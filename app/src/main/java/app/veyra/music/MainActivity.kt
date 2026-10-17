@@ -52,7 +52,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -715,6 +714,7 @@ private fun VeyraApp(
 
     val homeState by viewModel.home.collectAsStateWithLifecycle()
     val homeLoadingMore by viewModel.homeLoadingMore.collectAsStateWithLifecycle()
+    val homePageError by viewModel.homePageError.collectAsStateWithLifecycle()
     val homeRecentlyPlayedLoading by viewModel.homeRecentlyPlayedLoading.collectAsStateWithLifecycle()
 
     // The top bar's icon is the quiet, always-there nudge; this is the
@@ -1075,6 +1075,7 @@ private fun VeyraApp(
     // something is exactly when it needs re-fetching.
     LaunchedEffect(currentFeed) {
         if (currentFeed == MainViewModel.Feed.HOME) viewModel.onHomeShown()
+        if (currentFeed == MainViewModel.Feed.EXPLORE) viewModel.onExploreShown()
         // Likewise for Library: a playlist created or a song liked since it
         // was last fetched is a change to exactly this page.
         if (currentFeed == MainViewModel.Feed.LIBRARY) viewModel.onLibraryShown()
@@ -3111,6 +3112,8 @@ private fun VeyraApp(
                             contentPadding = listPadding,
                             onLoadMore = viewModel::loadMoreHome,
                             loadingMore = homeLoadingMore,
+                            loadMoreError = homePageError,
+                            onRetryMore = viewModel::retryMoreHome,
                             recentlyPlayedLoading = homeRecentlyPlayedLoading,
                         )
                         TAB_EXPLORE -> selectedMoodGenre?.let { category ->

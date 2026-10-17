@@ -27,14 +27,15 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
-## Latest update: 0.1.0-beta5
+## Latest update: 0.1.0-beta6
 
-- **Player:** larger white filled play/pause glyphs, matching the other transport icons, without colored discs. Loading retains the same touch footprint.
-- **Settings:** full-width category rows, supporting descriptions and subtle dividers. Category grids, icon tiles and group boxes have been removed; search and every existing control remain.
-- **Rendering:** static gradients replace Home/Library utility-card meshes and the sign-in banner's continuous animation. Canvas video pauses with music, backgrounding and player transitions; periodic frame captures follow the same rules.
-- **Reduced effects:** solid fills are now the default when no blur preference was saved. Explicit blur/high-performance choices are preserved. Reduced blur or motion also disables recurring Canvas color sampling. Legacy mesh colors update in drawing rather than recomposing the backdrop per animation frame.
+- **Home:** a compact editorial header gives the music more space. Optional history/discovery requests have deadlines, retries cancel superseded Home loads, and failed pagination shows an explicit Retry action instead of repeatedly requesting the same page. Explore fetches on its first visit.
+- **Playback preparation:** queue startup reuses immutable media items for playback and shuffle restoration, avoiding repeated URI construction and downloaded-file checks for every context track.
+- **Next-song loading:** the next stream URL starts warming after 1.5 seconds, independently of addon lookup. Later URLs remain delayed, and bulk audio downloads retain their eight-second grace period. Warm-up skips pinned sources, removes duplicate IDs and propagates cancellation.
 
-Download `downloads/Veyra_Android_Source_0.1.0-beta5.zip`, extract it, and open the Veyra root in Android Studio. Verification and device-review limits are in [verification/BETA5-RESULTS.md](verification/BETA5-RESULTS.md). No device performance numbers or verified beta5 APK are available from this cloud instance.
+Beta5's bold transport icons, flat Settings rows and reduced rendering work remain. These changes remove identified delays and redundant work; actual startup and frame-rate gains still require phone profiling.
+
+Download `downloads/Veyra_Android_Source_0.1.0-beta6.zip`, extract it, and open the Veyra root in Android Studio. See [verification/BETA6-RESULTS.md](verification/BETA6-RESULTS.md) for validation. This cloud instance cannot build a verified beta6 APK because its proxy blocks JitPack.
 
 Build dependencies require `dl.google.com`, Maven Central, the Gradle plugin portal, and **jitpack.io**. The current SDK package name is `android-37.0`; an older existing SDK can be selected with `-PveyraCompileSdk=android-37`. Do not disable TLS or artifact verification to work around access failures.
 
@@ -58,7 +59,7 @@ Discord’s application ID is retained for compatibility. Some Discord surfaces 
 
 Automatic app updates are disabled until you provide `VEYRA_UPDATE_FEED_URL` with your own compatible GitHub-style latest-release JSON feed. Publish Veyra APK assets with the expected `Veyra-` prefix; never point the fork at the original project's release feed. Production APK signing uses your own `keystore.properties`; see the example. Keep the same signing key for future updates.
 
-The web, browser-extension, TV and watch sources are retained. Their public-service/deployment URLs are preserved, not rebranded into nonexistent domains. Configure your own deployment origins and extension identity before publishing a web fork. Android is the primary target of this handoff; see `verification/BETA5-RESULTS.md` for the checks run on this revision. `verification/RESULTS.md` describes the earlier supplied baseline.
+The web, browser-extension, TV and watch sources are retained. Their public-service/deployment URLs are preserved, not rebranded into nonexistent domains. Configure your own deployment origins and extension identity before publishing a web fork. Android is the primary target of this handoff; see `verification/BETA6-RESULTS.md` for the checks run on this revision. `verification/RESULTS.md` describes the earlier supplied baseline.
 
 ## License and attribution
 

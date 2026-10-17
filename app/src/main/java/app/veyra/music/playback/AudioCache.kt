@@ -28,6 +28,7 @@ import app.veyra.music.data.sources.SourceRegistry
 import app.veyra.music.data.sources.SourceResolver
 import app.veyra.music.data.sources.TrackMatcher
 import app.veyra.music.download.Downloads
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -184,9 +185,6 @@ object AudioCache {
      * extraction gate, which serialises what is left of that.
      */
     private const val QUEUE_LOOKAHEAD = 1
-
-    /** Spacing between queued resolves, so warming the queue never competes with the track actually playing. */
-    private const val QUEUE_RESOLVE_STAGGER_MS = 500L
 
     /** How many upcoming tracks are worth gathering for [prefetchQueue] — the caller doesn't need to know why. */
     const val QUEUE_DEPTH = QUEUE_LOOKAHEAD + 1
@@ -947,6 +945,18 @@ object AudioCache {
             // reverted track resolves through YouTube, which is what it warms.
             val pinnedToYouTube = OriginalVersion.isPinned(next)
             scope.launch {
+                // Independent of optional substitute lookup: a slow addon must not
+                // prevent the next track's YouTube fallback from being ready.
+                launch {
+                    warmQueueUrls(
+                        ids = videoIds.take(QUEUE_LOOKAHEAD + 1),
+                        skip = { StreamChoice.of(it) != null },
+                        resolve = { StreamResolver.resolve(it); Unit },
+                        onFailure = { id, failure ->
+                            TrackLog.d(TAG, "queue warm-up skipped $id: ${failure.message}", about = id)
+                        },
+                    )
+                }
                 // With substitution on, the *bytes* half above used to be
                 // switched off outright, and the paragraph explaining why is
                 // still correct as far as it goes: read-ahead resolving to
@@ -968,7 +978,10 @@ object AudioCache {
                 // playback time as usual.
                 val warmed = if (substitutable && target != null && !pinnedToYouTube) {
                     runCatching { SourceResolver.prefetchSubstitute(target) }
-                        .onFailure { TrackLog.d(TAG, "warm-up substitute failed for $next: ${it.message}", about = next) }
+                        .onFailure {
+                            if (it is CancellationException) throw it
+                            TrackLog.d(TAG, "warm-up substitute failed for $next: ${it.message}", about = next)
+                        }
                         .getOrNull()
                         ?.also { StreamChoice.remember(next, it, substituted = true) }
                 } else {
@@ -983,19 +996,6 @@ object AudioCache {
                         delay(PREFETCH_DELAY_MS)
                         fetch(next, 0, PRELOAD_BYTES)
                         fetchWhole(next)
-                    }
-                }
-                launch {
-                    delay(PREFETCH_DELAY_MS)
-                    for (id in videoIds.take(QUEUE_LOOKAHEAD + 1).let { if (cacheBytes) it.drop(1) else it }) {
-                        // A track already pinned to another source has no use
-                        // for a YouTube URL: nothing will ask for one, and
-                        // minting it spends a client walk to fill a cache entry
-                        // that is never read.
-                        if (id == next && warmed != null) continue
-                        runCatching { StreamResolver.resolve(id) }
-                            .onFailure { TrackLog.d(TAG, "queue warm-up skipped $id: ${it.message}", about = id) }
-                        delay(QUEUE_RESOLVE_STAGGER_MS)
                     }
                 }
             }

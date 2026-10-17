@@ -1,3 +1,13 @@
+# Veyra 0.1.0-beta6 (Home and playback preparation)
+
+- Replaced Home's large header card with a compact title, brand mark, supporting caption and accent rule.
+- Cancel superseded Home loads/pages, reject stale pagination results, bound optional recent-history/discovery requests and settle empty initial feeds with a retryable message.
+- Preserve feed content during refresh; pause pagination while replacing the continuation and restore it if refresh fails. Clear refresh/loading indicators in finally blocks.
+- Failed pagination exposes a Retry action and blocks automatic retry loops. Explore loads on its first tab visit instead of competing with Home at startup.
+- Reuse media-item conversions for queue startup and shuffle restoration, avoiding repeated URI/download-file checks.
+- Warm the next queue URL after 1.5 seconds independently of addon lookup; retain the later-URL and bulk-download delay. Propagate cancellation and skip duplicate/pinned IDs.
+- Added five coroutine warm-up regression tests. Validation and the JitPack Android-build blocker: `verification/BETA6-RESULTS.md`. No device speed measurement or verified beta6 APK is claimed.
+
 # Veyra 0.1.0-beta5 (rendering and interface refinement)
 
 - Removed the colored play/pause disc and skip-button fills; enlarged the bold white transport glyphs.

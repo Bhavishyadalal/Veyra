@@ -882,23 +882,26 @@ suspend fun MediaController.playSongs(songs: List<Song>, startIndex: Int) {
         val contextEntries = songsWithIds.filter { it.queueTier == QueueTier.CONTEXT }
         val canonicalIndexMap = contextEntries.mapIndexed { idx, s -> s.queueEntryId!! to idx }.toMap()
 
+        // A media item includes URI construction and download-file checks.
+        // Reuse that immutable result for playback and shuffle restoration.
+        val builtItems = java.util.IdentityHashMap<Song, MediaItem>(songsWithIds.size)
+        songsWithIds.forEach { song -> builtItems[song] = song.toMediaItem() }
+        val canonicalMediaItems = contextEntries.mapIndexed { idx, song ->
+            QueueShuffle.withQueueMetadata(builtItems.getValue(song), newCanonicalIndex = idx)
+        }
+        QueueShuffle.setCanonicalContext(canonicalMediaItems)
         val queue = if (shuffled) {
-            QueueShuffle.startingOrder(songsWithIds, startIndex.coerceIn(songsWithIds.indices))
+            QueueShuffle.startingOrder(
+                songsWithIds, startIndex.coerceIn(songsWithIds.indices), rememberContext = false,
+            )
         } else {
             songsWithIds
         }
         val mediaItems = queue.map { song ->
-            val item = song.toMediaItem()
-            val cIndex = if (song.queueTier == QueueTier.CONTEXT) {
-                canonicalIndexMap[song.queueEntryId]
-            } else null
+            val item = builtItems.getValue(song)
+            val cIndex = if (song.queueTier == QueueTier.CONTEXT) canonicalIndexMap[song.queueEntryId] else null
             if (cIndex != null) QueueShuffle.withQueueMetadata(item, newCanonicalIndex = cIndex) else item
         }
-
-        val canonicalMediaItems = contextEntries.mapIndexed { idx, s ->
-            QueueShuffle.withQueueMetadata(s.toMediaItem(), newCanonicalIndex = idx)
-        }
-        QueueShuffle.setCanonicalContext(canonicalMediaItems)
 
         mediaItems
     }

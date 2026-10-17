@@ -130,8 +130,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val _homeLoadingMore = MutableStateFlow(false)
 
     /**
-     * Requests still filling out the first Play page. The core feed and each
-     * supplement browse run in parallel and publish as they land, so the list
+     * Requests still filling out the first Play page. The core feed publishes
+     * first, then optional supplement browses publish as they land, so the list
      * goes Success while several shelves are still on the wire — counted here
      * so the feed can say more is coming instead of just ending mid-load.
      */
@@ -145,7 +145,12 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val _homeRecentlyPlayedLoading = MutableStateFlow(false)
     val homeRecentlyPlayedLoading: StateFlow<Boolean> = _homeRecentlyPlayedLoading.asStateFlow()
     private val homeLoadGeneration = AtomicLong(0L)
+    private var homeLoadJob: Job? = null
+    private var homePageJob: Job? = null
+    private val _homePageError = MutableStateFlow<String?>(null)
+    val homePageError: StateFlow<String?> = _homePageError.asStateFlow()
 
+    private var exploreLoadJob: Job? = null
     private val _explore = MutableStateFlow<UiState<List<MoodGenreSection>>>(UiState.Loading)
     val explore: StateFlow<UiState<List<MoodGenreSection>>> = _explore.asStateFlow()
 
@@ -1422,7 +1427,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         startSuggestPipeline()
         startTypeaheadMediaPipeline()
         loadHome()
-        loadExplore()
+        // Explore loads on first visit, outside Home's startup request burst.
         if (_signedIn.value) {
             loadLibrary()
             loadAccount()
@@ -1548,18 +1553,26 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         val identity = listenerKey()
         _refreshing.value = _refreshing.value + feed
         viewModelScope.launch {
-            when (feed) {
-                Feed.HOME -> refreshHome(identity)
-                Feed.EXPLORE -> fetchExplore()
-                Feed.LIBRARY -> fetchLibrary(identity)
+            try {
+                when (feed) {
+                    Feed.HOME -> refreshHome(identity)
+                    Feed.EXPLORE -> fetchExplore()
+                    Feed.LIBRARY -> fetchLibrary(identity)
+                }
+            } finally {
+                _refreshing.value = _refreshing.value - feed
             }
-            _refreshing.value = _refreshing.value - feed
         }
     }
 
+    fun onExploreShown() {
+        if (_explore.value is UiState.Loading && exploreLoadJob == null) loadExplore()
+    }
+
     fun loadExplore() {
+        exploreLoadJob?.cancel()
         _explore.value = UiState.Loading
-        viewModelScope.launch { fetchExplore() }
+        exploreLoadJob = viewModelScope.launch { fetchExplore() }
     }
 
     private suspend fun fetchExplore() {
@@ -1633,6 +1646,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun loadHome() {
+        homeLoadJob?.cancel()
+        homePageJob?.cancel()
+        _homePageError.value = null
         val identity = listenerKey()
         val generation = homeLoadGeneration.incrementAndGet()
         _home.value = UiState.Loading
@@ -1644,7 +1660,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         // out: it has its own skeleton at the head of the page rather than the
         // one at the tail.
         _homePendingShelves.value = 1 + YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS.size
-        viewModelScope.launch {
+        homeLoadJob = viewModelScope.launch {
             val coreRequest = launch {
                 try {
                     YtMusicRepository.home()
@@ -1664,16 +1680,16 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             }
             if (_signedIn.value) {
                 launch {
-                    YtMusicRepository.homeRecentlyPlayed()
-                        .onSuccess { shelf ->
-                            if (isCurrentHomeLoad(identity, generation)) {
-                                _homeRecentlyPlayedLoading.value = false
-                                shelf?.let { publishHomeShelves(listOf(it), prepend = true) }
+                    try {
+                        withTimeoutOrNull(6_000L) { YtMusicRepository.homeRecentlyPlayed() }
+                            ?.onSuccess { shelf ->
+                                if (isCurrentHomeLoad(identity, generation)) {
+                                    shelf?.let { publishHomeShelves(listOf(it), prepend = true) }
+                                }
                             }
-                        }
-                        .onFailure {
-                            if (isCurrentHomeLoad(identity, generation)) _homeRecentlyPlayedLoading.value = false
-                        }
+                    } finally {
+                        if (isCurrentHomeLoad(identity, generation)) _homeRecentlyPlayedLoading.value = false
+                    }
                 }
             }
             // Keep optional feed parsing/image arrivals out of the first core response burst.
@@ -1681,7 +1697,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             for (browseId in YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS) {
                 if (!isCurrentHomeLoad(identity, generation)) break
                 try {
-                    YtMusicRepository.homeSupplement(browseId).onSuccess { shelves ->
+                    withTimeoutOrNull(8_000L) { YtMusicRepository.homeSupplement(browseId) }?.onSuccess { shelves ->
                         if (isCurrentHomeLoad(identity, generation)) publishHomeShelves(shelves)
                     }
                 } finally {
@@ -1698,6 +1714,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private fun homeShelfRequestSettled(identity: String?, generation: Long) {
         if (!isCurrentHomeLoad(identity, generation)) return
         _homePendingShelves.value = (_homePendingShelves.value - 1).coerceAtLeast(0)
+        if (_homePendingShelves.value == 0 && _home.value is UiState.Loading) {
+            _home.value = UiState.Error(text(R.string.auto_empty_quick_picks_subtitle))
+        }
     }
 
     private fun isCurrentHomeLoad(identity: String?, generation: Long) =
@@ -1722,17 +1741,36 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     /** Refreshes the core feed without blanking the current Play page first. */
     private suspend fun refreshHome(identity: String?) = coroutineScope {
-        val recent = if (_signedIn.value) async { YtMusicRepository.homeRecentlyPlayed() } else null
+        homeLoadJob?.cancel()
+        homePageJob?.cancel()
+        val generation = homeLoadGeneration.incrementAndGet()
+        val previousContinuation = homeContinuation
+        homeContinuation = null
+        _homePendingShelves.value = 0
+        _homeLoadingMore.value = false
+        _homeRecentlyPlayedLoading.value = false
+        _homePageError.value = null
+        val recent = if (_signedIn.value) async {
+            withTimeoutOrNull(6_000L) { YtMusicRepository.homeRecentlyPlayed() }
+        } else null
         YtMusicRepository.home().onSuccess { feed ->
-            if (identity != listenerKey()) return@onSuccess
+            if (!isCurrentHomeLoad(identity, generation)) return@onSuccess
             homeContinuation = feed.continuation
             homeSeenTitles.clear()
             val shelves = feed.shelves.withoutRepeatsOf(emptyList())
                 .filter { homeSeenTitles.add(it.title.lowercase(Locale.ROOT)) }
             if (shelves.isNotEmpty()) _home.value = UiState.Success(shelves)
+            else if (_home.value !is UiState.Success) {
+                _home.value = UiState.Error(text(R.string.auto_empty_quick_picks_subtitle))
+            }
+        }.onFailure { failure ->
+            if (isCurrentHomeLoad(identity, generation)) {
+                homeContinuation = previousContinuation
+                if (_home.value !is UiState.Success) _home.value = UiState.Error(failure.friendly())
+            }
         }
         recent?.await()?.onSuccess { shelf ->
-            if (identity == listenerKey()) shelf?.let { publishHomeShelves(listOf(it), prepend = true) }
+            if (isCurrentHomeLoad(identity, generation)) shelf?.let { publishHomeShelves(listOf(it), prepend = true) }
         }
     }
 
@@ -1741,25 +1779,33 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * in flight, once the feed is exhausted, or before the first page has
      * loaded — [homeContinuation] covers all three by construction.
      */
+    fun retryMoreHome() {
+        _homePageError.value = null
+        loadMoreHome()
+    }
+
     fun loadMoreHome() {
         val token = homeContinuation ?: return
-        if (_homeLoadingMore.value) return
+        if (_homeLoadingMore.value || _homePageError.value != null) return
         val identity = listenerKey()
+        val generation = homeLoadGeneration.get()
         _homeLoadingMore.value = true
-        viewModelScope.launch {
-            YtMusicRepository.moreHome(token).onSuccess { feed ->
-                if (identity == listenerKey()) {
-                    val existing = (_home.value as? UiState.Success)?.data ?: emptyList()
-                    val added = feed.shelves.withoutRepeatsOf(existing)
-                        .filter { homeSeenTitles.add(it.title.lowercase(Locale.ROOT)) }
-                    // A page with nothing new signals the feed has looped back on
-                    // itself rather than run dry with a token still attached —
-                    // treat it the same as exhausted so scrolling can't spin here.
-                    homeContinuation = feed.continuation.takeIf { added.isNotEmpty() }
-                    if (added.isNotEmpty()) _home.value = UiState.Success(existing + added)
+        homePageJob = viewModelScope.launch {
+            try {
+                YtMusicRepository.moreHome(token).onSuccess { feed ->
+                    if (isCurrentHomeLoad(identity, generation)) {
+                        val existing = (_home.value as? UiState.Success)?.data.orEmpty()
+                        val added = feed.shelves.withoutRepeatsOf(existing)
+                            .filter { homeSeenTitles.add(it.title.lowercase(Locale.ROOT)) }
+                        homeContinuation = feed.continuation.takeIf { added.isNotEmpty() }
+                        if (added.isNotEmpty()) _home.value = UiState.Success(existing + added)
+                    }
+                }.onFailure { failure ->
+                    if (isCurrentHomeLoad(identity, generation)) _homePageError.value = failure.friendly()
                 }
+            } finally {
+                if (isCurrentHomeLoad(identity, generation)) _homeLoadingMore.value = false
             }
-            if (identity == listenerKey()) _homeLoadingMore.value = false
         }
     }
 

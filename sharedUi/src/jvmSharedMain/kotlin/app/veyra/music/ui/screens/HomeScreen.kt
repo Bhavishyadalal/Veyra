@@ -8,7 +8,6 @@ import org.jetbrains.compose.resources.DrawableResource
 import androidx.compose.foundation.Image
 import org.jetbrains.compose.resources.stringResource
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import app.veyra.music.ui.components.longPressMenuClickable
@@ -37,6 +36,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.semantics.heading
@@ -134,6 +134,8 @@ fun HomeScreen(
     // Explore doesn't page — only Home has a continuation worth following.
     onLoadMore: (() -> Unit)? = null,
     loadingMore: Boolean = false,
+    loadMoreError: String? = null,
+    onRetryMore: (() -> Unit)? = null,
     recentlyPlayedLoading: Boolean = false,
     /**
      * Whether the feed's first shelf gets the big full-bleed cards. The phone
@@ -216,6 +218,17 @@ fun HomeScreen(
                             },
                         )
                         if (loadingMore) feedMoreSkeleton()
+                        if (loadMoreError != null) {
+                            item(key = "home:page-error", contentType = "message") {
+                                Column(Modifier.fillMaxWidth().padding(horizontal = PAGE_GUTTER, vertical = 12.dp)) {
+                                    Text(loadMoreError, style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    if (onRetryMore != null) {
+                                        TextButton(onClick = onRetryMore) { Text(stringResource(Res.string.retry)) }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -231,12 +244,12 @@ fun HomeScreen(
         // skeleton and no request in flight to explain it. Restarting on
         // [loadingMore] re-checks the moment a page settles, so the next one is
         // asked for while the tail is still on screen to show it loading.
-        LaunchedEffect(listState, loadingMore) {
+        LaunchedEffect(listState, loadingMore, loadMoreError) {
             snapshotFlow {
                 val layout = listState.layoutInfo
                 (layout.visibleItemsInfo.lastOrNull()?.index ?: -1) to layout.totalItemsCount
             }.collect { (lastVisible, total) ->
-                if (!loadingMore && total > 0 && lastVisible >= total - 3) loadMore()
+                if (!loadingMore && loadMoreError == null && total > 0 && lastVisible >= total - 3) loadMore()
             }
         }
     }
@@ -494,50 +507,40 @@ fun CompactTrackRow(
     }
 }
 
-/** The home feed opens with a static tonal hero instead of stacked logo and text. */
+/** Compact heading leaves the first recommendations within reach. */
 @Composable
 private fun HomeTitle(title: String, modifier: Modifier = Modifier) {
     val colors = MaterialTheme.colorScheme
-    val shape = RoundedCornerShape(30.dp)
     Column(
-        modifier = modifier
-            .padding(horizontal = PAGE_GUTTER, vertical = 12.dp)
-            .fillMaxWidth()
-            .background(
-                Brush.linearGradient(listOf(colors.primaryContainer, colors.surfaceVariant)),
-                shape,
-            )
-            .border(1.dp, colors.primary.copy(alpha = 0.18f), shape)
-            .padding(22.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+        modifier = modifier.fillMaxWidth()
+            .padding(horizontal = PAGE_GUTTER, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                Modifier.size(40.dp).clip(RoundedCornerShape(14.dp))
-                    .background(colors.primary.copy(alpha = 0.12f)),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_logo),
-                    contentDescription = null,
-                    tint = colors.onPrimaryContainer,
-                    modifier = Modifier.size(26.dp),
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text("Veyra", style = MaterialTheme.typography.labelLarge, color = colors.primary)
+                Text(
+                    text = title,
+                    modifier = Modifier.semantics { heading() },
+                    style = MaterialTheme.typography.displayLarge,
+                    color = colors.onBackground,
                 )
             }
-            Spacer(Modifier.width(10.dp))
-            Text("Veyra", style = MaterialTheme.typography.labelLarge, color = colors.onPrimaryContainer)
+            Spacer(Modifier.width(16.dp))
+            Icon(
+                painter = painterResource(Res.drawable.ic_logo),
+                contentDescription = null,
+                tint = colors.primary,
+                modifier = Modifier.size(38.dp),
+            )
         }
-        Text(
-            text = title,
-            modifier = Modifier.semantics { heading() },
-            style = MaterialTheme.typography.displayLarge,
-            color = colors.onPrimaryContainer,
-        )
         Text(
             text = stringResource(Res.string.home_hero_subtitle),
             style = MaterialTheme.typography.bodyLarge,
-            color = colors.onPrimaryContainer.copy(alpha = 0.78f),
+            color = colors.onSurfaceVariant,
         )
+        Box(Modifier.padding(top = 4.dp).width(36.dp).height(3.dp)
+            .background(colors.primary, CircleShape))
     }
 }
 

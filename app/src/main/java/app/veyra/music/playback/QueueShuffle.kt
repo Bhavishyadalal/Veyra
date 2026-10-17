@@ -185,10 +185,15 @@ object QueueShuffle {
      * the track the user picked leads, the rest follow at random. The order it
      * arrived in is remembered, so turning shuffle off restores it.
      */
-    fun startingOrder(songs: List<Song>, startIndex: Int): List<Song> {
+    fun startingOrder(
+        songs: List<Song>,
+        startIndex: Int,
+        /** False when playSongs has already built the canonical media items. */
+        rememberContext: Boolean = true,
+    ): List<Song> {
         original = songs.map { "${it.queueEntryId ?: it.videoId}_${it.queueTier.name}" }
         val contextSongs = songs.filter { it.queueTier == QueueTier.CONTEXT }
-        if (contextSongs.isNotEmpty()) {
+        if (rememberContext && contextSongs.isNotEmpty()) {
             setCanonicalContext(contextSongs.mapIndexed { idx, s ->
                 val entryId = s.queueEntryId ?: UUID.randomUUID().toString()
                 withQueueMetadata(s.toMediaItem(), newEntryId = entryId, newCanonicalIndex = idx)
