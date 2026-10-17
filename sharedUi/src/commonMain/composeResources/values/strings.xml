@@ -209,4 +209,5 @@
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="player_position">Playback position</string>
     <string name="player_volume">Volume</string>
+    <string name="home_hero_subtitle">Find your next favorite.</string>
 </resources>

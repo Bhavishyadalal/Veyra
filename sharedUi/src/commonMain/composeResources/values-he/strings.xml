@@ -202,4 +202,5 @@
     <string name="search_library_no_results">אין דבר במוזיקה המקומית שתואם ל-„%1$s”.</string>
     <string name="player_position">מיקום ההשמעה</string>
     <string name="player_volume">עוצמת קול</string>
+    <string name="home_hero_subtitle">גלו את השיר האהוב הבא שלכם.</string>
 </resources>

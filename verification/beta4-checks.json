@@ -1,0 +1,25 @@
+{
+  "revision": "0.1.0-beta4",
+  "focused_kotlin_tests": {
+    "passed": 15,
+    "failed": 0
+  },
+  "kotlin_syntax": {
+    "files": 24,
+    "errors": 0,
+    "scope": "changes since original beta1 upload; not type checking"
+  },
+  "resources": {
+    "xml_documents": 137,
+    "localized_entries": 23151,
+    "font_references": 8,
+    "errors": 0,
+    "settings_caption_catalogs": 19,
+    "home_caption_catalogs": 18
+  },
+  "android_build": "blocked_before_Kotlin_compilation_by_jitpack_io_HTTP_403",
+  "apk": "not_built",
+  "device_visual_review": "not_run",
+  "backend_tests": "unchanged; not_rerun_in_beta4",
+  "git_whitespace": "passed"
+}

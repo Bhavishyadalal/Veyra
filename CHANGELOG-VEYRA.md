@@ -1,3 +1,14 @@
+# Veyra 0.1.0-beta4 (visual redesign, source update)
+
+- Player: prominent filled lavender play control, separate circular skip buttons, rounded tonal control deck, larger song title and softer artwork corners.
+- Home: branded static gradient hero with a localized supporting caption.
+- Settings: tonal overview header and responsive two-column category cards; full-width rows for narrow windows or large text, with global search retained.
+- Bottom navigation: stronger selection capsule and labels; coordinated glass-mode colors and search highlight; selectable tab semantics in the regular bar.
+- Navigation swipes use current callbacks and measured geometry, clamp at the ends and support right-to-left reading order. Added five regression tests.
+- Added the two captions across all existing relevant catalogs; no new fonts or heavy rendering dependency.
+
+Current verification: `verification/BETA4-RESULTS.md`. Full Android compilation/assembly is blocked by this cloud instance's JitPack HTTP 403; no verified beta4 APK is provided.
+
 # Beta3 build setup refresh — 2026-10-17
 
 - Restored Android Studio module discovery, pinned the native toolchain and refreshed the complete checksum-verified Gradle wrapper.

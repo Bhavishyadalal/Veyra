@@ -1,3 +1,5 @@
+> Historical beta3 build result supplied in the uploaded archive. See [BETA4-RESULTS.md](BETA4-RESULTS.md) for current revision status.
+
 # Beta3 Android build verification — 2026-10-17
 
 The beta3 phone APK and bundled Wear OS app built successfully using JDK 17 and the supplied Gradle 8.11.1 wrapper.

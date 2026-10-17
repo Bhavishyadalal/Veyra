@@ -1293,4 +1293,5 @@
     <string name="wear_os_code_hint">Codice di associazione</string>
     <string name="wear_os_done">Fine</string>
     <string name="signed_by">Firmato da %1$s</string>
+    <string name="settings_intro">Suono, stile e tutto il resto.</string>
 </resources>

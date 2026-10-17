@@ -452,9 +452,9 @@ internal fun TransportRow(
     onNext: () -> Unit,
     compact: Boolean = false,
 ) {
-    val playSize = if (compact) 58.dp else 74.dp
-    val playTouch = if (compact) 76.dp else 92.dp
-    val skipSize = if (compact) 44.dp else PLAYER_SKIP_ICON_SIZE
+    val playSize = if (compact) 28.dp else 36.dp
+    val playTouch = if (compact) 64.dp else 80.dp
+    val skipSize = if (compact) 26.dp else 30.dp
     Row(
         modifier = Modifier.fillMaxWidth(),
         // SpaceAround, not SpaceEvenly: the outer margins take half a gap, so
@@ -467,7 +467,8 @@ internal fun TransportRow(
             contentDescription = stringResource(Res.string.widget_previous),
             size = skipSize,
             touchSize = PLAYER_SKIP_TOUCH_SIZE,
-            heightScale = PLAYER_SKIP_HEIGHT_SCALE,
+            heightScale = 1f,
+            containerColor = Color.White.copy(alpha = 0.08f),
             onClick = onPrevious,
             enabled = previousEnabled,
             haptic = Haptic.SkipPrevious,
@@ -475,9 +476,12 @@ internal fun TransportRow(
         if (isLoading) {
             // Same footprint as the play/pause target — a smaller box here
             // would shunt everything below it on every load.
-            Box(Modifier.size(playTouch), contentAlignment = Alignment.Center) {
+            Box(
+                Modifier.size(playTouch).clip(CircleShape).background(Color(0xFFEBDDFF)),
+                contentAlignment = Alignment.Center,
+            ) {
                 CircularProgressIndicator(
-                    color = Color.White,
+                    color = Color(0xFF35204F),
                     strokeWidth = 3.dp,
                     modifier = Modifier.size(if (compact) 30.dp else 38.dp),
                 )
@@ -488,6 +492,8 @@ internal fun TransportRow(
                 contentDescription = stringResource(if (isPlaying) Res.string.pause else Res.string.play),
                 size = playSize,
                 touchSize = playTouch,
+                tint = Color(0xFF35204F),
+                containerColor = Color(0xFFEBDDFF),
                 onClick = onPlayPause,
                 haptic = if (isPlaying) Haptic.Pause else Haptic.Resume,
             )
@@ -497,7 +503,8 @@ internal fun TransportRow(
             contentDescription = stringResource(Res.string.widget_next),
             size = skipSize,
             touchSize = PLAYER_SKIP_TOUCH_SIZE,
-            heightScale = PLAYER_SKIP_HEIGHT_SCALE,
+            heightScale = 1f,
+            containerColor = Color.White.copy(alpha = 0.08f),
             onClick = onNext,
             enabled = nextEnabled,
             haptic = Haptic.SkipNext,
@@ -774,6 +781,8 @@ private fun TransportGlyph(
     haptic: Haptic = Haptic.Tap,
     /** Vertical squash of the glyph alone; its width and touch box are untouched. */
     heightScale: Float = 1f,
+    tint: Color = Color.White,
+    containerColor: Color = Color.Transparent,
 ) {
     val haptics = rememberHaptics()
     val interactionSource = remember { MutableInteractionSource() }
@@ -793,6 +802,7 @@ private fun TransportGlyph(
         modifier = Modifier
             .size(touchSize)
             .clip(CircleShape)
+            .background(containerColor)
             .graphicsLayer { scaleX = pressedScale.value; scaleY = pressedScale.value }
             .clickable(
                 interactionSource = interactionSource,
@@ -808,7 +818,7 @@ private fun TransportGlyph(
         Icon(
             painter = painterResource(icon),
             contentDescription = contentDescription,
-            tint = Color.White.copy(alpha = alpha),
+            tint = tint.copy(alpha = alpha),
             modifier = Modifier
                 .size(size)
                 .then(if (heightScale != 1f) Modifier.graphicsLayer { scaleY = heightScale } else Modifier),
@@ -816,15 +826,8 @@ private fun TransportGlyph(
     }
 }
 
-/** The skip glyphs' width, and their touch box, beside the larger play button. */
-private val PLAYER_SKIP_ICON_SIZE = 53.dp
+/** Skip controls retain a full touch target around their smaller glyphs. */
 private val PLAYER_SKIP_TOUCH_SIZE = 53.dp
-
-/**
- * The skip glyphs are drawn a little flatter than they are wide, so the pair
- * reads lower and longer next to the play button without losing any width.
- */
-private const val PLAYER_SKIP_HEIGHT_SCALE = 0.85f
 
 private val BOTTOM_ACTION_SIZE = 44.dp
 

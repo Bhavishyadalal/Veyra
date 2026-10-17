@@ -202,4 +202,5 @@
     <string name="search_library_no_results">ไม่มีอะไรในเพลงในเครื่องตรงกับ “%1$s”</string>
     <string name="player_position">ตำแหน่งการเล่น</string>
     <string name="player_volume">ระดับเสียง</string>
+    <string name="home_hero_subtitle">ค้นพบเพลงโปรดเพลงถัดไปของคุณ</string>
 </resources>

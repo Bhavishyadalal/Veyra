@@ -30,6 +30,7 @@ import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.border
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -169,7 +170,6 @@ import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.ExperimentalHazeApi
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
-import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -447,7 +447,7 @@ private class DockFrame {
 private class LandscapeDockPose(val left: Float, val top: Float, val scale: Float)
 
 /** The placeholder tile's corners — one shape, not a new one every frame it moves. */
-private val TileShape = RoundedCornerShape(8.dp)
+private val TileShape = RoundedCornerShape(24.dp)
 
 /**
  * [content], for as long as [shown] says so.
@@ -746,7 +746,7 @@ fun NowPlayingScreen(
     val density = LocalDensity.current
     val haptics = rememberHaptics()
     // Keep the two credit lines inside their band when system text size increases.
-    val headerHeight = with(density) { maxOf(HEADER_HEIGHT, 48.sp.toDp() + 12.dp) }
+    val headerHeight = with(density) { maxOf(HEADER_HEIGHT, 54.sp.toDp() + 12.dp) }
 
     // Remote tracks whose art lives inside the file resolve it here, once —
     // every surface below reads the same value rather than each triggering
@@ -2791,7 +2791,7 @@ fun NowPlayingScreen(
                         // it docks.
                         fun sleeveShown(): Float = bannerShown() * dockT()
                         fun sleeveCorner(): Dp {
-                            val corner = 8.dp * (1f - sleeveShown())
+                            val corner = 24.dp * (1f - sleeveShown())
                             val t = dockT()
                             return if (dock == null || t >= 1f) corner else lerp(dock.miniArtCorner(), corner, t)
                         }
@@ -3236,8 +3236,8 @@ fun NowPlayingScreen(
                                         MarqueeText(
                                             text = song.title,
                                             style = MaterialTheme.typography.titleLarge.copy(
-                                                fontSize = 22.sp,
-                                                lineHeight = 26.sp,
+                                                fontSize = 26.sp,
+                                                lineHeight = 32.sp,
                                                 fontWeight = FontWeight.Bold,
                                             ),
                                             color = Color.White,
@@ -3259,7 +3259,7 @@ fun NowPlayingScreen(
                                             },
                                             style = MaterialTheme.typography.titleLarge.copy(
                                                 fontWeight = FontWeight.W500,
-                                                fontSize = 17.sp,
+                                                fontSize = 16.sp,
                                                 lineHeight = 22.sp,
                                             ),
                                             color = LocalPlayerTint.current.copy(alpha = 0.72f),
@@ -3536,7 +3536,13 @@ fun NowPlayingScreen(
                     Column(
                         modifier = Modifier
                             .widthIn(max = PLAYER_MAX_WIDTH)
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .background(
+                                Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.10f), Color.Black.copy(alpha = 0.16f))),
+                                RoundedCornerShape(30.dp),
+                            )
+                            .border(1.dp, Color.White.copy(alpha = 0.12f), RoundedCornerShape(30.dp))
+                            .padding(start = 18.dp, end = 18.dp, top = 12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                     // Current lyric, one line, directly above the scrubber. It stays in

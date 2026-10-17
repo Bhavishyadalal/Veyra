@@ -202,4 +202,5 @@
     <string name="search_library_no_results">Nichts in der lokalen Musik passt zu „%1$s“.</string>
     <string name="player_position">Wiedergabeposition</string>
     <string name="player_volume">Lautstärke</string>
+    <string name="home_hero_subtitle">Entdecke deinen nächsten Lieblingssong.</string>
 </resources>

@@ -27,18 +27,18 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
-## Latest update: 0.1.0-beta3
+## Latest update: 0.1.0-beta4
 
-The existing player and home layout are retained and refined:
+Beta4 gives the main surfaces a visibly different treatment:
 
-- Clearer title/artist hierarchy, stronger timestamp contrast and larger player-menu touch targets.
-- Press feedback on transport controls, static credits with reduced motion, and accessible seek/volume sliders.
-- More room for player credits at large system font sizes, plus two-line shelf titles and a larger home layout toggle.
-- One loading-animation clock per home feed, cached shimmer gradients, stable shelf keys and core-feed priority before supplementary requests.
-- Artwork and audio caches survive cosmetic app updates.
-- **Listen Together works for guests:** create, join or open an invite without signing in. Use a nickname or the generated guest name. An installation pseudonym is retained locally, while server-issued party tokens and host permissions still govern the session.
+- **Player:** a filled lavender play button, separate circular skip controls, a rounded translucent control deck, larger title typography and softer artwork corners.
+- **Home:** a branded gradient hero with a supporting caption at the top of the feed.
+- **Settings:** a tonal introduction and a two-column category overview. Narrow windows and larger system fonts use full-width rows. Global settings search remains available.
+- **Navigation:** a stronger selected capsule, clearer labels and coordinated selection colors in glass mode. The regular bar exposes tab semantics and handles swipe geometry in both reading directions.
 
-The six settings categories, global search, bold Manrope type scale and lavender accents from beta2 are preserved. See `verification/BETA3-RESULTS.md` for the exact checks and limits; the startup-lag report still needs a measured comparison on a phone.
+The guest Listen Together flow and loading-work reductions from beta3 remain. The new surfaces use static gradients and fills without adding blur passes or continuously animated backgrounds.
+
+Download the project from `downloads/Veyra_Android_Source_0.1.0-beta4.zip`, extract it, and open the Veyra root in Android Studio. Current verification and remaining limits are in `verification/BETA4-RESULTS.md`.
 
 Build dependencies require `dl.google.com`, Maven Central, the Gradle plugin portal, and **jitpack.io**. The current SDK package name is `android-37.0`; an older existing SDK can be selected with `-PveyraCompileSdk=android-37`. Do not disable TLS or artifact verification to work around access failures.
 
@@ -62,7 +62,7 @@ Discord’s application ID is retained for compatibility. Some Discord surfaces 
 
 Automatic app updates are disabled until you provide `VEYRA_UPDATE_FEED_URL` with your own compatible GitHub-style latest-release JSON feed. Publish Veyra APK assets with the expected `Veyra-` prefix; never point the fork at the original project's release feed. Production APK signing uses your own `keystore.properties`; see the example. Keep the same signing key for future updates.
 
-The web, browser-extension, TV and watch sources are retained. Their public-service/deployment URLs are preserved, not rebranded into nonexistent domains. Configure your own deployment origins and extension identity before publishing a web fork. Android is the primary target of this handoff; see `verification/BETA3-RESULTS.md` for the checks run on this revision. `verification/RESULTS.md` describes the earlier supplied baseline.
+The web, browser-extension, TV and watch sources are retained. Their public-service/deployment URLs are preserved, not rebranded into nonexistent domains. Configure your own deployment origins and extension identity before publishing a web fork. Android is the primary target of this handoff; see `verification/BETA4-RESULTS.md` for the checks run on this revision. `verification/RESULTS.md` describes the earlier supplied baseline.
 
 ## License and attribution
 

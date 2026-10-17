@@ -202,4 +202,5 @@
     <string name="search_library_no_results">लोकल म्यूज़िक में “%1$s” से मेल खाता कुछ नहीं.</string>
     <string name="player_position">प्लेबैक स्थिति</string>
     <string name="player_volume">आवाज़</string>
+    <string name="home_hero_subtitle">अपना अगला पसंदीदा गाना खोजें।</string>
 </resources>

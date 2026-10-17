@@ -1355,4 +1355,5 @@
     <string name="wear_os_code_hint">Code d’association</string>
     <string name="wear_os_done">Terminé</string>
     <string name="signed_by">Signé par %1$s</string>
+    <string name="settings_intro">Le son, le style et tout le reste.</string>
 </resources>

@@ -202,4 +202,5 @@
     <string name="search_library_no_results">Yerel Müzik’te “%1$s” ile eşleşen bir şey yok.</string>
     <string name="player_position">Oynatma konumu</string>
     <string name="player_volume">Ses düzeyi</string>
+    <string name="home_hero_subtitle">Bir sonraki favorini keşfet.</string>
 </resources>

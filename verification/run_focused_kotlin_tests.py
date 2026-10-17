@@ -17,6 +17,8 @@ classpath = os.pathsep.join(str(path) for path in sorted(libraries[0].glob("*.ja
 files = [
     "app/src/main/java/app/veyra/music/data/listentogether/GuestPartyIdentity.kt",
     "app/src/test/java/app/veyra/music/GuestPartyIdentityTest.kt",
+    "app/src/main/java/app/veyra/music/ui/components/BottomNavigationGeometry.kt",
+    "app/src/test/java/app/veyra/music/BottomNavigationGeometryTest.kt",
     "app/src/main/java/app/veyra/music/ui/screens/SettingsSearch.kt",
     "app/src/test/java/app/veyra/music/SettingsSearchTest.kt",
 ]
@@ -31,5 +33,6 @@ with tempfile.TemporaryDirectory(prefix="veyra-tests-") as output:
     result = subprocess.run([
         "java", "-cp", output + os.pathsep + classpath, "org.junit.runner.JUnitCore",
         "app.veyra.music.GuestPartyIdentityTest", "app.veyra.music.SettingsSearchTest",
+        "app.veyra.music.BottomNavigationGeometryTest",
     ])
     sys.exit(result.returncode)

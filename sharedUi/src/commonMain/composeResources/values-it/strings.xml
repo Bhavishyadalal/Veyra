@@ -202,4 +202,5 @@
     <string name="search_library_no_results">Nulla in Musica locale corrisponde a «%1$s».</string>
     <string name="player_position">Posizione di riproduzione</string>
     <string name="player_volume">Volume</string>
+    <string name="home_hero_subtitle">Scopri il tuo prossimo brano preferito.</string>
 </resources>

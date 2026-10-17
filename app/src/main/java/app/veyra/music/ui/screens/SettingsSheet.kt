@@ -15,6 +15,11 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.background
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -441,16 +446,7 @@ fun SettingsScreen(
                 .graphicsLayer { alpha = categoryAlpha.value },
         ) {
             if (category == null && !searching) {
-                SettingsCategory.entries.forEach { destination ->
-                    SettingsGroup(topSpacing = 10.dp) {
-                        SettingsRow(
-                            icon = destination.icon,
-                            title = stringResource(destination.title),
-                            subtitle = destination.summary.map { stringResource(it) }.joinToString(" · "),
-                            onClick = { category = destination },
-                        )
-                    }
-                }
+                SettingsOverview(onSelect = { category = it })
             }
 
             SearchableSettingsGroup(search, category = SettingsCategory.ACCOUNT, header = stringResource(R.string.account_integrations)) {
@@ -2326,6 +2322,88 @@ private enum class SettingsCategory(val title: Int, val summary: List<Int>, val 
     ADVANCED(R.string.advanced_options, listOf(R.string.miscellaneous, R.string.app_icon), Icons.Rounded.Apps),
 }
 
+/** A compact overview; larger system fonts switch back to full-width rows. */
+@Composable
+private fun SettingsOverview(onSelect: (SettingsCategory) -> Unit) {
+    val colors = MaterialTheme.colorScheme
+    val heroShape = RoundedCornerShape(26.dp)
+    Column(
+        Modifier.padding(horizontal = GROUP_INSET, vertical = 14.dp)
+            .fillMaxWidth()
+            .background(Brush.linearGradient(listOf(colors.primaryContainer, colors.surfaceVariant)), heroShape)
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text("Veyra", style = MaterialTheme.typography.labelLarge, color = colors.onPrimaryContainer)
+        Text(
+            stringResource(R.string.settings_intro),
+            style = MaterialTheme.typography.titleLarge,
+            color = colors.onPrimaryContainer,
+        )
+    }
+    BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = GROUP_INSET)) {
+        val columns = if (maxWidth >= 328.dp && LocalDensity.current.fontScale <= 1.2f) 2 else 1
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            SettingsCategory.entries.chunked(columns).forEach { categories ->
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    categories.forEach { destination ->
+                        SettingsCategoryCard(destination, columns == 2, { onSelect(destination) }, Modifier.weight(1f))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SettingsCategoryCard(
+    category: SettingsCategory,
+    grid: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val colors = MaterialTheme.colorScheme
+    val shape = RoundedCornerShape(24.dp)
+    val title = stringResource(category.title)
+    val summary = category.summary.map { stringResource(it) }.joinToString(" · ")
+    val card = modifier.clip(shape)
+        .background(colors.surfaceVariant)
+        .border(1.dp, colors.outline.copy(alpha = 0.45f), shape)
+        .clickable(role = Role.Button, onClick = onClick)
+        .padding(18.dp)
+    if (grid) {
+        Column(card, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                SettingsCategoryIcon(category.icon)
+                Spacer(Modifier.weight(1f))
+                Chevron()
+            }
+            Text(title, style = MaterialTheme.typography.titleMedium, color = colors.onSurface, minLines = 2, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(summary, style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant, minLines = 2, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        }
+    } else {
+        Row(card, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+            SettingsCategoryIcon(category.icon)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(title, style = MaterialTheme.typography.titleMedium, color = colors.onSurface)
+                Text(summary, style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant)
+            }
+            Chevron()
+        }
+    }
+}
+
+@Composable
+private fun SettingsCategoryIcon(icon: ImageVector) {
+    Box(
+        Modifier.size(42.dp).clip(RoundedCornerShape(14.dp))
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
+    }
+}
+
 /** Collects the rows of one group that survived the search. */
 private class SettingsGroupScope(
     private val search: SettingsSearch<SettingsCategory>,
@@ -2422,7 +2500,8 @@ internal fun SettingsGroup(
             .fillMaxWidth()
             .padding(horizontal = GROUP_INSET)
             .clip(GroupShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant),
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f), GroupShape),
     ) {
         content()
     }

@@ -6,6 +6,10 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -38,6 +42,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +51,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntSize
@@ -105,7 +112,7 @@ private val GESTURE_BAR_FLOOR = 15.dp
 internal val TAB_VERTICAL_PADDING = 9.dp
 
 /** The gap between a tab's glyph and its label, in both bars. */
-internal val TAB_ICON_LABEL_GAP = 2.dp
+internal val TAB_ICON_LABEL_GAP = 3.dp
 
 /**
  * The spring the selection indicator and the tab glyphs both travel on.
@@ -157,7 +164,8 @@ fun FloatingBottomBar(
     hazeState: HazeState,
     modifier: Modifier = Modifier,
 ) {
-    val pillShape = RoundedCornerShape(percent = 50)
+    if (tabs.isEmpty()) return
+    val pillShape = RoundedCornerShape(28.dp)
     val container = MaterialTheme.colorScheme.surface
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val useGlass = LocalLiquidGlassEnabled.current && isGlassSupported()
@@ -170,7 +178,9 @@ fun FloatingBottomBar(
     var dragOffset by remember { mutableFloatStateOf(0f) }
     val haptics = rememberHaptics()
     val density = LocalDensity.current
+    val rightToLeft = LocalLayoutDirection.current == LayoutDirection.Rtl
     val currentSelectedIndex by rememberUpdatedState(selectedIndex)
+    val currentOnTabSelected by rememberUpdatedState(onTabSelected)
 
     var rowSize by remember { mutableStateOf(IntSize.Zero) }
     val gapPx = with(density) { 6.dp.toPx() }
@@ -187,7 +197,7 @@ fun FloatingBottomBar(
     } else 0f
 
     val pillTargetPx = if (tabStepPx > 0f) {
-        selectedIndex * tabStepPx + dragOffset
+        navigationIndicatorOffset(selectedIndex, n, tabStepPx, rightToLeft) + dragOffset
     } else 0f
 
     val animatedPillOffset by animateFloatAsState(
@@ -230,12 +240,13 @@ fun FloatingBottomBar(
                     )
                 },
             )
-            .border(GLASS_EDGE_WIDTH, GLASS_EDGE_COLOR, pillShape)
+            .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.20f), pillShape)
             .padding(horizontal = PILL_INSET, vertical = PILL_INSET),
     ) {
         if (tabWidthPx > 0f) {
             Box(
                 modifier = Modifier
+                    .align(AbsoluteAlignment.TopLeft)
                     .width(with(density) { tabWidthPx.toDp() })
                     .height(with(density) { rowSize.height.toDp() })
                     .graphicsLayer {
@@ -248,8 +259,9 @@ fun FloatingBottomBar(
                         scaleX = 1f + lag * STRETCH
                         scaleY = 1f - lag * STRETCH * SQUASH
                     }
-                    .clip(pillShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)),
+                    .clip(RoundedCornerShape(22.dp))
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.20f), RoundedCornerShape(22.dp)),
             )
         }
 
@@ -257,31 +269,31 @@ fun FloatingBottomBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .onSizeChanged { rowSize = it }
-                .pointerInput(Unit) {
+                .selectableGroup()
+                .pointerInput(n, tabStepPx, rightToLeft) {
+                    if (tabStepPx <= 0f) return@pointerInput
                     var totalDrag = 0f
-                    var dragStartIndex = selectedIndex
+                    var dragStartIndex = currentSelectedIndex
                     detectHorizontalDragGestures(
                         onDragStart = {
                             totalDrag = 0f
-                            dragStartIndex = selectedIndex
+                            dragStartIndex = currentSelectedIndex
                         },
                         onDragCancel = { dragOffset = 0f },
                         onDragEnd = {
                             if (tabStepPx > 0f) {
-                                val absoluteIndexFloat = (dragStartIndex + totalDrag / tabStepPx)
-                                    .coerceIn(0f, tabs.lastIndex.toFloat())
+                                val absoluteIndexFloat = navigationDragPosition(dragStartIndex, totalDrag, tabStepPx, n, rightToLeft)
                                 val newIndex = absoluteIndexFloat.roundToInt()
-                                if (newIndex != selectedIndex) {
-                                    onTabSelected(newIndex)
+                                if (newIndex != currentSelectedIndex) {
+                                    currentOnTabSelected(newIndex)
                                 }
                             }
                             dragOffset = 0f
                         },
                         onHorizontalDrag = { _, delta ->
                             totalDrag += delta
-                            val absoluteIndexFloat = (dragStartIndex + totalDrag / tabStepPx)
-                                .coerceIn(0f, tabs.lastIndex.toFloat())
-                            dragOffset = absoluteIndexFloat * tabStepPx - selectedIndex * tabStepPx
+                            val absoluteIndexFloat = navigationDragPosition(dragStartIndex, totalDrag, tabStepPx, n, rightToLeft)
+                            dragOffset = (absoluteIndexFloat - currentSelectedIndex) * tabStepPx * (if (rightToLeft) -1f else 1f)
 
                             val approxTab = absoluteIndexFloat.roundToInt()
                             if (approxTab != lastHapticTab) {
@@ -306,7 +318,7 @@ fun FloatingBottomBar(
                     tab = tab,
                     selected = index == selectedIndex,
                     glassSpec = glassSpec,
-                    selectedTint = adaptiveTint,
+                    selectedTint = MaterialTheme.colorScheme.onPrimaryContainer,
                     unselectedTint = adaptiveTint?.copy(alpha = 0.65f),
                     onClick = { onTabSelected(index) },
                     modifier = Modifier.weight(1f),
@@ -337,7 +349,7 @@ private fun BottomBarItem(
     val haptics = rememberHaptics()
     val tint by animateColorAsState(
         targetValue = if (selected) {
-            selectedTint ?: MaterialTheme.colorScheme.primary
+            selectedTint ?: MaterialTheme.colorScheme.onPrimaryContainer
         } else {
             unselectedTint ?: MaterialTheme.colorScheme.onSurfaceVariant
         },
@@ -348,8 +360,10 @@ private fun BottomBarItem(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .clip(RoundedCornerShape(percent = 50))
-            .clickable(
+            .clip(RoundedCornerShape(22.dp))
+            .selectable(
+                selected = selected,
+                role = Role.Tab,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
             ) {
@@ -360,10 +374,10 @@ private fun BottomBarItem(
     ) {
         Icon(
             imageVector = tab.icon,
-            contentDescription = tab.label,
+            contentDescription = null,
             tint = tint,
             modifier = Modifier
-                .size(25.dp)
+                .size(24.dp)
                 .graphicsLayer {
                     scaleX = scale
                     scaleY = scale
@@ -372,7 +386,8 @@ private fun BottomBarItem(
         Spacer(Modifier.height(TAB_ICON_LABEL_GAP))
         Text(
             text = tab.label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
             color = tint,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

@@ -202,4 +202,5 @@
     <string name="search_library_no_results">Rien dans Musique locale ne correspond à « %1$s ».</string>
     <string name="player_position">Position de lecture</string>
     <string name="player_volume">Volume</string>
+    <string name="home_hero_subtitle">Votre prochain coup de cœur vous attend.</string>
 </resources>

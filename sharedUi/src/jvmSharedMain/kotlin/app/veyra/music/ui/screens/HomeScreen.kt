@@ -7,8 +7,8 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.DrawableResource
 import androidx.compose.foundation.Image
 import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import app.veyra.music.ui.components.longPressMenuClickable
@@ -496,42 +496,52 @@ fun CompactTrackRow(
     }
 }
 
-/**
- * Listen now's large heading, with the wordmark stacked above it.
- *
- * Only the home tab carries it — the top bar no longer shows the logo, so this
- * is where the app's mark lives. Its height is taken from the heading's own
- * font size rather than a fixed dp, so the two keep their proportion under the
- * system font scale.
- */
+/** The home feed opens with a static tonal hero instead of stacked logo and text. */
 @Composable
 private fun HomeTitle(title: String, modifier: Modifier = Modifier) {
-    val style = MaterialTheme.typography.displayLarge
-    val logoHeight = with(LocalDensity.current) { (style.fontSize * LOGO_TO_FONT).toDp() }
-    Column(modifier = modifier.padding(horizontal = PAGE_GUTTER, vertical = 8.dp)) {
-        Icon(
-            painter = painterResource(Res.drawable.ic_logo),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier
-                .padding(bottom = 14.dp)
-                .height(logoHeight)
-                .aspectRatio(LOGO_ASPECT),
-        )
+    val colors = MaterialTheme.colorScheme
+    val shape = RoundedCornerShape(30.dp)
+    Column(
+        modifier = modifier
+            .padding(horizontal = PAGE_GUTTER, vertical = 12.dp)
+            .fillMaxWidth()
+            .background(
+                Brush.linearGradient(listOf(colors.primaryContainer, colors.surfaceVariant)),
+                shape,
+            )
+            .border(1.dp, colors.primary.copy(alpha = 0.18f), shape)
+            .padding(22.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                Modifier.size(40.dp).clip(RoundedCornerShape(14.dp))
+                    .background(colors.primary.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_logo),
+                    contentDescription = null,
+                    tint = colors.onPrimaryContainer,
+                    modifier = Modifier.size(26.dp),
+                )
+            }
+            Spacer(Modifier.width(10.dp))
+            Text("Veyra", style = MaterialTheme.typography.labelLarge, color = colors.onPrimaryContainer)
+        }
         Text(
             text = title,
             modifier = Modifier.semantics { heading() },
-            style = style,
-            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.displayLarge,
+            color = colors.onPrimaryContainer,
+        )
+        Text(
+            text = stringResource(Res.string.home_hero_subtitle),
+            style = MaterialTheme.typography.bodyLarge,
+            color = colors.onPrimaryContainer.copy(alpha = 0.78f),
         )
     }
 }
-
-/** The wordmark's height against the heading's font size. */
-private const val LOGO_TO_FONT = 0.9f
-
-/** Veyra's mark has a square viewport. */
-private const val LOGO_ASPECT = 1f
 
 /**
  * Shared by the home feed, Explore and Library so headings line up across tabs.

@@ -202,4 +202,5 @@
     <string name="search_library_no_results">NIC w muzyce lokalnej nie pasuje do „%1$s”.</string>
     <string name="player_position">Pozycja odtwarzania</string>
     <string name="player_volume">Głośność</string>
+    <string name="home_hero_subtitle">Odkryj swój kolejny ulubiony utwór.</string>
 </resources>

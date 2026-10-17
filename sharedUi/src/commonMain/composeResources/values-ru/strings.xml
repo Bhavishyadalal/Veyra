@@ -202,4 +202,5 @@
     <string name="search_library_no_results">В локальной музыке нет ничего, совпадающего с «%1$s».</string>
     <string name="player_position">Позиция воспроизведения</string>
     <string name="player_volume">Громкость</string>
+    <string name="home_hero_subtitle">Найдите свою новую любимую песню.</string>
 </resources>

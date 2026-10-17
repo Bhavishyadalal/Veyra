@@ -1331,4 +1331,5 @@
     <string name="artist_signatures_unconfigured">尚未設定 — 輕點設定 API 網址</string>
     <string name="artist_signatures_test_failed">無法連線至該網址的 API</string>
     <string name="signed_by">簽名：%1$s</string>
+    <string name="settings_intro">聲音、風格，一切隨心。</string>
 </resources>

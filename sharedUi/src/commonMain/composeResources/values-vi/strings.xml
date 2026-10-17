@@ -202,4 +202,5 @@
     <string name="search_library_no_results">Không có gì trong Nhạc cục bộ khớp với “%1$s”.</string>
     <string name="player_position">Vị trí phát</string>
     <string name="player_volume">Âm lượng</string>
+    <string name="home_hero_subtitle">Khám phá bài hát yêu thích tiếp theo.</string>
 </resources>

@@ -1331,4 +1331,5 @@
     <string name="artist_signatures_unconfigured">尚未配置 — 轻点设置 API 地址</string>
     <string name="artist_signatures_test_failed">无法访问该地址的 API</string>
     <string name="signed_by">签名：%1$s</string>
+    <string name="settings_intro">声音、风格，一切随心。</string>
 </resources>
