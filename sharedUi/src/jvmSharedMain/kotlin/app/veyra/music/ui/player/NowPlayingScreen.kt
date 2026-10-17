@@ -745,6 +745,8 @@ fun NowPlayingScreen(
 ) {
     val density = LocalDensity.current
     val haptics = rememberHaptics()
+    // Keep the two credit lines inside their band when system text size increases.
+    val headerHeight = with(density) { maxOf(HEADER_HEIGHT, 48.sp.toDp() + 12.dp) }
 
     // Remote tracks whose art lives inside the file resolve it here, once —
     // every surface below reads the same value rather than each triggering
@@ -1479,8 +1481,13 @@ fun NowPlayingScreen(
         // On release only. Ticking the whole way along the bar turns a scrub
         // into a rattle, and the beat that matters is the one that says where
         // the playhead landed.
-        haptics.play(Haptic.Select)
-        scrub.release(onSeekFraction)
+        if (controlsLocked) {
+            scrub.release { }
+            onBlockedControl()
+        } else {
+            haptics.play(Haptic.Select)
+            scrub.release(onSeekFraction)
+        }
     }
     val onVolumeChange: (Float) -> Unit = volume::drag
     val onVolumeChangeFinished: () -> Unit = volume::release
@@ -2444,7 +2451,7 @@ fun NowPlayingScreen(
                                     if (panelUp) {
                                         bandTop = space?.positionInRoot()?.y ?: 0f
                                         bandBottom = bandTop +
-                                            (ART_BOX_TOP_PAD + HEADER_HEIGHT).toPx()
+                                            (ART_BOX_TOP_PAD + headerHeight).toPx()
                                     } else {
                                         bandTop = dismissBandTop
                                         bandBottom = dismissBandBottom
@@ -2454,7 +2461,7 @@ fun NowPlayingScreen(
                                             dragQueueIn(
                                                 down = down,
                                                 travel = bandBottom - bandTop -
-                                                    HEADER_HEIGHT.toPx(),
+                                                    headerHeight.toPx(),
                                                 slide = queueSlide,
                                                 onHold = { queueDragging = it },
                                                 onSettle = { open ->
@@ -2540,19 +2547,19 @@ fun NowPlayingScreen(
                         // over once the credits row and the gap above it have had
                         // theirs. Sizing it off the width alone is what pushed the
                         // credits down across the scrubber on anything but a phone.
-                        val wantArt = minOf(maxWidth, roomy - ART_TITLE_GAP - HEADER_HEIGHT)
+                        val wantArt = minOf(maxWidth, roomy - ART_TITLE_GAP - headerHeight)
                         // Held to what the box has actually got, for the single frame it
                         // takes the gaps below to catch up with a change in their own
                         // height: a sleeve a few dp under for one frame is a better
                         // failure than a credits row overhanging the lyric strip.
-                        val fullArt = minOf(wantArt, maxHeight - ART_TITLE_GAP - HEADER_HEIGHT)
+                        val fullArt = minOf(wantArt, maxHeight - ART_TITLE_GAP - headerHeight)
                             .coerceAtLeast(THUMB_SIZE)
                         // What's left over once the sleeve, the gap and the credits have
                         // had theirs. A few dp on a phone; the better part of a
                         // centimetre on anything taller, and since the group is centred,
                         // half of it used to land between the credits and the lyric strip
                         // as one wide hole in the middle of the controls.
-                        val slack = (roomy - wantArt - ART_TITLE_GAP - HEADER_HEIGHT)
+                        val slack = (roomy - wantArt - ART_TITLE_GAP - headerHeight)
                             .coerceAtLeast(0.dp)
                         // Handed to the two gaps around the transport row instead, which
                         // is where a tall screen should be doing its breathing.
@@ -2621,7 +2628,7 @@ fun NowPlayingScreen(
                         // the pair sits centred while the queue is closed — in whatever
                         // the controls couldn't take, which on all but the tallest
                         // screens is nothing.
-                        val groupTop = (maxHeight - fullArt - ART_TITLE_GAP - HEADER_HEIGHT)
+                        val groupTop = (maxHeight - fullArt - ART_TITLE_GAP - headerHeight)
                             .coerceAtLeast(0.dp) / 2
                         // Functions of the collapse, called at placement and measure
                         // — see [p]. Composition never reads them.
@@ -2640,7 +2647,7 @@ fun NowPlayingScreen(
                                 .takeIf { it > 0.dp }
                                 ?: maxHeight
                             val collapsedTitleTop = (
-                                expandedTopHeight + spotifyCanvasDeckHeight - HEADER_HEIGHT
+                                expandedTopHeight + spotifyCanvasDeckHeight - headerHeight
                             ).coerceAtLeast(0.dp)
                             collapsedTitleTop
                         } else {
@@ -3159,7 +3166,7 @@ fun NowPlayingScreen(
                                         x = 0,
                                         y = (
                                             currentTitleTop() -
-                                                lerp(0.dp, (HEADER_HEIGHT - THUMB_SIZE) / 2, p())
+                                                lerp(0.dp, (headerHeight - THUMB_SIZE) / 2, p())
                                         ).roundToPx(),
                                     )
                                 }
@@ -3173,7 +3180,7 @@ fun NowPlayingScreen(
                                         constraints.constrainHeight(placeable.height),
                                     ) { placeable.placeRelative(start, 0) }
                                 }
-                                .height(HEADER_HEIGHT)
+                                .height(headerHeight)
                                 // Where the dismiss band ends — see its top on the
                                 // artwork above. Taken from the row rather than added up
                                 // from the sleeve so the gap between the two is inside
@@ -3229,7 +3236,9 @@ fun NowPlayingScreen(
                                         MarqueeText(
                                             text = song.title,
                                             style = MaterialTheme.typography.titleLarge.copy(
-                                                fontSize = 20.sp,
+                                                fontSize = 22.sp,
+                                                lineHeight = 26.sp,
+                                                fontWeight = FontWeight.Bold,
                                             ),
                                             color = Color.White,
                                             enabled = scrolling,
@@ -3250,9 +3259,10 @@ fun NowPlayingScreen(
                                             },
                                             style = MaterialTheme.typography.titleLarge.copy(
                                                 fontWeight = FontWeight.W500,
-                                                fontSize = 20.sp,
+                                                fontSize = 17.sp,
+                                                lineHeight = 22.sp,
                                             ),
-                                            color = LocalPlayerTint.current.copy(alpha = 0.55f),
+                                            color = LocalPlayerTint.current.copy(alpha = 0.72f),
                                             enabled = scrolling,
                                             // A title that's also scrolling gets to go first —
                                             // starting together reads as clutter, so the artist
@@ -3335,7 +3345,7 @@ fun NowPlayingScreen(
                                     reduceMotion = lyricsTranslation.reduceMotion,
                                     modifier = Modifier
                                         .fillMaxSize()
-                                        .padding(top = HEADER_HEIGHT)
+                                        .padding(top = headerHeight)
                                         // Keep the prepared list measured but completely
                                         // outside hit-testing/drawing until it is needed.
                                         .offset {
@@ -3451,7 +3461,7 @@ fun NowPlayingScreen(
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(top = HEADER_HEIGHT)
+                                    .padding(top = headerHeight)
                                     .offset {
                                         if (queuePanelVisible) IntOffset.Zero else IntOffset(100_000, 0)
                                     }

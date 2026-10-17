@@ -20,6 +20,9 @@ import (
 )
 
 func setupTestServer() *httptest.Server {
+	// Isolate create quotas: otherwise the third localhost test gets a 429
+	// from earlier tests instead of exercising its own REST/WebSocket behavior.
+	createLimiter = newIPRateLimiter(time.Minute, config.CreateRatePerMinute, config.RateLimitMaxEntries)
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /{$}", handleRoot)
 	mux.HandleFunc("GET /healthz", handleHealthz)

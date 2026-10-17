@@ -1645,7 +1645,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         // one at the tail.
         _homePendingShelves.value = 1 + YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS.size
         viewModelScope.launch {
-            launch {
+            val coreRequest = launch {
                 try {
                     YtMusicRepository.home()
                         .onSuccess { feed ->
@@ -1676,22 +1676,23 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                         }
                 }
             }
-            YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS.forEach { browseId ->
-                launch {
-                    try {
-                        YtMusicRepository.homeSupplement(browseId).onSuccess { shelves ->
-                            if (isCurrentHomeLoad(identity, generation)) publishHomeShelves(shelves)
-                        }
-                    } finally {
-                        homeShelfRequestSettled(identity, generation)
+            // Keep optional feed parsing/image arrivals out of the first core response burst.
+            coreRequest.join()
+            for (browseId in YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS) {
+                if (!isCurrentHomeLoad(identity, generation)) break
+                try {
+                    YtMusicRepository.homeSupplement(browseId).onSuccess { shelves ->
+                        if (isCurrentHomeLoad(identity, generation)) publishHomeShelves(shelves)
                     }
+                } finally {
+                    homeShelfRequestSettled(identity, generation)
                 }
             }
         }
     }
 
     /**
-     * One of the parallel first-page requests has finished. Ignored once a newer
+     * One of the first-page requests has finished. Ignored once a newer
      * load has taken over, which has already reset the count for its own fan-out.
      */
     private fun homeShelfRequestSettled(identity: String?, generation: Long) {

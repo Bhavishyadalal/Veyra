@@ -149,18 +149,9 @@ class VeyraApplication : Application(), SingletonImageLoader.Factory {
         // suspend call chain that reaches it (a track's canvas lookup) has
         // one to hand — see SpotifyToken's doc for why.
         SpotifyToken.init(this)
-        // A sideloaded update is just a new APK over the old one, so app data —
-        // including whatever the old build left in these caches — survives it
-        // untouched. Wipe both on the first launch of a higher versionCode so a
-        // format or key change between builds can't serve stale or mismatched
-        // bytes from a cache the new code didn't write.
-        if (AppSettings.consumeVersionUpdate(BuildConfig.VERSION_CODE)) {
-            AudioCache.clear()
-            SingletonImageLoader.get(this).let { loader ->
-                loader.memoryCache?.clear()
-                loader.diskCache?.clear()
-            }
-        }
+        // Record the installed version. Media caches are retained across cosmetic updates;
+        // format-specific migrations should invalidate only the entries they change.
+        AppSettings.consumeVersionUpdate(BuildConfig.VERSION_CODE)
         // Initialize LastFM with saved settings if available
         initLastfm()
         // The public "apps open right now" count; see Presence.

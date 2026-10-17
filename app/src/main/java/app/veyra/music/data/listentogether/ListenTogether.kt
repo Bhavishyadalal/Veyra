@@ -110,7 +110,7 @@ val ServerConnectionState.health: ListenTogether.Health
     }
 
 /**
- * Listen together: one party, shared by up to five signed-in devices.
+ * Listen together: one party, shared by up to five devices, with optional account profiles.
  *
  * This object is the whole client half of the feature — membership, the socket,
  * the clock, and the controls any member may send. It does **not** touch the
@@ -155,11 +155,9 @@ val ServerConnectionState.health: ListenTogether.Health
  *
  * ## Identity
  *
- * Creating or joining requires a signed-in account — that is what puts real
- * names and faces in the member list on every device — and [identity] is where
- * that is enforced on this side. The server cannot verify the claim; what it
- * can do is refuse anyone without the token it minted, which is why the token
- * is stored and never shown.
+ * Signed-in listeners can use their profile; guests use a stable installation
+ * pseudonym and an optional nickname. The server issues a separate membership
+ * token for either kind of identity, and that token still protects the party.
  */
 object ListenTogether {
 
@@ -762,13 +760,13 @@ object ListenTogether {
         return job.await()
     }
 
-    /** Whether this device has an account it can jam as. */
-    fun canJoin(): Boolean = identity() != null
+    /** Both guests and account profiles can join; the server grants membership separately. */
+    fun canJoin(): Boolean = true
 
     fun nickname(): String = prefs.getString(KEY_NICKNAME, null).orEmpty()
 
     fun setNickname(value: String) {
-        prefs.edit().putString(KEY_NICKNAME, value.trim().take(80)).apply()
+        prefs.edit().putString(KEY_NICKNAME, partyDisplayName(value)).apply()
     }
 
     /**
@@ -814,7 +812,7 @@ object ListenTogether {
     }
 
     private suspend fun doCreateOnServer(serverBase: String, nickname: String, maxMembers: Int): String {
-        val who = identity(nickname) ?: throw PartyException("not_signed_in", "Sign in to listen together.")
+        val who = identity(nickname)
         if (serverBase.isBlank()) throw PartyException("no_server", "Set the party server address first.")
         val membership = post(
             "$serverBase/api/parties",
@@ -869,7 +867,7 @@ object ListenTogether {
     }
 
     private suspend fun doJoinOnServer(serverBase: String, code: String, nickname: String): String {
-        val who = identity(nickname) ?: throw PartyException("not_signed_in", "Sign in to listen together.")
+        val who = identity(nickname)
         if (serverBase.isBlank()) throw PartyException("no_server", "Set the party server address first.")
         val cleaned = code.filter { it.isLetterOrDigit() }.uppercase()
         if (cleaned.length != CODE_LENGTH) {
@@ -934,11 +932,6 @@ object ListenTogether {
     ): SwitchPartyResult = switchMutex.withLock {
         withContext(Dispatchers.IO) {
             val who = identity(nickname)
-                ?: return@withContext if (_state.value.inParty) {
-                    SwitchPartyResult.TargetFailedRecovered(_state.value.code.orEmpty(), "Sign in to listen together.")
-                } else {
-                    SwitchPartyResult.TargetFailedNoParty("Sign in to listen together.")
-                }
 
             val normTarget = when (val res = parseAndNormalizeServerUrl(targetCustomServer)) {
                 is ServerUrlValidationResult.Valid -> res.normalizedUrl
@@ -1452,34 +1445,26 @@ object ListenTogether {
         val avatar: String?,
     )
 
-    /**
-     * Who this device is jamming as, or null if it cannot.
-     *
-     * [AuthStore.isSignedIn][app.veyra.music.auth.AuthStore.isSignedIn]
-     * rather than "is there a cookie": a jar with no signable secret in it is a
-     * session the app is already treating as signed out everywhere else, and a
-     * party is not the place to start disagreeing with that.
-     *
-     * [userId] is a hash of the account and profile ids, not either of them. It
-     * only has to be stable and comparable — the server never needs to know
-     * which Google account it stands for, and a party server that accumulated
-     * real account identifiers would be holding something it has no use for.
-     */
-    private fun identity(nickname: String = nickname()): Identity? {
+    /** Account metadata is optional; an installation-scoped guest is always available. */
+    private fun identity(nickname: String = nickname()): Identity {
         val store = VeyraApplication.authStore
-        if (!store.isSignedIn) return null
-        val account = store.activeSession ?: return null
+        val device = deviceId()
+        val account = store.activeSession.takeIf { store.isSignedIn }
+        if (account == null) {
+            val guest = GuestPartyIdentity.forDevice(device, nickname)
+            return Identity(guest.userId, device, guest.name, null)
+        }
         val profile = account.profiles.firstOrNull { it.profileId == account.activeProfileId }
             ?: account.profiles.firstOrNull()
-        val name = nickname.trim().takeIf { it.isNotBlank() }
+        val name = partyDisplayName(nickname).takeIf { it.isNotBlank() }
             ?: profile?.name?.takeIf { it.isNotBlank() }
             ?: account.name.takeIf { it.isNotBlank() }
             ?: account.email.substringBefore('@').takeIf { it.isNotBlank() }
-            ?: return null
+            ?: GuestPartyIdentity.forDevice(device, "").name
         return Identity(
             userId = sha256("${account.accountId}:${profile?.profileId.orEmpty()}").take(32),
-            deviceId = deviceId(),
-            name = name,
+            deviceId = device,
+            name = partyDisplayName(name),
             avatar = profile?.avatar?.takeIf { it.startsWith("http") },
         )
     }
@@ -1549,9 +1534,9 @@ object ListenTogether {
      *
      * Read off [identity] rather than the account directly, so the settings
      * screen shows what will actually be sent rather than a second guess at it
-     * — including answering null in the cases a party cannot be joined at all.
+     * — guests have no profile avatar.
      */
-    fun myAvatarUrl(): String? = identity()?.avatar
+    fun myAvatarUrl(): String? = identity().avatar
 
     /**
      * This install's identity to the party, independent of who is signed in.
@@ -1560,6 +1545,7 @@ object ListenTogether {
      * from a sixth device — so it has to survive a sign-out, an account switch
      * and a process death, and must not survive an uninstall.
      */
+    @Synchronized
     private fun deviceId(): String {
         prefs.getString(KEY_DEVICE, null)?.let { return it }
         return UUID.randomUUID().toString().also {
@@ -1631,9 +1617,8 @@ object ListenTogether {
         return PartyException(
             code = parsed?.code.orEmpty().ifBlank { "http_${status.value}" },
             message = parsed?.message?.takeIf { it.isNotBlank() }
-                // 422 is the server rejecting an identity, which here can only
-                // mean the account layer handed over something blank.
-                ?: if (status.value == 422) "This account can't be used to jam."
+                // 422 is a rejected identity, whether from a profile or a guest.
+                ?: if (status.value == 422) "This listening identity could not join the party."
                 else "The party server said ${status.value}.",
             statusCode = status.value,
         )

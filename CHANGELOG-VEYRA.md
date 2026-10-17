@@ -1,3 +1,16 @@
+# Veyra 0.1.0-beta3 (source update)
+
+- Refined the existing player: stronger song/artist hierarchy, clearer secondary text, responsive credit height, larger menu touch areas and transport press feedback.
+- Seek and volume sliders expose labeled progress actions to accessibility services and use current gesture callbacks after track changes; seeking respects party host locks.
+- Reduced-motion mode stops both title/artist marquees and player-menu crossfades.
+- Refined home: two-line shelf titles, a larger layout toggle and stable shelf identities when recent history arrives.
+- Shared the home loading clock and cached shimmer brushes; fetch optional shelves after the core feed with bounded concurrency.
+- Preserve media caches across cosmetic version updates.
+- Allow guest Listen Together creation, joining, invite previews and server switching. Guest IDs are installation-scoped and nicknames fit the server's UTF-8 limit.
+- Added guest identity and REST authorization regression coverage. Isolated backend test server rate limits.
+
+Current validation: `verification/BETA3-RESULTS.md`. Full Android build and device performance validation remain blocked/unrun as documented; no verified beta3 APK is included.
+
 # Veyra 0.1.0-beta2 (source update)
 
 - Rebuilt settings navigation around six categories and a persistent global search field.

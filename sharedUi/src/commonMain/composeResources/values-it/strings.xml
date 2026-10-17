@@ -200,4 +200,6 @@
     <string name="search_library_empty">Cerca i brani nella cartella Musica locale.</string>
     <string name="search_library_hint">Brani, artisti e album</string>
     <string name="search_library_no_results">Nulla in Musica locale corrisponde a «%1$s».</string>
+    <string name="player_position">Posizione di riproduzione</string>
+    <string name="player_volume">Volume</string>
 </resources>

@@ -1,3 +1,5 @@
+> Historical beta2 validation. See [BETA3-RESULTS.md](BETA3-RESULTS.md) for current code and results.
+
 # Veyra beta2 source validation — 2026-10-17
 
 ## Passed in this environment

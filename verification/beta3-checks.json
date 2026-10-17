@@ -1,0 +1,32 @@
+{
+  "revision": "0.1.0-beta3",
+  "kotlin_focused_tests": {
+    "passed": 10,
+    "failed": 0,
+    "runner": "JUnit 4.13.2; Gradle 8.11.1 bundled Kotlin 2.0.20 compiler; real guest identity and settings search production classes"
+  },
+  "go_tests": {
+    "passed": 47,
+    "failed": 0,
+    "race_detector": true,
+    "go_version": "1.27.2"
+  },
+  "go_vet": "passed",
+  "kotlin_syntax": {
+    "files": 20,
+    "errors": 0,
+    "scope": "Changed/new Kotlin files compared with the original beta1 source upload; not Compose type checking"
+  },
+  "resources": {
+    "xml_files": 137,
+    "localized_entries": 23114,
+    "font_references": 8,
+    "errors": 0,
+    "accessibility_label_catalogs": 18
+  },
+  "android_compile": "blocked_before_Kotlin_compilation: proxy HTTP 403 for jitpack.io NewPipeExtractor v0.26.3",
+  "full_android_unit_suite": "unrun_due_to_dependency_resolution_failure",
+  "apk": "not_built",
+  "device_ui_playback_and_frame_timing": "not_run",
+  "source_whitespace": "passed"
+}

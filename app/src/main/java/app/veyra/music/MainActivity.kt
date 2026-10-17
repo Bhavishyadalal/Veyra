@@ -777,8 +777,8 @@ private fun VeyraApp(
         showListenTogether = true
         JamInviteLink.handled()
     }
-    LaunchedEffect(signedIn, activeJamInviteCode) {
-        if (signedIn && activeJamInviteCode != null) {
+    LaunchedEffect(activeJamInviteCode) {
+        if (activeJamInviteCode != null) {
             showSettings = true
             showListenTogether = true
         }
@@ -2838,17 +2838,11 @@ private fun VeyraApp(
                         WearOsScreen(contentPadding = listPadding)
                     } else if (key == "listen_together") {
                         ListenTogetherScreen(
-                            signedIn = signedIn,
                             inviteCode = activeJamInviteCode,
                             inviteServer = activeJamInviteServer,
                             onInviteHandled = {
                                 activeJamInviteCode = null
                                 activeJamInviteServer = null
-                            },
-                            onSignIn = {
-                                showListenTogether = false
-                                showSettings = false
-                                webSession = WebSessionMode.SIGN_IN
                             },
                             contentPadding = listPadding,
                             onEditServer = { editingPartyServer = true },
@@ -3441,17 +3435,11 @@ private fun VeyraApp(
                             color = MaterialTheme.colorScheme.background,
                         ) {
                             ListenTogetherScreen(
-                                signedIn = signedIn,
                                 inviteCode = activeJamInviteCode,
                                 inviteServer = activeJamInviteServer,
                                 onInviteHandled = {
                                     activeJamInviteCode = null
                                     activeJamInviteServer = null
-                                },
-                                onSignIn = {
-                                    settingsSubScreen = null
-                                    showSettings = false
-                                    webSession = WebSessionMode.SIGN_IN
                                 },
                                 contentPadding = listPadding,
                                 onEditServer = { editingPartyServer = true },

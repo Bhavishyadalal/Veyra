@@ -981,7 +981,7 @@ object AppSettings {
      */
     fun consumeVersionUpdate(currentVersionCode: Int): Boolean {
         val last = prefs.getInt(KEY_LAST_VERSION_CODE, currentVersionCode)
-        if (last != currentVersionCode) {
+        if (last != currentVersionCode || !prefs.contains(KEY_LAST_VERSION_CODE)) {
             prefs.edit().putInt(KEY_LAST_VERSION_CODE, currentVersionCode).apply()
         }
         return currentVersionCode > last

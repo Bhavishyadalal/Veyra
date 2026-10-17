@@ -36,6 +36,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -202,6 +204,7 @@ internal fun PlayerScrubber(
     onScrubFinished: () -> Unit,
     centerLabel: @Composable BoxScope.() -> Unit = {},
 ) {
+    val controlsLocked = rememberControlsLocked()
     val shown = shown()
     // Held as a State and read only inside the bar's draw: the blend republishes
     // every fade tick, and collecting it by value here would recompose the
@@ -216,6 +219,8 @@ internal fun PlayerScrubber(
             value = shown,
             onValueChange = onScrub,
             onValueChangeFinished = onScrubFinished,
+            accessibilityLabel = stringResource(Res.string.player_position),
+            enabled = !controlsLocked && durationMs > 0L,
             loading = loading,
             mixing = mixing,
             mixPulse = mixPulse,
@@ -235,12 +240,12 @@ internal fun PlayerScrubber(
                 Text(
                     text = formatTime((shown * durationMs).toLong()),
                     style = MaterialTheme.typography.labelMedium,
-                    color = LocalPlayerTint.current.copy(alpha = 0.55f),
+                    color = LocalPlayerTint.current.copy(alpha = 0.72f),
                 )
                 Text(
                     text = "-" + formatTime(durationMs - (shown * durationMs).toLong()),
                     style = MaterialTheme.typography.labelMedium,
-                    color = LocalPlayerTint.current.copy(alpha = 0.55f),
+                    color = LocalPlayerTint.current.copy(alpha = 0.72f),
                 )
             }
             // Pinned to the box's own centre rather than squeezed into the gap
@@ -521,11 +526,12 @@ internal fun VolumeRow(
         Icon(
             Icons.AutoMirrored.Rounded.VolumeDown,
             contentDescription = null,
-            tint = LocalPlayerTint.current.copy(alpha = 0.5f),
+            tint = LocalPlayerTint.current.copy(alpha = 0.7f),
             modifier = Modifier.size(20.dp),
         )
         Spacer(Modifier.width(10.dp))
         ThinSlider(
+            accessibilityLabel = stringResource(Res.string.player_volume),
             value = value(),
             onValueChange = onValueChange,
             onValueChangeFinished = onValueChangeFinished,
@@ -537,7 +543,7 @@ internal fun VolumeRow(
         Icon(
             Icons.AutoMirrored.Rounded.VolumeUp,
             contentDescription = null,
-            tint = LocalPlayerTint.current.copy(alpha = 0.5f),
+            tint = LocalPlayerTint.current.copy(alpha = 0.7f),
             modifier = Modifier.size(20.dp),
         )
     }
@@ -712,35 +718,42 @@ internal fun CircleGlyph(
     haptic: Haptic = Haptic.Tap,
 ) {
     val haptics = rememberHaptics()
+    val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     val discAlpha by animateFloatAsState(
         targetValue = if (active) 0.34f else 0.18f,
         label = "glyphDisc",
     )
     Box(
         modifier = Modifier
-            .size(34.dp)
+            .size(48.dp)
             .clip(CircleShape)
-            .background(LocalPlayerTint.current.copy(alpha = discAlpha))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
+                role = Role.Button,
             ) {
                 haptics.play(haptic)
                 onClick()
             },
         contentAlignment = Alignment.Center,
     ) {
-        Crossfade(
-            targetState = icon,
-            animationSpec = tween(durationMillis = 180),
-            label = "playerMenuGlyph",
-        ) { glyph ->
-            Icon(
-                imageVector = glyph,
-                contentDescription = contentDescription,
-                tint = LocalPlayerTint.current,
-                modifier = Modifier.size(19.dp),
-            )
+        Box(
+            Modifier.size(34.dp).clip(CircleShape)
+                .background(LocalPlayerTint.current.copy(alpha = discAlpha)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Crossfade(
+                targetState = icon,
+                animationSpec = tween(durationMillis = if (reduceMotion) 0 else 180),
+                label = "playerMenuGlyph",
+            ) { glyph ->
+                Icon(
+                    imageVector = glyph,
+                    contentDescription = contentDescription,
+                    tint = LocalPlayerTint.current,
+                    modifier = Modifier.size(19.dp),
+                )
+            }
         }
     }
 }
@@ -763,6 +776,14 @@ private fun TransportGlyph(
     heightScale: Float = 1f,
 ) {
     val haptics = rememberHaptics()
+    val interactionSource = remember { MutableInteractionSource() }
+    val pressed by interactionSource.collectIsPressedAsState()
+    val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+    val pressedScale = animateFloatAsState(
+        targetValue = if (pressed && enabled && !reduceMotion) 0.93f else 1f,
+        animationSpec = tween(if (reduceMotion) 0 else 120),
+        label = "transportPress",
+    )
     // Faded rather than hidden: the row keeps its shape at the ends of a queue.
     val alpha by animateFloatAsState(
         targetValue = if (enabled) 1f else 0.3f,
@@ -771,10 +792,13 @@ private fun TransportGlyph(
     Box(
         modifier = Modifier
             .size(touchSize)
+            .clip(CircleShape)
+            .graphicsLayer { scaleX = pressedScale.value; scaleY = pressedScale.value }
             .clickable(
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null,
                 enabled = enabled,
+                role = Role.Button,
             ) {
                 haptics.play(haptic)
                 onClick()
@@ -1271,6 +1295,7 @@ internal fun MarqueeText(
     leading: (@Composable () -> Unit)? = null,
     onOverflowChange: (Boolean) -> Unit = {},
 ) {
+    val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     val density = LocalDensity.current
     val textMeasurer = rememberTextMeasurer()
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
@@ -1278,7 +1303,7 @@ internal fun MarqueeText(
             leading()
             Spacer(Modifier.width(6.dp))
         }
-        if (!enabled) {
+        if (!enabled || reduceMotion) {
             Text(
                 text = text,
                 style = style,
@@ -1394,12 +1419,13 @@ internal fun ArtistCreditsMarquee(
     enabled: Boolean = true,
     startDelayMillis: Long = 0L,
 ) {
+    val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     val density = LocalDensity.current
     val textMeasurer = rememberTextMeasurer()
     val segments = remember(text, credits) { creditSegments(text, credits) }
 
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        if (!enabled) {
+        if (!enabled || reduceMotion) {
             CreditLine(segments = segments, style = style, color = color, onOpenArtist = onOpenArtist)
             return@Row
         }

@@ -23,6 +23,16 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import app.veyra.music.ui.player.PlayerSettings
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.geometry.Size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +60,29 @@ private val LineShape = RoundedCornerShape(4.dp)
 private val TitleWidths = listOf(0.68f, 0.46f, 0.58f, 0.74f, 0.52f)
 private val SubtitleWidths = listOf(0.34f, 0.44f, 0.27f, 0.38f, 0.31f)
 
+private val LocalShimmerProgress = staticCompositionLocalOf<State<Float>?> { null }
+
+/** A feed uses one animation clock for all visible skeletons, including nested rows. */
+@Composable
+internal fun FeedShimmerHost(enabled: Boolean, content: @Composable () -> Unit) {
+    val progress = rememberShimmerProgress(enabled)
+    CompositionLocalProvider(LocalShimmerProgress provides progress, content = content)
+}
+
+@Composable
+private fun rememberShimmerProgress(enabled: Boolean = true): State<Float> {
+    val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+    val still = remember { mutableStateOf(0.45f) }
+    return if (enabled && !reduceMotion) {
+        rememberInfiniteTransition(label = "skeleton").animateFloat(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(tween(SHIMMER_PERIOD_MS, easing = LinearEasing)),
+            label = "sweep",
+        )
+    } else still
+}
+
 /**
  * One placeholder block, with a highlight sweeping across it.
  *
@@ -63,27 +96,23 @@ fun ShimmerBox(modifier: Modifier = Modifier, shape: Shape = BlockShape) {
     val highlight = MaterialTheme.colorScheme.onSurfaceVariant
         .copy(alpha = 0.16f)
         .compositeOver(base)
-    val sweep = rememberInfiniteTransition(label = "skeleton").animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(SHIMMER_PERIOD_MS, easing = LinearEasing)),
-        label = "sweep",
-    )
+    val sweep = LocalShimmerProgress.current ?: rememberShimmerProgress()
     Box(
         modifier
             .clip(shape)
             .drawWithCache {
-                // The band travels from fully off one edge to fully off the
-                // other, which leaves a beat of flat grey between passes rather
-                // than a highlight permanently parked somewhere on the block.
                 val band = size.width * 0.5f
-                val startX = -band + sweep.value * (size.width + band * 2)
                 val brush = Brush.horizontalGradient(
                     colors = listOf(base, highlight, base),
-                    startX = startX,
-                    endX = startX + band,
+                    startX = 0f,
+                    endX = band,
                 )
-                onDrawBehind { drawRect(brush) }
+                onDrawBehind {
+                    drawRect(base)
+                    // State is read only while drawing; the brush remains cached across frames.
+                    val startX = -band + sweep.value * (size.width + band * 2)
+                    translate(left = startX) { drawRect(brush, size = Size(band, size.height)) }
+                }
             },
     )
 }

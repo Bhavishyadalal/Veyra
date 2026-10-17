@@ -83,6 +83,7 @@ import app.veyra.music.ui.components.PullToRefresh
 import app.veyra.music.ui.components.SHELF_CARD_WIDTH
 import app.veyra.music.ui.components.SearchPlayingBars
 import app.veyra.music.ui.components.SignInBanner
+import app.veyra.music.ui.components.FeedShimmerHost
 import app.veyra.music.ui.components.feedMoreSkeleton
 import app.veyra.music.ui.components.feedSkeleton
 import app.veyra.music.ui.components.recentlyPlayedSkeleton
@@ -147,75 +148,77 @@ fun HomeScreen(
 ) {
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
 
-    PullToRefresh(
-        refreshing = refreshing,
-        onRefresh = onRefresh,
-        state = pullState,
-        modifier = modifier,
-    ) {
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.fillMaxSize(),
-            // The heading sits higher than the other tabs' first row: pull the
-            // whole feed up by [HOME_TITLE_LIFT] with it.
-            contentPadding = if (title != null) {
-                PaddingValues(
-                    top = (contentPadding.calculateTopPadding() - HOME_TITLE_LIFT).coerceAtLeast(0.dp),
-                    bottom = contentPadding.calculateBottomPadding(),
-                )
-            } else {
-                contentPadding
-            },
+    FeedShimmerHost(enabled = state is UiState.Loading || recentlyPlayedLoading || loadingMore) {
+        PullToRefresh(
+            refreshing = refreshing,
+            onRefresh = onRefresh,
+            state = pullState,
+            modifier = modifier,
         ) {
-            if (title != null) {
-                item { HomeTitle(title) }
-            }
-            if (!signedIn && onSignIn != null) {
-                item {
-                    SignInBanner(onSignIn = onSignIn, modifier = Modifier.padding(bottom = 8.dp))
-                }
-            }
-            when (state) {
-                is UiState.Loading -> {
-                    if (recentlyPlayedLoading) {
-                        recentlyPlayedSkeleton(listLayout = recentsViewType == LibraryViewType.LIST)
-                        // Recents owns the leading layout while its request is
-                        // pending, so the feed behind it starts with ordinary
-                        // shelf placeholders rather than another hero card.
-                        feedSkeleton(firstIsHero = false)
-                    } else {
-                        feedSkeleton(firstIsHero = leadHero)
-                    }
-                }
-                is UiState.Error -> item {
-                    MessageState(state.message, actionLabel = stringResource(Res.string.retry), onAction = onRetry)
-                }
-                is UiState.Success -> {
-                    if (recentlyPlayedLoading) {
-                        recentlyPlayedSkeleton(listLayout = recentsViewType == LibraryViewType.LIST)
-                    }
-                    // The loading skeleton already owns the hero slot. Until
-                    // Recently Played lands, every real shelf must retain its
-                    // compact-card layout instead of briefly becoming a hero.
-                    itemsIndexedShelves(
-                        shelves = state.data,
-                        onItemClick = onItemClick,
-                        onItemLongPress = onItemLongPress,
-                        currentSong = currentSong,
-                        isPlaying = isPlaying,
-                        firstIsHero = leadHero && !recentlyPlayedLoading,
-                        recentsViewType = recentsViewType,
-                        onRecentsViewTypeToggle = {
-                            AppUi.host.setHomeRecentsViewType(
-                                if (recentsViewType == LibraryViewType.LIST) {
-                                    LibraryViewType.GRID
-                                } else {
-                                    LibraryViewType.LIST
-                                },
-                            )
-                        },
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize(),
+                // The heading sits higher than the other tabs' first row: pull the
+                // whole feed up by [HOME_TITLE_LIFT] with it.
+                contentPadding = if (title != null) {
+                    PaddingValues(
+                        top = (contentPadding.calculateTopPadding() - HOME_TITLE_LIFT).coerceAtLeast(0.dp),
+                        bottom = contentPadding.calculateBottomPadding(),
                     )
-                    if (loadingMore) feedMoreSkeleton()
+                } else {
+                    contentPadding
+                },
+            ) {
+                if (title != null) {
+                    item(key = "home:heading", contentType = "heading") { HomeTitle(title) }
+                }
+                if (!signedIn && onSignIn != null) {
+                    item(key = "home:account", contentType = "account") {
+                        SignInBanner(onSignIn = onSignIn, modifier = Modifier.padding(bottom = 8.dp))
+                    }
+                }
+                when (state) {
+                    is UiState.Loading -> {
+                        if (recentlyPlayedLoading) {
+                            recentlyPlayedSkeleton(listLayout = recentsViewType == LibraryViewType.LIST)
+                            // Recents owns the leading layout while its request is
+                            // pending, so the feed behind it starts with ordinary
+                            // shelf placeholders rather than another hero card.
+                            feedSkeleton(firstIsHero = false)
+                        } else {
+                            feedSkeleton(firstIsHero = leadHero)
+                        }
+                    }
+                    is UiState.Error -> item {
+                        MessageState(state.message, actionLabel = stringResource(Res.string.retry), onAction = onRetry)
+                    }
+                    is UiState.Success -> {
+                        if (recentlyPlayedLoading) {
+                            recentlyPlayedSkeleton(listLayout = recentsViewType == LibraryViewType.LIST)
+                        }
+                        // The loading skeleton already owns the hero slot. Until
+                        // Recently Played lands, every real shelf must retain its
+                        // compact-card layout instead of briefly becoming a hero.
+                        itemsIndexedShelves(
+                            shelves = state.data,
+                            onItemClick = onItemClick,
+                            onItemLongPress = onItemLongPress,
+                            currentSong = currentSong,
+                            isPlaying = isPlaying,
+                            firstIsHero = leadHero && !recentlyPlayedLoading,
+                            recentsViewType = recentsViewType,
+                            onRecentsViewTypeToggle = {
+                                AppUi.host.setHomeRecentsViewType(
+                                    if (recentsViewType == LibraryViewType.LIST) {
+                                        LibraryViewType.GRID
+                                    } else {
+                                        LibraryViewType.LIST
+                                    },
+                                )
+                            },
+                        )
+                        if (loadingMore) feedMoreSkeleton()
+                    }
                 }
             }
         }
@@ -256,7 +259,8 @@ private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexedShelves(
     onRecentsViewTypeToggle: () -> Unit,
 ) {
     shelves.forEachIndexed { index, shelf ->
-        item(key = shelf.title + index) {
+        // Recent history can arrive after the feed. Its insertion must not recreate every shelf.
+        item(key = "home:shelf:${shelf.title.lowercase(Locale.ROOT)}", contentType = "home:shelf") {
             val openItem: (ShelfItem) -> Unit = { item -> onItemClick(item, shelf.title) }
             if (index == 0 && shelf.title.equals(RECENTS_TITLE, ignoreCase = true)) {
                 RecentShelf(
@@ -389,7 +393,7 @@ private fun RecentSectionHeader(
         Spacer(Modifier.width(8.dp))
         Box(
             modifier = Modifier
-                .size(32.dp)
+                .size(48.dp)
                 .clip(CircleShape)
                 .clickable(onClick = onViewTypeToggle),
             contentAlignment = Alignment.Center,
@@ -516,6 +520,7 @@ private fun HomeTitle(title: String, modifier: Modifier = Modifier) {
         )
         Text(
             text = title,
+            modifier = Modifier.semantics { heading() },
             style = style,
             color = MaterialTheme.colorScheme.onBackground,
         )
@@ -1074,7 +1079,8 @@ internal fun ShelfCard(
                 text = item.title,
                 style = MaterialTheme.typography.titleMedium,
                 color = if (isCurrent) PlayingAccent else MaterialTheme.colorScheme.onBackground,
-                maxLines = 1,
+                maxLines = 2,
+                minLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f, fill = false),
             )

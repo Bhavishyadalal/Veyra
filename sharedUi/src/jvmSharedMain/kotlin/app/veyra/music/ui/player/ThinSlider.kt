@@ -34,6 +34,12 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.disabled
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.progressBarRangeInfo
+import androidx.compose.ui.semantics.setProgress
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -100,7 +106,12 @@ fun ThinSlider(
     inactiveColor: Color = Color.White.copy(alpha = 0.26f),
     /** Halfway between the two track colours: visible against unplayed, invisible under played. */
     markerColor: Color = Color.White.copy(alpha = 0.5f),
+    accessibilityLabel: String? = null,
+    enabled: Boolean = true,
 ) {
+    val currentEnabled by rememberUpdatedState(enabled)
+    val currentOnValueChange by rememberUpdatedState(onValueChange)
+    val currentOnFinished by rememberUpdatedState(onValueChangeFinished)
     var dragging by remember { mutableStateOf(false) }
     val height by animateDpAsState(
         targetValue = if (dragging) activeHeight else idleHeight,
@@ -143,6 +154,18 @@ fun ThinSlider(
             .fillMaxWidth()
             // Generous invisible touch target — the visible bar is only ~7dp.
             .height(activeHeight + 22.dp)
+            .semantics {
+                accessibilityLabel?.let { contentDescription = it }
+                progressBarRangeInfo = ProgressBarRangeInfo(value.coerceIn(0f, 1f), 0f..1f)
+                if (!enabled) disabled()
+                setProgress { requested ->
+                    if (!enabled || !requested.isFinite()) false else {
+                        currentOnValueChange(requested.coerceIn(0f, 1f))
+                        currentOnFinished?.invoke()
+                        true
+                    }
+                }
+            }
             // One gesture loop for both taps and drags. Two separate detectors
             // — a drag one plus a tap one — meant taps never landed: the drag
             // detector took the pointer and a tap has no drag to report.
@@ -150,7 +173,7 @@ fun ThinSlider(
                 awaitEachGesture {
                     val down = awaitFirstDown(requireUnconsumed = false)
                     dragging = true
-                    onValueChange((down.position.x / size.width).coerceIn(0f, 1f))
+                    if (currentEnabled) currentOnValueChange((down.position.x / size.width.coerceAtLeast(1)).coerceIn(0f, 1f))
 
                     while (true) {
                         val event = awaitPointerEvent()
@@ -160,13 +183,13 @@ fun ThinSlider(
                             break
                         }
                         if (pointer.positionChanged()) {
-                            onValueChange((pointer.position.x / size.width).coerceIn(0f, 1f))
+                            if (currentEnabled) currentOnValueChange((pointer.position.x / size.width.coerceAtLeast(1)).coerceIn(0f, 1f))
                             pointer.consume()
                         }
                     }
 
                     dragging = false
-                    onValueChangeFinished?.invoke()
+                    currentOnFinished?.invoke()
                 }
             },
         contentAlignment = Alignment.Center,

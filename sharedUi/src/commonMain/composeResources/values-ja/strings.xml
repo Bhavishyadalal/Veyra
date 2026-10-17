@@ -200,4 +200,6 @@
     <string name="search_library_empty">ローカル音楽フォルダ内の曲を検索します。</string>
     <string name="search_library_hint">曲・アーティスト・アルバム</string>
     <string name="search_library_no_results">ローカル音楽に「%1$s」に一致するものはありません。</string>
+    <string name="player_position">再生位置</string>
+    <string name="player_volume">音量</string>
 </resources>

@@ -468,8 +468,7 @@ fun SettingsScreen(
                     )
                 }
                 // Sits with the account rather than with Playback: a party is up to
-                // five signed-in people, and being signed in is the whole of what
-                // the row needs before it will do anything.
+                // five devices, including guests who use an installation pseudonym.
                 val listenTogetherTitle = stringResource(R.string.listen_together)
                 row(listenTogetherTitle, "jam", "party", "sync", "friends") {
                     SettingsRow(
