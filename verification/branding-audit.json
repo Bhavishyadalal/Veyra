@@ -1,6 +1,6 @@
 {
-  "xml_files_parsed": 137,
-  "localized_string_entries_checked": 23151,
+  "xml_files_parsed": 103,
+  "localized_string_entries_checked": 22548,
   "xml_font_references_resolved": 8,
   "errors": [],
   "intentional_remaining_brand_references": [
@@ -225,12 +225,6 @@
       "line": 2,
       "reason": "copyright or preserved external endpoint",
       "text": "* Copyright (C) 2026 BitChord Project"
-    },
-    {
-      "file": "tv/src/main/AndroidManifest.xml",
-      "line": 246,
-      "reason": "copyright or preserved external endpoint",
-      "text": "android:host=\"bitchord.kushagrasingh.in\""
     },
     {
       "file": "shared/src/commonMain/kotlin/app/veyra/music/data/listentogether/JamInvite.kt",

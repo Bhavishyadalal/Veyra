@@ -1,6 +1,7 @@
 import java.util.Properties
-import java.security.MessageDigest
-import java.io.FileInputStream
+import java.util.zip.ZipFile
+import java.util.zip.ZipOutputStream
+import java.util.zip.ZipEntry
 
 plugins {
     id("com.android.application")
@@ -59,7 +60,7 @@ val listenTogetherServer: String = (
         ?: "https://bitchord-listen-together.onrender.com"
     ).trim().trimEnd('/')
 
-// See the root build.gradle.kts: one version for the phone and its watch app.
+// The root build file owns the phone version.
 val betaSuffix = rootProject.extra["veyraBetaSuffix"] as String
 
 android {
@@ -92,9 +93,7 @@ android {
             "LISTEN_TOGETHER_SERVER",
             "\"${listenTogetherServer.replace("\\", "\\\\").replace("\"", "\\\"")}\"",
         )
-        // Which release assets are this app's: the phone and TV APKs ship in
-        // the same GitHub release, told apart by file name. See
-        // AppUpdateChecker.apkAssetUrl.
+        // Select phone APKs from the configured update feed.
         buildConfigField("String", "UPDATE_APK_PREFIX", "\"Veyra-\"")
     }
 
@@ -105,12 +104,6 @@ android {
             include("armeabi-v7a", "arm64-v8a", "x86_64")
             isUniversalApk = true
         }
-    }
-
-    // The phone <-> watch protocol, one file shared with the watch app so the
-    // two cannot drift. See wearos/protocol/.../WearProtocol.kt.
-    sourceSets {
-        getByName("main") { java.srcDir("../wearos/protocol") }
     }
 
     externalNativeBuild {
@@ -256,17 +249,39 @@ val newPipeExtractorRaw: Configuration by configurations.creating {
 dependencies {
     newPipeExtractorRaw("com.github.TeamNewPipe:NewPipeExtractor:v0.26.3")
 }
-val newPipeExtractorStripped = tasks.register<org.gradle.api.tasks.bundling.Jar>(
-    "stripNewPipeExtractorUtils"
-) {
-    archiveFileName.set("NewPipeExtractor-v0.26.3-noutils.jar")
-    destinationDirectory.set(layout.buildDirectory.dir("stripped-libs"))
-    from(provider { newPipeExtractorRaw.map { zipTree(it) } }) {
-        // The class itself, plus any nested or synthetic siblings the upstream
-        // compiler emitted alongside it, so nothing from the jar's Utils survives.
-        exclude("org/schabi/newpipe/extractor/utils/Utils.class")
-        exclude("org/schabi/newpipe/extractor/utils/Utils\$*.class")
+/** Read the archive during execution, so task discovery does not resolve it. */
+@CacheableTask
+abstract class StripNewPipeExtractorUtils : DefaultTask() {
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.NONE)
+    abstract val extractor: ConfigurableFileCollection
+
+    @get:OutputFile
+    abstract val outputJar: RegularFileProperty
+
+    @TaskAction
+    fun strip() {
+        val output = outputJar.get().asFile
+        output.parentFile.mkdirs()
+        ZipFile(extractor.singleFile).use { input ->
+            ZipOutputStream(output.outputStream().buffered()).use { zip ->
+                input.entries().asSequence().sortedBy { it.name }.forEach { entry ->
+                    val utils = "org/schabi/newpipe/extractor/utils/Utils"
+                    val excluded = entry.name == "$utils.class" ||
+                        (entry.name.startsWith("$utils\$") && entry.name.endsWith(".class"))
+                    if (!excluded) {
+                        zip.putNextEntry(ZipEntry(entry.name).apply { time = 0L })
+                        if (!entry.isDirectory) input.getInputStream(entry).use { it.copyTo(zip) }
+                        zip.closeEntry()
+                    }
+                }
+            }
+        }
     }
+}
+val newPipeExtractorStripped = tasks.register<StripNewPipeExtractorUtils>("stripNewPipeExtractorUtils") {
+    extractor.from(newPipeExtractorRaw)
+    outputJar.set(layout.buildDirectory.file("stripped-libs/NewPipeExtractor-v0.26.3-noutils.jar"))
 }
 
 dependencies {
@@ -380,7 +395,7 @@ dependencies {
     // because dropping its artifact drops them too. If the version changes,
     // re-derive this list with
     //   ./gradlew :app:dependencies --configuration prodReleaseRuntimeClasspath
-    implementation(files(newPipeExtractorStripped))
+    implementation(files(newPipeExtractorStripped.flatMap { it.outputJar }))
     implementation("com.github.TeamNewPipe:nanojson:e9d656ddb49a412a5a0a5d5ef20ca7ef09549996")
     implementation("org.jsoup:jsoup:1.22.2")
     implementation("com.google.code.findbugs:jsr305:3.0.2")
@@ -411,25 +426,6 @@ dependencies {
     // turn into a real stream — see [app.veyra.music.playback.cast.CastPlayback].
     implementation("com.google.android.gms:play-services-cast-framework:22.2.0")
     implementation("androidx.mediarouter:mediarouter:1.8.1")
-
-    // ---- The watch app (wearos/): Data Layer state out, commands in ----
-    // See app.veyra.music.wear.WearBridge. Rides on the Play services base
-    // the Cast framework already brings, so it adds very little.
-    implementation("com.google.android.gms:play-services-wearable:20.0.1")
-    // Opens the watch app after an update, so its install prompt is on screen.
-    implementation("androidx.wear:wear-remote-interactions:1.1.0")
-
-    // ---- "Veyra for Wear OS": the first install onto a watch ----
-    // Without the Play Store only ADB can install on a watch, so this phone is
-    // the ADB client, over the watch's Wireless debugging — see WatchInstaller.
-    // GPL-3.0/Apache-2.0 dual-licensed. Its own BouncyCastle (jdk15to18) is the
-    // same classes as the jdk18on one SMBJ already brings, so it is excluded;
-    // bcpkix supplies the certificate the ADB client identifies itself with.
-    implementation("com.github.MuntashirAkon:libadb-android:3.1.1") {
-        exclude(group = "org.bouncycastle")
-    }
-    implementation("org.conscrypt:conscrypt-android:2.5.3")
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.85")
 
     testImplementation("junit:junit:4.13.2")
     // A real HTTP server for the addon tests. The addon protocol is entirely
@@ -475,60 +471,3 @@ val verifyDevInstall = tasks.register("verifyDevInstall") {
     }
 }
 tasks.matching { it.name == "installDevDebug" }.configureEach { finalizedBy(verifyDevInstall) }
-
-/*
- * The watch app rides inside the phone app, so "Veyra for Wear OS" in
- * Settings can put it on a watch — or update it — with no computer involved.
- *
- * Each phone variant carries the watch build of the same flavor *and* build
- * type: the same package (dev with dev, prod with prod) and the same signing
- * key, which is what the Wearable Data Layer needs before the two will talk at
- * all. A SHA-256 travels with it, so the phone can tell the watch's build from
- * the one it carries even when the version numbers match.
- *
- * Costs a watch build per phone build; -Pveyra.bundleWear=false skips it
- * for a quick local iteration (Settings then offers no install).
- */
-abstract class BundleWearApk : DefaultTask() {
-    @get:InputFiles
-    abstract val apks: ConfigurableFileCollection
-
-    @get:OutputDirectory
-    abstract val outputDir: DirectoryProperty
-
-    @TaskAction
-    fun bundle() {
-        val out = outputDir.get().asFile.resolve("wear")
-        out.deleteRecursively()
-        out.mkdirs()
-        val apk = apks.asFileTree.matching { include("*.apk") }.files.singleOrNull()
-            ?: throw GradleException("Expected exactly one watch APK in ${apks.files}")
-        val target = out.resolve("VeyraWear.apk")
-        apk.copyTo(target, overwrite = true)
-        val digest = MessageDigest.getInstance("SHA-256")
-        target.inputStream().use { input ->
-            val buffer = ByteArray(64 * 1024)
-            while (true) {
-                val read = input.read(buffer)
-                if (read < 0) break
-                digest.update(buffer, 0, read)
-            }
-        }
-        out.resolve("VeyraWear.sha256").writeText(digest.digest().joinToString("") { "%02x".format(it) })
-    }
-}
-
-if (providers.gradleProperty("veyra.bundleWear").orNull != "false" && findProject(":wearos") != null) {
-    androidComponents.onVariants { variant ->
-        val flavor = variant.productFlavors.firstOrNull { it.first == "env" }?.second ?: return@onVariants
-        val type = variant.buildType ?: return@onVariants
-        // The benchmark build has no watch counterpart.
-        if (type != "debug" && type != "release") return@onVariants
-        val cap = variant.name.replaceFirstChar { it.uppercase() }
-        val bundle = tasks.register<BundleWearApk>("bundleWearApk$cap") {
-            dependsOn(":wearos:assemble$cap")
-            apks.from(rootProject.layout.projectDirectory.dir("wearos/build/outputs/apk/$flavor/$type"))
-        }
-        variant.sources.assets?.addGeneratedSourceDirectory(bundle, BundleWearApk::outputDir)
-    }
-}

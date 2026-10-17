@@ -27,7 +27,9 @@ In Android Studio's Gradle settings, select a JDK 17 installation as the Gradle 
 4. Select **app** as the run module and **devDebug** as the build variant.
 5. Connect your phone with USB debugging enabled, select it as the target device, then Run.
 
-All Android modules are always declared in settings.gradle.kts. A missing SDK path now results in a useful SDK setup error instead of silently hiding the app, TV and watch modules.
+Only **app** is an installable application. **shared** and **sharedUi** are internal libraries used by the phone app; keep them. TV and Wear OS modules and watch APK bundling were removed in beta7. Select **app** in the Run configuration.
+
+Gradle still needs to download the phone's dependencies and prepare its native audio toolchain on the first import. Later syncs reuse downloaded dependencies; task-output caching is enabled for repeat builds. NewPipe archive processing also waits until its task runs, instead of resolving the archive during task-graph discovery. Avoid deleting Gradle caches between builds.
 
 If Android Studio cannot find the SDK automatically, copy local.properties.example to local.properties and replace the example SDK path with your own. Use forward slashes in a Windows path. Do not commit local.properties.
 
@@ -57,13 +59,13 @@ Run the phone unit tests with:
 
 On macOS/Linux use ./gradlew instead of .\gradlew.bat. Use your phone as the target device to reduce RAM use on your PC.
 
-The default phone build includes the watch APK. For a quicker phone-only development build, append -Pveyra.bundleWear=false; the watch-install feature then has no bundled watch APK in that build.
+The phone build no longer builds or embeds a watch APK. No extra flag is needed.
 
 ## 4. If sync or build fails
 
 - **SDK location not found:** set the SDK location in Android Studio, or create local.properties from the example with your actual path.
 - **Platform android-37.0 is missing:** install SDK Platform 37.0. A correctly installed platform has android.jar and source.properties directly inside its platform directory. Reinstall a damaged/incomplete SDK package through SDK Manager. An older installation may use the existing -PveyraCompileSdk=android-37 option.
-- **NDK/CMake version missing:** install the exact versions in the table. The app and TV native builds now explicitly select NDK 27.0.12077973.
+- **NDK/CMake version missing:** install the exact versions in the table. The phone native build explicitly selects NDK 27.0.12077973.
 - **Dependency download failed / HTTP 403:** Gradle needs access to Google's Maven repository, Maven Central, the Gradle plugin portal and JitPack. Check your connection or configured proxy. A previous environment's proxy settings are not included in this ZIP.
 - **Unsupported Java / Gradle runtime:** select JDK 17 for Gradle, then sync again.
 - **No app run target after import:** check that you opened the project root and completed Gradle sync; select the app module and devDebug variant.

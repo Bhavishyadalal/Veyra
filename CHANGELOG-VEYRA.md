@@ -1,3 +1,13 @@
+# Veyra 0.1.0-beta7 (phone-only project and visual polish)
+
+- Removed TV and Wear OS module sources and Gradle includes, the phone's bundled-watch APK task and shared watch-protocol source path.
+- Removed watch pairing/ADB dependencies, wearable services, watch audio-output integration and watch Settings navigation. Cast, Bluetooth and phone playback remain.
+- Removed unused watch-screen labels and TV/watch CI build steps; kept the phone's two required shared library modules.
+- Moved NewPipe archive reads into a cacheable task action; verified the real task with an isolated fixture and successful dependency-free dry run.
+- Enabled Gradle task-output caching for repeat builds and updated Android Studio instructions for the phone-only project.
+- Made Home's Google sign-in invitation compact and softened the player control deck by removing its border and using a darker, subtler gradient.
+- See `verification/BETA7-RESULTS.md` for current validation and the remaining Android compilation blocker.
+
 # Veyra 0.1.0-beta6 (Home and playback preparation)
 
 - Replaced Home's large header card with a compact title, brand mark, supporting caption and accent rule.

@@ -1,0 +1,33 @@
+{
+  "revision": "0.1.0-beta7",
+  "gradle_projects": {
+    "status": "passed",
+    "projects": [
+      ":app",
+      ":shared",
+      ":sharedUi"
+    ]
+  },
+  "newpipe_strip_dry_run": "passed_without_archive_resolution",
+  "production_strip_fixture": "passed",
+  "focused_kotlin_tests": {
+    "passed": 23,
+    "failed": 0
+  },
+  "kotlin_syntax": {
+    "files": 35,
+    "errors": 0,
+    "scope": "changed/new since beta1; PSI parsing only"
+  },
+  "resources": {
+    "xml_documents": 103,
+    "localized_entries": 22548,
+    "font_references": 8,
+    "errors": 0
+  },
+  "phone_only_reference_audit": "passed",
+  "android_build": "blocked_by_jitpack_io_HTTP_403_during_strip_task_execution",
+  "apk": "not_built",
+  "device_review_and_sync_timing": "not_run",
+  "git_whitespace": "passed"
+}

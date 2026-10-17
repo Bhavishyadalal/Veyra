@@ -811,33 +811,25 @@ fun SignInBanner(onSignIn: () -> Unit, modifier: Modifier = Modifier) {
                 Brush.linearGradient(listOf(Color(0xFF3A1C71), Color(0xFF813D62))),
             ),
         )
-        Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 18.dp)) {
-            Text(
-                text = stringResource(Res.string.sign_in_youtube_music),
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.W800,
-                color = Color.White,
-            )
-            Spacer(Modifier.height(16.dp))
-            Row(
-                Modifier
-                    .clip(CircleShape)
-                    .background(Color.White)
-                    .padding(start = 16.dp, end = 20.dp, top = 10.dp, bottom = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Image(
-                    painter = painterResource(Res.drawable.ic_google_g),
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp),
+        Row(
+            Modifier.fillMaxWidth().padding(18.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Box(Modifier.size(44.dp).background(Color.White, CircleShape), contentAlignment = Alignment.Center) {
+                Image(painterResource(Res.drawable.ic_google_g), contentDescription = null, modifier = Modifier.size(22.dp))
+            }
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = stringResource(Res.string.sign_in_youtube_music),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.W800,
+                    color = Color.White,
                 )
-                Spacer(Modifier.width(8.dp))
                 Text(
                     text = stringResource(Res.string.sign_in_with_google),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.W700,
-                    color = Color.Black,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White.copy(alpha = 0.8f),
                 )
             }
         }

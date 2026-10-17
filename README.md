@@ -27,15 +27,13 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
-## Latest update: 0.1.0-beta6
+## Latest update: 0.1.0-beta7 — phone only
 
-- **Home:** a compact editorial header gives the music more space. Optional history/discovery requests have deadlines, retries cancel superseded Home loads, and failed pagination shows an explicit Retry action instead of repeatedly requesting the same page. Explore fetches on its first visit.
-- **Playback preparation:** queue startup reuses immutable media items for playback and shuffle restoration, avoiding repeated URI construction and downloaded-file checks for every context track.
-- **Next-song loading:** the next stream URL starts warming after 1.5 seconds, independently of addon lookup. Later URLs remain delayed, and bulk audio downloads retain their eight-second grace period. Warm-up skips pinned sources, removes duplicate IDs and propagates cancellation.
+- **One application:** removed TV and Wear OS modules, watch APK bundling, watch pairing/installation dependencies, wearable services and watch Settings navigation. **app** is the only installable application; **shared** and **sharedUi** remain required internal libraries.
+- **Simpler builds:** NewPipe archive processing now resolves its input during task execution, keeping it out of task-graph discovery. Repeat builds can reuse Gradle task outputs. CI builds and tests the phone explicitly. The first Android Studio sync still downloads phone dependencies and prepares the native audio toolchain.
+- **Visual polish:** a compact Google sign-in row leaves more room for music on Home. The player control deck uses a softer dark surface without its outline. Existing bold transport icons, flat Settings and beta6 playback/loading improvements remain.
 
-Beta5's bold transport icons, flat Settings rows and reduced rendering work remain. These changes remove identified delays and redundant work; actual startup and frame-rate gains still require phone profiling.
-
-Download `downloads/Veyra_Android_Source_0.1.0-beta6.zip`, extract it, and open the Veyra root in Android Studio. See [verification/BETA6-RESULTS.md](verification/BETA6-RESULTS.md) for validation. This cloud instance cannot build a verified beta6 APK because its proxy blocks JitPack.
+Download `downloads/Veyra_Android_Source_0.1.0-beta7.zip`, extract it into a new folder, and open the Veyra root in Android Studio. Select **app**, then the **devDebug** or **prodDebug** variant. See [START_HERE.md](START_HERE.md) and [verification/BETA7-RESULTS.md](verification/BETA7-RESULTS.md).
 
 Build dependencies require `dl.google.com`, Maven Central, the Gradle plugin portal, and **jitpack.io**. The current SDK package name is `android-37.0`; an older existing SDK can be selected with `-PveyraCompileSdk=android-37`. Do not disable TLS or artifact verification to work around access failures.
 
@@ -44,7 +42,7 @@ GitHub runs the normal checks on `main`. Signed releases, contributor maintenanc
 ## What changed
 
 - Veyra branding in app labels, translations, screens, notifications, widgets, sharing text and supporting modules.
-- Separate phone, TV, watch and native JNI package identity under `app.veyra.music`.
+- Phone and native JNI package identity under `app.veyra.music`.
 - Option 3 launcher artwork plus matching monochrome notification and themed icons.
 - Manrope font weights, stronger small labels and improved dark secondary-text contrast.
 - Independent app-update configuration, preventing the fork from offering the original app's APK.
@@ -59,7 +57,7 @@ Discord’s application ID is retained for compatibility. Some Discord surfaces 
 
 Automatic app updates are disabled until you provide `VEYRA_UPDATE_FEED_URL` with your own compatible GitHub-style latest-release JSON feed. Publish Veyra APK assets with the expected `Veyra-` prefix; never point the fork at the original project's release feed. Production APK signing uses your own `keystore.properties`; see the example. Keep the same signing key for future updates.
 
-The web, browser-extension, TV and watch sources are retained. Their public-service/deployment URLs are preserved, not rebranded into nonexistent domains. Configure your own deployment origins and extension identity before publishing a web fork. Android is the primary target of this handoff; see `verification/BETA6-RESULTS.md` for the checks run on this revision. `verification/RESULTS.md` describes the earlier supplied baseline.
+The web and browser-extension sources are retained outside the Android build. Their public-service/deployment URLs are preserved. TV and Wear OS sources were removed in beta7. Android phone is the target of this handoff; see `verification/BETA7-RESULTS.md` for current checks. `verification/RESULTS.md` describes the earlier supplied baseline.
 
 ## License and attribution
 

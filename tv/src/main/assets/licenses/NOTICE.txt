@@ -1,8 +1,0 @@
-Veyra is a modified version of BitChord by Kushagra Singh and its contributors.
-Upstream: https://github.com/kushagrasinghx/BitChord
-Base commit: e4dd63d863e3df67cf6c4e2ebd1385907d2f474d (v1.8.1 branch).
-The GNU GPL v3 license and existing third-party copyright notices are retained.
-Changes: Veyra identity, launcher/notification/widget icons, package and native JNI namespace,
-Manrope typography and contrast polish, independent updater configuration and documentation.
-Manrope is licensed under SIL OFL 1.1; see licenses/Manrope-OFL.txt.
-Existing service addresses are retained for interoperability. Their operators are not Veyra.

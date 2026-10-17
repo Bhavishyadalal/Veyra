@@ -32,16 +32,8 @@ buildscript {
         classpath("com.android.tools:r8:8.13.23")
     }
 }
-/*
- * The version of the phone app and of the watch app that ships inside it, in
- * one place. The watch has to move with the phone: it is installed and updated
- * from the phone's own APK (see app/build.gradle.kts), and Android refuses an
- * update whose versionCode is lower than the one installed.
- *
- * No "v" in the name — the in-app updater reads it as a number; the "v" is the
- * release tag's alone.
- */
-extra["veyraVersionCode"] = 6
+/* Phone version. Keep beta markers until publishing a signed stable release. */
+extra["veyraVersionCode"] = 7
 extra["veyraVersionName"] = "0.1.0"
 
 /*
@@ -59,11 +51,8 @@ extra["veyraVersionName"] = "0.1.0"
  * comes. Blanking this line is the one step that turns a beta into a release,
  * so it is the one place to get right.
  *
- * The watch app carries the same marker. It needs no prompt logic of its own:
- * the phone compares the watch's installed APK with the one it carries, so a
- * beta watch app shows "Update available" as soon as the phone has the release.
  */
-extra["veyraBetaSuffix"] = "beta6"
+extra["veyraBetaSuffix"] = "beta7"
 
 plugins {
     id("com.android.application") version "8.10.1" apply false

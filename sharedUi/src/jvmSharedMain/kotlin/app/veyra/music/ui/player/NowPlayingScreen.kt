@@ -30,7 +30,6 @@ import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.border
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -3541,10 +3540,9 @@ fun NowPlayingScreen(
                             .widthIn(max = PLAYER_MAX_WIDTH)
                             .fillMaxWidth()
                             .background(
-                                Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.10f), Color.Black.copy(alpha = 0.16f))),
+                                Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.08f), Color.Black.copy(alpha = 0.22f))),
                                 RoundedCornerShape(30.dp),
                             )
-                            .border(1.dp, Color.White.copy(alpha = 0.12f), RoundedCornerShape(30.dp))
                             .padding(start = 18.dp, end = 18.dp, top = 12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {

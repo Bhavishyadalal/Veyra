@@ -1,7 +1,7 @@
 from pathlib import Path
 import xml.etree.ElementTree as ET,re,json
 r=Path(__file__).resolve().parents[1];errors=[];xml_count=0;string_count=0;font_count=0;remaining=[]
-for module in ['app','tv','wearos','sharedUi','shared']:
+for module in ['app','sharedUi','shared']:
  base=r/module/'src'
  for p in base.rglob('*.xml'):
   if any(x in p.parts for x in ['build','.gradle']):continue
@@ -28,7 +28,7 @@ for module in ['app','tv','wearos','sharedUi','shared']:
 for p in (r/'app/src/main/cpp').rglob('*'):
  if p.is_file() and p.suffix in ['.cpp','.h']:
   if 'Java_com_music_' in p.read_text(errors='ignore'):errors.append(f'Old JNI export {p}')
-for mod in ['app','tv','wearos']:
+for mod in ['app']:
  b=(r/mod/'build.gradle.kts').read_text()
  if 'app.veyra.music' not in b:errors.append(f'Missing package ID in {mod}')
 report={'xml_files_parsed':xml_count,'localized_string_entries_checked':string_count,'xml_font_references_resolved':font_count,'errors':errors,'intentional_remaining_brand_references':remaining,'checks':'Static source/resource checks; not a native app runtime test.'}
