@@ -1,0 +1,22 @@
+{
+  "revision": "0.1.0-beta5",
+  "focused_kotlin_tests": {
+    "passed": 18,
+    "failed": 0
+  },
+  "kotlin_syntax": {
+    "files": 28,
+    "errors": 0,
+    "scope": "changes since original beta1; parsing only"
+  },
+  "resources": {
+    "xml_documents": 137,
+    "localized_entries": 23151,
+    "font_references": 8,
+    "errors": 0
+  },
+  "android_build": "blocked_before_Kotlin_compilation_by_jitpack_io_HTTP_403",
+  "apk": "not_built",
+  "device_review_and_profiling": "not_run",
+  "git_whitespace": "passed"
+}

@@ -41,7 +41,7 @@ buildscript {
  * No "v" in the name — the in-app updater reads it as a number; the "v" is the
  * release tag's alone.
  */
-extra["veyraVersionCode"] = 4
+extra["veyraVersionCode"] = 5
 extra["veyraVersionName"] = "0.1.0"
 
 /*
@@ -63,7 +63,7 @@ extra["veyraVersionName"] = "0.1.0"
  * the phone compares the watch's installed APK with the one it carries, so a
  * beta watch app shows "Update available" as soon as the phone has the release.
  */
-extra["veyraBetaSuffix"] = "beta4"
+extra["veyraBetaSuffix"] = "beta5"
 
 plugins {
     id("com.android.application") version "8.10.1" apply false

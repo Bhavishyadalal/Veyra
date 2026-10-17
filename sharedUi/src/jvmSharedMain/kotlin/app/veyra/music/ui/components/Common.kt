@@ -20,10 +20,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
-import app.veyra.music.ui.player.MESH_CYCLE_MILLIS
-import app.veyra.music.ui.player.MeshGradientBackground
-import app.veyra.music.ui.player.WelcomeMeshPalettes
-import app.veyra.music.ui.player.cyclingMeshPalette
 import androidx.compose.foundation.clickable
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.RepeatMode
@@ -85,6 +81,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.clipRect
@@ -792,14 +789,7 @@ fun PullToRefresh(
     }
 }
 
-/**
- * The prompt atop Home while signed out: a card in the welcome pages' living
- * mesh, so the one thing Home asks of a signed-out listener looks like an
- * invitation from the app rather than a settings row that wandered in.
- *
- * Drawn white-on-colour in either theme, like Replay and the welcome — the
- * mesh is the card, and white type is what sits on colour.
- */
+/** A static tonal invitation; press feedback runs only during interaction. */
 @Composable
 fun SignInBanner(onSignIn: () -> Unit, modifier: Modifier = Modifier) {
     val interaction = remember { MutableInteractionSource() }
@@ -816,15 +806,10 @@ fun SignInBanner(onSignIn: () -> Unit, modifier: Modifier = Modifier) {
             .clip(RoundedCornerShape(22.dp))
             .clickable(interactionSource = interaction, indication = null, onClick = onSignIn),
     ) {
-        // A card is a few hundred dp the reader is looking straight at, which
-        // is the case the mesh lets keep moving — see its `continuous` note.
-        MeshGradientBackground(
-            palette = cyclingMeshPalette(WelcomeMeshPalettes),
-            modifier = Modifier.matchParentSize(),
-            continuous = true,
-            driftMillis = 6_000,
-            blurRadius = 36.dp,
-            colorFadeMillis = MESH_CYCLE_MILLIS,
+        Box(
+            Modifier.matchParentSize().background(
+                Brush.linearGradient(listOf(Color(0xFF3A1C71), Color(0xFF813D62))),
+            ),
         )
         Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 18.dp)) {
             Text(

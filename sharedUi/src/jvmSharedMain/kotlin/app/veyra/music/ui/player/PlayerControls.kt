@@ -433,7 +433,7 @@ internal fun SleeveNerdStats(song: Song, modifier: Modifier = Modifier) {
  * Previous, play/pause, next.
  *
  * [compact] is the landscape player on a phone, where the portrait player's
- * 100dp play target is a third of the window's height on its own.
+ * 92dp play target is a third of the window's height on its own.
  */
 @Composable
 internal fun TransportRow(
@@ -452,9 +452,9 @@ internal fun TransportRow(
     onNext: () -> Unit,
     compact: Boolean = false,
 ) {
-    val playSize = if (compact) 28.dp else 36.dp
-    val playTouch = if (compact) 64.dp else 80.dp
-    val skipSize = if (compact) 26.dp else 30.dp
+    val playSize = if (compact) 52.dp else 68.dp
+    val playTouch = if (compact) 76.dp else 92.dp
+    val skipSize = if (compact) 30.dp else 34.dp
     Row(
         modifier = Modifier.fillMaxWidth(),
         // SpaceAround, not SpaceEvenly: the outer margins take half a gap, so
@@ -468,7 +468,6 @@ internal fun TransportRow(
             size = skipSize,
             touchSize = PLAYER_SKIP_TOUCH_SIZE,
             heightScale = 1f,
-            containerColor = Color.White.copy(alpha = 0.08f),
             onClick = onPrevious,
             enabled = previousEnabled,
             haptic = Haptic.SkipPrevious,
@@ -477,11 +476,11 @@ internal fun TransportRow(
             // Same footprint as the play/pause target — a smaller box here
             // would shunt everything below it on every load.
             Box(
-                Modifier.size(playTouch).clip(CircleShape).background(Color(0xFFEBDDFF)),
+                Modifier.size(playTouch),
                 contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(
-                    color = Color(0xFF35204F),
+                    color = Color.White,
                     strokeWidth = 3.dp,
                     modifier = Modifier.size(if (compact) 30.dp else 38.dp),
                 )
@@ -492,8 +491,6 @@ internal fun TransportRow(
                 contentDescription = stringResource(if (isPlaying) Res.string.pause else Res.string.play),
                 size = playSize,
                 touchSize = playTouch,
-                tint = Color(0xFF35204F),
-                containerColor = Color(0xFFEBDDFF),
                 onClick = onPlayPause,
                 haptic = if (isPlaying) Haptic.Pause else Haptic.Resume,
             )
@@ -504,7 +501,6 @@ internal fun TransportRow(
             size = skipSize,
             touchSize = PLAYER_SKIP_TOUCH_SIZE,
             heightScale = 1f,
-            containerColor = Color.White.copy(alpha = 0.08f),
             onClick = onNext,
             enabled = nextEnabled,
             haptic = Haptic.SkipNext,

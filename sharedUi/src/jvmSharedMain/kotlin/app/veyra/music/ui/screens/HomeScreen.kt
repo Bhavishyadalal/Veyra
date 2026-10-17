@@ -90,8 +90,6 @@ import app.veyra.music.ui.components.recentlyPlayedSkeleton
 import app.veyra.music.ui.components.heroCardWidth
 import app.veyra.music.ui.components.thumbnailBorder
 import app.veyra.music.ui.components.trackColumnWidth
-import app.veyra.music.ui.player.MeshGradientBackground
-import app.veyra.music.ui.player.MeshPalette
 
 /** How far the Listen now heading and feed sit above the shared top inset. */
 private val HOME_TITLE_LIFT = 28.dp
@@ -962,26 +960,20 @@ internal fun NewShelfCard(
 }
 
 /**
- * A device-folder card: mesh gradient in the folder's colours with its glyph
+ * A device-folder card: static gradient in the folder's colours with its glyph
  * on top. One composable for local music, WebDAV and SMB rather than three
  * copies of the same box.
  */
 @Composable
-private fun ServiceCard(colors: List<Color>, trackKey: String, icon: ImageVector) {
-    val palette = remember { MeshPalette(colors) }
+private fun ServiceCard(colors: List<Color>, icon: ImageVector) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
-            .clip(RoundedCornerShape(12.dp)),
+            .clip(RoundedCornerShape(12.dp))
+            .background(Brush.linearGradient(colors)),
         contentAlignment = Alignment.Center,
     ) {
-        MeshGradientBackground(
-            palette = palette,
-            trackKey = trackKey,
-            continuous = true,
-            blurRadius = 24.dp,
-        )
         Icon(
             imageVector = icon,
             contentDescription = null,
@@ -1009,47 +1001,24 @@ internal fun ShelfCard(
             .contextClick(onLongPress),
     ) {
         when (item.browseId) {
-            "local:downloads" -> {
-                val palette = remember { MeshPalette(listOf(Color(0xFF1E3C72), Color(0xFF2A5298))) }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    MeshGradientBackground(
-                        palette = palette,
-                        trackKey = "local:downloads",
-                        continuous = true,
-                        blurRadius = 24.dp,
-                    )
-                    Icon(
-                        imageVector = VeyraIcons.Download,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(40.dp),
-                    )
-                }
-            }
+            "local:downloads" -> ServiceCard(
+                colors = listOf(Color(0xFF1E3C72), Color(0xFF2A5298)),
+                icon = VeyraIcons.Download,
+            )
             "local:all" -> ServiceCard(
                 colors = listOf(Color(0xFF134E5E), Color(0xFF71B280)),
-                trackKey = "local:all",
                 icon = Icons.Rounded.LibraryMusic,
             )
             "local:cache" -> ServiceCard(
                 colors = listOf(Color(0xFF42275A), Color(0xFF734B6D)),
-                trackKey = "local:cache",
                 icon = Icons.Rounded.Cached,
             )
             "local:webdav" -> ServiceCard(
                 colors = listOf(Color(0xFF3A1C71), Color(0xFFD76D77)),
-                trackKey = "local:webdav",
                 icon = Icons.Rounded.Folder,
             )
             "local:smb" -> ServiceCard(
                 colors = listOf(Color(0xFF0F2027), Color(0xFF2C5364)),
-                trackKey = "local:smb",
                 icon = Icons.Rounded.Storage,
             )
             else -> {

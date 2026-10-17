@@ -853,7 +853,10 @@ fun NowPlayingScreen(
     // with it every few seconds. What keeps that affordable is the size of each
     // read, not the number of them: the frame comes back at `frameCapturePx`
     // rather than full-bleed, and is averaged on a stride off the main thread.
-    val meshRefreshMs = MESH_REFRESH_MS
+    val reducedBackdropEffects by PlayerSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
+    val reducedBackdropMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+    // Keep the initial palette, without repeated GPU readbacks in reduced-effects mode.
+    val meshRefreshMs = if (reducedBackdropEffects || reducedBackdropMotion) null else MESH_REFRESH_MS
 
     val scrub = rememberPlayerScrub(song.videoId, position, durationMs)
     // Read by the scrubber itself — see [PlayerScrubber.shown].

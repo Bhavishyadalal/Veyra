@@ -1,3 +1,13 @@
+# Veyra 0.1.0-beta5 (rendering and interface refinement)
+
+- Removed the colored play/pause disc and skip-button fills; enlarged the bold white transport glyphs.
+- Replaced Settings category cards and group boxes with flat rows, descriptions and dividers. Search, category navigation and controls are preserved.
+- Removed continuous decorative meshes from the sign-in banner and Home/Library utility cards.
+- Pause Canvas decoding when music pauses, the app backgrounds or the player transitions. Apply the same guards to periodic GPU frame captures, and reject invalid refresh intervals.
+- Default to reduced dynamic blur only when no preference exists; retain explicit choices and high-performance behavior. Reduced blur/motion skip recurring Canvas palette captures.
+- Cache legacy mesh color tuning and geometry; observe color-animation values during drawing; honor reduced blur and stop drift in the background.
+- Added decoder/capture policy regression coverage. See `verification/BETA5-RESULTS.md` for checks and the Android build blocker. Improvements remove identified work; device profiling is still needed to establish actual frame-rate gains.
+
 # Veyra 0.1.0-beta4 (visual redesign, source update)
 
 - Player: prominent filled lavender play control, separate circular skip buttons, rounded tonal control deck, larger song title and softer artwork corners.

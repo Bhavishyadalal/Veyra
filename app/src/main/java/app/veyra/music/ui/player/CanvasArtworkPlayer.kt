@@ -249,22 +249,12 @@ internal fun AndroidCanvasArtworkPlayer(
         player.prepare()
     }
 
-    // Gated on the app being on screen as well as on the caller's own state.
-    //
-    // This is a video decoder. Left to [isPlaying] alone it goes on decoding
-    // frames into a surface nobody can see for as long as the composition is
-    // alive — which, with the phone in a pocket and music playing, is the whole
-    // album. Worse on a detail page, whose caller passes a constant `true`
-    // because "the page is only up while it's being read": true of a page being
-    // looked at, not of one left open behind a locked screen.
-    //
-    // Held inside this component rather than asked of each caller, so no call
-    // site can forget it. The player now runs continuously in the foreground
-    // regardless of playback state, so coming back from background always has
-    // a surface ready and `onRenderedFirstFrame()` fires naturally.
+    // The surface-recovery effect below repaints still frames after a resume;
+    // keeping the video decoder running while music is paused is unnecessary.
     val foreground = rememberIsForeground()
-    LaunchedEffect(foreground, pausedForTransition) {
-        player.playWhenReady = foreground && !pausedForTransition
+    val active = CanvasRenderPolicy.shouldPlay(isPlaying, foreground, pausedForTransition)
+    LaunchedEffect(active) {
+        player.playWhenReady = active
     }
 
     // Repaint onto a surface that has just been handed back. A TextureView's
@@ -309,10 +299,9 @@ internal fun AndroidCanvasArtworkPlayer(
     // folded into the one above: that one is keyed on [rendered] so it fires
     // again on every fade-in, and this one only needs to start once a fade-in
     // has actually happened and then keep going for as long as it holds.
-    LaunchedEffect(rendered, refreshFrameEveryMs, frameCapturePx, clipAspect, contentMode, alignPortraitTop) {
+    LaunchedEffect(active, rendered, refreshFrameEveryMs, frameCapturePx, clipAspect, contentMode, alignPortraitTop) {
         val interval = refreshFrameEveryMs ?: return@LaunchedEffect
-        Log.d(TAG, "periodic frame refresh started, interval=$interval")
-        if (!rendered) return@LaunchedEffect
+        if (!CanvasRenderPolicy.shouldRefresh(active, rendered, interval)) return@LaunchedEffect
         while (isActive) {
             delay(interval)
             val view = textureView ?: continue

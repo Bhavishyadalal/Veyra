@@ -1,4 +1,4 @@
-> Android Studio import/build guide: [START_HERE.md](START_HERE.md). Current beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
+> Android Studio import/build guide: [START_HERE.md](START_HERE.md). Historical beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
 
 # Veyra
 
@@ -27,18 +27,14 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
-## Latest update: 0.1.0-beta4
+## Latest update: 0.1.0-beta5
 
-Beta4 gives the main surfaces a visibly different treatment:
+- **Player:** larger white filled play/pause glyphs, matching the other transport icons, without colored discs. Loading retains the same touch footprint.
+- **Settings:** full-width category rows, supporting descriptions and subtle dividers. Category grids, icon tiles and group boxes have been removed; search and every existing control remain.
+- **Rendering:** static gradients replace Home/Library utility-card meshes and the sign-in banner's continuous animation. Canvas video pauses with music, backgrounding and player transitions; periodic frame captures follow the same rules.
+- **Reduced effects:** solid fills are now the default when no blur preference was saved. Explicit blur/high-performance choices are preserved. Reduced blur or motion also disables recurring Canvas color sampling. Legacy mesh colors update in drawing rather than recomposing the backdrop per animation frame.
 
-- **Player:** a filled lavender play button, separate circular skip controls, a rounded translucent control deck, larger title typography and softer artwork corners.
-- **Home:** a branded gradient hero with a supporting caption at the top of the feed.
-- **Settings:** a tonal introduction and a two-column category overview. Narrow windows and larger system fonts use full-width rows. Global settings search remains available.
-- **Navigation:** a stronger selected capsule, clearer labels and coordinated selection colors in glass mode. The regular bar exposes tab semantics and handles swipe geometry in both reading directions.
-
-The guest Listen Together flow and loading-work reductions from beta3 remain. The new surfaces use static gradients and fills without adding blur passes or continuously animated backgrounds.
-
-Download the project from `downloads/Veyra_Android_Source_0.1.0-beta4.zip`, extract it, and open the Veyra root in Android Studio. Current verification and remaining limits are in `verification/BETA4-RESULTS.md`.
+Download `downloads/Veyra_Android_Source_0.1.0-beta5.zip`, extract it, and open the Veyra root in Android Studio. Verification and device-review limits are in [verification/BETA5-RESULTS.md](verification/BETA5-RESULTS.md). No device performance numbers or verified beta5 APK are available from this cloud instance.
 
 Build dependencies require `dl.google.com`, Maven Central, the Gradle plugin portal, and **jitpack.io**. The current SDK package name is `android-37.0`; an older existing SDK can be selected with `-PveyraCompileSdk=android-37`. Do not disable TLS or artifact verification to work around access failures.
 
@@ -62,7 +58,7 @@ Discord’s application ID is retained for compatibility. Some Discord surfaces 
 
 Automatic app updates are disabled until you provide `VEYRA_UPDATE_FEED_URL` with your own compatible GitHub-style latest-release JSON feed. Publish Veyra APK assets with the expected `Veyra-` prefix; never point the fork at the original project's release feed. Production APK signing uses your own `keystore.properties`; see the example. Keep the same signing key for future updates.
 
-The web, browser-extension, TV and watch sources are retained. Their public-service/deployment URLs are preserved, not rebranded into nonexistent domains. Configure your own deployment origins and extension identity before publishing a web fork. Android is the primary target of this handoff; see `verification/BETA4-RESULTS.md` for the checks run on this revision. `verification/RESULTS.md` describes the earlier supplied baseline.
+The web, browser-extension, TV and watch sources are retained. Their public-service/deployment URLs are preserved, not rebranded into nonexistent domains. Configure your own deployment origins and extension identity before publishing a web fork. Android is the primary target of this handoff; see `verification/BETA5-RESULTS.md` for the checks run on this revision. `verification/RESULTS.md` describes the earlier supplied baseline.
 
 ## License and attribution
 

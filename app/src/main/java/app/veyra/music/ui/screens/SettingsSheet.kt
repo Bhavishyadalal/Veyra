@@ -15,10 +15,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.background
 import androidx.compose.foundation.Image
@@ -2322,85 +2318,25 @@ private enum class SettingsCategory(val title: Int, val summary: List<Int>, val 
     ADVANCED(R.string.advanced_options, listOf(R.string.miscellaneous, R.string.app_icon), Icons.Rounded.Apps),
 }
 
-/** A compact overview; larger system fonts switch back to full-width rows. */
+/** Plain, full-width destinations remain readable at large system font sizes. */
 @Composable
 private fun SettingsOverview(onSelect: (SettingsCategory) -> Unit) {
-    val colors = MaterialTheme.colorScheme
-    val heroShape = RoundedCornerShape(26.dp)
-    Column(
-        Modifier.padding(horizontal = GROUP_INSET, vertical = 14.dp)
-            .fillMaxWidth()
-            .background(Brush.linearGradient(listOf(colors.primaryContainer, colors.surfaceVariant)), heroShape)
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text("Veyra", style = MaterialTheme.typography.labelLarge, color = colors.onPrimaryContainer)
-        Text(
-            stringResource(R.string.settings_intro),
-            style = MaterialTheme.typography.titleLarge,
-            color = colors.onPrimaryContainer,
-        )
-    }
-    BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = GROUP_INSET)) {
-        val columns = if (maxWidth >= 328.dp && LocalDensity.current.fontScale <= 1.2f) 2 else 1
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            SettingsCategory.entries.chunked(columns).forEach { categories ->
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    categories.forEach { destination ->
-                        SettingsCategoryCard(destination, columns == 2, { onSelect(destination) }, Modifier.weight(1f))
-                    }
-                }
-            }
+    Text(
+        stringResource(R.string.settings_intro),
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(horizontal = GROUP_INSET + ROW_INSET, vertical = 18.dp),
+    )
+    Column(Modifier.fillMaxWidth().padding(horizontal = GROUP_INSET)) {
+        SettingsCategory.entries.forEachIndexed { index, category ->
+            if (index > 0) RowDivider()
+            SettingsRow(
+                icon = category.icon,
+                title = stringResource(category.title),
+                subtitle = category.summary.map { stringResource(it) }.joinToString(" · "),
+                onClick = { onSelect(category) },
+            )
         }
-    }
-}
-
-@Composable
-private fun SettingsCategoryCard(
-    category: SettingsCategory,
-    grid: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val colors = MaterialTheme.colorScheme
-    val shape = RoundedCornerShape(24.dp)
-    val title = stringResource(category.title)
-    val summary = category.summary.map { stringResource(it) }.joinToString(" · ")
-    val card = modifier.clip(shape)
-        .background(colors.surfaceVariant)
-        .border(1.dp, colors.outline.copy(alpha = 0.45f), shape)
-        .clickable(role = Role.Button, onClick = onClick)
-        .padding(18.dp)
-    if (grid) {
-        Column(card, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                SettingsCategoryIcon(category.icon)
-                Spacer(Modifier.weight(1f))
-                Chevron()
-            }
-            Text(title, style = MaterialTheme.typography.titleMedium, color = colors.onSurface, minLines = 2, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Text(summary, style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant, minLines = 2, maxLines = 2, overflow = TextOverflow.Ellipsis)
-        }
-    } else {
-        Row(card, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            SettingsCategoryIcon(category.icon)
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(title, style = MaterialTheme.typography.titleMedium, color = colors.onSurface)
-                Text(summary, style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant)
-            }
-            Chevron()
-        }
-    }
-}
-
-@Composable
-private fun SettingsCategoryIcon(icon: ImageVector) {
-    Box(
-        Modifier.size(42.dp).clip(RoundedCornerShape(14.dp))
-            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
     }
 }
 
@@ -2438,7 +2374,7 @@ private class SettingsGroupScope(
  * A [SettingsGroup] whose rows are filtered by the search field, and which
  * takes itself off the screen when none of them are left. Dividers fall
  * between the rows that survived rather than around the gaps left by the ones
- * that didn't, so a filtered card is indistinguishable from a hand-written one.
+ * that didn't, so a filtered section is indistinguishable from a hand-written one.
  */
 @Composable
 private fun SearchableSettingsGroup(
@@ -2469,14 +2405,14 @@ private fun SearchableSettingsGroup(
 }
 
 /**
- * One inset card of rows, with a sentence-case heading above and an optional
+ * One section of rows, with a sentence-case heading above and an optional
  * plain-language [footer] below. Rows are separated by [RowDivider].
  */
 @Composable
 internal fun SettingsGroup(
     header: String? = null,
     footer: String? = null,
-    /** Room above the card, where there is no [header] to provide it. */
+    /** Room above the section, where there is no [header] to provide it. */
     topSpacing: Dp = 26.dp,
     content: @Composable () -> Unit,
 ) {
@@ -2498,10 +2434,7 @@ internal fun SettingsGroup(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = GROUP_INSET)
-            .clip(GroupShape)
-            .background(MaterialTheme.colorScheme.surface)
-            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.55f), GroupShape),
+            .padding(horizontal = GROUP_INSET),
     ) {
         content()
     }
