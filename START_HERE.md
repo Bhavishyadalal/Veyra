@@ -1,3 +1,5 @@
+> **beta8 visual update:** See UPDATE_BETA8.md for the new launcher choices, navigation order, launch animation and signing guidance. You can build this ZIP using your personal Veyra Builder.
+
 # Open Veyra in Android Studio on Windows
 
 This is the complete native Android source project. Extract the entire ZIP first. Open the **Veyra** folder containing **settings.gradle.kts**, **gradlew.bat** and the **app** folder. Do not open the ZIP itself or select only the app subfolder.

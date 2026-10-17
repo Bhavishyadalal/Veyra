@@ -354,6 +354,13 @@ internal fun shouldSkipAfterDislike(
 
 
 class MainActivity : AppCompatActivity() {
+    private var launchGeneration by mutableIntStateOf(0)
+
+    override fun onStart() {
+        super.onStart()
+        launchGeneration++
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -419,6 +426,7 @@ class MainActivity : AppCompatActivity() {
                         windowHeight = maxHeight,
                         appBackdrop = appBackdrop,
                     )
+                    app.veyra.music.ui.components.LaunchSignature(generation = launchGeneration)
                 }
                 }
             }
@@ -455,6 +463,9 @@ class MainActivity : AppCompatActivity() {
         // Replaces what getIntent() returns, so the extra this consumes is the
         // one that just arrived and not the one the task was started with.
         setIntent(intent)
+        if (intent.action == Intent.ACTION_MAIN && intent.hasCategory(Intent.CATEGORY_LAUNCHER) && hasWindowFocus()) {
+            launchGeneration++
+        }
         PlayerDeepLink.consume(intent)
         JamInviteLink.consume(intent)
         MusicLink.consume(intent)
@@ -1155,9 +1166,9 @@ private fun VeyraApp(
     val tabs = remember(homeLabel, exploreLabel, libraryLabel, searchLabel) {
         listOf(
             BottomTab(homeLabel, VeyraIcons.Home),
+            BottomTab(searchLabel, VeyraIcons.TabSearch),
             BottomTab(exploreLabel, VeyraIcons.TabExplore),
             BottomTab(libraryLabel, VeyraIcons.TabLibrary),
-            BottomTab(searchLabel, VeyraIcons.TabSearch),
         )
     }
 
@@ -4951,7 +4962,7 @@ private fun VeyraApp(
                                 confirmingProfile = false
                                 if (accepted) {
                                     webSession = null
-                                    if (mode == WebSessionMode.SIGN_IN) selectedTab = 2
+                                    if (mode == WebSessionMode.SIGN_IN) selectedTab = TAB_LIBRARY
                                 } else {
                                     captureFailed = true
                                 }
@@ -5701,9 +5712,9 @@ private object PlayerSheetShape : Shape {
 }
 
 private const val TAB_HOME = 0
-private const val TAB_EXPLORE = 1
-private const val TAB_LIBRARY = 2
-private const val TAB_SEARCH = 3
+private const val TAB_EXPLORE = 2
+private const val TAB_LIBRARY = 3
+private const val TAB_SEARCH = 1
 
 /**
  * What a tab's key is prefixed with in the content switcher above.

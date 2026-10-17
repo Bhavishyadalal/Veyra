@@ -1,0 +1,29 @@
+{
+  "launcher_choices": 16,
+  "enabled_launcher_aliases": 1,
+  "default": "Glass Noir",
+  "original_artwork": "preserved",
+  "navigation": [
+    "Home",
+    "Search",
+    "Explore",
+    "Library"
+  ],
+  "instagram": "https://www.instagram.com/bhavishya_dalal_/",
+  "xml_parsing": "passed",
+  "icon_references": "passed",
+  "legacy_aliases": "preserved",
+  "native_svg_geometry": 9,
+  "build": "ProdRelease",
+  "version": "0.1.0-beta8",
+  "version_code": 8,
+  "apk_sha256": "eadfa07415f85ffeaa2f82f762cef50e9b4de1d83b5e952350658a35cfbebd36",
+  "unit_tests": {
+    "tests": 1097,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1
+  },
+  "device_ui_testing": "Not performed: no physical Android device attached",
+  "signing": "Signed using the previously retained test signing key. Rebuild with your own existing key for updates over locally signed installations."
+}

@@ -2,6 +2,9 @@ package app.veyra.music.ui.screens
 
 import android.content.Context
 import android.content.Intent
+import app.veyra.music.ui.icons.SettingsIcons
+import androidx.compose.foundation.border
+import androidx.compose.foundation.selection.selectable
 import android.media.AudioFormat
 import android.media.audiofx.AudioEffect
 import android.net.Uri
@@ -450,7 +453,7 @@ fun SettingsScreen(
                 // them is named on the row itself.
                 row(accountTitle, "scrobbling", "last.fm", "listenbrainz") {
                     SettingsRow(
-                        icon = Icons.Rounded.Person,
+                        icon = SettingsIcons.Account,
                         title = accountTitle,
                         subtitle = account?.email?.takeIf { it.isNotBlank() }
                             ?: stringResource(if (signedIn) R.string.signed_in else R.string.not_signed_in),
@@ -503,7 +506,7 @@ fun SettingsScreen(
                 val onMobileDataTitle = stringResource(R.string.on_mobile_data)
                 row(onMobileDataTitle, "cellular", "streaming quality") {
                     SettingsRow(
-                        icon = Icons.Rounded.SignalCellularAlt,
+                        icon = SettingsIcons.Performance,
                         title = onMobileDataTitle,
                         badge = stringResource(R.string.in_use).takeIf { metered == true },
                         value = cellularQuality.localizedLabel(),
@@ -710,7 +713,7 @@ fun SettingsScreen(
                 val automixPerformanceTitle = stringResource(R.string.automix_performance)
                 row(automixPerformanceTitle, "cpu", "battery") {
                     SettingsRow(
-                        icon = Icons.Rounded.Tune,
+                        icon = SettingsIcons.Sound,
                         title = automixPerformanceTitle,
                         subtitle = stringResource(R.string.automix_performance_subtitle),
                         value = automixPerformance.localizedLabel(),
@@ -785,7 +788,7 @@ fun SettingsScreen(
                 val equalizerTitle = stringResource(R.string.equalizer)
                 row(equalizerTitle, "eq", "bass", "treble") {
                     SettingsRow(
-                        icon = Icons.Rounded.Tune,
+                        icon = SettingsIcons.Sound,
                         title = equalizerTitle,
                         subtitle = stringResource(R.string.equalizer_subtitle),
                         onClick = onEqualizer,
@@ -935,7 +938,7 @@ fun SettingsScreen(
                 val artistSignaturesTitle = stringResource(R.string.artist_signatures)
                 row(artistSignaturesTitle, "signature", "artist", "logo") {
                     SettingsRow(
-                        icon = Icons.Rounded.Draw,
+                        icon = SettingsIcons.Appearance,
                         title = artistSignaturesTitle,
                         subtitle = stringResource(R.string.artist_signatures_subtitle),
                         trailing = {
@@ -1164,7 +1167,7 @@ fun SettingsScreen(
                     val useAllAudioFoldersTitle = stringResource(R.string.use_all_audio_folders)
                     row(useAllAudioFoldersTitle, "folder") {
                         SettingsRow(
-                            icon = Icons.Rounded.LibraryMusic,
+                            icon = SettingsIcons.Library,
                             title = useAllAudioFoldersTitle,
                             subtitle = stringResource(R.string.use_all_audio_folders_subtitle),
                             onClick = { AppSettings.setLocalMusicFolderUri("") },
@@ -1459,6 +1462,14 @@ fun SettingsScreen(
                 }
             }
 
+            SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.app_icon)) {
+                val appIconTitle = stringResource(R.string.app_icon)
+                row(appIconTitle, "icon", "launcher", "logo", "glass", "frost") {
+                    SettingsRow(icon = SettingsIcons.Icons, title = appIconTitle, subtitle = stringResource(R.string.app_icon_picker_hint))
+                    AppIconPicker()
+                }
+            }
+
             SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.language)) {
                 val appLanguageTitle = stringResource(R.string.app_language)
                 row(appLanguageTitle, "locale", "translate") {
@@ -1512,65 +1523,25 @@ fun SettingsScreen(
                         onClick = { AppSettings.setShowNerdStats(!nerdStats) },
                     )
                 }
-                val appIconTitle = stringResource(R.string.app_icon)
-                row(appIconTitle, "icon", "launcher", "logo") {
-                    var selectedIcon by remember { mutableStateOf(AppIcon.current(context)) }
-                    SettingsRow(icon = Icons.Rounded.Apps, title = appIconTitle)
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState())
-                            .padding(start = ROW_INSET, end = ROW_INSET, bottom = 14.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        AppIcon.entries.forEach { option ->
-                            val selected = option == selectedIcon
-                            Column(
-                                modifier = Modifier
-                                    .width(84.dp)
-                                    .clip(RoundedCornerShape(16.dp))
-                                    .clickable {
-                                        selectedIcon = option
-                                        AppIcon.apply(context, option)
-                                    }
-                                    .padding(vertical = 6.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                // A glass foreground holds the finished icon in its own shape on the
-                                // central 72 of 108 dp: scaled 1.5× it fills the tile as designed.
-                                // Only the default goes through an adaptive mask.
-                                val preview = option.previewRes
-                                if (preview == null) {
-                                    AndroidView(
-                                        factory = { ctx ->
-                                            android.widget.ImageView(ctx).apply { setImageResource(option.iconRes) }
-                                        },
-                                        modifier = Modifier
-                                            .size(68.dp)
-                                            .clip(RoundedCornerShape(22.dp)),
-                                    )
-                                } else {
-                                    Image(
-                                        painter = painterResource(preview),
-                                        contentDescription = null,
-                                        contentScale = ContentScale.Fit,
-                                        modifier = Modifier
-                                            .size(68.dp)
-                                            .scale(1.5f),
-                                    )
+
+            }
+
+            if (category == null || searching) {
+                val creatorTitle = stringResource(R.string.creator_instagram)
+                if (!searching || search.matches(creatorTitle, "instagram", "bhavishya_dalal_", "creator")) {
+                    Column(Modifier.padding(horizontal = GROUP_INSET, vertical = 12.dp)) {
+                        SettingsRow(
+                            icon = SettingsIcons.Instagram,
+                            title = creatorTitle,
+                            subtitle = stringResource(R.string.creator_instagram_handle),
+                            onClick = {
+                                runCatching {
+                                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/bhavishya_dalal_/")))
+                                }.onFailure {
+                                    Toast.makeText(context, context.getString(R.string.creator_link_unavailable), Toast.LENGTH_SHORT).show()
                                 }
-                                Text(
-                                    text = stringResource(option.labelRes),
-                                    textAlign = TextAlign.Center,
-                                    maxLines = 2,
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = if (selected) MaterialTheme.colorScheme.primary
-                                    else MaterialTheme.colorScheme.onSurfaceVariant,
-                                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                                    modifier = Modifier.padding(top = 6.dp),
-                                )
-                            }
-                        }
+                            },
+                        )
                     }
                 }
             }
@@ -1882,7 +1853,7 @@ private fun Context.countOfMonths(months: Int): String = if (months == 0) {
 /** Which ceiling the open picker is editing. */
 private enum class QualityTarget(val icon: ImageVector) {
     WIFI(Icons.Rounded.Wifi),
-    CELLULAR(Icons.Rounded.SignalCellularAlt),
+    CELLULAR(SettingsIcons.Performance),
 }
 
 @Composable
@@ -2009,7 +1980,7 @@ internal fun AccountCard(
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    Icons.Rounded.Person,
+                    SettingsIcons.Account,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -2134,7 +2105,7 @@ private fun AutomixPerformanceSheet(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = Icons.Rounded.Tune,
+                imageVector = SettingsIcons.Sound,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.size(22.dp),
@@ -2299,12 +2270,12 @@ internal val TEXT_INSET = ROW_INSET + ICON_SIZE + ICON_GAP
  * only the selected category composes its controls.
  */
 private enum class SettingsCategory(val title: Int, val summary: List<Int>, val icon: ImageVector) {
-    ACCOUNT(R.string.account_integrations, listOf(R.string.scrobbling, R.string.listen_together), Icons.Rounded.Person),
-    SOUND(R.string.playback, listOf(R.string.audio_quality, R.string.equalizer), Icons.Rounded.Tune),
-    APPEARANCE(R.string.appearance, listOf(R.string.theme, R.string.language), Icons.Rounded.Draw),
-    LIBRARY(R.string.library, listOf(R.string.downloads, R.string.storage, R.string.your_data), Icons.Rounded.LibraryMusic),
-    PERFORMANCE(R.string.performance, listOf(R.string.high_performance_mode, R.string.reduce_animation), Icons.Rounded.SignalCellularAlt),
-    ADVANCED(R.string.advanced_options, listOf(R.string.miscellaneous, R.string.app_icon), Icons.Rounded.Apps),
+    ACCOUNT(R.string.account_integrations, listOf(R.string.scrobbling, R.string.listen_together), SettingsIcons.Account),
+    SOUND(R.string.playback, listOf(R.string.audio_quality, R.string.equalizer), SettingsIcons.Sound),
+    APPEARANCE(R.string.appearance, listOf(R.string.theme, R.string.app_icon), SettingsIcons.Appearance),
+    LIBRARY(R.string.library, listOf(R.string.downloads, R.string.storage, R.string.your_data), SettingsIcons.Library),
+    PERFORMANCE(R.string.performance, listOf(R.string.high_performance_mode, R.string.reduce_animation), SettingsIcons.Performance),
+    ADVANCED(R.string.advanced_options, listOf(R.string.miscellaneous, R.string.show_nerd_stats), SettingsIcons.Advanced),
 }
 
 /** Plain, full-width destinations remain readable at large system font sizes. */
@@ -2612,7 +2583,7 @@ internal fun Badge(text: String) {
 @Composable
 internal fun Chevron() {
     Icon(
-        Icons.Rounded.ChevronRight,
+        SettingsIcons.Chevron,
         contentDescription = null,
         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
         modifier = Modifier.size(20.dp),
@@ -2772,6 +2743,62 @@ internal fun SegmentedControl(
                     color = labelColor,
                     maxLines = 1,
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AppIconPicker() {
+    val context = LocalContext.current
+    var selected by remember { mutableStateOf(AppIcon.current(context)) }
+    androidx.compose.foundation.layout.BoxWithConstraints(
+        Modifier.fillMaxWidth().padding(horizontal = ROW_INSET, vertical = 8.dp),
+    ) {
+        val columns = if (maxWidth >= 340.dp) 3 else 2
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            AppIcon.entries.chunked(columns).forEach { row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                    row.forEach { option ->
+                        val checked = option == selected
+                        Column(
+                            Modifier.weight(1f)
+                                .clip(RoundedCornerShape(18.dp))
+                                .background(if (checked) MaterialTheme.colorScheme.primary.copy(alpha = 0.10f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.035f))
+                                .border(if (checked) 2.dp else 1.dp,
+                                    if (checked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), RoundedCornerShape(18.dp))
+                                .selectable(selected = checked, role = Role.RadioButton, onClick = {
+                                    if (!checked) {
+                                        runCatching { AppIcon.apply(context, option) }
+                                            .onSuccess {
+                                                selected = AppIcon.current(context)
+                                                Toast.makeText(context, context.getString(R.string.app_icon_changed), Toast.LENGTH_SHORT).show()
+                                            }.onFailure {
+                                                Toast.makeText(context, context.getString(R.string.app_icon_failed), Toast.LENGTH_SHORT).show()
+                                            }
+                                    }
+                                })
+                                .padding(horizontal = 6.dp, vertical = 12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            Box(Modifier.size(68.dp).clip(RoundedCornerShape(18.dp))) {
+                                val preview = option.previewRes
+                                if (preview != null) {
+                                    Image(painterResource(preview), null, modifier = Modifier.fillMaxSize().scale(1.5f), contentScale = ContentScale.Fit)
+                                } else {
+                                    AndroidView(factory = { ctx -> android.widget.ImageView(ctx) },
+                                        update = { it.setImageResource(option.iconRes) }, modifier = Modifier.fillMaxSize())
+                                }
+                            }
+                            Text(stringResource(option.labelRes), textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.labelMedium,
+                                color = if (checked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                fontWeight = if (checked) FontWeight.Bold else FontWeight.Medium,
+                                modifier = Modifier.padding(top = 8.dp))
+                        }
+                    }
+                    repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
+                }
             }
         }
     }
