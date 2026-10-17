@@ -1,0 +1,19 @@
+{
+  "name": "veyra-web",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.11.2",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @veyra/app dev",
+    "dev:ext": "pnpm --filter @veyra/extension dev",
+    "dev:ext:firefox": "pnpm --filter @veyra/extension dev:firefox",
+    "build": "pnpm -r build",
+    "build:site": "pnpm --filter @veyra/extension package && pnpm --filter @veyra/app build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "fixtures": "node scripts/capture-fixtures.mjs"
+  }
+}

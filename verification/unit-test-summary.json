@@ -1,0 +1,9 @@
+{
+  "tests": 1074,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 1,
+  "passed": 1073,
+  "suites": 95,
+  "skipped_test": "GeniusTest: live genius search and scraping test with noisy titles (upstream intentionally ignored live-service test)"
+}

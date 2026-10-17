@@ -1,0 +1,297 @@
+{
+  "xml_files_parsed": 137,
+  "localized_string_entries_checked": 23078,
+  "xml_font_references_resolved": 8,
+  "errors": [],
+  "intentional_remaining_brand_references": [
+    {
+      "file": "app/src/main/AndroidManifest.xml",
+      "line": 206,
+      "reason": "copyright or preserved external endpoint",
+      "text": "android:host=\"bitchord.kushagrasingh.in\""
+    },
+    {
+      "file": "app/src/main/cpp/jni/vocal_jni.cpp",
+      "line": 5,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "app/src/main/cpp/jni/mel_jni.cpp",
+      "line": 5,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "app/src/main/cpp/jni/analysis_jni.cpp",
+      "line": 5,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/playback/AudioOutputStatus.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/data/listentogether/JamInviteLink.kt",
+      "line": 19,
+      "reason": "copyright or preserved external endpoint",
+      "text": "const val ORIGIN = \"https://bitchord.kushagrasingh.in\""
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/data/listentogether/JamInviteLink.kt",
+      "line": 22,
+      "reason": "copyright or preserved external endpoint",
+      "text": "private const val HOST = \"bitchord.kushagrasingh.in\""
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/data/listentogether/JamInviteLink.kt",
+      "line": 53,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* 2. https://bitchord.kushagrasingh.in/invite/<CODE>?server=<SERVER>"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/data/listentogether/JamInviteLink.kt",
+      "line": 70,
+      "reason": "copyright or preserved external endpoint",
+      "text": "// 2. Official web domain: https://bitchord.kushagrasingh.in/invite/<CODE>"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/playback/audio/DirectAudioProbe.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/playback/audio/OutputNegotiator.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/playback/audio/AAudioEvaluation.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/playback/audio/bluetooth/BluetoothAudioTracker.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/playback/audio/usb/DirectUsbCapability.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/playback/audio/usb/UsbDirectManager.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/playback/audio/usb/DirectAudioOutput.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 26,
+      "reason": "copyright or preserved external endpoint",
+      "text": "JamInviteLink.parse(\"https://bitchord.kushagrasingh.in/invite/a1b2c3\"),"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 34,
+      "reason": "copyright or preserved external endpoint",
+      "text": "JamInviteLink.parse(\"https://bitchord.kushagrasingh.in/invite/ABC123?from=share\"),"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 40,
+      "reason": "copyright or preserved external endpoint",
+      "text": "assertNull(JamInviteLink.parse(\"http://bitchord.kushagrasingh.in/invite/ABC123\"))"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 42,
+      "reason": "copyright or preserved external endpoint",
+      "text": "assertNull(JamInviteLink.parse(\"https://bitchord.kushagrasingh.in/\"))"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 43,
+      "reason": "copyright or preserved external endpoint",
+      "text": "assertNull(JamInviteLink.parse(\"https://bitchord.kushagrasingh.in/download\"))"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 44,
+      "reason": "copyright or preserved external endpoint",
+      "text": "assertNull(JamInviteLink.parse(\"https://bitchord.kushagrasingh.in/invite/ABC123/\"))"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 45,
+      "reason": "copyright or preserved external endpoint",
+      "text": "assertNull(JamInviteLink.parse(\"https://bitchord.kushagrasingh.in/invite/ABC123/extra\"))"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 46,
+      "reason": "copyright or preserved external endpoint",
+      "text": "assertNull(JamInviteLink.parse(\"https://bitchord.kushagrasingh.in/invite/TOO-LONG\"))"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 52,
+      "reason": "copyright or preserved external endpoint",
+      "text": "\"https://bitchord.kushagrasingh.in/invite/ABC123\","
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 68,
+      "reason": "copyright or preserved external endpoint",
+      "text": "\"https://bitchord.kushagrasingh.in/invite/ABC123\","
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 72,
+      "reason": "copyright or preserved external endpoint",
+      "text": "\"https://bitchord.kushagrasingh.in/invite/ABC123\","
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 105,
+      "reason": "copyright or preserved external endpoint",
+      "text": "val invite = JamInviteLink.parseInvite(\"https://bitchord.kushagrasingh.in/invite/ABC123?server=https%3A%2F%2Fcustom.example.com\")"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 138,
+      "reason": "copyright or preserved external endpoint",
+      "text": "assertEquals(\"https://bitchord.kushagrasingh.in/invite/JAM001\", link)"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 151,
+      "reason": "copyright or preserved external endpoint",
+      "text": "assertNotEquals(\"https://bitchord.kushagrasingh.in/invite/JAM002\", link)"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/JamInviteLinkTest.kt",
+      "line": 168,
+      "reason": "copyright or preserved external endpoint",
+      "text": "val explicitInvite = \"https://bitchord.kushagrasingh.in/invite/JAM004?server=https%3A%2F%2Ftarget.party.com\""
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/playback/audio/OutputNegotiatorTest.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/playback/audio/AudioPipelineTelemetryTest.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/playback/audio/DirectAudioStreamingRegressionTest.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/playback/audio/AudioTelemetryHardeningTest.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/playback/audio/bluetooth/BluetoothAudioTrackerTest.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/test/java/app/veyra/music/playback/audio/usb/UsbDirectManagerTest.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "tv/src/main/AndroidManifest.xml",
+      "line": 246,
+      "reason": "copyright or preserved external endpoint",
+      "text": "android:host=\"bitchord.kushagrasingh.in\""
+    },
+    {
+      "file": "shared/src/commonMain/kotlin/app/veyra/music/data/listentogether/JamInvite.kt",
+      "line": 12,
+      "reason": "copyright or preserved external endpoint",
+      "text": "const val ORIGIN = \"https://bitchord.kushagrasingh.in\""
+    },
+    {
+      "file": "shared/src/commonMain/kotlin/app/veyra/music/playback/smart/TransitionPolicy.kt",
+      "line": 5,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "shared/src/commonMain/kotlin/app/veyra/music/playback/smart/TrackAnalysis.kt",
+      "line": 5,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "shared/src/commonMain/kotlin/app/veyra/music/playback/smart/TransitionPlanner.kt",
+      "line": 6,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "shared/src/jvmSharedMain/kotlin/app/veyra/music/data/presence/Presence.kt",
+      "line": 118,
+      "reason": "copyright or preserved external endpoint",
+      "text": "const val ENDPOINT = \"https://api.bitchord.kushagrasingh.in/api/presence\""
+    },
+    {
+      "file": "shared/src/jvmSharedMain/kotlin/app/veyra/music/playback/smart/VocalTracker.kt",
+      "line": 5,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "shared/src/jvmSharedMain/kotlin/app/veyra/music/playback/smart/BeatTracker.kt",
+      "line": 5,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "shared/src/jvmSharedMain/kotlin/app/veyra/music/playback/smart/MelSpectrogram.kt",
+      "line": 5,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "shared/src/jvmSharedMain/kotlin/app/veyra/music/playback/smart/TrackFeatures.kt",
+      "line": 5,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "shared/src/commonTest/kotlin/app/veyra/music/data/listentogether/JamInviteTest.kt",
+      "line": 36,
+      "reason": "copyright or preserved external endpoint",
+      "text": "assertNull(JamInvite.parse(\"http://bitchord.kushagrasingh.in/invite/ABC123\"))"
+    }
+  ],
+  "checks": "Static source/resource checks; not a native app runtime test."
+}

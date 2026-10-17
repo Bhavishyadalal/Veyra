@@ -1,0 +1,15 @@
+{
+  "apk_package": "app.veyra.music",
+  "labels_checked": 90,
+  "label": "Veyra",
+  "version": "0.1.0-beta1",
+  "architecture": "arm64-v8a",
+  "signature": "debug signature verified with apksigner",
+  "zip_integrity": "passed",
+  "renamed_native_libraries_present": true,
+  "new_namespace_jni_exports": 20,
+  "alternate_icon_images_verified": 65,
+  "bytes": 93846389,
+  "sha256": "1074ee22fa75438c0c1c81c973d60ac591d2417d5572bbc7f859f66c86aa68ad",
+  "device_runtime": "Not tested on a physical device or emulator."
+}

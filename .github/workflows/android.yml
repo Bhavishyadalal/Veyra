@@ -1,0 +1,58 @@
+name: Android Release APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-prod-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - uses: android-actions/setup-android@v3
+
+    - name: Install Android build tools
+      run: sdkmanager "platforms;android-36" "platforms;android-37.0" "build-tools;35.0.0" "ndk;27.0.12077973" "cmake;3.22.1"
+
+    - name: Setup Secrets (Keystore & local.properties)
+      run: |
+        echo "LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}" > local.properties
+        echo "LASTFM_SECRET=${{ secrets.LASTFM_SECRET }}" >> local.properties
+
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > veyra-release.jks
+        {
+          echo "storeFile=veyra-release.jks"
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}"
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}"
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}"
+        } > keystore.properties
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build Signed Prod Release APK
+      run: ./gradlew assembleProdRelease
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: veyra-prod-release-signed
+        path: app/build/outputs/apk/prod/release/*.apk
+
+    # Built by the same assembleProdRelease, with the same key. The watch app
+    # only pairs with a phone app signed by the same key, so a prod watch APK
+    # for these phone builds can only come from here, never a local build.
+    - name: Upload Wear OS APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: veyra-wear-prod-release-signed
+        path: wearos/build/outputs/apk/prod/release/*.apk
