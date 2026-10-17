@@ -1,3 +1,5 @@
+> Android Studio import/build guide: [START_HERE.md](START_HERE.md). Current beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
+
 # Veyra
 
 A personal music player for Android, with the selected purple, peach and cream V icon, Manrope typography and clearer dark-theme contrast.

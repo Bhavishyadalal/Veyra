@@ -1,3 +1,5 @@
+> Historical report from the earlier source handoff. For the completed beta3 Android build and tests, see [ANDROID-STUDIO-BUILD.md](ANDROID-STUDIO-BUILD.md). The limitations below describe that earlier environment.
+
 > Historical report from the uploaded beta1 source archive. These results do not validate the beta2 changes. See [POLISH-RESULTS.md](POLISH-RESULTS.md) for current results.
 
 # Verification — 2026-10-17

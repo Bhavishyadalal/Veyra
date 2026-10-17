@@ -1,3 +1,5 @@
+> Historical report from the earlier source handoff. For the completed beta3 Android build and tests, see [ANDROID-STUDIO-BUILD.md](ANDROID-STUDIO-BUILD.md). The limitations below describe that earlier environment.
+
 > Historical beta2 validation. See [BETA3-RESULTS.md](BETA3-RESULTS.md) for current code and results.
 
 # Veyra beta2 source validation — 2026-10-17

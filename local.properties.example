@@ -1,0 +1,7 @@
+# Copy this file to local.properties ONLY if Android Studio has not created it.
+# Replace YOUR_WINDOWS_USERNAME and the path with your actual Android SDK location.
+# Forward slashes avoid Java Properties backslash escaping on Windows.
+sdk.dir=C:/Users/YOUR_WINDOWS_USERNAME/AppData/Local/Android/Sdk
+
+# Optional integration settings are described in README.md.
+# Do not copy machine paths or private signing details into shared source archives.

@@ -1,3 +1,10 @@
+# Beta3 build setup refresh — 2026-10-17
+
+- Restored Android Studio module discovery, pinned the native toolchain and refreshed the complete checksum-verified Gradle wrapper.
+- Added Windows import instructions and an SDK path example.
+- Built and signature-verified the beta3 APK; completed the phone unit suite. See verification/ANDROID-STUDIO-BUILD.md.
+- Application sources, resources, translations and phone/watch protocol are unchanged from the uploaded beta3.
+
 # Veyra 0.1.0-beta3 (source update)
 
 - Refined the existing player: stronger song/artist hierarchy, clearer secondary text, responsive credit height, larger menu touch areas and transport press feedback.

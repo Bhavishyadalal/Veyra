@@ -77,6 +77,8 @@ val betaSuffix = ""
 
 android {
     namespace = "app.veyra.music"
+    // Match the native toolchain used to verify this project.
+    ndkVersion = "27.0.12077973"
     // InnerTubeX's AAR requires compiling against 37; targetSdk (runtime behaviour) stays 36.
     // Current SDK Manager publishes API 37 as android-37.0.
     // Override for an existing older SDK installation with -PveyraCompileSdk=android-37.

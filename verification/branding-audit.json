@@ -77,7 +77,13 @@
       "text": "* Copyright (C) 2026 BitChord Project"
     },
     {
-      "file": "app/src/main/java/app/veyra/music/playback/audio/bluetooth/BluetoothAudioTracker.kt",
+      "file": "app/src/main/java/app/veyra/music/playback/audio/usb/UsbDirectManager.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
+      "file": "app/src/main/java/app/veyra/music/playback/audio/usb/DirectAudioOutput.kt",
       "line": 2,
       "reason": "copyright or preserved external endpoint",
       "text": "* Copyright (C) 2026 BitChord Project"
@@ -89,13 +95,7 @@
       "text": "* Copyright (C) 2026 BitChord Project"
     },
     {
-      "file": "app/src/main/java/app/veyra/music/playback/audio/usb/UsbDirectManager.kt",
-      "line": 2,
-      "reason": "copyright or preserved external endpoint",
-      "text": "* Copyright (C) 2026 BitChord Project"
-    },
-    {
-      "file": "app/src/main/java/app/veyra/music/playback/audio/usb/DirectAudioOutput.kt",
+      "file": "app/src/main/java/app/veyra/music/playback/audio/bluetooth/BluetoothAudioTracker.kt",
       "line": 2,
       "reason": "copyright or preserved external endpoint",
       "text": "* Copyright (C) 2026 BitChord Project"
@@ -191,6 +191,12 @@
       "text": "val explicitInvite = \"https://bitchord.kushagrasingh.in/invite/JAM004?server=https%3A%2F%2Ftarget.party.com\""
     },
     {
+      "file": "app/src/test/java/app/veyra/music/playback/audio/AudioTelemetryHardeningTest.kt",
+      "line": 2,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 BitChord Project"
+    },
+    {
       "file": "app/src/test/java/app/veyra/music/playback/audio/OutputNegotiatorTest.kt",
       "line": 2,
       "reason": "copyright or preserved external endpoint",
@@ -209,19 +215,13 @@
       "text": "* Copyright (C) 2026 BitChord Project"
     },
     {
-      "file": "app/src/test/java/app/veyra/music/playback/audio/AudioTelemetryHardeningTest.kt",
+      "file": "app/src/test/java/app/veyra/music/playback/audio/usb/UsbDirectManagerTest.kt",
       "line": 2,
       "reason": "copyright or preserved external endpoint",
       "text": "* Copyright (C) 2026 BitChord Project"
     },
     {
       "file": "app/src/test/java/app/veyra/music/playback/audio/bluetooth/BluetoothAudioTrackerTest.kt",
-      "line": 2,
-      "reason": "copyright or preserved external endpoint",
-      "text": "* Copyright (C) 2026 BitChord Project"
-    },
-    {
-      "file": "app/src/test/java/app/veyra/music/playback/audio/usb/UsbDirectManagerTest.kt",
       "line": 2,
       "reason": "copyright or preserved external endpoint",
       "text": "* Copyright (C) 2026 BitChord Project"
@@ -239,6 +239,12 @@
       "text": "const val ORIGIN = \"https://bitchord.kushagrasingh.in\""
     },
     {
+      "file": "shared/src/commonMain/kotlin/app/veyra/music/playback/smart/TransitionPlanner.kt",
+      "line": 6,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
       "file": "shared/src/commonMain/kotlin/app/veyra/music/playback/smart/TransitionPolicy.kt",
       "line": 5,
       "reason": "copyright or preserved external endpoint",
@@ -247,12 +253,6 @@
     {
       "file": "shared/src/commonMain/kotlin/app/veyra/music/playback/smart/TrackAnalysis.kt",
       "line": 5,
-      "reason": "copyright or preserved external endpoint",
-      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
-    },
-    {
-      "file": "shared/src/commonMain/kotlin/app/veyra/music/playback/smart/TransitionPlanner.kt",
-      "line": 6,
       "reason": "copyright or preserved external endpoint",
       "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
     },
@@ -269,12 +269,6 @@
       "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
     },
     {
-      "file": "shared/src/jvmSharedMain/kotlin/app/veyra/music/playback/smart/BeatTracker.kt",
-      "line": 5,
-      "reason": "copyright or preserved external endpoint",
-      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
-    },
-    {
       "file": "shared/src/jvmSharedMain/kotlin/app/veyra/music/playback/smart/MelSpectrogram.kt",
       "line": 5,
       "reason": "copyright or preserved external endpoint",
@@ -282,6 +276,12 @@
     },
     {
       "file": "shared/src/jvmSharedMain/kotlin/app/veyra/music/playback/smart/TrackFeatures.kt",
+      "line": 5,
+      "reason": "copyright or preserved external endpoint",
+      "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
+    },
+    {
+      "file": "shared/src/jvmSharedMain/kotlin/app/veyra/music/playback/smart/BeatTracker.kt",
       "line": 5,
       "reason": "copyright or preserved external endpoint",
       "text": "* Copyright (C) 2026 Kushagra Singh (BitChord adaptation)"
