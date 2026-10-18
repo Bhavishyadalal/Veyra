@@ -1,0 +1,114 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-10-18",
+  "items": [
+    {
+      "id": "share-card",
+      "path": "social/veyra-share-card-v1.jpg",
+      "width": 1200,
+      "height": 630,
+      "title": "Link-sharing card",
+      "description": "Primary thumbnail for WhatsApp and other link previews.",
+      "alt": "Veyra app icon and wordmark beside a crystal sound portal; Your music. Another dimension."
+    },
+    {
+      "id": "app-banner",
+      "path": "banners/veyra-app-banner.png",
+      "width": 2560,
+      "height": 1440,
+      "title": "App campaign banner",
+      "description": "Large landscape artwork for the website and app showcase.",
+      "alt": "Veyra Android music app campaign with silver liquid-glass artwork."
+    },
+    {
+      "id": "github-banner",
+      "path": "banners/veyra-github-social.png",
+      "width": 1280,
+      "height": 640,
+      "title": "GitHub social banner",
+      "description": "Repository social-preview upload and README banner.",
+      "alt": "Veyra: Find your frequency. An independent Android music experience."
+    },
+    {
+      "id": "square-post",
+      "path": "posts/veyra-square-post.png",
+      "width": 1080,
+      "height": 1080,
+      "title": "Square showcase post",
+      "description": "Square campaign artwork for posts and image galleries.",
+      "alt": "Veyra glass artwork and the words Lose the noise. Keep the feeling."
+    },
+    {
+      "id": "story-post",
+      "path": "posts/veyra-portrait-story.jpg",
+      "width": 1080,
+      "height": 1920,
+      "title": "Portrait story",
+      "description": "Vertical promotional artwork for mobile stories and status posts.",
+      "alt": "Veyra brand above a tall crystal waveform; Find your frequency."
+    },
+    {
+      "id": "feature-graphic",
+      "path": "banners/veyra-feature-graphic.png",
+      "width": 1024,
+      "height": 500,
+      "title": "Feature graphic",
+      "description": "Wide promotional format, sized for a 1024 by 500 feature slot.",
+      "alt": "Veyra: Discover. Feel. Repeat. Android music player."
+    },
+    {
+      "id": "brand-lockup",
+      "path": "brand/veyra-lockup-transparent.png",
+      "width": 1600,
+      "height": 600,
+      "title": "Transparent brand lockup",
+      "description": "Real app icon with the Veyra wordmark; transparent outside the graphic.",
+      "alt": "Veyra app icon and white Veyra wordmark on a transparent canvas."
+    },
+    {
+      "id": "web-icon-192",
+      "path": "brand/veyra-web-icon-192.png",
+      "width": 192,
+      "height": 192,
+      "title": "Website icon · 192",
+      "description": "Website/bookmark icon derived from the original app artwork.",
+      "alt": "Veyra black-and-silver glass-waveform icon."
+    },
+    {
+      "id": "web-icon-512",
+      "path": "brand/veyra-web-icon-512.png",
+      "width": 512,
+      "height": 512,
+      "title": "Website icon · 512",
+      "description": "Website/bookmark icon derived from the original app artwork.",
+      "alt": "Veyra black-and-silver glass-waveform icon."
+    },
+    {
+      "id": "apple-touch",
+      "path": "brand/veyra-apple-touch.png",
+      "width": 180,
+      "height": 180,
+      "title": "Apple touch icon",
+      "description": "Website/bookmark icon derived from the original app artwork.",
+      "alt": "Veyra black-and-silver glass-waveform icon."
+    },
+    {
+      "id": "favicon",
+      "path": "brand/veyra-favicon.png",
+      "width": 32,
+      "height": 32,
+      "title": "Browser favicon PNG",
+      "description": "Website/bookmark icon derived from the original app artwork.",
+      "alt": "Veyra black-and-silver glass-waveform icon."
+    },
+    {
+      "id": "app-icon",
+      "path": "brand/veyra-app-icon-original.png",
+      "width": 1254,
+      "height": 1254,
+      "title": "Original app icon",
+      "description": "Unchanged high-resolution glass-waveform app artwork.",
+      "alt": "The original black and silver Veyra glass-waveform app icon."
+    }
+  ]
+}

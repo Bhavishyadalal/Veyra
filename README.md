@@ -1,8 +1,14 @@
+![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
+
 > Android Studio import/build guide: [START_HERE.md](START_HERE.md). Historical beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
 
 # Veyra
 
 A personal Android music player with Manrope typography, selectable launcher styles and a dark listening interface.
+
+## Website and artwork
+
+[Browse the Veyra media kit](media-kit/README.md) · [Website and media-kit ZIP downloads](downloads/README.md). Includes link-sharing artwork, app banners, social formats, original backgrounds and an offline preview gallery. The website is prepared for local review and later deployment.
 
 ## Open and build
 

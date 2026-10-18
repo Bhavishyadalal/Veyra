@@ -1,0 +1,355 @@
+:root {
+  color-scheme: dark;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background: #090b0c;
+  color: #edeee8;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+a {
+  color: inherit;
+  text-underline-offset: 4px;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #dfcda8;
+  outline-offset: 5px;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+header,
+main,
+footer {
+  max-width: 1300px;
+  margin: auto;
+  padding-inline: 6%;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-block: 30px;
+  border-bottom: 1px solid #ffffff20;
+}
+header strong {
+  font-size: 23px;
+  letter-spacing: -0.06em;
+}
+header a {
+  font-size: 13px;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: #d4c3a5;
+  text-transform: uppercase;
+}
+.intro {
+  padding-block: 65px 45px;
+}
+.intro h1 {
+  font-size: clamp(36px, 6vw, 72px);
+  line-height: 1.03;
+  letter-spacing: -0.065em;
+  max-width: 850px;
+  margin: 20px 0;
+}
+.intro > p:last-child {
+  max-width: 690px;
+  line-height: 1.8;
+  color: #b7beb7;
+  font-size: 14px;
+}
+.toolbar {
+  display: none;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+.enhanced .toolbar {
+  display: flex;
+}
+.toolbar button {
+  border: 1px solid #fff3;
+  color: #c6cdc2;
+  background: transparent;
+  border-radius: 30px;
+  padding: 11px 18px;
+  font-size: 12px;
+  min-height: 42px;
+}
+.toolbar button[aria-pressed="true"] {
+  background: #d7d7c6;
+  color: #151a15;
+  border-color: #d7d7c6;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+.asset {
+  border: 1px solid #fff2;
+  border-radius: 17px;
+  overflow: hidden;
+  background: #101512;
+}
+.asset[hidden] {
+  display: none;
+}
+.asset-preview {
+  height: 285px;
+  background: #050707;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.asset-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.4s;
+}
+.asset-preview:hover img {
+  transform: scale(1.025);
+}
+.checker {
+  background-color: #1b211e;
+  background-image:
+    linear-gradient(45deg, #242a27 25%, transparent 25%),
+    linear-gradient(-45deg, #242a27 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #242a27 75%),
+    linear-gradient(-45deg, transparent 75%, #242a27 75%);
+  background-size: 24px 24px;
+  background-position:
+    0 0,
+    0 12px,
+    12px -12px,
+    -12px 0;
+}
+.asset-info {
+  padding: 22px 24px 25px;
+}
+.asset-info .dims {
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  color: #b1bda9;
+}
+.asset-info h2 {
+  font-size: 21px;
+  letter-spacing: -0.04em;
+  margin: 10px 0;
+}
+.asset-info p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #b2bdb0;
+  min-height: 44px;
+  margin: 0;
+}
+.asset-actions {
+  display: flex;
+  gap: 20px;
+  margin-top: 22px;
+  font-size: 12px;
+}
+.asset-actions > a:first-child {
+  color: #e4d3ad;
+}
+.share-example {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 55px;
+  align-items: center;
+  padding-block: 85px;
+}
+.share-example h2 {
+  font-size: 32px;
+  letter-spacing: -0.045em;
+}
+.share-example p,
+.notes p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #b6c0b1;
+}
+.message-card {
+  background: #1b2520;
+  border: 1px solid #ffffff24;
+  border-radius: 17px;
+  overflow: hidden;
+  max-width: 440px;
+}
+.message-card img {
+  aspect-ratio: 1200/630;
+  object-fit: cover;
+}
+.message-copy {
+  padding: 17px;
+}
+.message-copy small {
+  font-size: 10px;
+  color: #bdc9b8;
+}
+.message-copy strong {
+  display: block;
+  font-size: 15px;
+  margin-top: 8px;
+}
+.message-copy p {
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 7px 0 0;
+}
+.notes {
+  border-top: 1px solid #fff2;
+  padding-top: 30px;
+  padding-bottom: 60px;
+}
+.notes h2 {
+  font-size: 25px;
+  letter-spacing: -0.04em;
+}
+.notes code {
+  font-size: 12px;
+  color: #e5d6ba;
+  overflow-wrap: anywhere;
+}
+footer {
+  border-top: 1px solid #fff2;
+  padding-block: 30px 45px;
+  color: #a9b5a4;
+  font-size: 11px;
+  line-height: 1.8;
+}
+dialog {
+  background: #090e0a;
+  color: #ecefe5;
+  border: 1px solid #fff4;
+  border-radius: 16px;
+  padding: 18px;
+  width: min(1100px, 95vw);
+  max-height: 92svh;
+}
+dialog::backdrop {
+  background: #000d;
+  backdrop-filter: blur(10px);
+}
+dialog .modal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 0 14px;
+}
+dialog button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid #fff3;
+  border-radius: 50%;
+  background: #fff1;
+  color: #fff;
+}
+dialog img {
+  width: 100%;
+  max-height: 72svh;
+  object-fit: contain;
+}
+.modal-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+.skip-link {
+  position: fixed;
+  left: 12px;
+  top: 10px;
+  padding: 12px;
+  background: #eee;
+  color: #111;
+  z-index: 99;
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+}
+@media (max-width: 650px) {
+  header,
+  main,
+  footer {
+    padding-inline: 6%;
+  }
+  .intro {
+    padding-block: 45px 30px;
+  }
+  .intro h1 {
+    font-size: 42px;
+  }
+  .intro > p:last-child {
+    font-size: 12px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 23px;
+  }
+  .asset-preview {
+    height: 240px;
+  }
+  .asset-info h2 {
+    font-size: 20px;
+  }
+  .asset-info p {
+    font-size: 12px;
+    min-height: 0;
+  }
+  .share-example {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding-block: 60px;
+  }
+  .share-example h2 {
+    font-size: 28px;
+  }
+  .message-card {
+    max-width: none;
+  }
+  .toolbar button {
+    font-size: 11px;
+    padding: 10px 14px;
+  }
+  .asset-info {
+    padding: 19px 20px 23px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+  .asset-preview:hover img {
+    transform: none;
+  }
+}
+.asset[data-category="brand"] .asset-preview img {
+  width: auto;
+  height: auto;
+  max-width: 76%;
+  max-height: 76%;
+}
