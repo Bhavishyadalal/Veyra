@@ -59,6 +59,8 @@ import app.veyra.music.data.model.EntityType
 import app.veyra.music.data.settings.SearchHistory
 import app.veyra.music.download.Downloads
 import android.util.LruCache
+import kotlinx.coroutines.withContext
+import app.veyra.music.data.artwork.ExploreArtworkCache
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -150,6 +152,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val _homePageError = MutableStateFlow<String?>(null)
     val homePageError: StateFlow<String?> = _homePageError.asStateFlow()
 
+    private val exploreArtworkCache = ExploreArtworkCache(app.cacheDir.resolve("explore_artwork"))
+    private var exploreArtworkJob: Job? = null
+    private var exploreGeneration = 0L
     private var exploreLoadJob: Job? = null
     private val _explore = MutableStateFlow<UiState<List<MoodGenreSection>>>(UiState.Loading)
     val explore: StateFlow<UiState<List<MoodGenreSection>>> = _explore.asStateFlow()
@@ -1556,7 +1561,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             try {
                 when (feed) {
                     Feed.HOME -> refreshHome(identity)
-                    Feed.EXPLORE -> fetchExplore()
+                    Feed.EXPLORE -> fetchExplore(forceArtworkRefresh = true)
                     Feed.LIBRARY -> fetchLibrary(identity)
                 }
             } finally {
@@ -1575,43 +1580,75 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         exploreLoadJob = viewModelScope.launch { fetchExplore() }
     }
 
-    private suspend fun fetchExplore() {
-        val state = YtMusicRepository.moodAndGenres().fold(
-            onSuccess = { sections ->
-                if (sections.isEmpty()) {
-                    UiState.Error(text(R.string.nothing_to_explore))
-                } else {
-                    UiState.Success(sections)
-                }
-            },
-            onFailure = { UiState.Error(it.friendly()) },
-        )
-        _explore.value = state
-        (state as? UiState.Success)?.data?.let(::loadMoodGenreArtwork)
+    private fun artworkKey(item: MoodGenre, region: String, language: String): String = ExploreArtworkCache.key(
+        item.browseId, item.params, region, language,
+    )
+
+    private fun isCurrentExplore(generation: Long, identity: String?, region: String, language: String): Boolean =
+        generation == exploreGeneration && identity == listenerKey() &&
+            region == Innertube.currentRegion && language == Innertube.currentLanguage
+
+    private suspend fun fetchExplore(forceArtworkRefresh: Boolean = false) {
+        exploreArtworkJob?.cancel()
+        val generation = ++exploreGeneration
+        val identity = listenerKey()
+        val region = Innertube.currentRegion
+        val language = Innertube.currentLanguage
+        val response = YtMusicRepository.moodAndGenres()
+        if (!isCurrentExplore(generation, identity, region, language)) return
+        val sections = response.getOrNull()
+        if (sections.isNullOrEmpty()) {
+            if (_explore.value !is UiState.Success) {
+                _explore.value = response.exceptionOrNull()?.let { UiState.Error(it.friendly()) }
+                    ?: UiState.Error(text(R.string.nothing_to_explore))
+            }
+            return
+        }
+        val restored = withContext(Dispatchers.IO) {
+            sections.map { section ->
+                section.copy(items = section.items.map { item ->
+                    item.copy(thumbnailUrl = item.thumbnailUrl ?: exploreArtworkCache.cached(artworkKey(item, region, language)))
+                })
+            }
+        }
+        if (!isCurrentExplore(generation, identity, region, language)) return
+        _explore.value = UiState.Success(restored)
+        loadMoodGenreArtwork(restored, generation, identity, region, language, forceArtworkRefresh)
     }
 
-    /**
-     * Category buttons do not carry thumbnails themselves. Resolve a small
-     * number at a time from the shelves they open, so the grid gains real art
-     * without saturating the browse client or delaying the category list.
-     */
-    private fun loadMoodGenreArtwork(sections: List<MoodGenreSection>) {
-        viewModelScope.launch {
-            val limiter = Semaphore(4)
+    /** Persist URL lookups as well as Coil's bytes; fresh categories cost no browse requests. */
+    private fun loadMoodGenreArtwork(
+        sections: List<MoodGenreSection>,
+        generation: Long,
+        identity: String?,
+        region: String,
+        language: String,
+        forceRefresh: Boolean,
+    ) {
+        exploreArtworkJob = viewModelScope.launch {
+            val limiter = Semaphore(2)
             coroutineScope {
-                sections.flatMap(MoodGenreSection::items).forEach { item ->
+                sections.flatMap(MoodGenreSection::items).distinctBy { artworkKey(it, region, language) }.forEach { item ->
                     launch {
                         val artwork = limiter.withPermit {
-                            YtMusicRepository.moodGenreArtwork(item.browseId, item.params).getOrNull()
+                            exploreArtworkCache.resolve(artworkKey(item, region, language), forceRefresh) {
+                                val result = withTimeoutOrNull(8_000L) {
+                                    YtMusicRepository.moodGenreArtwork(item.browseId, item.params, forceRefresh = true)
+                                } ?: throw java.io.IOException("Explore artwork lookup timed out")
+                                result.getOrThrow()
+                            }
                         } ?: return@launch
+                        if (!isCurrentExplore(generation, identity, region, language)) return@launch
                         val current = (_explore.value as? UiState.Success)?.data ?: return@launch
+                        val matching = current.asSequence().flatMap { it.items.asSequence() }.filter {
+                            it.browseId == item.browseId && it.params == item.params
+                        }
+                        if (matching.all { it.thumbnailUrl == artwork }) return@launch
                         _explore.value = UiState.Success(current.map { section ->
                             section.copy(items = section.items.map { currentItem ->
                                 if (currentItem.browseId == item.browseId && currentItem.params == item.params) {
                                     currentItem.copy(thumbnailUrl = artwork)
-                                } else {
-                                    currentItem
-                                }
+                                } else currentItem
                             })
                         })
                     }

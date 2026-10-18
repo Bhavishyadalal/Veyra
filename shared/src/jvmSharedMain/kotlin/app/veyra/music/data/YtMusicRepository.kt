@@ -266,17 +266,17 @@ object YtMusicRepository {
      * supplies its tile artwork, so caching it avoids a second request when a
      * user taps a category whose cover has already appeared.
      */
-    suspend fun moodGenreShelves(browseId: String, params: String?): Result<List<HomeShelf>> {
-        val key = "$browseId:${params.orEmpty()}"
-        moodGenreShelfCache[key]?.let { return Result.success(it) }
+    suspend fun moodGenreShelves(browseId: String, params: String?, forceRefresh: Boolean = false): Result<List<HomeShelf>> {
+        val key = "${Innertube.currentRegion}:${Innertube.currentLanguage}:$browseId:${params.orEmpty()}"
+        if (!forceRefresh) moodGenreShelfCache[key]?.let { return Result.success(it) }
         return call("mood-genre:$browseId") {
             InnertubeParser.parseHome(Innertube.browse(browseId, params))
-        }.also { result -> result.getOrNull()?.let { moodGenreShelfCache.putIfAbsent(key, it) } }
+        }.also { result -> result.getOrNull()?.let { moodGenreShelfCache[key] = it } }
     }
 
     /** A category card borrows the first real cover from the playlists it opens. */
-    suspend fun moodGenreArtwork(browseId: String, params: String?): Result<String?> =
-        moodGenreShelves(browseId, params).map { shelves ->
+    suspend fun moodGenreArtwork(browseId: String, params: String?, forceRefresh: Boolean = false): Result<String?> =
+        moodGenreShelves(browseId, params, forceRefresh).map { shelves ->
             shelves.asSequence().flatMap { it.items.asSequence() }
                 .mapNotNull(ShelfItem::thumbnailUrl)
                 .firstOrNull()

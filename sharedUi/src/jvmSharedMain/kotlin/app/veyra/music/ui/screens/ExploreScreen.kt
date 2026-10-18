@@ -42,6 +42,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil3.request.crossfade
+import coil3.request.CachePolicy
+import coil3.request.ImageRequest
+import coil3.compose.LocalPlatformContext
 import coil3.compose.AsyncImage
 import app.veyra.music.data.model.HomeShelf
 import app.veyra.music.data.model.MoodGenre
@@ -165,7 +169,7 @@ private fun MoodGenreCard(
  * tinted sleeve rather than a photo pasted onto a swatch.
  *
  * Only the artwork: the caller sizes, clips and makes it clickable, which is
- * how the TV app wraps the same sleeve in its own focus treatment.
+ * the card and category header can share the same cached artwork.
  */
 @Composable
 fun MoodGenreSleeve(
@@ -183,8 +187,16 @@ fun MoodGenreSleeve(
                 .background(tone.placeholder),
         ) {
             item.thumbnailUrl?.let { artwork ->
+                val context = LocalPlatformContext.current
+                val request = remember(context, artwork) {
+                    ImageRequest.Builder(context).data(artwork)
+                        .memoryCachePolicy(CachePolicy.ENABLED)
+                        .diskCachePolicy(CachePolicy.ENABLED)
+                        .crossfade(false)
+                        .build()
+                }
                 AsyncImage(
-                    model = artwork,
+                    model = request,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     colorFilter = tone.duotone,

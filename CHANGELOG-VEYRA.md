@@ -1,3 +1,13 @@
+# Veyra 0.1.0-beta10 (flowing welcome and persistent Explore artwork)
+
+- Reworked first-install onboarding with a flowing letter wordmark, staggered localized headlines, a small animated ribbon, progress treatment and coordinated page transitions.
+- Kept name entry and optional sign-in/guest flow. Added scrolling for short windows/large fonts, RTL-aware transitions/back navigation, full-heading accessibility semantics, adaptive controls and reduced-motion handling.
+- Ambient motion is finite, foreground/keyboard-aware and reads animation state in drawing/graphics layers. No full-screen animated blur, video, downloaded hero artwork or new dependency.
+- Persist Explore's category-to-image URL lookups instead of browsing every category again after process restart. Restore cached URLs before displaying the grid and reuse Coil's disk/memory image cache.
+- Add stale/offline fallback, manual refresh, expiry, negative caching, same-key coalescing, atomic writes and bounded disk storage. Keep artwork lookups to two concurrent requests with per-request timeouts and reject stale account/locale/generation results.
+- Added 13 real filesystem/coroutine cache regressions; 36 focused tests pass. Android build/device limits and online references: `verification/BETA10-RESULTS.md`.
+- Beta8/beta9 source additions remain; their supplied update notes are retained.
+
 # Veyra 0.1.0-beta7 (phone-only project and visual polish)
 
 - Removed TV and Wear OS module sources and Gradle includes, the phone's bundled-watch APK task and shared watch-protocol source path.
