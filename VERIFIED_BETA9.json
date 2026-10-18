@@ -1,0 +1,20 @@
+{
+  "kotlin_compilation": "passed",
+  "unit_tests": {
+    "tests": 1097,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1
+  },
+  "apk_built": false,
+  "tasks": [
+    ":app:compileProdReleaseKotlin",
+    ":app:testProdReleaseUnitTest"
+  ],
+  "version": "0.1.0-beta9",
+  "version_code": 9,
+  "switch_count": 45,
+  "callback_and_preference_logic": "unchanged",
+  "onboarding_background": "static cached gradient; no mesh/palette timer/RenderEffect blur",
+  "phone_frame_time_testing": "not performed"
+}

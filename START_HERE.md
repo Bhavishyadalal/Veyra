@@ -1,3 +1,5 @@
+> **beta9 source-only fix:** See UPDATE_BETA9.md for off-state switch visibility and the lighter onboarding background. No APK is included in this update.
+
 > **beta8 visual update:** See UPDATE_BETA8.md for the new launcher choices, navigation order, launch animation and signing guidance. You can build this ZIP using your personal Veyra Builder.
 
 # Open Veyra in Android Studio on Windows

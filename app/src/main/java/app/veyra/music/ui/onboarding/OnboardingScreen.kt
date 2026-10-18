@@ -55,6 +55,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -75,11 +77,6 @@ import app.veyra.music.sharedui.resources.ic_google_g
 import app.veyra.music.sharedui.resources.ic_logo
 import org.jetbrains.compose.resources.painterResource
 import app.veyra.music.ui.icons.VeyraIcons
-import app.veyra.music.ui.player.MeshGradientBackground
-import app.veyra.music.ui.player.MESH_CYCLE_MILLIS
-import app.veyra.music.ui.player.MeshPalette
-import app.veyra.music.ui.player.WelcomeMeshPalettes
-import app.veyra.music.ui.player.cyclingMeshPalette
 
 /**
  * The two welcome pages: a name for Listen Together, then the YouTube sign-in.
@@ -89,8 +86,8 @@ import app.veyra.music.ui.player.cyclingMeshPalette
  * that is already signed in; asking somebody to connect what is connected
  * reads as the app having forgotten them.
  *
- * Always drawn dark, whatever the theme, for the same reason Replay is: the
- * mesh is colour, and white type is what sits on colour.
+ * Always drawn dark, whatever the theme. A static cached colour wash keeps
+ * white text legible without competing with the keyboard or page transitions.
  */
 @Composable
 fun OnboardingScreen(
@@ -114,9 +111,6 @@ fun OnboardingScreen(
         if (signedIn && page == PAGE_CONNECT) onFinish()
     }
 
-    // The mesh never settles on one palette: each crossfade is as long as the
-    // hold, so one runs straight into the next.
-    val palette = cyclingMeshPalette(if (page == PAGE_NAME) WelcomeMeshPalettes else ConnectPalettes)
 
     Box(
         modifier
@@ -127,26 +121,7 @@ fun OnboardingScreen(
             // away, which is where a thumb goes to dismiss one.
             .pointerInput(Unit) { detectTapGestures { focusManager.clearFocus() } },
     ) {
-        MeshGradientBackground(
-            palette = palette,
-            trackKey = page,
-            continuous = true,
-            driftMillis = 6_000,
-            colorFadeMillis = MESH_CYCLE_MILLIS,
-        )
-        // The mesh carries its own light scrim for a player's controls; two
-        // full-width buttons and a paragraph want the foot of it a shade deeper.
-        Box(
-            Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        0f to Color.Black.copy(alpha = 0.05f),
-                        0.55f to Color.Transparent,
-                        1f to Color.Black.copy(alpha = 0.45f),
-                    ),
-                ),
-        )
+        OnboardingBackdrop()
 
         AnimatedContent(
             targetState = page,
@@ -360,8 +335,8 @@ private fun NameField(value: String, onValueChange: (String) -> Unit, onDone: ()
 }
 
 /**
- * A full-width capsule. Primary is white on the mesh, the way Apple Music's
- * own welcome sheet does it; secondary is the same shape in frosted white, so
+ * A full-width capsule. Primary is white on the dark background; secondary
+ * is the same shape in frosted white, so
  * the pair reads as a choice rather than a button and an afterthought.
  */
 @Composable
@@ -439,10 +414,33 @@ private const val PAGE_CONNECT = 1
 /** Long enough for a full name; the party server keeps the first 80. */
 private const val NAME_LIMIT = 40
 
-/** The account page keeps leaning into YouTube's red while it moves. */
-private val ConnectPalettes = listOf(
-    MeshPalette(listOf(Color(0xFFFF1E3C), Color(0xFFC2185B), Color(0xFFFF8F3D), Color(0xFF4A1C8C))),
-    MeshPalette(listOf(Color(0xFFE53935), Color(0xFFFF6E40), Color(0xFFAD1457), Color(0xFF311B92))),
-    MeshPalette(listOf(Color(0xFFFF3D00), Color(0xFFD81B60), Color(0xFF8E24AA), Color(0xFFB71C1C))),
-    MeshPalette(listOf(Color(0xFFF50057), Color(0xFFFF9100), Color(0xFFC51162), Color(0xFF4527A0))),
-)
+/**
+ * Static, size-cached colour wash. No palette timer, full-screen RenderEffect,
+ * animated shader, or continuous draw invalidation while the user types.
+ * Brush allocation happens only when layout bounds change (e.g. rotation).
+ */
+@Composable
+private fun OnboardingBackdrop() {
+    Box(Modifier.fillMaxSize().drawWithCache {
+        val base = Brush.linearGradient(
+            colors = listOf(Color(0xFF100D1B), Color(0xFF20142D), Color(0xFF100E18)),
+            start = Offset.Zero,
+            end = Offset(size.width, size.height),
+        )
+        val glow = Brush.radialGradient(
+            colors = listOf(Color(0xFF59436B).copy(alpha = 0.5f), Color.Transparent),
+            center = Offset(size.width * 0.8f, size.height * 0.2f),
+            radius = size.maxDimension * 0.7f,
+        )
+        val scrim = Brush.verticalGradient(
+            0f to Color.Transparent,
+            0.6f to Color.Black.copy(alpha = 0.12f),
+            1f to Color.Black.copy(alpha = 0.5f),
+        )
+        onDrawBehind {
+            drawRect(base)
+            drawRect(glow)
+            drawRect(scrim)
+        }
+    })
+}

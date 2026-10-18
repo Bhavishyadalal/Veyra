@@ -1,5 +1,6 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.components.veyraSwitchColors
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -142,6 +143,7 @@ private fun SpotifyCanvasSettingToggle(
             )
         }
         Switch(
+            colors = veyraSwitchColors(),
             checked = checked,
             onCheckedChange = onCheckedChange,
         )

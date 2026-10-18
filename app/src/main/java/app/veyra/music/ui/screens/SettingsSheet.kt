@@ -102,7 +102,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
+import app.veyra.music.ui.components.veyraSwitchColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -541,10 +541,7 @@ fun SettingsScreen(
                                 checked = dolbyAtmos && dolbyAtmosSupported,
                                 onCheckedChange = AppSettings::setDolbyAtmos,
                                 enabled = dolbyAtmosSupported,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setDolbyAtmos(!dolbyAtmos) },
@@ -602,10 +599,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = preferMusicOnly,
                                 onCheckedChange = AppSettings::setPreferMusicOnly,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setPreferMusicOnly(!preferMusicOnly) },
@@ -652,10 +646,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = loudnessNormalization,
                                 onCheckedChange = AppSettings::setLoudnessNormalization,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setLoudnessNormalization(!loudnessNormalization) },
@@ -701,10 +692,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = smartFade,
                                 onCheckedChange = AppSettings::setSmartFadeEnabled,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setSmartFadeEnabled(!smartFade) },
@@ -741,10 +729,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = skipSilence,
                                 onCheckedChange = AppSettings::setSkipSilence,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setSkipSilence(!skipSilence) },
@@ -772,10 +757,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = spatialAudio,
                                 onCheckedChange = AppSettings::setSpatialAudio,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setSpatialAudio(!spatialAudio) },
@@ -825,10 +807,7 @@ fun SettingsScreen(
                                 checked = liquidGlass,
                                 onCheckedChange = AppSettings::setLiquidGlass,
                                 enabled = liquidGlassSupported,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setLiquidGlass(!liquidGlass) },
@@ -849,10 +828,7 @@ fun SettingsScreen(
                                 Switch(
                                     checked = fullBleedArtwork,
                                     onCheckedChange = AppSettings::setFullBleedArtwork,
-                                    colors = SwitchDefaults.colors(
-                                        checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                        checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                    ),
+                                    colors = veyraSwitchColors(),
                                 )
                             },
                             onClick = { AppSettings.setFullBleedArtwork(!fullBleedArtwork) },
@@ -869,10 +845,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = legacyMeshGradient,
                                 onCheckedChange = AppSettings::setLegacyMeshGradient,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setLegacyMeshGradient(!legacyMeshGradient) },
@@ -891,10 +864,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = animatedCanvas,
                                 onCheckedChange = AppSettings::setAnimatedCanvas,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setAnimatedCanvas(!animatedCanvas) },
@@ -945,10 +915,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = signatureApiEnabled,
                                 onCheckedChange = AppSettings::setSignatureApiEnabled,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setSignatureApiEnabled(!signatureApiEnabled) },
@@ -990,10 +957,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = syncedLyrics,
                                 onCheckedChange = AppSettings::setSyncedLyrics,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setSyncedLyrics(!syncedLyrics) },
@@ -1013,10 +977,7 @@ fun SettingsScreen(
                                 Switch(
                                     checked = lyricsBlur,
                                     onCheckedChange = AppSettings::setLyricsBlur,
-                                    colors = SwitchDefaults.colors(
-                                        checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                        checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                    ),
+                                    colors = veyraSwitchColors(),
                                 )
                             },
                             onClick = { AppSettings.setLyricsBlur(!lyricsBlur) },
@@ -1066,10 +1027,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = reduceAnimation,
                                 onCheckedChange = AppSettings::setReduceAnimation,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setReduceAnimation(!reduceAnimation) },
@@ -1085,10 +1043,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = reduceDynamicBlur,
                                 onCheckedChange = AppSettings::setReduceDynamicBlur,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setReduceDynamicBlur(!reduceDynamicBlur) },
@@ -1114,10 +1069,7 @@ fun SettingsScreen(
                                         AppSettings.setHighPerformanceMode(false)
                                     }
                                 },
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = {
@@ -1184,10 +1136,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = filterNonMusicAudio,
                                 onCheckedChange = AppSettings::setFilterNonMusicAudio,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setFilterNonMusicAudio(!filterNonMusicAudio) },
@@ -1212,10 +1161,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = showCacheFolder,
                                 onCheckedChange = AppSettings::setShowCacheFolder,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setShowCacheFolder(!showCacheFolder) },
@@ -1291,10 +1237,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = replayGenres,
                                 onCheckedChange = AppSettings::setReplayGenres,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setReplayGenres(!replayGenres) },
@@ -1337,10 +1280,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = swipeToPlayNext,
                                 onCheckedChange = AppSettings::setSwipeToPlayNext,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setSwipeToPlayNext(!swipeToPlayNext) },
@@ -1356,10 +1296,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = dontRepeatSuggestions,
                                 onCheckedChange = AppSettings::setDontRepeatSuggestions,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setDontRepeatSuggestions(!dontRepeatSuggestions) },
@@ -1375,10 +1312,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = stopOnTaskRemoved,
                                 onCheckedChange = AppSettings::setStopOnTaskRemoved,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setStopOnTaskRemoved(!stopOnTaskRemoved) },
@@ -1394,10 +1328,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = hideVolumeBar,
                                 onCheckedChange = AppSettings::setHideVolumeBar,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setHideVolumeBar(!hideVolumeBar) },
@@ -1413,10 +1344,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = hideStatusBarInPlayer,
                                 onCheckedChange = AppSettings::setHideStatusBarInPlayer,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setHideStatusBarInPlayer(!hideStatusBarInPlayer) },
@@ -1432,10 +1360,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = showQueueHistory,
                                 onCheckedChange = AppSettings::setShowQueueHistory,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setShowQueueHistory(!showQueueHistory) },
@@ -1451,10 +1376,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = hideSongStatus,
                                 onCheckedChange = AppSettings::setHideSongStatus,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setHideSongStatus(!hideSongStatus) },
@@ -1495,10 +1417,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = smartVersionAlignment,
                                 onCheckedChange = AppSettings::setSmartVersionAlignment,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setSmartVersionAlignment(!smartVersionAlignment) },
@@ -1514,10 +1433,7 @@ fun SettingsScreen(
                             Switch(
                                 checked = nerdStats,
                                 onCheckedChange = AppSettings::setShowNerdStats,
-                                colors = SwitchDefaults.colors(
-                                    checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                    checkedBorderColor = MaterialTheme.colorScheme.primary,
-                                ),
+                                colors = veyraSwitchColors(),
                             )
                         },
                         onClick = { AppSettings.setShowNerdStats(!nerdStats) },
@@ -2558,10 +2474,7 @@ internal fun SettingsSubRow(
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange,
-            colors = SwitchDefaults.colors(
-                checkedTrackColor = MaterialTheme.colorScheme.primary,
-                checkedBorderColor = MaterialTheme.colorScheme.primary,
-            ),
+            colors = veyraSwitchColors(),
         )
     }
 }
