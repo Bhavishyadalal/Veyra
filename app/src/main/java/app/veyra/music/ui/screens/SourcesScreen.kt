@@ -118,7 +118,7 @@ fun SourcesScreen(
     onEditWebDav: () -> Unit,
     /** As [onEditWebDav], for the SMB share editor. */
     onEditSmb: () -> Unit,
-    /** Opens the full-window warning before JioSaavn is opted into. */
+    /** Opens the existing matching warning when manually re-enabling JioSaavn. */
     onConfirmJioSaavn: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

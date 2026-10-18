@@ -5,13 +5,11 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -22,6 +20,10 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -109,16 +111,14 @@ fun ThinSlider(
     accessibilityLabel: String? = null,
     enabled: Boolean = true,
 ) {
+    val reduceAnimation by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     val currentEnabled by rememberUpdatedState(enabled)
     val currentOnValueChange by rememberUpdatedState(onValueChange)
     val currentOnFinished by rememberUpdatedState(onValueChangeFinished)
     var dragging by remember { mutableStateOf(false) }
     val height by animateDpAsState(
         targetValue = if (dragging) activeHeight else idleHeight,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessMediumLow,
-        ),
+        animationSpec = tween(if (reduceAnimation) 0 else 160, easing = FastOutSlowInEasing),
         label = "sliderHeight",
     )
     // The sheen gets a minimum beat even when the switch resolves instantly —
@@ -129,13 +129,13 @@ fun ThinSlider(
     // so rapid toggling never blinks the bar out mid-morph.
     var shownLoading by remember { mutableStateOf(loading) }
     var sheenStart by remember { mutableStateOf(System.nanoTime()) }
-    LaunchedEffect(loading) {
+    LaunchedEffect(loading, reduceAnimation) {
         if (loading) {
             sheenStart = System.nanoTime()
             shownLoading = true
         } else {
             val remaining = LOADING_MIN_MS - (System.nanoTime() - sheenStart) / 1_000_000L
-            if (remaining > 0) delay(remaining)
+            if (remaining > 0 && !reduceAnimation) delay(remaining)
             shownLoading = false
         }
     }
@@ -145,14 +145,15 @@ fun ThinSlider(
     val sheenVisible = shownLoading || (mixing && mixPulse?.active != true)
     val fillFactor by animateFloatAsState(
         targetValue = if (sheenVisible) 0f else 1f,
-        animationSpec = tween(durationMillis = MORPH_MS, easing = FastOutSlowInEasing),
+        animationSpec = tween(durationMillis = if (reduceAnimation) 0 else MORPH_MS, easing = FastOutSlowInEasing),
         label = "fillFactor",
     )
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            // Generous invisible touch target — the visible bar is only ~7dp.
+            // Keep the slender track, with a full accessible target for both seek and volume.
+            .heightIn(min = 48.dp)
             .height(activeHeight + 22.dp)
             .semantics {
                 accessibilityLabel?.let { contentDescription = it }
@@ -172,24 +173,27 @@ fun ThinSlider(
             .pointerInput(Unit) {
                 awaitEachGesture {
                     val down = awaitFirstDown(requireUnconsumed = false)
+                    if (!currentEnabled) return@awaitEachGesture
                     dragging = true
-                    if (currentEnabled) currentOnValueChange((down.position.x / size.width.coerceAtLeast(1)).coerceIn(0f, 1f))
-
-                    while (true) {
-                        val event = awaitPointerEvent()
-                        val pointer = event.changes.firstOrNull { it.id == down.id } ?: break
-                        if (!pointer.pressed) {
-                            pointer.consume()
-                            break
+                    try {
+                        currentOnValueChange((down.position.x / size.width.coerceAtLeast(1)).coerceIn(0f, 1f))
+                        while (true) {
+                            val event = awaitPointerEvent()
+                            val pointer = event.changes.firstOrNull { it.id == down.id } ?: break
+                            if (!pointer.pressed) {
+                                pointer.consume()
+                                break
+                            }
+                            if (pointer.positionChanged()) {
+                                if (currentEnabled) currentOnValueChange((pointer.position.x / size.width.coerceAtLeast(1)).coerceIn(0f, 1f))
+                                pointer.consume()
+                            }
                         }
-                        if (pointer.positionChanged()) {
-                            if (currentEnabled) currentOnValueChange((pointer.position.x / size.width.coerceAtLeast(1)).coerceIn(0f, 1f))
-                            pointer.consume()
-                        }
+                    } finally {
+                        // Cancellation/another gesture must not leave the player in scrubbing mode.
+                        dragging = false
+                        currentOnFinished?.invoke()
                     }
-
-                    dragging = false
-                    currentOnFinished?.invoke()
                 }
             },
         contentAlignment = Alignment.Center,
@@ -252,15 +256,17 @@ fun ThinSlider(
             // capsule is full-bleed, so that slide started past the screen
             // edge and flew in from outside the display. Same duration and
             // curve as the fill's retraction, so the swap reads as one morph.
-            enter = fadeIn(tween(durationMillis = MORPH_MS, easing = FastOutSlowInEasing)) +
+            enter = fadeIn(tween(durationMillis = if (reduceAnimation) 0 else MORPH_MS, easing = FastOutSlowInEasing)) +
                 scaleIn(
-                    animationSpec = tween(durationMillis = MORPH_MS, easing = FastOutSlowInEasing),
+                    animationSpec = tween(durationMillis = if (reduceAnimation) 0 else MORPH_MS, easing = FastOutSlowInEasing),
                     initialScale = 0f,
                     transformOrigin = TransformOrigin(0f, 0.5f),
                 ),
-            exit = fadeOut(tween(durationMillis = MORPH_MS, easing = FastOutSlowInEasing)),
+            exit = fadeOut(tween(durationMillis = if (reduceAnimation) 0 else MORPH_MS, easing = FastOutSlowInEasing)),
         ) {
-            MixSheen(height = height, color = activeColor)
+            if (reduceAnimation) {
+                Box(Modifier.fillMaxWidth().height(height).background(activeColor.copy(alpha = 0.55f), CircleShape))
+            } else MixSheen(height = height, color = activeColor)
         }
     }
 }

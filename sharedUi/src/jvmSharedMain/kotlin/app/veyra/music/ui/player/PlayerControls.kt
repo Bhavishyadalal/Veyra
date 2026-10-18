@@ -231,7 +231,7 @@ internal fun PlayerScrubber(
                 .fillMaxWidth()
                 // The slider's touch target extends well past the drawn bar,
                 // so pull the labels back up under it.
-                .offset(y = (-9).dp),
+                .offset(y = (-15).dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -454,7 +454,7 @@ internal fun TransportRow(
 ) {
     val playSize = if (compact) 52.dp else 68.dp
     val playTouch = if (compact) 76.dp else 92.dp
-    val skipSize = if (compact) 30.dp else 34.dp
+    val skipSize = if (compact) 30.dp else 36.dp
     Row(
         modifier = Modifier.fillMaxWidth(),
         // SpaceAround, not SpaceEvenly: the outer margins take half a gap, so
@@ -508,8 +508,8 @@ internal fun TransportRow(
     }
 }
 
-/** ThinSlider's fixed touch target at the volume bar's size: 10dp + 22dp. */
-internal val VOLUME_ROW_HEIGHT = 32.dp
+/** Match ThinSlider's minimum accessible touch target so hiding volume retains its geometry. */
+internal val VOLUME_ROW_HEIGHT = 48.dp
 
 /** The volume bar between its two speaker glyphs. */
 @Composable
@@ -577,6 +577,7 @@ internal fun PlayerActionRow(
     /** Opens [ListenTogetherMembersSheet] rather than settings directly. */
     onOpenListenTogetherMembers: () -> Unit,
 ) {
+    val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     BoxWithConstraints(Modifier.fillMaxWidth()) {
         // Sized for the wider of the two capsules — the three-up one — in both
         // states. Computed for whichever was on screen it would change as they
@@ -588,7 +589,7 @@ internal fun PlayerActionRow(
         // slide relays out the row and recomposes nothing.
         val toStart = animateFloatAsState(
             targetValue = if (queueOpen) 1f else 0f,
-            animationSpec = tween(PILL_SLIDE_MS, easing = FastOutSlowInEasing),
+            animationSpec = tween(if (reduceMotion) 0 else PILL_SLIDE_MS, easing = FastOutSlowInEasing),
             label = "playerBottomPillSlide",
         )
         Box(
@@ -599,8 +600,8 @@ internal fun PlayerActionRow(
             // the queue glyph, lit, is how you get back.
             AnimatedVisibility(
                 visible = !queueOpen,
-                enter = fadeIn(tween(180, delayMillis = 120)),
-                exit = fadeOut(tween(120)),
+                enter = fadeIn(tween(if (reduceMotion) 0 else 140, delayMillis = if (reduceMotion) 0 else 80)),
+                exit = fadeOut(tween(if (reduceMotion) 0 else 120)),
                 modifier = Modifier.align(Alignment.CenterStart),
             ) {
                 BottomGlyph(
@@ -628,11 +629,11 @@ internal fun PlayerActionRow(
                 },
                 targetState = queueOpen,
                 transitionSpec = {
-                    (fadeIn(tween(180, delayMillis = 140)) togetherWith fadeOut(tween(140)))
+                    (fadeIn(tween(if (reduceMotion) 0 else 140, delayMillis = if (reduceMotion) 0 else 80)) togetherWith fadeOut(tween(if (reduceMotion) 0 else 140)))
                         // Unclipped: the capsule's own rounded ends are what
                         // the eye follows through the width change, and the
                         // default clip cuts them square while it happens.
-                        .using(SizeTransform(clip = false) { _, _ -> tween(220) })
+                        .using(SizeTransform(clip = false) { _, _ -> tween(if (reduceMotion) 0 else 220) })
                 },
                 label = "playerBottomPill",
             ) { showQueueModes ->
@@ -798,7 +799,7 @@ private fun TransportGlyph(
         modifier = Modifier
             .size(touchSize)
             .clip(CircleShape)
-            .background(containerColor)
+            .background(if (pressed && enabled) tint.copy(alpha = 0.10f) else containerColor)
             .graphicsLayer { scaleX = pressedScale.value; scaleY = pressedScale.value }
             .clickable(
                 interactionSource = interactionSource,
@@ -825,7 +826,7 @@ private fun TransportGlyph(
 /** Skip controls retain a full touch target around their smaller glyphs. */
 private val PLAYER_SKIP_TOUCH_SIZE = 53.dp
 
-private val BOTTOM_ACTION_SIZE = 44.dp
+private val BOTTOM_ACTION_SIZE = 48.dp
 
 /**
  * One half of the output capsule — wider than it is tall, so the capsule reads
@@ -840,7 +841,7 @@ private val PILL_SEGMENT_WIDTH = 64.dp
  * glyph's place as the queue opens, and back. Long enough to cover the content
  * swap and the resize, so it lands after both rather than before.
  */
-private const val PILL_SLIDE_MS = 320
+private const val PILL_SLIDE_MS = 240
 
 /**
  * Optical sizes, not equal ones.
@@ -872,16 +873,14 @@ private fun Pill(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
+    val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     Row(
         modifier = modifier
             .height(BOTTOM_ACTION_SIZE)
             .clip(CircleShape)
             .background(LocalPlayerTint.current.copy(alpha = 0.12f))
             .animateContentSize(
-                animationSpec = spring(
-                    dampingRatio = 0.82f,
-                    stiffness = Spring.StiffnessMediumLow,
-                ),
+                animationSpec = tween(if (reduceMotion) 0 else 220, easing = FastOutSlowInEasing),
             ),
         verticalAlignment = Alignment.CenterVertically,
         content = content,

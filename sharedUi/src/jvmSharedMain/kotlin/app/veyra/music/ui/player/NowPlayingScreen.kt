@@ -745,7 +745,7 @@ fun NowPlayingScreen(
     val density = LocalDensity.current
     val haptics = rememberHaptics()
     // Keep the two credit lines inside their band when system text size increases.
-    val headerHeight = with(density) { maxOf(HEADER_HEIGHT, 54.sp.toDp() + 12.dp) }
+    val headerHeight = with(density) { maxOf(HEADER_HEIGHT, 58.sp.toDp() + 12.dp) }
 
     // Remote tracks whose art lives inside the file resolve it here, once —
     // every surface below reads the same value rather than each triggering
@@ -3230,21 +3230,25 @@ fun NowPlayingScreen(
                                 // it.
                                 Crossfade(
                                     targetState = song.title to song.artist,
-                                    animationSpec = tween(durationMillis = 300),
+                                    animationSpec = tween(durationMillis = if (reducedBackdropMotion) 0 else 220),
                                     label = "playerCredits",
-                                ) {
+                                ) { (title, artist) ->
+                                    // Keep outgoing credits and links attached to their recording during the fade.
+                                    val heldSong = remember(title, artist) { mutableStateOf(song) }
+                                    if (song.title == title && song.artist == artist) heldSong.value = song
+                                    val creditSong = heldSong.value
                                     val scrolling = scrolls()
                                     Column {
                                         MarqueeText(
-                                            text = song.title,
+                                            text = title,
                                             style = MaterialTheme.typography.titleLarge.copy(
-                                                fontSize = 26.sp,
-                                                lineHeight = 32.sp,
+                                                fontSize = 28.sp,
+                                                lineHeight = 34.sp,
                                                 fontWeight = FontWeight.Bold,
                                             ),
                                             color = Color.White,
                                             enabled = scrolling,
-                                            leading = if (song.isExplicit == true) {
+                                            leading = if (creditSong.isExplicit == true) {
                                                 { ExplicitBadge(color = Color.White) }
                                             } else {
                                                 null
@@ -3252,19 +3256,19 @@ fun NowPlayingScreen(
                                             onOverflowChange = { titleOverflowing = it },
                                             // Only the tracks YouTube hands us a browse id for
                                             // lead anywhere; the rest stay plain text.
-                                            modifier = Modifier.opensPage(song.albumId, onOpenAlbum),
+                                            modifier = Modifier.opensPage(creditSong.albumId, onOpenAlbum),
                                         )
                                         ArtistCreditsMarquee(
-                                            text = song.artist,
-                                            credits = remember(song.artist, song.artists, song.artistId) {
-                                                artistCredits(song.artist, song.artists, song.artistId)
+                                            text = artist,
+                                            credits = remember(creditSong.artist, creditSong.artists, creditSong.artistId) {
+                                                artistCredits(artist, creditSong.artists, creditSong.artistId)
                                             },
                                             style = MaterialTheme.typography.titleLarge.copy(
                                                 fontWeight = FontWeight.W500,
                                                 fontSize = 16.sp,
-                                                lineHeight = 22.sp,
+                                                lineHeight = 24.sp,
                                             ),
-                                            color = LocalPlayerTint.current.copy(alpha = 0.72f),
+                                            color = LocalPlayerTint.current.copy(alpha = 0.82f),
                                             enabled = scrolling,
                                             // A title that's also scrolling gets to go first —
                                             // starting together reads as clutter, so the artist
@@ -3540,7 +3544,7 @@ fun NowPlayingScreen(
                             .widthIn(max = PLAYER_MAX_WIDTH)
                             .fillMaxWidth()
                             .background(
-                                Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.08f), Color.Black.copy(alpha = 0.22f))),
+                                Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.12f), Color.Black.copy(alpha = 0.32f))),
                                 RoundedCornerShape(30.dp),
                             )
                             .padding(start = 18.dp, end = 18.dp, top = 12.dp),

@@ -15,6 +15,9 @@ if not libraries:
     sys.exit("Run ./gradlew --version first, with the same GRADLE_USER_HOME.")
 classpath = os.pathsep.join(str(path) for path in sorted(libraries[0].glob("*.jar")))
 files = [
+    "app/src/main/java/app/veyra/music/data/sources/SourceKind.kt",
+    "app/src/main/java/app/veyra/music/data/sources/SourceEnablementPolicy.kt",
+    "app/src/test/java/app/veyra/music/SourceEnablementPolicyTest.kt",
     "app/src/main/java/app/veyra/music/ui/NavigationMotionPolicy.kt",
     "app/src/test/java/app/veyra/music/NavigationMotionPolicyTest.kt",
     "sharedUi/src/jvmSharedMain/kotlin/app/veyra/music/ui/screens/HomeCarouselPaging.kt",
@@ -42,6 +45,7 @@ with tempfile.TemporaryDirectory(prefix="veyra-tests-") as output:
         sys.exit(compile_result.returncode)
     result = subprocess.run([
         "java", "-cp", output + os.pathsep + classpath, "org.junit.runner.JUnitCore",
+        "app.veyra.music.SourceEnablementPolicyTest",
         "app.veyra.music.NavigationMotionPolicyTest",
         "app.veyra.music.HomeCarouselPagingTest",
         "app.veyra.music.ExploreArtworkCacheTest",

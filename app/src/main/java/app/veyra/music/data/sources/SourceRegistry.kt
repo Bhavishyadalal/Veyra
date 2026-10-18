@@ -36,8 +36,8 @@ data class SourceConfig(
     /** What the user called it. Blank falls back to the server's host, or the kind's own label. */
     val label: String = "",
     val baseUrl: String = "",
-    /** JioSaavn is opt-in because catalogue matches can select the wrong recording. */
-    val enabled: Boolean = kind != SourceKind.JIOSAAVN,
+    /** Built-in sources start enabled; persisted switch choices are retained after migration. */
+    val enabled: Boolean = SourceEnablementPolicy.DEFAULT_ENABLED,
     /**
      * The addon's `allowDownloads`, as its manifest last said. Stored rather
      * than asked each time so the answer is there without a request — see
@@ -81,8 +81,8 @@ data class SourceConfig(
  * disabled — it needs no configuration, so a "remove" would delete something
  * the user could not then re-create by typing anything in, it would just be a
  * switch that hides itself. Addons are entirely optional: with none
- * configured, YouTube is the only active source on a fresh install. JioSaavn
- * is present but off until the user accepts its catalogue-matching risk.
+ * configured, JioSaavn and YouTube are active on a fresh install. JioSaavn
+ * remains switchable; catalogue matching and quality gates are unchanged.
  */
 object SourceRegistry {
 
@@ -109,51 +109,37 @@ object SourceRegistry {
         prefs = EncryptedPrefs.open(context, "veyra_sources", "veyra_sources_plain")
 
         val stored = prefs.getString(KEY_SOURCES, null)?.let(::decodeStored) ?: emptyList()
-        val jioOptInMigrationDone = prefs.getBoolean(KEY_JIOSAAVN_OPT_IN_V1, false)
-        val after = sourcesForInit(stored, forceJioSaavnOff = !jioOptInMigrationDone)
+        val defaultOnMigrationDone = prefs.getBoolean(KEY_JIOSAAVN_DEFAULT_ON_V2, false)
+        val after = sourcesForInit(stored, applyDefaultOnMigration = !defaultOnMigrationDone)
 
-        // Publish state and the migration marker in one preferences edit. If a
-        // process dies after recording the marker but before recording the
-        // disabled source, the next launch would otherwise believe the forced
-        // opt-out had already happened and silently restore the old on state.
         publish(after, persist = false)
-        if (after != stored || !jioOptInMigrationDone) {
+        // Persist the corrected state and its marker atomically. Later launches preserve off choices.
+        if (after != stored || !defaultOnMigrationDone) {
             prefs.edit()
                 .putString(KEY_SOURCES, json.encodeToString(ListSerializer(SourceConfig.serializer()), after))
-                .putBoolean(KEY_JIOSAAVN_OPT_IN_V1, true)
+                .putBoolean(KEY_JIOSAAVN_DEFAULT_ON_V2, true)
                 .apply()
         }
     }
 
     /**
-     * Built-in seeding and one-time source migrations, kept pure for tests.
-     *
-     * [forceJioSaavnOff] is true exactly once for every install that first runs
-     * this version, including upgrades whose stored config currently says on.
-     * Once the marker is written, a user who deliberately enables JioSaavn is
-     * left enabled on subsequent launches.
+     * Seed built-ins and repair the previous forced-off default once.
+     * Older builds did not record whether off came from migration or a switch;
+     * this requested correction enables legacy JioSaavn once. Subsequent choices survive restarts.
      */
     internal fun sourcesForInit(
         stored: List<SourceConfig>,
-        forceJioSaavnOff: Boolean,
+        applyDefaultOnMigration: Boolean,
     ): List<SourceConfig> {
-        // Seeded rather than persisted-on-first-write, so a build adding a new
-        // built-in kind picks it up for existing installs too. SourceConfig's
-        // default is the policy: JioSaavn off, YouTube on.
         val seeded = stored + BUILT_IN_KINDS
             .filter { kind -> stored.none { it.kind == kind } }
             .map { SourceConfig(kind = it) }
 
-        // The retired built-in module is removed, while a custom module entered
-        // by the user is preserved.
         return seeded
             .filterNot { it.kind == SourceKind.MODULE }
             .map { config ->
-                when {
-                    config.kind == SourceKind.YOUTUBE && !config.enabled -> config.copy(enabled = true)
-                    config.kind == SourceKind.JIOSAAVN && forceJioSaavnOff -> config.copy(enabled = false)
-                    else -> config
-                }
+                val enabled = SourceEnablementPolicy.onStartup(config.kind, config.enabled, applyDefaultOnMigration)
+                if (enabled == config.enabled) config else config.copy(enabled = enabled)
             }
     }
 
@@ -504,8 +490,8 @@ object SourceRegistry {
     private val BUILT_IN_KINDS = listOf(SourceKind.JIOSAAVN, SourceKind.YOUTUBE)
 
     private const val KEY_SOURCES = "sources"
-    /** One-shot migration: existing users must explicitly opt in again. */
-    private const val KEY_JIOSAAVN_OPT_IN_V1 = "jiosaavn_opt_in_v1"
+    /** Supersedes the retired opt-in migration; never re-enables a later off choice. */
+    private const val KEY_JIOSAAVN_DEFAULT_ON_V2 = "jiosaavn_default_on_v2"
     private const val PREFIX = "src:"
     private const val SEPARATOR = "::"
 }

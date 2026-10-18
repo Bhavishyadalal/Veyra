@@ -1,4 +1,4 @@
-> **Veyra 0.1.0:** Stable-labelled release, version code 13. See STABLE_RELEASE.md for build verification.
+> **Veyra 0.1.1:** Stable source update, version code 14. See verification/STABLE-0.1.1-RESULTS.md for current checks and the Android compile blocker. No APK included.
 
 > **beta11 build compatibility fix:** See BUILD_FIX_BETA11.md for the R8/lint updates and verified build results. App code and UI are unchanged.
 

@@ -1,0 +1,25 @@
+{
+  "revision": "0.1.1",
+  "baseline": "user-provided 0.1.0 Stable; 3fdc848",
+  "focused_kotlin_tests": {
+    "passed": 50,
+    "failed": 0,
+    "new_source_policy_tests": 4
+  },
+  "kotlin_syntax": {
+    "files": 9,
+    "errors": 0,
+    "scope": "changed/new Kotlin and build script; PSI syntax only"
+  },
+  "resources": {
+    "xml_documents": 114,
+    "localized_entries": 22613,
+    "font_references": 8,
+    "errors": 0
+  },
+  "source_registry_integration_tests": "updated; not run because Android dependency resolution is blocked",
+  "android_compile_and_full_unit_suite": "JitPack HTTP 403 before Kotlin compilation",
+  "apk_tasks_run": false,
+  "device_visual_gesture_and_performance_validation": "not_run",
+  "git_whitespace": "passed"
+}

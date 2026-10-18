@@ -598,32 +598,24 @@ class SourcesTest {
     }
 
     @Test
-    fun `JioSaavn is off by default on a fresh install`() {
-        assertFalse(SourceConfig(kind = SourceKind.JIOSAAVN).enabled)
-        val sources = SourceRegistry.sourcesForInit(emptyList(), forceJioSaavnOff = true)
+    fun `JioSaavn is on by default on a fresh install`() {
+        assertTrue(SourceConfig(kind = SourceKind.JIOSAAVN).enabled)
+        val sources = SourceRegistry.sourcesForInit(emptyList(), applyDefaultOnMigration = true)
 
-        assertFalse(sources.single { it.kind == SourceKind.JIOSAAVN }.enabled)
+        assertTrue(sources.single { it.kind == SourceKind.JIOSAAVN }.enabled)
         assertTrue(sources.single { it.kind == SourceKind.YOUTUBE }.enabled)
     }
 
     @Test
-    fun `the opt-in migration disables JioSaavn once for existing installs`() {
-        val previouslyEnabled = SourceConfig(kind = SourceKind.JIOSAAVN, enabled = true)
-
-        val migrated = SourceRegistry.sourcesForInit(
-            listOf(previouslyEnabled),
-            forceJioSaavnOff = true,
-        )
-        assertFalse(migrated.single { it.kind == SourceKind.JIOSAAVN }.enabled)
-
-        val userEnabledAgain = migrated.map {
-            if (it.kind == SourceKind.JIOSAAVN) it.copy(enabled = true) else it
-        }
-        val nextLaunch = SourceRegistry.sourcesForInit(
-            userEnabledAgain,
-            forceJioSaavnOff = false,
-        )
-        assertTrue(nextLaunch.single { it.kind == SourceKind.JIOSAAVN }.enabled)
+    fun `default correction enables a legacy disabled source once and preserves later off`() {
+        val legacyDisabled = SourceConfig(kind = SourceKind.JIOSAAVN, enabled = false)
+        val migrated = SourceRegistry.sourcesForInit(listOf(legacyDisabled), applyDefaultOnMigration = true)
+        assertTrue(migrated.single { it.kind == SourceKind.JIOSAAVN }.enabled)
+        assertEquals(legacyDisabled.id, migrated.single { it.kind == SourceKind.JIOSAAVN }.id)
+        val userDisabled = migrated.map { if (it.kind == SourceKind.JIOSAAVN) it.copy(enabled = false) else it }
+        val nextLaunch = SourceRegistry.sourcesForInit(userDisabled, applyDefaultOnMigration = false)
+        assertFalse(nextLaunch.single { it.kind == SourceKind.JIOSAAVN }.enabled)
+        assertEquals(nextLaunch, SourceRegistry.sourcesForInit(nextLaunch, applyDefaultOnMigration = false))
     }
 
     @Test

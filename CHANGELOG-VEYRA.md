@@ -1,3 +1,12 @@
+# Veyra 0.1.1 (JioSaavn defaults and player refinement)
+
+- Enable JioSaavn on fresh installs and replace the old forced-off migration with a one-time enabled-default correction. Persist source state and the new marker together; preserve subsequent off/on choices, addons, source order, matching and quality gates.
+- Clarify player titles/artists, retain outgoing recording metadata and links during 220 ms credit fades, improve control-area contrast and keep the established bold white transport glyphs with pressed feedback.
+- Give seek, volume and bottom actions 48dp targets, preserve the hidden-volume footprint and align timing labels to the enlarged seek target. Clean up interrupted drags and ignore disabled slider gestures.
+- Respect reduced motion in credit changes, queue capsules and slider effects. Use a static loading treatment instead of an animated sheen in that mode; shorten the queue capsule slide and remove slider-height overshoot.
+- 50 focused tests pass, including four new production source-policy tests. Existing SourcesTest integration cases are updated; the full suite remains blocked by JitPack HTTP 403. Details: verification/STABLE-0.1.1-RESULTS.md. No APK task run.
+- Based on the user-supplied 0.1.0 Stable source; versionCode 14, stable versionName 0.1.1. Build tools, application identity, data and signing configuration are retained.
+
 # Veyra 0.1.0-beta12 (brand header, welcome and navigation motion)
 
 - Use the latest default black-and-white waveform icon and supplied Super Malibu Regular font in a shared Home/Welcome brand composition. Bundle the exact TTF locally following the owner's permission confirmation; keep Manrope elsewhere.
