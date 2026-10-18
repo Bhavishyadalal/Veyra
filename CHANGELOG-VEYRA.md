@@ -1,3 +1,12 @@
+# Veyra 0.1.0-beta12 (brand header, welcome and navigation motion)
+
+- Use the latest default black-and-white waveform icon and supplied Super Malibu Regular font in a shared Home/Welcome brand composition. Bundle the exact TTF locally following the owner's permission confirmation; keep Manrope elsewhere.
+- Give Home a compact branded header with a short once-per-retained-state reveal, readable listening heading and quiet divider. Keep the decorative brand distinct from the existing working top-bar actions.
+- Replace Welcome's two long looping flourishes with one 620 ms reveal and static charcoal artwork. Shorten headline and step transitions, keep name entry and optional sign-in, stop decorative motion in background/while typing and shorten final dismissal.
+- Add a consistent directional motion policy for pushes/returns, short tab fades and Settings/Explore sub-screen transitions. Keep opaque destination surfaces during transitions and retain root-page saveable state without accumulating transient detail states.
+- Preserve existing player docking/back handlers, playback, downloads, account flows and beta11 Build Fixed tool versions. No dependencies, application identity or signing configuration changed.
+- 46 focused tests pass, including four navigation policy regressions; see `verification/BETA12-RESULTS.md` for the JitPack compile blocker and unrun device checks. No APK task was run.
+
 # Veyra 0.1.0-beta11 (Home banners and cover tiles)
 
 - Alternate a featured banner carousel, three-cover mosaic pages and compact shelves; preserve Recently Played's chosen layout and stable recommendation positions when history loads.

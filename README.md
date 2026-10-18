@@ -27,14 +27,14 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
-## Latest update: 0.1.0-beta11 — Home banners and cover tiles
+## Latest update: 0.1.0-beta12 — brand header, welcome and return motion
 
-- **Mixed Home layout:** a wide featured song/collection carousel, three-cover mosaic pages and compact shelves, using Veyra's existing Manrope type, theme and artwork treatment.
-- **Interactive browsing:** swipe pages or use previous/next arrows. The featured section switches between banners and tiles with a short slide/fade, keeping your place in the collection. All shelf items remain reachable.
-- **Considerate motion:** no automatic rotation or animation loop. Reduced animation skips decorative motion; large fonts and narrow widths use readable rows. Existing playback, long-press menus and Recently Played preferences remain.
-- **Retained:** beta10 flowing welcome and persistent Explore artwork cache, plus beta8/beta9 launcher, launch-signature and Settings additions.
+- **Home:** the actual black-and-white glass waveform launcher artwork paired with the locally bundled Super Malibu “Veyra” wordmark, a compact listening heading and a subtle divider. Supporting text and controls retain Manrope. A brief entrance settles without a recurring animation.
+- **Welcome:** the same icon/wordmark, a charcoal background, one short coordinated reveal, quicker headline entrances and directional step transitions. Repeating ribbon/letter motion is removed; name entry, optional sign-in, Back and completion remain.
+- **Return navigation:** directional forward/back motion for details, Library grids, Explore categories and Settings sub-screens; short tab fades with opaque page surfaces. Tab-local saveable state and Settings state survive pushes; existing list positions, query state and player docking remain in place.
+- **Baseline:** built on your supplied beta11 Build Fixed source, retaining R8 9.1.56 and lint 9.4.1. Existing Home banners/tiles and Explore artwork caching remain.
 
-Only **app** is installable; **shared** and **sharedUi** remain required phone libraries. Download `downloads/Veyra_Android_Source_0.1.0-beta11.zip`, extract into a new folder and open Veyra in Android Studio. See [verification/BETA11-RESULTS.md](verification/BETA11-RESULTS.md) for tests, design references and remaining build/device limits.
+Download `downloads/Veyra_Android_Source_0.1.0-beta12.zip`, extract the entire folder and open Veyra in Android Studio. Only **app** is installable; **shared** and **sharedUi** remain required phone libraries. See [verification/BETA12-RESULTS.md](verification/BETA12-RESULTS.md) for current checks and limitations. No APK was requested or generated for this update.
 
 Build dependencies require `dl.google.com`, Maven Central, the Gradle plugin portal, and **jitpack.io**. The current SDK package name is `android-37.0`; an older existing SDK can be selected with `-PveyraCompileSdk=android-37`. Do not disable TLS or artifact verification to work around access failures.
 
@@ -58,7 +58,7 @@ Discord’s application ID is retained for compatibility. Some Discord surfaces 
 
 Automatic app updates are disabled until you provide `VEYRA_UPDATE_FEED_URL` with your own compatible GitHub-style latest-release JSON feed. Publish Veyra APK assets with the expected `Veyra-` prefix; never point the fork at the original project's release feed. Production APK signing uses your own `keystore.properties`; see the example. Keep the same signing key for future updates.
 
-The web and browser-extension sources are retained outside the Android build. Their public-service/deployment URLs are preserved. TV and Wear OS sources were removed in beta7. Android phone is the target of this handoff; see `verification/BETA11-RESULTS.md` for current checks. `verification/RESULTS.md` describes the earlier supplied baseline.
+The web and browser-extension sources are retained outside the Android build. Their public-service/deployment URLs are preserved. TV and Wear OS sources were removed in beta7. Android phone is the target of this handoff; see `verification/BETA12-RESULTS.md` for current checks. `verification/RESULTS.md` describes the earlier supplied baseline.
 
 ## License and attribution
 

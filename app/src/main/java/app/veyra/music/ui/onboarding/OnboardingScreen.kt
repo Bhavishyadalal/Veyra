@@ -3,7 +3,6 @@ package app.veyra.music.ui.onboarding
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
@@ -73,7 +72,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -88,7 +86,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -98,17 +95,15 @@ import app.veyra.music.data.settings.AppSettings
 import app.veyra.music.sharedui.resources.Res
 import app.veyra.music.sharedui.resources.ic_google_g
 import app.veyra.music.ui.icons.VeyraIcons
+import app.veyra.music.ui.components.VeyraBrand
 import app.veyra.music.ui.rememberIsForeground
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
-import kotlin.math.PI
-import kotlin.math.sin
 
-private val WelcomeCream = Color(0xFFF6ECDF)
+private val WelcomeCream = Color(0xFFF5F3EF)
 private val WelcomeLilac = Color(0xFFCDB2FF)
-private val WelcomePeach = Color(0xFFFFBAA0)
 
-/** First-install name and optional sign-in, with a finite, keyboard-aware introduction. */
+/** First-install name and optional sign-in, with one brief, keyboard-aware brand reveal. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OnboardingScreen(
@@ -126,15 +121,14 @@ fun OnboardingScreen(
     val foreground = rememberIsForeground()
     val keyboardUp = WindowInsets.isImeVisible
     val systemScale = rememberCoroutineScope().coroutineContext[MotionDurationScale]?.scaleFactor ?: 1f
-    val reduceMotion = reduceAnimation || systemScale == 0f
-    val phase = remember { Animatable(0f) }
-    // Two slow loops, then a still composition. No infinite work while reading or typing.
+    val reduceMotion = reduceAnimation || systemScale == 0f || !foreground
+    var introduced by rememberSaveable { mutableStateOf(false) }
+    val phase = remember { Animatable(if (introduced || reduceMotion) 1f else 0f) }
+    // One short foreground reveal, then completely still. Typing/backgrounding settles it.
     LaunchedEffect(foreground, keyboardUp, reduceMotion) {
-        phase.snapTo(0f)
-        if (!foreground || keyboardUp || reduceMotion) return@LaunchedEffect
-        repeat(2) {
-            phase.animateTo(phase.value + (2 * PI).toFloat(), tween(5_200, easing = LinearEasing))
-        }
+        val animate = !introduced && foreground && !keyboardUp && !reduceMotion
+        introduced = true
+        if (animate) phase.animateTo(1f, tween(620)) else phase.snapTo(1f)
     }
 
     BackHandler(enabled = page == PAGE_CONNECT) { page = PAGE_NAME }
@@ -143,7 +137,7 @@ fun OnboardingScreen(
     }
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Box(
-        modifier.fillMaxSize().background(Color(0xFF100D18))
+        modifier.fillMaxSize().background(Color(0xFF101113))
             .pointerInput(Unit) { detectTapGestures { focusManager.clearFocus() } },
     ) {
         OnboardingBackdrop()
@@ -151,7 +145,7 @@ fun OnboardingScreen(
             targetState = page,
             transitionSpec = {
                 val direction = if ((targetState > initialState) != rtl) 1 else -1
-                val duration = if (reduceMotion) 0 else 320
+                val duration = if (reduceMotion) 0 else 260
                 (slideInHorizontally(tween(duration)) { direction * it / 10 } + fadeIn(tween(duration)))
                     .togetherWith(
                         slideOutHorizontally(tween(duration)) { -direction * it / 10 } + fadeOut(tween(duration / 2)),
@@ -217,7 +211,7 @@ private fun ColumnScope.NamePage(
         WelcomeProgress(PAGE_NAME)
         Spacer(Modifier.height(if (keyboardUp) 24.dp else 36.dp))
         if (!keyboardUp) {
-            FlowingWordmark(phase, reduceMotion)
+            VeyraBrand(prominent = true, color = WelcomeCream, reveal = phase)
             Spacer(Modifier.height(16.dp))
         }
         FlowingTitle(stringResource(R.string.onboarding_title), reduceMotion)
@@ -257,6 +251,8 @@ private fun ColumnScope.ConnectPage(
     Column {
         WelcomeProgress(PAGE_CONNECT, onBack)
         Spacer(Modifier.height(36.dp))
+        VeyraBrand(color = WelcomeCream)
+        Spacer(Modifier.height(18.dp))
         FlowingTitle(stringResource(R.string.onboarding_connect_title), reduceMotion)
         Spacer(Modifier.height(18.dp))
         Text(
@@ -284,7 +280,7 @@ private fun WelcomeProgress(page: Int, onBack: (() -> Unit)? = null) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         if (onBack != null) BackButton(onBack)
-        else Text("Veyra", style = MaterialTheme.typography.labelLarge, color = WelcomeCream)
+        else Box(Modifier.size(8.dp).background(WelcomeLilac, CircleShape))
         Row(
             Modifier.weight(1f).semantics {
                 contentDescription = description
@@ -303,39 +299,6 @@ private fun WelcomeProgress(page: Int, onBack: (() -> Unit)? = null) {
     }
 }
 
-/** Letter motion lives in graphics layers; the name field does not recompose every frame. */
-@Composable
-private fun FlowingWordmark(phase: () -> Float, reduceMotion: Boolean) {
-    val density = LocalDensity.current
-    BoxWithConstraints(Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = "Veyra" }) {
-        // The wordmark scales like a logo; body and form text still respect system font size.
-        val size = (minOf(88f, maxWidth.value / 3.2f) / density.fontScale).sp
-        Row {
-            "Veyra".forEachIndexed { index, letter ->
-                val reveal = remember { Animatable(if (reduceMotion) 1f else 0f) }
-                LaunchedEffect(reduceMotion) {
-                    if (reduceMotion) reveal.snapTo(1f) else {
-                        delay(index * 55L)
-                        reveal.animateTo(1f, tween(620))
-                    }
-                }
-                Text(
-                    letter.toString(),
-                    style = MaterialTheme.typography.displayLarge,
-                    fontSize = size,
-                    lineHeight = size * 1.12f,
-                    fontWeight = FontWeight.W800,
-                    color = listOf(WelcomeCream, WelcomeLilac, WelcomePeach, WelcomeCream, WelcomeLilac)[index],
-                    modifier = Modifier.graphicsLayer {
-                        alpha = reveal.value
-                        translationY = ((1f - reveal.value) * 18f + sin(phase() + index * 0.7f) * 3f).dp.toPx()
-                    },
-                )
-            }
-        }
-    }
-}
-
 /** Whole words flow into place; accessibility reads the original localized heading once. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -349,8 +312,8 @@ private fun FlowingTitle(text: String, reduceMotion: Boolean) {
             val reveal = remember(text, index) { Animatable(if (reduceMotion) 1f else 0f) }
             LaunchedEffect(text, reduceMotion) {
                 if (reduceMotion) reveal.snapTo(1f) else {
-                    delay(80L + (index * 45L).coerceAtMost(450L))
-                    reveal.animateTo(1f, tween(460))
+                    delay(40L + (index * 30L).coerceAtMost(120L))
+                    reveal.animateTo(1f, tween(280))
                 }
             }
             Text(
@@ -372,11 +335,11 @@ private fun FlowingTitle(text: String, reduceMotion: Boolean) {
 private fun WelcomeRibbon(phase: () -> Float) {
     Box(Modifier.fillMaxWidth().height(84.dp).drawWithCache {
         val path = Path()
-        val brush = Brush.linearGradient(listOf(WelcomeLilac.copy(alpha = 0.15f), WelcomePeach, WelcomeLilac))
+        val brush = Brush.linearGradient(listOf(WelcomeCream.copy(alpha = 0.05f), WelcomeCream.copy(alpha = 0.5f), WelcomeLilac.copy(alpha = 0.25f)))
         val stroke = Stroke(width = 1.5.dp.toPx())
         onDrawBehind {
             repeat(3) { line ->
-                val bend = sin(phase() + line * 0.7f) * size.height * 0.13f
+                val bend = (1f - phase()) * size.height * 0.13f
                 val center = size.height * 0.5f + line * 6.dp.toPx()
                 path.reset()
                 path.moveTo(0f, center)
@@ -458,9 +421,9 @@ private const val NAME_LIMIT = 40
 @Composable
 private fun OnboardingBackdrop() {
     Box(Modifier.fillMaxSize().drawWithCache {
-        val base = Brush.linearGradient(listOf(Color(0xFF100D18), Color(0xFF21152E), Color(0xFF100E18)),
+        val base = Brush.linearGradient(listOf(Color(0xFF101113), Color(0xFF1A1B20), Color(0xFF101113)),
             start = Offset.Zero, end = Offset(size.width, size.height))
-        val glow = Brush.radialGradient(listOf(WelcomeLilac.copy(alpha = 0.16f), Color.Transparent),
+        val glow = Brush.radialGradient(listOf(WelcomeCream.copy(alpha = 0.06f), Color.Transparent),
             center = Offset(size.width * 0.9f, size.height * 0.26f), radius = size.maxDimension * 0.65f)
         val scrim = Brush.verticalGradient(0f to Color.Transparent, 1f to Color.Black.copy(alpha = 0.42f))
         onDrawBehind { drawRect(base); drawRect(glow); drawRect(scrim) }

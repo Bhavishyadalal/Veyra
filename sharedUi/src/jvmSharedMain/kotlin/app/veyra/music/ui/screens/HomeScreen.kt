@@ -45,6 +45,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import app.veyra.music.ui.components.VeyraBrand
+import app.veyra.music.ui.player.PlayerSettings
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -507,40 +514,32 @@ fun CompactTrackRow(
     }
 }
 
-/** Compact heading leaves the first recommendations within reach. */
+/** One finite introduction per retained Home state; scrolling simply carries the header away. */
 @Composable
 private fun HomeTitle(title: String, modifier: Modifier = Modifier) {
     val colors = MaterialTheme.colorScheme
+    val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+    var introduced by rememberSaveable { mutableStateOf(false) }
+    val reveal = remember { Animatable(if (introduced || reduceMotion) 1f else 0f) }
+    LaunchedEffect(reduceMotion) {
+        val animate = !introduced && !reduceMotion
+        // Set before suspending: navigating away mid-intro must not replay it on return.
+        introduced = true
+        if (animate) reveal.animateTo(1f, tween(300)) else reveal.snapTo(1f)
+    }
     Column(
-        modifier = modifier.fillMaxWidth()
-            .padding(horizontal = PAGE_GUTTER, vertical = 16.dp),
+        modifier = modifier.fillMaxWidth().padding(horizontal = PAGE_GUTTER, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Veyra", style = MaterialTheme.typography.labelLarge, color = colors.primary)
-                Text(
-                    text = title,
-                    modifier = Modifier.semantics { heading() },
-                    style = MaterialTheme.typography.displayLarge,
-                    color = colors.onBackground,
-                )
-            }
-            Spacer(Modifier.width(16.dp))
-            Icon(
-                painter = painterResource(Res.drawable.ic_logo),
-                contentDescription = null,
-                tint = colors.primary,
-                modifier = Modifier.size(38.dp),
-            )
+        VeyraBrand(color = colors.onBackground, reveal = { reveal.value })
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(title, modifier = Modifier.semantics { heading() },
+                style = MaterialTheme.typography.headlineMedium, color = colors.onBackground)
+            Text(stringResource(Res.string.home_hero_subtitle),
+                style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant)
         }
-        Text(
-            text = stringResource(Res.string.home_hero_subtitle),
-            style = MaterialTheme.typography.bodyLarge,
-            color = colors.onSurfaceVariant,
-        )
-        Box(Modifier.padding(top = 4.dp).width(36.dp).height(3.dp)
-            .background(colors.primary, CircleShape))
+        Box(Modifier.padding(top = 4.dp).fillMaxWidth().height(1.dp).background(
+            Brush.horizontalGradient(listOf(colors.onBackground.copy(alpha = 0.20f), Color.Transparent))))
     }
 }
 

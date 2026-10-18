@@ -296,7 +296,7 @@ fun SettingsScreen(
 
     // Search spans all categories; an empty query shows the selected category,
     // exactly as if the field weren't there.
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
     var picking by remember { mutableStateOf<QualityTarget?>(null) }
     var pickingDownloadQuality by remember { mutableStateOf(false) }
     var pickingAutomixPerformance by remember { mutableStateOf(false) }

@@ -7,6 +7,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import app.veyra.music.R
+import app.veyra.music.ui.components.LocalVeyraWordmarkFont
 
 // Apple Music's signature red. No longer the primary accent, but kept for the
 // spots (Replay's rank badge) that want that specific red regardless of theme.
@@ -67,6 +69,8 @@ val VeyraFontFamily = FontFamily(
     Font(R.font.veyra_heavy, FontWeight.W800),
 )
 
+private val VeyraWordmarkFont = FontFamily(Font(R.font.super_malibu, FontWeight.Normal))
+
 // Clear, compact type scale for Veyra.
 private val VeyraTypography = Typography(
     displayLarge = TextStyle(fontWeight = FontWeight.ExtraBold, fontSize = 34.sp, lineHeight = 42.sp, letterSpacing = (-0.8).sp),
@@ -110,11 +114,13 @@ fun VeyraTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    MaterialTheme(
-        colorScheme = if (darkTheme) DarkColors else LightColors,
-        typography = VeyraTypography,
-        content = content,
-    )
+    CompositionLocalProvider(LocalVeyraWordmarkFont provides VeyraWordmarkFont) {
+        MaterialTheme(
+            colorScheme = if (darkTheme) DarkColors else LightColors,
+            typography = VeyraTypography,
+            content = content,
+        )
+    }
 }
 
 /**
