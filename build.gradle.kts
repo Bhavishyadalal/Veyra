@@ -11,7 +11,7 @@ buildscript {
     }
 }
 /* Phone version. Keep beta markers until publishing a signed stable release. */
-extra["veyraVersionCode"] = 12
+extra["veyraVersionCode"] = 13
 extra["veyraVersionName"] = "0.1.0"
 
 /*
@@ -30,7 +30,7 @@ extra["veyraVersionName"] = "0.1.0"
  * so it is the one place to get right.
  *
  */
-extra["veyraBetaSuffix"] = "beta12"
+extra["veyraBetaSuffix"] = ""
 
 plugins {
     id("com.android.application") version "8.10.1" apply false

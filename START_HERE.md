@@ -1,3 +1,5 @@
+> **Veyra 0.1.0:** Stable-labelled release, version code 13. See STABLE_RELEASE.md for build verification.
+
 > **beta11 build compatibility fix:** See BUILD_FIX_BETA11.md for the R8/lint updates and verified build results. App code and UI are unchanged.
 
 > **beta9 source-only fix:** See UPDATE_BETA9.md for off-state switch visibility and the lighter onboarding background. No APK is included in this update.
