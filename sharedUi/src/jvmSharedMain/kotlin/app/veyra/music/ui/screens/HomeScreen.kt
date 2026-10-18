@@ -39,8 +39,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import app.veyra.music.ui.components.VeyraWaveform
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -531,10 +534,15 @@ private fun HomeTitle(title: String, modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth().padding(horizontal = PAGE_GUTTER, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        VeyraBrand(color = colors.onBackground, reveal = { reveal.value })
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            VeyraBrand(Modifier.weight(1f), color = colors.onBackground, reveal = { reveal.value })
+            VeyraWaveform(Modifier.size(30.dp).clearAndSetSemantics { },
+                color = colors.onBackground.copy(alpha = 0.65f), progress = { reveal.value })
+        }
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(title, modifier = Modifier.semantics { heading() },
-                style = MaterialTheme.typography.headlineMedium, color = colors.onBackground)
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.W800), color = colors.onBackground)
             Text(stringResource(Res.string.home_hero_subtitle),
                 style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant)
         }

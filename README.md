@@ -33,7 +33,15 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
-## Latest update: 0.1.2 — welcome artwork and creator links
+## Latest update: 0.1.3 — silver waveform welcome
+
+A dedicated welcome landing now follows the supplied design direction: full-width silver waveform artwork, bold native typography, optional swipe/tap previews and a silver Get started button. No restore-backup entry is included. Get started goes directly to name entry; account linking remains optional.
+
+Home has a stronger heading and native waveform accent; Settings has a clearer hierarchy and category emphasis. No player/backend/appearance-setting behavior is changed. See [artwork provenance](design/launcher/WELCOME-ARTWORK.md) and [checks/build limits](verification/STABLE-0.1.3-RESULTS.md).
+
+[Download 0.1.3 Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.3_Stable.zip). 57 focused regressions, native resource compilation and syntax checks pass. Full Android compilation is blocked by JitPack HTTP 403; native device rendering is unverified. No APK was generated.
+
+## Previous update: 0.1.2 — welcome artwork and creator links
 
 - **Campaign welcome:** original liquid-glass artwork, warm neutral styling, keyboard-aware name entry and finite reduced-motion-aware transitions. Images are local and use the existing Coil cache.
 - **Creator links:** searchable Settings rows for [Bhavishyadalal](https://github.com/Bhavishyadalal), [Veyra source](https://github.com/Bhavishyadalal/Veyra) and the [website repository](https://github.com/Bhavishyadalal/Veyra-website).

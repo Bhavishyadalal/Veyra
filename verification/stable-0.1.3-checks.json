@@ -1,0 +1,27 @@
+{
+  "revision": "0.1.3",
+  "focused_kotlin_tests": {
+    "passed": 57,
+    "failed": 0,
+    "new_welcome_paging_cases": 7
+  },
+  "kotlin_syntax": {
+    "files": 7,
+    "errors": 0,
+    "scope": "PSI parsing only"
+  },
+  "aapt2_resources": "passed",
+  "resources": {
+    "xml_files_parsed": 114,
+    "localized_string_entries_checked": 22632,
+    "xml_font_references_resolved": 8,
+    "errors": [],
+    "checks": "Static source/resource checks; not a native app runtime test."
+  },
+  "android_compile_and_full_unit_suite": "blocked by JitPack HTTP 403 before Kotlin compilation",
+  "native_ui_render_and_device_test": "not_run",
+  "apk_tasks_run": false,
+  "welcome_restore_backup_entry": false,
+  "forced_onboarding_reset": false,
+  "new_runtime_dependencies": false
+}

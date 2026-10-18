@@ -1178,4 +1178,17 @@
     <string name="veyra_github_source_path" translatable="false">Bhavishyadalal/Veyra</string>
     <string name="veyra_website_source">Website source code</string>
     <string name="veyra_website_source_path" translatable="false">Bhavishyadalal/Veyra-website</string>
+    <string name="welcome_space_title">Your music.\nYour space.</string>
+    <string name="welcome_space_body">Find a favourite.\nStay for the feeling.</string>
+    <string name="welcome_lyrics_title">Every word.\nEvery feeling.</string>
+    <string name="welcome_lyrics_body">Follow the lyrics.\nGet closer to the song.</string>
+    <string name="welcome_together_title">Your people.\nOne soundtrack.</string>
+    <string name="welcome_together_body">Listen together.\nNo account needed to join.</string>
+    <string name="welcome_music_chip">Made for your music</string>
+    <string name="welcome_lyrics_chip">Stay with the lyrics</string>
+    <string name="welcome_together_chip">Better together</string>
+    <string name="welcome_get_started">Get started</string>
+    <string name="welcome_next_preview">Explore the next preview</string>
+    <string name="welcome_preview_position">Preview %1$d of %2$d</string>
+    <string name="onboarding_personalize_title">Make it yours.</string>
 </resources>

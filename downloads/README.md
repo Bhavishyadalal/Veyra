@@ -27,7 +27,13 @@ This is the website source for local review and later deployment to your separat
 
 [Download the full-resolution regenerated gateway artwork](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Glass_Gateway_4.0.png)
 
-## Android — 0.1.2 Stable source
+## Android — 0.1.3 Stable source
+
+[Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.3_Stable.zip) · [SHA-256](Veyra_Android_Source_0.1.3_Stable.zip.sha256)
+
+Silver-wave welcome with optional swipe/tap previews and direct Get started, plus Home/Settings refinements. Extract the complete Veyra folder and open it in Android Studio. No APK is included. [Validation and Android dependency blocker](../verification/STABLE-0.1.3-RESULTS.md).
+
+## Previous Android — 0.1.2 Stable source
 
 [Download updated Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.2_Stable.zip) · [SHA-256](Veyra_Android_Source_0.1.2_Stable.zip.sha256)
 

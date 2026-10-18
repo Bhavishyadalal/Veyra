@@ -1,3 +1,13 @@
+# Veyra 0.1.3 stable-series source update
+
+Version name 0.1.3, code 16. Includes the reference-inspired silver-wave welcome, optional interactive previews, direct Get started flow, and Home/Settings hierarchy refinements. No restore-backup action is added to Welcome.
+
+This is a source delivery. 57 focused tests, resource compilation and syntax checks pass; full Android compilation is blocked by JitPack HTTP 403 before Kotlin compilation, and on-device rendering remains unverified. No APK was generated or published. See [validation](verification/STABLE-0.1.3-RESULTS.md).
+
+Earlier reports below concern only their stated revisions.
+
+---
+
 # Veyra 0.1.2 stable-series source update
 
 Version code 15, version name 0.1.2. Welcome now uses local campaign artwork and clearer optional account linking. Settings adds the owner's GitHub profile and app/website source links. Application identity, signing and existing music behavior remain.

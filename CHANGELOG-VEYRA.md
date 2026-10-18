@@ -1,3 +1,12 @@
+# Veyra 0.1.3 (silver waveform welcome)
+
+- Add a genuine welcome landing inspired by the owner's reference: original silver-wave artwork, actual app branding, bold native copy, selectable/swipeable previews and a silver Get started action. No restore-backup UI.
+- Get started skips straight to name entry from any preview. Preserve optional account linking, guest completion, name validation, Back, compact/scrolling layouts, RTL and reduced motion.
+- Replace the old framed welcome illustrations with one smaller local waveform image and cached alpha masks. No continuous effects or new dependency.
+- Refine Home's header and native waveform accent; strengthen Settings heading/category hierarchy while retaining plain rows, search, links and existing actions.
+- 57 focused tests pass (seven new gesture/paging cases), plus AAPT2 resource compilation and seven-file syntax parsing. Full Android compilation remains blocked by JitPack HTTP 403; device UI checks remain pending. No APK tasks run.
+- Stable-series source version 0.1.3, code 16. Package identity, signing, player and dependency versions retained.
+
 # Veyra 0.1.2 (welcome campaign and creator links)
 
 - Integrate the original glass portal and crystal-waveform campaign images into both welcome steps as small local WebP assets, decoded by the existing Coil loader.

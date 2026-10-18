@@ -419,9 +419,9 @@ fun SettingsScreen(
     ) {
         Text(
             text = stringResource(if (searching) R.string.settings else category?.title ?: R.string.settings),
-            style = MaterialTheme.typography.displayLarge,
+            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.W800),
             color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 14.dp),
+            modifier = Modifier.semantics { heading() }.padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 18.dp),
         )
         SearchField(
             query = searchQuery,
@@ -2229,7 +2229,7 @@ private fun SettingsOverview(onSelect: (SettingsCategory) -> Unit) {
         stringResource(R.string.settings_intro),
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.padding(horizontal = GROUP_INSET + ROW_INSET, vertical = 18.dp),
+        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
     )
     Column(Modifier.fillMaxWidth().padding(horizontal = GROUP_INSET)) {
         SettingsCategory.entries.forEachIndexed { index, category ->
@@ -2238,6 +2238,7 @@ private fun SettingsOverview(onSelect: (SettingsCategory) -> Unit) {
                 icon = category.icon,
                 title = stringResource(category.title),
                 subtitle = category.summary.map { stringResource(it) }.joinToString(" · "),
+                emphasized = true,
                 onClick = { onSelect(category) },
             )
         }
@@ -2386,6 +2387,7 @@ internal fun SettingsRow(
     enabled: Boolean = true,
     iconPainter: Painter? = null,
     onClick: (() -> Unit)? = null,
+    emphasized: Boolean = false,
     trailing: (@Composable () -> Unit)? = null,
 ) {
     Row(
@@ -2418,6 +2420,7 @@ internal fun SettingsRow(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
+                    fontWeight = if (emphasized) FontWeight.W700 else null,
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
