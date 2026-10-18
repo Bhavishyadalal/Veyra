@@ -1,10 +1,10 @@
 # Veyra source downloads
 
-## Website — 3.0.0 Obsidian Edition
+## Website — 4.0.0 Refraction Edition
 
-[Download the complete website source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Website_Source_3.0.0.zip) · [SHA-256](Veyra_Website_Source_3.0.0.zip.sha256)
+[Download the complete website source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Website_Source_4.0.0.zip) · [SHA-256](Veyra_Website_Source_4.0.0.zip.sha256)
 
-A standalone React/Vite showcase with an obsidian and smoked-chrome palette, four original generated artworks, liquid-glass controls, Motion transitions, eight public React Bits components, an original interactive reel, phone preview and secret frequency dial. The ZIP includes its own README, local assets, source, tests, licenses, Windows launcher and Vercel configuration.
+A standalone React/Vite showcase with an obsidian and smoked-chrome palette, four original generated artworks, liquid-glass controls, Motion transitions, eight public React Bits components, layered glass particles, a pointer-responsive camera, Syne/Bodoni display typography, an original interactive reel, phone preview and secret frequency dial. The ZIP includes its own README, local assets, source, tests, licenses, Windows launcher and Vercel configuration.
 
 Extract the ZIP, open `Veyra-Website`, install Node.js 24 LTS, then double-click `START-WEBSITE.cmd` on Windows. Alternatively:
 
@@ -14,6 +14,8 @@ npm run dev
 ```
 
 This is the website source for local review and later deployment to your separate website repository. It is not an Android Studio project or APK. The Pro vertical-reel source is not bundled; the reel is original Motion-based website code. Full provenance and validation reports are inside the archive.
+
+[Download the full-resolution regenerated gateway artwork](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Glass_Gateway_4.0.png)
 
 ## Android — 0.1.1 Stable source
 
