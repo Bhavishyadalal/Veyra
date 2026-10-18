@@ -33,7 +33,15 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
-## Latest update: 0.1.1 — JioSaavn default and player refinement
+## Latest update: 0.1.2 — welcome artwork and creator links
+
+- **Campaign welcome:** original liquid-glass artwork, warm neutral styling, keyboard-aware name entry and finite reduced-motion-aware transitions. Images are local and use the existing Coil cache.
+- **Creator links:** searchable Settings rows for [Bhavishyadalal](https://github.com/Bhavishyadalal), [Veyra source](https://github.com/Bhavishyadalal/Veyra) and the [website repository](https://github.com/Bhavishyadalal/Veyra-website).
+- **Optional account linking:** clear Continue/Start listening actions; sign-in remains optional. Playback, data, JioSaavn defaults and the existing player behavior are retained.
+
+[Download the 0.1.2 Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.2_Stable.zip). See [validation and build limits](verification/STABLE-0.1.2-RESULTS.md). 50 focused regressions and native resource compilation pass; full Android compilation remains blocked by JitPack HTTP 403. No APK was built.
+
+## Previous update: 0.1.1 — JioSaavn default and player refinement
 
 - **JioSaavn starts on:** fresh installs enable it automatically. A one-time correction replaces the old forced-off migration on existing installations. Later switch-off choices survive restarts; YouTube fallback, custom sources, matching and quality rules remain.
 - **Clearer player:** stronger song/artist hierarchy, better contrast over artwork, correct outgoing credits during track changes, bold white transport icons and visible pressed feedback.

@@ -59,6 +59,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.annotation.DrawableRes
+import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImage
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.MotionDurationScale
@@ -67,9 +70,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -101,7 +102,7 @@ import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 
 private val WelcomeCream = Color(0xFFF5F3EF)
-private val WelcomeLilac = Color(0xFFCDB2FF)
+private val WelcomeChampagne = Color(0xFFD8C4A5)
 
 /** First-install name and optional sign-in, with one brief, keyboard-aware brand reveal. */
 @OptIn(ExperimentalLayoutApi::class)
@@ -137,7 +138,7 @@ fun OnboardingScreen(
     }
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Box(
-        modifier.fillMaxSize().background(Color(0xFF101113))
+        modifier.fillMaxSize().background(Color(0xFF090B0C))
             .pointerInput(Unit) { detectTapGestures { focusManager.clearFocus() } },
     ) {
         OnboardingBackdrop()
@@ -154,9 +155,10 @@ fun OnboardingScreen(
             label = "welcomePage",
             modifier = Modifier.fillMaxSize().systemBarsPadding().imePadding(),
         ) { shown ->
-            OnboardingPage {
+            OnboardingPage { compact ->
                 when (shown) {
                     PAGE_NAME -> NamePage(
+                        compact = compact,
                         name = name,
                         onNameChange = { name = it.take(NAME_LIMIT) },
                         reduceMotion = reduceMotion,
@@ -171,6 +173,7 @@ fun OnboardingScreen(
                         },
                     )
                     else -> ConnectPage(
+                        compact = compact,
                         reduceMotion = reduceMotion,
                         phase = { phase.value },
                         onBack = { page = PAGE_NAME },
@@ -185,21 +188,22 @@ fun OnboardingScreen(
 
 /** Scrolls on short screens/large fonts while keeping the actions low on normal screens. */
 @Composable
-private fun OnboardingPage(content: @Composable ColumnScope.() -> Unit) {
+private fun OnboardingPage(content: @Composable ColumnScope.(Boolean) -> Unit) {
     BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        val compact = maxHeight < 800.dp
         Column(
             Modifier.widthIn(max = 520.dp).fillMaxWidth()
                 .verticalScroll(rememberScrollState())
                 .heightIn(min = maxHeight)
                 .padding(horizontal = 28.dp, vertical = 20.dp),
             verticalArrangement = Arrangement.SpaceBetween,
-            content = content,
-        )
+        ) { content(compact) }
     }
 }
 
 @Composable
 private fun ColumnScope.NamePage(
+    compact: Boolean,
     name: String,
     onNameChange: (String) -> Unit,
     onNext: () -> Unit,
@@ -209,14 +213,17 @@ private fun ColumnScope.NamePage(
 ) {
     Column {
         WelcomeProgress(PAGE_NAME)
-        Spacer(Modifier.height(if (keyboardUp) 24.dp else 36.dp))
+        Spacer(Modifier.height(if (keyboardUp || compact) 20.dp else 36.dp))
         if (!keyboardUp) {
-            VeyraBrand(prominent = true, color = WelcomeCream, reveal = phase)
-            Spacer(Modifier.height(16.dp))
+            VeyraBrand(prominent = !compact, color = WelcomeCream, reveal = phase)
+            Spacer(Modifier.height(if (compact) 12.dp else 16.dp))
         }
         FlowingTitle(stringResource(R.string.onboarding_title), reduceMotion)
-        if (!keyboardUp) WelcomeRibbon(phase)
-        Spacer(Modifier.height(28.dp))
+        if (!keyboardUp) {
+            Spacer(Modifier.height(if (compact) 12.dp else 20.dp))
+            WelcomeArtwork(R.drawable.welcome_glass_portal, phase = phase, compact = compact)
+        }
+        Spacer(Modifier.height(if (compact) 16.dp else 28.dp))
     }
     Column {
         Text(
@@ -234,7 +241,7 @@ private fun ColumnScope.NamePage(
             color = WelcomeCream.copy(alpha = 0.66f),
             modifier = Modifier.padding(horizontal = 4.dp),
         )
-        Spacer(Modifier.height(28.dp))
+        Spacer(Modifier.height(if (compact) 20.dp else 28.dp))
         PillButton(stringResource(R.string.onboarding_next), onNext, primary = true,
             enabled = name.isNotBlank(), reduceMotion = reduceMotion)
     }
@@ -242,6 +249,7 @@ private fun ColumnScope.NamePage(
 
 @Composable
 private fun ColumnScope.ConnectPage(
+    compact: Boolean,
     reduceMotion: Boolean,
     phase: () -> Float,
     onBack: () -> Unit,
@@ -250,18 +258,19 @@ private fun ColumnScope.ConnectPage(
 ) {
     Column {
         WelcomeProgress(PAGE_CONNECT, onBack)
-        Spacer(Modifier.height(36.dp))
+        Spacer(Modifier.height(if (compact) 16.dp else 36.dp))
         VeyraBrand(color = WelcomeCream)
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(if (compact) 12.dp else 18.dp))
         FlowingTitle(stringResource(R.string.onboarding_connect_title), reduceMotion)
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(if (compact) 12.dp else 18.dp))
         Text(
             stringResource(R.string.onboarding_connect_body),
-            style = MaterialTheme.typography.bodyLarge,
+            style = if (compact) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyLarge,
             color = WelcomeCream.copy(alpha = 0.72f),
         )
-        WelcomeRibbon(phase)
-        Spacer(Modifier.height(28.dp))
+        Spacer(Modifier.height(if (compact) 12.dp else 20.dp))
+        WelcomeArtwork(R.drawable.welcome_glass_frequency, phase = phase, portrait = true, compact = compact)
+        Spacer(Modifier.height(if (compact) 16.dp else 28.dp))
     }
     Column {
         PillButton(stringResource(R.string.onboarding_sign_in_google), onSignIn, primary = true,
@@ -280,7 +289,7 @@ private fun WelcomeProgress(page: Int, onBack: (() -> Unit)? = null) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         if (onBack != null) BackButton(onBack)
-        else Box(Modifier.size(8.dp).background(WelcomeLilac, CircleShape))
+        else Box(Modifier.size(8.dp).background(WelcomeChampagne, CircleShape))
         Row(
             Modifier.weight(1f).semantics {
                 contentDescription = description
@@ -290,7 +299,7 @@ private fun WelcomeProgress(page: Int, onBack: (() -> Unit)? = null) {
         ) {
             repeat(2) { step ->
                 Box(Modifier.weight(1f).height(3.dp).background(
-                    if (step <= page) WelcomeLilac else Color.White.copy(alpha = 0.16f), CircleShape))
+                    if (step <= page) WelcomeChampagne else Color.White.copy(alpha = 0.16f), CircleShape))
             }
         }
         Text(if (page == PAGE_NAME) "01 / 02" else "02 / 02",
@@ -330,25 +339,40 @@ private fun FlowingTitle(text: String, reduceMotion: Boolean) {
     }
 }
 
-/** Three small paths, with cached brushes and no blur, bitmap, shader compilation or network art. */
+/** Bundled, bounded artwork: Coil decodes off the UI thread and reuses its memory cache. */
 @Composable
-private fun WelcomeRibbon(phase: () -> Float) {
-    Box(Modifier.fillMaxWidth().height(84.dp).drawWithCache {
-        val path = Path()
-        val brush = Brush.linearGradient(listOf(WelcomeCream.copy(alpha = 0.05f), WelcomeCream.copy(alpha = 0.5f), WelcomeLilac.copy(alpha = 0.25f)))
-        val stroke = Stroke(width = 1.5.dp.toPx())
-        onDrawBehind {
-            repeat(3) { line ->
-                val bend = (1f - phase()) * size.height * 0.13f
-                val center = size.height * 0.5f + line * 6.dp.toPx()
-                path.reset()
-                path.moveTo(0f, center)
-                path.cubicTo(size.width * 0.28f, center - 28.dp.toPx() + bend,
-                    size.width * 0.58f, center + 24.dp.toPx() - bend, size.width, center - 6.dp.toPx())
-                drawPath(path, brush, alpha = 1f - line * 0.28f, style = stroke)
-            }
+private fun WelcomeArtwork(
+    @DrawableRes artwork: Int,
+    phase: () -> Float,
+    portrait: Boolean = false,
+    compact: Boolean = false,
+) {
+    BoxWithConstraints(Modifier.fillMaxWidth().clearAndSetSemantics { }) {
+        val shape = RoundedCornerShape(28.dp)
+        Box(
+            Modifier.fillMaxWidth().height(
+                if (compact) { if (portrait) 112.dp else 128.dp }
+                else (maxWidth * 0.56f).coerceIn(140.dp, 210.dp),
+            )
+                .clip(shape).background(Color(0xFF07090A))
+                .border(1.dp, WelcomeChampagne.copy(alpha = 0.2f), shape),
+        ) {
+            AsyncImage(
+                model = artwork,
+                contentDescription = null,
+                contentScale = if (portrait) ContentScale.Fit else ContentScale.Crop,
+                modifier = Modifier.fillMaxSize().graphicsLayer {
+                    val progress = phase().coerceIn(0f, 1f)
+                    alpha = 0.65f + progress * 0.35f
+                    scaleX = 1.04f - progress * 0.04f
+                    scaleY = scaleX
+                },
+            )
+            Box(Modifier.fillMaxSize().background(Brush.verticalGradient(
+                listOf(Color.Transparent, Color.Black.copy(alpha = 0.18f)),
+            )))
         }
-    }.clearAndSetSemantics { })
+    }
 }
 
 @Composable
@@ -358,7 +382,7 @@ private fun NameField(value: String, onValueChange: (String) -> Unit, onDone: ()
     Box(
         Modifier.fillMaxWidth().heightIn(min = 64.dp).clip(RoundedCornerShape(20.dp))
             .background(Color.White.copy(alpha = 0.07f))
-            .border(1.dp, WelcomeLilac.copy(alpha = 0.28f), RoundedCornerShape(20.dp))
+            .border(1.dp, WelcomeChampagne.copy(alpha = 0.28f), RoundedCornerShape(20.dp))
             .padding(horizontal = 20.dp, vertical = 16.dp),
         contentAlignment = Alignment.CenterStart,
     ) {
@@ -366,7 +390,7 @@ private fun NameField(value: String, onValueChange: (String) -> Unit, onDone: ()
             color = WelcomeCream.copy(alpha = 0.5f), maxLines = 1, modifier = Modifier.clearAndSetSemantics { })
         BasicTextField(
             value, onValueChange, singleLine = true, textStyle = style,
-            cursorBrush = SolidColor(WelcomeLilac),
+            cursorBrush = SolidColor(WelcomeChampagne),
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words,
                 autoCorrectEnabled = false, imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(onNext = { onDone() }),
@@ -399,7 +423,7 @@ private fun PillButton(
     ) {
         if (leading != null) { leading(); Spacer(Modifier.width(10.dp)) }
         Text(label, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.W800,
-            color = if (primary) Color(0xFF21172E) else WelcomeCream,
+            color = if (primary) Color(0xFF151513) else WelcomeCream,
             textAlign = TextAlign.Center, modifier = Modifier.weight(1f))
     }
 }
@@ -421,7 +445,7 @@ private const val NAME_LIMIT = 40
 @Composable
 private fun OnboardingBackdrop() {
     Box(Modifier.fillMaxSize().drawWithCache {
-        val base = Brush.linearGradient(listOf(Color(0xFF101113), Color(0xFF1A1B20), Color(0xFF101113)),
+        val base = Brush.linearGradient(listOf(Color(0xFF090B0C), Color(0xFF171817), Color(0xFF090B0C)),
             start = Offset.Zero, end = Offset(size.width, size.height))
         val glow = Brush.radialGradient(listOf(WelcomeCream.copy(alpha = 0.06f), Color.Transparent),
             center = Offset(size.width * 0.9f, size.height * 0.26f), radius = size.maxDimension * 0.65f)

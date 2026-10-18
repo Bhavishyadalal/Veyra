@@ -1443,6 +1443,34 @@ fun SettingsScreen(
             }
 
             if (category == null || searching) {
+                val githubLinks = listOf(
+                    Triple(R.string.veyra_github_profile, R.string.veyra_github_profile_handle,
+                        "https://github.com/Bhavishyadalal"),
+                    Triple(R.string.veyra_github_source, R.string.veyra_github_source_path,
+                        "https://github.com/Bhavishyadalal/Veyra"),
+                    Triple(R.string.veyra_website_source, R.string.veyra_website_source_path,
+                        "https://github.com/Bhavishyadalal/Veyra-website"),
+                )
+                githubLinks.forEach { (titleRes, subtitleRes, url) ->
+                    val title = stringResource(titleRes)
+                    val subtitle = stringResource(subtitleRes)
+                    if (!searching || search.matches(title, subtitle, "github", "developer", "repository", "source", "code")) {
+                        Column(Modifier.padding(horizontal = GROUP_INSET, vertical = 4.dp)) {
+                            SettingsRow(
+                                icon = if (titleRes == R.string.veyra_github_profile) SettingsIcons.Account else SettingsIcons.Source,
+                                title = title,
+                                subtitle = subtitle,
+                                onClick = {
+                                    runCatching {
+                                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                                    }.onFailure {
+                                        Toast.makeText(context, context.getString(R.string.creator_link_unavailable), Toast.LENGTH_SHORT).show()
+                                    }
+                                },
+                            )
+                        }
+                    }
+                }
                 val creatorTitle = stringResource(R.string.creator_instagram)
                 if (!searching || search.matches(creatorTitle, "instagram", "bhavishya_dalal_", "creator")) {
                     Column(Modifier.padding(horizontal = GROUP_INSET, vertical = 12.dp)) {

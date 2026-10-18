@@ -27,7 +27,15 @@ This is the website source for local review and later deployment to your separat
 
 [Download the full-resolution regenerated gateway artwork](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Glass_Gateway_4.0.png)
 
-## Android — 0.1.1 Stable source
+## Android — 0.1.2 Stable source
+
+[Download updated Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.2_Stable.zip) · [SHA-256](Veyra_Android_Source_0.1.2_Stable.zip.sha256)
+
+Native welcome artwork, warm neutral welcome styling and searchable GitHub profile/app/website links. Extract the complete ZIP and open the Veyra folder in Android Studio. No APK is included. [Checks and Android build limitation](../verification/STABLE-0.1.2-RESULTS.md).
+
+The full website source is now available directly in [Bhavishyadalal/Veyra-website](https://github.com/Bhavishyadalal/Veyra-website), ready to clone and preview or import into Vercel later.
+
+## Previous Android — 0.1.1 Stable source
 
 [Download the Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.1_Stable.zip)
 

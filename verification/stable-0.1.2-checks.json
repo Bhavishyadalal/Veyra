@@ -1,0 +1,26 @@
+{
+  "revision": "0.1.2",
+  "focused_kotlin_tests": {
+    "passed": 50,
+    "failed": 0
+  },
+  "kotlin_syntax": {
+    "files": 4,
+    "errors": 0,
+    "scope": "PSI syntax only"
+  },
+  "aapt2_resource_compile": "passed",
+  "resources": {
+    "xml_files_parsed": 114,
+    "localized_string_entries_checked": 22619,
+    "xml_font_references_resolved": 8,
+    "errors": [],
+    "checks": "Static source/resource checks; not a native app runtime test."
+  },
+  "android_compile_and_full_unit_suite": "blocked by JitPack HTTP 403 before Kotlin compilation",
+  "apk_tasks_run": false,
+  "device_visual_gesture_and_performance_validation": "not_run",
+  "website_checkout_install_typecheck_build": "passed",
+  "website_production_browser_smoke": "passed",
+  "website_repository": "https://github.com/Bhavishyadalal/Veyra-website"
+}

@@ -1,3 +1,12 @@
+# Veyra 0.1.2 (welcome campaign and creator links)
+
+- Integrate the original glass portal and crystal-waveform campaign images into both welcome steps as small local WebP assets, decoded by the existing Coil loader.
+- Polish welcome's neutral/champagne palette, finite artwork reveal and clear optional account-linking copy. Keep keyboard-aware name entry, guest completion, RTL, large-font scrolling and reduced-motion support.
+- Add searchable Settings links to Bhavishyadalal's GitHub profile, Veyra app repository and Veyra-website source repository, using native icons and the existing link error handling.
+- Publish the complete website project in its separate GitHub repository. No website deployment or APK generation.
+- 50 focused Kotlin tests, resource audit, AAPT2 compilation and four-file syntax parsing pass. Full Android Kotlin compilation remains blocked by JitPack HTTP 403; on-device UI verification remains required. See verification/STABLE-0.1.2-RESULTS.md.
+- versionCode 15, stable versionName 0.1.2; package identity, signing and dependencies unchanged.
+
 # Veyra 0.1.1 (JioSaavn defaults and player refinement)
 
 - Enable JioSaavn on fresh installs and replace the old forced-off migration with a one-time enabled-default correction. Persist source state and the new marker together; preserve subsequent off/on choices, addons, source order, matching and quality gates.

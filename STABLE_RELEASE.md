@@ -1,3 +1,13 @@
+# Veyra 0.1.2 stable-series source update
+
+Version code 15, version name 0.1.2. Welcome now uses local campaign artwork and clearer optional account linking. Settings adds the owner's GitHub profile and app/website source links. Application identity, signing and existing music behavior remain.
+
+50 focused regressions and Android resource compilation pass. Full Android compilation remains blocked by JitPack HTTP 403, so this source delivery is not a verified installable release. No APK was generated or published. See [validation details](verification/STABLE-0.1.2-RESULTS.md).
+
+The reports below concern earlier revisions only.
+
+---
+
 # Veyra 0.1.1 stable source update
 
 Based on the supplied 0.1.0 Stable source. Version code 14, version name 0.1.1, no beta suffix. JioSaavn defaults/migration and player polish are updated; application identity and signing configuration are unchanged.
