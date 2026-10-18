@@ -203,4 +203,7 @@
     <string name="player_position">प्लेबैक स्थिति</string>
     <string name="player_volume">आवाज़</string>
     <string name="home_hero_subtitle">अपना अगला पसंदीदा गाना खोजें।</string>
+    <string name="home_show_banners">बैनर दिखाएँ</string>
+    <string name="home_show_tiles">टाइलें दिखाएँ</string>
+    <string name="home_page">%2$d में से पेज %1$d</string>
 </resources>

@@ -1,0 +1,29 @@
+{
+  "revision": "0.1.0-beta11",
+  "focused_kotlin_tests": {
+    "passed": 42,
+    "failed": 0,
+    "new_paging_tests": 6
+  },
+  "kotlin_syntax": {
+    "files": 52,
+    "errors": 0,
+    "scope": "changed/new since beta1; PSI parsing only"
+  },
+  "resources": {
+    "xml_documents": 114,
+    "localized_entries": 22613,
+    "font_references": 8,
+    "errors": 0,
+    "home_label_catalogs": 18
+  },
+  "online_design_references": [
+    "Material carousel guidance",
+    "AndroidX Pager samples",
+    "Material motion"
+  ],
+  "android_build": "blocked_by_jitpack_io_HTTP_403_before_Android_Kotlin_compilation",
+  "apk": "not_built",
+  "device_visual_review_and_performance": "not_run",
+  "git_whitespace": "passed"
+}

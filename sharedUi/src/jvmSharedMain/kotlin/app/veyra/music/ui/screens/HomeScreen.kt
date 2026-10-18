@@ -85,7 +85,7 @@ import app.veyra.music.ui.components.SearchPlayingBars
 import app.veyra.music.ui.components.SignInBanner
 import app.veyra.music.ui.components.FeedShimmerHost
 import app.veyra.music.ui.components.feedMoreSkeleton
-import app.veyra.music.ui.components.feedSkeleton
+import app.veyra.music.ui.components.homeFeedSkeleton
 import app.veyra.music.ui.components.recentlyPlayedSkeleton
 import app.veyra.music.ui.components.heroCardWidth
 import app.veyra.music.ui.components.thumbnailBorder
@@ -97,7 +97,7 @@ private val HOME_TITLE_LIFT = 28.dp
 private const val RECENTS_TITLE = "Recents"
 private const val RECENT_TRACKS_PER_COLUMN = 4
 
-private fun List<ShelfItem>.playingItemMatcher(song: Song?): (ShelfItem) -> Boolean {
+internal fun List<ShelfItem>.playingItemMatcher(song: Song?): (ShelfItem) -> Boolean {
     song ?: return { false }
     // The card that was played, when the shelf holds it, and only that one —
     // see [app.veyra.music.data.model.playingRowMatcher], which rows use.
@@ -181,12 +181,10 @@ fun HomeScreen(
                     is UiState.Loading -> {
                         if (recentlyPlayedLoading) {
                             recentlyPlayedSkeleton(listLayout = recentsViewType == LibraryViewType.LIST)
-                            // Recents owns the leading layout while its request is
-                            // pending, so the feed behind it starts with ordinary
-                            // shelf placeholders rather than another hero card.
-                            feedSkeleton(firstIsHero = false)
+                            // Recents reserves its own slot; the featured collection stays below it.
+                            homeFeedSkeleton(featured = leadHero)
                         } else {
-                            feedSkeleton(firstIsHero = leadHero)
+                            homeFeedSkeleton(featured = leadHero)
                         }
                     }
                     is UiState.Error -> item {
@@ -196,16 +194,13 @@ fun HomeScreen(
                         if (recentlyPlayedLoading) {
                             recentlyPlayedSkeleton(listLayout = recentsViewType == LibraryViewType.LIST)
                         }
-                        // The loading skeleton already owns the hero slot. Until
-                        // Recently Played lands, every real shelf must retain its
-                        // compact-card layout instead of briefly becoming a hero.
                         itemsIndexedShelves(
                             shelves = state.data,
                             onItemClick = onItemClick,
                             onItemLongPress = onItemLongPress,
                             currentSong = currentSong,
                             isPlaying = isPlaying,
-                            firstIsHero = leadHero && !recentlyPlayedLoading,
+                            firstIsHero = leadHero,
                             recentsViewType = recentsViewType,
                             onRecentsViewTypeToggle = {
                                 AppUi.host.setHomeRecentsViewType(
@@ -256,8 +251,8 @@ fun HomeScreen(
 }
 
 /**
- * Recents mirrors the artist page's top-tracks pager. Any other lead shelf keeps
- * Apple's full-bleed treatment, while the remaining shelves use square cards.
+ * Recents retains its saved presentation. Recommendations alternate a featured
+ * carousel, three-cover tile pages and compact shelves without moving on history arrival.
  */
 private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexedShelves(
     shelves: List<HomeShelf>,
@@ -269,11 +264,14 @@ private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexedShelves(
     recentsViewType: LibraryViewType,
     onRecentsViewTypeToggle: () -> Unit,
 ) {
-    shelves.forEachIndexed { index, shelf ->
+    var recommendationIndex = 0
+    shelves.forEach { shelf ->
+        val recent = shelf.title.equals(RECENTS_TITLE, ignoreCase = true)
+        val recommendation = if (recent) -1 else recommendationIndex++
         // Recent history can arrive after the feed. Its insertion must not recreate every shelf.
         item(key = "home:shelf:${shelf.title.lowercase(Locale.ROOT)}", contentType = "home:shelf") {
             val openItem: (ShelfItem) -> Unit = { item -> onItemClick(item, shelf.title) }
-            if (index == 0 && shelf.title.equals(RECENTS_TITLE, ignoreCase = true)) {
+            if (recent) {
                 RecentShelf(
                     shelf = shelf,
                     onItemClick = openItem,
@@ -283,9 +281,10 @@ private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexedShelves(
                     viewType = recentsViewType,
                     onViewTypeToggle = onRecentsViewTypeToggle,
                 )
-            } else if (index == 0 && firstIsHero) {
-                HeroShelf(
+            } else if (firstIsHero && (recommendation == 0 || recommendation % 3 == 1)) {
+                HomeCollection(
                     shelf = shelf,
+                    featured = recommendation == 0,
                     onItemClick = openItem,
                     onItemLongPress = onItemLongPress,
                     currentSong = currentSong,
@@ -462,6 +461,7 @@ fun CompactTrackRow(
     onLongPress: (() -> Unit)?,
     isCurrent: Boolean = false,
     isPlaying: Boolean = false,
+    titleMaxLines: Int = 1,
 ) {
     Row(
         modifier = Modifier
@@ -490,7 +490,7 @@ fun CompactTrackRow(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
                 color = if (isCurrent) PlayingAccent else MaterialTheme.colorScheme.onBackground,
-                maxLines = 1,
+                maxLines = titleMaxLines,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
@@ -549,10 +549,15 @@ private fun HomeTitle(title: String, modifier: Modifier = Modifier) {
  *
  * [onShowAll] is only ever set on Library, whose rows stop at five cards
  * rather than running the shelf's whole length — see [LibraryGridShelf].
- * Home and Explore never pass it, so their heading is unchanged.
+ * Home can supply a presentation toggle through [trailing].
  */
 @Composable
-internal fun SectionHeader(title: String, subtitle: String = "", onShowAll: (() -> Unit)? = null) {
+internal fun SectionHeader(
+    title: String,
+    subtitle: String = "",
+    onShowAll: (() -> Unit)? = null,
+    trailing: (@Composable () -> Unit)? = null,
+) {
     val displayTitle = localizeShelfTitle(title)
     val displaySubtitle = localizeShelfSubtitle(subtitle)
     Row(
@@ -580,7 +585,10 @@ internal fun SectionHeader(title: String, subtitle: String = "", onShowAll: (() 
                 )
             }
         }
-        if (onShowAll != null) {
+        if (trailing != null) {
+            Spacer(Modifier.width(8.dp))
+            trailing()
+        } else if (onShowAll != null) {
             Text(
                 text = stringResource(Res.string.show_all),
                 style = MaterialTheme.typography.titleSmall,
@@ -760,45 +768,6 @@ internal fun localizeCardSubtitle(subtitle: String): String {
         }
     }
     return localizedParts.joinToString(delimiter)
-}
-
-@Composable
-private fun HeroShelf(
-    shelf: HomeShelf,
-    onItemClick: (ShelfItem) -> Unit,
-    onItemLongPress: ((ShelfItem) -> Unit)? = null,
-    currentSong: Song? = null,
-    isPlaying: Boolean = false,
-) {
-    Column(Modifier.padding(bottom = 26.dp)) {
-        SectionHeader(shelf.title, shelf.subtitle)
-        val isCurrentItem = remember(shelf.items, currentSong) {
-            shelf.items.playingItemMatcher(currentSong)
-        }
-        // Measured rather than taken as a share of the parent, because the card
-        // has a ceiling as well as a fraction — see [heroCardWidth]. A fixed
-        // width is also the only one of the two the aspect ratio below can turn
-        // into a height, so the card keeps its shape however it was arrived at.
-        BoxWithConstraints {
-            val cardWidth = heroCardWidth(maxWidth)
-            ShelfRow(
-                state = rememberLazyListState(),
-                contentPadding = PaddingValues(horizontal = PAGE_GUTTER),
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
-            ) {
-                items(shelf.items) { item ->
-                    HeroCard(
-                        item = item,
-                        onClick = { onItemClick(item) },
-                        onLongPress = onItemLongPress?.let { { it(item) } },
-                        modifier = Modifier.width(cardWidth),
-                        isCurrent = isCurrentItem(item),
-                        isPlaying = isCurrentItem(item) && isPlaying,
-                    )
-                }
-            }
-        }
-    }
 }
 
 /** Big card: artwork with the caption laid over a scrim, as on Listen Now. */

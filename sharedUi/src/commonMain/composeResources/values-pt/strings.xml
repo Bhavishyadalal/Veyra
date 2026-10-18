@@ -203,4 +203,7 @@
     <string name="player_position">Posição de reprodução</string>
     <string name="player_volume">Volume</string>
     <string name="home_hero_subtitle">Descubra sua próxima música favorita.</string>
+    <string name="home_show_banners">Mostrar banners</string>
+    <string name="home_show_tiles">Mostrar blocos</string>
+    <string name="home_page">Página %1$d de %2$d</string>
 </resources>

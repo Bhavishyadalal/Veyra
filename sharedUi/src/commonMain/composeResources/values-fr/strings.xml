@@ -203,4 +203,7 @@
     <string name="player_position">Position de lecture</string>
     <string name="player_volume">Volume</string>
     <string name="home_hero_subtitle">Votre prochain coup de cœur vous attend.</string>
+    <string name="home_show_banners">Afficher les bannières</string>
+    <string name="home_show_tiles">Afficher les vignettes</string>
+    <string name="home_page">Page %1$d sur %2$d</string>
 </resources>

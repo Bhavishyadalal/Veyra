@@ -203,4 +203,7 @@
     <string name="player_position">Позиция воспроизведения</string>
     <string name="player_volume">Громкость</string>
     <string name="home_hero_subtitle">Найдите свою новую любимую песню.</string>
+    <string name="home_show_banners">Показать баннеры</string>
+    <string name="home_show_tiles">Показать плитки</string>
+    <string name="home_page">Страница %1$d из %2$d</string>
 </resources>

@@ -203,4 +203,7 @@
     <string name="player_position">Oynatma konumu</string>
     <string name="player_volume">Ses düzeyi</string>
     <string name="home_hero_subtitle">Bir sonraki favorini keşfet.</string>
+    <string name="home_show_banners">Afişleri göster</string>
+    <string name="home_show_tiles">Kutucukları göster</string>
+    <string name="home_page">%2$d sayfadan %1$d. sayfa</string>
 </resources>

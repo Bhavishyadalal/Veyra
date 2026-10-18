@@ -203,4 +203,7 @@
     <string name="player_position">Posisi pemutaran</string>
     <string name="player_volume">Volume</string>
     <string name="home_hero_subtitle">Temukan lagu favorit berikutnya.</string>
+    <string name="home_show_banners">Tampilkan banner</string>
+    <string name="home_show_tiles">Tampilkan ubin</string>
+    <string name="home_page">Halaman %1$d dari %2$d</string>
 </resources>

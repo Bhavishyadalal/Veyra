@@ -203,4 +203,7 @@
     <string name="player_position">מיקום ההשמעה</string>
     <string name="player_volume">עוצמת קול</string>
     <string name="home_hero_subtitle">גלו את השיר האהוב הבא שלכם.</string>
+    <string name="home_show_banners">הצגת כרזות</string>
+    <string name="home_show_tiles">הצגת אריחים</string>
+    <string name="home_page">עמוד %1$d מתוך %2$d</string>
 </resources>

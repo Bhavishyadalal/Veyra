@@ -203,4 +203,7 @@
     <string name="player_position">Pozycja odtwarzania</string>
     <string name="player_volume">Głośność</string>
     <string name="home_hero_subtitle">Odkryj swój kolejny ulubiony utwór.</string>
+    <string name="home_show_banners">Pokaż banery</string>
+    <string name="home_show_tiles">Pokaż kafelki</string>
+    <string name="home_page">Strona %1$d z %2$d</string>
 </resources>

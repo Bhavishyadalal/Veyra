@@ -1,3 +1,12 @@
+# Veyra 0.1.0-beta11 (Home banners and cover tiles)
+
+- Alternate a featured banner carousel, three-cover mosaic pages and compact shelves; preserve Recently Played's chosen layout and stable recommendation positions when history loads.
+- Add a featured banner/tile switch with reading-direction-aware sliding/fading transitions and position retention, manual paging arrows and localized page announcements.
+- Preserve every shelf item, tap/hold/context actions and current-playback indicators. Reuse existing image sizes/cache, typography, colors and rounded artwork treatment.
+- Use readable rows on narrow screens or with large text, 48dp controls and reduced-animation handling. Animate page scale/opacity in graphics layers; no automatic carousel timer or new dependency.
+- Add six paging regression tests; 42 focused tests pass. Full Android build remains blocked by JitPack HTTP 403. Device visual review and profiling remain required; see `verification/BETA11-RESULTS.md`.
+- Retain beta10 welcome/Explore caching and the supplied beta8/beta9 additions. Phone-only source project; versionCode 11.
+
 # Veyra 0.1.0-beta10 (flowing welcome and persistent Explore artwork)
 
 - Reworked first-install onboarding with a flowing letter wordmark, staggered localized headlines, a small animated ribbon, progress treatment and coordinated page transitions.

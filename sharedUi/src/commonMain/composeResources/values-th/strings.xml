@@ -203,4 +203,7 @@
     <string name="player_position">ตำแหน่งการเล่น</string>
     <string name="player_volume">ระดับเสียง</string>
     <string name="home_hero_subtitle">ค้นพบเพลงโปรดเพลงถัดไปของคุณ</string>
+    <string name="home_show_banners">แสดงแบนเนอร์</string>
+    <string name="home_show_tiles">แสดงไทล์</string>
+    <string name="home_page">หน้า %1$d จาก %2$d</string>
 </resources>

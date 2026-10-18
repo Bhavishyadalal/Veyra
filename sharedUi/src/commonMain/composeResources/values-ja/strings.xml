@@ -203,4 +203,7 @@
     <string name="player_position">再生位置</string>
     <string name="player_volume">音量</string>
     <string name="home_hero_subtitle">次のお気に入りを見つけよう。</string>
+    <string name="home_show_banners">バナーを表示</string>
+    <string name="home_show_tiles">タイルを表示</string>
+    <string name="home_page">%2$dページ中%1$dページ</string>
 </resources>

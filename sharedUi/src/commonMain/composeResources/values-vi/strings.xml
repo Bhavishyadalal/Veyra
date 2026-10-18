@@ -203,4 +203,7 @@
     <string name="player_position">Vị trí phát</string>
     <string name="player_volume">Âm lượng</string>
     <string name="home_hero_subtitle">Khám phá bài hát yêu thích tiếp theo.</string>
+    <string name="home_show_banners">Hiển thị biểu ngữ</string>
+    <string name="home_show_tiles">Hiển thị ô</string>
+    <string name="home_page">Trang %1$d trên %2$d</string>
 </resources>

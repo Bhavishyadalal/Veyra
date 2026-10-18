@@ -203,4 +203,7 @@
     <string name="player_position">播放进度</string>
     <string name="player_volume">音量</string>
     <string name="home_hero_subtitle">发现下一首心动好歌。</string>
+    <string name="home_show_banners">显示横幅</string>
+    <string name="home_show_tiles">显示卡片</string>
+    <string name="home_page">第 %1$d 页，共 %2$d 页</string>
 </resources>
