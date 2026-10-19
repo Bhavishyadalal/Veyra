@@ -1,3 +1,7 @@
+# New preview source · 0.1.5-beta1
+
+[Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip). Includes the Veyra backend migration. Full Android compilation and deployed-server verification remain pending; [read the verification limits](../verification/backend-migration/README.md). No APK is bundled.
+
 # Veyra source downloads
 
 ## Android preview — 0.1.4-beta1

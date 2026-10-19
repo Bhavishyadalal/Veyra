@@ -33,9 +33,13 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
-## Preview development: 0.1.4-beta1
+## Veyra-owned backend migration
 
-This branch contains the **preview beta**, not a replacement for stable 0.1.3. Build version is `0.1.4-beta1`, code 17. Stable 0.1.3/code 16 remains on [main](https://github.com/Bhavishyadalal/Veyra/tree/main), with its original source ZIP unchanged.
+Room synchronization, invites and presence now target `https://veyra-listen-together.onrender.com`. Old managed server preferences and room tokens migrate without contacting the retired service; intentional custom servers remain. [Migration checks and remaining build/device verification](verification/backend-migration/README.md). Source candidates are separate from a published stable APK.
+
+## Preview development: 0.1.5-beta1
+
+This branch contains the **preview beta**, not a replacement for stable 0.1.3. Build version is `0.1.5-beta1`, code 18. Stable 0.1.3/code 16 remains on [main](https://github.com/Bhavishyadalal/Veyra/tree/main), with its original source ZIP unchanged.
 
 **Build correction:** restored the missing `java.util.Locale` import used by subtitle localization. No other application source is changed by this correction. The separate app-test/sharedUi visibility issue remains unresolved; see [BUILD_FIX_BETA1.md](BUILD_FIX_BETA1.md) for the exact fix, reported external build outcome and local validation limits.
 
@@ -45,7 +49,7 @@ The player now has a framed bold play/pause control, consistent pressed/selected
 
 The settings refinement preserves Google/YouTube Music sign-in, account/channel switching, sign-out and optional integrations. The account entry has no local username/password form. Last.fm's existing optional credentials are shown only in the explicitly labeled Last.fm preview. The earlier generic account/password illustration was misleading and has been removed.
 
-[Browse corrected component previews](design/settings-preview/README.md) · [Preservation audit and checks](verification/PREVIEW-0.1.4-beta1-RESULTS.md) · [Download preview Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.4-beta1/downloads/Veyra_Android_Source_0.1.4-beta1.zip)
+[Browse corrected component previews](design/settings-preview/README.md) · [Preservation audit and checks](verification/PREVIEW-0.1.4-beta1-RESULTS.md) · [Download preview Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip)
 
 Native component checks pass; full Android compilation remains blocked by NewPipe dependency access. This is preview source, not a verified APK or stable release. Use the `devDebug` flavor for the existing separate Veyra Dev application identity; package IDs and signing configuration have not been changed.
 

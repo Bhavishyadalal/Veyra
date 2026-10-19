@@ -1,5 +1,6 @@
 package app.veyra.music.data.presence
 
+import app.veyra.music.data.backend.VeyraBackend
 import app.veyra.music.data.DebugLog
 import app.veyra.music.data.Http
 import kotlinx.coroutines.CoroutineScope
@@ -115,7 +116,7 @@ class Presence(
     }
 
     companion object {
-        const val ENDPOINT = "https://api.bitchord.kushagrasingh.in/api/presence"
+        const val ENDPOINT = VeyraBackend.PRESENCE_ENDPOINT
         private const val TAG = "Presence"
         private const val DEFAULT_INTERVAL_SEC = 300
         private const val MIN_INTERVAL_SEC = 60

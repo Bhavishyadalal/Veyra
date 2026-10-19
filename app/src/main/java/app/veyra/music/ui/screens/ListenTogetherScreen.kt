@@ -85,6 +85,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.veyra.music.R
+import app.veyra.music.data.backend.VeyraBackend
 import app.veyra.music.data.listentogether.JamInviteLink
 import app.veyra.music.data.listentogether.ListenTogether
 import app.veyra.music.data.listentogether.PartyActivity
@@ -244,6 +245,11 @@ fun ListenTogetherScreen(
     // A link tap opens the preview for guests and account profiles alike.
     LaunchedEffect(inviteCode, inviteServer) {
         val code = inviteCode ?: return@LaunchedEffect
+        if (VeyraBackend.isRetired(inviteServer)) {
+            failure = VeyraBackend.EXPIRED_INVITE_MESSAGE
+            onInviteHandled()
+            return@LaunchedEffect
+        }
         if (busy) return@LaunchedEffect
 
         val activeServer = (ListenTogether.activePartyServerBase() ?: ListenTogether.effectiveIdleServerBase()).trim().trimEnd('/')
