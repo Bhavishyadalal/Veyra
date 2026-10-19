@@ -45,10 +45,16 @@ Future backend edits should be developed and deployed in `Veyra-backend` first,
 then mirrored here with a new commit reference and refreshed manifest. This is a
 snapshot, not an automatic cross-repository deployment pipeline.
 
-## Android tracks
+## Android tracks and downloads
 
-This synchronization keeps stable Android **0.1.5 / code 20** unchanged. The
-**0.1.6-beta1 / code 21** Android work remains on `preview/0.1.6-beta1`.
-Both Android tracks already target the same Veyra service. No APK or release is
-created by this backend source update. The stable source ZIP is refreshed to include
-this same backend snapshot; historical source archives are preserved.
+Current stable Android **0.1.5 / code 20** is on `main`. Current preview
+**0.1.6-beta1 / code 21** is on `preview/0.1.6-beta1`. Older branches retain their
+own version and UI; only their backend/client migration and archive maintenance
+are updated. Do not promote preview UI to stable as part of backend synchronization.
+
+All six app branch tips carry the same backend snapshot and four retained source
+archives: current stable plus the latest three previews. Each archive is generated
+from its own Android source branch. [Downloads and retention](../downloads/README.md).
+
+Archive removal here does not purge Git history or remove GitHub Releases. No
+force pushes, deleted branches/tags, APK builds or Render deployment are involved.
