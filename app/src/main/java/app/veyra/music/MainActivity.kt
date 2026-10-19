@@ -729,6 +729,11 @@ private fun VeyraApp(
     val homeLoadingMore by viewModel.homeLoadingMore.collectAsStateWithLifecycle()
     val homePageError by viewModel.homePageError.collectAsStateWithLifecycle()
     val homeRecentlyPlayedLoading by viewModel.homeRecentlyPlayedLoading.collectAsStateWithLifecycle()
+    val homeOnline by viewModel.homeOnline.collectAsStateWithLifecycle()
+    val homeShowingSaved by viewModel.homeShowingSaved.collectAsStateWithLifecycle()
+    val homeUpdating by viewModel.homeUpdating.collectAsStateWithLifecycle()
+    val homeNotice by viewModel.homeNotice.collectAsStateWithLifecycle()
+    val homeSections by viewModel.homeSections.collectAsStateWithLifecycle()
 
     // The top bar's icon is the quiet, always-there nudge; this is the
     // once-per-launch popup version of the same news. `updateDialogShown`
@@ -3075,7 +3080,21 @@ private fun VeyraApp(
                                 title = stringResource(R.string.listen_now),
                                 signedIn = signedIn,
                                 onSignIn = { webSession = WebSessionMode.SIGN_IN },
-                                onItemClick = { item, shelfTitle ->
+                                onItemClick = homeItem@{ item, shelfTitle ->
+                                    if (!homeOnline) {
+                                        val id = item.videoId
+                                        val savedUri = id?.let { Downloads.saved.value[it] }
+                                        if (savedUri == null) {
+                                            showQueueNotice(context.getString(R.string.home_offline_track_unavailable))
+                                        } else scope.launch {
+                                            val songs = Downloads.getDownloadedSongs(context)
+                                            val index = songs.indexOfFirst { it.videoId == id || it.localPath == savedUri }
+                                            if (index >= 0) playFrom(songs, index,
+                                                QueueSource(context.getString(R.string.downloads), PlaybackSourceType.BROWSE, "local:downloads"))
+                                            else showQueueNotice(context.getString(R.string.home_offline_track_unavailable))
+                                        }
+                                        return@homeItem
+                                    }
                                     val song = shelfSong(item)
                                     // Hoisted because ShelfItem lives in :shared, and
                                     // Kotlin will not smart-cast a public nullable
@@ -3105,6 +3124,20 @@ private fun VeyraApp(
                                 loadMoreError = homePageError,
                                 onRetryMore = viewModel::retryMoreHome,
                                 recentlyPlayedLoading = homeRecentlyPlayedLoading,
+                                offline = !homeOnline,
+                                showingSaved = homeShowingSaved,
+                                updating = homeUpdating,
+                                homeNotice = homeNotice,
+                                homeSections = homeSections,
+                                onMoveHomeSection = viewModel::moveHomeSection,
+                                onHomeSectionVisible = viewModel::setHomeSectionVisible,
+                                onResetHomeSections = viewModel::resetHomeSections,
+                                onOpenDownloads = {
+                                    onLibraryItemClick(ShelfItem(context.getString(R.string.downloads), "", null, null, "local:downloads"))
+                                },
+                                onOpenLocalMusic = {
+                                    onLibraryItemClick(ShelfItem(context.getString(R.string.local_music), "", null, null, "local:all"))
+                                },
                             )
                             TAB_EXPLORE -> AnimatedContent(
                                 targetState = selectedMoodGenre,

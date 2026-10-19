@@ -218,4 +218,24 @@
     <string name="home_empty_title">Your next favorite is out there</string>
     <string name="home_empty_subtitle">No recommendations arrived yet. Refresh to try again.</string>
     <string name="home_refresh">Refresh recommendations</string>
+    <string name="home_your_space">Your space</string>
+    <string name="home_customize">Customize Home</string>
+    <string name="home_offline_title">You’re offline</string>
+    <string name="home_offline_subtitle">Listen from Downloads or Local Music. Saved recommendations need a connection unless the song is downloaded.</string>
+    <string name="home_saved_title">Your saved Home</string>
+    <string name="home_saved_subtitle">Your previous Home stays available while we try to refresh it.</string>
+    <string name="home_refreshing_title">Refreshing Home…</string>
+    <string name="home_refresh_failed">Home needs attention</string>
+    <string name="home_open_downloads">Downloads</string>
+    <string name="home_open_local_music">Local Music</string>
+    <string name="home_all_sections_hidden">Your sections are hidden</string>
+    <string name="home_all_sections_hidden_subtitle">Show a section or restore the default order in Customize Home.</string>
+    <string name="home_customize_subtitle">Move sections up or down and choose what appears. Changes are saved for this listener.</string>
+    <string name="home_reset_sections">Restore default layout</string>
+    <string name="home_editor_done">Done</string>
+    <string name="home_move_section_up">Move %1$s up</string>
+    <string name="home_move_section_down">Move %1$s down</string>
+    <string name="home_show_section">Show %1$s</string>
+    <string name="home_section_shown">Shown on Home</string>
+    <string name="home_section_hidden">Hidden from Home</string>
 </resources>

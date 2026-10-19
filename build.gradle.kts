@@ -11,8 +11,8 @@ buildscript {
     }
 }
 /* Phone version. Keep beta markers until publishing a signed stable release. */
-extra["veyraVersionCode"] = 20
-extra["veyraVersionName"] = "0.1.5"
+extra["veyraVersionCode"] = 21
+extra["veyraVersionName"] = "0.1.6"
 
 /*
  * Bump this by hand before cutting each sideloaded test build ("beta2",
@@ -30,7 +30,7 @@ extra["veyraVersionName"] = "0.1.5"
  * so it is the one place to get right.
  *
  */
-extra["veyraBetaSuffix"] = ""
+extra["veyraBetaSuffix"] = "beta1"
 
 plugins {
     id("com.android.application") version "8.10.1" apply false

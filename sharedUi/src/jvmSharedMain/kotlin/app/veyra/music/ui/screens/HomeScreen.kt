@@ -78,6 +78,7 @@ import app.veyra.music.ui.icons.VeyraIcons
 import coil3.compose.AsyncImage
 import app.veyra.music.data.model.CARD_ART_PX
 import app.veyra.music.data.model.HEADER_ART_PX
+import app.veyra.music.data.home.HomeSectionOption
 import app.veyra.music.data.model.HomeShelf
 import app.veyra.music.data.model.ROW_ART_PX
 import app.veyra.music.data.model.ShelfItem
@@ -154,10 +155,31 @@ fun HomeScreen(
     leadHero: Boolean = true,
     currentSong: Song? = null,
     isPlaying: Boolean = false,
+    offline: Boolean = false,
+    showingSaved: Boolean = false,
+    updating: Boolean = false,
+    homeNotice: String? = null,
+    homeSections: List<HomeSectionOption> = emptyList(),
+    onMoveHomeSection: ((String, Int) -> Unit)? = null,
+    onHomeSectionVisible: ((String, Boolean) -> Unit)? = null,
+    onResetHomeSections: (() -> Unit)? = null,
+    onOpenDownloads: (() -> Unit)? = null,
+    onOpenLocalMusic: (() -> Unit)? = null,
 ) {
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
+    val homeReducedMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+    var editingHome by rememberSaveable { mutableStateOf(false) }
+    val customizable = onMoveHomeSection != null && onHomeSectionVisible != null && onResetHomeSections != null
+    val displayState = if (offline && state is UiState.Loading) UiState.Success(emptyList<HomeShelf>()) else state
+    if (editingHome && customizable) HomeSectionEditor(
+        sections = homeSections,
+        onMove = { id, offset -> onMoveHomeSection?.invoke(id, offset) },
+        onVisible = { id, visible -> onHomeSectionVisible?.invoke(id, visible) },
+        onReset = { onResetHomeSections?.invoke() },
+        onDismiss = { editingHome = false },
+    )
 
-    FeedShimmerHost(enabled = state is UiState.Loading || recentlyPlayedLoading || loadingMore) {
+    FeedShimmerHost(enabled = !offline && (displayState is UiState.Loading || recentlyPlayedLoading || loadingMore)) {
         PullToRefresh(
             refreshing = refreshing,
             onRefresh = onRefresh,
@@ -181,6 +203,13 @@ fun HomeScreen(
                 if (title != null) {
                     item(key = "home:heading", contentType = "heading") { HomeTitle(title) }
                 }
+                if (customizable || offline || showingSaved || updating || homeNotice != null) {
+                    item(key = "home:experience", contentType = "home:experience") {
+                        HomeExperienceHeader(offline, showingSaved, updating, homeNotice, homeSections,
+                            if (customizable) ({ editingHome = true }) else null,
+                            onOpenDownloads, onOpenLocalMusic, reducedMotion = homeReducedMotion)
+                    }
+                }
                 if (!signedIn && onSignIn != null) {
                     item(key = "home:account", contentType = "account") {
                         HomeAccountPrompt(
@@ -190,9 +219,9 @@ fun HomeScreen(
                         ) { Image(painterResource(Res.drawable.ic_google_g), null, Modifier.size(28.dp)) }
                     }
                 }
-                when (state) {
+                when (val state = displayState) {
                     is UiState.Loading -> {
-                        if (recentlyPlayedLoading) {
+                        if (recentlyPlayedLoading && !offline) {
                             recentlyPlayedSkeleton(listLayout = recentsViewType == LibraryViewType.LIST)
                             // Recents reserves its own slot; the featured collection stays below it.
                             homeFeedSkeleton(featured = leadHero)
@@ -204,10 +233,14 @@ fun HomeScreen(
                         MessageState(state.message, actionLabel = stringResource(Res.string.retry), onAction = onRetry)
                     }
                     is UiState.Success -> {
-                        if (recentlyPlayedLoading) {
+                        if (recentlyPlayedLoading && !offline) {
                             recentlyPlayedSkeleton(listLayout = recentsViewType == LibraryViewType.LIST)
                         }
-                        if (!recentlyPlayedLoading && !loadingMore && loadMoreError == null && state.data.all { it.items.isEmpty() }) {
+                        val allHidden = homeSections.isNotEmpty() && homeSections.none { it.visible }
+                        if (allHidden && customizable) item(key = "home:hidden", contentType = "message") {
+                            HomeHiddenSectionsNotice { editingHome = true }
+                        }
+                        if (!offline && !allHidden && !recentlyPlayedLoading && !loadingMore && loadMoreError == null && state.data.all { it.items.isEmpty() }) {
                             item(key = "home:empty", contentType = "message") {
                                 HomeEmptyContent(stringResource(Res.string.home_empty_title),
                                     stringResource(Res.string.home_empty_subtitle), stringResource(Res.string.home_refresh),
@@ -232,7 +265,7 @@ fun HomeScreen(
                                 )
                             },
                         )
-                        if (loadingMore) feedMoreSkeleton()
+                        if (loadingMore && !offline) feedMoreSkeleton()
                         if (loadMoreError != null) {
                             item(key = "home:page-error", contentType = "message") {
                                 Column(Modifier.fillMaxWidth().padding(horizontal = PAGE_GUTTER, vertical = 12.dp)) {
@@ -250,7 +283,7 @@ fun HomeScreen(
         }
     }
 
-    if (onLoadMore != null && state is UiState.Success) {
+    if (!offline && onLoadMore != null && state is UiState.Success && state.data.isNotEmpty()) {
         val loadMore by rememberUpdatedState(onLoadMore)
         // Re-checked on every layout change, rather than on the rising edge of
         // "the tail is in view". A page that appends only a shelf or two leaves

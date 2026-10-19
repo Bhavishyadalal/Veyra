@@ -4,7 +4,7 @@
 
 # Veyra
 
-> **Stable source: 0.1.5, code 20.** Includes the promoted preview Home, player and Settings refinements. [Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.5_Stable.zip) · [Separate preview 0.1.5-beta1](https://github.com/Bhavishyadalal/Veyra/tree/preview/0.1.5-beta1) · [Verification and limits](verification/backend-migration/README.md).
+> **Preview: 0.1.6-beta1, code 21.** Saved Home on reopening, customizable sections and offline shortcuts. [Source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.6-beta1/downloads/Veyra_Android_Source_0.1.6-beta1.zip) · [Verification](verification/HOME-0.1.6-beta1-RESULTS.md). Stable 0.1.5/code 20 remains on main.
 
 A personal Android music player with Manrope typography, selectable launcher styles and a dark listening interface.
 
@@ -39,7 +39,13 @@ APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for 
 
 Both stable and preview use the same backend. [Configure your external 12-minute cron job](docs/RENDER_KEEPALIVE.md), including its exact URL, method, timeout and expected response. The backend's existing GitHub schedule remains available as a fallback. No app-side background timer is required.
 
-## Latest update: 0.1.5 — Veyra-owned Listen Together
+## Latest preview: 0.1.6-beta1 — Home ready sooner
+
+Restore a previously loaded Home before fetching fresh shelves, keep it visible during refresh/failure, and customize section order/visibility per account/channel. Offline Home provides direct access to existing Downloads and Local Music; cached online-only items are clearly distinguished from downloaded songs. A first successful online load is required to populate the snapshot. Images use existing Coil caching and fallbacks; music is not downloaded automatically.
+
+[Release notes](RELEASE_NOTES_0.1.6-beta1.md) · [Native component review](design/home016-preview/README.md) · [Checks and device checklist](verification/HOME-0.1.6-beta1-RESULTS.md). No APK or backend deployment is generated here.
+
+## Previous stable: 0.1.5 — Veyra-owned Listen Together
 
 Rooms, invite links and app presence now use **https://veyra-listen-together.onrender.com**. Saved old managed server addresses migrate safely; old membership tokens are discarded without being sent to another service. Intentional custom servers, guest listening and optional Google profiles remain supported. Old-service rooms require a new invite.
 

@@ -1,5 +1,12 @@
 # Veyra source downloads
 
+## Latest preview — 0.1.6-beta1
+
+[Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.6-beta1/downloads/Veyra_Android_Source_0.1.6-beta1.zip) · [SHA-256](Veyra_Android_Source_0.1.6-beta1.zip.sha256)
+
+Previously loaded Home restores before a quiet refresh; sections can be moved/hidden/reset; offline Home exposes Downloads and Local Music. Per-listener cache/layout persistence, existing image fallbacks and guarded offline downloaded-track playback. No APK included. [Current checks and limitations](../verification/HOME-0.1.6-beta1-RESULTS.md). Stable 0.1.5 remains on main.
+
+
 Latest stable and preview packages include the [external cron setup guide](../docs/RENDER_KEEPALIVE.md). Both use the same backend and its 12-minute keep-alive support.
 
 ## Android — 0.1.5 Stable source

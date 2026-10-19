@@ -61,6 +61,12 @@ import app.veyra.music.download.Downloads
 import android.util.LruCache
 import kotlinx.coroutines.withContext
 import app.veyra.music.data.artwork.ExploreArtworkCache
+import app.veyra.music.data.home.HomeDiskStore
+import app.veyra.music.data.home.HomeConnectivity
+import app.veyra.music.data.home.HomeLayout
+import app.veyra.music.data.home.HomeSectionOption
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -116,7 +122,29 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val signedIn: StateFlow<Boolean> = _signedIn.asStateFlow()
 
     private val _home = MutableStateFlow<UiState<List<HomeShelf>>>(UiState.Loading)
-    val home: StateFlow<UiState<List<HomeShelf>>> = _home.asStateFlow()
+    private val homeDisk = HomeDiskStore(app.noBackupFilesDir.resolve("home_feed"))
+    private val homeNetwork = HomeConnectivity(app)
+    val homeOnline: StateFlow<Boolean> = homeNetwork.online
+    private val _homeLayout = MutableStateFlow(HomeLayout())
+    private val _homeVisible = MutableStateFlow<UiState<List<HomeShelf>>>(UiState.Loading)
+    val home: StateFlow<UiState<List<HomeShelf>>> = _homeVisible.asStateFlow()
+    private val _homeSectionOptions = MutableStateFlow<List<HomeSectionOption>>(emptyList())
+    val homeSections: StateFlow<List<HomeSectionOption>> = _homeSectionOptions.asStateFlow()
+    private val _homeShowingSaved = MutableStateFlow(false)
+    val homeShowingSaved = _homeShowingSaved.asStateFlow()
+    private val _homeUpdating = MutableStateFlow(false)
+    val homeUpdating = _homeUpdating.asStateFlow()
+    private val _homeNotice = MutableStateFlow<String?>(null)
+    val homeNotice = _homeNotice.asStateFlow()
+    private var homeAuthTransitions = 0
+    private var homeOwner: String? = null
+    private var homeLayoutLoaded = false
+    private var homeNetworkShelves = emptyList<HomeShelf>()
+    private var homeCoreReady = false
+    private var homeHoldForCore = false
+    private var homeSnapshotJob: Job? = null
+    private val homeSnapshotMutex = Mutex()
+    private val homeLayoutMutex = Mutex()
 
     /**
      * Token for the next page of Home shelves; null once there's nothing
@@ -1428,6 +1456,16 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     init {
+        viewModelScope.launch {
+            homeNetwork.online.drop(1).collect { online ->
+                if (online) loadHome()
+                else {
+                    _homeRecentlyPlayedLoading.value = false
+                    _homePendingShelves.value = 0
+                    _homeLoadingMore.value = false
+                }
+            }
+        }
         startSearchPipeline()
         startSuggestPipeline()
         startTypeaheadMediaPipeline()
@@ -1682,64 +1720,169 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         if (_detailStack.value.isNotEmpty()) _detailStack.value = emptyList()
     }
 
+    /** Publish synchronously so a listener change cannot leave old cards in a derived flow. */
+    private fun publishHomeState(state: UiState<List<HomeShelf>>) {
+        _home.value = state
+        val shelves = (state as? UiState.Success)?.data.orEmpty()
+        _homeSectionOptions.value = _homeLayout.value.options(shelves)
+        _homeVisible.value = if (state is UiState.Success) UiState.Success(_homeLayout.value.apply(shelves)) else state
+    }
+
+    private fun applyHomeLayout(layout: HomeLayout) {
+        _homeLayout.value = layout
+        publishHomeState(_home.value)
+    }
+
+    private fun prepareHomeOwner(identity: String?, restoreNow: Boolean = false) {
+        val owner = HomeDiskStore.owner(identity)
+        if (homeOwner == owner) return
+        homeLoadJob?.cancel()
+        homePageJob?.cancel()
+        homeSnapshotJob?.cancel()
+        homeLoadGeneration.incrementAndGet()
+        homeOwner = owner
+        homeLayoutLoaded = false
+        publishHomeState(UiState.Loading)
+        _homeLayout.value = HomeLayout()
+        _homeShowingSaved.value = false
+        _homeNotice.value = null
+        _homeUpdating.value = false
+        _homeRecentlyPlayedLoading.value = false
+        _homePendingShelves.value = 0
+        homeContinuation = null
+        if (restoreNow) {
+            val generation = homeLoadGeneration.get()
+            viewModelScope.launch { restoreHomeSnapshot(identity, generation) }
+        }
+    }
+
+    private suspend fun restoreHomeSnapshot(identity: String?, generation: Long): Boolean {
+        if (homeLayoutLoaded) return isCurrentHomeLoad(identity, generation)
+        val owner = HomeDiskStore.owner(identity)
+        val (layout, cached) = withContext(Dispatchers.IO) {
+            homeDisk.readLayout(owner) to homeDisk.read(owner)
+        }
+        if (!isCurrentHomeLoad(identity, generation) || homeOwner != owner) return false
+        applyHomeLayout(layout)
+        homeLayoutLoaded = true
+        if (_home.value !is UiState.Success && cached != null) {
+            _homeShowingSaved.value = true
+            publishHomeState(UiState.Success(cached.shelves))
+        }
+        return true
+    }
+
     fun loadHome() {
+        if (homeAuthTransitions > 0) return
         homeLoadJob?.cancel()
         homePageJob?.cancel()
         _homePageError.value = null
         val identity = listenerKey()
+        prepareHomeOwner(identity)
+        val owner = HomeDiskStore.owner(identity)
         val generation = homeLoadGeneration.incrementAndGet()
-        _home.value = UiState.Loading
-        homeContinuation = null
+        val previousContinuation = homeContinuation
+        homeContinuation = null // A disk snapshot never restores a live paging token.
         homeSeenTitles.clear()
+        homeNetworkShelves = emptyList()
+        homeCoreReady = false
         _homeLoadingMore.value = false
-        _homeRecentlyPlayedLoading.value = _signedIn.value
-        // The core feed plus one browse per supplement. Recently played is left
-        // out: it has its own skeleton at the head of the page rather than the
-        // one at the tail.
-        _homePendingShelves.value = 1 + YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS.size
+        _homePendingShelves.value = 0
+        _homeRecentlyPlayedLoading.value = false
+        _homeNotice.value = null
         homeLoadJob = viewModelScope.launch {
-            val coreRequest = launch {
-                try {
-                    YtMusicRepository.home()
-                        .onSuccess { feed ->
+            try {
+                if (!restoreHomeSnapshot(identity, generation)) return@launch
+                if (!homeNetwork.online.value) {
+                    if (_home.value is UiState.Loading) publishHomeState(UiState.Success(emptyList()))
+                    return@launch
+                }
+                homeHoldForCore = _home.value is UiState.Success
+                _homeUpdating.value = true
+                _homeRecentlyPlayedLoading.value = _signedIn.value && !homeHoldForCore
+                _homePendingShelves.value = 1 + YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS.size
+                val coreRequest = launch {
+                    try {
+                        YtMusicRepository.home().onSuccess { feed ->
                             if (!isCurrentHomeLoad(identity, generation)) return@onSuccess
                             homeContinuation = feed.continuation
+                            homeCoreReady = true
                             publishHomeShelves(feed.shelves)
-                        }
-                        .onFailure { failure ->
-                            if (isCurrentHomeLoad(identity, generation) && _home.value !is UiState.Success) {
-                                _home.value = UiState.Error(failure.friendly())
+                        }.onFailure { failure ->
+                            if (isCurrentHomeLoad(identity, generation)) {
+                                homeContinuation = previousContinuation
+                                _homeNotice.value = failure.friendly()
+                                if (_home.value !is UiState.Success) publishHomeState(UiState.Error(failure.friendly()))
                             }
                         }
-                } finally {
-                    homeShelfRequestSettled(identity, generation)
+                    } finally { homeShelfRequestSettled(identity, generation) }
                 }
-            }
-            if (_signedIn.value) {
-                launch {
+                if (_signedIn.value) launch {
                     try {
-                        withTimeoutOrNull(6_000L) { YtMusicRepository.homeRecentlyPlayed() }
-                            ?.onSuccess { shelf ->
-                                if (isCurrentHomeLoad(identity, generation)) {
-                                    shelf?.let { publishHomeShelves(listOf(it), prepend = true) }
-                                }
-                            }
+                        withTimeoutOrNull(6_000L) { YtMusicRepository.homeRecentlyPlayed() }?.onSuccess { shelf ->
+                            if (isCurrentHomeLoad(identity, generation)) shelf?.let { publishHomeShelves(listOf(it), prepend = true) }
+                        }
                     } finally {
                         if (isCurrentHomeLoad(identity, generation)) _homeRecentlyPlayedLoading.value = false
                     }
                 }
-            }
-            // Keep optional feed parsing/image arrivals out of the first core response burst.
-            coreRequest.join()
-            for (browseId in YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS) {
-                if (!isCurrentHomeLoad(identity, generation)) break
-                try {
-                    withTimeoutOrNull(8_000L) { YtMusicRepository.homeSupplement(browseId) }?.onSuccess { shelves ->
-                        if (isCurrentHomeLoad(identity, generation)) publishHomeShelves(shelves)
-                    }
-                } finally {
-                    homeShelfRequestSettled(identity, generation)
+                coreRequest.join()
+                for (browseId in YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS) {
+                    if (!isCurrentHomeLoad(identity, generation) || !homeNetwork.online.value) break
+                    try {
+                        withTimeoutOrNull(8_000L) { YtMusicRepository.homeSupplement(browseId) }?.onSuccess { shelves ->
+                            if (isCurrentHomeLoad(identity, generation)) publishHomeShelves(shelves)
+                        }
+                    } finally { homeShelfRequestSettled(identity, generation) }
                 }
+            } finally {
+                if (isCurrentHomeLoad(identity, generation)) {
+                    _homeUpdating.value = false
+                    _homePendingShelves.value = 0
+                    _homeRecentlyPlayedLoading.value = false
+                }
+            }
+        }
+    }
+
+    fun moveHomeSection(id: String, offset: Int) {
+        updateHomeLayout(_homeLayout.value.move(id, offset, (_home.value as? UiState.Success)?.data.orEmpty()))
+    }
+
+    fun setHomeSectionVisible(id: String, visible: Boolean) {
+        if (homeSections.value.none { it.id == id }) return
+        updateHomeLayout(_homeLayout.value.setVisible(id, visible))
+    }
+
+    fun resetHomeSections() { updateHomeLayout(HomeLayout()) }
+
+    private fun updateHomeLayout(next: HomeLayout) {
+        val previous = _homeLayout.value
+        if (next == previous) return
+        val owner = homeOwner ?: return
+        applyHomeLayout(next)
+        viewModelScope.launch {
+            val fallback = homeLayoutMutex.withLock { withContext(Dispatchers.IO) {
+                if (homeDisk.writeLayout(owner, next)) null else homeDisk.readLayout(owner)
+            } }
+            if (fallback != null && homeOwner == owner && _homeLayout.value == next) {
+                applyHomeLayout(fallback)
+                _homeNotice.value = text(R.string.home_layout_save_failed)
+            }
+        }
+    }
+
+    private fun saveHomeSnapshot() {
+        val identity = listenerKey()
+        val owner = HomeDiskStore.owner(identity)
+        val generation = homeLoadGeneration.get()
+        homeSnapshotJob?.cancel()
+        homeSnapshotJob = viewModelScope.launch {
+            delay(250L) // Coalesce the core, recents and supplement arrivals.
+            homeSnapshotMutex.withLock {
+                if (!isCurrentHomeLoad(identity, generation) || homeOwner != owner) return@withLock
+                val shelves = (_home.value as? UiState.Success)?.data ?: return@withLock
+                withContext(Dispatchers.IO) { homeDisk.write(owner, shelves) }
             }
         }
     }
@@ -1752,7 +1895,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         if (!isCurrentHomeLoad(identity, generation)) return
         _homePendingShelves.value = (_homePendingShelves.value - 1).coerceAtLeast(0)
         if (_homePendingShelves.value == 0 && _home.value is UiState.Loading) {
-            _home.value = UiState.Error(text(R.string.auto_empty_quick_picks_subtitle))
+            publishHomeState(UiState.Error(text(R.string.auto_empty_quick_picks_subtitle)))
         }
     }
 
@@ -1760,55 +1903,28 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         identity == listenerKey() && generation == homeLoadGeneration.get()
 
     private fun publishHomeShelves(shelves: List<HomeShelf>, prepend: Boolean = false) {
-        val existing = (_home.value as? UiState.Success)?.data.orEmpty()
-        if (prepend) {
-            // YouTube's core home can also contain a stale "Recently played"
-            // shelf. The dedicated history endpoint wins and replaces it.
+        val existing = homeNetworkShelves
+        homeNetworkShelves = if (prepend) {
             val replacing = shelves.map { it.title.lowercase(Locale.ROOT) }.toSet()
             homeSeenTitles.addAll(replacing)
-            _home.value = UiState.Success(shelves + existing.filterNot {
-                it.title.lowercase(Locale.ROOT) in replacing
-            })
-            return
+            shelves + existing.filterNot { it.title.lowercase(Locale.ROOT) in replacing }
+        } else {
+            existing + shelves.withoutRepeatsOf(existing)
+                .filter { homeSeenTitles.add(it.title.lowercase(Locale.ROOT)) }
         }
-        val added = shelves.withoutRepeatsOf(existing)
-            .filter { homeSeenTitles.add(it.title.lowercase(Locale.ROOT)) }
-        if (added.isNotEmpty()) _home.value = UiState.Success(existing + added)
+        // Keep a useful previous feed until the new core succeeds. Supplements cannot wipe it.
+        if (homeNetworkShelves.isNotEmpty() && (!homeHoldForCore || homeCoreReady)) {
+            publishHomeState(UiState.Success(homeNetworkShelves))
+            _homeShowingSaved.value = false
+            saveHomeSnapshot()
+        }
     }
 
-    /** Refreshes the core feed without blanking the current Play page first. */
-    private suspend fun refreshHome(identity: String?) = coroutineScope {
-        homeLoadJob?.cancel()
-        homePageJob?.cancel()
-        val generation = homeLoadGeneration.incrementAndGet()
-        val previousContinuation = homeContinuation
-        homeContinuation = null
-        _homePendingShelves.value = 0
-        _homeLoadingMore.value = false
-        _homeRecentlyPlayedLoading.value = false
-        _homePageError.value = null
-        val recent = if (_signedIn.value) async {
-            withTimeoutOrNull(6_000L) { YtMusicRepository.homeRecentlyPlayed() }
-        } else null
-        YtMusicRepository.home().onSuccess { feed ->
-            if (!isCurrentHomeLoad(identity, generation)) return@onSuccess
-            homeContinuation = feed.continuation
-            homeSeenTitles.clear()
-            val shelves = feed.shelves.withoutRepeatsOf(emptyList())
-                .filter { homeSeenTitles.add(it.title.lowercase(Locale.ROOT)) }
-            if (shelves.isNotEmpty()) _home.value = UiState.Success(shelves)
-            else if (_home.value !is UiState.Success) {
-                _home.value = UiState.Error(text(R.string.auto_empty_quick_picks_subtitle))
-            }
-        }.onFailure { failure ->
-            if (isCurrentHomeLoad(identity, generation)) {
-                homeContinuation = previousContinuation
-                if (_home.value !is UiState.Success) _home.value = UiState.Error(failure.friendly())
-            }
-        }
-        recent?.await()?.onSuccess { shelf ->
-            if (isCurrentHomeLoad(identity, generation)) shelf?.let { publishHomeShelves(listOf(it), prepend = true) }
-        }
+    /** Manual refresh uses the same cache-preserving path as launch and reconnection. */
+    private suspend fun refreshHome(identity: String?) {
+        if (identity != listenerKey()) return
+        loadHome()
+        homeLoadJob?.join()
     }
 
     /**
@@ -1823,7 +1939,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun loadMoreHome() {
         val token = homeContinuation ?: return
-        if (_homeLoadingMore.value || _homePageError.value != null) return
+        if (!homeNetwork.online.value || _homeLoadingMore.value || _homePageError.value != null) return
         val identity = listenerKey()
         val generation = homeLoadGeneration.get()
         _homeLoadingMore.value = true
@@ -1835,7 +1951,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                         val added = feed.shelves.withoutRepeatsOf(existing)
                             .filter { homeSeenTitles.add(it.title.lowercase(Locale.ROOT)) }
                         homeContinuation = feed.continuation.takeIf { added.isNotEmpty() }
-                        if (added.isNotEmpty()) _home.value = UiState.Success(existing + added)
+                        if (added.isNotEmpty()) {
+                            publishHomeState(UiState.Success(existing + added))
+                            homeNetworkShelves = existing + added
+                            saveHomeSnapshot()
+                        }
                     }
                 }.onFailure { failure ->
                     if (isCurrentHomeLoad(identity, generation)) _homePageError.value = failure.friendly()
@@ -3208,97 +3328,112 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }
         val oldAccountId = _activeAccountId.value
         val oldProfileId = _activeProfileId.value
+        // Request signing is temporarily changed while a browser session is validated.
+        // Pause Home so that candidate credentials cannot populate the previous listener's disk cache.
+        homeAuthTransitions++
+        homeLoadGeneration.incrementAndGet()
+        homeLoadJob?.cancel()
+        homePageJob?.cancel()
+        homeSnapshotJob?.cancel()
         viewModelScope.launch {
-            // Validate the exact cookie/profile pair before writing any of it.
-            // The old implementation persisted first and unconditionally set
-            // signedIn=true; a half-finished channel chooser therefore became
-            // a durable broken "Personal" account.
-            Innertube.cookie = session.cookie
-            Innertube.adoptSessionScope(
-                pageId = session.pageId,
-                dataSyncId = session.dataSyncId,
-                authUser = session.authUser,
-                visitorData = session.visitorData,
-                clientVersion = session.clientVersion,
-                loggedIn = true,
-            )
-            Innertube.selectChannel(session.pageId, session.dataSyncId, session.authUser)
+            var homeSessionCommitted = false
+            try {
+                // Validate the exact cookie/profile pair before writing any of it.
+                // The old implementation persisted first and unconditionally set
+                // signedIn=true; a half-finished channel chooser therefore became
+                // a durable broken "Personal" account.
+                Innertube.cookie = session.cookie
+                Innertube.adoptSessionScope(
+                    pageId = session.pageId,
+                    dataSyncId = session.dataSyncId,
+                    authUser = session.authUser,
+                    visitorData = session.visitorData,
+                    clientVersion = session.clientVersion,
+                    loggedIn = true,
+                )
+                Innertube.selectChannel(session.pageId, session.dataSyncId, session.authUser)
 
-            val account = withTimeoutOrNull(20_000L) {
-                var result = YtMusicRepository.account()
-                if (result.isFailure) {
-                    delay(750L)
-                    result = YtMusicRepository.account()
+                val account = withTimeoutOrNull(20_000L) {
+                    var result = YtMusicRepository.account()
+                    if (result.isFailure) {
+                        delay(750L)
+                        result = YtMusicRepository.account()
+                    }
+                    result.getOrNull()
                 }
-                result.getOrNull()
-            }
-            if (account == null) {
-                restoreActiveSession(oldAccountId, oldProfileId)
-                onComplete(false)
-                return@launch
-            }
+                if (account == null) {
+                    restoreActiveSession(oldAccountId, oldProfileId)
+                    onComplete(false)
+                    return@launch
+                }
 
-            // A channel switch is another identity under the same Google
-            // login, never a new Google account. For a fresh sign-in, matching
-            // a non-empty email upgrades the existing entry instead of adding
-            // a duplicate after cookies rotate.
-            val accountId = when (mode) {
-                WebSessionMode.SWITCH_CHANNEL -> oldAccountId
-                WebSessionMode.SIGN_IN -> authStore.sessions.firstOrNull {
-                    account.email.isNotBlank() && it.email.equals(account.email, ignoreCase = true)
-                }?.accountId ?: sessionId(session.cookie, null)
-            }
-            if (accountId == null) {
-                restoreActiveSession(oldAccountId, oldProfileId)
-                onComplete(false)
-                return@launch
-            }
-            val previous = authStore.sessions.firstOrNull { it.accountId == accountId }
-            val selectedProfileId = profileId(session.pageId, session.dataSyncId, account.name)
-            val profile = YouTubeProfile(
-                profileId = selectedProfileId,
-                name = account.name,
-                handle = account.email,
-                avatar = account.thumbnailUrl,
-                pageId = session.pageId,
-                dataSyncId = session.dataSyncId,
-                authUser = session.authUser,
-                isBrandAccount = session.pageId != null,
-            )
-            val hasRealIdentity = profile.pageId != null || profile.dataSyncId != null
-            val profiles = previous?.profiles.orEmpty().filterNot { known ->
-                known.profileId == profile.profileId ||
-                    (hasRealIdentity && known.profileId.startsWith("profile:"))
-            } + profile
-            val stored = GoogleAccountSession(
-                accountId = accountId,
-                cookie = session.cookie,
-                name = account.name,
-                email = account.email,
-                profiles = profiles,
-                activeProfileId = profile.profileId,
-            )
+                // A channel switch is another identity under the same Google
+                // login, never a new Google account. For a fresh sign-in, matching
+                // a non-empty email upgrades the existing entry instead of adding
+                // a duplicate after cookies rotate.
+                val accountId = when (mode) {
+                    WebSessionMode.SWITCH_CHANNEL -> oldAccountId
+                    WebSessionMode.SIGN_IN -> authStore.sessions.firstOrNull {
+                        account.email.isNotBlank() && it.email.equals(account.email, ignoreCase = true)
+                    }?.accountId ?: sessionId(session.cookie, null)
+                }
+                if (accountId == null) {
+                    restoreActiveSession(oldAccountId, oldProfileId)
+                    onComplete(false)
+                    return@launch
+                }
+                val previous = authStore.sessions.firstOrNull { it.accountId == accountId }
+                val selectedProfileId = profileId(session.pageId, session.dataSyncId, account.name)
+                val profile = YouTubeProfile(
+                    profileId = selectedProfileId,
+                    name = account.name,
+                    handle = account.email,
+                    avatar = account.thumbnailUrl,
+                    pageId = session.pageId,
+                    dataSyncId = session.dataSyncId,
+                    authUser = session.authUser,
+                    isBrandAccount = session.pageId != null,
+                )
+                val hasRealIdentity = profile.pageId != null || profile.dataSyncId != null
+                val profiles = previous?.profiles.orEmpty().filterNot { known ->
+                    known.profileId == profile.profileId ||
+                        (hasRealIdentity && known.profileId.startsWith("profile:"))
+                } + profile
+                val stored = GoogleAccountSession(
+                    accountId = accountId,
+                    cookie = session.cookie,
+                    name = account.name,
+                    email = account.email,
+                    profiles = profiles,
+                    activeProfileId = profile.profileId,
+                )
 
-            val wasSignedIn = _signedIn.value
-            if (wasSignedIn) cacheCurrentListener()
-            authStore.upsertSession(stored)
-            authStore.cookie = session.cookie // legacy compatibility only
-            _googleAccounts.value = authStore.sessions
-            _activeAccountId.value = accountId
-            _activeProfileId.value = profile.profileId
-            _selectedChannelKey.value = profile.profileId
-            _selectedChannelName.value = account.name
-            _account.value = account
-            _channels.value = emptyList()
-            _signedIn.value = true
+                val wasSignedIn = _signedIn.value
+                if (wasSignedIn) cacheCurrentListener()
+                authStore.upsertSession(stored)
+                authStore.cookie = session.cookie // legacy compatibility only
+                _googleAccounts.value = authStore.sessions
+                _activeAccountId.value = accountId
+                _activeProfileId.value = profile.profileId
+                homeSessionCommitted = true
+                _selectedChannelKey.value = profile.profileId
+                _selectedChannelName.value = account.name
+                _account.value = account
+                _channels.value = emptyList()
+                _signedIn.value = true
 
-            // Every resolver verdict and personalised page belongs to the
-            // identity that was active before validation succeeded.
-            StreamResolver.onSessionChanged()
-            if (wasSignedIn) clearListenerState()
-            reloadForAccount()
-            loadChannels(force = true)
-            onComplete(true)
+                // Every resolver verdict and personalised page belongs to the
+                // identity that was active before validation succeeded.
+                StreamResolver.onSessionChanged()
+                if (wasSignedIn) clearListenerState()
+                reloadForAccount()
+                loadChannels(force = true)
+                onComplete(true)
+            } finally {
+                if (!homeSessionCommitted) restoreActiveSession(oldAccountId, oldProfileId)
+                homeAuthTransitions--
+                if (homeAuthTransitions == 0) loadHome()
+            }
         }
     }
 
@@ -3408,6 +3543,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private fun clearListenerState(restoreCached: Boolean = false) {
+        prepareHomeOwner(listenerKey(), restoreNow = true)
         _account.value = null
         likedSyncJob?.cancel()
         LikeState.clear()
@@ -3437,6 +3573,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * itself.
      */
     private fun reloadForAccount() {
+        prepareHomeOwner(listenerKey(), restoreNow = true)
         viewModelScope.launch {
             Innertube.ensureSessionScope()
             loadHome()
@@ -3480,6 +3617,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         ownershipInFlight.clear()
         _songMenu.value = null
         loadHome()
+    }
+
+    override fun onCleared() {
+        homeNetwork.close()
+        super.onCleared()
     }
 
     private fun Throwable.friendly(): String = when {

@@ -1192,4 +1192,6 @@
     <string name="welcome_preview_position">Preview %1$d of %2$d</string>
     <string name="onboarding_personalize_title">Make it yours.</string>
     <string name="settings_backup_working">Working on your backup…</string>
+    <string name="home_layout_save_failed">Could not save your Home layout. Please try again.</string>
+    <string name="home_offline_track_unavailable">This item needs a connection. Open Downloads or Local Music to listen offline.</string>
 </resources>
