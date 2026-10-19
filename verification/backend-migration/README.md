@@ -21,6 +21,7 @@ Executed in this environment on 19 October 2026:
 - Web helpers: **12 checks passed** against compiled production TypeScript. This is not a full web-player build or browser/extension run.
 - Production debug and release BuildConfig generation passes with the official Veyra URL and each track's version/code.
 - Android manifest XML parses; Git whitespace checks pass.
+- Stable candidate: the existing focused suite plus seven migration policy regressions passes **64 tests**.
 - Preview-only: the existing focused suite plus seven migration policy regressions passes **68 tests**. The HomeFeedIdentity test now lives in sharedUi's jvmTest source set, where it can legally access the internal sharedUi function. This does not establish a full Gradle unit-suite pass.
 
 **Android compilation is blocked before Kotlin compilation** by HTTP 403 downloading NewPipeExtractor v0.26.3 from JitPack. No full Android type check, APK, physical-phone playback, upgrade test or verified HTTPS App Links is claimed. The old stable main/0.1.3 release remains available; the 0.1.5 stable source is a candidate, not a published stable binary.
