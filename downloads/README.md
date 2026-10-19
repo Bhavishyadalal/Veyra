@@ -12,7 +12,7 @@ The latest preview ZIP includes the [external cron setup guide](../docs/RENDER_K
 
 Includes the exact missing-Locale-import correction from the owner's build handoff. [Build fix and remaining test limitation](../BUILD_FIX_BETA1.md).
 
-[Download preview Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.4-beta1/downloads/Veyra_Android_Source_0.1.4-beta1.zip). This is preview source on a separate branch, not stable 0.1.3 or a verified APK. Stable 0.1.3 and its original ZIP remain unchanged on main. Includes settings, player and Home refinements. See [preview verification](../verification/PREVIEW-0.1.4-beta1-RESULTS.md) and [player results](../verification/PLAYER-REFINEMENT-RESULTS.md) and [Home results](../verification/HOME-REFINEMENT-RESULTS.md).
+[Download preview Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.4-beta1/downloads/Veyra_Android_Source_0.1.4-beta1.zip). This is preview source on a separate branch, not stable 0.1.3 or a verified APK. Stable 0.1.5 is now on main; the original 0.1.3 ZIP remains available as a historical archive. Includes settings, player and Home refinements. See [preview verification](../verification/PREVIEW-0.1.4-beta1-RESULTS.md) and [player results](../verification/PLAYER-REFINEMENT-RESULTS.md) and [Home results](../verification/HOME-REFINEMENT-RESULTS.md).
 
 ## Website — 4.1.0 and Media kit — 1.0.0
 

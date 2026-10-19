@@ -43,7 +43,7 @@ Room synchronization, invites and presence now target `https://veyra-listen-toge
 
 ## Preview development: 0.1.5-beta1
 
-This branch contains the **preview beta**, not a replacement for stable 0.1.3. Build version is `0.1.5-beta1`, code 18. Stable 0.1.5/code 19 is now on [main](https://github.com/Bhavishyadalal/Veyra/tree/main), with a separate stable source ZIP; historical 0.1.3 archives remain available.
+This branch contains the **preview beta**, kept separate from stable 0.1.5. Build version is `0.1.5-beta1`, code 18. Stable 0.1.5/code 19 is now on [main](https://github.com/Bhavishyadalal/Veyra/tree/main), with a separate stable source ZIP; historical 0.1.3 archives remain available.
 
 **Build correction:** restored the missing `java.util.Locale` import used by subtitle localization. No other application source is changed by this correction. The HomeFeedIdentity test was moved into its owning sharedUi module in this preview. The earlier fix and its historical limitations are documented in [BUILD_FIX_BETA1.md](BUILD_FIX_BETA1.md) for the exact fix, reported external build outcome and local validation limits.
 
