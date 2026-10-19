@@ -35,6 +35,10 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
+## External cron and keep-alive
+
+Both stable and preview use the same backend. [Configure your external 12-minute cron job](docs/RENDER_KEEPALIVE.md), including its exact URL, method, timeout and expected response. The backend's existing GitHub schedule remains available as a fallback. No app-side background timer is required.
+
 ## Latest update: 0.1.5 — Veyra-owned Listen Together
 
 Rooms, invite links and app presence now use **https://veyra-listen-together.onrender.com**. Saved old managed server addresses migrate safely; old membership tokens are discarded without being sent to another service. Intentional custom servers, guest listening and optional Google profiles remain supported. Old-service rooms require a new invite.

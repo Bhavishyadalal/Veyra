@@ -1,5 +1,7 @@
 # Veyra source downloads
 
+Latest stable and preview packages include the [external cron setup guide](../docs/RENDER_KEEPALIVE.md). Both use the same backend and its 12-minute keep-alive support.
+
 ## Android — 0.1.5 Stable source
 
 [Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.5_Stable.zip) · [SHA-256](Veyra_Android_Source_0.1.5_Stable.zip.sha256)

@@ -10,6 +10,10 @@ On 19 October 2026 the owner reported testing 0.1.5 and successfully generating 
 
 The separate backend repository adds a scheduled `/healthz` request every 12 minutes, with retries and Veyra identity checks. [Workflow and run history](https://github.com/Bhavishyadalal/Veyra-backend/actions/workflows/render-keepalive.yml). Workflow syntax/response validation was checked locally; scheduled execution and uninterrupted uptime are not independently established. A phone-side repeating job would stop helping when the app closes and would waste battery, so keep-alive belongs outside Android. Render restarts still clear rooms.
 
+## External cron support for both tracks
+
+The public `/healthz` endpoint already supports external HTTP cron with no authentication. [Exact 12-minute setup](../../docs/RENDER_KEEPALIVE.md) is included in both source ZIPs. The backend's GitHub schedule and external-machine cron use the same tested shell helper. This is backend infrastructure shared by stable and preview, not a phone-side timer. The owner's external cron provider still needs configuration and an actual successful run; scheduling/continuous uptime is not claimed as verified.
+
 ## Upgrade behavior
 
 - A saved address for the retired managed services becomes the new official default before health probes run.
