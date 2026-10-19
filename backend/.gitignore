@@ -1,2 +1,8 @@
-server
-*.exe
+/bin/
+/server
+*.test
+coverage.out
+.env
+.env.*
+!.env.example
+*.log

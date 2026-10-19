@@ -1,0 +1,24 @@
+name: Render keep-alive
+
+on:
+  schedule:
+    # Every 12 minutes, offset from the busiest start-of-hour queue.
+    - cron: '7,19,31,43,55 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: veyra-render-keepalive
+  cancel-in-progress: false
+
+jobs:
+  health:
+    name: Check Veyra Render health
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wake service and verify its identity
+        run: bash scripts/keepalive.sh

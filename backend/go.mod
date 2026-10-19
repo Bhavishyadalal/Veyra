@@ -1,5 +1,5 @@
-module github.com/KabirSinghBhatia/Veyra/backend
+module github.com/Bhavishyadalal/Veyra-backend
 
 go 1.27.0
 
-require github.com/gorilla/websocket v1.5.3 // indirect
+require github.com/gorilla/websocket v1.5.3

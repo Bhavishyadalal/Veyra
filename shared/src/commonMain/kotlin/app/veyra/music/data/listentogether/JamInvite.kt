@@ -9,7 +9,7 @@ package app.veyra.music.data.listentogether
  */
 object JamInvite {
 
-    const val ORIGIN = "https://bitchord.kushagrasingh.in"
+    const val ORIGIN = "https://veyra-listen-together.onrender.com"
 
     /** How many characters a party code carries. */
     const val CODE_LENGTH = 6
@@ -19,7 +19,7 @@ object JamInvite {
         val text = value?.trim() ?: return null
         val prefix = "$ORIGIN/invite/"
         if (!text.startsWith(prefix, ignoreCase = true)) return null
-        val code = text.removePrefix(prefix).substringBefore('?').substringBefore('#')
+        val code = text.substring(prefix.length).substringBefore('?').substringBefore('#')
         if (code.length != CODE_LENGTH || !code.all(Char::isLetterOrDigit)) return null
         return code.uppercase()
     }
