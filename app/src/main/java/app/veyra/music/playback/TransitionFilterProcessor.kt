@@ -243,7 +243,7 @@ class TransitionFilterProcessor : BaseAudioProcessor() {
         return inputAudioFormat
     }
 
-    override fun onFlush() {
+    override fun onFlush(streamMetadata: AudioProcessor.StreamMetadata) {
         lowState.fill(0f)
         highState.fill(0f)
         currentLowPassHz = targetLowPassHz

@@ -71,7 +71,7 @@ import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.IosShare
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Sort
+import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Upgrade
 import app.veyra.music.data.listentogether.ServerConnectionState
 import androidx.compose.material3.DropdownMenu
@@ -109,14 +109,15 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.ClipEntry
+import android.content.ClipData
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -495,7 +496,7 @@ private fun VeyraApp(
     viewModel: MainViewModel = viewModel(),
 ) {
     val context = LocalContext.current
-    val clipboard = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
     val hazeState = remember { HazeState() }
     // Recording the backdrop layer costs a draw pass, so it only runs when a
     // liquid-glass surface (the nav bar or artwork-page back button) can sample it.
@@ -1476,7 +1477,7 @@ private fun VeyraApp(
                 }.getOrDefault(false)
             }
         }
-        if (player.song?.videoId == song.videoId) {
+        if (player.song.videoId == song.videoId) {
             hasAlternateVersion = exists
         }
     }
@@ -3245,7 +3246,7 @@ private fun VeyraApp(
                                 },
                                 onBrowseClick = { item ->
                                     viewModel.recordEntity(SearchHistoryEntity(
-                                        id = item.browseId ?: "",
+                                        id = item.browseId,
                                         title = item.title,
                                         subtitle = item.subtitle.ifBlank { "" },
                                         artworkUrl = item.thumbnailUrl,
@@ -3795,7 +3796,7 @@ private fun VeyraApp(
                                 Box {
                                     IconButton(onClick = { librarySortMenuOpen = true }) {
                                         Icon(
-                                            Icons.Rounded.Sort,
+                                            Icons.AutoMirrored.Rounded.Sort,
                                             contentDescription = stringResource(R.string.sort_library),
                                             tint = MaterialTheme.colorScheme.onSurface,
                                         )
@@ -3849,7 +3850,7 @@ private fun VeyraApp(
                                     onClick = { if (isLocalDetail) folderMenuOpen = true else songSortMenuOpen = true },
                                 ) {
                                     Icon(
-                                        Icons.Rounded.Sort,
+                                        Icons.AutoMirrored.Rounded.Sort,
                                         contentDescription = stringResource(
                                             if (isLocalDetail) R.string.sort_music else R.string.sort_songs,
                                         ),
@@ -4299,7 +4300,6 @@ private fun VeyraApp(
                     val original = convertedFromVideo
                     val originalAudio = convertedFromAudio
                     when {
-                        c == null -> Unit
                         original != null && (
                             convertedAudioId == song.videoId ||
                                 convertedAudioId == versionEffectiveSong.videoId ||
@@ -4462,7 +4462,7 @@ private fun VeyraApp(
                     controller?.currentMediaItem?.mediaId == song.videoId
                 ) {
                     {
-                        controller?.revertToOriginal()
+                        controller.revertToOriginal()
                         songActions = null
                     }
                 } else {
@@ -4507,7 +4507,7 @@ private fun VeyraApp(
                         songActions = null
                         scope.launch {
                             val text = TrackLog.forTrack(song, NerdStats.current.value)
-                            clipboard.setText(AnnotatedString(text))
+                            clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Veyra track log", text)))
                             // The line count, not just "copied": it is the
                             // one thing the system's own paste confirmation
                             // doesn't say, and an empty log is a real

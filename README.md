@@ -1,5 +1,7 @@
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
+> **Preview source maintenance:** compiler-warning cleanup and Media3/clipboard API updates. [Review, checks and build limits](verification/BUILD-WARNINGS-0.1.6-beta1.md). Version remains 0.1.6-beta1; stable Android code is unchanged.
+
 > **Maintenance:** Current stable is 0.1.5 on `main`; current preview is 0.1.6-beta1 on `preview/0.1.6-beta1`. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md). This branch retains its own Android UI/version.
 
 

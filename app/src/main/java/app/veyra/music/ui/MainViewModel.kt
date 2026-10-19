@@ -1506,7 +1506,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
         viewModelScope.launch {
-            combine(
+            @OptIn(FlowPreview::class)
+            val configurationChanges = combine(
                 AppSettings.smbHost,
                 AppSettings.smbShare,
                 AppSettings.smbBasePath,
@@ -1515,7 +1516,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             ) { fields -> fields.toList() }
                 .drop(1)
                 .debounce(300)
-                .collect { reloadRemoteDetail(SmbConfig.BROWSE_ID) }
+            configurationChanges.collect { reloadRemoteDetail(SmbConfig.BROWSE_ID) }
         }
         viewModelScope.launch {
             // A leftover APK only means "Install Now" for the session that

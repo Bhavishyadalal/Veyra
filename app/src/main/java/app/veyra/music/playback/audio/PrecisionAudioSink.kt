@@ -172,6 +172,8 @@ class PrecisionAudioSink(
                     .setPcmEncoding(targetEncoding.toMedia3PcmEncoding())
                     .build()
 
+                // Copy the deprecated override until Media3 offers a format-copy builder.
+                @Suppress("DEPRECATION")
                 val delegateConfig = AudioSink.AudioSinkConfig.Builder(delegateFormat)
                     .setPreferredBufferSizeOverride(audioSinkConfig.preferredBufferSizeOverride)
                     .setOutputChannelMapping(audioSinkConfig.outputChannelMapping)
@@ -199,6 +201,7 @@ class PrecisionAudioSink(
                     // If the Float32 delegate config failed, try PCM16 before aborting precision
                     if (targetEncoding != PcmEncoding.PCM_16BIT) {
                         try {
+                            @Suppress("DEPRECATION") // Preserve the same buffer contract for PCM16 fallback.
                             val fallbackPcm16Config = AudioSink.AudioSinkConfig.Builder(pcm16Format)
                                 .setPreferredBufferSizeOverride(audioSinkConfig.preferredBufferSizeOverride)
                                 .setOutputChannelMapping(audioSinkConfig.outputChannelMapping)

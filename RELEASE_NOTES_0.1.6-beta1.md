@@ -1,5 +1,12 @@
 # Veyra 0.1.6-beta1 · Your Home, ready sooner
 
+## Source build maintenance
+
+The refreshed beta source addresses the uploaded Kotlin warning sites, migrates
+clipboard and Media3 APIs, and adds audio reset regressions. Version remains
+**0.1.6-beta1 / code 21**. [Build-log review and verification limits](verification/BUILD-WARNINGS-0.1.6-beta1.md).
+No new APK or completed full release build is claimed.
+
 - Restore a previously loaded Home from a small local snapshot before refreshing online. Keep useful content visible when refresh fails.
 - Customize Home sections: move up/down, show/hide and restore the default layout. Changes are saved separately for each listener.
 - Keep Home useful offline with saved recommendations and direct Downloads/Local Music access. Play verified downloaded cards without starting a radio request; explain when an item needs a connection.
