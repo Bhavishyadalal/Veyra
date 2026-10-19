@@ -43,7 +43,7 @@ Both stable and preview use the same backend. [Configure your external 12-minute
 
 Rooms, invite links and app presence now use **https://veyra-listen-together.onrender.com**. Saved old managed server addresses migrate safely; old membership tokens are discarded without being sent to another service. Intentional custom servers, guest listening and optional Google profiles remain supported. Old-service rooms require a new invite.
 
-The backend lives in [Veyra-backend](https://github.com/Bhavishyadalal/Veyra-backend). Its [12-minute keep-alive workflow](https://github.com/Bhavishyadalal/Veyra-backend/actions/workflows/render-keepalive.yml) is independent of the phone app. GitHub schedules are best effort; Render restarts still clear in-memory rooms. The backend folder and Oracle deployment workflow retained in this Android repository are legacy reference material and are not the active Render deployment.
+The backend lives in [Veyra-backend](https://github.com/Bhavishyadalal/Veyra-backend). Its [12-minute keep-alive workflow](https://github.com/Bhavishyadalal/Veyra-backend/actions/workflows/render-keepalive.yml) is independent of the phone app. GitHub schedules are best effort; Render restarts still clear in-memory rooms. The [`backend/`](backend/) folder mirrors the active standalone server, including its fixes and external cron helpers. [Mirror provenance and verification](docs/BACKEND_SYNC.md). Render deployment and the active keep-alive schedule remain managed by the separate backend repository.
 
 This stable source now includes the Home, player and Settings refinements previously developed on preview/0.1.5-beta1. The historical preview branch is preserved. The beta suffix is removed; version code 20 permits upgrades from preview code 18 and the earlier stable code 19. No APK or GitHub release is published by this promotion. Local verification and the owner's device report are recorded separately in [the migration report](verification/backend-migration/README.md).
 
@@ -74,7 +74,7 @@ Download `downloads/Veyra_Android_Source_0.1.1_Stable.zip`, extract the whole fo
 
 Build dependencies require `dl.google.com`, Maven Central, the Gradle plugin portal, and **jitpack.io**. The current SDK package name is `android-37.0`; an older existing SDK can be selected with `-PveyraCompileSdk=android-37`. Do not disable TLS or artifact verification to work around access failures.
 
-GitHub runs the normal checks on `main`. Signed releases, contributor maintenance and backend deployment are manual workflows; configure your own secrets and `BACKEND_HEALTH_URL` before using them.
+GitHub runs the normal checks on `main`. Signed releases and contributor maintenance are manual workflows. Backend deployment is managed in [Veyra-backend](https://github.com/Bhavishyadalal/Veyra-backend); the obsolete Oracle deployment workflow has been removed from this app repository.
 
 ## What changed
 
