@@ -1,0 +1,47 @@
+{
+  "scope": "Production Android/shared/web source endpoints, excluding tests and copyright notices. URI hostnames only; no credential/query values. Manifest hosts and Gradle defaults are reviewed separately.",
+  "upstream_runtime_hosts_pending_migration": {
+    "bitchord.kushagrasingh.in": [
+      {
+        "file": "app/src/main/java/app/veyra/music/data/listentogether/JamInviteLink.kt",
+        "line": 19
+      },
+      {
+        "file": "app/src/main/java/app/veyra/music/data/listentogether/JamInviteLink.kt",
+        "line": 53
+      },
+      {
+        "file": "app/src/main/java/app/veyra/music/data/listentogether/JamInviteLink.kt",
+        "line": 70
+      },
+      {
+        "file": "shared/src/commonMain/kotlin/app/veyra/music/data/listentogether/JamInvite.kt",
+        "line": 12
+      },
+      {
+        "file": "web/app/src/party/invite.ts",
+        "line": 2
+      },
+      {
+        "file": "web/app/src/party/invite.ts",
+        "line": 7
+      }
+    ],
+    "api.bitchord.kushagrasingh.in": [
+      {
+        "file": "shared/src/jvmSharedMain/kotlin/app/veyra/music/data/presence/Presence.kt",
+        "line": 118
+      },
+      {
+        "file": "web/app/src/party/listenTogether.ts",
+        "line": 38
+      }
+    ],
+    "bitchord-listen-together.onrender.com": [
+      {
+        "file": "app/build.gradle.kts",
+        "line": 60
+      }
+    ]
+  }
+}

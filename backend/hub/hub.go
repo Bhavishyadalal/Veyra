@@ -61,20 +61,26 @@ func (h *Hub) Attach(code, memberId string, conn *websocket.Conn) *SafeConn {
 	return sc
 }
 
-func (h *Hub) Detach(code, memberId string, sc *SafeConn) {
+// IsCurrent prevents a replaced socket from submitting buffered controls.
+func (h *Hub) IsCurrent(code, memberId string, sc *SafeConn) bool {
+	h.mu.RLock()
+	defer h.mu.RUnlock()
+	return h.sockets[code] != nil && h.sockets[code][memberId] == sc
+}
+
+// Detach reports whether this was still the active socket for the member.
+func (h *Hub) Detach(code, memberId string, sc *SafeConn) bool {
 	h.mu.Lock()
 	defer h.mu.Unlock()
-
-	room, ok := h.sockets[code]
-	if !ok {
-		return
+	room := h.sockets[code]
+	if room == nil || room[memberId] != sc {
+		return false
 	}
-	if room[memberId] == sc {
-		delete(room, memberId)
-	}
+	delete(room, memberId)
 	if len(room) == 0 {
 		delete(h.sockets, code)
 	}
+	return true
 }
 
 func (h *Hub) DropParty(code string) {
@@ -134,9 +140,13 @@ func (h *Hub) CloseMember(code, memberId string) {
 	h.mu.RLock()
 	room := h.sockets[code]
 	var target *SafeConn
-	if room != nil { target = room[memberId] }
+	if room != nil {
+		target = room[memberId]
+	}
 	h.mu.RUnlock()
-	if target != nil { _ = target.Close() }
+	if target != nil {
+		_ = target.Close()
+	}
 }
 
 func (h *Hub) Broadcast(code string, payload interface{}, skipMemberId string) {

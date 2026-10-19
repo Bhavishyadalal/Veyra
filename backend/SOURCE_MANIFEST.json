@@ -1,0 +1,205 @@
+{
+  "package": "Veyra backend 0.1.5 standalone source",
+  "files": [
+    {
+      "path": ".env.example",
+      "sha256": "7e9a6bb5fa12b0aa50da49483d0b6a3b179279c4ab7b04098e5edde16557e7cd",
+      "bytes": 547
+    },
+    {
+      "path": ".github/workflows/render-keepalive.yml",
+      "sha256": "18db157bc3d37eea4f1ba0daa0096c924430439bd70a2fc6f9f1377dcf48331c",
+      "bytes": 510
+    },
+    {
+      "path": ".github/workflows/test.yml",
+      "sha256": "15de76eb1a6dc5a074cdc840cfbd9d605ae2b052e6b134c92e3edcefd5a65f9b",
+      "bytes": 412
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "de6101abd7edcc373832a54b9927e0845a6272da482a5b5cac93a484ed85abb0",
+      "bytes": 66
+    },
+    {
+      "path": "APP_MIGRATION_0.1.5.md",
+      "sha256": "0e1a6dd453b223fc37d42a3e9766db08139b0d54dab35f3fbfe822f31d79992e",
+      "bytes": 5569
+    },
+    {
+      "path": "CRON_SETUP.md",
+      "sha256": "9c85cd50debad6e613cf2ae621b78fe0187d8f0d19abeb39a75a009083510d86",
+      "bytes": 3778
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "bytes": 35149
+    },
+    {
+      "path": "NOTICE",
+      "sha256": "4ac6e19c84ed811fde0a7ffba7ab9b155bd548cf63986e77e29fb0ee544d370f",
+      "bytes": 719
+    },
+    {
+      "path": "PROTOCOL.md",
+      "sha256": "7f9a6fcd05d7f0159319e55fee776a8f156f3cdb221c1869648991b3b9b2f317",
+      "bytes": 4559
+    },
+    {
+      "path": "README.md",
+      "sha256": "3639c6c6fe4def0ab95e18286280d98e6bf7fe8e966c8824f3c9f95e6bc01bb0",
+      "bytes": 11574
+    },
+    {
+      "path": "UPSTREAM.md",
+      "sha256": "27fa5190f5e7f2752a3854a59773f4b11948c14ad8f609be112800c23e6de4ae",
+      "bytes": 1720
+    },
+    {
+      "path": "VERIFICATION.md",
+      "sha256": "295e823cfead046607c36083a203425bfb5d88655da13cf32f266cabf928eabb",
+      "bytes": 6594
+    },
+    {
+      "path": "app-endpoint-audit.json",
+      "sha256": "2f58d86c1c20eb55569052e9d1ffbcab8ae3972c94aac8b9b2b126ed0e7f08bc",
+      "bytes": 1375
+    },
+    {
+      "path": "app_links.go",
+      "sha256": "b244b719a483973cd9c299bfa0a7317dfbd4cfc03868d59e48d42d15ca8f0704",
+      "bytes": 708
+    },
+    {
+      "path": "clock/clock.go",
+      "sha256": "6ff05a90dba4b659574787423c2be4091b57bbd5d69c46c6dfe9dbca31ee4bb3",
+      "bytes": 408
+    },
+    {
+      "path": "cmd/veyra-smoke/main.go",
+      "sha256": "bade46ee5183bbae515278c8b771392db76d5468e75c968838262eb03363617b",
+      "bytes": 9959
+    },
+    {
+      "path": "codes/codes.go",
+      "sha256": "50dcc6631e6fa3c86162f755ad7cb79eb1fc9de78c0c2e3fcb22cf1150bb4b6d",
+      "bytes": 1472
+    },
+    {
+      "path": "codes/codes_test.go",
+      "sha256": "e9ee4b33b02d5b7a398256d3a0874e1eca6359e805048354aaacd13380eb52a1",
+      "bytes": 1214
+    },
+    {
+      "path": "config/app_links.go",
+      "sha256": "1647678733cac00ad5e5dc1c1fc0214d076988a3c57102aff5857c5ff70ba167",
+      "bytes": 945
+    },
+    {
+      "path": "config/app_links_test.go",
+      "sha256": "fee011cd7f7e98ba89c051d035faae0b735a83aa3d2350dd6c014850c29f5599",
+      "bytes": 829
+    },
+    {
+      "path": "config/config.go",
+      "sha256": "591a0fac4382500ca1701caa4c8bec7664a57dcf6ae5bcae4606e3d7178f4dfc",
+      "bytes": 3588
+    },
+    {
+      "path": "config/config_test.go",
+      "sha256": "41e3fb8185886172f327bdc8268497729ae6db2f141824c7200dc0404fef2bb7",
+      "bytes": 3404
+    },
+    {
+      "path": "go.mod",
+      "sha256": "b7361a7527c5531756f868844c2b265d561385e355d67d17c9ff74ffe4e7b58f",
+      "bytes": 103
+    },
+    {
+      "path": "go.sum",
+      "sha256": "1737d5523b7264df09b253e86e29f96af295a7bd18e0aaa4373c6099317e065f",
+      "bytes": 175
+    },
+    {
+      "path": "guest_test.go",
+      "sha256": "d3b584fbb5e31206535e048e14b90db8f604a479c03c6543b122fb02346a8689",
+      "bytes": 2395
+    },
+    {
+      "path": "hub/hub.go",
+      "sha256": "a75b53885aec6b22b25864dcb65b1a513102494fc17470096404126cdd29b121",
+      "bytes": 3592
+    },
+    {
+      "path": "licenses/gorilla-websocket-LICENSE.txt",
+      "sha256": "2be1b548b0387ca8948e1bb9434e709126904d15f622cc2d0d8e7f186e4d122d",
+      "bytes": 1312
+    },
+    {
+      "path": "main.go",
+      "sha256": "a18f7e561bc8af446fcc5b9fab2c4cbfa594b3d9e05bd6b2b229124b48d23d9f",
+      "bytes": 42210
+    },
+    {
+      "path": "main_test.go",
+      "sha256": "d5a91d3ef05afd64b0a3db33c370f9b7502170e16f8ed27d00c27dcebda45a0d",
+      "bytes": 18086
+    },
+    {
+      "path": "party/party.go",
+      "sha256": "242977d67ecf653ea8754f0c36db7aa2850792762e764584e1e86d1d057458b4",
+      "bytes": 23698
+    },
+    {
+      "path": "party/party_test.go",
+      "sha256": "e864e74c43b7945280c2aa16814077f3aaa7faf9f609bfa547e7c27fbfc4d8cb",
+      "bytes": 14801
+    },
+    {
+      "path": "presence/presence.go",
+      "sha256": "79a9ffa2b4582ca6544c72c00652f3e971d93f1588c9b8f2ddef91b779d29de5",
+      "bytes": 2934
+    },
+    {
+      "path": "presence/presence_test.go",
+      "sha256": "489955b1d6946db0ec8821ee974786e432d55a61f1836df2da0653f05e898b37",
+      "bytes": 3199
+    },
+    {
+      "path": "protocol/protocol.go",
+      "sha256": "5f6022b5d284d49c7392c7018c92a141d7d7946438803054bd48ced3be8bcb1c",
+      "bytes": 3168
+    },
+    {
+      "path": "protocol/protocol_test.go",
+      "sha256": "91b020943803b7bbd91338139f014718e507cadd0756c7892fbdd7fd042d2521",
+      "bytes": 2937
+    },
+    {
+      "path": "render.yaml",
+      "sha256": "b7414187836fb922aaaf007d33bc00e3023d4da8c4353d0f70a6ed6cc6edf537",
+      "bytes": 930
+    },
+    {
+      "path": "scripts/keepalive.sh",
+      "sha256": "264c996d9d9efd7ff40eeecf1c1f86cad328434adf6ed00e73b07ca9873793a1",
+      "bytes": 580
+    },
+    {
+      "path": "scripts/verify_health.py",
+      "sha256": "ec932dd2746694c7610ea712951c77eb8086cdc3c1eb011a8663c33d7ee48130",
+      "bytes": 863
+    },
+    {
+      "path": "verification-results.json",
+      "sha256": "b1519a7df78171d0b67175b981728cb06987c234f5a57e33340f149633b4e059",
+      "bytes": 5313
+    },
+    {
+      "path": "veyra_integration_test.go",
+      "sha256": "350efba2eb8bc52d6af1b3eb5fde79bd3e432ded59bc1e0d6a00da96ea8dd808",
+      "bytes": 9010
+    }
+  ]
+}

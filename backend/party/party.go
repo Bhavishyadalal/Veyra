@@ -8,9 +8,9 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/KabirSinghBhatia/Veyra/backend/clock"
-	"github.com/KabirSinghBhatia/Veyra/backend/codes"
-	"github.com/KabirSinghBhatia/Veyra/backend/config"
+	"github.com/Bhavishyadalal/Veyra-backend/clock"
+	"github.com/Bhavishyadalal/Veyra-backend/codes"
+	"github.com/Bhavishyadalal/Veyra-backend/config"
 )
 
 // PartyError represents an error with an HTTP status code and wire error code.

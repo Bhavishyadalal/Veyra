@@ -1,5 +1,8 @@
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
+> **Maintenance:** Current stable is 0.1.5 on `main`; current preview is 0.1.6-beta1 on `preview/0.1.6-beta1`. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md). This branch retains its own Android UI/version.
+
+
 > Android Studio import/build guide: [START_HERE.md](START_HERE.md). Historical beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
 
 # Veyra
@@ -63,7 +66,7 @@ A dedicated welcome landing now follows the supplied design direction: full-widt
 
 Home has a stronger heading and native waveform accent; Settings has a clearer hierarchy and category emphasis. No player/backend/appearance-setting behavior is changed. See [artwork provenance](design/launcher/WELCOME-ARTWORK.md) and [checks/build limits](verification/STABLE-0.1.3-RESULTS.md).
 
-[Download 0.1.3 Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.3_Stable.zip). 57 focused regressions, native resource compilation and syntax checks pass. Full Android compilation is blocked by JitPack HTTP 403; native device rendering is unverified. No APK was generated.
+[Current source downloads](https://github.com/Bhavishyadalal/Veyra/blob/main/downloads/README.md). 57 focused regressions, native resource compilation and syntax checks pass. Full Android compilation is blocked by JitPack HTTP 403; native device rendering is unverified. No APK was generated.
 
 ## Previous update: 0.1.2 — welcome artwork and creator links
 
@@ -71,7 +74,7 @@ Home has a stronger heading and native waveform accent; Settings has a clearer h
 - **Creator links:** searchable Settings rows for [Bhavishyadalal](https://github.com/Bhavishyadalal), [Veyra source](https://github.com/Bhavishyadalal/Veyra) and the [website repository](https://github.com/Bhavishyadalal/Veyra-website).
 - **Optional account linking:** clear Continue/Start listening actions; sign-in remains optional. Playback, data, JioSaavn defaults and the existing player behavior are retained.
 
-[Download the 0.1.2 Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.2_Stable.zip). See [validation and build limits](verification/STABLE-0.1.2-RESULTS.md). 50 focused regressions and native resource compilation pass; full Android compilation remains blocked by JitPack HTTP 403. No APK was built.
+[Current source downloads](https://github.com/Bhavishyadalal/Veyra/blob/main/downloads/README.md). See [validation and build limits](verification/STABLE-0.1.2-RESULTS.md). 50 focused regressions and native resource compilation pass; full Android compilation remains blocked by JitPack HTTP 403. No APK was built.
 
 ## Previous update: 0.1.1 — JioSaavn default and player refinement
 

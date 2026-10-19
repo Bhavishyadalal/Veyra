@@ -1,0 +1,10 @@
+Veyra Listen Together backend
+Copyright (C) 2026 Bhavishya Dalal (Veyra modifications)
+
+Derived from BitChord by Kushagra Singh and its contributors.
+Upstream: https://github.com/kushagrasinghx/BitChord
+Reference reviewed: edc1e6f36febf71a118e649411d2fc21b70ead45.
+The inherited backend predates this Veyra server preparation; no claim of exclusive original authorship is made.
+
+Distributed under GNU GPL version 3; see LICENSE. Retain this notice and provide corresponding source when distributing modified binaries.
+Veyra modifications: standalone deployment, Veyra module/service identity, deployment guidance, route coverage and reconnect-state correction. Original copyright and licence notices remain applicable.
