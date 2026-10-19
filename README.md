@@ -1,20 +1,16 @@
-# Veyra 0.1.5 · stable source candidate
-
-This branch starts from stable 0.1.3 and adds the Veyra-owned backend migration. It does not include the preview settings/player/Home redesigns. Version `0.1.5`, code `19`; no APK or stable release is published. Room synchronization, invites and presence target `https://veyra-listen-together.onrender.com`. [Verification and remaining checks](verification/backend-migration/README.md). Existing stable 0.1.3 remains on main until validation is complete.
-
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
 > Android Studio import/build guide: [START_HERE.md](START_HERE.md). Historical beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
 
 # Veyra
 
-> **Stable track: 0.1.3, code 16.** Main retains the saved stable source and original download. New settings work is **0.1.4-beta1 preview**, code 17, on [the separate preview branch](https://github.com/Bhavishyadalal/Veyra/tree/preview/0.1.4-beta1). [Preview source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.4-beta1/downloads/Veyra_Android_Source_0.1.4-beta1.zip) · [Preview review and preservation audit](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.4-beta1/verification/PREVIEW-0.1.4-beta1-RESULTS.md). The beta is not a stable release.
+> **Stable source: 0.1.5, code 19.** Promoted after the owner reported successful testing and Listen Together room-code creation. [Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.5_Stable.zip) · [Separate preview 0.1.5-beta1](https://github.com/Bhavishyadalal/Veyra/tree/preview/0.1.5-beta1) · [Verification and limits](verification/backend-migration/README.md).
 
 A personal Android music player with Manrope typography, selectable launcher styles and a dark listening interface.
 
 ## Website and artwork
 
-[Browse the Veyra media kit](media-kit/README.md) · [Website and media-kit ZIP downloads](downloads/README.md). Includes link-sharing artwork, app banners, social formats, original backgrounds and an offline preview gallery. The website is prepared for local review and later deployment.
+[Browse the Veyra media kit](media-kit/README.md) · [Website and media-kit ZIP downloads](downloads/README.md). Includes link-sharing artwork, app banners, social formats, original backgrounds and an offline preview gallery. [Visit the website](https://veyra-website-mauve.vercel.app/) · [Website source](https://github.com/Bhavishyadalal/Veyra-website).
 
 ## Open and build
 
@@ -39,7 +35,15 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
-## Latest update: 0.1.3 — silver waveform welcome
+## Latest update: 0.1.5 — Veyra-owned Listen Together
+
+Rooms, invite links and app presence now use **https://veyra-listen-together.onrender.com**. Saved old managed server addresses migrate safely; old membership tokens are discarded without being sent to another service. Intentional custom servers, guest listening and optional Google profiles remain supported. Old-service rooms require a new invite.
+
+The backend lives in [Veyra-backend](https://github.com/Bhavishyadalal/Veyra-backend). Its [12-minute keep-alive workflow](https://github.com/Bhavishyadalal/Veyra-backend/actions/workflows/render-keepalive.yml) is independent of the phone app. GitHub schedules are best effort; Render restarts still clear in-memory rooms. The backend folder and Oracle deployment workflow retained in this Android repository are legacy reference material and are not the active Render deployment.
+
+This stable source retains the 0.1.3 UI foundation. Preview UI changes remain on the separate preview branch. No new APK or GitHub release is published by this promotion. Local verification and the owner's device report are recorded separately in [the migration report](verification/backend-migration/README.md).
+
+## Previous update: 0.1.3 — silver waveform welcome
 
 A dedicated welcome landing now follows the supplied design direction: full-width silver waveform artwork, bold native typography, optional swipe/tap previews and a silver Get started button. No restore-backup entry is included. Get started goes directly to name entry; account linking remains optional.
 

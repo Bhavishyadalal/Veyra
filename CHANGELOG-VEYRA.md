@@ -1,3 +1,13 @@
+# Veyra 0.1.5 (independently hosted Listen Together)
+
+- Move room synchronization, public invites, Android invite host and presence to Veyra's own Render service.
+- Migrate old managed server preferences before probing. Discard old room codes/tokens and obsolete kick state without contacting the retired service or sending old tokens to the new service. Preserve deliberate custom servers.
+- Refuse retired-server invites with a new-invite message; pin official invites to the official server and reject malformed explicit server parameters.
+- Preserve guest access, optional Google profiles, package identity, signing configuration and the stable 0.1.3 UI foundation. Preview UI changes remain separate on preview/0.1.5-beta1.
+- Promote source to main after the owner reported testing 0.1.5 successfully, including Listen Together room-code generation. This report does not independently establish every playback/reconnection/upgrade scenario.
+- The separate backend repository now includes a best-effort 12-minute health/keep-alive workflow. GitHub scheduling and Render's free plan do not guarantee continuous availability; restarts still lose rooms.
+- Local migration tests and focused checks pass as documented. Full Android compilation and independent live-server checks remain blocked in this environment. No new APK, signing or GitHub release is performed here.
+
 # Veyra 0.1.3 (silver waveform welcome)
 
 - Add a genuine welcome landing inspired by the owner's reference: original silver-wave artwork, actual app branding, bold native copy, selectable/swipeable previews and a silver Get started action. No restore-backup UI.

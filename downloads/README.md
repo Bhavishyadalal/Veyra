@@ -1,8 +1,13 @@
-# Veyra 0.1.5 · stable source candidate
-
-[Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/stable/0.1.5/downloads/Veyra_Android_Source_0.1.5_Stable_Candidate.zip). Based on stable 0.1.3 with the Veyra backend migration. Source candidate only: full Android build, live server and device checks remain pending. [Read verification](../verification/backend-migration/README.md).
-
 # Veyra source downloads
+
+## Android — 0.1.5 Stable source
+
+[Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.5_Stable.zip) · [SHA-256](Veyra_Android_Source_0.1.5_Stable.zip.sha256)
+
+Promoted to main after the owner reported successful testing and Listen Together room creation. Uses Veyra's backend for rooms, invites and presence; retains the stable UI foundation and custom-server support. Extract the whole Veyra directory and open it in Android Studio. No APK is included. [Verification and remaining checks](../verification/backend-migration/README.md).
+
+[Preview 0.1.5-beta1 source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip) remains separate. Older stable/candidate archives below are historical snapshots.
+
 
 ## Website — 4.1.0 and Media kit — 1.0.0
 
@@ -31,7 +36,7 @@ This is the website source for local review and later deployment to your separat
 
 [Download the full-resolution regenerated gateway artwork](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Glass_Gateway_4.0.png)
 
-## Android — 0.1.3 Stable source
+## Previous Android — 0.1.3 Stable source
 
 [Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.3_Stable.zip) · [SHA-256](Veyra_Android_Source_0.1.3_Stable.zip.sha256)
 
