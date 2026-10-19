@@ -4,6 +4,8 @@
 
 # Veyra
 
+> **Stable track: 0.1.3, code 16.** Main retains the saved stable source and original download. New settings work is **0.1.4-beta1 preview**, code 17, on [the separate preview branch](https://github.com/Bhavishyadalal/Veyra/tree/preview/0.1.4-beta1). [Preview source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.4-beta1/downloads/Veyra_Android_Source_0.1.4-beta1.zip) · [Preview review and preservation audit](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.4-beta1/verification/PREVIEW-0.1.4-beta1-RESULTS.md). The beta is not a stable release.
+
 A personal Android music player with Manrope typography, selectable launcher styles and a dark listening interface.
 
 ## Website and artwork
