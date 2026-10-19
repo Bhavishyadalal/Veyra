@@ -1,3 +1,7 @@
+# Veyra 0.1.5 · stable source candidate
+
+[Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/stable/0.1.5/downloads/Veyra_Android_Source_0.1.5_Stable_Candidate.zip). Based on stable 0.1.3 with the Veyra backend migration. Source candidate only: full Android build, live server and device checks remain pending. [Read verification](../verification/backend-migration/README.md).
+
 # Veyra source downloads
 
 ## Website — 4.1.0 and Media kit — 1.0.0

@@ -1,3 +1,7 @@
+# Veyra 0.1.5 · stable source candidate
+
+This branch starts from stable 0.1.3 and adds the Veyra-owned backend migration. It does not include the preview settings/player/Home redesigns. Version `0.1.5`, code `19`; no APK or stable release is published. Room synchronization, invites and presence target `https://veyra-listen-together.onrender.com`. [Verification and remaining checks](verification/backend-migration/README.md). Existing stable 0.1.3 remains on main until validation is complete.
+
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
 > Android Studio import/build guide: [START_HERE.md](START_HERE.md). Historical beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).

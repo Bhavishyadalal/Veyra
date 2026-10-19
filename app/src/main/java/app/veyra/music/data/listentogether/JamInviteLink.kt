@@ -1,6 +1,7 @@
 package app.veyra.music.data.listentogether
 
 import android.content.Intent
+import app.veyra.music.data.backend.VeyraBackend
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,10 +17,10 @@ data class ParsedJamInvite(
 /** Relays a Veyra web or scheme invite from [app.veyra.music.MainActivity] to Compose. */
 object JamInviteLink {
 
-    const val ORIGIN = "https://bitchord.kushagrasingh.in"
+    const val ORIGIN = VeyraBackend.ORIGIN
 
     private const val EXTRA_CONSUMED = "veyra.jamInviteConsumed"
-    private const val HOST = "bitchord.kushagrasingh.in"
+    private const val HOST = VeyraBackend.HOST
     private const val CUSTOM_SCHEME = "veyra"
     private const val CUSTOM_HOST = "party"
 
@@ -50,14 +51,15 @@ object JamInviteLink {
     /**
      * Parses an incoming invite:
      * 1. veyra://party/<CODE>?server=<SERVER>
-     * 2. https://bitchord.kushagrasingh.in/invite/<CODE>?server=<SERVER>
+     * 2. https://veyra-listen-together.onrender.com/invite/<CODE>?server=<SERVER>
      */
     fun parseInvite(value: String?): ParsedJamInvite? {
         val uri = runCatching { URI(value ?: return null) }.getOrNull() ?: return null
         val scheme = uri.scheme?.lowercase() ?: return null
         val host = uri.host?.lowercase() ?: return null
         val query = uri.rawQuery
-        val server = extractQueryParam(query, "server")?.let { sanitizeServerUrl(it) }
+        val rawServer = extractQueryParam(query, "server")
+        val server = rawServer?.let { sanitizeServerUrl(it) ?: return null }
 
         // 1. Custom scheme: veyra://party/<CODE> or veyra://party?code=<CODE>
         if (scheme == CUSTOM_SCHEME && host == CUSTOM_HOST) {
@@ -67,11 +69,14 @@ object JamInviteLink {
             return ParsedJamInvite(code = code, serverUrl = server)
         }
 
-        // 2. Official web domain: https://bitchord.kushagrasingh.in/invite/<CODE>
-        if (scheme == "https" && host == HOST) {
+        // 2. Official web domain: https://veyra-listen-together.onrender.com/invite/<CODE>
+        if (scheme == "https" && (host == HOST || VeyraBackend.isRetired("https://$host"))) {
             val match = INVITE_PATH.matchEntire(uri.path.orEmpty()) ?: return null
             val code = match.groupValues[1].uppercase()
-            return ParsedJamInvite(code = code, serverUrl = server)
+            // Pin official links to their own service, even when a custom server is saved.
+            // Retired links stay retired: do not reinterpret their code on the new backend.
+            val target = if (host == HOST) server ?: ORIGIN else "https://$host"
+            return ParsedJamInvite(code = code, serverUrl = target)
         }
 
         return null
@@ -112,16 +117,17 @@ object JamInviteLink {
     }
 
     private fun sanitizeServerUrl(raw: String?): String? {
-        val trimmed = raw?.trim()?.trimEnd('/') ?: return null
+        val trimmed = raw?.trim() ?: return null
         if (trimmed.isBlank()) return null
-        val withScheme = if (trimmed.startsWith("http://", ignoreCase = true) || trimmed.startsWith("https://", ignoreCase = true)) {
+        val withScheme = if (trimmed.contains("://")) {
             trimmed
         } else {
             "https://$trimmed"
         }
         val uri = runCatching { URI(withScheme) }.getOrNull() ?: return null
-        if (uri.host.isNullOrBlank()) return null
-        return withScheme
+        if (uri.host.isNullOrBlank() || uri.userInfo != null || uri.rawQuery != null || uri.rawFragment != null) return null
+        if (uri.scheme?.lowercase() !in setOf("http", "https")) return null
+        return withScheme.trimEnd('/')
     }
 
     private val INVITE_PATH = Regex("""/invite/([A-Za-z0-9]{${ListenTogether.CODE_LENGTH}})""")
