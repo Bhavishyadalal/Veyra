@@ -155,6 +155,7 @@ fun HomeScreen(
     currentSong: Song? = null,
     isPlaying: Boolean = false,
 ) {
+    PrefetchHomeArtwork(state)
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
 
     FeedShimmerHost(enabled = state is UiState.Loading || recentlyPlayedLoading || loadingMore) {

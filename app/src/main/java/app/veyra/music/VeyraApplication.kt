@@ -169,6 +169,12 @@ class VeyraApplication : Application(), SingletonImageLoader.Factory {
      */
     private val coilHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
+            // Artwork has its own queue: fill visible covers in parallel without
+            // consuming playback's HTTP dispatcher or waiting behind five covers.
+            .dispatcher(okhttp3.Dispatcher().apply {
+                maxRequests = 48
+                maxRequestsPerHost = 16
+            })
             .addInterceptor { chain ->
                 chain.proceed(
                     chain.request().newBuilder()
@@ -216,12 +222,11 @@ class VeyraApplication : Application(), SingletonImageLoader.Factory {
             .diskCache {
                 DiskCache.Builder()
                     .directory(cacheDir.resolve("image_cache"))
-                    .maxSizeBytes(100L * 1024 * 1024)
+                    .maxSizeBytes(384L * 1024 * 1024)
                     .build()
             }
-            // Covers arriving with a hard cut read as the list flickering as
-            // it scrolls; a short fade reads as them developing.
-            .crossfade(200)
+            // A brief reveal avoids adding a noticeable delay after download.
+            .crossfade(80)
             .build()
 
     private fun initLastfm() {
