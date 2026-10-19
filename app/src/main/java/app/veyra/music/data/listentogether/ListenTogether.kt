@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import app.veyra.music.VeyraApplication
 import app.veyra.music.BuildConfig
+import app.veyra.music.data.backend.VeyraBackend
 import app.veyra.music.data.DebugLog as Log
 import app.veyra.music.data.settings.AppSettings
 import io.ktor.client.HttpClient
@@ -266,6 +267,7 @@ object ListenTogether {
     fun parseAndNormalizeServerUrl(raw: String): ServerUrlValidationResult {
         val trimmed = raw.trim()
         if (trimmed.isEmpty()) return ServerUrlValidationResult.Valid("")
+        if (VeyraBackend.isRetired(trimmed)) return ServerUrlValidationResult.Invalid(ServerUrlError.Malformed)
         if (trimmed.any { it.isWhitespace() }) return ServerUrlValidationResult.Invalid(ServerUrlError.Whitespace)
 
         val candidate = if (trimmed.contains("://")) trimmed else "https://$trimmed"
@@ -364,7 +366,10 @@ object ListenTogether {
      * The default party server this build ships pointed at, from `LISTEN_TOGETHER_SERVER`
      * in `local.properties` or build environment.
      */
-    val defaultServer: String = when (val res = parseAndNormalizeServerUrl(BuildConfig.LISTEN_TOGETHER_SERVER)) {
+    val defaultServer: String = when (val res = parseAndNormalizeServerUrl(
+        if (VeyraBackend.isRetired(BuildConfig.LISTEN_TOGETHER_SERVER)) VeyraBackend.ORIGIN
+        else BuildConfig.LISTEN_TOGETHER_SERVER
+    )) {
         is ServerUrlValidationResult.Valid -> res.normalizedUrl
         is ServerUrlValidationResult.Invalid -> error("Invalid BuildConfig.LISTEN_TOGETHER_SERVER: ${BuildConfig.LISTEN_TOGETHER_SERVER}")
     }
@@ -660,7 +665,11 @@ object ListenTogether {
     fun init(context: Context) {
         prefs = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val rawSaved = prefs.getString(KEY_SERVER, null)?.trim().orEmpty()
-        val normalizedSaved = when (val res = parseAndNormalizeServerUrl(rawSaved)) {
+        val discardMembership = VeyraBackend.discardSavedMembership(
+            rawSaved, prefs.getBoolean(KEY_BACKEND_MIGRATED, false),
+        )
+        val migratedServer = VeyraBackend.migrateSavedServer(rawSaved)
+        val normalizedSaved = when (val res = parseAndNormalizeServerUrl(migratedServer)) {
             is ServerUrlValidationResult.Valid -> res.normalizedUrl
             is ServerUrlValidationResult.Invalid -> ""
         }
@@ -673,8 +682,16 @@ object ListenTogether {
 
         val code = prefs.getString(KEY_CODE, null)
         val saved = prefs.getString(KEY_TOKEN, null)
-        prefs.edit().remove(KEY_CODE).remove(KEY_TOKEN).apply()
-        if (!code.isNullOrBlank() && !saved.isNullOrBlank()) {
+        prefs.edit().apply {
+            putBoolean(KEY_BACKEND_MIGRATED, true)
+            putString(KEY_SERVER, normalizedSaved)
+            remove(KEY_CODE)
+            remove(KEY_TOKEN)
+            if (discardMembership) remove(KEY_KICKED)
+        }.apply()
+        // Invalid or retired destinations must never leak old tokens to the new default.
+        val savedDestinationValid = rawSaved.isBlank() || normalizedSaved.isNotBlank()
+        if (!discardMembership && savedDestinationValid && !code.isNullOrBlank() && !saved.isNullOrBlank()) {
             releaseStaleSlot(code, saved)
         }
 
@@ -721,7 +738,7 @@ object ListenTogether {
      * rather than when the server's disconnect grace sweeps it.
      */
     private fun releaseStaleSlotOnServer(serverBase: String, code: String, held: String) {
-        if (serverBase.isBlank() || code.isBlank() || held.isBlank()) return
+        if (serverBase.isBlank() || code.isBlank() || held.isBlank() || VeyraBackend.isRetired(serverBase)) return
         scope.launch {
             runCatching {
                 http.post("$serverBase/api/parties/$code/leave") {
@@ -931,6 +948,13 @@ object ListenTogether {
         nickname: String = nickname(),
     ): SwitchPartyResult = switchMutex.withLock {
         withContext(Dispatchers.IO) {
+            if (VeyraBackend.isRetired(targetCustomServer)) {
+                return@withContext if (_state.value.inParty) {
+                    SwitchPartyResult.TargetFailedRecovered(_state.value.code.orEmpty(), VeyraBackend.EXPIRED_INVITE_MESSAGE)
+                } else {
+                    SwitchPartyResult.TargetFailedNoParty(VeyraBackend.EXPIRED_INVITE_MESSAGE)
+                }
+            }
             val who = identity(nickname)
 
             val normTarget = when (val res = parseAndNormalizeServerUrl(targetCustomServer)) {
@@ -1632,6 +1656,7 @@ object ListenTogether {
      */
     private fun resolveHttpBase(server: String): String {
         val raw = normalizeServerBase(server).ifBlank { defaultServer }
+        VeyraBackend.requireActive(raw)
         if (raw.isBlank()) return ""
         return if (raw.startsWith("http://") || raw.startsWith("https://")) raw else "https://$raw"
     }
@@ -1680,6 +1705,7 @@ object ListenTogether {
     private const val TAG = "ListenTogether"
     private const val PREFS = "veyra_listen_together"
     private const val KEY_SERVER = "server_url"
+    private const val KEY_BACKEND_MIGRATED = "veyra_backend_015_migrated"
 
     /** What a redacted address reads as. Not a hostname, so it cannot be resolved back. */
     private const val SERVER_PLACEHOLDER = "<party server>"

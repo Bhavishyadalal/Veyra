@@ -29,3 +29,17 @@ The Render service has **not** been created or deployed here. Native Render runt
 No Android app was rebuilt, relinked, signed or released in this stage. Actual two-phone playback timing, cross-network reconnection, background audio and device App Links remain unverified. Existing Android test-module visibility and dependency-access limitations are not solved by a Go server package. Do not describe the app as migrated until both endpoint changes and device verification are complete.
 
 The server remains an in-memory single-instance service. Restarts lose rooms and counts. Google/display-name assertions are not verified account identities; server-issued tokens protect membership. The provided TURN/STUN credentials are not used because the current client protocol contains no WebRTC audio/P2P exchange. Required upstream legal attribution remains.
+
+
+## Keep-alive addition — 19 October 2026
+
+Added `.github/workflows/render-keepalive.yml` on the backend repository default branch. The schedule requests the deployed Veyra `/healthz` route every 12 minutes, with bounded retries/timeouts and JSON service/protocol validation. It is separate from the Android process and can run when no phone is using the app. The old upstream README recommended an external monitor; no 12-minute scheduler existed in the reviewed code.
+
+Locally checked YAML parsing, five trigger minutes with 12-minute spacing across the hour boundary, `bash -n` for the actual workflow shell, a valid response and five invalid/wrong-service response cases. No Go runtime code changed, so the earlier Go test evidence is unchanged. No GitHub scheduled execution or always-awake Render behavior is claimed. The owner reports working 0.1.5 room-code generation. Direct requests from this environment still return HTTP 403; this is not evidence that the Render service is down.
+
+
+## External cron support — 19 October 2026
+
+Added `CRON_SETUP.md` with exact public HTTP cron settings and an external-machine crontab example. GitHub Actions and shell cron now share `scripts/keepalive.sh`. The helper has bounded transport retries, validates Veyra health JSON using the existing validator and removes its temporary response file. No Go protocol/runtime code, room state, app timer or hosting plan is changed.
+
+Checked Bash syntax and workflow YAML/schedule. Ran the actual helper from `/tmp` against a separately running compiled Veyra backend over HTTP: response identity/version validation passed. That local server was then stopped with SIGTERM and exited cleanly. This verifies the helper's local HTTP path and working-directory independence, not the user's future external cron provider or deployed Render uptime. Public cron execution must be verified in that provider's history after the owner configures/enables it.

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { BACKEND_ORIGIN, EXPIRED_INVITE_MESSAGE, isRetiredServer } from './backend';
 import { ytAuthSnapshot } from '@/extension/useYtAuth';
 import { ServerClock } from './clock';
 import { cleanCode, CODE_LENGTH, sanitizeServerUrl } from './invite';
@@ -35,7 +36,7 @@ import {
  * the server's 45 s grace, so a refresh is invisible to everyone else.
  */
 
-export const DEFAULT_SERVER = 'https://api.bitchord.kushagrasingh.in';
+export const DEFAULT_SERVER = BACKEND_ORIGIN;
 export const MAX_UPCOMING = 25;
 const PING_INTERVAL_MS = 15_000;
 const REPORT_INTERVAL_MS = 10_000;
@@ -112,7 +113,12 @@ interface Settings {
 
 export function partySettings(): Settings {
   try {
-    return { customServer: '', nickname: '', ...(JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? '{}') as Partial<Settings>) };
+    const saved = { customServer: '', nickname: '', ...(JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? '{}') as Partial<Settings>) };
+    if (isRetiredServer(saved.customServer)) {
+      saved.customServer = '';
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(saved));
+    }
+    return saved;
   } catch {
     return { customServer: '', nickname: '' };
   }
@@ -231,6 +237,7 @@ export async function joinParty(rawCode: string, serverUrl?: string | null): Pro
   const code = cleanCode(rawCode);
   if (!code) throw new PartyError('bad_code', `A party code is ${CODE_LENGTH} letters or digits.`);
   refuseIfRecentlyKicked(code);
+  if (isRetiredServer(serverUrl)) throw new Error(EXPIRED_INVITE_MESSAGE);
   const base = sanitizeServerUrl(serverUrl) ?? idleServer();
   const current = useParty.getState();
   if (current.code === code && server === base) return code;
@@ -253,6 +260,7 @@ export async function previewParty(rawCode: string, serverUrl?: string | null): 
   const code = cleanCode(rawCode);
   if (!code) throw new PartyError('bad_code', `A party code is ${CODE_LENGTH} letters or digits.`);
   refuseIfRecentlyKicked(code);
+  if (isRetiredServer(serverUrl)) throw new Error(EXPIRED_INVITE_MESSAGE);
   const base = sanitizeServerUrl(serverUrl) ?? idleServer();
   try {
     return await request<PartyPreview>(`${base}/api/parties/${code}/preview`);
@@ -290,6 +298,10 @@ export function resumeSession(): void {
   try {
     const saved = JSON.parse(sessionStorage.getItem(SESSION_KEY) ?? 'null') as { code: string; token: string; server: string } | null;
     if (!saved?.code || !saved.token || !saved.server) return;
+    if (isRetiredServer(saved.server)) {
+      sessionStorage.removeItem(SESSION_KEY);
+      return;
+    }
     token = saved.token;
     server = saved.server;
     useParty.setState({ ...IDLE, code: saved.code, connection: 'connecting' });

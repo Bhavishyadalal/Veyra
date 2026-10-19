@@ -15,6 +15,22 @@ The app migration is deliberately a second step: deploy this server, verify its 
 
 It does **not** relay audio, implement WebRTC, fetch music streams or need TURN/STUN credentials. Each app streams its own music using its existing sources. The supplied relay screenshots are not configuration for this protocol; no relay credentials are bundled.
 
+## External cron support
+
+[Set up a 12-minute external cron job](CRON_SETUP.md): public HTTP GET settings, a reusable shell helper, testing steps and the existing GitHub Actions fallback. Both stable and preview Android builds share this backend; no phone-side background timer is needed.
+
+## Live deployment and keep-alive
+
+Service: **https://veyra-listen-together.onrender.com** · [Health](https://veyra-listen-together.onrender.com/healthz) · [Keep-alive runs](https://github.com/Bhavishyadalal/Veyra-backend/actions/workflows/render-keepalive.yml).
+
+The owner has reported successful room-code creation with Android 0.1.5. The application source is in [Veyra](https://github.com/Bhavishyadalal/Veyra); its stable and preview tracks remain separate.
+
+The included **Render keep-alive** GitHub Actions workflow requests `/healthz` every 12 minutes (UTC minutes 07, 19, 31, 43 and 55). It retries temporary failures/cold starts and checks that the response identifies the Veyra service and protocol, not just an HTTP 200. It creates no rooms, needs no secrets and does not change the backend's process state beyond an ordinary request.
+
+The schedule becomes eligible on this repository's default branch, `main`, while Actions is enabled. You can also choose **Actions → Render keep-alive → Run workflow**. A successful run is green; inspect its logs on failure. Merely committing the workflow does not prove GitHub has executed it or that Render stayed awake.
+
+GitHub scheduled workflows are best effort: they can be delayed/dropped and public-repository schedules are disabled after 60 days without repository activity. Requests may reduce idle spin-down, but cannot guarantee 24/7 availability, prevent restarts, preserve rooms across restarts or override Render's free-instance usage limits. An always-on Render instance is the reliable option for uninterrupted service. The app must continue to handle cold starts and reconnects.
+
 ## Deploy on Render — separate repository
 
 1. Extract `Veyra_Backend_0.1.5_Source.zip`. Upload the **contents of `Veyra-Backend`** to your new repository root: `go.mod`, `main.go`, `render.yaml`, packages and the remaining files should be directly there.
