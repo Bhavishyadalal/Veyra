@@ -1,3 +1,10 @@
+# Exact build correction — 0.1.4-beta1 preview
+
+- Restore `java.util.Locale` in HomeScreen.kt; keep `lowercase(Locale.ROOT)` and all remaining application source unchanged. This fixes the missing-import diagnostic reported by the owner.
+- Starting source ZIP matches the handoff SHA-256. Keep 0.1.4-beta1/code 17 and stable 0.1.3 unchanged; refresh the preview ZIP and checksum.
+- Document the still-unresolved cross-module `homeShelfKeys` test compilation issue. Earlier single-module focused test results do not prove that the complete Gradle test suite compiles.
+- Local full compilation remains blocked by NewPipe/JitPack HTTP 403. Successful release/APK checks are reported by the supplied handoff, not independently reproduced here. No APK generated. See BUILD_FIX_BETA1.md.
+
 # Home details update — 0.1.4-beta1 preview
 
 - Refine Home headings, neutral Google sign-in entry, banner/tile artwork, current-track treatment, missing-art fallbacks, paging progress and 48dp action/menu targets.

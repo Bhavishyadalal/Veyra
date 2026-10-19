@@ -37,6 +37,8 @@ APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for 
 
 This branch contains the **preview beta**, not a replacement for stable 0.1.3. Build version is `0.1.4-beta1`, code 17. Stable 0.1.3/code 16 remains on [main](https://github.com/Bhavishyadalal/Veyra/tree/main), with its original source ZIP unchanged.
 
+**Build correction:** restored the missing `java.util.Locale` import used by subtitle localization. No other application source is changed by this correction. The separate app-test/sharedUi visibility issue remains unresolved; see [BUILD_FIX_BETA1.md](BUILD_FIX_BETA1.md) for the exact fix, reported external build outcome and local validation limits.
+
 Home has clearer brand/headings, neutral Google entry, polished artwork cards with fallbacks, 48dp paging/menu controls, safer layout switches and an empty-feed refresh action. Existing feed, playback and authentication callbacks remain. [Home component previews](design/home-preview/README.md) · [Home verification and limits](verification/HOME-REFINEMENT-RESULTS.md).
 
 The player now has a framed bold play/pause control, consistent pressed/selected/loading feedback, safer seek cancellation, RTL timeline input, large-text timing labels and quicker reduced-motion-aware deck transitions. Playback engine and Android host source remain unchanged. [Player component previews](design/player-preview/README.md) · [Player verification and limits](verification/PLAYER-REFINEMENT-RESULTS.md).
