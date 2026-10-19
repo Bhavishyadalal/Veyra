@@ -213,4 +213,6 @@
     <string name="home_show_banners">Show banners</string>
     <string name="home_show_tiles">Show tiles</string>
     <string name="home_page">Page %1$d of %2$d</string>
+    <string name="player_buffering">Loading audio</string>
+    <string name="close_queue">Close queue</string>
 </resources>

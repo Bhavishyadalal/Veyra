@@ -1,3 +1,11 @@
+# Player details update — 0.1.4-beta1 preview
+
+- Refine transport, menus and bottom actions with shared native surfaces, fixed touch regions, bold original glyphs, finite press/icon transitions and explicit busy/selected states.
+- Separate seek cancellation from completion; cancel on track, lock or deck changes, preserve final release coordinates and prevent stale targets. Mirror RTL seek/volume fill and move the quality badge below enlarged timing text.
+- Shorten the returning deck fade and hero reveal; respect reduced motion in shared controls, deck and queue placement. Keep callbacks, haptics, mode tap windows, engine and Android hosts.
+- 22 native component checks, 57 focused regressions, source-preservation and XML/syntax audits pass. Ten component boards are available. Full Android build remains blocked by NewPipe/JitPack HTTP 403; no APK/device verification or stable release. See verification/PLAYER-REFINEMENT-RESULTS.md.
+- Preview remains 0.1.4-beta1/code 17. Stable 0.1.3 and its original ZIP remain untouched on main.
+
 # 0.1.4-beta1 — preview settings refinement
 
 - Redesign shared rows, category/section headings, values, toggles, sliders, selectors, quality sheets and app-icon choices. Keep the open settings layout and selected app theme.

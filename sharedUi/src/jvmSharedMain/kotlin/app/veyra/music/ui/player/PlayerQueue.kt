@@ -209,8 +209,10 @@ internal fun splitQueue(queue: List<Song>, currentIndex: Int, showHistory: Boole
 }
 
 /** Placement-only item motion; see [QUEUE_ROW_MOTION]. */
+@Composable
 private fun LazyItemScope.queueMotion(): Modifier =
-    Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null, placementSpec = QUEUE_ROW_MOTION)
+    Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null,
+        placementSpec = if (LocalPlayerReducedMotion.current) null else QUEUE_ROW_MOTION)
 
 /** The live queue, in the player itself. */
 @Composable
@@ -741,7 +743,7 @@ private fun InlineQueueRow(
             .background(if (lifted) Color.White.copy(alpha = 0.06f) else Color.Transparent)
             // Disabled rather than ignored: a tap that ripples and then does
             // nothing reads as the app having missed it.
-            .clickable(enabled = !locked, onClick = onClick)
+            .clickable(enabled = !locked, role = androidx.compose.ui.semantics.Role.Button, onClick = onClick)
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -805,9 +807,9 @@ private fun InlineQueueRow(
         if (!locked) {
             Box(
                 modifier = Modifier
-                    .size(32.dp)
+                    .size(48.dp)
                     .clip(CircleShape)
-                    .clickable(onClick = onRemove),
+                    .clickable(role = androidx.compose.ui.semantics.Role.Button, onClick = onRemove),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
