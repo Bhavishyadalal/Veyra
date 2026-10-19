@@ -1,3 +1,5 @@
+> **Historical stable-source reports.** The current development branch is **0.1.4-beta1 preview**, code 17. These earlier stable reports do not certify the preview. Stable 0.1.3 remains on `main`; see [preview checks](verification/PREVIEW-0.1.4-beta1-RESULTS.md).
+
 # Veyra 0.1.3 stable-series source update
 
 Version name 0.1.3, code 16. Includes the reference-inspired silver-wave welcome, optional interactive previews, direct Get started flow, and Home/Settings hierarchy refinements. No restore-backup action is added to Welcome.

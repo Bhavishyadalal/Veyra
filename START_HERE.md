@@ -1,3 +1,5 @@
+> **Current preview: 0.1.4-beta1, code 17.** This branch contains unfinished preview work. Stable 0.1.3/code 16 stays on `main` with its original ZIP. See [preview checks](verification/PREVIEW-0.1.4-beta1-RESULTS.md). No APK included. The version notes below are historical.
+
 > **Veyra 0.1.1:** Stable source update, version code 14. See verification/STABLE-0.1.1-RESULTS.md for current checks and the Android compile blocker. No APK included.
 
 > **beta11 build compatibility fix:** See BUILD_FIX_BETA11.md for the R8/lint updates and verified build results. App code and UI are unchanged.

@@ -1704,78 +1704,25 @@ internal fun AccountCard(
     /** Sits inside a [SettingsGroup] that already supplies the card, so draws none of its own. */
     grouped: Boolean = false,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .then(
-                if (grouped) {
-                    Modifier
-                } else {
-                    Modifier
-                        .padding(horizontal = GROUP_INSET)
-                        .clip(GroupShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                },
-            )
-            .then(
-                when {
-                    signedIn && onClick != null -> Modifier.clickable(onClick = onClick)
-                    !signedIn -> Modifier.clickable(onClick = onSignIn)
-                    else -> Modifier
-                },
-            )
-            .padding(horizontal = 14.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (account?.thumbnailUrl != null) {
-            AsyncImage(
-                model = account.thumbnailUrl,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(52.dp).clip(CircleShape).thumbnailBorder(CircleShape),
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .size(52.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.outline),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    SettingsIcons.Account,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+    val action = if (signedIn) onClick else onSignIn
+    val avatarUrl = account?.thumbnailUrl?.takeIf { signedIn }
+    val avatar: (@Composable () -> Unit)? = if (avatarUrl != null) {
+        {
+            AsyncImage(model = avatarUrl, contentDescription = null, contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize().clip(CircleShape).thumbnailBorder(CircleShape))
         }
-        Spacer(Modifier.width(14.dp))
-        Column(Modifier.weight(1f)) {
-            Text(
-                text = account?.name
-                    ?: stringResource(if (signedIn) R.string.signed_in else R.string.not_signed_in),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(Modifier.height(2.dp))
-            Text(
-                text = account?.email?.takeIf { it.isNotBlank() }
-                    ?: stringResource(
-                        if (signedIn) R.string.youtube_music_account else R.string.tap_to_sign_in_google,
-                    ),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-        if (!signedIn) {
-            Spacer(Modifier.width(8.dp))
-            Chevron()
-        }
-    }
+    } else null
+    SettingsAccountSummary(
+        title = if (signedIn) account?.name ?: stringResource(R.string.signed_in)
+            else stringResource(R.string.sign_in_youtube_music),
+        detail = if (signedIn) account?.email?.takeIf { it.isNotBlank() }
+            ?: stringResource(R.string.youtube_music_account)
+            else stringResource(R.string.tap_to_sign_in_google),
+        onClick = action,
+        modifier = if (grouped) Modifier else Modifier.padding(horizontal = GROUP_INSET)
+            .clip(GroupShape).background(MaterialTheme.colorScheme.surfaceVariant),
+        avatar = avatar,
+    )
 }
 
 /** The connection ceiling and its data cost remain visible while choosing. */

@@ -1,6 +1,6 @@
 # Settings refinement — 19 October 2026
 
-Source update on the 0.1.3/code 16 base. This does not publish a new binary release or alter package/signing identity.
+Preview 0.1.4-beta1/code 17, developed from the saved 0.1.3/code 16 baseline. Stable remains on main. No binary release or package/signing identity change.
 
 ## Design and interaction changes
 
@@ -16,7 +16,7 @@ Source update on the 0.1.3/code 16 base. This does not publish a new binary rele
 
 ## Verification
 
-- The standalone Compose renderer compiles actual production controls and runs **16 component interaction checks**. It renders seven scenes: dark, light, RTL, 320dp/1.6× text, overview, radio choices, and forms/icon selection. These were visually reviewed; review exposed and corrected narrow large-text wrapping, RTL chevron direction and the editor semantics target size. The scenes are not complete Android app screenshots.
+- The standalone Compose renderer compiles actual production controls and runs **16 component interaction checks**. It renders nine scenes: dark, light, RTL, 320dp/1.6× text, overview, radio choices, and forms/icon selection. The initial seven component scenes were visually reviewed; review exposed and corrected narrow large-text wrapping, RTL chevron direction and the editor semantics target size. The scenes are not complete Android app screenshots.
 - **57 existing Android-independent Kotlin/JUnit regressions passed**, including Settings search and source enablement policy. This is not the full app unit suite.
 - Kotlin PSI syntax parsing: 17 changed/new Kotlin files, zero syntax errors. Syntax parsing does not establish full Android type correctness.
 - Android SDK 36 AAPT2 resource compilation passed. Resource audit: 114 XML files, 22,633 localized entries and eight font references; zero errors. New backup progress copy falls back to English where not translated.
@@ -28,3 +28,7 @@ Source update on the 0.1.3/code 16 base. This does not publish a new binary rele
 The full `:app:compileProdDebugKotlin` attempt stops before Kotlin compilation at `:app:stripNewPipeExtractorUtils`: JitPack returns HTTP 403 for `com.github.TeamNewPipe:NewPipeExtractor:v0.26.3`. The environment's HTTPS proxy and trusted CA were used; no artifact substitution, TLS bypass or disabled verification was used. Full app compilation, Android UI/instrumentation tests and a physical-device run remain unverified. No APK/assemble/sign/release tasks were run.
 
 Device follow-up: navigate every category and global search; test TalkBack/keyboard traversal and enlarged text; toggle disabled/available features; confirm high-performance and cache prompts; check manual/automatic audio modes; exercise Wi-Fi/download quality sheets; source enablement, matching and reordering; Last.fm/ListenBrainz/Discord edit versus enable behavior; icon changes and rotation; IME and scrolling in source/account dialogs; successful, failed and cancelled backup pickers. Check slider behavior during actual playback and persistence across restart. Network service responses and file/launcher/system-settings integrations are not proven by the component harness.
+
+## Account preview correction and version separation
+
+The generic username/password illustration was misleadingly titled “Connect your account.” It was never wired into Google sign-in, but it has been removed and replaced with the shared production Google account entry plus an explicitly labeled optional Last.fm scene. Current version separation, expanded preservation audit and latest checks are in [PREVIEW-0.1.4-beta1-RESULTS.md](PREVIEW-0.1.4-beta1-RESULTS.md). The old 0.1.3 Settings Polish archive was retired; the original stable 0.1.3 archive is unchanged.

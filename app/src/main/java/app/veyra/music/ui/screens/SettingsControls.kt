@@ -568,3 +568,62 @@ internal fun SettingsIconChoice(
         )
     }
 }
+
+/** Google/YouTube account entry. Authentication is supplied by the existing host callback. */
+@Composable
+internal fun SettingsAccountSummary(
+    title: String,
+    detail: String,
+    onClick: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+    avatar: (@Composable () -> Unit)? = null,
+) {
+    Row(
+        modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .then(
+                if (onClick != null) Modifier.clickable(role = Role.Button, onClick = onClick)
+                else Modifier
+            )
+            .semantics(mergeDescendants = true) {}
+            .heightIn(min = 96.dp)
+            .padding(horizontal = ROW_INSET, vertical = 18.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            Modifier.size(48.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (avatar != null) avatar()
+            else
+                Icon(
+                    SettingsIcons.Account,
+                    null,
+                    Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+        }
+        Spacer(Modifier.width(14.dp))
+        Column(Modifier.weight(1f)) {
+            Text(
+                title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Text(
+                detail,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 4.dp),
+            )
+        }
+        if (onClick != null) {
+            Spacer(Modifier.width(12.dp))
+            Chevron()
+        }
+    }
+}

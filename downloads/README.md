@@ -1,5 +1,9 @@
 # Veyra source downloads
 
+## Android preview — 0.1.4-beta1
+
+[Download preview Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.4-beta1/downloads/Veyra_Android_Source_0.1.4-beta1.zip). This is preview source on a separate branch, not stable 0.1.3 or a verified APK. Stable 0.1.3 and its original ZIP remain unchanged on main. See [preview verification](../verification/PREVIEW-0.1.4-beta1-RESULTS.md).
+
 ## Website — 4.1.0 and Media kit — 1.0.0
 
 [Download updated website source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Website_Source_4.1.0.zip) · [SHA-256](Veyra_Website_Source_4.1.0.zip.sha256)

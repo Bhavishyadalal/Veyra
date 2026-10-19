@@ -1,10 +1,11 @@
-# Settings refinement (0.1.3 source update)
+# 0.1.4-beta1 — preview settings refinement
 
 - Redesign shared rows, category/section headings, values, toggles, sliders, selectors, quality sheets and app-icon choices. Keep the open settings layout and selected app theme.
 - Preserve separate integration editing and enable/disable actions. Improve selection semantics, disabled explanations, touch targets, RTL, narrow layouts and large text.
 - Improve shared dialog actions and fields, keyboard-safe account forms, language selection and backup progress feedback. Sliders save once on release rather than on every move.
-- Add reproducible native Compose component renders and 16 interaction checks; 57 focused regressions and AAPT2 checks pass. Full Android compilation remains blocked by JitPack HTTP 403. No APK generated; version identity stays 0.1.3/code 16.
-- See verification/SETTINGS-REFINEMENT-RESULTS.md and design/settings-preview/README.md.
+- Add reproducible native Compose component renders and 16 interaction checks; 57 focused regressions and AAPT2 checks pass. Full Android compilation remains blocked by JitPack HTTP 403. No APK generated. Preview version 0.1.4-beta1/code 17 is separate from stable 0.1.3/code 16.
+- Correct the misleading account preview: Google sign-in stays a host action; credentials are explicitly for optional Last.fm. Add an account-entry render shared with production and audit existing controls against the stable baseline.
+- See verification/PREVIEW-0.1.4-beta1-RESULTS.md and design/settings-preview/README.md.
 
 # Veyra 0.1.3 (silver waveform welcome)
 

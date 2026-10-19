@@ -232,16 +232,59 @@ private fun SampleScreen(kind: String) {
                         SettingsRow(icon, title, subtitle = detail, emphasized = true, onClick = {})
                     }
             }
-        } else if (kind == "dialog") {
+        } else if (kind == "account" || kind == "account-signed-in") {
             SettingsPageHeader("Account & integrations", SettingsIcons.Account)
+            Column(Modifier.padding(horizontal = GROUP_INSET)) {
+                SettingsAccountSummary(
+                    if (kind == "account") "Sign in to YouTube Music" else "Veyra listener",
+                    if (kind == "account") "Tap to sign in with Google" else "listener@example.com",
+                    onClick = {},
+                )
+                if (kind == "account-signed-in") {
+                    RowDivider()
+                    SettingsRow(
+                        SettingsIcons.Account,
+                        "Listen as",
+                        subtitle = "YouTube Music profile",
+                        onClick = {},
+                    )
+                    DestructiveRow("Sign out", onClick = {})
+                }
+                SettingsSectionTitle(
+                    "Optional integrations",
+                    Modifier.padding(top = 28.dp, bottom = 12.dp),
+                )
+                SettingsRow(
+                    SettingsIcons.Sound,
+                    "Spotify",
+                    subtitle = "Connect your Spotify account",
+                    onClick = {},
+                )
+                RowDivider()
+                SettingsRow(
+                    SettingsIcons.Advanced,
+                    "Discord",
+                    subtitle = "Show what you are playing",
+                    onClick = {},
+                )
+                RowDivider()
+                SettingsRow(
+                    SettingsIcons.Sound,
+                    "Last.fm",
+                    subtitle = "Optional listening history and scrobbling",
+                    onClick = {},
+                )
+            }
+        } else if (kind == "lastfm") {
+            SettingsPageHeader("Last.fm", SettingsIcons.Sound)
             Column(
                 Modifier.padding(horizontal = 20.dp, vertical = 32.dp)
                     .clip(RoundedCornerShape(24.dp))
                     .background(MaterialTheme.colorScheme.surface)
             ) {
                 SettingsPickerHeader(
-                    "Connect your account",
-                    "Keep your listening connected. You can change this at any time.",
+                    "Last.fm sign-in",
+                    "Sign in with your Last.fm account to enable scrobbling.",
                     SettingsIcons.Account,
                 )
                 Column(Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
@@ -249,7 +292,7 @@ private fun SampleScreen(kind: String) {
                     Spacer(Modifier.height(12.dp))
                     PillTextField("secret", {}, "Password", isPassword = true)
                 }
-                AlertAction("Continue to sign in", true, {})
+                AlertAction("Sign in to Last.fm", true, {})
                 AlertRule()
                 AlertAction("Not now", false, {})
             }
@@ -366,7 +409,9 @@ fun main() =
                 Quad("choices", 390, 740, 1f),
                 Quad("controls", 320, 1600, 1.6f),
                 Quad("controls-light", 390, 1000, 1f),
-                Quad("dialog", 390, 844, 1f),
+                Quad("lastfm", 390, 844, 1f),
+                Quad("account", 390, 844, 1f),
+                Quad("account-signed-in", 390, 844, 1f),
                 Quad("controls-rtl", 390, 1000, 1f),
             )) {
             val scene =
@@ -569,6 +614,28 @@ fun main() =
         scene.close()
         println(
             "PASS: 16 native Compose checks: switch role, one toggle callback, state update, disabled semantics, separate edit/toggle actions, radio targets >=48dp, radio callback, slider accessibility commit, dialog button role/minimum height, dialog callback, disabled dialog semantics, no writes while dragging, one write after release, editor height >=52dp, editable labeled field, password semantics."
+        )
+        var googleOpens = 0
+        val googleScene =
+            ImageComposeScene(780, 1000, density = Density(2f)) {
+                MaterialTheme(colorScheme = DarkColors, typography = VeyraTypography) {
+                    SettingsAccountSummary(
+                        "Sign in to YouTube Music",
+                        "Tap to sign in with Google",
+                        { googleOpens++ },
+                    )
+                }
+            }
+        googleScene.render(0).close()
+        val googleEntry =
+            googleScene.nodes().single { it.text().contains("Sign in to YouTube Music") }
+        check(googleEntry.config[SemanticsProperties.Role] == Role.Button)
+        check(googleEntry.config[SemanticsActions.OnClick].action!!.invoke())
+        check(googleOpens == 1)
+        check(googleScene.nodes().none { it.config.contains(SemanticsProperties.EditableText) })
+        googleScene.close()
+        println(
+            "PASS: Google entry opens its host callback once and contains no username/password fields."
         )
         println("Rendered actual SettingsControls.kt to ${out.absolutePath}")
     }
