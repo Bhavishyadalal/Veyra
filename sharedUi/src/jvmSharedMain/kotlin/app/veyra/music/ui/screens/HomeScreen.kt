@@ -166,6 +166,7 @@ fun HomeScreen(
     onOpenDownloads: (() -> Unit)? = null,
     onOpenLocalMusic: (() -> Unit)? = null,
 ) {
+    PrefetchHomeArtwork(state, enabled = !offline)
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
     val homeReducedMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     var editingHome by rememberSaveable { mutableStateOf(false) }
