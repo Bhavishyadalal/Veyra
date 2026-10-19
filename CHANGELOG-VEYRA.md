@@ -1,3 +1,11 @@
+# Home details update — 0.1.4-beta1 preview
+
+- Refine Home headings, neutral Google sign-in entry, banner/tile artwork, current-track treatment, missing-art fallbacks, paging progress and 48dp action/menu targets.
+- Preserve anchor conversion while switching presentation; use settled page navigation and block interactions/accessibility on outgoing content. Respect reduced motion in finite action feedback.
+- Add an empty-feed refresh state and duplicate-heading-safe shelf keys; align featured loading placeholders. Keep original item/hold/menu, refresh/retry, recents, auth and playback routes.
+- 17 native Home component checks, 61 focused regressions and source/resource/syntax audits pass. Nine component boards are included. Full Android build/device validation remains blocked/unverified because NewPipe resolution receives JitPack HTTP 403. No APK or stable publication.
+- Remain on preview 0.1.4-beta1/code 17; stable 0.1.3 and its original ZIP are untouched. See verification/HOME-REFINEMENT-RESULTS.md.
+
 # Player details update — 0.1.4-beta1 preview
 
 - Refine transport, menus and bottom actions with shared native surfaces, fixed touch regions, bold original glyphs, finite press/icon transitions and explicit busy/selected states.

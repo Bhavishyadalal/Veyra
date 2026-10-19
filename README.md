@@ -37,6 +37,8 @@ APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for 
 
 This branch contains the **preview beta**, not a replacement for stable 0.1.3. Build version is `0.1.4-beta1`, code 17. Stable 0.1.3/code 16 remains on [main](https://github.com/Bhavishyadalal/Veyra/tree/main), with its original source ZIP unchanged.
 
+Home has clearer brand/headings, neutral Google entry, polished artwork cards with fallbacks, 48dp paging/menu controls, safer layout switches and an empty-feed refresh action. Existing feed, playback and authentication callbacks remain. [Home component previews](design/home-preview/README.md) · [Home verification and limits](verification/HOME-REFINEMENT-RESULTS.md).
+
 The player now has a framed bold play/pause control, consistent pressed/selected/loading feedback, safer seek cancellation, RTL timeline input, large-text timing labels and quicker reduced-motion-aware deck transitions. Playback engine and Android host source remain unchanged. [Player component previews](design/player-preview/README.md) · [Player verification and limits](verification/PLAYER-REFINEMENT-RESULTS.md).
 
 The settings refinement preserves Google/YouTube Music sign-in, account/channel switching, sign-out and optional integrations. The account entry has no local username/password form. Last.fm's existing optional credentials are shown only in the explicitly labeled Last.fm preview. The earlier generic account/password illustration was misleading and has been removed.

@@ -81,18 +81,15 @@ import app.veyra.music.data.model.ROW_ART_PX
 import app.veyra.music.data.model.ShelfItem
 import app.veyra.music.data.model.Song
 import app.veyra.music.data.model.UiState
-import java.util.Locale
 import app.veyra.music.data.model.artworkAt
 import app.veyra.music.data.settings.LibraryViewType
 import app.veyra.music.ui.components.HERO_CARD_RATIO
 import app.veyra.music.ui.components.MessageState
 import app.veyra.music.ui.components.PAGE_GUTTER
-import app.veyra.music.ui.components.RowMoreButton
 import app.veyra.music.ui.components.PlayingAccent
 import app.veyra.music.ui.components.PullToRefresh
 import app.veyra.music.ui.components.SHELF_CARD_WIDTH
 import app.veyra.music.ui.components.SearchPlayingBars
-import app.veyra.music.ui.components.SignInBanner
 import app.veyra.music.ui.components.FeedShimmerHost
 import app.veyra.music.ui.components.feedMoreSkeleton
 import app.veyra.music.ui.components.homeFeedSkeleton
@@ -184,7 +181,11 @@ fun HomeScreen(
                 }
                 if (!signedIn && onSignIn != null) {
                     item(key = "home:account", contentType = "account") {
-                        SignInBanner(onSignIn = onSignIn, modifier = Modifier.padding(bottom = 8.dp))
+                        HomeAccountPrompt(
+                            title = stringResource(Res.string.sign_in_youtube_music),
+                            subtitle = stringResource(Res.string.sign_in_with_google), onSignIn = onSignIn,
+                            modifier = Modifier.padding(horizontal = PAGE_GUTTER, vertical = 8.dp),
+                        ) { Image(painterResource(Res.drawable.ic_google_g), null, Modifier.size(28.dp)) }
                     }
                 }
                 when (state) {
@@ -203,6 +204,13 @@ fun HomeScreen(
                     is UiState.Success -> {
                         if (recentlyPlayedLoading) {
                             recentlyPlayedSkeleton(listLayout = recentsViewType == LibraryViewType.LIST)
+                        }
+                        if (!recentlyPlayedLoading && !loadingMore && loadMoreError == null && state.data.all { it.items.isEmpty() }) {
+                            item(key = "home:empty", contentType = "message") {
+                                HomeEmptyContent(stringResource(Res.string.home_empty_title),
+                                    stringResource(Res.string.home_empty_subtitle), stringResource(Res.string.home_refresh),
+                                    refreshing, onRefresh, Modifier.padding(horizontal = PAGE_GUTTER))
+                            }
                         }
                         itemsIndexedShelves(
                             shelves = state.data,
@@ -275,11 +283,13 @@ private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexedShelves(
     onRecentsViewTypeToggle: () -> Unit,
 ) {
     var recommendationIndex = 0
-    shelves.forEach { shelf ->
+    val shelfKeys = homeShelfKeys(shelves.map { it.title })
+    shelves.forEachIndexed { shelfIndex, shelf ->
+        if (shelf.items.isEmpty()) return@forEachIndexed
         val recent = shelf.title.equals(RECENTS_TITLE, ignoreCase = true)
         val recommendation = if (recent) -1 else recommendationIndex++
         // Recent history can arrive after the feed. Its insertion must not recreate every shelf.
-        item(key = "home:shelf:${shelf.title.lowercase(Locale.ROOT)}", contentType = "home:shelf") {
+        item(key = shelfKeys[shelfIndex], contentType = "home:shelf") {
             val openItem: (ShelfItem) -> Unit = { item -> onItemClick(item, shelf.title) }
             if (recent) {
                 RecentShelf(
@@ -411,30 +421,12 @@ private fun RecentSectionHeader(
             }
         }
         Spacer(Modifier.width(8.dp))
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .clip(CircleShape)
-                .clickable(onClick = onViewTypeToggle),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                imageVector = if (viewType == LibraryViewType.LIST) {
-                    VeyraIcons.GridView
-                } else {
-                    VeyraIcons.ListView
-                },
-                contentDescription = stringResource(
-                    if (viewType == LibraryViewType.LIST) {
-                        Res.string.switch_to_grid_view
-                    } else {
-                        Res.string.switch_to_list_view
-                    },
-                ),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(19.dp),
-            )
-        }
+        val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+        HomeActionButton(
+            icon = if (viewType == LibraryViewType.LIST) VeyraIcons.GridView else VeyraIcons.ListView,
+            description = stringResource(if (viewType == LibraryViewType.LIST) Res.string.switch_to_grid_view else Res.string.switch_to_list_view),
+            onClick = onViewTypeToggle, reducedMotion = reduceMotion,
+        )
     }
 }
 
@@ -472,12 +464,13 @@ fun CompactTrackRow(
     isCurrent: Boolean = false,
     isPlaying: Boolean = false,
     titleMaxLines: Int = 1,
+    enabled: Boolean = true,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .longPressMenuClickable(onClick = onClick, onLongClick = onLongPress)
-            .contextClick(onLongPress)
+            .longPressMenuClickable(onClick = onClick, onLongClick = onLongPress, enabled = enabled)
+            .contextClick(if (enabled) onLongPress else null)
             .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -512,7 +505,9 @@ fun CompactTrackRow(
             )
         }
         if (onLongPress != null) {
-            RowMoreButton(onClick = onLongPress)
+            HomeActionButton(icon = Icons.Rounded.MoreVert,
+                description = stringResource(Res.string.more), onClick = onLongPress,
+                enabled = enabled, reducedMotion = true)
         }
     }
 }
@@ -530,24 +525,11 @@ private fun HomeTitle(title: String, modifier: Modifier = Modifier) {
         introduced = true
         if (animate) reveal.animateTo(1f, tween(300)) else reveal.snapTo(1f)
     }
-    Column(
-        modifier = modifier.fillMaxWidth().padding(horizontal = PAGE_GUTTER, vertical = 14.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-    ) {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            VeyraBrand(Modifier.weight(1f), color = colors.onBackground, reveal = { reveal.value })
-            VeyraWaveform(Modifier.size(30.dp).clearAndSetSemantics { },
-                color = colors.onBackground.copy(alpha = 0.65f), progress = { reveal.value })
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(title, modifier = Modifier.semantics { heading() },
-                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.W800), color = colors.onBackground)
-            Text(stringResource(Res.string.home_hero_subtitle),
-                style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant)
-        }
-        Box(Modifier.padding(top = 4.dp).fillMaxWidth().height(1.dp).background(
-            Brush.horizontalGradient(listOf(colors.onBackground.copy(alpha = 0.20f), Color.Transparent))))
+    HomeHeading(title, stringResource(Res.string.home_hero_subtitle),
+        modifier.fillMaxWidth().padding(horizontal = PAGE_GUTTER, vertical = 18.dp)) {
+        VeyraBrand(Modifier.weight(1f), color = colors.onBackground, reveal = { reveal.value })
+        VeyraWaveform(Modifier.size(32.dp).clearAndSetSemantics { },
+            color = colors.onBackground.copy(alpha = 0.65f), progress = { reveal.value })
     }
 }
 
