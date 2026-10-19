@@ -1,3 +1,7 @@
+# Cron support update · 0.1.5-beta1
+
+The latest preview ZIP includes the [external cron setup guide](../docs/RENDER_KEEPALIVE.md) and current stable/preview status. Runtime features and version remain unchanged; both app tracks share the Veyra backend and 12-minute keep-alive infrastructure.
+
 # New preview source · 0.1.5-beta1
 
 [Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip). Includes the Veyra backend migration. Full Android compilation and deployed-server verification remain pending; [read the verification limits](../verification/backend-migration/README.md). No APK is bundled.

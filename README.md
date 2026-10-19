@@ -33,15 +33,19 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
+## External cron and 12-minute keep-alive
+
+Preview **0.1.5-beta1** uses the same backend and keep-alive infrastructure as stable **0.1.5**. [Set up your external cron job](docs/RENDER_KEEPALIVE.md). The backend's GitHub Actions schedule remains a fallback; no app-side background timer or separate preview scheduler is needed. Preview features and version/code remain unchanged.
+
 ## Veyra-owned backend migration
 
 Room synchronization, invites and presence now target `https://veyra-listen-together.onrender.com`. Old managed server preferences and room tokens migrate without contacting the retired service; intentional custom servers remain. [Migration checks and remaining build/device verification](verification/backend-migration/README.md). Source candidates are separate from a published stable APK.
 
 ## Preview development: 0.1.5-beta1
 
-This branch contains the **preview beta**, not a replacement for stable 0.1.3. Build version is `0.1.5-beta1`, code 18. Stable 0.1.3/code 16 remains on [main](https://github.com/Bhavishyadalal/Veyra/tree/main), with its original source ZIP unchanged.
+This branch contains the **preview beta**, not a replacement for stable 0.1.3. Build version is `0.1.5-beta1`, code 18. Stable 0.1.5/code 19 is now on [main](https://github.com/Bhavishyadalal/Veyra/tree/main), with a separate stable source ZIP; historical 0.1.3 archives remain available.
 
-**Build correction:** restored the missing `java.util.Locale` import used by subtitle localization. No other application source is changed by this correction. The separate app-test/sharedUi visibility issue remains unresolved; see [BUILD_FIX_BETA1.md](BUILD_FIX_BETA1.md) for the exact fix, reported external build outcome and local validation limits.
+**Build correction:** restored the missing `java.util.Locale` import used by subtitle localization. No other application source is changed by this correction. The HomeFeedIdentity test was moved into its owning sharedUi module in this preview. The earlier fix and its historical limitations are documented in [BUILD_FIX_BETA1.md](BUILD_FIX_BETA1.md) for the exact fix, reported external build outcome and local validation limits.
 
 Home has clearer brand/headings, neutral Google entry, polished artwork cards with fallbacks, 48dp paging/menu controls, safer layout switches and an empty-feed refresh action. Existing feed, playback and authentication callbacks remain. [Home component previews](design/home-preview/README.md) · [Home verification and limits](verification/HOME-REFINEMENT-RESULTS.md).
 
