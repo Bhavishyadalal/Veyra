@@ -81,3 +81,11 @@ Then open `http://localhost:5173/extension`. It shows "Installed", with the vers
 corepack pnpm --dir web -r typecheck
 corepack pnpm --dir web/app build
 ```
+
+## Veyra deployment configuration
+
+The Android backend is Veyra-owned. The browser extension now defaults only to
+`http://localhost:5173` for development. A store build requires explicit
+`VEYRA_SITE_ORIGINS` containing your HTTPS web-player origins; retired operator
+origins and localhost store origins are rejected. The marketing website is not a
+web-player deployment. See [source maintenance](../docs/BACKEND_SYNC.md).

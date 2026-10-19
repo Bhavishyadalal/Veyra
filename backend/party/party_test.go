@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/KabirSinghBhatia/Veyra/backend/codes"
-	"github.com/KabirSinghBhatia/Veyra/backend/config"
+	"github.com/Bhavishyadalal/Veyra-backend/codes"
+	"github.com/Bhavishyadalal/Veyra-backend/config"
 )
 
 func TestCodeNormalisation(t *testing.T) {

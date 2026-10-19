@@ -1,355 +1,144 @@
-# Veyra — Listen Together
+# Veyra Backend · 0.1.5
 
-The party server behind **Listen together**: create a six-character code, share
-it, and up to five signed-in devices listen to the same thing at the same time.
-Anyone in the party can control the music.
+An independently hosted **Listen Together and app-presence service for Veyra**. Deploy this source in your own repository and Render account. It does not call the original app's backend.
 
-Go + a WebSocket per device, no database, deployed as a single Render web
-service.
+The app migration is deliberately a second step: deploy this server, verify its HTTPS URL, then wire **stable 0.1.5** and **preview 0.1.5-beta1** to it. Current app source/version/defaults have not been switched by this backend preparation.
 
-```bash
+## What this service does
+
+- Creates six-character listening rooms; guest and optional account-profile identities work without Google credentials at the server.
+- Issues separate random membership tokens; private REST and WebSocket actions require those tokens.
+- Synchronizes playback position, server-clock anchors, sequence numbers, shared queues and membership over REST + WebSockets.
+- Supports host-only controls, member limits, queue deltas, reconnect grace and room expiration.
+- Supplies Veyra presence open/close counts, public invite previews and Veyra-branded invite landing pages.
+- Optionally serves Android App Links verification from public signing-certificate fingerprints.
+
+It does **not** relay audio, implement WebRTC, fetch music streams or need TURN/STUN credentials. Each app streams its own music using its existing sources. The supplied relay screenshots are not configuration for this protocol; no relay credentials are bundled.
+
+## External cron support
+
+[Set up a 12-minute external cron job](CRON_SETUP.md): public HTTP GET settings, a reusable shell helper, testing steps and the existing GitHub Actions fallback. Both stable and preview Android builds share this backend; no phone-side background timer is needed.
+
+## Live deployment and keep-alive
+
+Service: **https://veyra-listen-together.onrender.com** · [Health](https://veyra-listen-together.onrender.com/healthz) · [Keep-alive runs](https://github.com/Bhavishyadalal/Veyra-backend/actions/workflows/render-keepalive.yml).
+
+The owner has reported successful room-code creation with Android 0.1.5. The application source is in [Veyra](https://github.com/Bhavishyadalal/Veyra); its stable and preview tracks remain separate.
+
+The included **Render keep-alive** GitHub Actions workflow requests `/healthz` every 12 minutes (UTC minutes 07, 19, 31, 43 and 55). It retries temporary failures/cold starts and checks that the response identifies the Veyra service and protocol, not just an HTTP 200. It creates no rooms, needs no secrets and does not change the backend's process state beyond an ordinary request.
+
+The schedule becomes eligible on this repository's default branch, `main`, while Actions is enabled. You can also choose **Actions → Render keep-alive → Run workflow**. A successful run is green; inspect its logs on failure. Merely committing the workflow does not prove GitHub has executed it or that Render stayed awake.
+
+GitHub scheduled workflows are best effort: they can be delayed/dropped and public-repository schedules are disabled after 60 days without repository activity. Requests may reduce idle spin-down, but cannot guarantee 24/7 availability, prevent restarts, preserve rooms across restarts or override Render's free-instance usage limits. An always-on Render instance is the reliable option for uninterrupted service. The app must continue to handle cold starts and reconnects.
+
+## Deploy on Render — separate repository
+
+1. Extract `Veyra_Backend_0.1.5_Source.zip`. Upload the **contents of `Veyra-Backend`** to your new repository root: `go.mod`, `main.go`, `render.yaml`, packages and the remaining files should be directly there.
+2. In Render choose **New → Web Service**, connect that repository, then use:
+
+| Field | Value |
+| --- | --- |
+| Runtime | Go |
+| Root Directory | Leave blank |
+| Build Command | `go build -trimpath -ldflags="-s -w" -o bin/veyra-server .` |
+| Start Command | `./bin/veyra-server` |
+| Health Check Path | `/healthz` |
+| Instance count | **1** |
+| `GO_VERSION` | `1.27.2` |
+| `JAM_TRUST_PROXY` | `true` |
+
+3. After Render assigns the service URL, set **`JAM_PUBLIC_ORIGIN`** to that exact `https://your-service.onrender.com` origin, without a path/query/fragment, and redeploy. Do not use an invented domain. Until configured, invite links derive the origin from the request/proxy headers.
+4. Set **`JAM_ALLOWED_ORIGINS`** to exact browser origins that should access the API. The supplied blueprint uses your current website, `https://veyra-website-mauve.vercel.app`. Native Android clients send no Origin and work without a browser entry. Do not use `*`.
+5. Open `/healthz`: it should report `ok: true`, service `veyra-listen-together`, version `0.1.5` and protocol `veyra.v1`.
+6. Run the deployment probe below, then send the service URL for app integration.
+
+Alternatively, **New → Blueprint** can read the included `render.yaml`. It is designed for a repository containing the extracted backend at its root. If deploying from the Android monorepo instead, manually set Root Directory to `backend`; do not copy monorepo directory settings into the standalone deployment.
+
+Render free services can sleep, cold-start and restart. Because rooms live in memory, every restart or deployment loses rooms and live counts. Use an always-on plan if uninterrupted listening is required. This implementation is single-instance; it does not provide shared state across replicas or persistent rooms.
+
+## Verify your deployment
+
+Install Go 1.27.2 or a compatible newer Go toolchain. From the backend repository root:
+
+```sh
+go mod verify
+go vet ./...
+go test -race -count=1 ./...
+go run ./cmd/veyra-smoke -server https://YOUR-ACTUAL-SERVICE.onrender.com
+```
+
+The probe checks the Veyra deployment identity before creating one temporary room. It drives **two real WebSocket clients**, checks guest access, authorization, queue broadcast/reorder, track state, host-only enforcement, seek synchronization, queue resync and presence, then leaves its own memberships. It prints no membership tokens. Repeated probes are subject to the same creation limits as clients; wait for the rate-limit window if necessary. It does not test actual Android audio playback or mobile networks.
+
+Local development:
+
+```sh
 go run .
-go test -v ./...
+# In another terminal:
+go run ./cmd/veyra-smoke -server http://127.0.0.1:8000
 ```
 
----
+The server reads process environment. `.env.example` documents settings but is **not automatically loaded**. Set values in Render's Environment panel or in your local shell. Keep local `.env` files untracked. No database, account password, private signing key or TURN credential is required.
 
-## How devices stay in time
+## API and synchronization
 
-This is the part worth reading before changing anything. Nothing here is
-synchronised by broadcasting "play now" — a frame that arrives 40 ms late on one
-phone and 300 ms late on another would start them a quarter of a second apart,
-and re-sending it more often would not fix that, only re-spread it.
+[Protocol reference](PROTOCOL.md) explains every route, frame, control and clock/queue rule. [Android migration checklist](APP_MIGRATION_0.1.5.md) records all app endpoints that still need moving after deployment. [Verification](VERIFICATION.md) records what was actually exercised locally.
 
-Instead the server holds **a position and the server time that position was true
-at**:
+| Route | Purpose |
+| --- | --- |
+| `GET /`, `GET /healthz` | Service identity, version and health |
+| `GET /api/time` | Server clock sample |
+| `POST /api/parties` | Create room and host membership |
+| `POST /api/parties/{code}/join` | Join/reclaim a device slot |
+| `GET /api/parties/{code}` | Token-authenticated room snapshot |
+| `GET /api/parties/{code}/preview` | Public limited member preview |
+| `POST /api/parties/{code}/leave` | Revoke membership and close socket |
+| `GET /ws/parties/{code}` | Authenticated WebSocket synchronization |
+| `GET /invite/{code}` | Veyra invite page and `veyra://party` link |
+| `POST /api/presence` | App-open heartbeat/close |
+| `GET /api/stats/live`, `/api/stats/live/badge.svg` | Public aggregate counts |
+| `GET /.well-known/assetlinks.json` | Optional Android App Links association |
 
-```jsonc
-{
-  "positionMs": 42000,          // where the party was...
-  "anchorMs": 1757630001234,    // ...at this instant on the server's clock
-  "isPlaying": true
-}
-```
+## Environment reference
 
-Each device knows its own offset from that clock, so it can answer "where should
-I be *right now*" locally, whenever it likes, without another round trip:
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `PORT` | `8000` | Render supplies its own port automatically |
+| `JAM_PUBLIC_ORIGIN` | Derived | Actual HTTPS origin for invite links |
+| `JAM_TRUST_PROXY` | `false` | Enable only behind your trusted TLS proxy; Render blueprint sets true |
+| `JAM_ALLOWED_ORIGINS` | Empty | Comma-separated exact browser origins |
+| `JAM_MAX_MEMBERS` | `5` | Default devices per room; host can choose 2–10 |
+| `JAM_MAX_PARTIES` | `50` | Concurrent room ceiling |
+| `JAM_MAX_UPCOMING_QUEUE` | `25` | Upcoming-track ceiling |
+| `JAM_MAX_QUEUE_LENGTH` | `26` | Total queue ceiling |
+| `JAM_STATE_HEARTBEAT_MS` | `5000` | State heartbeat interval; minimum effective interval is 1s |
+| `JAM_PLAY_LEAD_MS` | `350` | Future anchor lead for play/seek |
+| `JAM_DISCONNECT_GRACE_MS` | `45000` | Dropped-socket slot grace |
+| `JAM_EMPTY_PARTY_TTL_MS` | `120000` | Empty-room expiration |
+| `JAM_PARTY_MAX_AGE_MS` | `43200000` | Maximum room lifetime |
+| `JAM_CREATE_RATE_PER_MINUTE` | `2` | Room creations per client IP |
+| `JAM_RATE_LIMIT_MAX_ENTRIES` | `10000` | Creation limiter IP-table ceiling |
+| `JAM_CONTROL_RATE_PER_SECOND` | `25` | Per-member control budget |
+| `JAM_FRAME_RATE_PER_SECOND` | `30` | Per-member frame budget, including ping/sync |
+| `JAM_REQUEST_MAX_BYTES` | `16384` | REST request-body limit |
+| `JAM_WEBSOCKET_MAX_BYTES` | `16384` | WebSocket frame limit |
+| `JAM_CONNECTION_IDLE_MS` | `900000` | Application-frame idle timeout |
+| `JAM_PRESENCE_INTERVAL_SEC` | `300` | Suggested app-open ping interval |
+| `JAM_PRESENCE_GRACE_SEC` | `90` | Presence expiration grace |
+| `JAM_PRESENCE_MAX_ENTRIES` | `200000` | Presence record ceiling |
+| `JAM_PRESENCE_PINGS_PER_MINUTE` | `20` | Presence IP request budget |
+| `JAM_PRESENCE_RATE_LIMIT_MAX_IPS` | `100000` | Presence limiter IP-table ceiling |
+| `ANDROID_APP_SHA256_CERT_FINGERPRINTS` | Empty | Optional comma-separated **public** production signing-certificate SHA-256 fingerprints |
 
-```
-serverNow   = deviceNow + clockOffset
-playhead    = positionMs + max(0, serverNow - anchorMs)      // while playing
-playhead    = positionMs                                      // while paused
-```
+Numeric settings should remain positive; keep defaults until measured load justifies changes. Display names/user IDs are client assertions, not verified Google identities. Membership tokens authorize room actions. Public room codes are invitations; never treat a code as a private account credential.
 
-A delayed frame carries an anchor that is correspondingly further in the past,
-so it still lands the device in exactly the right place. That is the whole
-trick, and four things protect it:
+## Android App Links
 
-1. **The clock offset is measured, not assumed.** Each device sends
-   `{"type":"ping","clientMs":…}`; the server replies with that stamp untouched
-   plus its own. Offset is `serverMs - (t0 + t1) / 2`, error is bounded by half
-   the round trip, and keeping the sample with the *smallest* round trip is what
-   makes this accurate over mobile data. Same idea as NTP. `GET /api/time` gives
-   a client a first estimate before it has a socket.
-2. **The server clock never jumps.** `clock/clock.go` reads the wall clock once
-   and advances it monotonically after that, so an NTP step on the host cannot
-   rewrite the anchor under a room full of phones at once.
-3. **Resuming is scheduled slightly ahead.** Play and seek anchor
-   `JAM_PLAY_LEAD_MS` (default 350 ms) into the future, so every device aims at
-   one common instant and has time to buffer, instead of each starting whenever
-   its own packet landed. Before that instant, `PositionAt` holds at the
-   position rather than running backwards.
-4. **The truth is re-stated on a timer.** Every `JAM_STATE_HEARTBEAT_MS`
-   (default 5 s) each party is told again where it is, unprompted. Lost frames,
-   a phone coming back from doze, an offset that has wandered — none of those
-   announce themselves, so correctness must not depend on anyone asking.
+Once the real Render origin is known, the app manifest must declare that host. To enable verified HTTPS opening, set `ANDROID_APP_SHA256_CERT_FINGERPRINTS` to the public SHA-256 fingerprint of the certificate that signs your production APK, then verify `/.well-known/assetlinks.json`. The package is `app.veyra.music`. Get this **certificate fingerprint**, not the APK file's SHA-256, from your existing signing certificate (for example with Android SDK `apksigner verify --print-certs`). Do not send a private keystore or signing password to the backend.
 
-The server's state is the truth. Devices *report* their real playhead
-(`{"type":"report"}`), but that is only logged — a party is never averaged
-towards a straggler on a bad connection.
+When fingerprints are unset or invalid, that route returns 404; the Veyra custom-scheme invite remains available. Actual HTTPS App Links also need Android verification and cannot be proven before the final app/host/certificate are configured.
 
-## Identity, and what it is worth
+## Source and licence
 
-Creating or joining requires `userId`, `deviceId` and `displayName`, which the
-app takes from the signed-in Google/YouTube profile. That is what puts real
-names and avatars in the member list on every device.
+Veyra backend modifications are by **Bhavishya Dalal**. This is a GPL-3.0 derivative of the existing synchronization backend; see [NOTICE](NOTICE), [LICENSE](LICENSE) and [upstream review](UPSTREAM.md). Runtime service names, invite pages, Go module and deployment defaults use Veyra. Required upstream attribution remains in legal documentation. Gorilla WebSocket's licence is in `licenses/`.
 
-**The server cannot verify that claim**, and is written on the assumption it
-never will: it holds no Google credential, and an Innertube round trip per join
-would be both slow and another way to get rate-limited. What *is* server-held is
-the **token** minted on join — unguessable, returned exactly once, and required
-on every call afterwards. So a member can lie about who they are; they cannot
-act as a member they are not, or join a party whose code they were not given.
-
-If that trade ever stops being acceptable, the place to change it is
-`Party.Join`: have the client send a short-lived proof from the account layer and
-verify it there. Nothing above that function would need to move.
-
-## Capacity and lifecycle
-
-- **Five devices** (`JAM_MAX_MEMBERS`), counted per device rather than per
-  account — the same person on a phone and a tablet is two streams.
-- **Rejoining reclaims a slot.** Reinstall, force-stop, a socket the grace
-  period outlived: all come back through the same path, so a party of five does
-  not fill with ghosts of the same five devices.
-- **A dropped socket is not a departure.** The membership survives
-  `JAM_DISCONNECT_GRACE_MS` (default 45 s), which is what makes a tunnel or a
-  screen-off invisible to everyone else.
-- **The host is privileged only if it says so.** By default anyone may control
-  the music and the role just decides who inherits it, passing on when the host
-  leaves rather than ending the party. A host may also set `hostOnlyControl`,
-  after which the server refuses every playback and queue action from anybody
-  else — see the control actions below. The setting belongs to the party, so a
-  new host inherits it rather than being locked out of a party they now own.
-- Parties are swept when nobody has been connected for
-  `JAM_EMPTY_PARTY_TTL_MS`, and unconditionally after `JAM_PARTY_MAX_AGE_MS`.
-
-## API
-
-All bodies and frames are camelCase — the only client is the Android app, and
-matching Kotlin's naming keeps `@SerialName` off every field.
-
-### REST
-
-| | |
-|---|---|
-| `GET /healthz` | Render's health check. |
-| `GET /api/time` | `{"serverMs":…}` — a clock sample before the socket exists. |
-| `POST /api/parties` | Create a party and join it as host. Body: `userId`, `deviceId`, `displayName`, `avatarUrl?`. → `201` with `code`, `token`, `you`, `party`. Creation is capped per IP and by the service-wide party limit. |
-| `POST /api/parties/{code}/join` | Same body. `404` unknown code, `409` full, `422` no identity. The code is normalised first, so lower case, spaces, and `O`/`I`/`L` typed for `0`/`1` all work. |
-| `GET /api/parties/{code}` | Full snapshot. Needs `Authorization: Bearer <token>`. |
-| `POST /api/parties/{code}/leave` | Give up the slot. Needs the bearer token. |
-
-### WebSocket — `/ws/parties/{code}`
-
-Pass the party token in `Authorization: Bearer <token>` during the WebSocket
-handshake. Tokens are intentionally not accepted in the URL, which prevents
-them from being recorded in common HTTP access logs.
-
-A browser cannot set that header on a WebSocket, so the web player offers the
-token as a subprotocol instead: `Sec-WebSocket-Protocol: veyra.v1,
-veyra.token.<token>`. The server answers `veyra.v1` and never echoes the
-token. The browser's `Origin` must be in `JAM_ALLOWED_ORIGINS`.
-
-Client → server:
-
-```jsonc
-{"type": "ping",    "clientMs": 1757630000000}
-{"type": "sync"}                                   // re-send me the state
-{"type": "syncQueue"}                              // my queue copy is stale
-{"type": "report",  "positionMs": 42210, "isPlaying": true}
-{"type": "control", "action": "play",        "positionMs": 42000}
-{"type": "control", "action": "pause",       "positionMs": 42000}   // positionMs optional
-{"type": "control", "action": "seek",        "positionMs": 90000}   // required
-{"type": "control", "action": "setTrack",    "track": {…}, "positionMs": 0, "isPlaying": true}
-{"type": "control", "action": "setQueue",    "queue": [{…}], "queueIndex": 0}
-{"type": "control", "action": "queueAdd",    "tracks": [{…}], "playNext": false}
-{"type": "control", "action": "queueRemove", "videoId": "…"}
-{"type": "control", "action": "queueClear"}
-{"type": "control", "action": "queueMove",   "fromIndex": 2, "toIndex": 5, "videoId": "…"}
-{"type": "control", "action": "next"}
-{"type": "control", "action": "previous"}
-{"type": "control", "action": "setHostOnlyControl", "enabled": true}   // host only
-```
-
-`setMaxMembers`, `kick` and `setHostOnlyControl` are host-only and answer
-`403 host_only` to anybody else. While `hostOnlyControl` is on, so is every
-action above them in that list — `play`, `pause`, `seek`, `setTrack`,
-`setQueue`, `queueAdd`, `queueRemove`, `queueClear`, `queueMove`, `next`,
-`previous` and `setAutoplay` — which is what makes the restriction real rather
-than a matter of the app hiding its own buttons.
-
-The flag travels on the `members` frame, alongside `maxMembers`, and in the
-snapshot; it is deliberately not on the state frame, which rides the heartbeat.
-Absent from either — an older server — it reads as `false`, which is the
-behaviour the feature shipped with.
-
-A `bye` frame carries a `reason`: `left` when a member gives up their own slot,
-`kicked` when the host removes them. The server holds no grudge — a removed
-device may rejoin immediately as far as it is concerned — but the reason lets a
-client shut its own door, which is what the Android app does for 24 hours.
-
-A `track` is `{videoId, title, artist, thumbnailUrl, durationMs, fromAutoplay}` — enough to
-identify and to *show* a song, and nothing more. Stream URLs, sources, quality
-and download state stay each device's own business, so two people in a party can
-be on different sources at different bitrates and still be in the same place.
-
-Playback state also carries `startedBy` and `startedByName`, identifying the
-member who selected the current track. They change only with the track;
-`updatedBy` continues to identify the most recent play, pause, seek, or track
-control. Keeping the name in the state preserves the attribution if that member
-leaves before the song ends.
-
-Server → client:
-
-```jsonc
-{"type": "welcome", "you": {…}, "party": {…}, "serverMs": …}
-{"type": "pong",    "clientMs": …, "serverMs": …}
-{"type": "state",   "playback": {…}, "serverMs": …}
-{"type": "queue",   "queue": {"seq": 3, "index": 1, "items": [{…}]}, "serverMs": …}
-{"type": "members", "members": [{…}], "maxMembers": 5, "serverMs": …}
-{"type": "error",   "error": "rate_limited", "message": "…"}
-{"type": "bye",     "reason": "left"}
-```
-
-Every mutation bumps `playback.seq`. **Clients must ignore any state whose `seq`
-is not greater than the last one they applied** — that is what makes two people
-hitting pause at the same moment settle instead of oscillate. A control is
-broadcast to the sender too, so the controlling device re-anchors off the same
-frame as everyone else rather than running on a state it predicted locally.
-
-### The queue travels separately
-
-**`state` does not contain the queue.** It carries `queueSeq`, `queueIndex` and
-`queueLength`, and that is all. The list itself arrives:
-
-- **whole, in a snapshot** — `welcome` and `GET /api/parties/{code}` both carry
-  `party.queue`, because a device that has just arrived has no other way to
-  learn it;
-- **on change** — a queue control broadcasts a `queue` frame *before* the
-  `state` frame, so nobody ever holds a state pointing at an index in a list
-  they have not been given;
-- **on request** — a client whose `queue.seq` disagrees with the `queueSeq` in a
-  state frame sends `syncQueue`. That is the self-healing half: a missed queue
-  broadcast is noticed on the very next heartbeat rather than lived with.
-
-This split is the single biggest thing keeping the service cheap. The state
-frame goes to every device every few seconds forever, and the queue is the one
-field in it that is both large and almost never different — a 50-track queue on
-the heartbeat was roughly twenty times the bytes of everything else combined,
-paid continuously, on other people's mobile data. Adding a field to `ToWire`
-that grows with the queue puts all of that straight back; put it in
-`QueueToWire` instead.
-
-### Shared queue limits and delta moves
-
-To keep memory, bandwidth, and latency strictly bounded:
-
-- **Upcoming limit** (`JAM_MAX_UPCOMING_QUEUE`, default 25): A party holds at
-  most 25 upcoming songs (excluding the active track). Additions past 25 are
-  clamped or rejected with `queue_full`.
-- **Delta actions**: Rather than replacing the whole array on every gesture,
-  clients send lightweight deltas (`queueAdd`, `queueRemove`, `queueClear`,
-  `queueMove`).
-- **Race condition resilience**: `queueMove` carries an optional `videoId`
-  alongside indices. If concurrent network lag (e.g. 800 ms mobile latency) or
-  a track completion shifts indices, the server resolves `fromIndex` from the
-  track's `videoId` under the party lock, preventing misplaced drops.
-- **Repeated tracks**: the queue keeps its history, so it can hold the playing
-  track twice. `setQueue` keeps the sender's `queueIndex` when it names the
-  playing track, and `setTrack` without one takes the copy nearest the current
-  index (the next slot first) rather than the first copy from the top.
-- **AutoPlay de-duplication**: `queueAdd` drops `fromAutoplay` tracks already
-  waiting after the current one (or repeated in the batch). A batch that is
-  entirely such tracks succeeds without changing the queue. Hand-queued tracks
-  are never filtered.
-
-## Deploying to Oracle Cloud (Always Free)
-
-This is what runs `https://api.bitchord.kushagrasingh.in`: one Always Free
-`VM.Standard.E2.1.Micro` (1 OCPU, 1 GB) on Ubuntu 24.04 in ap-mumbai-1, with
-Caddy in front for HTTPS and WebSockets. Files are in `deploy/`.
-
-1. **Create the VM**: Compute -> Instances -> Create. Image *Canonical Ubuntu
-   24.04*, shape *VM.Standard.E2.1.Micro* (tagged Always Free), public subnet,
-   public IPv4 on, paste your SSH public key.
-2. **Open 80/443 in the VCN**: Networking -> VCN -> Security -> *Default
-   Security List* -> Add Ingress Rule: source `0.0.0.0/0`, TCP, destination
-   ports `80,443`.
-3. **DNS**: an `A` record for the host name pointing at the VM's public IP.
-   It has to resolve before step 4 can get a certificate.
-4. **Install** (from a copy of `backend/` on the VM):
-
-   ```sh
-   sudo DOMAIN=api.bitchord.kushagrasingh.in bash deploy/setup.sh
-   ```
-
-   It installs Go, builds the server into `/opt/veyra-jam`, runs it as the
-   `veyra-jam` systemd service on `:8000`, installs Caddy for the domain, and
-   opens 80/443 in the VM's own iptables. Oracle's Ubuntu images carry a REJECT
-   rule besides the security list, so both have to be opened. Re-run the same
-   command to deploy a new build.
-
-Check it with `curl https://<domain>/healthz`. Logs are in
-`journalctl -u veyra-jam` and `journalctl -u caddy`.
-
-## Deploying to Render
-
-The blueprint is `render.yaml`, but Render reads blueprints from the repository
-root and this one lives in `backend/`. Either copy it up a level, or create the
-service by hand — which is one screen:
-
-- **New → Web Service**, connect this repo
-- **Root Directory** `backend`
-- **Runtime** Go
-- **Build Command** `go build -o server .`
-- **Start Command** `./server`
-- **Health check path** `/healthz`
-- **Instances** 1
-
-Then point the app at `https://<service>.onrender.com`, by adding this to
-`local.properties` at the repository root:
-
-```properties
-LISTEN_TOGETHER_SERVER=https://<service>.onrender.com
-```
-
-That becomes `BuildConfig.LISTEN_TOGETHER_SERVER` and seeds the address box on
-the Listen Together screen. It is only a default — anything typed into that box
-wins and persists, so running your own copy of this server never means editing
-the build. `local.properties` is gitignored, so a fresh checkout builds with an
-empty default and simply asks for an address the first time the screen is
-opened.
-
-Two things about Render specifically:
-
-- **Keep it to one instance.** A party lives in the memory of the instance
-  holding its WebSockets, so a second instance is a second, disjoint set of
-  parties, and a join lands in whichever one the load balancer picked. Outgrowing
-  that is a Redis pub/sub swap behind `PartyStore` — nothing above it moves.
-- **The free plan spins down after ~15 minutes idle**, which closes every
-  WebSocket and drops every party, and the next request then waits ~30 s for a
-  cold start. Fine for development; for real use this wants the paid instance
-  type, where the process stays up (or a free uptime monitor pinging `/healthz`
-  every 12 minutes).
-
-### Environment
-
-Every one of these is optional — `config/config.go` carries the same defaults.
-
-| Variable | Default | |
-|---|---|---|
-| `JAM_MAX_MEMBERS` | `5` | Devices per party. |
-| `JAM_STATE_HEARTBEAT_MS` | `5000` | How often the truth is re-stated. |
-| `JAM_PLAY_LEAD_MS` | `350` | How far ahead a resume is scheduled. |
-| `JAM_MAX_UPCOMING_QUEUE` | `25` | Maximum upcoming tracks in shared queue. |
-| `JAM_MAX_QUEUE_LENGTH` | `26` | Hard limit on total queue length (`1 + MaxUpcomingQueue`). |
-| `JAM_DISCONNECT_GRACE_MS` | `45000` | How long a lost socket keeps its slot. |
-| `JAM_EMPTY_PARTY_TTL_MS` | `120000` | How long an empty party survives. |
-| `JAM_PARTY_MAX_AGE_MS` | `43200000` | Hard ceiling on a party's life. |
-| `JAM_CONTROL_RATE_PER_SECOND` | `25` | Per-member control ceiling. |
-| `JAM_FRAME_RATE_PER_SECOND` | `30` | Per-member WebSocket frame ceiling, including ping and sync frames. |
-| `JAM_MAX_PARTIES` | `50` | Maximum concurrent parties. Conservative default for Render Free (250 sockets at five devices each). |
-| `JAM_CREATE_RATE_PER_MINUTE` | `2` | Maximum new parties per client IP per minute. |
-| `JAM_RATE_LIMIT_MAX_ENTRIES` | `10000` | Maximum tracked client IPs before new creations are rejected, preventing the limiter itself from growing without bound. |
-| `JAM_REQUEST_MAX_BYTES` | `16384` | Maximum REST request size. |
-| `JAM_WEBSOCKET_MAX_BYTES` | `16384` | Maximum incoming WebSocket message size. |
-| `JAM_CONNECTION_IDLE_MS` | `900000` | Close a WebSocket that sends no message for 15 minutes. |
-| `JAM_ALLOWED_ORIGINS` | *(none)* | Comma-separated browser Origin allowlist. Native clients send no Origin and remain supported. |
-| `JAM_TRUST_PROXY` | `false` | Read `X-Forwarded-For` for rate limiting only when a trusted proxy terminates requests. |
-| `JAM_PUBLIC_ORIGIN` | *(none)* | Public origin emitted verbatim in invite deep links, e.g. `https://party.example.com`. Set it when TLS terminates upstream and `X-Forwarded-Proto` may be rewritten or dropped along the way. |
-| `PORT` | `8000` | Port the server listens on. |
-
-## Layout
-
-```
-clock/clock.go        The one clock, monotonic so anchors never jump
-codes/codes.go        Six-character codes, and reading a mistyped one charitably
-config/config.go      Environment knobs
-hub/hub.go            Who holds a socket, and how a frame reaches everyone
-party/party.go        Party, Member, PlaybackState — the sync rule, in-memory state
-protocol/protocol.go  Action and frame-type names
-main.go               REST routes, the socket loop, the heartbeat ticker
-main_test.go          REST endpoints and WebSocket integration tests
-party/party_test.go   Capacity limits, queue limits, delta moves, step
-```
+The standalone Render ZIP omits legacy VM provisioning helpers under `deploy/` and the older Python probes under `tools/`; they are not required for this deployment. Use the included Go smoke command. No binaries, APKs, private credentials or app-source ZIPs are included.
