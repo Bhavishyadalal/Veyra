@@ -11,4 +11,5 @@ fi
 git -C "$SRC" fetch --depth 1 origin "$SOURCE_BRANCH"
 git -C "$SRC" reset --hard FETCH_HEAD
 echo "deploying $(git -C "$SRC" log -1 --format='%h %s')"
-DOMAIN="$(cat /etc/veyra-domain)" bash "$SRC/backend/deploy/setup.sh"
+BACKEND_ROOT="${VEYRA_BACKEND_ROOT:-.}"
+DOMAIN="$(cat /etc/veyra-domain)" bash "$SRC/$BACKEND_ROOT/deploy/setup.sh"

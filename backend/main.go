@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -11,32 +12,34 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"os/signal"
 	"sort"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/gorilla/websocket"
 
-	"github.com/KabirSinghBhatia/Veyra/backend/clock"
-	"github.com/KabirSinghBhatia/Veyra/backend/codes"
-	"github.com/KabirSinghBhatia/Veyra/backend/config"
-	"github.com/KabirSinghBhatia/Veyra/backend/hub"
-	"github.com/KabirSinghBhatia/Veyra/backend/party"
-	"github.com/KabirSinghBhatia/Veyra/backend/presence"
-	"github.com/KabirSinghBhatia/Veyra/backend/protocol"
+	"github.com/Bhavishyadalal/Veyra-backend/clock"
+	"github.com/Bhavishyadalal/Veyra-backend/codes"
+	"github.com/Bhavishyadalal/Veyra-backend/config"
+	"github.com/Bhavishyadalal/Veyra-backend/hub"
+	"github.com/Bhavishyadalal/Veyra-backend/party"
+	"github.com/Bhavishyadalal/Veyra-backend/presence"
+	"github.com/Bhavishyadalal/Veyra-backend/protocol"
 )
 
 var (
-	store    = party.NewPartyStore()
-	hubInst  = hub.NewHub()
-	createLimiter = newIPRateLimiter(time.Minute, config.CreateRatePerMinute, config.RateLimitMaxEntries)
+	store           = party.NewPartyStore()
+	hubInst         = hub.NewHub()
+	createLimiter   = newIPRateLimiter(time.Minute, config.CreateRatePerMinute, config.RateLimitMaxEntries)
 	presenceTracker = presence.NewTracker(
 		time.Duration(config.PresenceIntervalSec+config.PresenceGraceSec)*time.Second,
 		config.PresenceMaxEntries,
 	)
 	presenceLimiter = newIPRateLimiter(time.Minute, config.PresencePingsPerMinute, config.PresenceRateLimitMaxIPs)
-	upgrader = websocket.Upgrader{
+	upgrader        = websocket.Upgrader{
 		// Answered only to a browser that offered it with its token (see
 		// parseSocketToken); a native client offers no subprotocol and gets none.
 		Subprotocols: []string{socketProtocol},
@@ -47,15 +50,17 @@ var (
 	}
 )
 
-func main() {
-	go startHeartbeatTicker()
-	go startPresenceSweeper()
+const serverVersion = "0.1.5"
+const serviceName = "veyra-listen-together"
 
+// Tests and the deployed process use exactly the same routes.
+func newHTTPHandler() http.Handler {
 	mux := http.NewServeMux()
 
 	// REST endpoints
 	mux.HandleFunc("GET /{$}", handleRoot)
 	mux.HandleFunc("GET /healthz", handleHealthz)
+	mux.HandleFunc("GET /.well-known/assetlinks.json", handleAppLinks)
 	mux.HandleFunc("GET /api/time", handleTime)
 	mux.HandleFunc("POST /api/parties", handleCreateParty)
 	mux.HandleFunc("POST /api/parties/{code}/join", handleJoinParty)
@@ -74,21 +79,38 @@ func main() {
 	// WebSocket endpoint
 	mux.HandleFunc("GET /ws/parties/{code}", handleWebSocket)
 
-	handler := corsMiddleware(mux)
+	return corsMiddleware(mux)
 
+}
+
+func main() {
+	go startHeartbeatTicker()
+	go startPresenceSweeper()
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
 	addr := fmt.Sprintf("0.0.0.0:%d", config.Port)
-	log.Printf("Veyra Listen Together (Go) starting on %s...", addr)
-	server := &http.Server{
-		Addr:              addr,
-		Handler:           handler,
-		ReadHeaderTimeout: 10 * time.Second,
-		ReadTimeout:       20 * time.Second,
-		WriteTimeout:      20 * time.Second,
-		IdleTimeout:       60 * time.Second,
-	}
-	if err := server.ListenAndServe(); err != nil {
+	server := &http.Server{Addr: addr, Handler: newHTTPHandler(),
+		ReadHeaderTimeout: 10 * time.Second, ReadTimeout: 20 * time.Second,
+		WriteTimeout: 20 * time.Second, IdleTimeout: 60 * time.Second}
+	stopped := make(chan struct{})
+	go func() {
+		defer close(stopped)
+		<-ctx.Done()
+		// HTTP Shutdown does not close hijacked WebSockets. Close them explicitly.
+		for _, code := range hubInst.ActiveCodes() {
+			hubInst.DropParty(code)
+		}
+		deadline, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err := server.Shutdown(deadline); err != nil {
+			log.Printf("Shutdown: %v", err)
+		}
+	}()
+	log.Printf("Veyra Listen Together %s starting on %s", serverVersion, addr)
+	if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Fatalf("Server stopped: %v", err)
 	}
+	<-stopped
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
@@ -197,6 +219,9 @@ func decodeJSONBody(w http.ResponseWriter, r *http.Request, dst interface{}) boo
 }
 
 func jsonResponse(w http.ResponseWriter, status int, data interface{}) {
+	if w.Header().Get("Cache-Control") == "" {
+		w.Header().Set("Cache-Control", "no-store")
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	_ = json.NewEncoder(w).Encode(data)
@@ -250,16 +275,21 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	jsonResponse(w, http.StatusOK, map[string]interface{}{
-		"service":    "veyra-listen-together",
-		"members":    store.MemberCount(),
-		"parties":    store.Len(),
-		"serverMs":   clock.NowMs(),
+		"service":  serviceName,
+		"version":  serverVersion,
+		"protocol": socketProtocol,
+		"members":  store.MemberCount(),
+		"parties":  store.Len(),
+		"serverMs": clock.NowMs(),
 	})
 }
 
 func handleHealthz(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, http.StatusOK, map[string]interface{}{
 		"ok":       true,
+		"service":  serviceName,
+		"version":  serverVersion,
+		"protocol": socketProtocol,
 		"serverMs": clock.NowMs(),
 	})
 }
@@ -355,8 +385,10 @@ func handleCreateParty(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	maxMembers := 5
-	if req.MaxMembers != nil { maxMembers = *req.MaxMembers }
+	maxMembers := config.MaxMembers
+	if req.MaxMembers != nil {
+		maxMembers = *req.MaxMembers
+	}
 	p, err := store.CreateWithLimits(config.MaxParties, maxMembers)
 	if err != nil {
 		if pe, ok := err.(*party.PartyError); ok {
@@ -579,6 +611,7 @@ func handleLeaveParty(w http.ResponseWriter, r *http.Request) {
 		"type":   protocol.FrameBye,
 		"reason": "left",
 	})
+	hubInst.CloseMember(p.Code, memberId)
 	hubInst.Broadcast(p.Code, membersFrame, memberId)
 
 	jsonResponse(w, http.StatusOK, map[string]bool{"ok": true})
@@ -886,14 +919,19 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	conn.SetReadLimit(config.WebSocketMaxBytes)
 	_ = conn.SetReadDeadline(time.Now().Add(time.Duration(config.ConnectionIdleMs) * time.Millisecond))
 
+	// Registration and connection state must be atomic against an old socket's cleanup.
 	p.Lock()
-	p.MarkConnected(member, true)
-	p.Unlock()
-
+	// Membership or token may have changed while the upgrade was in flight.
+	current, authErr := p.Authenticate(token)
+	if authErr != nil || current != member {
+		p.Unlock()
+		_ = conn.Close()
+		return
+	}
 	sc := hubInst.Attach(p.Code, member.MemberId, conn)
+	p.MarkConnected(member, true)
 
 	// Send welcome frame
-	p.Lock()
 	welcome := map[string]interface{}{
 		"type":     protocol.FrameWelcome,
 		"you":      member.ToWire(),
@@ -908,15 +946,19 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 	// Read loop
 	defer func() {
-		hubInst.Detach(p.Code, member.MemberId, sc)
-		_ = sc.Close()
-
 		p.Lock()
-		p.MarkConnected(member, false)
-		mFrame := membersFrame(p)
+		// An outgoing connection must not mark its replacement disconnected.
+		detached := hubInst.Detach(p.Code, member.MemberId, sc)
+		var mFrame map[string]interface{}
+		if detached {
+			p.MarkConnected(member, false)
+			mFrame = membersFrame(p)
+		}
 		p.Unlock()
-
-		hubInst.Broadcast(p.Code, mFrame, "")
+		_ = sc.Close()
+		if detached {
+			hubInst.Broadcast(p.Code, mFrame, "")
+		}
 	}()
 
 	for {
@@ -937,6 +979,10 @@ func handleSocketFrame(p *party.Party, member *party.Member, sc *hub.SafeConn, f
 
 	p.Lock()
 	defer p.Unlock()
+	if p.Members[member.MemberId] != member || !hubInst.IsCurrent(p.Code, member.MemberId, sc) {
+		_ = sc.Close()
+		return
+	}
 	if !p.SpendFrameBudget(member) {
 		_ = sc.WriteJSON(map[string]interface{}{
 			"type": protocol.FrameError, "error": "rate_limited", "message": "Too many messages at once.",
@@ -1153,7 +1199,9 @@ func applyControl(p *party.Party, member *party.Member, action string, frame map
 
 	case protocol.ActionSetMaxMembers:
 		value, ok := frame["maxMembers"].(float64)
-		if !ok { return false, "invalid_capacity", "Choose a party size between 2 and 10." }
+		if !ok {
+			return false, "invalid_capacity", "Choose a party size between 2 and 10."
+		}
 		if err := p.SetMaxMembers(member, int(value)); err != nil {
 			pe := err.(*party.PartyError)
 			return false, pe.Code, pe.Message
@@ -1181,9 +1229,15 @@ func applyControl(p *party.Party, member *party.Member, action string, frame map
 
 	case protocol.ActionKick:
 		targetID, _ := frame["memberId"].(string)
-		if !member.IsHost { return false, "host_only", "Only the host can remove listeners." }
-		if targetID == "" || targetID == member.MemberId { return false, "invalid_member", "Choose another listener to remove." }
-		if p.Remove(targetID) == nil { return false, "not_found", "That listener is no longer in this party." }
+		if !member.IsHost {
+			return false, "host_only", "Only the host can remove listeners."
+		}
+		if targetID == "" || targetID == member.MemberId {
+			return false, "invalid_member", "Choose another listener to remove."
+		}
+		if p.Remove(targetID) == nil {
+			return false, "not_found", "That listener is no longer in this party."
+		}
 		hubInst.Send(p.Code, targetID, map[string]interface{}{
 			"type":    protocol.FrameBye,
 			"reason":  "kicked",
@@ -1216,27 +1270,46 @@ func activityFrame(member *party.Member, action string, frame map[string]interfa
 	}
 	switch action {
 	case protocol.ActionSetTrack:
-		if title := trackTitle(frame["track"]); title != "" { detail = "Changed the song to \"" + title + "\"" }
+		if title := trackTitle(frame["track"]); title != "" {
+			detail = "Changed the song to \"" + title + "\""
+		}
 	case protocol.ActionQueueAdd:
 		if tracks, ok := frame["tracks"].([]interface{}); ok && len(tracks) > 0 {
 			title := trackTitle(tracks[0])
 			if title != "" {
-				if len(tracks) == 1 { detail = "Added \"" + title + "\" to the queue" } else { detail = fmt.Sprintf("Added \"%s\" and %d more to the queue", title, len(tracks)-1) }
+				if len(tracks) == 1 {
+					detail = "Added \"" + title + "\" to the queue"
+				} else {
+					detail = fmt.Sprintf("Added \"%s\" and %d more to the queue", title, len(tracks)-1)
+				}
 			}
 		}
 	case protocol.ActionSetQueue:
-		if tracks, ok := frame["queue"].([]interface{}); ok { detail = fmt.Sprintf("Replaced the queue with %d tracks", len(tracks)) }
-	case protocol.ActionQueueRemove: detail = "Removed a track from the queue"
-	case protocol.ActionQueueClear: detail = "Cleared upcoming tracks"
-	case protocol.ActionQueueMove: detail = "Reordered the upcoming queue"
-	case protocol.ActionNext: detail = "Skipped to the next song"
-	case protocol.ActionPrevious: detail = "Went back to the previous song"
-	case protocol.ActionPlay: detail = "Started playback"
-	case protocol.ActionPause: detail = "Paused playback"
-	case protocol.ActionSeek: detail = "Changed the playback position"
-	case protocol.ActionKick: detail = "Removed a listener from the party"
-	case protocol.ActionSetMaxMembers: detail = "Changed the party size"
-	case protocol.ActionSetAutoplay: detail = "Changed AutoPlay"
+		if tracks, ok := frame["queue"].([]interface{}); ok {
+			detail = fmt.Sprintf("Replaced the queue with %d tracks", len(tracks))
+		}
+	case protocol.ActionQueueRemove:
+		detail = "Removed a track from the queue"
+	case protocol.ActionQueueClear:
+		detail = "Cleared upcoming tracks"
+	case protocol.ActionQueueMove:
+		detail = "Reordered the upcoming queue"
+	case protocol.ActionNext:
+		detail = "Skipped to the next song"
+	case protocol.ActionPrevious:
+		detail = "Went back to the previous song"
+	case protocol.ActionPlay:
+		detail = "Started playback"
+	case protocol.ActionPause:
+		detail = "Paused playback"
+	case protocol.ActionSeek:
+		detail = "Changed the playback position"
+	case protocol.ActionKick:
+		detail = "Removed a listener from the party"
+	case protocol.ActionSetMaxMembers:
+		detail = "Changed the party size"
+	case protocol.ActionSetAutoplay:
+		detail = "Changed AutoPlay"
 	}
 	return map[string]interface{}{"type": protocol.FrameActivity, "action": action, "by": member.DisplayName, "detail": detail, "atMs": clock.NowMs()}
 }

@@ -6,6 +6,12 @@
 
 A personal Android music player with Manrope typography, selectable launcher styles and a dark listening interface.
 
+## Backend preparation — 0.1.5
+
+A standalone Veyra Listen Together/presence service is prepared on `backend/0.1.5`. [Download backend source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/backend/0.1.5/downloads/Veyra_Backend_0.1.5_Source.zip) · [Render deployment guide](backend/README.md) · [Compatibility checks](backend/VERIFICATION.md).
+
+Deploy that backend in your own repository first. App defaults and versions are deliberately unchanged until the real deployed URL is provided; stable 0.1.5 and preview 0.1.5-beta1 are the subsequent migration stage. Existing Android source ZIPs remain intact. See [the endpoint/version migration checklist](backend/APP_MIGRATION_0.1.5.md).
+
 ## Website and artwork
 
 [Browse the Veyra media kit](media-kit/README.md) · [Website and media-kit ZIP downloads](downloads/README.md). Includes link-sharing artwork, app banners, social formats, original backgrounds and an offline preview gallery. The website is prepared for local review and later deployment.

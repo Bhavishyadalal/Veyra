@@ -7,8 +7,9 @@ app sends `queueAdd` and never looks at the answer -- an `error` frame only
 lands in a log line -- so every refusal here is a silent "AutoPlay did nothing"
 on somebody's phone.
 
-Usage: python jam_probe.py [server]   (default: the LISTEN_TOGETHER_SERVER in
-local.properties). Creates real parties on it; the server sweeps them once
+Legacy probe: python jam_probe.py [server] (default: localhost:8000).
+Prefer the maintained Go cmd/veyra-smoke for deployment checks. Creates real
+parties on the specified server; the server sweeps them once
 everybody disconnects.
 """
 
@@ -20,7 +21,7 @@ import uuid
 import websockets
 from urllib.request import Request, urlopen
 
-DEFAULT_SERVER = "https://bitchord-67v8.onrender.com"
+DEFAULT_SERVER = "http://127.0.0.1:8000"
 
 
 def post(url, body):

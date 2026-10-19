@@ -1,5 +1,9 @@
 # Veyra source downloads
 
+## Backend — 0.1.5 deployment source
+
+[Download standalone backend ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/backend/0.1.5/downloads/Veyra_Backend_0.1.5_Source.zip) · [Checksum](Veyra_Backend_0.1.5_Source.zip.sha256) · [Render setup](../backend/README.md). Extract and upload the **contents** of `Veyra-Backend` to your new repository root. This is server source, not an APK or updated Android source. Existing app source ZIPs are unchanged while the real deployment URL is pending.
+
 ## Android preview — 0.1.4-beta1
 
 Includes the exact missing-Locale-import correction from the owner's build handoff. [Build fix and remaining test limitation](../BUILD_FIX_BETA1.md).

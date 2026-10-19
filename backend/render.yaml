@@ -1,45 +1,30 @@
-# Render blueprint for Veyra Listen Together (Go backend)
-#
-# Deploy this service manually on Render Dashboard (Recommended):
-# - New -> Web Service, connect repo
-# - Root Directory: backend
-# - Runtime: Go
-# - Build Command: go build -o server .
-# - Start Command: ./server
-# - Health Check Path: /healthz
-# - Plan: Free
-# - Region: Singapore (or closest to you)
-# - Instances: 1 (Parties live in memory, so keep to 1 instance)
-
+# This file is at repository root when the backend ZIP is extracted/uploaded.
+# For the app monorepo instead, set the Render service Root Directory to backend.
 services:
   - type: web
     name: veyra-listen-together
     runtime: go
     plan: free
     region: singapore
-    rootDir: backend
-    buildCommand: go build -o server .
-    startCommand: ./server
-    healthCheckPath: /healthz
     numInstances: 1
+    buildCommand: go build -trimpath -ldflags="-s -w" -o bin/veyra-server .
+    startCommand: ./bin/veyra-server
+    healthCheckPath: /healthz
+    autoDeployTrigger: checksPass
     envVars:
-      - key: JAM_MAX_MEMBERS
-        value: "5"
-      - key: JAM_STATE_HEARTBEAT_MS
-        value: "5000"
-      - key: JAM_MAX_UPCOMING_QUEUE
-        value: "25"
-      - key: JAM_MAX_PARTIES
-        value: "50"
-      - key: JAM_CREATE_RATE_PER_MINUTE
-        value: "2"
-      - key: JAM_CONNECTION_IDLE_MS
-        value: "900000"
-      # Render terminates TLS and supplies the real client IP in X-Forwarded-For.
+      - key: GO_VERSION
+        value: "1.27.2"
       - key: JAM_TRUST_PROXY
         value: "true"
-      # Set to the public https origin (e.g. https://party.example.com) when a
-      # proxy in front of Render may not carry X-Forwarded-Proto through;
-      # invite deep links then use it verbatim.
       - key: JAM_PUBLIC_ORIGIN
         sync: false
+      - key: JAM_ALLOWED_ORIGINS
+        value: "https://veyra-website-mauve.vercel.app"
+      - key: JAM_MAX_MEMBERS
+        value: "5"
+      - key: JAM_MAX_PARTIES
+        value: "50"
+      - key: JAM_MAX_UPCOMING_QUEUE
+        value: "25"
+      - key: JAM_CREATE_RATE_PER_MINUTE
+        value: "2"
