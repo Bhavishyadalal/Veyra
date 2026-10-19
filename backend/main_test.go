@@ -13,31 +13,17 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"github.com/KabirSinghBhatia/Veyra/backend/clock"
-	"github.com/KabirSinghBhatia/Veyra/backend/config"
-	"github.com/KabirSinghBhatia/Veyra/backend/presence"
-	"github.com/KabirSinghBhatia/Veyra/backend/protocol"
+	"github.com/Bhavishyadalal/Veyra-backend/clock"
+	"github.com/Bhavishyadalal/Veyra-backend/config"
+	"github.com/Bhavishyadalal/Veyra-backend/presence"
+	"github.com/Bhavishyadalal/Veyra-backend/protocol"
 )
 
 func setupTestServer() *httptest.Server {
 	// Isolate create quotas: otherwise the third localhost test gets a 429
 	// from earlier tests instead of exercising its own REST/WebSocket behavior.
 	createLimiter = newIPRateLimiter(time.Minute, config.CreateRatePerMinute, config.RateLimitMaxEntries)
-	mux := http.NewServeMux()
-	mux.HandleFunc("GET /{$}", handleRoot)
-	mux.HandleFunc("GET /healthz", handleHealthz)
-	mux.HandleFunc("GET /api/time", handleTime)
-	mux.HandleFunc("POST /api/parties", handleCreateParty)
-	mux.HandleFunc("POST /api/parties/{code}/join", handleJoinParty)
-	mux.HandleFunc("GET /api/parties/{code}", handleGetParty)
-	mux.HandleFunc("POST /api/parties/{code}/leave", handleLeaveParty)
-	mux.HandleFunc("POST /api/presence", handlePresence)
-	mux.HandleFunc("GET /api/stats/live", handleLiveStats)
-	mux.HandleFunc("GET /api/stats/live/badge.svg", handleLiveBadge)
-	mux.HandleFunc("GET /invite/{code}", handleInviteLanding)
-	mux.HandleFunc("GET /ws/parties/{code}", handleWebSocket)
-
-	return httptest.NewServer(corsMiddleware(mux))
+	return httptest.NewServer(newHTTPHandler())
 }
 
 func TestRESTEndpoints(t *testing.T) {
