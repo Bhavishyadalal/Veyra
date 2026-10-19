@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-19",
+  "source_base": "0.1.3",
+  "version_code": 16,
+  "native_component_checks": {
+    "passed": 16,
+    "failed": 0,
+    "renderer": "Compose Desktop / Skia; actual production controls",
+    "complete_android_screens": false
+  },
+  "rendered_scenes": 7,
+  "focused_kotlin_tests": {
+    "passed": 57,
+    "failed": 0
+  },
+  "kotlin_syntax": {
+    "files": 17,
+    "errors": 0,
+    "scope": "PSI only"
+  },
+  "aapt2_resources": "passed",
+  "resource_audit": {
+    "xml_files": 114,
+    "localized_entries": 22633,
+    "font_references": 8,
+    "errors": 0
+  },
+  "row_switches_migrated": 42,
+  "separate_edit_toggle_actions_preserved": 4,
+  "full_android_compile": "blocked before Kotlin compilation: JitPack HTTP 403 for NewPipe v0.26.3",
+  "device_tests": "not run",
+  "new_app_runtime_dependencies": false,
+  "apk_tasks_run": false,
+  "existing_row_title_action_pairs_preserved": 88,
+  "comparison_baseline": "8a03bb769aeeea5b76ed36dc44db28aa950ca5e9"
+}

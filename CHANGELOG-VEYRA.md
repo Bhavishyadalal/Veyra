@@ -1,3 +1,11 @@
+# Settings refinement (0.1.3 source update)
+
+- Redesign shared rows, category/section headings, values, toggles, sliders, selectors, quality sheets and app-icon choices. Keep the open settings layout and selected app theme.
+- Preserve separate integration editing and enable/disable actions. Improve selection semantics, disabled explanations, touch targets, RTL, narrow layouts and large text.
+- Improve shared dialog actions and fields, keyboard-safe account forms, language selection and backup progress feedback. Sliders save once on release rather than on every move.
+- Add reproducible native Compose component renders and 16 interaction checks; 57 focused regressions and AAPT2 checks pass. Full Android compilation remains blocked by JitPack HTTP 403. No APK generated; version identity stays 0.1.3/code 16.
+- See verification/SETTINGS-REFINEMENT-RESULTS.md and design/settings-preview/README.md.
+
 # Veyra 0.1.3 (silver waveform welcome)
 
 - Add a genuine welcome landing inspired by the owner's reference: original silver-wave artwork, actual app branding, bold native copy, selectable/swipeable previews and a silver Get started action. No restore-backup UI.

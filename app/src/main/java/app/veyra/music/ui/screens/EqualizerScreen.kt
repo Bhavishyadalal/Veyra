@@ -2,8 +2,8 @@ package app.veyra.music.ui.screens
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -21,9 +21,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ShowChart
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.GraphicEq
-import androidx.compose.material.icons.automirrored.rounded.ShowChart
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material.icons.rounded.Waves
@@ -32,8 +32,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Switch
-import app.veyra.music.ui.components.veyraSwitchColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,7 +46,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.platform.LocalContext
@@ -68,6 +65,8 @@ import app.veyra.music.ui.haptics.rememberHaptics
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToInt
+
+
 
 /**
  * The app's own equaliser, in the two shapes people have already been taught to
@@ -112,6 +111,7 @@ fun EqualizerScreen(
             .verticalScroll(rememberScrollState())
             .padding(contentPadding),
     ) {
+        SettingsPageHeader(stringResource(R.string.equalizer), app.veyra.music.ui.icons.SettingsIcons.Sound)
         SettingsGroup(
             footer = stringResource(R.string.equalizer_footer),
             topSpacing = 8.dp,
@@ -119,16 +119,7 @@ fun EqualizerScreen(
             SettingsRow(
                 icon = Icons.Rounded.Tune,
                 title = stringResource(R.string.equalizer),
-                trailing = {
-                    Switch(
-                        checked = enabled,
-                        onCheckedChange = {
-                            haptics.play(if (it) Haptic.ToggleOn else Haptic.ToggleOff)
-                            AppSettings.setEqualizerEnabled(it)
-                        },
-                        colors = veyraSwitchColors(),
-                    )
-                },
+                checked = enabled,
                 onClick = {
                     haptics.play(if (!enabled) Haptic.ToggleOn else Haptic.ToggleOff)
                     AppSettings.setEqualizerEnabled(!enabled)

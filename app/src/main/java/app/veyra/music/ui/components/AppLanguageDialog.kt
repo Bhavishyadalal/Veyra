@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
@@ -30,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,6 +45,8 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
 import java.util.Locale
+
+
 
 /** Language tag paired with its display-name string.
  *
@@ -112,7 +117,8 @@ fun AppLanguageDialog(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onDismiss,
-            ),
+            )
+            .padding(horizontal = 20.dp, vertical = 24.dp),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -168,7 +174,7 @@ fun AppLanguageDialog(
             // [TranslationLanguageDialog] — sixteen rows is short enough not
             // to need that dialog's filter field, but still taller than the
             // card should get to stay centred on a phone.
-            LazyColumn(modifier = Modifier.heightIn(max = LANGUAGE_LIST_MAX_HEIGHT)) {
+            LazyColumn(modifier = Modifier.selectableGroup().weight(1f, fill = false).heightIn(max = LANGUAGE_LIST_MAX_HEIGHT)) {
                 items(SUPPORTED_LANGUAGES, key = { it.tag }) { language ->
                     AlertRule()
                     LanguageRow(
@@ -198,7 +204,9 @@ private fun LanguageRow(language: AppLanguage, selected: Boolean, onClick: () ->
             .background(
                 if (pressed) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.09f) else Color.Transparent,
             )
-            .clickable(
+            .selectable(
+                selected = selected,
+                role = Role.RadioButton,
                 indication = null,
                 interactionSource = interactionSource,
                 onClick = onClick,

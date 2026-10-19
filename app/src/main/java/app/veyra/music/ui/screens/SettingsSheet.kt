@@ -2,26 +2,22 @@ package app.veyra.music.ui.screens
 
 import android.content.Context
 import android.content.Intent
-import app.veyra.music.ui.icons.SettingsIcons
-import androidx.compose.foundation.border
-import androidx.compose.foundation.selection.selectable
 import android.media.AudioFormat
 import android.media.audiofx.AudioEffect
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.animation.animateColorAsState
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.core.Animatable
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.animation.core.tween
-import androidx.compose.ui.semantics.Role
-import androidx.compose.foundation.background
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,33 +27,30 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.ScrollState
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Notes
 import androidx.compose.material.icons.automirrored.rounded.VolumeOff
 import androidx.compose.material.icons.rounded.Animation
-import androidx.compose.material.icons.rounded.Apps
-import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.AutoAwesome
+import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.BlurOff
 import androidx.compose.material.icons.rounded.BlurOn
 import androidx.compose.material.icons.rounded.Brightness4
 import androidx.compose.material.icons.rounded.Cached
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.ChevronRight
-import androidx.compose.material.icons.rounded.Cloud
 import androidx.compose.material.icons.rounded.DeleteSweep
-import androidx.compose.material.icons.rounded.Dns
 import androidx.compose.material.icons.rounded.Download
+import androidx.compose.material.icons.rounded.Extension
 import androidx.compose.material.icons.rounded.FileDownload
 import androidx.compose.material.icons.rounded.FileUpload
 import androidx.compose.material.icons.rounded.FilterAlt
@@ -68,41 +61,26 @@ import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Language
-import androidx.compose.material.icons.rounded.Translate
-import androidx.compose.material.icons.rounded.VisibilityOff
-import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.LocalOffer
-import androidx.compose.material.icons.rounded.MusicOff
 import androidx.compose.material.icons.rounded.MotionPhotosOff
-import androidx.compose.material.icons.rounded.Extension
-import androidx.compose.material.icons.rounded.Draw
-import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.MusicOff
 import androidx.compose.material.icons.rounded.PlaylistPlay
-import androidx.compose.material.icons.rounded.SignalCellularAlt
 import androidx.compose.material.icons.rounded.SmartDisplay
 import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.SurroundSound
-import androidx.compose.material.icons.rounded.Tune
+import androidx.compose.material.icons.rounded.Translate
+import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material.icons.rounded.VolumeOff
-import androidx.compose.material.icons.rounded.WebAssetOff
 import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Waves
+import androidx.compose.material.icons.rounded.WebAssetOff
 import androidx.compose.material.icons.rounded.Wifi
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatDelegate
-import app.veyra.music.data.lyrics.translationLanguageName
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
-import androidx.compose.material3.Switch
-import app.veyra.music.ui.components.veyraSwitchColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -118,70 +96,66 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.viewinterop.AndroidView
-import app.veyra.music.AppIcon
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.SingletonImageLoader
-import coil3.compose.AsyncImage
-import app.veyra.music.ui.components.isGlassSupported
-import app.veyra.music.ui.components.languageDisplayNameRes
+import app.veyra.music.AppIcon
+import app.veyra.music.R
+import app.veyra.music.data.LocalMediaRepository
+import app.veyra.music.data.NerdStats
+import app.veyra.music.data.listentogether.ListenTogether
+import app.veyra.music.data.lyrics.translationLanguageName
+import app.veyra.music.data.model.Account
+import app.veyra.music.data.scrobbling.LastFM
+import app.veyra.music.data.settings.AppSettings
+import app.veyra.music.data.settings.AudioQuality
+import app.veyra.music.data.settings.AutomixPerformanceMode
+import app.veyra.music.data.settings.DownloadQuality
+import app.veyra.music.data.settings.OutputPcmMode
+import app.veyra.music.data.settings.ThemeMode
+import app.veyra.music.data.sources.DeviceCodecs
+import app.veyra.music.data.stats.Backup
+import app.veyra.music.playback.AudioCache
+import app.veyra.music.playback.AudioOutputStatus
 import app.veyra.music.ui.components.MessageState
 import app.veyra.music.ui.components.SearchField
+import app.veyra.music.ui.components.isGlassSupported
+import app.veyra.music.ui.components.languageDisplayNameRes
 import app.veyra.music.ui.components.thumbnailBorder
+import app.veyra.music.ui.icons.SettingsIcons
 import app.veyra.music.ui.icons.VeyraIcons
 import app.veyra.music.ui.performance.resolvePerformanceRefreshRate
 import app.veyra.music.ui.performance.supportedPerformanceRefreshRates
-import app.veyra.music.data.model.Account
-import app.veyra.music.data.LocalMediaRepository
-import app.veyra.music.data.NerdStats
-import app.veyra.music.data.scrobbling.LastFM
-import app.veyra.music.data.listentogether.ListenTogether
-import app.veyra.music.data.settings.AppSettings
-import app.veyra.music.data.settings.OutputPcmMode
-import app.veyra.music.playback.AudioOutputStatus
-import app.veyra.music.data.settings.AutomixPerformanceMode
-import app.veyra.music.R
-import app.veyra.music.data.sources.DeviceCodecs
-import app.veyra.music.data.settings.AudioQuality
-import app.veyra.music.data.settings.DownloadQuality
-import app.veyra.music.data.settings.ThemeMode
-import app.veyra.music.data.stats.Backup
-import app.veyra.music.playback.AudioCache
 import app.veyra.music.ui.player.fullBleedArtworkAvailable
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
+import coil3.SingletonImageLoader
+import coil3.compose.AsyncImage
 import java.util.Locale
+import kotlin.math.roundToInt
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
-/**
- * Grouped settings, in the shape phones have taught people to expect: inset
- * cards of rows, a leading glyph per row, the current value on the right, and a
- * plain-language footer under any group whose effect isn't obvious from its
- * title. Anything with more than two choices opens a sheet rather than pushing
- * a row of chips into the layout.
- */
+
+
+/** Searchable settings with category navigation and shared, accessible controls. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -306,6 +280,8 @@ fun SettingsScreen(
     // result reports itself under the word "Export".
     var exportStatus by remember { mutableStateOf<String?>(null) }
     var importStatus by remember { mutableStateOf<String?>(null) }
+    var exporting by remember { mutableStateOf(false) }
+    var importing by remember { mutableStateOf(false) }
     var confirmImport by remember { mutableStateOf(false) }
     var confirmClearSongCache by remember { mutableStateOf(false) }
     var showPerformanceWarning by remember { mutableStateOf(false) }
@@ -342,14 +318,20 @@ fun SettingsScreen(
     ) { target ->
         if (target == null) return@rememberLauncherForActivityResult
         backupScope.launch {
-            exportStatus = Backup.exportTo(context, target).fold(
-                onSuccess = { months ->
-                    context.getString(R.string.export_succeeded, context.countOfMonths(months))
-                },
-                onFailure = {
-                    context.getString(R.string.export_failed, it.message ?: context.getString(R.string.unknown_error))
-                },
-            )
+            exporting = true
+            exportStatus = context.getString(R.string.settings_backup_working)
+            try {
+                exportStatus = Backup.exportTo(context, target).fold(
+                    onSuccess = { months ->
+                        context.getString(R.string.export_succeeded, context.countOfMonths(months))
+                    },
+                    onFailure = {
+                        context.getString(R.string.export_failed, it.message ?: context.getString(R.string.unknown_error))
+                    },
+                )
+            } finally {
+                exporting = false
+            }
         }
     }
     val importPicker = rememberLauncherForActivityResult(
@@ -357,14 +339,20 @@ fun SettingsScreen(
     ) { source ->
         if (source == null) return@rememberLauncherForActivityResult
         backupScope.launch {
-            importStatus = Backup.importFrom(context, source).fold(
-                onSuccess = {
-                    context.getString(R.string.import_succeeded, context.countOfMonths(it.months), it.from)
-                },
-                onFailure = {
-                    context.getString(R.string.import_failed, it.message ?: context.getString(R.string.unknown_error))
-                },
-            )
+            importing = true
+            importStatus = context.getString(R.string.settings_backup_working)
+            try {
+                importStatus = Backup.importFrom(context, source).fold(
+                    onSuccess = {
+                        context.getString(R.string.import_succeeded, context.countOfMonths(it.months), it.from)
+                    },
+                    onFailure = {
+                        context.getString(R.string.import_failed, it.message ?: context.getString(R.string.unknown_error))
+                    },
+                )
+            } finally {
+                importing = false
+            }
         }
     }
     var showListenBrainzTokenDialog by remember { mutableStateOf(false) }
@@ -417,11 +405,9 @@ fun SettingsScreen(
             .fillMaxSize()
             .padding(contentPadding),
     ) {
-        Text(
-            text = stringResource(if (searching) R.string.settings else category?.title ?: R.string.settings),
-            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.W800),
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.semantics { heading() }.padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 18.dp),
+        SettingsPageHeader(
+            title = stringResource(if (searching) R.string.settings else category?.title ?: R.string.settings),
+            icon = if (searching) SettingsIcons.Advanced else category?.icon ?: SettingsIcons.Sound,
         )
         SearchField(
             query = searchQuery,
@@ -536,14 +522,7 @@ fun SettingsScreen(
                             },
                         ),
                         enabled = dolbyAtmosSupported,
-                        trailing = {
-                            Switch(
-                                checked = dolbyAtmos && dolbyAtmosSupported,
-                                onCheckedChange = AppSettings::setDolbyAtmos,
-                                enabled = dolbyAtmosSupported,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = dolbyAtmos && dolbyAtmosSupported,
                         onClick = { AppSettings.setDolbyAtmos(!dolbyAtmos) },
                     )
                 }
@@ -595,13 +574,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.SmartDisplay,
                         title = preferMusicOnlyTitle,
                         subtitle = stringResource(R.string.prefer_music_only_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = preferMusicOnly,
-                                onCheckedChange = AppSettings::setPreferMusicOnly,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = preferMusicOnly,
                         onClick = { AppSettings.setPreferMusicOnly(!preferMusicOnly) },
                     )
                 }
@@ -642,13 +615,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.VolumeUp,
                         title = loudnessTitle,
                         subtitle = stringResource(R.string.loudness_normalization_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = loudnessNormalization,
-                                onCheckedChange = AppSettings::setLoudnessNormalization,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = loudnessNormalization,
                         onClick = { AppSettings.setLoudnessNormalization(!loudnessNormalization) },
                     )
                 }
@@ -665,6 +632,7 @@ fun SettingsScreen(
                 // than needing it set to anything first.
                 if (!smartFade) {
                     val crossfadeTitle = stringResource(R.string.crossfade)
+                    val crossfadeOff = stringResource(R.string.off)
                     row(crossfadeTitle, "fade", "gapless") {
                         SliderRow(
                             icon = Icons.Rounded.Waves,
@@ -672,6 +640,7 @@ fun SettingsScreen(
                             subtitle = stringResource(R.string.crossfade_subtitle),
                             value = if (crossfade == 0) stringResource(R.string.off) else "${crossfade}s",
                             sliderValue = crossfade.toFloat(),
+                            formatValue = { if (it.roundToInt() == 0) crossfadeOff else "${it.roundToInt()}s" },
                             onSliderValue = { AppSettings.setCrossfadeSeconds(it.roundToInt()) },
                             valueRange = 0f..12f,
                             steps = 11,
@@ -688,13 +657,7 @@ fun SettingsScreen(
                         } else {
                             stringResource(R.string.automix_disabled_subtitle)
                         },
-                        trailing = {
-                            Switch(
-                                checked = smartFade,
-                                onCheckedChange = AppSettings::setSmartFadeEnabled,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = smartFade,
                         onClick = { AppSettings.setSmartFadeEnabled(!smartFade) },
                     )
                 }
@@ -725,13 +688,7 @@ fun SettingsScreen(
                         } else {
                             stringResource(R.string.skip_silence_subtitle)
                         },
-                        trailing = {
-                            Switch(
-                                checked = skipSilence,
-                                onCheckedChange = AppSettings::setSkipSilence,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = skipSilence,
                         onClick = { AppSettings.setSkipSilence(!skipSilence) },
                     )
                 }
@@ -753,13 +710,7 @@ fun SettingsScreen(
                         } else {
                             stringResource(R.string.spatial_audio_subtitle)
                         },
-                        trailing = {
-                            Switch(
-                                checked = spatialAudio,
-                                onCheckedChange = AppSettings::setSpatialAudio,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = spatialAudio,
                         onClick = { AppSettings.setSpatialAudio(!spatialAudio) },
                     )
                 }
@@ -802,14 +753,7 @@ fun SettingsScreen(
                             },
                         ),
                         enabled = liquidGlassSupported,
-                        trailing = {
-                            Switch(
-                                checked = liquidGlass,
-                                onCheckedChange = AppSettings::setLiquidGlass,
-                                enabled = liquidGlassSupported,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = liquidGlass,
                         onClick = { AppSettings.setLiquidGlass(!liquidGlass) },
                     )
                 }
@@ -824,13 +768,7 @@ fun SettingsScreen(
                             icon = Icons.Rounded.Fullscreen,
                             title = fullScreenCoverArtTitle,
                             subtitle = stringResource(R.string.full_screen_cover_art_subtitle),
-                            trailing = {
-                                Switch(
-                                    checked = fullBleedArtwork,
-                                    onCheckedChange = AppSettings::setFullBleedArtwork,
-                                    colors = veyraSwitchColors(),
-                                )
-                            },
+                            checked = fullBleedArtwork,
                             onClick = { AppSettings.setFullBleedArtwork(!fullBleedArtwork) },
                         )
                     }
@@ -841,13 +779,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.Gradient,
                         title = legacyMeshGradientTitle,
                         subtitle = stringResource(R.string.legacy_mesh_gradient_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = legacyMeshGradient,
-                                onCheckedChange = AppSettings::setLegacyMeshGradient,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = legacyMeshGradient,
                         onClick = { AppSettings.setLegacyMeshGradient(!legacyMeshGradient) },
                     )
                 }
@@ -860,13 +792,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.Animation,
                         title = animatedCoverArtTitle,
                         subtitle = stringResource(R.string.animated_cover_art_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = animatedCanvas,
-                                onCheckedChange = AppSettings::setAnimatedCanvas,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = animatedCanvas,
                         onClick = { AppSettings.setAnimatedCanvas(!animatedCanvas) },
                     )
                 }
@@ -911,13 +837,7 @@ fun SettingsScreen(
                         icon = SettingsIcons.Appearance,
                         title = artistSignaturesTitle,
                         subtitle = stringResource(R.string.artist_signatures_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = signatureApiEnabled,
-                                onCheckedChange = AppSettings::setSignatureApiEnabled,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = signatureApiEnabled,
                         onClick = { AppSettings.setSignatureApiEnabled(!signatureApiEnabled) },
                     )
                 }
@@ -953,13 +873,7 @@ fun SettingsScreen(
                         icon = Icons.AutoMirrored.Rounded.Notes,
                         title = syncedLyricsTitle,
                         subtitle = stringResource(R.string.synced_lyrics_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = syncedLyrics,
-                                onCheckedChange = AppSettings::setSyncedLyrics,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = syncedLyrics,
                         onClick = { AppSettings.setSyncedLyrics(!syncedLyrics) },
                     )
                 }
@@ -973,13 +887,7 @@ fun SettingsScreen(
                             icon = Icons.Rounded.BlurOn,
                             title = lyricsBlurTitle,
                             subtitle = stringResource(R.string.blur_unfocused_lyrics_subtitle),
-                            trailing = {
-                                Switch(
-                                    checked = lyricsBlur,
-                                    onCheckedChange = AppSettings::setLyricsBlur,
-                                    colors = veyraSwitchColors(),
-                                )
-                            },
+                            checked = lyricsBlur,
                             onClick = { AppSettings.setLyricsBlur(!lyricsBlur) },
                         )
                     }
@@ -1023,13 +931,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.MotionPhotosOff,
                         title = reduceAnimationTitle,
                         subtitle = stringResource(R.string.reduce_animation_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = reduceAnimation,
-                                onCheckedChange = AppSettings::setReduceAnimation,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = reduceAnimation,
                         onClick = { AppSettings.setReduceAnimation(!reduceAnimation) },
                     )
                 }
@@ -1039,13 +941,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.BlurOff,
                         title = reduceDynamicBlurTitle,
                         subtitle = stringResource(R.string.reduce_dynamic_blur_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = reduceDynamicBlur,
-                                onCheckedChange = AppSettings::setReduceDynamicBlur,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = reduceDynamicBlur,
                         onClick = { AppSettings.setReduceDynamicBlur(!reduceDynamicBlur) },
                     )
                 }
@@ -1059,19 +955,7 @@ fun SettingsScreen(
                         } else {
                             stringResource(R.string.high_performance_subtitle)
                         },
-                        trailing = {
-                            Switch(
-                                checked = highPerformanceMode,
-                                onCheckedChange = { enabled ->
-                                    if (enabled) {
-                                        showPerformanceWarning = true
-                                    } else {
-                                        AppSettings.setHighPerformanceMode(false)
-                                    }
-                                },
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = highPerformanceMode,
                         onClick = {
                             if (highPerformanceMode) {
                                 AppSettings.setHighPerformanceMode(false)
@@ -1132,13 +1016,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.FilterAlt,
                         title = filterNonMusicAudioTitle,
                         subtitle = stringResource(R.string.filter_non_music_audio_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = filterNonMusicAudio,
-                                onCheckedChange = AppSettings::setFilterNonMusicAudio,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = filterNonMusicAudio,
                         onClick = { AppSettings.setFilterNonMusicAudio(!filterNonMusicAudio) },
                     )
                 }
@@ -1157,13 +1035,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.Cached,
                         title = showCacheFolderTitle,
                         subtitle = stringResource(R.string.show_cache_folder_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = showCacheFolder,
-                                onCheckedChange = AppSettings::setShowCacheFolder,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = showCacheFolder,
                         onClick = { AppSettings.setShowCacheFolder(!showCacheFolder) },
                     )
                 }
@@ -1180,6 +1052,7 @@ fun SettingsScreen(
                         },
                         value = cacheLimitLabel,
                         sliderValue = cacheLimitMb.toFloat(),
+                        formatValue = { if (it.roundToInt() == CACHE_UNLIMITED_STOP_MB) unlimitedLabel else formatCacheSize(it.roundToInt()) },
                         onSliderValue = {
                             AppSettings.setAudioCacheLimitBytes(it.roundToInt().toLong() * 1024 * 1024)
                         },
@@ -1193,6 +1066,7 @@ fun SettingsScreen(
                     SettingsRow(
                         icon = Icons.Rounded.DeleteSweep,
                         title = clearSongCacheTitle,
+                        destructive = true,
                         subtitle = stringResource(R.string.clear_song_cache_subtitle),
                         onClick = { confirmClearSongCache = true },
                     )
@@ -1202,6 +1076,7 @@ fun SettingsScreen(
                     SettingsRow(
                         icon = Icons.Rounded.DeleteSweep,
                         title = clearImageCacheTitle,
+                        destructive = true,
                         subtitle = stringResource(R.string.clear_image_cache_subtitle),
                         onClick = {
                             val loader = SingletonImageLoader.get(context)
@@ -1233,13 +1108,7 @@ fun SettingsScreen(
                         } else {
                             stringResource(R.string.replay_genres_disabled_subtitle)
                         },
-                        trailing = {
-                            Switch(
-                                checked = replayGenres,
-                                onCheckedChange = AppSettings::setReplayGenres,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = replayGenres,
                         onClick = { AppSettings.setReplayGenres(!replayGenres) },
                     )
                 }
@@ -1248,6 +1117,7 @@ fun SettingsScreen(
                     SettingsRow(
                         icon = Icons.Rounded.FileUpload,
                         title = exportDataTitle,
+                        enabled = !exporting && !importing,
                         subtitle = exportStatus ?: stringResource(R.string.export_data_subtitle),
                         onClick = { exportPicker.launch(Backup.suggestedName()) },
                     )
@@ -1257,6 +1127,7 @@ fun SettingsScreen(
                     SettingsRow(
                         icon = Icons.Rounded.FileDownload,
                         title = importDataTitle,
+                        enabled = !exporting && !importing,
                         subtitle = importStatus ?: stringResource(R.string.import_data_subtitle),
                         onClick = { confirmImport = true },
                     )
@@ -1276,13 +1147,7 @@ fun SettingsScreen(
                         } else {
                             stringResource(R.string.swipe_adds_to_queue)
                         },
-                        trailing = {
-                            Switch(
-                                checked = swipeToPlayNext,
-                                onCheckedChange = AppSettings::setSwipeToPlayNext,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = swipeToPlayNext,
                         onClick = { AppSettings.setSwipeToPlayNext(!swipeToPlayNext) },
                     )
                 }
@@ -1292,13 +1157,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.History,
                         title = dontRepeatSongsTitle,
                         subtitle = stringResource(R.string.dont_repeat_songs_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = dontRepeatSuggestions,
-                                onCheckedChange = AppSettings::setDontRepeatSuggestions,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = dontRepeatSuggestions,
                         onClick = { AppSettings.setDontRepeatSuggestions(!dontRepeatSuggestions) },
                     )
                 }
@@ -1308,13 +1167,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.MusicOff,
                         title = stopMusicOnCloseTitle,
                         subtitle = stringResource(R.string.stop_music_on_close_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = stopOnTaskRemoved,
-                                onCheckedChange = AppSettings::setStopOnTaskRemoved,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = stopOnTaskRemoved,
                         onClick = { AppSettings.setStopOnTaskRemoved(!stopOnTaskRemoved) },
                     )
                 }
@@ -1324,13 +1177,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.VolumeOff,
                         title = hideVolumeBarTitle,
                         subtitle = stringResource(R.string.hide_volume_bar_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = hideVolumeBar,
-                                onCheckedChange = AppSettings::setHideVolumeBar,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = hideVolumeBar,
                         onClick = { AppSettings.setHideVolumeBar(!hideVolumeBar) },
                     )
                 }
@@ -1340,13 +1187,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.WebAssetOff,
                         title = hideStatusBarTitle,
                         subtitle = stringResource(R.string.hide_status_bar_in_player_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = hideStatusBarInPlayer,
-                                onCheckedChange = AppSettings::setHideStatusBarInPlayer,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = hideStatusBarInPlayer,
                         onClick = { AppSettings.setHideStatusBarInPlayer(!hideStatusBarInPlayer) },
                     )
                 }
@@ -1356,13 +1197,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.History,
                         title = showQueueHistoryTitle,
                         subtitle = stringResource(R.string.show_queue_history_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = showQueueHistory,
-                                onCheckedChange = AppSettings::setShowQueueHistory,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = showQueueHistory,
                         onClick = { AppSettings.setShowQueueHistory(!showQueueHistory) },
                     )
                 }
@@ -1372,13 +1207,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.VisibilityOff,
                         title = hideSongStatusTitle,
                         subtitle = stringResource(R.string.hide_song_status_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = hideSongStatus,
-                                onCheckedChange = AppSettings::setHideSongStatus,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = hideSongStatus,
                         onClick = { AppSettings.setHideSongStatus(!hideSongStatus) },
                     )
                 }
@@ -1413,13 +1242,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.GraphicEq,
                         title = smartAlignmentTitle,
                         subtitle = stringResource(R.string.smart_version_alignment_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = smartVersionAlignment,
-                                onCheckedChange = AppSettings::setSmartVersionAlignment,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = smartVersionAlignment,
                         onClick = { AppSettings.setSmartVersionAlignment(!smartVersionAlignment) },
                     )
                 }
@@ -1429,13 +1252,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.BarChart,
                         title = showNerdStatsTitle,
                         subtitle = stringResource(R.string.show_nerd_stats_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = nerdStats,
-                                onCheckedChange = AppSettings::setShowNerdStats,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = nerdStats,
                         onClick = { AppSettings.setShowNerdStats(!nerdStats) },
                     )
                 }
@@ -1737,6 +1554,8 @@ fun SettingsScreen(
                     OutlinedTextField(
                         value = passwordInput,
                         onValueChange = { passwordInput = it },
+                        visualTransformation = PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                         label = { Text(stringResource(R.string.password)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
@@ -1959,252 +1778,55 @@ internal fun AccountCard(
     }
 }
 
-/** The quality options for one connection, with what each costs in data. */
+/** The connection ceiling and its data cost remain visible while choosing. */
 @Composable
-private fun QualitySheet(
-    target: QualityTarget,
-    selected: AudioQuality,
-    onSelect: (AudioQuality) -> Unit,
-) {
+private fun QualitySheet(target: QualityTarget, selected: AudioQuality, onSelect: (AudioQuality) -> Unit) {
     val haptics = LocalHapticFeedback.current
-    Column(Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
-        Row(
-            modifier = Modifier.padding(start = 22.dp, end = 22.dp, bottom = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = target.icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.size(22.dp),
-            )
-            Spacer(Modifier.width(14.dp))
-            Column {
-                Text(
-                    text = stringResource(R.string.audio_quality),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                Text(
-                    text = stringResource(
-                        R.string.audio_quality_connection,
-                        target.localizedTitle().lowercase(Locale.getDefault()),
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-        HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline)
-
-        // Best first — the option most people want shouldn't be last.
+    Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).selectableGroup().padding(bottom = 24.dp)) {
+        SettingsPickerHeader(stringResource(R.string.audio_quality),
+            stringResource(R.string.audio_quality_connection, target.localizedTitle().lowercase(Locale.getDefault())), target.icon)
         AudioQuality.entries.reversed().forEach { quality ->
-            val chosen = quality == selected
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                        onSelect(quality)
-                    }
-                    .padding(horizontal = 22.dp, vertical = 14.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(Modifier.weight(1f)) {
-                    Text(
-                        text = quality.localizedLabel(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                    Text(
-                        text = stringResource(R.string.quality_hourly, quality.detail, quality.hourly),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                if (chosen) {
-                    Spacer(Modifier.width(12.dp))
-                    Icon(
-                        Icons.Rounded.Check,
-                        contentDescription = stringResource(R.string.selected),
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(22.dp),
-                    )
-                }
+            SettingsChoiceRow(quality.localizedLabel(), stringResource(R.string.quality_hourly, quality.detail, quality.hourly), quality == selected) {
+                haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                onSelect(quality)
             }
         }
     }
 }
 
-/** CPU budget picker for the background models that prepare Automix. */
 @Composable
-private fun AutomixPerformanceSheet(
-    selected: AutomixPerformanceMode,
-    onSelect: (AutomixPerformanceMode) -> Unit,
-) {
+private fun AutomixPerformanceSheet(selected: AutomixPerformanceMode, onSelect: (AutomixPerformanceMode) -> Unit) {
     val haptics = LocalHapticFeedback.current
-    Column(Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
-        Row(
-            modifier = Modifier.padding(start = 22.dp, end = 22.dp, bottom = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = SettingsIcons.Sound,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.size(22.dp),
-            )
-            Spacer(Modifier.width(14.dp))
-            Column {
-                Text(
-                    text = stringResource(R.string.automix_performance),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                Text(
-                    text = stringResource(R.string.automix_performance_warning),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-        HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline)
+    Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).selectableGroup().padding(bottom = 24.dp)) {
+        SettingsPickerHeader(stringResource(R.string.automix_performance), stringResource(R.string.automix_performance_warning), SettingsIcons.Sound)
         AutomixPerformanceMode.entries.forEach { mode ->
-            val chosen = mode == selected
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                        onSelect(mode)
-                    }
-                    .padding(horizontal = 22.dp, vertical = 14.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(Modifier.weight(1f)) {
-                    Text(
-                        text = mode.localizedLabel(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                    Text(
-                        text = stringResource(
-                            when (mode) {
-                                AutomixPerformanceMode.EFFICIENT -> R.string.automix_mode_efficient_subtitle
-                                AutomixPerformanceMode.BALANCED -> R.string.automix_mode_balanced_subtitle
-                                AutomixPerformanceMode.PERFORMANCE -> R.string.automix_mode_performance_subtitle
-                            },
-                        ),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                if (chosen) {
-                    Spacer(Modifier.width(12.dp))
-                    Icon(
-                        Icons.Rounded.Check,
-                        contentDescription = stringResource(R.string.selected),
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(22.dp),
-                    )
-                }
+            SettingsChoiceRow(mode.localizedLabel(), stringResource(when (mode) {
+                AutomixPerformanceMode.EFFICIENT -> R.string.automix_mode_efficient_subtitle
+                AutomixPerformanceMode.BALANCED -> R.string.automix_mode_balanced_subtitle
+                AutomixPerformanceMode.PERFORMANCE -> R.string.automix_mode_performance_subtitle
+            }), mode == selected) {
+                haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                onSelect(mode)
             }
         }
     }
 }
 
-/**
- * What to keep when a track is saved, with what each rung costs on disk.
- *
- * Priced per track rather than per hour, the way [QualitySheet] is. That sheet
- * is answering "what will listening cost me this hour", because a stream is
- * spent again on every replay; this one is answering "what will keeping this
- * cost me", and the answer is charged once. Same widget, different question, so
- * the numbers beside the options are in different units on purpose.
- */
 @Composable
-private fun DownloadQualitySheet(
-    selected: DownloadQuality,
-    onSelect: (DownloadQuality) -> Unit,
-) {
+private fun DownloadQualitySheet(selected: DownloadQuality, onSelect: (DownloadQuality) -> Unit) {
     val haptics = LocalHapticFeedback.current
-    Column(Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
-        Row(
-            modifier = Modifier.padding(start = 22.dp, end = 22.dp, bottom = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Download,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.size(22.dp),
-            )
-            Spacer(Modifier.width(14.dp))
-            Column {
-                Text(
-                    text = stringResource(R.string.download_quality),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                Text(
-                    text = stringResource(R.string.download_quality_dialog_subtitle),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-        HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline)
-
-        // Best first, matching [QualitySheet] — and here the best rung is also
-        // the default, so the checkmark starts where the eye does.
+    Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).selectableGroup().padding(bottom = 24.dp)) {
+        SettingsPickerHeader(stringResource(R.string.download_quality), stringResource(R.string.download_quality_dialog_subtitle), Icons.Rounded.Download)
         DownloadQuality.entries.reversed().forEach { quality ->
-            val chosen = quality == selected
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                        onSelect(quality)
-                    }
-                    .padding(horizontal = 22.dp, vertical = 14.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(Modifier.weight(1f)) {
-                    Text(
-                        text = quality.localizedLabel(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                    Text(
-                        text = stringResource(R.string.quality_per_track, quality.detail, quality.perTrack),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                if (chosen) {
-                    Spacer(Modifier.width(12.dp))
-                    Icon(
-                        Icons.Rounded.Check,
-                        contentDescription = stringResource(R.string.selected),
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(22.dp),
-                    )
-                }
+            SettingsChoiceRow(quality.localizedLabel(), stringResource(R.string.quality_per_track, quality.detail, quality.perTrack), quality == selected) {
+                haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                onSelect(quality)
             }
         }
     }
 }
 
 // ---- Building blocks --------------------------------------------------------
-
-internal val GroupShape = RoundedCornerShape(22.dp)
-internal val GROUP_INSET = 16.dp
-internal val ROW_INSET = 16.dp
-internal val ICON_SIZE = 22.dp
-internal val ICON_GAP = 14.dp
-
-/** Where a row's text starts — dividers are inset to match, as on iOS. */
-internal val TEXT_INSET = ROW_INSET + ICON_SIZE + ICON_GAP
 
 /**
  * What is typed into the field under the Settings title, and whether anything
@@ -2322,16 +1944,10 @@ internal fun SettingsGroup(
     content: @Composable () -> Unit,
 ) {
     if (header != null) {
-        Text(
-            text = header,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.semantics { heading() }.padding(
-                start = GROUP_INSET + 4.dp,
-                end = GROUP_INSET,
-                top = 26.dp,
-                bottom = 8.dp,
-            ),
+        SettingsSectionTitle(
+            title = header,
+            modifier = Modifier.padding(start = GROUP_INSET + ROW_INSET, end = GROUP_INSET + ROW_INSET,
+                top = topSpacing, bottom = 6.dp),
         )
     } else {
         Spacer(Modifier.height(topSpacing))
@@ -2358,372 +1974,38 @@ internal fun SettingsGroup(
 }
 
 @Composable
-internal fun RowDivider() {
-    HorizontalDivider(
-        modifier = Modifier.padding(start = TEXT_INSET),
-        thickness = 0.5.dp,
-        color = MaterialTheme.colorScheme.outline,
-    )
-}
-
-/**
- * The standard row: glyph, title, optional subtitle, and on the right either
- * [trailing] (a switch, say) or a chevron. The current [value] sits beneath the
- * label so it cannot squeeze long translated labels out of narrow screens.
- *
- * [iconPainter] is for the handful of rows whose glyph is a drawable rather
- * than a Material icon — the Dolby double-D, which is a mark and not something
- * to approximate with the nearest speaker outline. Exactly one of it and [icon]
- * is expected; the painter wins where both are given.
- */
-@Composable
-internal fun SettingsRow(
-    icon: ImageVector? = null,
-    title: String,
-    subtitle: String? = null,
-    subtitleContent: (@Composable () -> Unit)? = null,
-    value: String? = null,
-    badge: String? = null,
-    enabled: Boolean = true,
-    iconPainter: Painter? = null,
-    onClick: (() -> Unit)? = null,
-    emphasized: Boolean = false,
-    trailing: (@Composable () -> Unit)? = null,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .then(if (onClick != null && enabled) Modifier.clickable(onClick = onClick) else Modifier)
-            .alpha(if (enabled) 1f else 0.45f)
-            .heightIn(min = 64.dp)
-            .padding(horizontal = ROW_INSET, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (iconPainter != null) {
-            Icon(
-                painter = iconPainter,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(ICON_SIZE),
-            )
-        } else if (icon != null) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(ICON_SIZE),
-            )
-        }
-        Spacer(Modifier.width(ICON_GAP))
-        Column(Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = if (emphasized) FontWeight.W700 else null,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f, fill = false),
-                )
-                if (badge != null) {
-                    Spacer(Modifier.width(8.dp))
-                    Badge(badge)
-                }
-            }
-            if (subtitleContent != null) {
-                subtitleContent()
-            } else if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 5,
-                )
-            }
-            if (value != null) {
-                Text(
-                    text = value,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
-            }
-        }
-        Spacer(Modifier.width(12.dp))
-        if (trailing != null) {
-            trailing()
-        } else if (value != null || onClick != null) {
-            Chevron()
-        }
-    }
-}
-
-/**
- * A toggle that reads as part of the option above it rather than a setting
- * of its own: no icon, no divider, and pulled up close against its parent
- * instead of getting the same breathing room a full [SettingsRow] gets.
- */
-@Composable
-internal fun SettingsSubRow(
-    title: String,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    badge: String? = null,
-    subtitle: String? = null,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onCheckedChange(!checked) }
-            .padding(start = ROW_INSET, end = ROW_INSET, top = 0.dp, bottom = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                if (badge != null) {
-                    Spacer(Modifier.width(8.dp))
-                    Badge(badge)
-                }
-            }
-            if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 5,
-                )
-            }
-        }
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange,
-            colors = veyraSwitchColors(),
-        )
-    }
-}
-
-/** Marks the connection whose ceiling is actually in force right now. */
-@Composable
-internal fun Badge(text: String) {
-    Text(
-        text = text.uppercase(Locale.ROOT),
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier
-            .clip(RoundedCornerShape(5.dp))
-            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.16f))
-            .padding(horizontal = 6.dp, vertical = 2.dp),
-    )
-}
-
-@Composable
-internal fun Chevron() {
-    Icon(
-        SettingsIcons.Chevron,
-        contentDescription = null,
-        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-        modifier = Modifier.size(20.dp),
-    )
-}
-
-/** A continuous setting: label and current value on one line, track beneath. */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-internal fun SliderRow(
-    icon: ImageVector,
-    title: String,
-    value: String,
-    sliderValue: Float,
-    onSliderValue: (Float) -> Unit,
-    valueRange: ClosedFloatingPointRange<Float>,
-    steps: Int,
-    subtitle: String? = null,
-) {
-    val colors = SliderDefaults.colors(
-        thumbColor = MaterialTheme.colorScheme.primary,
-        activeTrackColor = MaterialTheme.colorScheme.primary,
-        inactiveTrackColor = MaterialTheme.colorScheme.outline,
-    )
-    Column(Modifier.padding(start = ROW_INSET, end = ROW_INSET, top = 12.dp, bottom = 4.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.size(ICON_SIZE),
-            )
-            Spacer(Modifier.width(ICON_GAP))
-            Column(Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                if (subtitle != null) {
-                    Text(
-                        text = subtitle,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-            Spacer(Modifier.width(12.dp))
-            Text(
-                text = value,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-        Slider(
-            value = sliderValue,
-            onValueChange = onSliderValue,
-            valueRange = valueRange,
-            steps = steps,
-            colors = colors,
-            // Bare track: the step ticks and the end-stop dot are noise when the
-            // value is already spelled out on the line above.
-            track = { state ->
-                SliderDefaults.Track(
-                    sliderState = state,
-                    colors = colors,
-                    drawStopIndicator = null,
-                    drawTick = { _, _ -> },
-                )
-            },
-            modifier = Modifier.padding(start = ICON_SIZE + ICON_GAP),
-        )
-    }
-}
-
-/** Sign out: centered, accent-coloured, no glyph — the shape of a real one. */
-@Composable
-internal fun DestructiveRow(
-    label: String,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(enabled = enabled, onClick = onClick)
-            .padding(vertical = 15.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.primary,
-        )
-    }
-}
-
-/** Sliding pill selector, for the handful of settings with two or three states. */
-@Composable
-internal fun SegmentedControl(
-    options: List<String>,
-    selectedIndex: Int,
-    onSelect: (Int) -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-) {
-    val haptics = LocalHapticFeedback.current
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.outline)
-            // Enough of a margin for the track to read as a track. At 2dp the
-            // selected pill sat all but flush against the container's own edge,
-            // so the two rounded rectangles merged into one shape and the
-            // control stopped looking like something with a position in it.
-            .padding(4.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        options.forEachIndexed { index, label ->
-            val chosen = index == selectedIndex
-            val pill by animateColorAsState(
-                targetValue = if (chosen) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    Color.Transparent
-                },
-                animationSpec = tween(160),
-                label = "segmentPill",
-            )
-            val labelColor by animateColorAsState(
-                targetValue = if (chosen) {
-                    MaterialTheme.colorScheme.onPrimary
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                },
-                animationSpec = tween(160),
-                label = "segmentLabel",
-            )
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(pill)
-                    .clickable(enabled = enabled) {
-                        if (!chosen) {
-                            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                            onSelect(index)
-                        }
-                    }
-                    .padding(vertical = 9.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = labelColor,
-                    maxLines = 1,
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun AppIconPicker() {
     val context = LocalContext.current
     var selected by remember { mutableStateOf(AppIcon.current(context)) }
     androidx.compose.foundation.layout.BoxWithConstraints(
         Modifier.fillMaxWidth().padding(horizontal = ROW_INSET, vertical = 8.dp),
     ) {
-        val columns = if (maxWidth >= 340.dp) 3 else 2
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        val fontScale = LocalDensity.current.fontScale
+        val columns = when {
+            maxWidth / fontScale < 220.dp -> 1
+            maxWidth >= 340.dp && fontScale <= 1.2f -> 3
+            else -> 2
+        }
+        Column(Modifier.selectableGroup(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             AppIcon.entries.chunked(columns).forEach { row ->
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
                     row.forEach { option ->
                         val checked = option == selected
-                        Column(
-                            Modifier.weight(1f)
-                                .clip(RoundedCornerShape(18.dp))
-                                .background(if (checked) MaterialTheme.colorScheme.primary.copy(alpha = 0.10f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.035f))
-                                .border(if (checked) 2.dp else 1.dp,
-                                    if (checked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), RoundedCornerShape(18.dp))
-                                .selectable(selected = checked, role = Role.RadioButton, onClick = {
-                                    if (!checked) {
-                                        runCatching { AppIcon.apply(context, option) }
-                                            .onSuccess {
-                                                selected = AppIcon.current(context)
-                                                Toast.makeText(context, context.getString(R.string.app_icon_changed), Toast.LENGTH_SHORT).show()
-                                            }.onFailure {
-                                                Toast.makeText(context, context.getString(R.string.app_icon_failed), Toast.LENGTH_SHORT).show()
-                                            }
-                                    }
-                                })
-                                .padding(horizontal = 6.dp, vertical = 12.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                        SettingsIconChoice(
+                            label = stringResource(option.labelRes),
+                            selected = checked,
+                            modifier = Modifier.weight(1f),
+                            onSelect = {
+                                if (!checked) {
+                                    runCatching { AppIcon.apply(context, option) }
+                                        .onSuccess {
+                                            selected = AppIcon.current(context)
+                                            Toast.makeText(context, context.getString(R.string.app_icon_changed), Toast.LENGTH_SHORT).show()
+                                        }.onFailure {
+                                            Toast.makeText(context, context.getString(R.string.app_icon_failed), Toast.LENGTH_SHORT).show()
+                                        }
+                                }
+                            },
                         ) {
                             Box(Modifier.size(68.dp).clip(RoundedCornerShape(18.dp))) {
                                 val preview = option.previewRes
@@ -2734,11 +2016,7 @@ private fun AppIconPicker() {
                                         update = { it.setImageResource(option.iconRes) }, modifier = Modifier.fillMaxSize())
                                 }
                             }
-                            Text(stringResource(option.labelRes), textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = if (checked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-                                fontWeight = if (checked) FontWeight.Bold else FontWeight.Medium,
-                                modifier = Modifier.padding(top = 8.dp))
+
                         }
                     }
                     repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
