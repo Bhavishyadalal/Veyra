@@ -48,6 +48,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Switch
+import app.veyra.music.ui.components.veyraSwitchColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -84,6 +86,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import app.veyra.music.R
 import app.veyra.music.data.listentogether.JamInviteLink
 import app.veyra.music.data.listentogether.ListenTogether
@@ -91,11 +94,8 @@ import app.veyra.music.data.listentogether.PartyActivity
 import app.veyra.music.data.listentogether.PartyMember
 import app.veyra.music.data.listentogether.ServerConnectionState
 import app.veyra.music.data.listentogether.ServerUrlError
-import coil3.compose.AsyncImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
-
 
 internal fun ServerUrlError.toMessageRes(): Int = when (this) {
     ServerUrlError.Whitespace -> R.string.listen_together_err_whitespace
@@ -894,7 +894,13 @@ private fun InAParty(
                 icon = Icons.Rounded.Lock,
                 title = stringResource(R.string.listen_together_host_only),
                 subtitle = stringResource(R.string.listen_together_host_only_subtitle),
-                checked = state.hostOnlyControl,
+                trailing = {
+                    Switch(
+                        checked = state.hostOnlyControl,
+                        onCheckedChange = onSetHostOnlyControl,
+                        colors = veyraSwitchColors(),
+                    )
+                },
                 onClick = { onSetHostOnlyControl(!state.hostOnlyControl) },
             )
             RowDivider()

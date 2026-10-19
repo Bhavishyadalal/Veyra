@@ -1,8 +1,12 @@
 package app.veyra.music.ui.components
 
+import app.veyra.music.R
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
@@ -15,16 +19,12 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.DragHandle
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -40,33 +40,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import app.veyra.music.R
 import app.veyra.music.data.lyrics.LyricsSource
 import app.veyra.music.data.settings.AppSettings
 import app.veyra.music.ui.player.edgeScrollSpeed
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
-
-
 
 /**
  * Which lyric databases the player is allowed to ask.
@@ -106,8 +103,7 @@ fun LyricsSourcesDialog(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onDismiss,
-            )
-            .padding(horizontal = 20.dp, vertical = 24.dp),
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -261,12 +257,10 @@ private fun SyllableSyncToggle(checked: Boolean, onToggle: () -> Unit) {
             .background(
                 if (pressed) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.09f) else Color.Transparent,
             )
-            .toggleable(
-                value = checked,
-                role = Role.Switch,
+            .clickable(
                 indication = null,
                 interactionSource = interactionSource,
-                onValueChange = { onToggle() },
+                onClick = onToggle,
             )
             .padding(horizontal = 16.dp, vertical = 9.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -287,7 +281,7 @@ private fun SyllableSyncToggle(checked: Boolean, onToggle: () -> Unit) {
         if (checked) {
             Icon(
                 imageVector = Icons.Rounded.Check,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.enabled),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(19.dp),
             )

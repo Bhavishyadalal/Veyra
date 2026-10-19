@@ -12,14 +12,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -40,7 +37,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -56,8 +52,6 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
 import java.util.Locale
-
-
 
 /** How much of the screen the list may take before it scrolls inside the card. */
 private val LIST_MAX_HEIGHT = 340.dp
@@ -111,14 +105,13 @@ fun TranslationLanguageDialog(
 
     Box(
         modifier = modifier
-            .fillMaxSize().imePadding()
+            .fillMaxSize()
             .background(SCRIM_COLOR)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onDismiss,
-            )
-            .padding(horizontal = 20.dp, vertical = 24.dp),
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -172,7 +165,7 @@ fun TranslationLanguageDialog(
             SearchField(query = query, onQueryChange = { query = it })
             AlertRule()
 
-            LazyColumn(modifier = Modifier.selectableGroup().weight(1f, fill = false).heightIn(max = LIST_MAX_HEIGHT)) {
+            LazyColumn(modifier = Modifier.heightIn(max = LIST_MAX_HEIGHT)) {
                 // Only with an empty field: it is the default rather than a
                 // language, so it has no name to match and filtering it in on a
                 // near-miss would be noise.
@@ -290,9 +283,7 @@ private fun LanguageChoiceRow(
             .background(
                 if (pressed) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.09f) else Color.Transparent,
             )
-            .selectable(
-                selected = selected,
-                role = Role.RadioButton,
+            .clickable(
                 indication = null,
                 interactionSource = interactionSource,
                 onClick = onClick,

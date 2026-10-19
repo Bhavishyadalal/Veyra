@@ -1,5 +1,7 @@
 package app.veyra.music.ui.components
 
+import app.veyra.music.R
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,15 +15,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.Icon
@@ -35,10 +34,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,14 +45,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import app.veyra.music.R
 import app.veyra.music.data.settings.AppSettings
+import kotlinx.coroutines.launch
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
-import kotlinx.coroutines.launch
-
-
 
 /**
  * Same UIAlertController shape as [UpdateAvailableDialog] — frosted card,
@@ -821,14 +817,13 @@ internal fun AlertScaffold(
 
     Box(
         modifier = Modifier
-            .fillMaxSize().imePadding()
+            .fillMaxSize()
             .background(SCRIM_COLOR)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onDismiss,
-            )
-            .padding(horizontal = 20.dp, vertical = 24.dp),
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -849,8 +844,7 @@ internal fun AlertScaffold(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = {},
-                )
-                .verticalScroll(rememberScrollState()),
+                ),
             content = content,
         )
     }

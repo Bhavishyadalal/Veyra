@@ -5,8 +5,12 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import app.veyra.music.playback.audio.LosslessOutput
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
@@ -28,21 +32,22 @@ import androidx.compose.material.icons.rounded.Cloud
 import androidx.compose.material.icons.rounded.DeleteSweep
 import androidx.compose.material.icons.rounded.Dns
 import androidx.compose.material.icons.rounded.DragHandle
+import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.Extension
 import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.PlayCircle
-import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
+import app.veyra.music.ui.components.veyraSwitchColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,38 +62,27 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.veyra.music.R
 import app.veyra.music.data.settings.AppSettings
-import app.veyra.music.data.settings.AudioQuality
 import app.veyra.music.data.settings.permits
 import app.veyra.music.data.smb.SmbRepository
+import app.veyra.music.data.webdav.WebDavRepository
+import app.veyra.music.data.settings.AudioQuality
 import app.veyra.music.data.sources.AddonSource
 import app.veyra.music.data.sources.SourceConfig
 import app.veyra.music.data.sources.SourceHealth
 import app.veyra.music.data.sources.SourceKind
 import app.veyra.music.data.sources.SourceRegistry
-import app.veyra.music.data.webdav.WebDavRepository
-import app.veyra.music.playback.audio.LosslessOutput
 import app.veyra.music.ui.components.AddonEditorAlert
-import app.veyra.music.ui.components.veyraSwitchColors
 import dev.chrisbanes.haze.HazeState
-import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
-
+import kotlin.math.roundToInt
 
 /**
  * Where the app is allowed to get audio from.
@@ -200,7 +194,12 @@ fun SourcesScreen(
             .verticalScroll(rememberScrollState())
             .padding(contentPadding),
     ) {
-        SettingsPageHeader(stringResource(R.string.source), app.veyra.music.ui.icons.SettingsIcons.Source)
+        Text(
+            text = stringResource(R.string.source),
+            style = MaterialTheme.typography.displayLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 14.dp),
+        )
 
         SettingsGroup(
             header = stringResource(R.string.sources_order_header),
@@ -363,7 +362,6 @@ fun SourcesScreen(
                 subtitle = stringResource(R.string.upgrade_length_slack_subtitle),
                 value = stringResource(R.string.seconds_short, upgradeLengthSlackSeconds),
                 sliderValue = upgradeLengthSlackSeconds.toFloat(),
-                formatValue = { context.getString(R.string.seconds_short, it.roundToInt()) },
                 onSliderValue = {
                     AppSettings.setUpgradeLengthSlackSeconds(it.roundToInt())
                 },
@@ -378,6 +376,7 @@ fun SourcesScreen(
     }
 
 }
+
 
 /**
  * A personal library section: the server row, plus test and disconnect rows
@@ -775,9 +774,9 @@ private fun SourceRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .then(if (onClick != null) Modifier.clickable(role = Role.Button, onClick = onClick) else Modifier)
-            .heightIn(min = 80.dp)
-            .padding(horizontal = ROW_INSET, vertical = 16.dp),
+            .clickable(enabled = onClick != null) { onClick?.invoke() }
+            .heightIn(min = 60.dp)
+            .padding(horizontal = ROW_INSET, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -811,8 +810,7 @@ private fun SourceRow(
         ) {
             Text(
                 text = config.displayName,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -852,6 +850,7 @@ private fun SourceRow(
                     health is SourceHealth.Rejected -> MaterialTheme.colorScheme.error
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 },
+                maxLines = 2,
             )
         }
         Spacer(Modifier.width(8.dp))
@@ -865,7 +864,6 @@ private fun SourceRow(
             Switch(
                 checked = config.enabled,
                 onCheckedChange = onToggle,
-                modifier = Modifier.semantics { contentDescription = config.displayName },
                 colors = veyraSwitchColors(),
             )
         }

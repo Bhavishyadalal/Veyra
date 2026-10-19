@@ -29,6 +29,8 @@ import androidx.compose.material.icons.rounded.SmartButton
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import app.veyra.music.ui.components.veyraSwitchColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,14 +45,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import app.veyra.music.R
 import app.veyra.music.data.NerdStats
 import app.veyra.music.data.discord.DiscordRPC
@@ -64,15 +67,12 @@ import app.veyra.music.ui.components.ChoiceAlert
 import app.veyra.music.ui.components.DiscordTokenAlert
 import app.veyra.music.ui.components.TextValueAlert
 import app.veyra.music.ui.components.thumbnailBorder
-import coil3.compose.AsyncImage
 import com.my.kizzy.rpc.KizzyRPC
 import dev.chrisbanes.haze.HazeState
-import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
-
+import java.util.Locale
 
 /** Which dot Discord draws on the avatar, and what it tells other people. */
 enum class DiscordPresenceStatus(val value: String, val label: String, val detail: String) {
@@ -211,7 +211,12 @@ fun DiscordScreen(
             .verticalScroll(rememberScrollState())
             .padding(contentPadding),
     ) {
-        SettingsPageHeader(stringResource(R.string.discord), app.veyra.music.ui.icons.SettingsIcons.Account)
+        Text(
+            text = stringResource(R.string.discord),
+            style = MaterialTheme.typography.displayLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 14.dp),
+        )
 
         DiscordAccountCard(
             connected = connected,
@@ -252,7 +257,14 @@ fun DiscordScreen(
                 title = stringResource(R.string.show_what_playing),
                 subtitle = if (connected) null else stringResource(R.string.connect_account_first),
                 enabled = connected,
-                checked = rpcEnabled && connected,
+                trailing = {
+                    Switch(
+                        checked = rpcEnabled && connected,
+                        onCheckedChange = AppSettings::setDiscordRpcEnabled,
+                        enabled = connected,
+                        colors = veyraSwitchColors(),
+                    )
+                },
                 onClick = { AppSettings.setDiscordRpcEnabled(!rpcEnabled) },
             )
             RowDivider()
@@ -261,7 +273,14 @@ fun DiscordScreen(
                 title = stringResource(R.string.lead_with_song),
                 subtitle = stringResource(R.string.lead_with_song_subtitle),
                 enabled = connected && rpcEnabled,
-                checked = useDetails,
+                trailing = {
+                    Switch(
+                        checked = useDetails,
+                        onCheckedChange = AppSettings::setDiscordUseDetails,
+                        enabled = connected && rpcEnabled,
+                        colors = veyraSwitchColors(),
+                    )
+                },
                 onClick = { AppSettings.setDiscordUseDetails(!useDetails) },
             )
             RowDivider()
@@ -270,7 +289,14 @@ fun DiscordScreen(
                 title = stringResource(R.string.discord_show_audio_quality),
                 subtitle = stringResource(R.string.discord_show_audio_quality_subtitle),
                 enabled = connected && rpcEnabled,
-                checked = showAudioQuality,
+                trailing = {
+                    Switch(
+                        checked = showAudioQuality,
+                        onCheckedChange = AppSettings::setDiscordShowAudioQuality,
+                        enabled = connected && rpcEnabled,
+                        colors = veyraSwitchColors(),
+                    )
+                },
                 onClick = { AppSettings.setDiscordShowAudioQuality(!showAudioQuality) },
             )
             RowDivider()
@@ -279,7 +305,14 @@ fun DiscordScreen(
                 title = stringResource(R.string.customize_card),
                 subtitle = stringResource(R.string.customize_card_subtitle),
                 enabled = connected && rpcEnabled,
-                checked = advancedMode,
+                trailing = {
+                    Switch(
+                        checked = advancedMode,
+                        onCheckedChange = AppSettings::setDiscordAdvancedMode,
+                        enabled = connected && rpcEnabled,
+                        colors = veyraSwitchColors(),
+                    )
+                },
                 onClick = { AppSettings.setDiscordAdvancedMode(!advancedMode) },
             )
         }
@@ -317,8 +350,13 @@ fun DiscordScreen(
                         icon = Icons.Rounded.SmartButton,
                         title = stringResource(R.string.first_button),
                         subtitle = button1Text.ifEmpty { DiscordRPC.DEFAULT_BUTTON_1 },
-                        checked = button1Visible,
-                        onCheckedChange = AppSettings::setDiscordButton1Visible,
+                        trailing = {
+                            Switch(
+                                checked = button1Visible,
+                                onCheckedChange = AppSettings::setDiscordButton1Visible,
+                                colors = veyraSwitchColors(),
+                            )
+                        },
                         onClick = { onOpenDialog(DiscordDialog.BUTTON_1) },
                     )
                     if (DiscordRPC.PROJECT_URL.isNotBlank()) {
@@ -327,8 +365,13 @@ fun DiscordScreen(
                             icon = Icons.Rounded.SmartButton,
                             title = stringResource(R.string.second_button),
                             subtitle = button2Text.ifEmpty { DiscordRPC.DEFAULT_BUTTON_2 },
-                            checked = button2Visible,
-                            onCheckedChange = AppSettings::setDiscordButton2Visible,
+                            trailing = {
+                                Switch(
+                                    checked = button2Visible,
+                                    onCheckedChange = AppSettings::setDiscordButton2Visible,
+                                    colors = veyraSwitchColors(),
+                                )
+                            },
                             onClick = { onOpenDialog(DiscordDialog.BUTTON_2) },
                         )
                     }

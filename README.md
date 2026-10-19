@@ -33,15 +33,7 @@ For a build labelled simply **Veyra**, use `:app:assembleProdDebug` for a locall
 
 APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for most current phones, or universal if unsure. The dev app is named **Veyra Dev**; the production variant is **Veyra**. Both have their own package identity and can coexist with the original app. This new identity does not automatically import the original app's private data.
 
-## Latest source update: refined settings
-
-Settings now has a consistent set of native controls across categories, account integrations, Sources and related screens: stronger headings, open rows, readable values, accessible toggles, adaptive selectors, clearer quality sheets and improved forms/dialog actions. Sliders show live draft values and save once when released. Existing data, preference keys and service actions remain.
-
-[Browse the rendered controls](design/settings-preview/README.md) · [Checks and Android build limits](verification/SETTINGS-REFINEMENT-RESULTS.md) · [Download the updated Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.3_Settings_Polish.zip)
-
-16 native Compose component checks and 57 focused Kotlin regressions pass. Full Android compilation is still blocked by JitPack HTTP 403. The previews are component renders, not a verified Android build. No APK generated; source stays on version 0.1.3/code 16.
-
-## Previous update: 0.1.3 — silver waveform welcome
+## Latest update: 0.1.3 — silver waveform welcome
 
 A dedicated welcome landing now follows the supplied design direction: full-width silver waveform artwork, bold native typography, optional swipe/tap previews and a silver Get started button. No restore-backup entry is included. Get started goes directly to name entry; account linking remains optional.
 
