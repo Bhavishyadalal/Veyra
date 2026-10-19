@@ -1779,7 +1779,6 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         _homePageError.value = null
         val identity = listenerKey()
         prepareHomeOwner(identity)
-        val owner = HomeDiskStore.owner(identity)
         val generation = homeLoadGeneration.incrementAndGet()
         val previousContinuation = homeContinuation
         homeContinuation = null // A disk snapshot never restores a live paging token.

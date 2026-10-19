@@ -26,7 +26,7 @@ A lifecycle-bound default-network callback supplies connectivity without polling
 
 ## Executed verification
 
-- **84 focused Kotlin/JUnit tests passed**, including **16 new Home tests** against real models, disk store and layout policy: restart/metadata round-trip, guest/account/channel isolation, hashed filenames, corrupt/unknown schema, atomic failure, bounded retention, empty refresh, layout persistence, hide-all/reset, missing/new section behavior, invalid moves, Turkish locale, clock change and Unicode/null metadata.
+- **85 focused Kotlin/JUnit tests passed**, including **17 new Home tests** against real models, disk store and layout policy: restart/metadata round-trip, guest/account/channel isolation, hashed filenames, corrupt/unknown schema, atomic failure, bounded retention, empty refresh, layout persistence, hide-all/reset, missing/new section behavior, invalid moves, Turkish locale, clock change and Unicode/null metadata.
 - Actual **HomeExperience.kt**, HomeLayout and models compiled with Kotlin 2.3.20 / Compose Desktop 1.10.3 / Material 3 Desktop 1.7.3.
 - **7 component interaction checks passed**: move, visibility, reset, edit, both offline shortcuts and disabled edge control. Six component boards rendered; compact/large-text and offline contrast were visually inspected. These use real production component bodies/resources and bundled Manrope, with narrow settings/page-gutter host adapters. They are not complete Android Home screenshots.
 - **7 changed/new production Kotlin files parsed with zero PSI syntax errors.** HomeConnectivity separately compiled against the real Android API 36 jar. Syntax parsing is not full Android/Compose type checking.

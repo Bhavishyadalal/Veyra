@@ -90,7 +90,7 @@ internal class HomeDiskStore(private val directory: File, private val now: () ->
         val temp = File.createTempFile("home-", ".tmp", directory)
         try {
             FileOutputStream(temp).use { file ->
-                val out = DataOutputStream(BufferedOutputStream(file))
+                val out = DataOutputStream(BufferedOutputStream(LimitedOutput(file)))
                 write(out); out.flush(); file.fd.sync()
             }
             check(temp.length() <= MAX_BYTES)
@@ -100,6 +100,18 @@ internal class HomeDiskStore(private val directory: File, private val now: () ->
                 Files.move(temp.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING)
             }
         } finally { temp.delete() }
+    }
+
+    private class LimitedOutput(output: OutputStream) : FilterOutputStream(output) {
+        private var written = 0L
+        override fun write(value: Int) {
+            if (written >= MAX_BYTES) throw IOException("Home snapshot is too large")
+            out.write(value); written++
+        }
+        override fun write(bytes: ByteArray, offset: Int, length: Int) {
+            if (written + length > MAX_BYTES) throw IOException("Home snapshot is too large")
+            out.write(bytes, offset, length); written += length
+        }
     }
 
     private fun DataInputStream.text(): String = readUTF().also { check(it.length <= MAX_TEXT) }

@@ -61,6 +61,15 @@ class HomeExperienceTest {
         assertEquals("Saved", store.read("a")!!.shelves.single().title)
         assertFalse(dir.listFiles()!!.any { it.extension == "tmp" })
     }
+    @Test fun oversizePayloadIsStoppedBeforeReplacingSavedContent() = disk { dir, store ->
+        store.write("a", listOf(shelf("Saved")))
+        val huge = List(24) { n -> HomeShelf("Section $n", List(20) {
+            ShelfItem("t".repeat(4096), "a".repeat(4096), null, "id", null)
+        }) }
+        assertFalse(store.write("a", huge))
+        assertEquals("Saved", store.read("a")!!.shelves.single().title)
+        assertFalse(dir.listFiles()!!.any { it.extension == "tmp" })
+    }
     @Test fun diskFootprintAndSnapshotLengthAreBounded() = disk { dir, store ->
         repeat(12) { store.write("owner$it", List(40) { n -> shelf("Shelf $n", 50) }) }
         val feeds = dir.listFiles()!!.filter { it.extension == "feed" }
