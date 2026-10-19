@@ -1,11 +1,6 @@
 package app.veyra.music.ui.screens
 
-import app.veyra.music.auth.clearSpotifyWebSession
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.HorizontalDivider
-import app.veyra.music.sharedui.resources.Res
-import app.veyra.music.sharedui.resources.spotify_logo
-import org.jetbrains.compose.resources.painterResource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,25 +12,28 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Cloud
 import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.History
-import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.SwitchAccount
 import androidx.compose.material.icons.rounded.Tune
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import app.veyra.music.ui.components.veyraSwitchColors
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.veyra.music.R
+import app.veyra.music.auth.clearSpotifyWebSession
 import app.veyra.music.data.model.Account
 import app.veyra.music.data.settings.AppSettings
+import app.veyra.music.sharedui.resources.Res
+import app.veyra.music.sharedui.resources.spotify_logo
 import kotlin.math.roundToInt
+import org.jetbrains.compose.resources.painterResource
+
+
 
 @Composable
 fun AccountAndScrobblingScreen(
@@ -75,12 +73,7 @@ fun AccountAndScrobblingScreen(
             .verticalScroll(rememberScrollState())
             .padding(contentPadding),
     ) {
-        Text(
-            text = stringResource(R.string.account_integrations),
-            style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 14.dp),
-        )
+        SettingsPageHeader(stringResource(R.string.account_integrations), app.veyra.music.ui.icons.SettingsIcons.Account)
 
         // One card: who is signed in, which profile is listening, and the way
         // out, with the explanation of profiles underneath.
@@ -162,18 +155,10 @@ fun AccountAndScrobblingScreen(
                     } else {
                         stringResource(R.string.enter_token_to_enable)
                     },
-                    trailing = {
-                        Switch(
-                            checked = listenBrainzEnabled,
-                            onCheckedChange = { checked ->
-                                if (checked && listenBrainzToken.isBlank()) {
-                                    onOpenListenBrainzLogin()
-                                } else {
-                                    AppSettings.setListenBrainzEnabled(checked)
-                                }
-                            },
-                            colors = veyraSwitchColors(),
-                        )
+                    checked = listenBrainzEnabled,
+                    onCheckedChange = { checked ->
+                        if (checked && listenBrainzToken.isBlank()) onOpenListenBrainzLogin()
+                        else AppSettings.setListenBrainzEnabled(checked)
                     },
                     onClick = onOpenListenBrainzLogin,
                 )
@@ -183,13 +168,7 @@ fun AccountAndScrobblingScreen(
                         icon = Icons.Rounded.GraphicEq,
                         title = stringResource(R.string.scrobble_primary_artist_only),
                         subtitle = stringResource(R.string.scrobble_primary_artist_only_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = listenBrainzPrimaryArtistOnly,
-                                onCheckedChange = AppSettings::setListenBrainzPrimaryArtistOnly,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = listenBrainzPrimaryArtistOnly,
                         onClick = { AppSettings.setListenBrainzPrimaryArtistOnly(!listenBrainzPrimaryArtistOnly) },
                     )
                 }
@@ -202,18 +181,10 @@ fun AccountAndScrobblingScreen(
                     } else {
                         stringResource(R.string.tap_to_sign_in)
                     },
-                    trailing = {
-                        Switch(
-                            checked = lastfmEnabled,
-                            onCheckedChange = { checked ->
-                                if (checked && lastfmSessionKey.isBlank()) {
-                                    onOpenLastfmLogin()
-                                } else {
-                                    AppSettings.setLastfmEnabled(checked)
-                                }
-                            },
-                            colors = veyraSwitchColors(),
-                        )
+                    checked = lastfmEnabled,
+                    onCheckedChange = { checked ->
+                        if (checked && lastfmSessionKey.isBlank()) onOpenLastfmLogin()
+                        else AppSettings.setLastfmEnabled(checked)
                     },
                     onClick = {
                         if (lastfmSessionKey.isNotBlank()) {
@@ -233,13 +204,7 @@ fun AccountAndScrobblingScreen(
                         icon = Icons.Rounded.GraphicEq,
                         title = stringResource(R.string.scrobble_tracks),
                         subtitle = stringResource(R.string.scrobble_tracks_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = lastfmScrobbleEnabled,
-                                onCheckedChange = AppSettings::setLastfmScrobbleEnabled,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = lastfmScrobbleEnabled,
                         onClick = { AppSettings.setLastfmScrobbleEnabled(!lastfmScrobbleEnabled) },
                     )
                     RowDivider()
@@ -247,13 +212,7 @@ fun AccountAndScrobblingScreen(
                         icon = Icons.Rounded.GraphicEq,
                         title = stringResource(R.string.scrobble_primary_artist_only),
                         subtitle = stringResource(R.string.scrobble_primary_artist_only_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = lastfmPrimaryArtistOnly,
-                                onCheckedChange = AppSettings::setLastfmPrimaryArtistOnly,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = lastfmPrimaryArtistOnly,
                         onClick = { AppSettings.setLastfmPrimaryArtistOnly(!lastfmPrimaryArtistOnly) },
                     )
                     RowDivider()
@@ -261,13 +220,7 @@ fun AccountAndScrobblingScreen(
                         icon = Icons.Rounded.GraphicEq,
                         title = stringResource(R.string.now_playing),
                         subtitle = stringResource(R.string.lastfm_now_playing_subtitle),
-                        trailing = {
-                            Switch(
-                                checked = lastfmNowPlayingEnabled,
-                                onCheckedChange = AppSettings::setLastfmNowPlaying,
-                                colors = veyraSwitchColors(),
-                            )
-                        },
+                        checked = lastfmNowPlayingEnabled,
                         onClick = { AppSettings.setLastfmNowPlaying(!lastfmNowPlayingEnabled) },
                     )
                 }
@@ -281,6 +234,7 @@ fun AccountAndScrobblingScreen(
                         subtitle = stringResource(R.string.min_song_duration_subtitle),
                         value = "${scrobbleMinDuration}s",
                         sliderValue = scrobbleMinDuration.toFloat(),
+                        formatValue = { "${it.roundToInt()}s" },
                         onSliderValue = { AppSettings.setScrobbleMinDuration(it.roundToInt()) },
                         valueRange = 15f..120f,
                         steps = 20,
@@ -292,6 +246,7 @@ fun AccountAndScrobblingScreen(
                         subtitle = stringResource(R.string.scrobble_delay_subtitle),
                         value = "${(scrobbleDelayPercent * 100).roundToInt()}%",
                         sliderValue = scrobbleDelayPercent,
+                        formatValue = { "${(it * 100).roundToInt()}%" },
                         onSliderValue = { AppSettings.setScrobbleDelayPercent(it) },
                         valueRange = 0.1f..1.0f,
                         steps = 8,
@@ -303,6 +258,7 @@ fun AccountAndScrobblingScreen(
                         subtitle = stringResource(R.string.max_delay_subtitle),
                         value = "${scrobbleDelaySeconds}s",
                         sliderValue = scrobbleDelaySeconds.toFloat(),
+                        formatValue = { "${it.roundToInt()}s" },
                         onSliderValue = { AppSettings.setScrobbleDelaySeconds(it.roundToInt()) },
                         valueRange = 30f..300f,
                         steps = 26,

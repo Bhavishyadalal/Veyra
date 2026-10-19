@@ -6,7 +6,7 @@ Latest stable and preview packages include the [external cron setup guide](../do
 
 [Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.5_Stable.zip) · [SHA-256](Veyra_Android_Source_0.1.5_Stable.zip.sha256)
 
-Promoted to main after the owner reported successful testing and Listen Together room creation. Uses Veyra's backend for rooms, invites and presence; retains the stable UI foundation and custom-server support. Extract the whole Veyra directory and open it in Android Studio. No APK is included. [Verification and remaining checks](../verification/backend-migration/README.md).
+Stable 0.1.5/code 20 now includes the preview Home, player and Settings refinements, with no beta suffix. Uses Veyra's backend for rooms, invites and presence and retains custom-server support. Extract the whole Veyra directory and open it in Android Studio. No APK is included. [Verification and remaining checks](../verification/backend-migration/README.md).
 
 [Preview 0.1.5-beta1 source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip) remains separate. Older stable/candidate archives below are historical snapshots.
 

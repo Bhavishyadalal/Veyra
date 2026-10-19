@@ -4,7 +4,7 @@
 
 # Veyra
 
-> **Stable source: 0.1.5, code 19.** Promoted after the owner reported successful testing and Listen Together room-code creation. [Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.5_Stable.zip) · [Separate preview 0.1.5-beta1](https://github.com/Bhavishyadalal/Veyra/tree/preview/0.1.5-beta1) · [Verification and limits](verification/backend-migration/README.md).
+> **Stable source: 0.1.5, code 20.** Includes the promoted preview Home, player and Settings refinements. [Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.5_Stable.zip) · [Separate preview 0.1.5-beta1](https://github.com/Bhavishyadalal/Veyra/tree/preview/0.1.5-beta1) · [Verification and limits](verification/backend-migration/README.md).
 
 A personal Android music player with Manrope typography, selectable launcher styles and a dark listening interface.
 
@@ -45,7 +45,7 @@ Rooms, invite links and app presence now use **https://veyra-listen-together.onr
 
 The backend lives in [Veyra-backend](https://github.com/Bhavishyadalal/Veyra-backend). Its [12-minute keep-alive workflow](https://github.com/Bhavishyadalal/Veyra-backend/actions/workflows/render-keepalive.yml) is independent of the phone app. GitHub schedules are best effort; Render restarts still clear in-memory rooms. The backend folder and Oracle deployment workflow retained in this Android repository are legacy reference material and are not the active Render deployment.
 
-This stable source retains the 0.1.3 UI foundation. Preview UI changes remain on the separate preview branch. No new APK or GitHub release is published by this promotion. Local verification and the owner's device report are recorded separately in [the migration report](verification/backend-migration/README.md).
+This stable source now includes the Home, player and Settings refinements previously developed on preview/0.1.5-beta1. The historical preview branch is preserved. The beta suffix is removed; version code 20 permits upgrades from preview code 18 and the earlier stable code 19. No APK or GitHub release is published by this promotion. Local verification and the owner's device report are recorded separately in [the migration report](verification/backend-migration/README.md).
 
 ## Previous update: 0.1.3 — silver waveform welcome
 

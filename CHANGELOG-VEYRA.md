@@ -1,3 +1,11 @@
+# Veyra 0.1.5 · preview refinements promoted to stable
+
+- Promote the complete preview Settings, player and Home presentation to stable main, including reusable controls, pressed/loading feedback, seek cancellation, reduced-motion behavior, artwork fallbacks and stable feed identities.
+- Preserve optional Google/YouTube Music sign-in, guest Listen Together, integrations, playback callbacks, downloads and saved preferences. No replacement Google username/password form.
+- Keep Veyra-owned room synchronization, invites, presence and the shared external cron/12-minute keep-alive setup.
+- Remove the beta suffix. Version is 0.1.5, code 20, allowing upgrades from beta code 18 and earlier stable code 19 with the same package/signing identity.
+- Keep historical preview branches and source archives. See verification/STABLE-0.1.5-PROMOTION.md for current checks and build limitations. No APK or release is published by this source promotion.
+
 # Veyra 0.1.5 (independently hosted Listen Together)
 
 - Move room synchronization, public invites, Android invite host and presence to Veyra's own Render service.

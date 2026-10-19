@@ -35,6 +35,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
@@ -110,11 +113,12 @@ fun ThinSlider(
     markerColor: Color = Color.White.copy(alpha = 0.5f),
     accessibilityLabel: String? = null,
     enabled: Boolean = true,
+    onValueChangeCancelled: (() -> Unit)? = onValueChangeFinished,
+    interactionKey: Any? = Unit,
+    valueDescription: String? = null,
 ) {
     val reduceAnimation by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
-    val currentEnabled by rememberUpdatedState(enabled)
-    val currentOnValueChange by rememberUpdatedState(onValueChange)
-    val currentOnFinished by rememberUpdatedState(onValueChangeFinished)
+    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     var dragging by remember { mutableStateOf(false) }
     val height by animateDpAsState(
         targetValue = if (dragging) activeHeight else idleHeight,
@@ -149,108 +153,32 @@ fun ThinSlider(
         label = "fillFactor",
     )
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            // Keep the slender track, with a full accessible target for both seek and volume.
-            .heightIn(min = 48.dp)
-            .height(activeHeight + 22.dp)
-            .semantics {
-                accessibilityLabel?.let { contentDescription = it }
-                progressBarRangeInfo = ProgressBarRangeInfo(value.coerceIn(0f, 1f), 0f..1f)
-                if (!enabled) disabled()
-                setProgress { requested ->
-                    if (!enabled || !requested.isFinite()) false else {
-                        currentOnValueChange(requested.coerceIn(0f, 1f))
-                        currentOnFinished?.invoke()
-                        true
-                    }
-                }
-            }
-            // One gesture loop for both taps and drags. Two separate detectors
-            // — a drag one plus a tap one — meant taps never landed: the drag
-            // detector took the pointer and a tap has no drag to report.
-            .pointerInput(Unit) {
-                awaitEachGesture {
-                    val down = awaitFirstDown(requireUnconsumed = false)
-                    if (!currentEnabled) return@awaitEachGesture
-                    dragging = true
-                    try {
-                        currentOnValueChange((down.position.x / size.width.coerceAtLeast(1)).coerceIn(0f, 1f))
-                        while (true) {
-                            val event = awaitPointerEvent()
-                            val pointer = event.changes.firstOrNull { it.id == down.id } ?: break
-                            if (!pointer.pressed) {
-                                pointer.consume()
-                                break
-                            }
-                            if (pointer.positionChanged()) {
-                                if (currentEnabled) currentOnValueChange((pointer.position.x / size.width.coerceAtLeast(1)).coerceIn(0f, 1f))
-                                pointer.consume()
-                            }
-                        }
-                    } finally {
-                        // Cancellation/another gesture must not leave the player in scrubbing mode.
-                        dragging = false
-                        currentOnFinished?.invoke()
-                    }
-                }
-            },
-        contentAlignment = Alignment.Center,
+    PlayerTrackInput(
+        value = value, enabled = enabled, description = accessibilityLabel,
+        onChange = onValueChange, onFinished = onValueChangeFinished,
+        onCancelled = onValueChangeCancelled, onDragging = { dragging = it },
+        interactionKey = interactionKey, valueDescription = valueDescription,
+        modifier = modifier.fillMaxWidth().heightIn(min = 48.dp).height(activeHeight + 22.dp),
     ) {
-        Canvas(
-            Modifier
-                .fillMaxWidth()
-                .height(height),
-        ) {
-            val radius = CornerRadius(size.height / 2f)
-            drawRoundRect(color = inactiveColor, cornerRadius = radius)
-            // Between the two track colours, and drawn *under* the played fill:
-            // once the playhead reaches the window the transition is no longer
-            // upcoming, and the ordinary progress colour taking it over is what
-            // says so.
-            transitionWindow?.let { window ->
-                val from = size.width * window.start.coerceIn(0f, 1f)
-                val to = size.width * window.endInclusive.coerceIn(0f, 1f)
-                if (to > from) {
-                    drawRoundRect(
-                        color = markerColor,
-                        topLeft = Offset(from, 0f),
-                        size = Size(to - from, size.height),
-                        cornerRadius = radius,
-                    )
-                }
-            }
-            // While a blend runs the whole bar is the fill, outgoing song and
-            // incoming alike, and it is the fill's opacity that carries the mix:
-            // brightest on each beat, easing down between them over the unplayed
-            // track colour. A drag in progress always shows the finger.
-            val cover = if (dragging) 0f else mixPulse?.cover ?: 0f
-            val base = value.coerceIn(0f, 1f)
-            val fraction = base + (1f - base) * cover
-            // Scaled by [fillFactor]: retracted to nothing while the sheen
-            // runs (two white signals on one bar would read as progress
-            // fighting the wait) and slid back in when the switch lands. The
-            // capsule's minimum width rides the same factor, so the nub at
-            // zero progress retires with the fill instead of sitting as a
-            // dot under the sheen.
-            val filled = size.width * fraction * fillFactor
-            if (filled > 0f) {
+        PlayerProgressTrack(
+            fraction = {
+                val cover = if (dragging) 0f else mixPulse?.cover ?: 0f
+                val base = playerFraction(value)
+                base + (1f - base) * cover
+            },
+            height = height,
+            activeColor = {
                 val alpha = if (dragging) activeColor.alpha else mixPulse?.alpha(activeColor.alpha) ?: activeColor.alpha
-                drawRoundRect(
-                    color = activeColor.copy(alpha = alpha),
-                    size = Size(
-                        filled.coerceAtLeast(size.height * fillFactor).coerceAtMost(size.width),
-                        size.height,
-                    ),
-                    cornerRadius = radius,
-                )
-            }
-        }
+                activeColor.copy(alpha = alpha)
+            },
+            inactiveColor = inactiveColor, markerColor = markerColor,
+            transitionWindow = transitionWindow, fillFactor = { fillFactor },
+        )
         // Composed only while switching or mixing. The infinite animation therefore costs no
         // frames during ordinary playback, and AnimatedVisibility lets it leave gracefully.
         AnimatedVisibility(
             visible = sheenVisible,
+            modifier = Modifier.graphicsLayer { scaleX = if (rtl) -1f else 1f },
             // Grown out of the bar's own left end — where the progress fill
             // begins — instead of slid in from a third of its own width: the
             // capsule is full-bleed, so that slide started past the screen

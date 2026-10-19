@@ -519,7 +519,7 @@ private const val SPOTIFY_CANVAS_CONTROLS_IDLE_MS = 5_000L
 /** One shared travel time keeps the deck, credits and stats moving as a unit. */
 private const val SPOTIFY_CANVAS_CONTROLS_ANIMATION_MS = 420
 /** The deck's fade back in on returning from lyrics or the queue. */
-private const val PLAYER_DECK_FADE_IN_MS = 700
+private const val PLAYER_DECK_FADE_IN_MS = 280
 /** Shared top-only scrim transition for the Canvas lower deck. */
 private const val SPOTIFY_DECK_TOP_FADE_FRACTION = 0.28f
 
@@ -570,8 +570,15 @@ private fun SlidingPlayerDeck(
 ) {
     var mounted by remember { mutableStateOf(visible) }
     val alpha = remember { Animatable(1f) }
+    val reduced = LocalPlayerReducedMotion.current
 
-    LaunchedEffect(visible) {
+    LaunchedEffect(visible, reduced) {
+        if (reduced) {
+            reveal.snapTo(if (visible) 1f else 0f)
+            alpha.snapTo(1f)
+            mounted = visible
+            return@LaunchedEffect
+        }
         if (visible) {
             if (fadeIn() && reveal.value < 1f) {
                 alpha.snapTo(0f)
@@ -625,7 +632,7 @@ private fun SlidingPlayerDeck(
                     }
                 },
         ) {
-            content()
+            CompositionLocalProvider(LocalPlayerControlsInteractive provides visible) { content() }
         }
     }
 }
@@ -1352,12 +1359,12 @@ fun NowPlayingScreen(
             // once the banner has settled — see [heroSettled].
             heroMode && (heroSettled || art.loaded || canvasRendered)
         ) 1f else 0f,
-        animationSpec = tween(durationMillis = 420, easing = FastOutSlowInEasing),
+        animationSpec = tween(durationMillis = playerMotionMillis(reducedBackdropMotion, 320), easing = FastOutSlowInEasing),
         label = "heroCanvas",
     )
     val spotifyChromeAlpha by animateFloatAsState(
         targetValue = if (!spotifyCanvasPresentation || spotifyCanvasControlsOpen) 1f else 0f,
-        animationSpec = tween(durationMillis = 180, easing = FastOutSlowInEasing),
+        animationSpec = tween(durationMillis = playerMotionMillis(reducedBackdropMotion, 180), easing = FastOutSlowInEasing),
         label = "spotifyCanvasChrome",
     )
     // How tall that banner is, worked out down in the layout where the sleeve's
@@ -1484,7 +1491,7 @@ fun NowPlayingScreen(
         // into a rattle, and the beat that matters is the one that says where
         // the playhead landed.
         if (controlsLocked) {
-            scrub.release { }
+            scrub.cancel()
             onBlockedControl()
         } else {
             haptics.play(Haptic.Select)
@@ -1732,7 +1739,7 @@ fun NowPlayingScreen(
         animationSpec = tween(durationMillis = 360, easing = FastOutSlowInEasing),
         label = "playerTint",
     )
-    CompositionLocalProvider(LocalPlayerTint provides playerTint) {
+    CompositionLocalProvider(LocalPlayerTint provides playerTint, LocalPlayerReducedMotion provides reducedBackdropMotion) {
         if (landscape) {
             // Paused always wins outright over a scrub in progress — see
             // [ARTWORK_PAUSE_SHRINK_SCALE].
@@ -1931,6 +1938,8 @@ fun NowPlayingScreen(
                                         ?.let { it.start..it.end },
                                     onScrub = onScrub,
                                     onScrubFinished = onScrubFinished,
+                                    onScrubCancelled = scrub::cancel,
+                                    interactionKey = song.videoId,
                                 ) {
                                     PlaybackQualityLabel(
                                         song = song,
@@ -3614,6 +3623,8 @@ fun NowPlayingScreen(
                             ?.let { it.start..it.end },
                         onScrub = onScrub,
                         onScrubFinished = onScrubFinished,
+                        onScrubCancelled = scrub::cancel,
+                        interactionKey = song.videoId,
                     ) {
                         PlaybackQualityLabel(
                             song = song,

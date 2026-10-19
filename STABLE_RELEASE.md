@@ -1,3 +1,15 @@
+# Veyra 0.1.5 · preview promoted to stable
+
+Version **0.1.5**, version code **20**, beta suffix empty. Includes preview Home, player and Settings refinements plus Veyra-owned Listen Together/presence and shared external cron support. Package identity, signing configuration and existing app data remain unchanged. Code 20 is higher than both the previous beta (18) and stable (19).
+
+Build/sign the production release using your existing signing key. When publishing your release, target `main` with tag `v0.1.5` and leave the prerelease option disabled. [Release notes](RELEASE_NOTES_0.1.5.md) · [Checks and limitations](verification/STABLE-0.1.5-PROMOTION.md).
+
+No APK or GitHub release was generated here. Earlier reports below are historical and do not certify this revision.
+
+---
+
+> **Historical stable-source reports.** The current development branch is **0.1.4-beta1 preview**, code 17. These earlier stable reports do not certify the preview. Stable 0.1.3 remains on `main`; see [preview checks](verification/PREVIEW-0.1.4-beta1-RESULTS.md).
+
 # Veyra 0.1.3 stable-series source update
 
 Version name 0.1.3, code 16. Includes the reference-inspired silver-wave welcome, optional interactive previews, direct Get started flow, and Home/Settings hierarchy refinements. No restore-backup action is added to Welcome.

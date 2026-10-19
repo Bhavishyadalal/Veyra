@@ -429,9 +429,9 @@ fun LazyListScope.homeFeedSkeleton(featured: Boolean) {
                     val width = (maxWidth - PAGE_GUTTER * 2).coerceAtLeast(120.dp).coerceAtMost(620.dp)
                     val scale = androidx.compose.ui.platform.LocalDensity.current.fontScale.coerceAtLeast(1f)
                     ShimmerBox(Modifier.padding(horizontal = PAGE_GUTTER).width(width)
-                        .height((width * 0.63f).coerceIn(228.dp, 320.dp) * scale), RoundedCornerShape(22.dp))
+                        .height((width * 0.63f).coerceIn(228.dp, 320.dp) * scale), RoundedCornerShape(26.dp))
                 }
-                Spacer(Modifier.height(48.dp))
+                Spacer(Modifier.height(64.dp))
             }
         }
     }

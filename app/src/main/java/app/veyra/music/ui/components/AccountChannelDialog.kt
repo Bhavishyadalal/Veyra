@@ -14,8 +14,12 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Person
@@ -30,19 +34,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
 import app.veyra.music.data.model.AccountChannel
 import app.veyra.music.data.settings.AppSettings
+import coil3.compose.AsyncImage
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
+
+
 
 /**
  * Which channel to listen as — the Google account's own, or one of its brand
@@ -80,7 +87,8 @@ fun AccountChannelDialog(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onDismiss,
-            ),
+            )
+            .padding(horizontal = 20.dp, vertical = 24.dp),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -103,7 +111,9 @@ fun AccountChannelDialog(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = {},
-                ),
+                )
+                .selectableGroup()
+                .verticalScroll(rememberScrollState()),
         ) {
             Column(
                 modifier = Modifier
@@ -187,7 +197,9 @@ private fun ChannelRow(channel: AccountChannel, selected: Boolean, onClick: () -
             .background(
                 if (pressed) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.09f) else Color.Transparent,
             )
-            .clickable(
+            .selectable(
+                selected = selected,
+                role = Role.RadioButton,
                 indication = null,
                 interactionSource = interactionSource,
                 onClick = onClick,
