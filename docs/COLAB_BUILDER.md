@@ -9,7 +9,7 @@ changing its options does not change or interrupt an Actions run.
 
 1. Open the notebook in Colab, save a private copy, and select a CPU runtime.
 2. Run the helper code cells above Step 1.
-3. In Step 1 select **Preview 0.1.6-beta1** or **Stable 0.1.5**. Defaults are
+3. In Step 1 select **Preview 0.1.7-beta1** or **Stable 0.1.6**. Defaults are
    Production Release, ARM64, Java 17, two workers, and existing-key signing.
    Read the Android SDK terms and enable the licence checkbox if you agree.
 4. Run Step 2 for source retrieval, then Step 3 for tools. You can alternatively
@@ -33,7 +33,7 @@ and cannot produce compatible updates to the existing installation.
 The notebook preserves source versions, forces Release R8/resource shrinking,
 and checks reports, package/version, native ABI, archive integrity and APK
 certificate before marking an artifact ready. Optional tests are reported
-separately. Android generally blocks installing stable 0.1.5 over preview 0.1.6;
+separately. Stable 0.1.6 / code 22 can update preview code 21 with the same signing key; Android blocks older version codes, so
 use the correct newer build or the separately installed Dev flavor for testing.
 
 Colab signing uploads your key to your remote runtime; it is not offline signing.
