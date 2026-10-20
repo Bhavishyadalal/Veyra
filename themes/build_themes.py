@@ -86,3 +86,4 @@ colors.write_text('<resources><color name="theme_web_background">#070C18</color>
 # Additional schema-3 fan theme; old published packs above remain byte-for-byte immutable.
 import runpy
 runpy.run_path(str(root / "build_playtime.py"), run_name="__main__")
+runpy.run_path(str(root / "build_astral.py"), run_name="__main__")

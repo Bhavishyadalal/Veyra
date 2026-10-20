@@ -33,6 +33,17 @@
       "sha256": "d84fc7de0ff4fdf9accd33cfac62feb29c66660a43e1863bd00bc178fce0a079",
       "bytes": 442771,
       "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/playtime-club/artwork/preview.webp"
+    },
+    {
+      "id": "astral-tide",
+      "name": "Astral Tide",
+      "description": "Bioluminescent manta rays beneath a midnight ocean. Bold Space Grotesk headings, sea-glass mint controls, champagne starlight, custom waveform glyphs and an optional matching Veyra icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/astral-tide-v1.zip",
+      "sha256": "399985796c9caec40ec4e2f2f1d12136cc30a3424dbac798f2c2f22f1d436d22",
+      "bytes": 521115,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/astral-tide/artwork/preview.webp"
     }
   ]
 }

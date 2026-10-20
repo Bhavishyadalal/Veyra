@@ -1,4 +1,4 @@
-# Veyra 0.1.7-beta1 · Listening continuity and three worlds
+# Veyra 0.1.7-beta1 · Listening continuity and four worlds
 
 **Preview source · code 25 · Made by Bhavishya Dalal**
 
@@ -17,6 +17,15 @@ an APK or change the Listen Together backend.
 
 [Implementation, validation and device-check limits](verification/RELIABILITY-0.1.7-beta1.md).
 Version remains **0.1.7-beta1 / code 25**. No new installer is published.
+
+## Astral Tide
+
+- Original bioluminescent manta-ray ocean artwork, sea-glass mint controls and champagne starlight.
+- Bold geometric Space Grotesk headings, custom navigation/player/action glyphs and a luminous mint timeline.
+- Optional bundled manta-waveform launcher icon, offered explicitly during theme apply.
+- Compact Theme Studio, real song covers, existing playback/reliability behavior and reduced-motion support remain.
+- Data-only schema-2 pack; minimum app code 25. Rebuild the refreshed preview source for its optional launcher icon.
+- [New-theme previews and verification](verification/ASTRAL-TIDE-0.1.7-beta1.md). No APK publication.
 
 ## Playtime Club
 

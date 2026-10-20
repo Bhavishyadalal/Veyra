@@ -74,13 +74,19 @@ class ThemePackTest {
     }
     @Test fun allPublishedThemesInstallWithCorrectBrandingAndMinimumVersion() {
         val catalog=ThemePack.json.decodeFromString<ThemeCatalog>(File(project,"themes/catalog.json").readText())
-        assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club"),catalog.themes.map { it.id }.toSet())
+        assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club","astral-tide"),catalog.themes.map { it.id }.toSet())
         for (entry in catalog.themes) {
             val pack=File(project,"themes/packs/${entry.id}-v${entry.version}.zip")
             val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,25)
             assertEquals(if(entry.id == "playtime-club") 3 else 2,m.schema)
             assertTrue(File(dir,m.assets.getValue("brandIcon")).isFile)
             rejects { ThemePack.validate(m,23) }
+            if (entry.id == "astral-tide") {
+                rejects { ThemePack.validate(m,24) }
+                assertEquals("fonts/SpaceGrotesk.ttf",m.assets["headingFont"])
+                assertEquals("ember",m.seekStyle)
+                assertEquals("mist",m.sceneStyle)
+            }
             if (entry.id == "playtime-club") {
                 rejects { ThemePack.validate(m,24) }
                 rejects { ThemePack.validate(m.copy(schema=2,minAppCode=24),25) }

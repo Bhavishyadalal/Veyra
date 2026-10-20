@@ -5,6 +5,7 @@ Made by **Bhavishya Dalal**.
 
 | Theme | Its own atmosphere | Download |
 | --- | --- | --- |
+| **Astral Tide v1** | Original bioluminescent ocean, bold Space Grotesk headings, sea-glass controls, champagne starlight and a manta-waveform icon | [Theme ZIP](packs/astral-tide-v1.zip) · [SHA-256](packs/astral-tide-v1.zip.sha256) |
 | **Playtime Club v1** | Unofficial cartoon music party, Fredoka rounded headings, yellow/mint details, bubble timeline and soft press feedback | [Theme ZIP](packs/playtime-club-v1.zip) · [SHA-256](packs/playtime-club-v1.zip.sha256) |
 | **Web Slinger v1** | Midnight city, crimson glass, cobalt webs, bold condensed type, angular action details and a web timeline | [Theme ZIP](packs/web-slinger-v1.zip) · [SHA-256](packs/web-slinger-v1.zip.sha256) |
 | **Halloween Nocturne v3** | Moonlit forest, smoked glass, pumpkin amber, gothic headings and an ember timeline | [Theme ZIP](packs/halloween-nocturne-v3.zip) · [SHA-256](packs/halloween-nocturne-v3.zip.sha256) |
@@ -27,7 +28,7 @@ Made by **Bhavishya Dalal**.
 6. For the standard launcher icon choose **Veyra → Glass Noir · Default**.
    Choose **Original Veyra** in Studio to restore your saved appearance.
 
-All 18 launcher choices are retained. Only the visible icon group is composed.
+All 20 launcher choices are retained. Only the visible icon group is composed.
 Headers stay reachable; grids, group filters and hints scroll within the chooser
 on smaller displays. Icon changes run off the UI thread and are serialized with
 selection reads so Activity recreation cannot read a half-finished icon switch.
@@ -52,7 +53,7 @@ files, preserving corruption checks. Installed themes and Original remain offlin
 | Player | Custom glyphs, button geometry, themed fill and web/ember playhead | Seek, RTL, elapsed/duration, busy/locked states, haptics and touch targets |
 | Menus / Settings | Theme palette and sculpted action icon housings | Existing actions, account/offline requirements and sleep-timer state |
 | Theme Studio | Compact lazy collection, separate detail page, saved swatches and fixed actions | Checksum validation, download/cancel, confirmation, offline use and removal rules |
-| Android launcher | Two bundled adaptive icon choices, with legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
+| Android launcher | Four bundled adaptive icon choices, with legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
 
 Web details are drawn behind content without pointer handlers or continuous
 animation loops. Native press feedback and existing reduced-motion preferences
@@ -95,7 +96,7 @@ Apply; a download never replaces the currently active theme definition.
 
 Packs are data only. No scripts, executable layouts, component names, remote asset
 references or arbitrary launcher icons can be supplied by a pack. Bundled icon
-mapping recognizes only the three known theme IDs. Unknown themes cannot select an
+mapping recognizes only the four known theme IDs. Unknown themes cannot select an
 Android component. Limits remain ZIP 12 MiB, 48 asset files, 8 MiB per file,
 32 MiB unpacked, 2048-pixel artwork and 256-pixel glyphs/branding icons.
 
@@ -113,7 +114,7 @@ no AI service or network access is needed for rebuilding. Published ZIPs cannot
 be overwritten with changed bytes: bump their manifest version first.
 `--replace-draft` is only for a theme version that has **not** been published.
 
-The builder produces all three packs, checksums, catalog and Android icon densities.
+The builder produces all four packs, checksums, catalog and Android icon densities.
 Full atmosphere/fonts remain in downloadable packs; only the catalog and bundled
 launcher artwork are added to Android resources. A theme ZIP is not a launcher
 icon installation mechanism.
@@ -150,3 +151,34 @@ See [artwork notice](playtime-club/licenses/ARTWORK.txt) and included font licen
 Fredoka font source: https://github.com/google/fonts/tree/main/ofl/fredoka .
 Design reference search: https://www.pinterest.com/search/pins/?q=cartoon%20music%20app%20ui .
 No Pinterest artwork was copied into the theme.
+
+## Astral Tide · drift deeper, hear everything
+
+An original ocean/celestial world: luminous manta rays, distant submerged arches,
+sea-glass mint controls and champagne starlight. Static Space Grotesk weight-700
+headings give it a distinct geometric voice; Manrope keeps body text familiar.
+Custom navigation, transport, queue, lyrics, back and download glyphs remain bold
+and recognizable. The existing ember-style track becomes a mint luminous timeline.
+Rounded controls, dark readable surfaces and bounded atmospheric detail extend
+through Home, player, menus and Settings. Real album covers remain unchanged.
+
+Schema 2 / minimum code 25. No new engine or continuous animation. It works with
+the existing reduced-motion controls, RTL back glyph and large-text layouts.
+The new bundled manta-waveform launcher requires the refreshed preview source;
+older code-25 installations can use the data pack but may not offer that icon.
+Matching launcher selection is explicitly optional in the Apply confirmation;
+manual icon selection remains available under Themes.
+
+| Home | Player |
+| --- | --- |
+| <img src="previews/astral-tide/home.png" width="280" alt="Astral Tide Home component study" /> | <img src="previews/astral-tide/player.png" width="280" alt="Astral Tide player component study" /> |
+
+[Six native studies](previews/astral-tide) include 320 dp / 150% text Home and
+compact Theme Studio. These are actual shared components in illustrative native
+layouts, not Android device screenshots. [Validation and limits](../verification/ASTRAL-TIDE-0.1.7-beta1.md).
+Rebuild this pack alone with `python3 themes/build_astral.py`.
+
+The illustrations and vector manta-waveform mark are original AI-assisted Veyra
+artwork, not a film/comic character or official franchise asset. Made by
+Bhavishya Dalal. Space Grotesk and Manrope retain their included SIL Open Font
+License notices; the bold Space Grotesk static instance is documented in the pack.

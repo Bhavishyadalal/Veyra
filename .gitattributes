@@ -7,3 +7,6 @@ themes/web-slinger/licenses/BarlowCondensed-OFL.txt -text -whitespace
 
 # Preserve the upstream Fredoka SIL license verbatim.
 themes/playtime-club/licenses/Fredoka-OFL.txt -text -whitespace
+
+# Preserve the upstream Space Grotesk SIL license, including CRLF bytes.
+themes/astral-tide/licenses/SpaceGrotesk-OFL.txt -text -whitespace

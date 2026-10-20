@@ -1,6 +1,6 @@
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
-> **Preview 0.1.7-beta1 / code 25:** Theme Studio, Playtime Club, Web Slinger, Halloween Nocturne and optional matching launcher icons. [Theme ZIP and native previews](themes/README.md) · [Release notes](RELEASE_NOTES_0.1.7-beta1.md). Stable remains 0.1.6 / code 22; no APK is published here.
+> **Preview 0.1.7-beta1 / code 25:** Theme Studio, Astral Tide, Playtime Club, Web Slinger, Halloween Nocturne and optional matching launcher icons. [Theme ZIP and native previews](themes/README.md) · [Release notes](RELEASE_NOTES_0.1.7-beta1.md). Stable remains 0.1.6 / code 22; no APK is published here.
 
 > **Maintenance:** Current stable is 0.1.6 on `main`; completed preview is preserved on `preview/0.1.6-beta1`. Current preview 0.1.7-beta1 is on `preview/0.1.7-beta1`. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
 
@@ -43,6 +43,13 @@ APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for 
 ## External cron and keep-alive
 
 Both stable and preview use the same backend. [Configure your external 12-minute cron job](docs/RENDER_KEEPALIVE.md), including its exact URL, method, timeout and expected response. The backend's existing GitHub schedule remains available as a fallback. No app-side background timer is required.
+
+## Astral Tide — drift deeper, hear everything
+
+An original bioluminescent ocean theme: luminous manta rays, bold Space Grotesk
+headings, sea-glass mint controls and an optional manta-waveform launcher icon.
+[Theme pack and native studies](themes/README.md#astral-tide--drift-deeper-hear-everything)
+· [Verification and limits](verification/ASTRAL-TIDE-0.1.7-beta1.md).
 
 ## Preview 0.1.7-beta1 — Theme Studio
 

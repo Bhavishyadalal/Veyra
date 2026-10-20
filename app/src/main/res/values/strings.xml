@@ -1285,4 +1285,5 @@
     <string name="queue_undo_expired">Queue changed. Undo is no longer available.</string>
     <string name="undo">Undo</string>
     <string name="download_action_track">%1$s %2$s</string>
+    <string name="app_icon_astral">Astral Tide</string>
 </resources>

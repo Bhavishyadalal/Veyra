@@ -1,0 +1,1 @@
+Space Grotesk: static weight-700 instance of the upstream variable font. Source: https://github.com/google/fonts/tree/main/ofl/spacegrotesk . Original OFL notice preserved. Manrope reused from the existing licensed Veyra theme assets.
