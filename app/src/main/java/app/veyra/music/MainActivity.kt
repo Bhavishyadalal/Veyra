@@ -172,6 +172,7 @@ import app.veyra.music.ui.screens.CACHE_FOLDER_BROWSE_ID
 import app.veyra.music.ui.screens.ListenTogetherScreen
 import app.veyra.music.ui.screens.PartyServerEditor
 import app.veyra.music.ui.screens.SignatureApiEditor
+import app.veyra.music.ui.screens.SettingsNavigationState
 import app.veyra.music.ui.screens.SettingsScreen
 import app.veyra.music.ui.screens.SourceEditorAlert
 import app.veyra.music.ui.screens.SourcesScreen
@@ -574,6 +575,7 @@ private fun VeyraApp(
      */
     var webSession by remember { mutableStateOf<WebSessionMode?>(null) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
+    val settingsNavigation = rememberSaveable(saver = SettingsNavigationState.Saver) { SettingsNavigationState() }
     // Replay: the page, the stories over it, and the share sheet over those.
     // Three states rather than one enum because they stack — the stories are
     // opened from the page and the share sheet from either, and closing one
@@ -2593,12 +2595,14 @@ private fun VeyraApp(
         // One back step out of Settings, or out of any tab but Home, lands on
         // Home rather than exiting — only Home itself hands back to the system,
         // which is what actually closes/minimizes the app.
+        val settingsBack: () -> Unit = {
+            if (!settingsNavigation.back()) {
+                showSettings = false
+                if (detail == null && !showReplay) selectedTab = TAB_HOME
+            }
+        }
         BackHandler(enabled = showSettings && !showSpotify && !showAccountScrobbling && !showSources && !showListenTogether && !showEqualizer && !showReplay) {
-            showSettings = false
-            // Only when Settings was the whole of what was on screen. Opened
-            // over Replay or over a release page, closing it reveals that again
-            // rather than throwing both away.
-            if (detail == null && !showReplay) selectedTab = TAB_HOME
+            settingsBack()
         }
         BackHandler(
             enabled = detail == null && !showSettings && !showAccountScrobbling && !showSpotify &&
@@ -2855,6 +2859,7 @@ private fun VeyraApp(
                             EqualizerScreen(contentPadding = listPadding)
                         } else if (key == "settings") {
                             SettingsScreen(
+                                navigationState = settingsNavigation,
                                 windowWidth = windowWidth,
                                 signedIn = signedIn,
                                 account = account,
@@ -3008,6 +3013,7 @@ private fun VeyraApp(
                                 )
                             }
                             DetailScreen(
+                                isActive = key == destinationKey && settingsSubScreen == null && !showHistory,
                                 page = page,
                                 currentSong = player.song,
                                 isPlaying = player.isPlaying,
@@ -3645,9 +3651,12 @@ private fun VeyraApp(
                             showEqualizer = false
                             if (settingsSubScreen == "equalizer") settingsSubScreen = null
                         })
+                        showReplay -> ({
+                            showReplay = false
+                            if (settingsSubScreen == "replay") settingsSubScreen = null
+                        })
                         settingsSubScreen != null -> ({ settingsSubScreen = null })
-                        showSettings -> ({ showSettings = false })
-                        showReplay -> ({ showReplay = false })
+                        showSettings -> settingsBack
                         detailActiveShelf != null -> ({ detailActiveShelf = null })
                         detail != null -> ({ viewModel.closeDetail(); Unit })
                         selectedMoodGenre != null -> ({ viewModel.closeMoodGenre(); Unit })

@@ -276,6 +276,7 @@ private fun String.looksLikeCredit() = CREDIT_SEPARATOR.containsMatchIn(this)
  */
 @Composable
 fun DetailScreen(
+    isActive: Boolean = true,
     page: DetailPage,
     currentSong: Song?,
     isPlaying: Boolean,
@@ -419,7 +420,7 @@ fun DetailScreen(
     val closeSearch = { onSearchingChange(false) }
     // Back closes the search first — this handler is registered after the one
     // that pops the page, so it is the one that answers while it's enabled.
-    BackHandler(enabled = searching) { closeSearch() }
+    BackHandler(enabled = isActive && activeShelf == null && searching) { closeSearch() }
 
     // Each surviving row still knows where it sat in the full running order, so
     // an album's track numbers stay the album's rather than becoming positions
@@ -442,7 +443,7 @@ fun DetailScreen(
     } else {
         emptyList()
     }
-    BackHandler(enabled = folderState?.selecting == true) { folderState?.clear() }
+    BackHandler(enabled = isActive && activeShelf == null && folderState?.selecting == true) { folderState?.clear() }
 
     // What marks a row as already downloaded, tinted from the sleeve like the
     // rest of the page. Null on any page that is itself a reading of this

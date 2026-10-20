@@ -13,6 +13,8 @@ import app.veyra.music.ui.motion.VeyraMotion
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import app.veyra.music.ui.motion.veyraPressFeedback
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -660,5 +662,80 @@ internal fun SettingsOptionsReveal(
         exit = ExitTransition.None,
     ) {
         Column(Modifier.fillMaxWidth()) { content() }
+    }
+}
+
+/** Quiet value row; choices live in a bounded sheet rather than filling the settings page. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun SettingsPresetRow(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    options: List<String>,
+    selectedIndex: Int,
+    onSelect: (Int) -> Unit,
+    swatches: List<Color>? = null,
+) {
+    var choosing by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+    val focus = androidx.compose.ui.platform.LocalFocusManager.current
+    SettingsRow(icon = icon, title = title, subtitle = subtitle.takeIf { it.isNotBlank() },
+        onClick = { focus.clearFocus(); choosing = true },
+        trailing = {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                swatches?.getOrNull(selectedIndex)?.let { color ->
+                    Box(Modifier.size(12.dp).clip(CircleShape).background(color)
+                        .border(0.5.dp, MaterialTheme.colorScheme.outline, CircleShape))
+                }
+                Text(options.getOrNull(selectedIndex).orEmpty(),
+                    style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+                    maxLines = 2, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                    modifier = Modifier.widthIn(max = 112.dp))
+                Chevron()
+            }
+        })
+    if (choosing) {
+        ModalBottomSheet(onDismissRequest = { choosing = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = MaterialTheme.colorScheme.surface,
+            shape = VeyraSurfaces.Sheet,
+        ) {
+            Column(Modifier.fillMaxWidth().heightIn(max = 480.dp)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp).padding(bottom = 24.dp)) {
+                Text(title, style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.semantics { heading() }.padding(bottom = 8.dp))
+                if (subtitle.isNotBlank()) Text(subtitle, style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 14.dp))
+                Column(Modifier.fillMaxWidth().selectableGroup()) {
+                    options.forEachIndexed { index, label ->
+                        val selected = index == selectedIndex
+                        val interaction = remember { MutableInteractionSource() }
+                        Row(Modifier.fillMaxWidth().clip(VeyraSurfaces.Row)
+                            .veyraPressFeedback(interaction, MaterialTheme.colorScheme.primary)
+                            .selectable(selected = selected, role = Role.RadioButton,
+                                interactionSource = interaction, indication = null,
+                                onClick = { if (!selected) onSelect(index); choosing = false })
+                            .heightIn(min = 56.dp).padding(horizontal = 12.dp, vertical = 14.dp),
+                            verticalAlignment = Alignment.CenterVertically) {
+                            swatches?.getOrNull(index)?.let { color ->
+                                Box(Modifier.size(20.dp).clip(CircleShape).background(color)
+                                    .border(0.5.dp, MaterialTheme.colorScheme.outline, CircleShape))
+                                Spacer(Modifier.width(14.dp))
+                            }
+                            Text(label, modifier = Modifier.weight(1f),
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium)
+                            Spacer(Modifier.width(12.dp))
+                            Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+                                if (selected) Icon(Icons.Rounded.Check, null,
+                                    tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(22.dp))
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

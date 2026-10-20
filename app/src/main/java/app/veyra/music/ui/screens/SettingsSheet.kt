@@ -3,6 +3,7 @@ package app.veyra.music.ui.screens
 import app.veyra.music.ui.customization.*
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.saveable.mapSaver
+import androidx.compose.ui.graphics.Color
 import android.content.Context
 import android.content.Intent
 import android.media.AudioFormat
@@ -10,7 +11,6 @@ import android.media.audiofx.AudioEffect
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
@@ -44,7 +44,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Notes
 import androidx.compose.material.icons.automirrored.rounded.VolumeOff
 import androidx.compose.material.icons.rounded.Animation
@@ -166,6 +165,7 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(
     /** The window's width, for the gates that depend on it. */
     windowWidth: Dp,
+    navigationState: SettingsNavigationState,
     signedIn: Boolean,
     account: Account?,
     onSignIn: () -> Unit,
@@ -283,7 +283,7 @@ fun SettingsScreen(
 
     // Search spans all categories; an empty query shows the selected category,
     // exactly as if the field weren't there.
-    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var searchQuery by navigationState::query
     var picking by remember { mutableStateOf<QualityTarget?>(null) }
     var pickingDownloadQuality by remember { mutableStateOf(false) }
     var pickingAutomixPerformance by remember { mutableStateOf(false) }
@@ -381,12 +381,9 @@ fun SettingsScreen(
     // Made fresh on every pass rather than remembered: it tallies the rows
     // that answered to the query, and that tally has to start from zero each
     // time the query changes.
-    var category by rememberSaveable { mutableStateOf<SettingsCategory?>(null) }
+    var category by navigationState::category
     val searching = searchQuery.isNotBlank()
     val search = SettingsSearch(searchQuery, category)
-    BackHandler(enabled = category != null || searching) {
-        if (searching) searchQuery = "" else category = null
-    }
 
     val scrollPositions = rememberSaveable(saver = mapSaver<MutableMap<String, Int>>(
         save = { it.toMap() },
@@ -436,13 +433,6 @@ fun SettingsScreen(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 4.dp),
         )
 
-        if (category != null && !searching) {
-            TextButton(onClick = { category = null }, modifier = Modifier.padding(horizontal = 12.dp)) {
-                Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.settings))
-            }
-        }
         Column(
             Modifier.weight(1f).verticalScroll(scrollState)
                 .graphicsLayer {
@@ -754,48 +744,41 @@ fun SettingsScreen(
             SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.appearance)) {
                 val themeTitle = stringResource(R.string.theme)
                 row(themeTitle, "dark mode", "light mode") {
-                    SettingsRow(icon = Icons.Rounded.Brightness4, title = themeTitle)
-                    SegmentedControl(
+                    SettingsPresetRow(icon = Icons.Rounded.Brightness4, title = themeTitle, subtitle = "",
                         options = ThemeMode.entries.map { it.localizedLabel() },
                         selectedIndex = ThemeMode.entries.indexOf(theme),
-                        onSelect = { AppSettings.setThemeMode(ThemeMode.entries[it]) },
-                        modifier = Modifier.padding(start = ROW_INSET, end = ROW_INSET, bottom = 14.dp),
-                    )
+                        onSelect = { AppSettings.setThemeMode(ThemeMode.entries[it]) })
                 }
                 row(stringResource(R.string.custom_accent), "accent", "color", "palette") {
-                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_accent),
-                        subtitle = stringResource(R.string.custom_accent_hint))
-                    SegmentedControl(options = androidx.compose.ui.res.stringArrayResource(R.array.custom_accent_options).toList(),
+                    SettingsPresetRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_accent),
+                        subtitle = stringResource(R.string.custom_accent_hint),
+                        options = androidx.compose.ui.res.stringArrayResource(R.array.custom_accent_options).toList(),
                         selectedIndex = AccentPalette.entries.indexOf(accentPalette), onSelect = { AppSettings.setAccentPalette(AccentPalette.entries[it]) },
-                        modifier = Modifier.padding(horizontal = ROW_INSET, vertical = 8.dp))
+                        swatches = listOf(Color(0xFFD9C4FF), Color(0xFF9BE1D5), Color(0xFFFFD58A), Color(0xFFFFB1C4)))
                 }
                 row(stringResource(R.string.custom_artwork_corners), "artwork", "corners", "covers") {
-                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_artwork_corners),
-                        subtitle = stringResource(R.string.custom_artwork_corners_hint))
-                    SegmentedControl(options = androidx.compose.ui.res.stringArrayResource(R.array.custom_corner_options).toList(),
-                        selectedIndex = ArtworkCorners.entries.indexOf(artworkCorners), onSelect = { AppSettings.setArtworkCorners(ArtworkCorners.entries[it]) },
-                        modifier = Modifier.padding(horizontal = ROW_INSET, vertical = 8.dp))
+                    SettingsPresetRow(icon = SettingsIcons.Icons, title = stringResource(R.string.custom_artwork_corners),
+                        subtitle = stringResource(R.string.custom_artwork_corners_hint),
+                        options = androidx.compose.ui.res.stringArrayResource(R.array.custom_corner_options).toList(),
+                        selectedIndex = ArtworkCorners.entries.indexOf(artworkCorners), onSelect = { AppSettings.setArtworkCorners(ArtworkCorners.entries[it]) })
                 }
                 row(stringResource(R.string.custom_list_spacing), "density", "spacing", "compact") {
-                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_list_spacing),
-                        subtitle = stringResource(R.string.custom_list_spacing_hint))
-                    SegmentedControl(options = androidx.compose.ui.res.stringArrayResource(R.array.custom_spacing_options).toList(),
-                        selectedIndex = ListSpacing.entries.indexOf(listSpacing), onSelect = { AppSettings.setListSpacing(ListSpacing.entries[it]) },
-                        modifier = Modifier.padding(horizontal = ROW_INSET, vertical = 8.dp))
+                    SettingsPresetRow(icon = SettingsIcons.Library, title = stringResource(R.string.custom_list_spacing),
+                        subtitle = stringResource(R.string.custom_list_spacing_hint),
+                        options = androidx.compose.ui.res.stringArrayResource(R.array.custom_spacing_options).toList(),
+                        selectedIndex = ListSpacing.entries.indexOf(listSpacing), onSelect = { AppSettings.setListSpacing(ListSpacing.entries[it]) })
                 }
                 row(stringResource(R.string.custom_motion_level), "motion", "animation") {
-                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_motion_level),
-                        subtitle = stringResource(R.string.custom_motion_level_hint))
-                    SegmentedControl(options = androidx.compose.ui.res.stringArrayResource(R.array.custom_motion_options).toList(),
-                        selectedIndex = if (reduceAnimation) 2 else if (subtleMotion) 1 else 0, onSelect = { AppSettings.setMotionLevel(MotionLevel.entries[it]) },
-                        modifier = Modifier.padding(horizontal = ROW_INSET, vertical = 8.dp))
+                    SettingsPresetRow(icon = SettingsIcons.Performance, title = stringResource(R.string.custom_motion_level),
+                        subtitle = stringResource(R.string.custom_motion_level_hint),
+                        options = androidx.compose.ui.res.stringArrayResource(R.array.custom_motion_options).toList(),
+                        selectedIndex = if (reduceAnimation) 2 else if (subtleMotion) 1 else 0, onSelect = { AppSettings.setMotionLevel(MotionLevel.entries[it]) })
                 }
                 row(stringResource(R.string.custom_player_shortcut), "player", "shortcut", "download", "sleep", "favorite") {
-                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_player_shortcut),
-                        subtitle = stringResource(R.string.custom_player_shortcut_hint))
-                    SegmentedControl(options = androidx.compose.ui.res.stringArrayResource(R.array.custom_shortcut_options).toList(),
-                        selectedIndex = PlayerShortcut.entries.indexOf(playerShortcut), onSelect = { AppSettings.setPlayerShortcut(PlayerShortcut.entries[it]) },
-                        modifier = Modifier.padding(horizontal = ROW_INSET, vertical = 8.dp))
+                    SettingsPresetRow(icon = SettingsIcons.Sound, title = stringResource(R.string.custom_player_shortcut),
+                        subtitle = stringResource(R.string.custom_player_shortcut_hint),
+                        options = androidx.compose.ui.res.stringArrayResource(R.array.custom_shortcut_options).toList(),
+                        selectedIndex = PlayerShortcut.entries.indexOf(playerShortcut), onSelect = { AppSettings.setPlayerShortcut(PlayerShortcut.entries[it]) })
                 }
                 row(stringResource(R.string.custom_reset_appearance), "reset", "appearance") {
                     SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_reset_appearance),
@@ -1872,7 +1855,7 @@ private fun DownloadQualitySheet(selected: DownloadQuality, onSelect: (DownloadQ
  * Categories use existing translated labels. Search spans them all; otherwise
  * only the selected category composes its controls.
  */
-private enum class SettingsCategory(val title: Int, val summary: List<Int>, val icon: ImageVector) {
+internal enum class SettingsCategory(val title: Int, val summary: List<Int>, val icon: ImageVector) {
     ACCOUNT(R.string.account_integrations, listOf(R.string.scrobbling, R.string.listen_together), SettingsIcons.Account),
     SOUND(R.string.playback, listOf(R.string.audio_quality, R.string.equalizer), SettingsIcons.Sound),
     APPEARANCE(R.string.appearance, listOf(R.string.theme, R.string.app_icon), SettingsIcons.Appearance),

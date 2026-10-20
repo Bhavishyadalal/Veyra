@@ -1,5 +1,14 @@
 # Veyra 0.1.6-beta1 · Your Home, ready sooner
 
+## Settings navigation and Appearance refinement
+
+- One top-left Back control replaces the duplicate row beneath Settings search.
+- The visible screen owns Back; hidden Settings and outgoing detail pages cannot consume its first gesture.
+- Toolbar Back follows category/search navigation, and Replay clears its Settings route on exit.
+- Theme and customization presets use clean value rows and scrollable choice sheets, preserving existing options.
+
+[Changes and verification limits](verification/SETTINGS-BACK-0.1.6-beta1.md).
+
 ## Customization, state and welcome artwork
 
 - Saved accent, artwork-corner, list-spacing and Full/Subtle/Off motion presets.
