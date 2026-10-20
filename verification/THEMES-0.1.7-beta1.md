@@ -1,86 +1,78 @@
 # Veyra 0.1.7-beta1 · Theme Studio verification
 
-Preview **0.1.7-beta1 / code 23** only. Stable **0.1.6 / code 22** remains separate.
-No APK build or Actions dispatch is part of this update.
+Current preview **0.1.7-beta1 / code 24**. Stable **0.1.6 / code 22** remains separate.
+No APK assembly or Actions dispatch is part of this update.
 
-## Implemented
+## Current implementation
 
-- Settings → Appearance → Theme studio with a public catalog, themed previews,
-  bounded/cancelable downloads and explicit Apply confirmation.
-- Data-only ZIP installation in app-private storage. Hashes, paths, schema/app
-  version, file/expanded limits, color contrast, shape bounds, Android image
-  dimensions and font loading are checked before publishing an installation.
-- Installed themes work offline. Corrupt saved packs fall back to Original Veyra;
-  failed verification preserves the prior installation. Temporary/old staging
-  folders are cleaned on startup. Theme downloads do not activate themselves.
-- Updated theme versions remain separate from the active definition until Apply.
-  Active packs cannot be removed. Inactive versions can be removed with confirmation.
-- Theme activation persists only in its own preference namespace. The Activity
-  recreates on confirmation; no playback-service stop or process exit is called.
-- Shared native colors, typography, supported icon slots, navigation geometry,
-  player button surfaces and an ember timeline. Original music artwork, service
-  logos, callbacks, permission/account requirements and touch semantics remain.
-- Original Veyra restores the saved base appearance. Existing font-scale,
-  high-contrast and reduced-motion preferences continue to work.
+- Web Slinger v1: original midnight-city/crimson-glass artwork, Barlow Condensed
+  headings, custom navigation/transport glyphs, angular action/control surfaces,
+  web details, diamond playhead and themed Veyra wordmark/icon.
+- Halloween Nocturne v3 retains forest/amber/gothic styling and adds matching Veyra
+  branding and a bundled launcher icon. Published v1/v2 archives remain unchanged;
+  installed legacy packs still load through schema-1 support.
+- Schema 2 adds bounded native style/tagline fields and a validated 256-pixel
+  branding slot. Minimum app code 24 gates new packs from older code-23 clients.
+  Catalog entries retain the old schema, allowing older apps to show Update first.
+- Studio has shared native artwork/collection panels, All/Downloaded filters,
+  installed swatches, progress/cancel, explicit apply, offline packs and removal.
+- Optional launcher choices extend the existing AppIcon enum, manifest aliases and
+  picker. Only known theme IDs map to bundled aliases. A ZIP cannot name components.
+  Theme application does not change the launcher icon automatically or kill playback.
+- Launcher changes retain the existing atomic Android-13+ update and enable-first
+  older-device path with rollback. Default remains the only shipped enabled alias.
+  Theme activation and restoring Original do not overwrite a manual launcher choice.
+- Branding uses the real shared Veyra layout with a native icon fallback, responsive
+  wordmark sizing and a single accessible Veyra description.
+- Artwork-derived palettes honor active theme colors. Real music artwork, service
+  logos, original menu actions, offline/account rules, sleep-timer state, player
+  locking and native interaction callbacks remain.
 
-The Halloween art is original AI-assisted artwork; all theme vectors are original.
-The two font files retain their SIL Open Font License notices in the pack. Theme
-assets live outside Android resources, so the artwork/fonts are downloaded on
-selection rather than bundled into every APK. Only catalog metadata is bundled.
+## Executed checks
 
-## Refinement after device feedback
+- Android release resources and Kotlin compilation via focused unit-test tasks;
+  **23 JVM tests**, no failures: theme packs (13), launcher mapping/manifest (2),
+  player quality menu (4), Settings navigation (4).
+- Both actual packs install with exact declared assets and outer/inner hashes.
+  Tests cover corruption, traversal, extra entries, tampered assets, unsupported
+  schema/app/scene requirements, unsafe paths, oversized streams, unreadable
+  colors, unbounded shapes/taglines and decoder rejection preserving a previous
+  installation. A legacy schema-1 pack validates in code 24.
+- Launcher tests verify known mappings, unknown/null ID rejection, unique enum
+  aliases, manifest entries and exactly one default-enabled launcher component.
+  They do not execute Android PackageManager or a real launcher.
+- Nine Compose studies per theme: Home, large-text Home, player, Settings,
+  large-text Settings, actions, large-text actions, Studio and large-text Studio.
+  Normal width 390 dp; enlarged layouts 320 dp / 150% text.
+- Actual themed transport semantics deliver the callback once with at least a
+  48 dp hit target. Studies use real shared branding, Home frames, Settings rows,
+  timeline/transport and Studio panels inside illustrative compositions.
+- Deterministic regeneration preserves current pack hashes. Changed bytes at an
+  existing version are refused unless explicitly marked as an unpublished draft.
+  Previously published v1/v2 ZIPs are preserved.
+- Offline gallery checked over ordinary local HTTP at desktop/mobile sizes for
+  complete images, page errors and horizontal overflow.
+- Separate website build/type checks and desktop/mobile source/theme-link checks.
+- Source ZIP per-file manifests, nested packs/checksums, archive cap and backend
+  mirror verified before publication. Stable Android code remains unchanged.
 
-The screenshot showed a burgundy song menu because artwork-derived palettes
-bypassed the theme. Active themes now return their validated palette before
-cover decoding, and artwork backdrops use the local themed scene. Original mode
-retains the existing cover-derived palette. The menu keeps its original actions,
-callbacks, enabled/busy rules and saveable sleep-timer/scroll behavior.
+## Rendering and integration limits
 
-Main app and Settings surfaces now draw local forest artwork, a dark readability
-scrim and a static sparse constellation. No animations or network requests were
-added to these layers. They expose no interactive semantics or pointer handlers.
-Shared thumbnail borders and actual HomeArtworkFrame components use amber edges;
-Home headings get decorative rules. Settings icons and song menu icons share
-sculpted housings. The native glass navigation surface retains its implementation.
+These images are **native component studies, not full Android window captures**.
+Action rows, Studio surrounding content and navigation arrangement in the desktop
+studies are illustrative. Sample covers are demonstration art; production uses the
+listener's actual music artwork. No emulator/device session was available for the
+full Android Studio sheet, PackageManager switching, launcher cache/shortcuts,
+Android font loading, Activity recreation during playback or frame pacing. JVM
+checks and desktop renders do not replace those integration tests.
 
-The current revision compiles Android release Kotlin and runs 18 focused JVM
-tests: pack validation (10), player quality menu (4), Settings navigation (4).
-Six native studies cover Home, player, Settings, large-text Settings and normal /
-large-text action components. Action rows in these desktop studies are illustrative;
-the background and icon housings are the actual shared components. The real Android
-sheet is not rendered by this desktop tool. Theme v1 remains immutable; v2 is a
-separate checked pack with the same supported manifest schema.
+On the next signed preview: upgrade from code 23; retain/apply a legacy pack;
+download/apply both new packs; test Later, cancel/retry and offline restoration;
+change both launcher icons and restore Default; inspect the existing icon picker;
+check shortcuts/widget entry points; reopen/rotate/background; inspect Home, queue,
+lyrics, actions and every Settings category; verify large text, RTL and reduced
+motion. Music should continue through confirmed UI recreation.
 
-## Initial implementation checks
-
-- Android release Kotlin compilation and **30 focused JVM tests**, no failures:
-  theme pack (10), Settings navigation (4), navigation transitions (4), existing
-  customization (3), player quality menu (4), Settings search (5).
-- Theme tests exercise the actual checked-in pack and rejection of corrupt outer
-  data, archive traversal, extra entries, changed asset hashes, incompatible
-  versions, unreadable colors, unbounded geometry and oversized streams. A
-  decoder-rejection callback leaves an existing installation untouched.
-- Four native Compose component studies: Home, player, Settings and 320 dp /
-  150% text Settings. The themed transport's real semantics action delivers its
-  callback once and retains at least a 48 dp target. Rendering exposed and led
-  to fixes for a clipped sample footer and a fixed-height theme-header text crop.
-- Offline preview gallery checked through a local HTTP server at desktop/mobile
-  viewport sizes: every image loaded, no horizontal overflow or page errors.
-- Website build/type checks and both mobile/desktop download-link checks passed.
-- Source ZIP integrity, per-file manifests, embedded theme pack/checksum, archive
-  retention and the mirrored backend manifest are verified before publishing.
-
-## Limits and device follow-up
-
-The native images are **component studies**, not complete Android screen captures.
-They use actual shared components inside illustrative screen compositions; the
-sample player's cover is demonstration art. The app keeps the real track cover.
-No emulator or physical device test was available for download cancellation,
-Android font decoding, Activity recreation during playback or full-screen layout.
-JVM tests do not replace those Android integration checks or frame profiling.
-
-On the next signed beta, check: download/cancel/retry; install while a song plays;
-Later versus Apply; rotate/background/kill/reopen; offline activation; restore
-Original; remove an inactive theme; navigate every main tab and Settings category;
-queue, lyrics and locked Listen Together controls; large fonts and RTL; and
-motion Off. Google/Spotify web sign-in pages retain the providers' own UI.
+Google/Spotify sign-in pages retain provider interfaces. Full atmosphere/fonts
+remain downloadable; catalog and launcher artwork are bundled. Original native
+glyphs remain available when a supported theme icon fails to draw.

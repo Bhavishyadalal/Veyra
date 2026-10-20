@@ -2,3 +2,5 @@ native/ffmpeg/build.sh text eol=lf
 # Keep downloadable ZIPs out of source archives to avoid recursive packages.
 downloads export-ignore
 downloads/** export-ignore
+# Preserve upstream font licence bytes, including their original whitespace.
+themes/web-slinger/licenses/BarlowCondensed-OFL.txt -text -whitespace

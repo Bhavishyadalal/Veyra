@@ -1,117 +1,108 @@
-# Veyra Theme Studio · Halloween Nocturne
+# Veyra Theme Studio
 
-**For Veyra 0.1.7-beta1 / code 23 or newer theme-engine-compatible builds.**
-Made by **Bhavishya Dalal**. Stable 0.1.6 does not contain the theme installer.
+**Latest preview: 0.1.7-beta1 / code 24. Stable 0.1.6 stays separate.**
+Made by **Bhavishya Dalal**.
 
-Smoked black glass, pumpkin amber, moonlit artwork and gothic display type.
-Body copy stays readable; music artwork, navigation destinations and action
-callbacks keep their original meaning.
+| Theme | Its own atmosphere | Download |
+| --- | --- | --- |
+| **Web Slinger v1** | Midnight city, crimson glass, cobalt webs, bold condensed type, angular action details and a web timeline | [Theme ZIP](packs/web-slinger-v1.zip) · [SHA-256](packs/web-slinger-v1.zip.sha256) |
+| **Halloween Nocturne v3** | Moonlit forest, smoked glass, pumpkin amber, gothic headings and an ember timeline | [Theme ZIP](packs/halloween-nocturne-v3.zip) · [SHA-256](packs/halloween-nocturne-v3.zip.sha256) |
 
-[Download the theme ZIP](packs/halloween-nocturne-v2.zip) · [SHA-256](packs/halloween-nocturne-v2.zip.sha256)
-· [Catalog](catalog.json) · [Manifest](halloween-nocturne/theme.json)
-· [Offline preview gallery](index.html)
+[Offline preview gallery](index.html) · [Catalog](catalog.json) · [Verification](../verification/THEMES-0.1.7-beta1.md)
 
-## Refined Halloween theme · pack v2
+## Make it yours
 
-- New original moonlit-forest artwork and a persistent, darkened atmosphere behind
-  main screens and Settings, including when Home is scrolled beyond its header.
-- Amber frames on shared thumbnails and Home feature tiles, warmer caption
-  gradients, ornamental section rules and a framed navigation surface.
-- Song sheets and artwork-derived detail palettes now honor the active theme.
-  Red album covers no longer turn the selected Halloween theme burgundy.
-- Song menu icons have matching sculpted housings, a larger track thumbnail and
-  clearer action groups. All existing actions and eligibility rules remain.
-- Settings icon housings match the menu and player styling. Background layers
-  have no pointer handlers, network fetches, continuous timers or shaders.
+1. Build/install the **latest preview source**. These ZIPs are themes, not APKs.
+2. Open **Settings → Appearance → Theme studio**.
+3. Browse **All themes** or your **Downloaded** collection. Download a theme;
+   progress, Cancel, retry and offline installed themes remain available.
+4. Choose **Apply theme → Apply & restart UI**. Later keeps the current appearance.
+   The Activity refreshes; the playback service is not stopped.
+5. For a matching launcher icon, choose **The finishing touch → Use matching app
+   icon**, then confirm. The existing **App icon** picker also includes both themes.
+6. Return to **Original Veyra** whenever you want. The separate **Restore original
+   app icon** action returns the launcher to Veyra's standard icon.
 
-Build the latest preview source for the new interface changes. In Theme studio,
-choose the version 2 update, download it, then Apply. Existing v1 installations
-remain usable until you choose to update; the original v1 ZIP is preserved.
+Applying a theme does **not** silently change the launcher icon. Removing a theme
+or choosing Original does not overwrite a manually chosen icon. Android launchers
+may cache icon changes or apply their own monochrome themed-icon setting.
 
-## Use it in the app
+## More than a new accent
 
-1. Open **Settings → Appearance → Theme studio** in the new beta.
-2. Choose **Halloween Nocturne → Download theme**. Progress and Cancel are available.
-3. After validation, tap **Apply theme** and confirm **Apply & restart UI**.
-4. The Activity refreshes; the playback service is not stopped. Installed themes
-   work offline. **Later** leaves the current appearance unchanged.
-5. Choose **Original Veyra** to restore the saved base appearance. Inactive themes
-   can be removed with confirmation, then downloaded again later.
+| Component | Theme presentation | Preserved behavior |
+| --- | --- | --- |
+| Home branding | Matching Veyra icon and heading font; Web Slinger wordmark treatment | Accessible Veyra identity, responsive logo width and actual Home content |
+| Main screens | Darkened local atmosphere, web/ember details, color and typography | Navigation, accounts, search, scroll and saved customization |
+| Home artwork | Theme frames, caption gradients and decorative section rules | The listener's real album covers and playback actions |
+| Navigation | Theme glyphs, colors, radius and framed native glass surface | Labels, routes, gestures and accessibility roles |
+| Player | Custom glyphs, button geometry, themed fill and web/ember playhead | Seek, RTL, elapsed/duration, busy/locked states, haptics and touch targets |
+| Menus / Settings | Theme palette and sculpted action icon housings | Existing actions, account/offline requirements and sleep-timer state |
+| Theme Studio | Large native previews, collection filter, saved swatches and clear actions | Checksum validation, download/cancel, confirmation, offline use and removal rules |
+| Android launcher | Two bundled adaptive icon choices, with legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
 
-The catalog is seeded in the app and refreshed when Theme studio opens. Future
-compatible theme versions download separately; downloading does not activate an
-update or change the currently active pack. Packs requiring a newer app are gated.
+Web details are drawn behind content without pointer handlers or continuous
+animation loops. Native press feedback and existing reduced-motion preferences
+remain. Service logos and specialty glyphs keep their original meaning.
 
 ## Native component previews
 
-These are **Compose component studies**, not whole-app emulator/device screenshots.
-The artwork shown as a sample album cover is demonstration art. The real player
-keeps the listener's actual album artwork; themed atmosphere is an additional
-low-opacity decorative layer. The actual navigation bar keeps its existing native
-glass implementation, labels, touch handling and destinations.
+These are **Compose component studies, not complete Android device screenshots**.
+They use real shared branding, Home frames, theme backgrounds, player controls,
+Settings rows and Theme Studio preview components in illustrative compositions.
+Music-cover examples are original demonstration artwork; the real app retains
+its actual music artwork. Menu rows, navigation arrangement and Studio surrounding
+content in the studies are illustrative; Android host windows are not reproduced.
 
-| Home study | Player controls study |
+| Web Slinger Home | Web Slinger player |
 | --- | --- |
-| <img src="previews/home.png" width="280" alt="Halloween Home components" /> | <img src="previews/player.png" width="280" alt="Halloween player components" /> |
+| <img src="previews/web-slinger/home.png" width="280" alt="Web Slinger native Home components" /> | <img src="previews/web-slinger/player.png" width="280" alt="Web Slinger native player controls" /> |
 
-| Settings study | 320 dp, 150% text study |
+| Theme Studio | Studio at 320 dp / 150% text |
 | --- | --- |
-| <img src="previews/settings.png" width="280" alt="Halloween Settings controls" /> | <img src="previews/settings-large-text.png" width="280" alt="Large-text Settings layout" /> |
+| <img src="previews/web-slinger/studio.png" width="280" alt="Web Slinger Theme Studio components" /> | <img src="previews/web-slinger/studio-large-text.png" width="280" alt="Large-text Theme Studio" /> |
 
-| Song actions study | 320 dp, 150% text action study |
+| Halloween branding | Halloween Theme Studio |
 | --- | --- |
-| <img src="previews/actions.png" width="280" alt="Themed action icon and background components" /> | <img src="previews/actions-large-text.png" width="280" alt="Large-text action components" /> |
+| <img src="previews/home.png" width="280" alt="Halloween Veyra branding" /> | <img src="previews/studio.png" width="280" alt="Halloween Theme Studio components" /> |
 
-The action studies use the real shared background/icon housing with illustrative
-menu rows; the Android sheet itself is checked by Android Kotlin compilation,
-not rendered as a full Android window here.
+Additional [Web Slinger studies](previews/web-slinger) and [Halloween studies](previews)
+include Settings, actions and large-text layouts.
 
-## What a theme can change
+## Compatibility and validation
 
-| Component | Theme-owned presentation | Preserved behavior |
-| --- | --- | --- |
-| App screens | Dark palette, surfaces, heading/body fonts, Material shape roles | Content, route hierarchy, system font scaling |
-| Home / Settings | Persistent atmosphere, artwork frames, section details and icon housings | Songs, account access, search and scroll state |
-| Navigation | Home/Search/Explore/Library glyphs, container radius and colors | Labels, accessibility roles, destinations and gestures |
-| Player buttons | Native framed surfaces, corner geometry and transport icon assets | Play/pause/skip, busy/locked states, haptics, touch targets |
-| Player timeline | Accent fill, track thickness and ember playhead | Seek gestures, RTL, elapsed/duration, loading/mix feedback |
-| Common actions | Back, download, queue, lyrics and appearance icon slots where vector icons are used | Original callbacks and account rules |
+The new packs use **schema 2 / minimum app code 24**, so older code-23 preview
+builds show **Update Veyra first**. Previously installed Halloween v1/v2 packs
+remain supported by the new app. Existing published v1/v2 ZIPs stay immutable.
+Theme updates download into a separate version directory and require explicit
+Apply; a download never replaces the currently active theme definition.
 
-Service logos, album art and unsupported specialty glyphs stay original. Theme
-packs are **not executable skins** and cannot introduce arbitrary screens,
-replacement button logic or uncontrolled animations. Existing motion/accessibility
-preferences continue to apply. Return to Original Veyra to use the saved base
-palette again; theme activation never rewrites those preferences.
+Packs are data only. No scripts, executable layouts, component names, remote asset
+references or arbitrary launcher icons can be supplied by a pack. Bundled icon
+mapping recognizes only the two known theme IDs. Unknown themes cannot select an
+Android component. Limits remain ZIP 12 MiB, 48 asset files, 8 MiB per file,
+32 MiB unpacked, 2048-pixel artwork and 256-pixel glyphs/branding icons.
 
-## Validation and storage
+The catalog and downloads use exact repository HTTPS paths. The outer checksum,
+every inner hash, manifest/app compatibility, safe paths, unpacked sizes, contrast,
+geometry, image bounds and native font loading are validated before installation.
+Failures preserve the previous installation; cancellation cleans temporary data.
+Active themes cannot be removed. Original appearance and installed packs work offline.
 
-Catalog/pack downloads are restricted to this repository's exact HTTPS paths.
-The ZIP checksum, manifest schema/app requirement, every file hash, canonical
-paths, entry count, unpacked size, palette contrast and geometry are checked.
-Android image bounds, SFNT font signatures and native font loading are checked
-**before** an installation becomes visible. Temporary files are removed after
-failure/cancellation. Invalid saved themes fall back to Original Veyra at startup.
+## Rebuild and provenance
 
-Limits: ZIP 12 MiB; 48 asset files plus manifest; 8 MiB per file; 32 MiB total;
-artwork at most 2048×2048; icons at most 256×256. No scripts, code, remote asset
-references, symlink restoration or absolute/traversing paths. Installed assets live
-in the app's private files directory. Active selection has its own preference
-namespace and does not interfere with account/music backup data.
+Run `python3 -m pip install -r themes/requirements.txt`, then
+`python3 themes/build_themes.py`. Original assets and SVG sources are checked in;
+no AI service or network access is needed for rebuilding. Published ZIPs cannot
+be overwritten with changed bytes: bump their manifest version first.
+`--replace-draft` is only for a theme version that has **not** been published.
 
-## Rebuild
+The builder produces both packs, checksums, catalog and Android icon densities.
+Full atmosphere/fonts remain in downloadable packs; only the catalog and bundled
+launcher artwork are added to Android resources. A theme ZIP is not a launcher
+icon installation mechanism.
 
-Artwork and licensed fonts are committed; no image-generation service or font
-network request is needed to rebuild the pack.
-
-```sh
-python3 -m pip install -r themes/requirements.txt
-python3 themes/build_halloween.py
-```
-
-This rebuilds original SVG/PNG glyphs, asset hashes, deterministic ZIP, checksum
-and catalog. A changed published pack must bump its theme version and catalog
-entry; never replace different assets under an existing immutable version.
-
-Native rendering instructions and limits: [renderer](../verification/theme-preview/README.md).
-Font notices are included alongside the fonts. The original generated atmosphere
-and vector icons are credited in [artwork licensing](halloween-nocturne/licenses/ARTWORK.txt).
+Original AI-assisted abstract artwork and original vector glyphs by Veyra.
+Web Slinger is a web-and-city fan theme; no official comic/film artwork or brand
+logo is included. Manrope, Barlow Condensed and Grenze Gotisch retain their
+included SIL Open Font License notices. [Barlow Condensed source](https://github.com/google/fonts/tree/main/ofl/barlowcondensed)
+· [Android adaptive icon reference](https://developer.android.com/develop/ui/views/launch/icon_design_adaptive).

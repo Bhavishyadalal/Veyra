@@ -17,7 +17,7 @@ sourceSets.main {
     kotlin.srcDir(veyraRoot.resolve("sharedUi/src/jvmSharedMain/kotlin/app/veyra/music/ui"))
     kotlin.srcDir(veyraRoot.resolve("app/src/main/java/app/veyra/music/ui/screens"))
     kotlin.srcDir(veyraRoot.resolve("app/src/main/java/app/veyra/music/ui/components"))
-    kotlin.include("RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt",
+    kotlin.include("RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt", "**/ThemeStudioComponents.kt", "**/VeyraBrandContent.kt",
         "**/PlayerControlPrimitives.kt", "**/PlayerInteractionPolicy.kt", "**/PlayerScrubState.kt",
         "**/ReadableLayout.kt", "**/Customization.kt", "**/VeyraSurfaces.kt", "**/VeyraMotion.kt", "**/VeyraIcons.kt", "**/SettingsIcons.kt",
         "SettingsControls.kt", "VeyraSwitchColors.kt", "**/HomeComponents.kt")
@@ -25,4 +25,8 @@ sourceSets.main {
 application {
     mainClass.set("app.veyra.music.ui.player.RenderThemesKt")
     applicationDefaultJvmArgs=listOf("-Dveyra.root=$veyraRoot")
+}
+
+tasks.named<JavaExec>("run") {
+    systemProperty("veyra.theme", providers.gradleProperty("theme").getOrElse("halloween-nocturne"))
 }

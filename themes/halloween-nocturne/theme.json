@@ -1,10 +1,10 @@
 {
-  "schema": 1,
+  "schema": 2,
   "id": "halloween-nocturne",
   "name": "Halloween Nocturne",
   "author": "Bhavishya Dalal",
-  "version": 2,
-  "minAppCode": 23,
+  "version": 3,
+  "minAppCode": 24,
   "palette": {
     "background": "#0D0B09",
     "surface": "#17120F",
@@ -39,9 +39,11 @@
     "lyrics": "icons/lyrics.png",
     "settings": "icons/settings.png",
     "back": "icons/back.png",
-    "download": "icons/download.png"
+    "download": "icons/download.png",
+    "brandIcon": "artwork/brand.webp"
   },
   "files": {
+    "artwork/brand.webp": "5a5d65d30dca6501fafbfc249572ebd58c8ba1c1985dffc2742081cb22c1e73e",
     "artwork/header.webp": "d2b53b7d1e4060865b432499ce536d734bd87f4ac29f89f2765cab625cbd8a94",
     "artwork/player.webp": "30161baf86bb805fdca485aa1f19355274ab4b90ea7a9675ee0db6fbacabe194",
     "artwork/preview.webp": "c1dac7601c6e2e95afd3be54fc97eeae34403e5a5cdde0c4a4621eef749459ee",
@@ -62,6 +64,8 @@
     "icons/previous.png": "a39f093298585a185c9168f8b76ec96a83429931dbe49840f9e035ae99616a71",
     "icons/queue.png": "29a4c7c80d98284aa5529fd431b015a95175f7305027c12e55e9ad936c865ac6",
     "icons/settings.png": "7f9ea58025335ea87366654e098abf3a3e4f59c868b11ccf3a6d486b105cd093",
-    "licenses/ARTWORK.txt": "81a8154d9eb381050440e58b950133612e1bdb302dfccfa7315a71f68e9c38a9"
-  }
+    "licenses/ARTWORK.txt": "52f5e2b56c8cb4b9133ef4c3e38c48d88b1627b40df1e9bc098858f29871eb7c"
+  },
+  "sceneStyle": "mist",
+  "tagline": "A different kind of night."
 }

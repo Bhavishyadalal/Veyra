@@ -1,6 +1,6 @@
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
-> **Preview 0.1.7-beta1 / code 23:** Theme Studio and Halloween Nocturne. [Theme ZIP and native previews](themes/README.md) · [Release notes](RELEASE_NOTES_0.1.7-beta1.md). Stable remains 0.1.6 / code 22; no APK is published here.
+> **Preview 0.1.7-beta1 / code 24:** Theme Studio, Web Slinger, Halloween Nocturne and optional matching launcher icons. [Theme ZIP and native previews](themes/README.md) · [Release notes](RELEASE_NOTES_0.1.7-beta1.md). Stable remains 0.1.6 / code 22; no APK is published here.
 
 > **Maintenance:** Current stable is 0.1.6 on `main`; completed preview is preserved on `preview/0.1.6-beta1`. Current preview 0.1.7-beta1 is on `preview/0.1.7-beta1`. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
 

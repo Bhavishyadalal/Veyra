@@ -2,14 +2,25 @@
   "schema": 1,
   "themes": [
     {
+      "id": "web-slinger",
+      "name": "Web Slinger",
+      "description": "Midnight city, crimson glass and cobalt webs. Bold condensed headings, themed Veyra branding, angular control details, web timeline and an optional matching launcher icon.",
+      "version": 1,
+      "minAppCode": 24,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/web-slinger-v1.zip",
+      "sha256": "2c75ef916b748e768991e44b728a7e3b0946da67537743e8b736ea805cb61b34",
+      "bytes": 696181,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/web-slinger/artwork/preview.webp"
+    },
+    {
       "id": "halloween-nocturne",
       "name": "Halloween Nocturne",
-      "description": "Smoked glass, warm pumpkin amber and gothic headings. Moonlit forest atmosphere throughout the interface, framed artwork, themed song menus, custom navigation glyphs, sculpted buttons and an ember seek bar.",
-      "version": 2,
-      "minAppCode": 23,
-      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/halloween-nocturne-v2.zip",
-      "sha256": "213cc3019c26e9f02aa21d22371a9481be5ffdbf0b94d0137a30596f2ec9e6b1",
-      "bytes": 528619,
+      "description": "Moonlit forest, pumpkin amber and gothic headings. Themed Veyra branding, sculpted controls, ember timeline and an optional matching launcher icon.",
+      "version": 3,
+      "minAppCode": 24,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/halloween-nocturne-v3.zip",
+      "sha256": "4346dc2ebdfef65a34040b09b23b6bb412d119323c40a81f4859a8a502916750",
+      "bytes": 550378,
       "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/halloween-nocturne/artwork/preview.webp"
     }
   ]

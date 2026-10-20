@@ -33,6 +33,8 @@ data class ThemeVisuals(
     val seekStyle: String = "plain", val seekHeight: Int = 7, val version: Int = 1,
     val background: Color = surface,
     val text: Color = Color(0xFFFFF4E6), val muted: Color = Color(0xFFCFBDAA),
+    val secondary: Color = accent, val sceneStyle: String = "mist",
+    val tagline: String = "A different kind of night.",
 ) {
     fun asset(key: String): String? = assets[key]
 }
@@ -81,7 +83,7 @@ fun ThemeAtmosphere(key: String, modifier: Modifier = Modifier, compact: Boolean
         Column(Modifier.fillMaxWidth(if(LocalDensity.current.fontScale > 1.2f) .85f else .64f).padding(20.dp)) {
             Text(theme.name, style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSurface)
             Spacer(Modifier.height(6.dp))
-            Text("A different kind of night.", style = MaterialTheme.typography.bodySmall,
+            Text(theme.tagline, style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
@@ -117,6 +119,22 @@ fun ThemeScene(modifier: Modifier = Modifier) {
             theme.background.copy(alpha = .35f), theme.background.copy(alpha = .50f),
             theme.background.copy(alpha = .35f)))))
         androidx.compose.foundation.Canvas(Modifier.matchParentSize()) {
+            if (theme.sceneStyle == "web") {
+                val origin = androidx.compose.ui.geometry.Offset(size.width * 1.04f, -size.height * .04f)
+                val reach = maxOf(size.width,size.height) * 1.4f
+                for (ray in 0..10) {
+                    val angle = ray * Math.PI / 20 + Math.PI / 2
+                    drawLine(theme.secondary.copy(alpha=.12f),origin,
+                        origin + androidx.compose.ui.geometry.Offset(kotlin.math.cos(angle).toFloat()*reach,kotlin.math.sin(angle).toFloat()*reach), .7.dp.toPx())
+                }
+                for (ring in 1..9) {
+                    val radius = ring * reach / 10
+                    drawArc(theme.accent.copy(alpha=.10f),90f,90f,false,
+                        topLeft=origin-androidx.compose.ui.geometry.Offset(radius,radius),
+                        size=androidx.compose.ui.geometry.Size(radius*2,radius*2),
+                        style=androidx.compose.ui.graphics.drawscope.Stroke(.7.dp.toPx()))
+                }
+            }
             // A restrained constellation continues beyond the hero, even deep in a feed.
             repeat(24) { i ->
                 val x = size.width * ((i * 37 % 101) / 100f)
@@ -135,7 +153,13 @@ fun ThemeSectionRule(modifier: Modifier = Modifier) {
     androidx.compose.foundation.Canvas(modifier.fillMaxWidth().height(12.dp).clearAndSetSemantics {}) {
         val y = size.height / 2
         val c = androidx.compose.ui.geometry.Offset(4.dp.toPx(),y)
-        drawCircle(theme.accent,2.dp.toPx(),c)
+        if (theme.sceneStyle == "web") {
+            val d=3.dp.toPx()
+            val path=androidx.compose.ui.graphics.Path().apply {
+                moveTo(c.x,c.y-d);lineTo(c.x+d,c.y);lineTo(c.x,c.y+d);lineTo(c.x-d,c.y);close()
+            }
+            drawPath(path,theme.accent)
+        } else drawCircle(theme.accent,2.dp.toPx(),c)
         drawLine(Brush.horizontalGradient(listOf(theme.accent.copy(alpha=.55f),Color.Transparent)),
             androidx.compose.ui.geometry.Offset(14.dp.toPx(),y),
             androidx.compose.ui.geometry.Offset(size.width,y), .8.dp.toPx())
@@ -147,7 +171,7 @@ fun ThemeSectionRule(modifier: Modifier = Modifier) {
 fun ThemeActionEmblem(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val theme = LocalThemeVisuals.current
     if (theme == null) { content(); return }
-    val shape = RoundedCornerShape(12.dp)
+    val shape = if (theme.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(9.dp) else RoundedCornerShape(12.dp)
     Box(modifier.size(38.dp).clip(shape)
         .background(Brush.linearGradient(listOf(theme.raised,theme.surface)))
         .border(.75.dp, theme.outline.copy(alpha=.65f), shape),

@@ -153,7 +153,7 @@ fun VeyraTheme(
         LocalArtworkCorners provides corners,
         LocalListSpacing provides spacing,
         LocalSubtleMotion provides subtle,
-        LocalVeyraWordmarkFont provides VeyraWordmarkFont,
+        LocalVeyraWordmarkFont provides (if (pack?.asset("brandIcon") != null) selectedTypography.headlineLarge.fontFamily else VeyraWordmarkFont),
         LocalVeyraContrastControls provides contrastControls,
     ) {
         MaterialTheme(

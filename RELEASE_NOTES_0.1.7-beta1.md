@@ -1,51 +1,47 @@
-# Veyra 0.1.7-beta1 · A different kind of night
+# Veyra 0.1.7-beta1 · Two worlds, one Veyra
 
-**Preview source · version code 23 · Made by Bhavishya Dalal**
+**Preview source · code 24 · Made by Bhavishya Dalal**
 
-Stable remains **0.1.6 / code 22**. This preview adds the first version of Theme
-Studio; it does not change the Listen Together backend or publish an APK.
+Stable **0.1.6 / code 22** remains separate. This source update does not publish
+an APK or change the Listen Together backend.
 
-## Halloween Nocturne
+## Web Slinger
 
-- Original smoked-glass pumpkin artwork, warm amber surfaces and gothic headings.
-- Custom navigation glyphs and geometry, player transport icons and framed controls.
-- A themed seek bar with an ember playhead, preserving seek and accessibility logic.
-- Shared colors/fonts across the app, decorative Home/Settings headers and subtle
-  player atmosphere. Existing music artwork and service logos remain original.
+- Original midnight-city and crimson-glass artwork with cobalt web details.
+- Bold Barlow Condensed headings and a matching Veyra icon/wordmark on Home.
+- Custom navigation and transport glyphs, angular action/player surfaces and
+  a web-pattern timeline with a diamond playhead.
+- A matching Android launcher icon, chosen separately in Theme Studio or the
+  existing App icon picker.
 
-## Download, choose, return
+## Halloween Nocturne v3
 
-Open **Settings → Appearance → Theme studio**. Download with progress/cancellation,
-then confirm **Apply & restart UI**. The Activity refreshes without stopping the
-playback service. Choose **Later** to keep the current appearance. Installed packs
-work offline; **Original Veyra** restores saved base appearance preferences.
-Inactive theme files can be removed with confirmation. Theme updates download
-separately and cannot activate themselves.
+- Moonlit forest, amber details, gothic headings and an ember timeline.
+- Matching Veyra branding and an optional Halloween launcher icon.
+- Earlier v1/v2 packs remain supported; published archives are preserved.
 
-## Compatibility and verification
+## A better Theme Studio
 
-Data-only packs are restricted to the official repository and validated before
-installation: outer/asset hashes, paths, schema/app version, palette contrast,
-geometry, unpacked limits, image dimensions and font decoding. Failed validation
-leaves the current installed appearance alone. Invalid saved data falls back to
-Original Veyra. No executable theme code or replacement action logic is accepted.
+- Larger artwork previews, a themed backdrop and clearer collection panels.
+- All/Downloaded filters, installed palette swatches and clear download states.
+- Progress, cancellation, offline packs and confirmation before applying a theme.
+- Separate matching-icon confirmation and a Restore original app icon action.
+- Theme application does not silently replace a manually selected launcher icon.
 
-[Theme ZIP, native previews, supported components and licenses](themes/README.md)
-· [Verification and device follow-up](verification/THEMES-0.1.7-beta1.md)
+## Familiar controls, a different atmosphere
 
-No APK was assembled or release uploaded during this work. Build the preview by
-starting a **new** Android Release APK workflow on `preview/0.1.7-beta1`; re-running
-an older workflow run uses its original commit.
+The listener's actual music covers, account rules, menu actions, playback controls,
+queue/lyrics behavior and saved appearance preferences remain. Shared typography,
+artwork frames, menu colors and native press feedback follow the active theme.
+Large text and reduced-motion settings remain supported.
 
-## Halloween refinement · theme pack v2
+The new packs require **the latest preview / code 24**. Older preview builds show
+Update Veyra first. Original appearance and previously installed themes remain
+available offline. Music playback is not stopped by confirmed interface recreation.
 
-- Persistent moonlit forest atmosphere on the main app surface and Settings.
-- Amber artwork frames, warmer Home tile captions and decorative section rules.
-- Theme colors now take priority over cover-derived colors in song sheets and
-  detail palettes; original Veyra keeps its artwork-color behavior.
-- Refined song menu icon housings, track header and action grouping; all original
-  callbacks, online/offline rules, sleep timer and quality controls remain.
-- Matching Settings icon surfaces and a framed native navigation bar.
-- New original artwork; v2 installs alongside v1 until explicitly applied.
+[Themes, downloads and native component studies](themes/README.md)
+· [Checks and physical-device follow-up](verification/THEMES-0.1.7-beta1.md)
 
-Source-only update. Stable 0.1.6 is unchanged; no APK is produced here.
+Android Kotlin/resource compilation and 23 focused JVM tests passed. Native studies
+include 320 dp / 150% text layouts; they are not full-device screenshots. Launcher
+switching, shortcuts and full Android layout still need device verification.

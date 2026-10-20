@@ -1238,4 +1238,19 @@
     <string name="theme_remove_description">This removes the unused theme files from this device. You can download the theme again later.</string>
     <string name="theme_done">Done</string>
     <string name="theme_download_update">Download theme update</string>
+    <string name="app_icon_web_slinger">Web Slinger</string>
+    <string name="app_icon_halloween">Halloween Nocturne</string>
+    <string name="theme_collection_title">Make it feel like you.</string>
+    <string name="theme_collection_description">New worlds for your music. Explore artwork, type, icons and player details, then keep your favourites offline.</string>
+    <string name="theme_all">All themes</string>
+    <string name="theme_downloaded">Downloaded</string>
+    <string name="theme_discover">Discover</string>
+    <string name="theme_no_downloads">Your downloaded themes will appear here.</string>
+    <string name="theme_includes">Artwork · Fonts · Controls · Branding</string>
+    <string name="theme_launcher_title">The finishing touch</string>
+    <string name="theme_launcher_hint">Choose a matching home-screen icon separately. Your launcher may take a moment to refresh.</string>
+    <string name="theme_use_launcher">Use matching app icon</string>
+    <string name="theme_restore_launcher">Restore original app icon</string>
+    <string name="theme_launcher_confirm">Change the app icon?</string>
+    <string name="theme_current_launcher">Current app icon: %1$s</string>
 </resources>

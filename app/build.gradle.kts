@@ -476,6 +476,7 @@ tasks.matching { it.name == "installDevDebug" }.configureEach { finalizedBy(veri
 // Re-run them when pack/catalog bytes change, including in a source-ZIP checkout.
 tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
     inputs.files(rootProject.file("themes/catalog.json"),
-        rootProject.file("themes/packs/halloween-nocturne-v2.zip"))
+        rootProject.file("themes/packs/halloween-nocturne-v3.zip"),
+        rootProject.file("themes/packs/web-slinger-v1.zip"))
         .withPropertyName("themePackFixtures")
 }

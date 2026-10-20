@@ -57,7 +57,7 @@ internal fun PlayerControlSurface(
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val controlTint = pack?.accent ?: tint
-    val effectiveShape = pack?.let { androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp) } ?: shape
+    val effectiveShape = pack?.let { if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp) else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp) } ?: shape
     val contrast = LocalVeyraContrastControls.current
     val controlBackground = if (contrast && containerColor == Color.Transparent) controlTint.copy(alpha = 0.12f) else if (pack != null && containerColor == Color.Transparent) pack.raised.copy(alpha=0.7f) else containerColor
     val indicatorSize = if ((visualSize ?: 48.dp) >= 64.dp) 36.dp else 24.dp
@@ -332,6 +332,20 @@ internal fun PlayerProgressTrack(
                     ),
                 cornerRadius = radius,
             )
+        if (pack?.seekStyle == "web" && filled > 0f && factor > 0.95f) {
+            // The web motif follows the real seek fraction, including RTL and scrubbing.
+            val x=filled.coerceIn(0f,size.width)
+            val cy=size.height/2
+            val d=size.height*.65f
+            val diamond=androidx.compose.ui.graphics.Path().apply {
+                moveTo(x,cy-d);lineTo(x+d,cy);lineTo(x,cy+d);lineTo(x-d,cy);close()
+            }
+            drawPath(diamond,pack.text)
+            for (strand in 1..8) {
+                val sx=size.width*strand/9
+                if (sx > filled) drawLine(pack.secondary.copy(alpha=.4f),Offset(sx,0f),Offset(sx+size.height,size.height),.7.dp.toPx())
+            }
+        }
         if (pack?.seekStyle == "ember" && filled > 0f && factor > 0.95f) {
             // A quiet ember playhead, with no extra animation or input surface.
             drawCircle(pack.accent, radius = size.height * .65f,
