@@ -47,6 +47,7 @@ jobs:
         with:
           name: veyra-dev-debug
           path: app/build/outputs/apk/dev/debug/*.apk
+          retention-days: 7
 
       - name: Upload test reports
         if: failure()
@@ -54,6 +55,7 @@ jobs:
         with:
           name: android-test-reports
           path: app/build/reports/tests/
+          retention-days: 7
 
   backend:
     name: Backend · Go
