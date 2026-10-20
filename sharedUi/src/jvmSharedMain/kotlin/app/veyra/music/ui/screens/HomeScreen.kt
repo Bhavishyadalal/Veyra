@@ -1,5 +1,7 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
+
 import java.util.Locale
 
 import app.veyra.music.ui.components.contextClick
@@ -56,7 +58,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import app.veyra.music.ui.components.VeyraBrand
-import app.veyra.music.ui.player.PlayerSettings
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -168,7 +169,7 @@ fun HomeScreen(
 ) {
     PrefetchHomeArtwork(state, enabled = !offline)
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
-    val homeReducedMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+    val homeReducedMotion = rememberVeyraReducedMotion()
     var editingHome by rememberSaveable { mutableStateOf(false) }
     val customizable = onMoveHomeSection != null && onHomeSectionVisible != null && onResetHomeSections != null
     val displayState = if (offline && state is UiState.Loading) UiState.Success(emptyList<HomeShelf>()) else state
@@ -457,7 +458,7 @@ private fun RecentSectionHeader(
             }
         }
         Spacer(Modifier.width(8.dp))
-        val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+        val reduceMotion = rememberVeyraReducedMotion()
         HomeActionButton(
             icon = if (viewType == LibraryViewType.LIST) VeyraIcons.GridView else VeyraIcons.ListView,
             description = stringResource(if (viewType == LibraryViewType.LIST) Res.string.switch_to_grid_view else Res.string.switch_to_list_view),
@@ -552,7 +553,7 @@ fun CompactTrackRow(
 @Composable
 private fun HomeTitle(title: String, modifier: Modifier = Modifier) {
     val colors = MaterialTheme.colorScheme
-    val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+    val reduceMotion = rememberVeyraReducedMotion()
     var introduced by rememberSaveable { mutableStateOf(false) }
     val reveal = remember { Animatable(if (introduced || reduceMotion) 1f else 0f) }
     LaunchedEffect(reduceMotion) {

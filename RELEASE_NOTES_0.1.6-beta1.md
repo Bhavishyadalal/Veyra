@@ -1,5 +1,16 @@
 # Veyra 0.1.6-beta1 · Your Home, ready sooner
 
+## Interface and motion update
+
+- Matching surfaces and touch feedback across Settings, player drawers and song menus.
+- Refined page/section transitions and dependent Settings controls.
+- Smoother drawer interaction and coordinated queue/lyrics panes.
+- Cached tile artwork as a detail-header loading placeholder.
+- Reduced-motion support follows both app and system preferences.
+
+[Changes, checks and device follow-up](verification/UI-POLISH-0.1.6-beta1.md).
+
+
 ## Source build maintenance
 
 The refreshed beta source addresses the uploaded Kotlin warning sites, migrates
@@ -14,6 +25,6 @@ No new APK or completed full release build is claimed.
 
 **Preview source**, version 0.1.6-beta1/code 21. Stable 0.1.5/code 20 remains on main. A first online load is needed to populate Home; cached recommendations do not download their music. Existing image caching/fallbacks remain.
 
-[Verification and known build/device limits](verification/HOME-0.1.6-beta1-RESULTS.md). No APK is generated with this source delivery; full Android compilation is currently blocked in this environment by a JitPack dependency HTTP 403.
+[Verification and known build/device limits](verification/HOME-0.1.6-beta1-RESULTS.md). No APK is generated with this source delivery. Production-release Kotlin compilation now passes with the environment proxy/CA configured; the earlier Home-specific verification below records its historical dependency limitation. Device and performance validation remain separate.
 
 Made by Bhavishya Dalal.

@@ -1,5 +1,7 @@
 package app.veyra.music.ui.player
 
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
+
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.unit.constrainHeight
@@ -860,7 +862,7 @@ fun NowPlayingScreen(
     // read, not the number of them: the frame comes back at `frameCapturePx`
     // rather than full-bleed, and is averaged on a stride off the main thread.
     val reducedBackdropEffects by PlayerSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
-    val reducedBackdropMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+    val reducedBackdropMotion = rememberVeyraReducedMotion()
     // Keep the initial palette, without repeated GPU readbacks in reduced-effects mode.
     val meshRefreshMs = if (reducedBackdropEffects || reducedBackdropMotion) null else MESH_REFRESH_MS
 
@@ -1075,11 +1077,12 @@ fun NowPlayingScreen(
     // [QUEUE_CARRY_FRACTION] has to fall back to 0 just as surely as one that
     // carried has to finish reaching 1.
     var queueReleased by remember { mutableIntStateOf(0) }
-    LaunchedEffect(queueOpen, queueDragging, queueReleased) {
+    LaunchedEffect(queueOpen, queueDragging, queueReleased, reducedBackdropMotion) {
         if (queueDragging) return@LaunchedEffect
         val target = if (queueOpen) 1f else 0f
         val from = queueSlide.floatValue
         if (from == target) return@LaunchedEffect
+        if (reducedBackdropMotion) { queueSlide.floatValue = target; return@LaunchedEffect }
         animate(
             initialValue = from,
             targetValue = target,

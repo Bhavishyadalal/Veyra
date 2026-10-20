@@ -2,6 +2,10 @@ package app.veyra.music.ui.player
 
 import app.veyra.music.sharedui.resources.*
 
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.snap
+import app.veyra.music.ui.motion.VeyraMotion
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -94,15 +98,6 @@ private val LANDSCAPE_COMPACT_HEIGHT = 440.dp
  */
 private val LANDSCAPE_GUTTER_COMPACT = 20.dp
 
-/**
- * How the right column hands over between the player, the lyrics and the
- * queue. The left column never moves, so a crossfade is the whole transition —
- * the same page being turned, not a panel being opened.
- */
-private const val LANDSCAPE_PANE_FADE_IN_MS = 220
-private const val LANDSCAPE_PANE_FADE_IN_DELAY_MS = 90
-private const val LANDSCAPE_PANE_FADE_OUT_MS = 140
-
 /** Which of its three things the player's content column is showing. */
 internal enum class PlayerPane { Main, Lyrics, Queue }
 
@@ -150,6 +145,7 @@ internal fun LandscapePlayerLayout(
     queuePane: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val reducedMotion = rememberVeyraReducedMotion()
     Box(modifier = modifier.fillMaxSize()) {
         background(Modifier.fillMaxSize())
 
@@ -200,12 +196,14 @@ internal fun LandscapePlayerLayout(
                 AnimatedContent(
                     targetState = pane,
                     transitionSpec = {
-                        fadeIn(
+                        (fadeIn(
                             tween(
-                                LANDSCAPE_PANE_FADE_IN_MS,
-                                delayMillis = LANDSCAPE_PANE_FADE_IN_DELAY_MS,
+                                VeyraMotion.duration(reducedMotion, VeyraMotion.Enter),
+                                delayMillis = 0,
                             ),
-                        ) togetherWith fadeOut(tween(LANDSCAPE_PANE_FADE_OUT_MS))
+                        ) togetherWith fadeOut(tween(VeyraMotion.duration(reducedMotion, VeyraMotion.Exit)))).using(
+                            SizeTransform(clip = false) { _, _ -> snap() },
+                        )
                     },
                     contentAlignment = Alignment.Center,
                     modifier = Modifier

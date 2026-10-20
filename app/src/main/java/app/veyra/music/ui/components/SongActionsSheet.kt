@@ -3,6 +3,14 @@ package app.veyra.music.ui.components
 import app.veyra.music.R
 
 import android.net.Uri
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.progressBarRangeInfo
+import androidx.compose.ui.semantics.semantics
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
+import app.veyra.music.ui.motion.veyraPressFeedback
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -16,6 +24,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -243,6 +252,7 @@ fun SongActionsSheet(
                     ),
                     accent = palette.accent,
                     enabled = onRollbackToOriginal != null || !upgradeQualityInProgress,
+                    busy = onRollbackToOriginal == null && upgradeQualityInProgress,
                     onClick = it,
                 )
             }
@@ -505,7 +515,7 @@ private fun TintedSheet(
     }
 }
 
-private val SHEET_SHAPE = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+private val SHEET_SHAPE = VeyraSurfaces.Sheet
 
 /**
  * One row carrying the whole life of a download: start it, watch it, cancel it,
@@ -791,13 +801,15 @@ internal fun ActionRow(
     tint: Color? = null,
     accent: Color = MaterialTheme.colorScheme.primary,
     enabled: Boolean = true,
+    busy: Boolean = false,
     onClick: () -> Unit,
 ) {
     val menu = LocalActionRowStyle.current == ActionRowStyle.Menu
+    val interaction = remember { MutableInteractionSource() }
     // The popup sits on a surface rather than the page background, so its
     // text follows the surface's colour — the two differ in light mode.
     val foreground = if (menu) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onBackground
-    val alpha = if (enabled) 1f else 0.4f
+    val alpha = if (enabled || busy) 1f else 0.4f
     val iconView: @Composable () -> Unit = {
         Icon(
             imageVector = icon,
@@ -809,12 +821,15 @@ internal fun ActionRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(enabled = enabled, onClick = onClick)
+            .clip(VeyraSurfaces.Row)
+            .veyraPressFeedback(interaction, accent, enabled && !busy)
+            .clickable(interactionSource = interaction, indication = null, enabled = enabled && !busy, role = Role.Button, onClick = onClick)
+            .semantics { if (busy) progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate }
             .then(
                 if (menu) {
-                    Modifier.heightIn(min = 46.dp).padding(horizontal = 18.dp, vertical = 11.dp)
+                    Modifier.heightIn(min = 48.dp).padding(horizontal = 18.dp, vertical = 12.dp)
                 } else {
-                    Modifier.padding(horizontal = 22.dp, vertical = 15.dp)
+                    Modifier.heightIn(min = 56.dp).padding(horizontal = 22.dp, vertical = 15.dp)
                 },
             ),
         verticalAlignment = Alignment.CenterVertically,
@@ -833,13 +848,20 @@ internal fun ActionRow(
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f),
         )
+        if (busy) {
+            Spacer(Modifier.width(12.dp))
+            ActionProgressIndicator(accent)
+        }
         if (value != null) {
             Spacer(Modifier.width(12.dp))
             Text(
                 text = value,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
                 color = accent.copy(alpha = alpha),
-                maxLines = 1,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.widthIn(max = 120.dp),
             )
         }
         if (menu) {
@@ -863,7 +885,7 @@ private fun LoadingActionRow(icon: ImageVector, label: String, palette: ArtworkP
             .fillMaxWidth()
             .then(
                 if (menu) {
-                    Modifier.heightIn(min = 46.dp).padding(horizontal = 18.dp, vertical = 11.dp)
+                    Modifier.heightIn(min = 48.dp).padding(horizontal = 18.dp, vertical = 12.dp)
                 } else {
                     Modifier.padding(horizontal = 22.dp, vertical = 15.dp)
                 },
@@ -883,11 +905,7 @@ private fun LoadingActionRow(icon: ImageVector, label: String, palette: ArtworkP
             color = palette.onBackground.copy(alpha = 0.4f),
             modifier = Modifier.weight(1f),
         )
-        CircularProgressIndicator(
-            color = palette.onBackgroundVariant,
-            strokeWidth = 2.dp,
-            modifier = Modifier.size(16.dp),
-        )
+        ActionProgressIndicator(palette.onBackgroundVariant)
     }
 }
 
@@ -948,4 +966,16 @@ internal fun SheetHeading(text: String) {
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 4.dp),
     )
+}
+
+/** A static progress arc replaces the rotating indicator under reduced motion. */
+@Composable
+private fun ActionProgressIndicator(color: Color) {
+    if (rememberVeyraReducedMotion()) {
+        CircularProgressIndicator(progress = { 0.75f }, color = color,
+            strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
+    } else {
+        CircularProgressIndicator(color = color, strokeWidth = 2.dp,
+            modifier = Modifier.size(18.dp))
+    }
 }

@@ -881,6 +881,14 @@ private fun ReleaseHeader(
     onArtistClick: ((String, String) -> Unit)?,
     onToggleLibrary: (() -> Unit)?,
 ) {
+    val imageContext = LocalPlatformContext.current
+    val headerArtwork = remember(imageContext, page.thumbnailUrl) {
+        ImageRequest.Builder(imageContext)
+            .data(page.thumbnailUrl.artworkAt(HEADER_ART_PX))
+            .size(HEADER_ART_PX)
+            .placeholderMemoryCacheKey(page.thumbnailUrl.artworkAt(CARD_ART_PX))
+            .build()
+    }
     val (credit, meta) = page.headerLines(songs.size, songs.playtime())
     // Every row on a release carries the same credit — see [pageCredit] — so
     // the first one speaks for the whole page, the same source the rows'
@@ -916,7 +924,7 @@ private fun ReleaseHeader(
                 )
             }
             AsyncImage(
-                model = page.thumbnailUrl.artworkAt(HEADER_ART_PX),
+                model = headerArtwork,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 onState = { artFailed = it is AsyncImagePainter.State.Error },

@@ -235,6 +235,7 @@ import app.veyra.music.ui.MainViewModel
 import app.veyra.music.ui.NavigationDestination
 import app.veyra.music.ui.NavigationMotion
 import app.veyra.music.ui.NavigationMotionPolicy
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 import app.veyra.music.ui.navigationTransition
 import app.veyra.music.ui.SearchSource
 import app.veyra.music.ui.components.BottomFadeScrim
@@ -543,7 +544,7 @@ private fun VeyraApp(
     // player and no artwork flying between the two. Everything below that
     // takes part in the docking asks for [activeDock] / this, never for the
     // dock or the motion directly.
-    val reducePlayerMotion by AppSettings.reduceAnimation.collectAsStateWithLifecycle()
+    val reducePlayerMotion = rememberVeyraReducedMotion()
     val activeDock = playerDock.takeIf { !reducePlayerMotion }
     playerSheetMotion.flingVelocity = with(LocalDensity.current) { PLAYER_PULL_FLING_VELOCITY.toPx() }
     // How the app takes the player down, whatever for: a back press, or a page

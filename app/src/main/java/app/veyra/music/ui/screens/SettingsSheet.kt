@@ -11,6 +11,9 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
+import app.veyra.music.ui.motion.VeyraMotion
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -389,14 +392,17 @@ fun SettingsScreen(
         }
     }
 
+    val reducedMotion = rememberVeyraReducedMotion()
+    var categoryIntroduced by remember { mutableStateOf(false) }
     val categoryAlpha = remember { Animatable(1f) }
-    LaunchedEffect(category, reduceAnimation) {
-        if (reduceAnimation) {
+    LaunchedEffect(category, reducedMotion) {
+        if (reducedMotion || !categoryIntroduced) {
             categoryAlpha.snapTo(1f)
         } else {
             categoryAlpha.snapTo(0f)
-            categoryAlpha.animateTo(1f, tween(180))
+            categoryAlpha.animateTo(1f, tween(VeyraMotion.Section, easing = FastOutSlowInEasing))
         }
+        categoryIntroduced = true
     }
 
     Column(
@@ -425,7 +431,10 @@ fun SettingsScreen(
         }
         Column(
             Modifier.weight(1f).verticalScroll(scrollState)
-                .graphicsLayer { alpha = categoryAlpha.value },
+                .graphicsLayer {
+                    alpha = categoryAlpha.value
+                    translationY = if (reducedMotion) 0f else (1f - categoryAlpha.value) * 10.dp.toPx()
+                },
         ) {
             if (category == null && !searching) {
                 SettingsOverview(onSelect = { category = it })
@@ -632,7 +641,7 @@ fun SettingsScreen(
                 if (!smartFade) {
                     val crossfadeTitle = stringResource(R.string.crossfade)
                     val crossfadeOff = stringResource(R.string.off)
-                    row(crossfadeTitle, "fade", "gapless") {
+                    row(crossfadeTitle, "fade", "gapless", reveal = true, reducedMotion = reducedMotion) {
                         SliderRow(
                             icon = Icons.Rounded.Waves,
                             title = crossfadeTitle,
@@ -802,7 +811,7 @@ fun SettingsScreen(
                 // that cost repeated on every loop — see AppSettings.canvasOverCellular.
                 if (animatedCanvas) {
                     val coverCellularTitle = stringResource(R.string.animated_cover_cellular)
-                    row(coverCellularTitle, "canvas", "cellular", divided = false) {
+                    row(coverCellularTitle, "canvas", "cellular", divided = false, reveal = true, reducedMotion = reducedMotion) {
                         SettingsSubRow(
                             title = coverCellularTitle,
                             checked = canvasOverCellular,
@@ -810,7 +819,7 @@ fun SettingsScreen(
                         )
                     }
                     val spotifyCanvasTitle = stringResource(R.string.integrate_spotify_canvas)
-                    row(spotifyCanvasTitle, "spotify", "canvas", divided = false) {
+                    row(spotifyCanvasTitle, "spotify", "canvas", divided = false, reveal = true, reducedMotion = reducedMotion) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -842,7 +851,7 @@ fun SettingsScreen(
                 }
                 if (signatureApiEnabled) {
                     val signatureUrlTitle = stringResource(R.string.artist_signatures_url)
-                    row(signatureUrlTitle, "signature", "api", "url", divided = false) {
+                    row(signatureUrlTitle, "signature", "api", "url", divided = false, reveal = true, reducedMotion = reducedMotion) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -966,7 +975,7 @@ fun SettingsScreen(
                 }
                 if (highPerformanceMode) {
                     val refreshRateTitle = stringResource(R.string.refresh_rate)
-                    row(refreshRateTitle, "hz", "frame rate") {
+                    row(refreshRateTitle, "hz", "frame rate", reveal = true, reducedMotion = reducedMotion) {
                         SettingsRow(
                             icon = VeyraIcons.FrameRate,
                             title = refreshRateTitle,
@@ -1818,7 +1827,7 @@ private class SettingsGroupScope(
     private val search: SettingsSearch<SettingsCategory>,
     private val header: String?,
 ) {
-    class Entry(val divided: Boolean, val content: @Composable () -> Unit)
+    class Entry(val identity: List<String?>, val divided: Boolean, val content: @Composable () -> Unit)
 
     val entries = mutableListOf<Entry>()
 
@@ -1835,11 +1844,16 @@ private class SettingsGroupScope(
     fun row(
         vararg keywords: String?,
         divided: Boolean = true,
+        reveal: Boolean = false,
+        reducedMotion: Boolean = false,
         content: @Composable () -> Unit,
     ) {
         // The header counts for every row beneath it: searching "playback"
         // should turn up the playback group entire, not nothing at all.
-        if (search.matches(header, *keywords)) entries += Entry(divided, content)
+        if (search.matches(header, *keywords)) entries += Entry(keywords.toList(), divided) {
+            if (reveal) SettingsOptionsReveal(reducedMotion = reducedMotion, content = content)
+            else content()
+        }
     }
 }
 
@@ -1865,14 +1879,16 @@ private fun SearchableSettingsGroup(
     if (scope.entries.isEmpty()) return
     SettingsGroup(header = header, footer = footer, topSpacing = topSpacing) {
         scope.entries.forEachIndexed { index, entry ->
-            when {
-                index > 0 && entry.divided -> RowDivider()
-                // An undivided row is drawn tight to the top because something
-                // it belongs to is usually above it. Filtered down to itself it
-                // has nothing to sit under, so it is given that room back.
-                index == 0 && !entry.divided -> Spacer(Modifier.height(10.dp))
+            androidx.compose.runtime.key(entry.identity) {
+                when {
+                    index > 0 && entry.divided -> RowDivider()
+                    // An undivided row is drawn tight to the top because something
+                    // it belongs to is usually above it. Filtered down to itself it
+                    // has nothing to sit under, so it is given that room back.
+                    index == 0 && !entry.divided -> Spacer(Modifier.height(10.dp))
+                }
+                entry.content()
             }
-            entry.content()
         }
     }
 }

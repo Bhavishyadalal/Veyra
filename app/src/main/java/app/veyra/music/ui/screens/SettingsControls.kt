@@ -1,5 +1,16 @@
 package app.veyra.music.ui.screens
 
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.FastOutSlowInEasing
+import app.veyra.music.ui.motion.VeyraMotion
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import app.veyra.music.ui.motion.veyraPressFeedback
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,6 +41,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import app.veyra.music.ui.components.VeyraSurfaces
 import app.veyra.music.ui.components.veyraSwitchColors
 import app.veyra.music.ui.icons.SettingsIcons
 
@@ -90,6 +102,7 @@ internal fun SettingsRow(
     destructive: Boolean = false,
     onCheckedChange: ((Boolean) -> Unit)? = null,
 ) {
+    val interaction = remember { MutableInteractionSource() }
     val scheme = MaterialTheme.colorScheme
     val tint = if (destructive) scheme.error else scheme.primary
     val action =
@@ -99,10 +112,12 @@ internal fun SettingsRow(
                     value = checked,
                     enabled = enabled,
                     role = Role.Switch,
+                    interactionSource = interaction,
+                    indication = null,
                     onValueChange = { onClick() },
                 )
             onClick != null ->
-                Modifier.clickable(enabled = enabled, role = Role.Button, onClick = onClick)
+                Modifier.clickable(interactionSource = interaction, indication = null, enabled = enabled, role = Role.Button, onClick = onClick)
             else -> Modifier
         }
     BoxWithConstraints(Modifier.fillMaxWidth()) {
@@ -131,7 +146,8 @@ internal fun SettingsRow(
         }
         Row(
             Modifier.fillMaxWidth()
-                .clip(RoundedCornerShape(18.dp))
+                .clip(VeyraSurfaces.Row)
+                .veyraPressFeedback(interaction, tint, enabled)
                 .then(action)
                 .semantics(mergeDescendants = true) {}
                 .heightIn(min = if (emphasized) 92.dp else 80.dp)
@@ -372,7 +388,7 @@ internal fun SegmentedControl(
             val chosen = index == selectedIndex
             Row(
                 modifier
-                    .clip(RoundedCornerShape(18.dp))
+                    .clip(VeyraSurfaces.Row)
                     .background(
                         if (chosen) MaterialTheme.colorScheme.primaryContainer
                         else Color.Transparent
@@ -521,7 +537,7 @@ internal fun SettingsIconChoice(
 ) {
     Column(
         modifier
-            .clip(RoundedCornerShape(18.dp))
+            .clip(VeyraSurfaces.Row)
             .selectable(selected = selected, role = Role.RadioButton, onClick = onSelect)
             .padding(horizontal = 8.dp, vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -625,5 +641,23 @@ internal fun SettingsAccountSummary(
             Spacer(Modifier.width(12.dp))
             Chevron()
         }
+    }
+}
+
+/** Reveal dependent controls without retaining hidden, clickable settings on exit. */
+@Composable
+internal fun SettingsOptionsReveal(
+    reducedMotion: Boolean,
+    content: @Composable () -> Unit,
+) {
+    val visibility = remember { MutableTransitionState(reducedMotion).apply { targetState = true } }
+    AnimatedVisibility(
+        visibleState = visibility,
+        enter = if (reducedMotion) EnterTransition.None else
+            fadeIn(tween(VeyraMotion.Feedback)) +
+                expandVertically(tween(VeyraMotion.Section, easing = FastOutSlowInEasing)),
+        exit = ExitTransition.None,
+    ) {
+        Column(Modifier.fillMaxWidth()) { content() }
     }
 }

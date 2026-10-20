@@ -1,5 +1,8 @@
 package app.veyra.music.ui.player
 
+import app.veyra.music.ui.components.VeyraSurfaces
+import app.veyra.music.ui.motion.VeyraMotion
+
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -57,19 +60,19 @@ internal fun PlayerControlSurface(
     val scale =
         animateFloatAsState(
             if (pressed && available && !reducedMotion) 0.95f else 1f,
-            tween(playerMotionMillis(reducedMotion, 120), easing = FastOutSlowInEasing),
+            tween(playerMotionMillis(reducedMotion, VeyraMotion.Press), easing = FastOutSlowInEasing),
             label = "playerControlPress",
         )
     val opacity =
         animateFloatAsState(
             if (enabled || busy) 1f else 0.35f,
-            tween(playerMotionMillis(reducedMotion, 140)),
+            tween(playerMotionMillis(reducedMotion, VeyraMotion.Feedback)),
             label = "playerControlAvailability",
         )
     Box(
         modifier
-            .heightIn(min = 48.dp)
-            .widthIn(min = 48.dp)
+            .heightIn(min = VeyraSurfaces.MinTouch)
+            .widthIn(min = VeyraSurfaces.MinTouch)
             .clip(shape)
             .clickable(
                 interactionSource = interaction,
@@ -112,7 +115,7 @@ internal fun PlayerControlSurface(
         ) {
             Crossfade(
                 busy,
-                animationSpec = tween(playerMotionMillis(reducedMotion, 140)),
+                animationSpec = tween(playerMotionMillis(reducedMotion, VeyraMotion.Feedback)),
                 label = "playerControlBusy",
             ) { waiting ->
                 Box(contentAlignment = Alignment.Center) {
@@ -167,7 +170,7 @@ internal fun PlayerTrackInput(
     Box(
         modifier
             .fillMaxWidth()
-            .heightIn(min = 48.dp)
+            .heightIn(min = VeyraSurfaces.MinTouch)
             .semantics {
                 description?.let { contentDescription = it }
                 valueDescription?.let { stateDescription = it }
