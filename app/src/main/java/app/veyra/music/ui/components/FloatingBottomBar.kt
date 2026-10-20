@@ -1,5 +1,7 @@
 package app.veyra.music.ui.components
 
+import app.veyra.music.ui.themes.themeNavigationSurface
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateFloatAsState
@@ -159,7 +161,7 @@ fun FloatingBottomBar(
     val container = MaterialTheme.colorScheme.surface
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val useGlass = LocalLiquidGlassEnabled.current && isGlassSupported()
-    val reduceAnimation by AppSettings.reduceAnimation.collectAsStateWithLifecycle()
+    val reduceAnimation = rememberVeyraReducedMotion()
     // The glass settle is exactly the motion "reduce animation" promises to
     // drop — snapping both the indicator's travel and the glyph's pop to
     // their target leaves the tap itself instant rather than eased.
@@ -219,7 +221,9 @@ fun FloatingBottomBar(
             .fillMaxWidth()
             .clip(pillShape)
             .then(
-                if (reduceDynamicBlur) {
+                if (pack != null) {
+                    Modifier.themeNavigationSurface(pillShape)
+                } else if (reduceDynamicBlur) {
                     Modifier.background(container)
                 } else if (useGlass) {
                     Modifier.liquidGlass(shape = pillShape)
@@ -302,15 +306,16 @@ fun FloatingBottomBar(
             // color instead and picks pure black or white, same as the tint
             // Echo's floating nav bar uses for its own liquid glass.
             val glassTint = glassContentColor()
-            val adaptiveTint = if (useGlass) glassTint else null
+            val adaptiveTint = if (pack != null) pack.muted else if (useGlass) glassTint else null
             tabs.forEachIndexed { index, tab ->
                 BottomBarItem(
                     themeKey = listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
                     tab = tab,
                     selected = index == selectedIndex,
                     glassSpec = glassSpec,
+                    reduceAnimation = reduceAnimation,
                     selectedTint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    unselectedTint = adaptiveTint?.copy(alpha = 0.65f),
+                    unselectedTint = if (pack != null) adaptiveTint else adaptiveTint?.copy(alpha = 0.65f),
                     onClick = { onTabSelected(index) },
                     modifier = Modifier.weight(1f),
                 )
@@ -325,6 +330,7 @@ private fun BottomBarItem(
     tab: BottomTab,
     selected: Boolean,
     glassSpec: AnimationSpec<Float>,
+    reduceAnimation: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     /** Overrides the theme's primary/onSurfaceVariant tint — see the glass branch above. */
@@ -345,9 +351,20 @@ private fun BottomBarItem(
         } else {
             unselectedTint ?: MaterialTheme.colorScheme.onSurfaceVariant
         },
-        animationSpec = tween(200),
+        animationSpec = if (reduceAnimation) snap() else tween(200),
         label = "tabTint",
     )
+
+    if (app.veyra.music.ui.themes.LocalThemeVisuals.current != null) {
+        app.veyra.music.ui.themes.ThemeNavigationItem(tab.label, selected, tint, {
+            if (!selected) haptics.play(Haptic.Select)
+            onClick()
+        }, modifier) {
+            app.veyra.music.ui.themes.ThemeIcon(tab.icon, null,
+                Modifier.size(24.dp).graphicsLayer { scaleX = scale; scaleY = scale }, tint, themeKey)
+        }
+        return
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -382,7 +399,7 @@ private fun BottomBarItem(
             style = MaterialTheme.typography.labelMedium,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
             color = tint,
-            maxLines = 1,
+            maxLines = if (app.veyra.music.ui.themes.LocalThemeVisuals.current != null) 2 else 1,
             overflow = TextOverflow.Ellipsis,
         )
     }

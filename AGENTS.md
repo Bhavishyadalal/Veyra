@@ -2,7 +2,7 @@
 
 - Current stable Android source: `main` and `stable/0.1.6`, version 0.1.6 / code 22.
   Completed preview `preview/0.1.6-beta1` remains version 0.1.6-beta1 / code 21.
-  Current preview `preview/0.1.7-beta1`, version 0.1.7-beta1 / code 25, includes Theme Studio, eleven published themes (the original five plus the six-theme reference collection) and optional themed launcher icons. Glass Atelier adds twelve separate launcher choices without theme bindings.
+  Current preview `preview/0.1.7-beta1`, version 0.1.7-beta1 / code 25, includes Theme Studio, sixteen published themes (the original five, six-theme reference collection and five-theme Wayfarer collection) and optional themed launcher icons. Glass Atelier adds twelve separate launcher choices without theme bindings.
   Keep future preview features out of stable until the owner promotes them.
   Older branches retain their historical Android code and version.
 - For app/version/download changes, also update and push the separate website
@@ -27,6 +27,8 @@
   separate `Veyra-website` repository; do not re-add old website/media ZIPs here.
   Generate source packages with `scripts/package_source.py` after staging source
   changes. Include the backend and its manifest, omit local config/secrets/builds.
+  Generated images under `themes/previews/` remain in Git and the gallery; omit
+  those study renders from source ZIPs, retaining their renderer and theme assets.
 - Check all remote branch heads explicitly (`git ls-remote --heads origin`). A
   restricted fetch refspec may expose only `origin/HEAD` by default.
 - Archive cleanup removes files from branch tips, not Git history. Do not force

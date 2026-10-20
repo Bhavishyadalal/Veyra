@@ -3,6 +3,8 @@
 **Latest preview: 0.1.7-beta1 / code 25. Stable 0.1.6 stays separate.**
 Made by **Bhavishya Dalal**.
 
+**New: [five Wayfarer themes, creative Glass Noir icons and themed bottom navigation](WAYFARER.md).** Sixteen themes are now available.
+
 | Theme | Its own atmosphere | Download |
 | --- | --- | --- |
 | **Midnight Express v1** | Original rainy night train, amber carriage lights, bold Rajdhani headings, route-style timeline and optional ticket-waveform icon | [Theme ZIP](packs/midnight-express-v1.zip) · [SHA-256](packs/midnight-express-v1.zip.sha256) |
@@ -24,12 +26,12 @@ Made by **Bhavishya Dalal**.
    while preserving your current screen and music. **Also refresh the interface**
    remains available when you want a full screen refresh; it is optional.
 5. Open **App icon** in Studio or Appearance. Browse **Veyra**, **Glass** or
-   **Themes**. Glass has Liquid, Samsung and Pixel groups, each with four variants.
+   **Themes** or **Glass Atelier**. Glass has Liquid, Samsung and Pixel groups, each with four variants.
    The current choice opens first in Appearance; Studio opens the Themes group.
 6. For the standard launcher icon choose **Veyra → Glass Noir · Default**.
    Choose **Original Veyra** in Studio to restore your saved appearance.
 
-All 21 launcher choices are retained. Only the visible icon group is composed.
+All 39 earlier launcher choices are retained; five new theme choices bring the total to 44. Only the visible icon group is composed.
 Headers stay reachable; grids, group filters and hints scroll within the chooser
 on smaller displays. Icon changes run off the UI thread and are serialized with
 selection reads so Activity recreation cannot read a half-finished icon switch.
@@ -50,11 +52,11 @@ files, preserving corruption checks. Installed themes and Original remain offlin
 | Home branding | Matching Veyra icon and heading font; Web Slinger wordmark treatment | Accessible Veyra identity, responsive logo width and actual Home content |
 | Main screens | Darkened local atmosphere, web/ember details, color and typography | Navigation, accounts, search, scroll and saved customization |
 | Home artwork | Theme frames, caption gradients and decorative section rules | The listener's real album covers and playback actions |
-| Navigation | Theme glyphs, colors, radius and framed native glass surface | Labels, routes, gestures and accessibility roles |
+| Navigation | Theme glyphs, readable tonal surface, radius, selected state and static timeline motifs | Labels, routes, gestures and accessibility roles |
 | Player | Custom glyphs, button geometry, themed fill and web/ember playhead | Seek, RTL, elapsed/duration, busy/locked states, haptics and touch targets |
 | Menus / Settings | Theme palette and sculpted action icon housings | Existing actions, account/offline requirements and sleep-timer state |
 | Theme Studio | Compact lazy collection, separate detail page, saved swatches and fixed actions | Checksum validation, download/cancel, confirmation, offline use and removal rules |
-| Android launcher | Five bundled adaptive icon choices, with legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
+| Android launcher | 44 bundled choices, with adaptive icons and legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
 
 Web details are drawn behind content without pointer handlers or continuous
 animation loops. Native press feedback and existing reduced-motion preferences

@@ -27,6 +27,11 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
     AtelierEmberForge("LauncherAtelierEmberForge", R.mipmap.ic_atelier_ember_forge, R.string.app_icon_atelier_ember_forge, R.mipmap.ic_atelier_ember_forge_foreground),
     AtelierOceanOpal("LauncherAtelierOceanOpal", R.mipmap.ic_atelier_ocean_opal, R.string.app_icon_atelier_ocean_opal, R.mipmap.ic_atelier_ocean_opal_foreground),
     AtelierRoyalSapphire("LauncherAtelierRoyalSapphire", R.mipmap.ic_atelier_royal_sapphire, R.string.app_icon_atelier_royal_sapphire, R.mipmap.ic_atelier_royal_sapphire_foreground),
+    GoldenAfterglow("LauncherAfterglow", R.mipmap.ic_theme_afterglow, R.string.app_icon_afterglow, R.mipmap.ic_theme_afterglow_foreground),
+    LilypondParade("LauncherLilypond", R.mipmap.ic_theme_lilypond, R.string.app_icon_lilypond, R.mipmap.ic_theme_lilypond_foreground),
+    DustbyteOutpost("LauncherDustbyte", R.mipmap.ic_theme_dustbyte, R.string.app_icon_dustbyte, R.mipmap.ic_theme_dustbyte_foreground),
+    AlpineEmber("LauncherAlpine", R.mipmap.ic_theme_alpine, R.string.app_icon_alpine, R.mipmap.ic_theme_alpine_foreground),
+    StarfallPals("LauncherStarfall", R.mipmap.ic_theme_starfall, R.string.app_icon_starfall, R.mipmap.ic_theme_starfall_foreground),
     PumpkinPurr("LauncherPurr", R.mipmap.ic_theme_purr, R.string.app_icon_purr, R.mipmap.ic_theme_purr_foreground),
     SunsetCrew("LauncherSunset", R.mipmap.ic_theme_sunset, R.string.app_icon_sunset, R.mipmap.ic_theme_sunset_foreground),
     StarrySpirits("LauncherSpirits", R.mipmap.ic_theme_spirits, R.string.app_icon_spirits, R.mipmap.ic_theme_spirits_foreground),
@@ -61,6 +66,11 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
     companion object {
         /** A data-only theme cannot supply a component name or an arbitrary launcher alias. */
         fun forTheme(id: String?): AppIcon? = when (id) {
+            "golden-afterglow" -> GoldenAfterglow
+            "lilypond-parade" -> LilypondParade
+            "dustbyte-outpost" -> DustbyteOutpost
+            "alpine-ember" -> AlpineEmber
+            "starfall-pals" -> StarfallPals
             "pumpkin-purr" -> PumpkinPurr
             "sunset-crew" -> SunsetCrew
             "starry-spirits" -> StarrySpirits

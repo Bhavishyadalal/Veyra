@@ -1306,4 +1306,9 @@
     <string name="app_icon_atelier_ember_forge">Ember Forge</string>
     <string name="app_icon_atelier_ocean_opal">Ocean Opal</string>
     <string name="app_icon_atelier_royal_sapphire">Royal Sapphire</string>
+    <string name="app_icon_afterglow">Golden Afterglow</string>
+    <string name="app_icon_lilypond">Lilypond Parade</string>
+    <string name="app_icon_dustbyte">Dustbyte Outpost</string>
+    <string name="app_icon_alpine">Alpine Ember</string>
+    <string name="app_icon_starfall">Starfall Pals</string>
 </resources>

@@ -1,6 +1,7 @@
 @file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 package app.veyra.music.ui.player
 
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -107,14 +108,17 @@ private fun bitmap(path:String): androidx.compose.ui.graphics.ImageBitmap {
     val file=reference?.getProperty("asset.$key")?.let { File(dir,it) } ?: File(dir,path)
     return Image.makeFromEncoded(file.readBytes()).toComposeImageBitmap()
 }
+private var navigationClicks = 0
 @Composable private fun Nav(selected:Int) {
-    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(26.dp)).background(pack.surface).border(1.dp,pack.outline,RoundedCornerShape(26.dp)).padding(6.dp)) {
+    val shape = RoundedCornerShape(pack.navCorner.dp)
+    Row(Modifier.fillMaxWidth().themeNavigationSurface(shape).padding(6.dp)
+        .then(Modifier.selectableGroup()), horizontalArrangement=Arrangement.spacedBy(6.dp)) {
         listOf("Home","Search","Explore","Library").forEachIndexed { i,name ->
-            Column(Modifier.weight(1f).clip(RoundedCornerShape(20.dp)).background(if(i==selected)colors.primaryContainer else Color.Transparent)
-                .padding(vertical=10.dp),horizontalAlignment=Alignment.CenterHorizontally) {
-                ThemeIcon(listOf(VeyraIcons.Home,VeyraIcons.Search,VeyraIcons.Explore,VeyraIcons.Library)[i],name,Modifier.size(24.dp),
-                    tint=if(i==selected)amber else colors.onSurfaceVariant,themeKey=listOf("nav_home","nav_search","nav_explore","nav_library")[i])
-                Spacer(Modifier.height(4.dp));Text(name,style=MaterialTheme.typography.labelMedium,color=if(i==selected)amber else colors.onSurfaceVariant)
+            val tint=if(i==selected)colors.onPrimaryContainer else pack.muted
+            ThemeNavigationItem(name,i==selected,tint,{navigationClicks++},
+                Modifier.weight(1f).background(if(i==selected)colors.primaryContainer else Color.Transparent,RoundedCornerShape(22.dp))) {
+                ThemeIcon(listOf(VeyraIcons.Home,VeyraIcons.Search,VeyraIcons.Explore,VeyraIcons.Library)[i],null,Modifier.size(24.dp),
+                    tint=tint,themeKey=listOf("nav_home","nav_search","nav_explore","nav_library")[i])
             }
         }
     }
@@ -280,7 +284,7 @@ fun main() {
     val output=File(root,if(reference!=null)"themes/previews/$themeId" else if(performance)"verification/performance-preview" else if(reliability)"verification/reliability-preview" else if(midnight)"themes/previews/midnight-express" else if(astral)"themes/previews/astral-tide" else if(playful)"themes/previews/playtime-club" else if(web)"themes/previews/web-slinger" else "themes/previews").apply{mkdirs()}
     val study=System.getProperty("veyra.study").orEmpty()
     val results=mutableListOf<String>()
-    for(kind in (if(reference!=null)listOf("home","player","atmosphere-rtl-large-text","glass-icons") else if(performance)listOf("studio","studio-large-text","studio-rtl-large-text","atmosphere-rtl-large-text") else if(reliability)listOf("apply","apply-large-text","apply-rtl-large-text") else if(astral || midnight)listOf("home","home-large-text","player","studio","studio-large-text","settings") else if(playful) listOf("home","home-large-text","player","studio","studio-large-text","settings","actions") else listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text"))) {
+    for(kind in (if(reference!=null)listOf("home","player","atmosphere-rtl-large-text","navigation-large-text","navigation-rtl-large-text","glass-icons") else if(performance)listOf("studio","studio-large-text","studio-rtl-large-text","atmosphere-rtl-large-text") else if(reliability)listOf("apply","apply-large-text","apply-rtl-large-text") else if(astral || midnight)listOf("home","home-large-text","player","studio","studio-large-text","settings") else if(playful) listOf("home","home-large-text","player","studio","studio-large-text","settings","actions") else listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text"))) {
         if(study.isNotEmpty() && kind !in study.split(",")) continue
         val width=if(kind.endsWith("large-text"))320 else 390
         var matchingIconCallbacks=0
@@ -292,7 +296,11 @@ fun main() {
                     Surface(Modifier.fillMaxSize(),color=colors.background) {
                         Box(Modifier.fillMaxSize()) {
                             ThemeScene(Modifier.matchParentSize())
-                            when { kind=="glass-icons"->GlassIconCollection(); kind.startsWith("atmosphere")->Column(Modifier.fillMaxWidth().padding(20.dp)) { ThemeAtmosphere("header") }; kind.startsWith("apply")->Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp)) {
+                            when { kind.startsWith("navigation")->Column(Modifier.fillMaxSize().padding(12.dp), verticalArrangement=Arrangement.spacedBy(18.dp)) {
+                                Text(pack.name,style=MaterialTheme.typography.headlineSmall)
+                                Text("Native navigation study · 320 dp / 150% text",style=MaterialTheme.typography.bodySmall)
+                                repeat(4) { Nav(it) }
+                            }; kind=="glass-icons"->GlassIconCollection(); kind.startsWith("atmosphere")->Column(Modifier.fillMaxWidth().padding(20.dp)) { ThemeAtmosphere("header") }; kind.startsWith("apply")->Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp)) {
                                 Text("Apply "+pack.name, style=MaterialTheme.typography.titleLarge)
                                 Spacer(Modifier.height(16.dp))
                                 ThemeApplyOptions("Your music keeps playing. Original Veyra settings stay saved.",
@@ -318,6 +326,16 @@ fun main() {
         }
         val nodes=scene.semanticsOwners.flatMap{it.rootSemanticsNode.flatten()}
         check(nodes.isNotEmpty())
+        if (kind.startsWith("navigation")) {
+            val tabs=nodes.filter { it.config.getOrNull(SemanticsProperties.Role)==Role.Tab }
+            check(tabs.size==16) { "Four states must each retain four tabs" }
+            tabs.forEach { check(it.boundsInRoot.height>=96f && it.boundsInRoot.width>=96f) }
+            check(tabs.count { it.config.getOrNull(SemanticsProperties.Selected)==true }==4)
+            check(tabs.first().config.getOrNull(SemanticsActions.OnClick)?.action?.invoke()==true)
+            check(navigationClicks==1)
+            results+="$kind: sixteen tab targets >=48 dp; four selected states; one selection callback."
+            navigationClicks=0
+        }
         if (kind.startsWith("apply")) {
             val options = nodes.filter { it.config.getOrNull(SemanticsProperties.Role) == Role.Checkbox }
             check(options.size == 2) { "Expected one accessible checkbox per option" }

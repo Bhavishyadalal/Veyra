@@ -25,6 +25,10 @@ def main():
     with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
         for rel in sorted(filter(None, paths)):
             p = Path(rel)
+            # Generated native study images remain in Git; ship their renderer, not
+            # 36+ MB of screenshots in every Android Studio source download.
+            if p.parts[:2] == ("themes", "previews") and p.suffix.lower() in {".png", ".webp"}:
+                continue
             if any(part in excluded for part in p.parts):
                 continue
             if p.name in {"local.properties", "key.properties", ".DS_Store", "banner.jpg", "upi_support.jpg"}:

@@ -7,6 +7,11 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 class ThemeLauncherTest {
     @Test fun themesMapOnlyToBundledIconsAndUnknownThemesCannotSelectAnAlias() {
+        assertEquals(AppIcon.GoldenAfterglow,AppIcon.forTheme("golden-afterglow"))
+        assertEquals(AppIcon.LilypondParade,AppIcon.forTheme("lilypond-parade"))
+        assertEquals(AppIcon.DustbyteOutpost,AppIcon.forTheme("dustbyte-outpost"))
+        assertEquals(AppIcon.AlpineEmber,AppIcon.forTheme("alpine-ember"))
+        assertEquals(AppIcon.StarfallPals,AppIcon.forTheme("starfall-pals"))
         assertEquals(AppIcon.PumpkinPurr,AppIcon.forTheme("pumpkin-purr"))
         assertEquals(AppIcon.SunsetCrew,AppIcon.forTheme("sunset-crew"))
         assertEquals(AppIcon.StarrySpirits,AppIcon.forTheme("starry-spirits"))
@@ -46,7 +51,7 @@ class ThemeLauncherTest {
         val choices=app.veyra.music.data.themes.IconPickerPolicy.options(
             app.veyra.music.data.themes.IconCollection.ATELIER,app.veyra.music.data.themes.GlassFamily.LIQUID)
         assertEquals(12,choices.size)
-        assertEquals(39,AppIcon.entries.size)
+        assertEquals(44,AppIcon.entries.size)
         val expected=catalog.map { row ->
             val id=((row as kotlinx.serialization.json.JsonObject).getValue("id") as kotlinx.serialization.json.JsonPrimitive).content
             assertNull(AppIcon.forTheme(id))

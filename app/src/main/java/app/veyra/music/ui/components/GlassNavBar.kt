@@ -9,6 +9,9 @@
 
 package app.veyra.music.ui.components
 
+import app.veyra.music.ui.themes.themeNavigationSurface
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -114,10 +117,10 @@ fun GlassNavBar(
     // lambda, which the tab bar sees as a changed argument and recomposes on.
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val pillShape = remember(pack?.navCorner) { pack?.let { RoundedCornerShape(it.navCorner.dp) } ?: RoundedCornerShape(percent = 50) }
-    val contentColor = glassContentColor()
+    val contentColor = pack?.text ?: glassContentColor()
     val selectedColor = MaterialTheme.colorScheme.onPrimaryContainer
     val selectedBackground = MaterialTheme.colorScheme.primaryContainer
-    val unselectedColor = contentColor.copy(alpha = 0.65f)
+    val unselectedColor = pack?.muted ?: contentColor.copy(alpha = 0.65f)
     val haptics = rememberHaptics()
 
     // The tab content lambdas below are captured once per contentKey and held
@@ -135,9 +138,8 @@ fun GlassNavBar(
     // A factory, not a value — see the note in FloatingTabBar's header. Each of
     // the three surfaces gets its own glass modifier and so its own shape cache.
     val glassSurface: @Composable () -> Modifier = {
-        Modifier.liquidGlass(shape = pillShape).then(
-            if (pack != null) Modifier.border(1.dp, pack.outline.copy(alpha = .8f), pillShape)
-            else Modifier)
+        if (pack != null) Modifier.themeNavigationSurface(pillShape)
+        else Modifier.liquidGlass(shape = pillShape)
     }
 
     FloatingTabBar(
@@ -218,8 +220,8 @@ fun GlassNavBar(
         ),
         // Held too: this is declared `Any?`, so a fresh list every pass is a
         // changed argument by identity and defeats skipping on its own.
-        contentKey = remember(selectedIndex, tabs, contentColor, selectedColor, selectedBackground) {
-            listOf(selectedIndex, tabs, contentColor, selectedColor, selectedBackground)
+        contentKey = remember(selectedIndex, tabs, contentColor, selectedColor, selectedBackground, pack) {
+            listOf(selectedIndex, tabs, contentColor, selectedColor, selectedBackground, pack)
         },
     ) {
         tabs.forEachIndexed { index, tab ->
@@ -268,7 +270,7 @@ fun GlassNavBar(
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                             color = tint,
-                            maxLines = 1,
+                            maxLines = if (pack != null) 2 else 1,
                             overflow = TextOverflow.Ellipsis,
                             // The library's Tab stacks the glyph and the label
                             // with nothing between them; the plain bar spaces
@@ -316,9 +318,10 @@ private fun GlassNowPlaying(
     val haptics = rememberHaptics()
     val pressSource = remember { MutableInteractionSource() }
     val isPressed by pressSource.collectIsPressedAsState()
+    val reducedMotion = rememberVeyraReducedMotion()
     val pressScale by animateFloatAsState(
-        targetValue = if (isPressed) 1.04f else 1f,
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        targetValue = if (isPressed && !reducedMotion) 1.04f else 1f,
+        animationSpec = if (reducedMotion) snap() else spring(stiffness = Spring.StiffnessMediumLow),
         label = "accessoryPressScale",
     )
 

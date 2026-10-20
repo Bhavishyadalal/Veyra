@@ -1,5 +1,17 @@
 # Veyra 0.1.7-beta1 · Listening continuity and eleven worlds
 
+## Wayfarer collection and themed navigation
+
+- Five new themes: Golden Afterglow, Lilypond Parade, Dustbyte Outpost, Alpine Ember and Starfall Pals. Original AI scenes, licensed bold fonts, themed controls/timelines and distinctive navigation glyphs.
+- Five AI-edited Glass Noir launcher/Home marks preserve the official waveform, with miniature theme details. Matching launcher selection remains optional. All 39 previous choices remain; 44 are now available.
+- Both bottom-bar styles use readable themed tonal surfaces with quiet timeline motifs. Theme changes invalidate cached glass tab content. Themed labels can wrap; affected tint/press feedback respects reduced motion.
+- No animated wallpaper, continuous ornament loop or dynamic blur is needed for themed navigation. Routes, drag switching, native playback and account actions remain intact.
+- Sixteen catalog themes; previously published pack bytes remain unchanged. App stays 0.1.7-beta1 / code 25. Stable 0.1.6 remains unchanged.
+- Source downloads include the renderer and all theme assets, while generated study images remain in the repository/gallery to keep source archives compact.
+
+[Theme downloads and previews](themes/WAYFARER.md) · [Checks and device limits](verification/WAYFARER-COLLECTION-0.1.7-beta1.md)
+
+
 **Preview source · code 25 · Made by Bhavishya Dalal**
 
 Stable **0.1.6 / code 22** remains separate. This source update does not publish

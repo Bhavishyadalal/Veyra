@@ -121,6 +121,61 @@
       "sha256": "b11fcdc2be01cb355e74795394cc7cc5e8d4f7461ea69030dce3a2458a61b84c",
       "bytes": 512423,
       "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/moonlit-herbarium/artwork/preview.webp"
+    },
+    {
+      "id": "golden-afterglow",
+      "name": "Golden Afterglow",
+      "description": "Cinematic amber meadow and dusk silhouettes. Bold Manrope, bronze-and-olive controls, meadow navigation glyphs and an optional sunset-glass Veyra icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/golden-afterglow-v1.zip",
+      "sha256": "fa8feca0be2c1f3eb873f92c3ce941b3a8e4b34a2ebd82ca936186e9abf0ac39",
+      "bytes": 254256,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/golden-afterglow/artwork/preview.webp"
+    },
+    {
+      "id": "lilypond-parade",
+      "name": "Lilypond Parade",
+      "description": "Original pond pals and impressionist lily pads. Fredoka headings, jade surfaces, bubble timeline, lily navigation glyphs and an optional bunny-charm glass Veyra icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/lilypond-parade-v1.zip",
+      "sha256": "dbd813c3b1ad8deaaef7db3899f088dfad35d073ee5104608bfba114d9d7819e",
+      "bytes": 464560,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/lilypond-parade/artwork/preview.webp"
+    },
+    {
+      "id": "dustbyte-outpost",
+      "name": "Dustbyte Outpost",
+      "description": "Pixel-art desert cabin, mauve mesas and copper dusk. Bold Rajdhani, stepped navigation glyphs, route timeline and an optional miniature desert-diorama Veyra icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/dustbyte-outpost-v1.zip",
+      "sha256": "088eaa489fca549fc1108dca883e5097b0f5221e9e5732fda78933e427a9b43a",
+      "bytes": 430721,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/dustbyte-outpost/artwork/preview.webp"
+    },
+    {
+      "id": "alpine-ember",
+      "name": "Alpine Ember",
+      "description": "Pixel-art mountain cabin, mirrored lake and rose-gold dawn. Space Grotesk headings, pine-and-slate controls, mountain navigation glyphs and an optional alpine glass Veyra icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/alpine-ember-v1.zip",
+      "sha256": "a10db9d57d8e5ebdd196bd3d7010e19f26e227456a2eba87cf23d73b5f933935",
+      "bytes": 321621,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/alpine-ember/artwork/preview.webp"
+    },
+    {
+      "id": "starfall-pals",
+      "name": "Starfall Pals",
+      "description": "Original moon-bunny friends under painterly shooting stars. Fredoka headings, ink-blue glass, peach starlight, star-navigation glyphs and an optional celestial bunny-glass Veyra icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/starfall-pals-v1.zip",
+      "sha256": "3cf7c9297fbe9bdb27a98add59ba81f259f92d93bed7feb7a58a09346ae612ce",
+      "bytes": 322616,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/starfall-pals/artwork/preview.webp"
     }
   ]
 }
