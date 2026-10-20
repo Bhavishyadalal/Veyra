@@ -2,6 +2,9 @@
 
 This guide uses the current **Android Release APK** workflow in `.github/workflows/android.yml`. It builds repository code selected by branch; it does **not** accept a source ZIP URL. No build has been triggered by adding this guide.
 
+Want interactive architecture/signing/source options instead? Use the separate
+[Colab Backup Builder 3](COLAB_BUILDER.md). Its options do not change this workflow.
+
 ## One-time private signing setup
 
 The owner supplied a private backup whose selected certificate matches the published 0.1.5 APK. Its public SHA-256 is `22b5a611d9c62ded21114c28074f4f25c378c2ee70866740623e49221198cb9a`. Private key bytes and credentials are not included here. Matching the certificate is separate from successfully validating the private-key password during a build.
