@@ -27,4 +27,17 @@ class ThemeLauncherTest {
         AppIcon.entries.forEach { assertTrue(it.alias,states.containsKey(it.alias)) }
         assertEquals(setOf("LauncherDefault"),states.filterValues { it=="true" }.keys)
     }
+    @Test fun groupedPickerRetainsEveryExistingIconExactlyOnce() {
+        val p=app.veyra.music.data.themes.IconPickerPolicy
+        val family=app.veyra.music.data.themes.GlassFamily.entries
+        val groups=app.veyra.music.data.themes.IconCollection.entries
+        val all=groups.flatMap { g ->
+            if(g==app.veyra.music.data.themes.IconCollection.GLASS) family.flatMap {p.options(g,it)}
+            else p.options(g,family.first())
+        }
+        assertEquals(AppIcon.entries.toSet(),all.toSet())
+        assertEquals(AppIcon.entries.size,all.size)
+        family.forEach {assertEquals(4,p.options(app.veyra.music.data.themes.IconCollection.GLASS,it).size)}
+    }
+
 }

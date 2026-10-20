@@ -118,9 +118,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import app.veyra.music.AppIcon
 import app.veyra.music.R
 import app.veyra.music.data.LocalMediaRepository
 import app.veyra.music.data.NerdStats
@@ -1284,8 +1282,7 @@ fun SettingsScreen(
             SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.app_icon)) {
                 val appIconTitle = stringResource(R.string.app_icon)
                 row(appIconTitle, "icon", "launcher", "logo", "glass", "frost") {
-                    SettingsRow(icon = SettingsIcons.Icons, title = appIconTitle, subtitle = stringResource(R.string.app_icon_picker_hint))
-                    AppIconPicker()
+                    AppIconSetting()
                 }
             }
 
@@ -2004,58 +2001,5 @@ internal fun SettingsGroup(
                 top = 8.dp,
             ),
         )
-    }
-}
-
-@Composable
-private fun AppIconPicker() {
-    val context = LocalContext.current
-    var selected by remember { mutableStateOf(AppIcon.current(context)) }
-    androidx.compose.foundation.layout.BoxWithConstraints(
-        Modifier.fillMaxWidth().padding(horizontal = ROW_INSET, vertical = 8.dp),
-    ) {
-        val fontScale = LocalDensity.current.fontScale
-        val columns = when {
-            maxWidth / fontScale < 220.dp -> 1
-            maxWidth >= 340.dp && fontScale <= 1.2f -> 3
-            else -> 2
-        }
-        Column(Modifier.selectableGroup(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            AppIcon.entries.chunked(columns).forEach { row ->
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                    row.forEach { option ->
-                        val checked = option == selected
-                        SettingsIconChoice(
-                            label = stringResource(option.labelRes),
-                            selected = checked,
-                            modifier = Modifier.weight(1f),
-                            onSelect = {
-                                if (!checked) {
-                                    runCatching { AppIcon.apply(context, option) }
-                                        .onSuccess {
-                                            selected = AppIcon.current(context)
-                                            Toast.makeText(context, context.getString(R.string.app_icon_changed), Toast.LENGTH_SHORT).show()
-                                        }.onFailure {
-                                            Toast.makeText(context, context.getString(R.string.app_icon_failed), Toast.LENGTH_SHORT).show()
-                                        }
-                                }
-                            },
-                        ) {
-                            Box(Modifier.size(68.dp).clip(RoundedCornerShape(18.dp))) {
-                                val preview = option.previewRes
-                                if (preview != null) {
-                                    Image(painterResource(preview), null, modifier = Modifier.fillMaxSize().scale(1.5f), contentScale = ContentScale.Fit)
-                                } else {
-                                    AndroidView(factory = { ctx -> android.widget.ImageView(ctx) },
-                                        update = { it.setImageResource(option.iconRes) }, modifier = Modifier.fillMaxSize())
-                                }
-                            }
-
-                        }
-                    }
-                    repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
-                }
-            }
-        }
     }
 }

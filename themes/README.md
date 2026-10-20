@@ -12,20 +12,33 @@ Made by **Bhavishya Dalal**.
 
 ## Make it yours
 
-1. Build/install the **latest preview source**. These ZIPs are themes, not APKs.
-2. Open **Settings → Appearance → Theme studio**.
-3. Browse **All themes** or your **Downloaded** collection. Download a theme;
-   progress, Cancel, retry and offline installed themes remain available.
-4. Choose **Apply theme → Apply & restart UI**. Later keeps the current appearance.
-   The Activity refreshes; the playback service is not stopped.
-5. For a matching launcher icon, choose **The finishing touch → Use matching app
-   icon**, then confirm. The existing **App icon** picker also includes both themes.
-6. Return to **Original Veyra** whenever you want. The separate **Restore original
-   app icon** action returns the launcher to Veyra's standard icon.
+1. Build/install the **latest preview source**. Theme ZIPs are not APKs.
+2. Open **Settings → Appearance → Theme studio**. The compact collection shows
+   Original, your themes and one App icon row. Filter All or Downloaded.
+3. Tap a theme row to open its detail page. Preview, description and palette stay
+   there; Download/Apply and cancellation remain reachable below the scroll area.
+4. Download, then choose **Apply theme** and confirm. The appearance updates live
+   while preserving your current screen and music. **Also refresh the interface**
+   remains available when you want a full screen refresh; it is optional.
+5. Open **App icon** in Studio or Appearance. Browse **Veyra**, **Glass** or
+   **Themes**. Glass has Liquid, Samsung and Pixel groups, each with four variants.
+   The current choice opens first in Appearance; Studio opens the Themes group.
+6. For the standard launcher icon choose **Veyra → Glass Noir · Default**.
+   Choose **Original Veyra** in Studio to restore your saved appearance.
+
+All 18 launcher choices are retained. Only the visible icon group is composed.
+Headers stay reachable; grids, group filters and hints scroll within the chooser
+on smaller displays. Icon changes run off the UI thread and are serialized with
+selection reads so Activity recreation cannot read a half-finished icon switch.
 
 Applying a theme does **not** silently change the launcher icon. Removing a theme
 or choosing Original does not overwrite a manually chosen icon. Android launchers
 may cache icon changes or apply their own monochrome themed-icon setting.
+
+Catalog reads are shared while in flight and reused for ten minutes after success.
+The explicit Refresh button always requests fresh data. Download installation
+validates once before atomic publication; applying still revalidates the local
+files, preserving corruption checks. Installed themes and Original remain offline.
 
 ## More than a new accent
 
@@ -37,7 +50,7 @@ may cache icon changes or apply their own monochrome themed-icon setting.
 | Navigation | Theme glyphs, colors, radius and framed native glass surface | Labels, routes, gestures and accessibility roles |
 | Player | Custom glyphs, button geometry, themed fill and web/ember playhead | Seek, RTL, elapsed/duration, busy/locked states, haptics and touch targets |
 | Menus / Settings | Theme palette and sculpted action icon housings | Existing actions, account/offline requirements and sleep-timer state |
-| Theme Studio | Large native previews, collection filter, saved swatches and clear actions | Checksum validation, download/cancel, confirmation, offline use and removal rules |
+| Theme Studio | Compact lazy collection, separate detail page, saved swatches and fixed actions | Checksum validation, download/cancel, confirmation, offline use and removal rules |
 | Android launcher | Two bundled adaptive icon choices, with legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
 
 Web details are drawn behind content without pointer handlers or continuous
@@ -64,6 +77,10 @@ content in the studies are illustrative; Android host windows are not reproduced
 | Halloween branding | Halloween Theme Studio |
 | --- | --- |
 | <img src="previews/home.png" width="280" alt="Halloween Veyra branding" /> | <img src="previews/studio.png" width="280" alt="Halloween Theme Studio components" /> |
+
+| Grouped icon choices | 320 dp / 150% text icon choices |
+| --- | --- |
+| <img src="previews/web-slinger/icons.png" width="280" alt="Grouped native icon-choice components" /> | <img src="previews/web-slinger/icons-large-text.png" width="280" alt="Large-text icon choices" /> |
 
 Additional [Web Slinger studies](previews/web-slinger) and [Halloween studies](previews)
 include Settings, actions and large-text layouts.

@@ -45,6 +45,7 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
             else -> null
         }
 
+        @Synchronized
         fun current(context: Context): AppIcon {
             val pm = context.packageManager
             return entries.firstOrNull {
@@ -55,6 +56,7 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
         }
 
         /** Atomic on Android 13+, and enable-first on older Android versions. */
+        @Synchronized
         fun apply(context: Context, icon: AppIcon) {
             val pm = context.packageManager
             if (android.os.Build.VERSION.SDK_INT >= 33) {

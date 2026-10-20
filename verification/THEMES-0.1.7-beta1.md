@@ -28,10 +28,30 @@ No APK assembly or Actions dispatch is part of this update.
   logos, original menu actions, offline/account rules, sleep-timer state, player
   locking and native interaction callbacks remain.
 
+## Compact management and application refinement
+
+- Studio now uses a lazy collection of 88 dp minimum theme rows. Details are a
+  separate internal page; Back returns to the collection. Done stays fixed, and
+  Download/Apply/Cancel stay below the detail scroll area.
+- Appearance now has one App icon Settings row. The chooser groups all 18 choices
+  into Veyra, Glass and Themes; each Glass family shows four variants. A coverage
+  test proves every existing icon appears exactly once across these groups.
+- Chooser uses a lazy adaptive-column grid with scrollable group headers and hints.
+  Labels grow with font scale. Selection and PackageManager writes run on IO;
+  synchronized reads/switches avoid a partial alias snapshot on rotation.
+- Theme application defaults to a live Compose update and closes only Studio,
+  preserving the existing screen state. Optional interface recreation is retained.
+  Integrity checks, user confirmation, playback and saved base preferences remain.
+- Recent successful catalog data is reused for ten minutes; concurrent refreshes
+  coalesce. Explicit Refresh bypasses the time cache. Failed requests do not
+  replace the offline catalog or extend its successful-refresh timestamp.
+- Redundant post-install decoding/hash verification was removed. Atomic installation
+  still validates before publication, and applying rechecks stored assets on IO.
+
 ## Executed checks
 
 - Android release resources and Kotlin compilation via focused unit-test tasks;
-  **23 JVM tests**, no failures: theme packs (13), launcher mapping/manifest (2),
+  **24 JVM tests**, no failures: theme packs (13), launcher mapping/manifest/group coverage (3),
   player quality menu (4), Settings navigation (4).
 - Both actual packs install with exact declared assets and outer/inner hashes.
   Tests cover corruption, traversal, extra entries, tampered assets, unsupported
@@ -41,8 +61,9 @@ No APK assembly or Actions dispatch is part of this update.
 - Launcher tests verify known mappings, unknown/null ID rejection, unique enum
   aliases, manifest entries and exactly one default-enabled launcher component.
   They do not execute Android PackageManager or a real launcher.
-- Nine Compose studies per theme: Home, large-text Home, player, Settings,
-  large-text Settings, actions, large-text actions, Studio and large-text Studio.
+- Eleven Compose studies per theme: Home, large-text Home, player, Settings,
+  large-text Settings, actions, large-text actions, Studio, large-text Studio, icon
+  choices and large-text icon choices.
   Normal width 390 dp; enlarged layouts 320 dp / 150% text.
 - Actual themed transport semantics deliver the callback once with at least a
   48 dp hit target. Studies use real shared branding, Home frames, Settings rows,
@@ -76,3 +97,7 @@ motion. Music should continue through confirmed UI recreation.
 Google/Spotify sign-in pages retain provider interfaces. Full atmosphere/fonts
 remain downloadable; catalog and launcher artwork are bundled. Original native
 glyphs remain available when a supported theme icon fails to draw.
+
+These changes remove identified UI-thread work and eager list/image composition.
+They are not a claim of zero dropped frames across devices. Real-device frame
+profiling, live theme activation and launcher switching remain follow-up checks.

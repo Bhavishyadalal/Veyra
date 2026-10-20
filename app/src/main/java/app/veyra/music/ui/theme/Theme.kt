@@ -136,7 +136,8 @@ fun VeyraTheme(
     val contrastControls by AppSettings.contrastPlayerControls.collectAsStateWithLifecycle()
     val packState by app.veyra.music.data.themes.ThemeRepository.active.collectAsStateWithLifecycle()
     val pack = packState
-    val manifest = pack?.let { app.veyra.music.data.themes.ThemeRepository.activeManifest() }
+    // Keep fonts and palette on the same activation snapshot during live updates.
+    val manifest = remember(pack) { pack?.let { app.veyra.music.data.themes.ThemeRepository.activeManifest() } }
     val selectedTypography = remember(pack, strongerText) {
         val base = if (strongerText) StrongerTypography else VeyraTypography
         if (pack == null) base else runCatching {

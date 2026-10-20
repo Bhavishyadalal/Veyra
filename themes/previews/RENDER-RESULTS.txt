@@ -8,4 +8,6 @@ actions: native Compose components rendered at 390 dp
 actions-large-text: native Compose components rendered at 320 dp
 studio: native Compose components rendered at 390 dp
 studio-large-text: native Compose components rendered at 320 dp
+icons: native Compose components rendered at 390 dp
+icons-large-text: native Compose components rendered at 320 dp
 Native component studies, not full-device screenshots. Album artwork in the sample player is demonstration art.

@@ -1230,7 +1230,7 @@
     <string name="theme_catalog_empty">No themes loaded yet. Refresh the catalog when you are online.</string>
     <string name="theme_refresh_catalog">Refresh theme catalog</string>
     <string name="theme_safety_hint">A theme overrides supported colors, heading fonts and control styles until you return to Original Veyra. Your accounts, downloads, playlists and playback controls stay yours. Original appearance remains available offline.</string>
-    <string name="theme_restart_title">Apply and restart the interface?</string>
+    <string name="theme_restart_title">Apply this theme?</string>
     <string name="theme_restart_description">Veyra will refresh its screens to load the theme. Music keeps playing. Your library, accounts and original appearance preferences are preserved.</string>
     <string name="theme_apply_restart">Apply &amp; restart UI</string>
     <string name="theme_later">Later</string>
@@ -1253,4 +1253,20 @@
     <string name="theme_restore_launcher">Restore original app icon</string>
     <string name="theme_launcher_confirm">Change the app icon?</string>
     <string name="theme_current_launcher">Current app icon: %1$s</string>
+    <string name="icon_collection_veyra">Veyra</string>
+    <string name="icon_collection_glass">Glass</string>
+    <string name="icon_collection_themes">Themes</string>
+    <string name="icon_family_liquid">Liquid</string>
+    <string name="icon_family_samsung">Samsung</string>
+    <string name="icon_family_pixel">Pixel</string>
+    <string name="icon_chooser_hint">Choose an icon above. Your launcher may take a moment to refresh.</string>
+    <string name="theme_back_collection">Back to themes</string>
+    <string name="theme_details">Theme details</string>
+    <string name="theme_downloading">Downloading…</string>
+    <string name="theme_verifying">Verifying files…</string>
+    <string name="theme_applying">Applying…</string>
+    <string name="theme_live_apply_hint">Update the look while keeping your place and your music playing.</string>
+    <string name="theme_optional_restart">Also refresh the interface</string>
+    <string name="icon_choose">Choose an icon</string>
+    <string name="theme_saved_appearance">Your saved style</string>
 </resources>

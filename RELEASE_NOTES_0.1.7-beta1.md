@@ -25,7 +25,7 @@ an APK or change the Listen Together backend.
 - Larger artwork previews, a themed backdrop and clearer collection panels.
 - All/Downloaded filters, installed palette swatches and clear download states.
 - Progress, cancellation, offline packs and confirmation before applying a theme.
-- Separate matching-icon confirmation and a Restore original app icon action.
+- Grouped app-icon selection, including the standard Veyra icon.
 - Theme application does not silently replace a manually selected launcher icon.
 
 ## Familiar controls, a different atmosphere
@@ -42,6 +42,15 @@ available offline. Music playback is not stopped by confirmed interface recreati
 [Themes, downloads and native component studies](themes/README.md)
 · [Checks and physical-device follow-up](verification/THEMES-0.1.7-beta1.md)
 
-Android Kotlin/resource compilation and 23 focused JVM tests passed. Native studies
+Android Kotlin/resource compilation and 24 focused JVM tests passed. Native studies
 include 320 dp / 150% text layouts; they are not full-device screenshots. Launcher
 switching, shortcuts and full Android layout still need device verification.
+
+## Compact controls and smoother theme changes
+
+- Theme Studio is a compact collection with a separate detail page and fixed actions.
+- Appearance shows one App icon row; a grouped chooser keeps all 18 options available.
+- Apply themes live while preserving your place; optional screen refresh remains.
+- Icon switching runs off the UI thread and serializes changes across rotation.
+- Lazy lists, shared catalog refreshes and fewer duplicate installation checks reduce
+  avoidable work. No new permanent animation or network loop is added.

@@ -73,15 +73,22 @@ object ThemeRepository {
     }
 
     fun clearMessage() { _message.value = null }
-    fun refreshCatalog() = scope.launch {
-        runCatching {
-            client.newCall(Request.Builder().url(ROOT_URL+"catalog.json").build()).execute().use { r ->
-                require(r.isSuccessful) { "Theme catalog unavailable. Try again later." }
-                parseCatalog(ThemePack.readBounded(r.body!!.byteStream(),65536))
-            }
-        }.onSuccess { _catalog.value = it }.onFailure {
-            _message.value = "Could not refresh themes. Installed themes still work offline."
-        }
+    private var catalogJob: Job? = null
+    @Volatile private var lastCatalogRefresh = 0L
+    /** Reopening Studio reuses recent data; the refresh button always requests fresh data. */
+    fun refreshCatalog(force: Boolean = false): Job? = synchronized(lock) {
+        val elapsed = System.nanoTime() - lastCatalogRefresh
+        if (catalogJob?.isActive == true || (!force && lastCatalogRefresh != 0L &&
+                elapsed in 0 until TimeUnit.MINUTES.toNanos(10) && _catalog.value.isNotEmpty())) return@synchronized catalogJob
+        scope.launch {
+            runCatching {
+                client.newCall(Request.Builder().url(ROOT_URL+"catalog.json").build()).execute().use { r ->
+                    require(r.isSuccessful) { "Theme catalog unavailable. Try again later." }
+                    parseCatalog(ThemePack.readBounded(r.body.byteStream(),65536))
+                }
+            }.onSuccess { _catalog.value = it; lastCatalogRefresh = System.nanoTime() }
+                .onFailure { _message.value = "Could not refresh themes. Installed themes still work offline." }
+        }.also { catalogJob = it }
     }
 
     private fun parseCatalog(bytes: ByteArray): List<ThemeListing> {
@@ -129,7 +136,7 @@ object ThemeRepository {
                 }
                 ensureActive()
                 val (m, folder) = ThemePack.install(temp,root,listing,BuildConfig.VERSION_CODE, ::validateDecodedAssets)
-                loadInstalled(folder) // decoder, font and per-file checks before exposing Apply
+                // Install already checked hashes and decoded assets before its atomic publish.
                 synchronized(lock) { installedDirectories[m.id] = folder }
                 _installed.value = _installed.value + (m.id to m)
                 _message.value = "${m.name} is installed. Select Apply when you are ready."

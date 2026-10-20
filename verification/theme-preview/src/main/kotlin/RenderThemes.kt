@@ -1,4 +1,4 @@
-@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 package app.veyra.music.ui.player
 
 import androidx.compose.foundation.Image
@@ -180,27 +180,45 @@ private fun bitmap(path:String)=Image.makeFromEncoded(File(dir,path).readBytes()
     }
 }
 @Composable private fun Studio() {
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
-        Header("Theme studio")
-        ThemeStudioCollection("Make it feel like you.","New worlds for your music. Download once, keep your favourites offline.")
-        ThemeStudioArtwork(pack.name,File(dir,"artwork/preview.webp"),"Downloaded")
-        Text("Artwork · Fonts · Controls · Branding",style=MaterialTheme.typography.labelMedium,color=amber)
-        Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(14.dp)) {
-            Image(bitmap("artwork/brand.webp"),null,Modifier.size(64.dp).clip(RoundedCornerShape(16.dp)))
-            Column(Modifier.weight(1f)) {
-                Text("The finishing touch",style=MaterialTheme.typography.titleMedium)
-                Text("A matching app icon, chosen separately.",style=MaterialTheme.typography.bodySmall,color=pack.muted)
+    Column(Modifier.fillMaxSize().background(pack.background).padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+        Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically) {
+            Text("Theme studio",Modifier.weight(1f),style=MaterialTheme.typography.titleLarge)
+            TextButton(onClick={}) {Text("Done")}
+        }
+        androidx.compose.foundation.layout.FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+            FilterChip(selected=true,onClick={},label={Text("All themes")})
+            FilterChip(selected=false,onClick={},label={Text("Downloaded")})
+        }
+        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+            ThemeStudioRow("Original Veyra","Your saved style",null,false,{})
+            ThemeStudioRow("Web Slinger",if(web)"Currently active" else "Downloaded",File(root,"themes/web-slinger/artwork/preview.webp"),web,{})
+            ThemeStudioRow("Halloween Nocturne",if(web)"Downloaded" else "Currently active",File(root,"themes/halloween-nocturne/artwork/preview.webp"),!web,{})
+            SettingsRow(icon=SettingsIcons.Icons,title="App icon",subtitle=pack.name,onClick={})
+        }
+    }
+}
+@Composable private fun IconsStudy() {
+    Column(Modifier.fillMaxSize().background(pack.background).padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+        Text("App icon",style=MaterialTheme.typography.titleLarge)
+        androidx.compose.foundation.layout.FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+            listOf("Veyra","Glass","Themes").forEach {name->FilterChip(selected=name=="Themes",onClick={},label={Text(name)})}
+        }
+        Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+            listOf("web-slinger","halloween-nocturne").forEach {id->
+                ThemeIconChoice(if(id=="web-slinger")"Web Slinger" else "Halloween Nocturne",id==themeId,true,{},Modifier.weight(1f)) {
+                    val image=Image.makeFromEncoded(File(root,"themes/$id/artwork/brand.webp").readBytes()).toComposeImageBitmap()
+                    androidx.compose.foundation.Image(image,null,Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp)))
+                }
             }
         }
-        Button(onClick={},modifier=Modifier.fillMaxWidth()) {Text("Use matching app icon")}
-        Text("Music, downloads and your saved preferences stay yours.",style=MaterialTheme.typography.bodySmall,color=pack.muted)
+        Text("Choose an icon above. Your launcher may take a moment to refresh.",style=MaterialTheme.typography.bodySmall,color=pack.muted)
     }
 }
 private fun SemanticsNode.flatten():List<SemanticsNode> = listOf(this)+children.flatMap{it.flatten()}
 fun main() {
     val output=File(root,if(web)"themes/previews/web-slinger" else "themes/previews").apply{mkdirs()}
     val results=mutableListOf<String>()
-    for(kind in listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text")) {
+    for(kind in listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text")) {
         val width=if(kind.endsWith("large-text"))320 else 390
         lateinit var scene: ImageComposeScene
         SwingUtilities.invokeAndWait { scene=ImageComposeScene(width*2,1800,density=Density(2f,if(kind.endsWith("large-text"))1.5f else 1f)) {
@@ -209,7 +227,7 @@ fun main() {
                     Surface(Modifier.fillMaxSize(),color=colors.background) {
                         Box(Modifier.fillMaxSize()) {
                             ThemeScene(Modifier.matchParentSize())
-                            when { kind.startsWith("home")->Home();kind=="player"->Player();kind.startsWith("actions")->Actions();kind.startsWith("studio")->Studio();else->Settings() }
+                            when { kind.startsWith("home")->Home();kind=="player"->Player();kind.startsWith("actions")->Actions();kind.startsWith("studio")->Studio();kind.startsWith("icons")->IconsStudy();else->Settings() }
                         }
                     }
                 }
