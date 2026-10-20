@@ -2,7 +2,7 @@
 
 - Current stable Android source: `main` and `stable/0.1.6`, version 0.1.6 / code 22.
   Completed preview `preview/0.1.6-beta1` remains version 0.1.6-beta1 / code 21.
-  Next preview 0.1.7-beta1 theme packs are planned, not implemented or released.
+  Current preview `preview/0.1.7-beta1`, version 0.1.7-beta1 / code 23, adds Theme Studio and Halloween Nocturne.
   Keep future preview features out of stable until the owner promotes them.
   Older branches retain their historical Android code and version.
 - For app/version/download changes, also update and push the separate website
