@@ -27,6 +27,11 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
     AtelierEmberForge("LauncherAtelierEmberForge", R.mipmap.ic_atelier_ember_forge, R.string.app_icon_atelier_ember_forge, R.mipmap.ic_atelier_ember_forge_foreground),
     AtelierOceanOpal("LauncherAtelierOceanOpal", R.mipmap.ic_atelier_ocean_opal, R.string.app_icon_atelier_ocean_opal, R.mipmap.ic_atelier_ocean_opal_foreground),
     AtelierRoyalSapphire("LauncherAtelierRoyalSapphire", R.mipmap.ic_atelier_royal_sapphire, R.string.app_icon_atelier_royal_sapphire, R.mipmap.ic_atelier_royal_sapphire_foreground),
+    ChromeVesper("LauncherVesper", R.mipmap.ic_theme_vesper, R.string.app_icon_vesper, R.mipmap.ic_theme_vesper_foreground),
+    WindowWish("LauncherWish", R.mipmap.ic_theme_wish, R.string.app_icon_wish, R.mipmap.ic_theme_wish_foreground),
+    CassetteCorner("LauncherCassette", R.mipmap.ic_theme_cassette, R.string.app_icon_cassette, R.mipmap.ic_theme_cassette_foreground),
+    AzureBloom("LauncherAzure", R.mipmap.ic_theme_azure, R.string.app_icon_azure, R.mipmap.ic_theme_azure_foreground),
+    StrawberryDaydream("LauncherDaydream", R.mipmap.ic_theme_daydream, R.string.app_icon_daydream, R.mipmap.ic_theme_daydream_foreground),
     GoldenAfterglow("LauncherAfterglow", R.mipmap.ic_theme_afterglow, R.string.app_icon_afterglow, R.mipmap.ic_theme_afterglow_foreground),
     LilypondParade("LauncherLilypond", R.mipmap.ic_theme_lilypond, R.string.app_icon_lilypond, R.mipmap.ic_theme_lilypond_foreground),
     DustbyteOutpost("LauncherDustbyte", R.mipmap.ic_theme_dustbyte, R.string.app_icon_dustbyte, R.mipmap.ic_theme_dustbyte_foreground),
@@ -66,6 +71,11 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
     companion object {
         /** A data-only theme cannot supply a component name or an arbitrary launcher alias. */
         fun forTheme(id: String?): AppIcon? = when (id) {
+            "chrome-vesper" -> ChromeVesper
+            "window-wish" -> WindowWish
+            "cassette-corner" -> CassetteCorner
+            "azure-bloom" -> AzureBloom
+            "strawberry-daydream" -> StrawberryDaydream
             "golden-afterglow" -> GoldenAfterglow
             "lilypond-parade" -> LilypondParade
             "dustbyte-outpost" -> DustbyteOutpost

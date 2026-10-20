@@ -1,5 +1,16 @@
 # Veyra 0.1.7-beta1 · Listening continuity and eleven worlds
 
+## Dreamscape collection
+
+- Five more themes from the owner's references: Chrome Vesper, Window Wish, Cassette Corner, Azure Bloom and Strawberry Daydream.
+- Original AI scenes and more detailed Glass Noir Home/launcher marks, with silver chains, moon-window ornaments, tiny cassette/cat details, blue blossom branches and strawberry/daisy charms. Official Veyra waveform preserved.
+- Distinct navigation glyphs and transport silhouettes accompany licensed bold headings, readable palettes, themed geometry and timelines. Existing static, reduced-motion-aware navigation material is reused.
+- Twenty-one catalog themes and 49 launcher choices. Matching launcher selection stays explicit and optional; Glass Atelier and every previous theme remain available.
+- App remains 0.1.7-beta1 / code 25. Stable source, prior published packs, default icon, backend and playback behavior remain unchanged. New launcher aliases require rebuilding the latest source; theme ZIPs are not APKs.
+
+[Downloads and native previews](themes/DREAMSCAPE.md) · [Checks and device limits](verification/DREAMSCAPE-COLLECTION-0.1.7-beta1.md)
+
+
 ## Wayfarer collection and themed navigation
 
 - Five new themes: Golden Afterglow, Lilypond Parade, Dustbyte Outpost, Alpine Ember and Starfall Pals. Original AI scenes, licensed bold fonts, themed controls/timelines and distinctive navigation glyphs.

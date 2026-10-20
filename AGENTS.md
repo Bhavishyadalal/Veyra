@@ -2,7 +2,7 @@
 
 - Current stable Android source: `main` and `stable/0.1.6`, version 0.1.6 / code 22.
   Completed preview `preview/0.1.6-beta1` remains version 0.1.6-beta1 / code 21.
-  Current preview `preview/0.1.7-beta1`, version 0.1.7-beta1 / code 25, includes Theme Studio, sixteen published themes (the original five, six-theme reference collection and five-theme Wayfarer collection) and optional themed launcher icons. Glass Atelier adds twelve separate launcher choices without theme bindings.
+  Current preview `preview/0.1.7-beta1`, version 0.1.7-beta1 / code 25, includes Theme Studio, twenty-one published themes (the original five, six-theme reference collection, five-theme Wayfarer collection and five-theme Dreamscape collection) and optional themed launcher icons. Glass Atelier adds twelve separate launcher choices without theme bindings.
   Keep future preview features out of stable until the owner promotes them.
   Older branches retain their historical Android code and version.
 - For app/version/download changes, also update and push the separate website

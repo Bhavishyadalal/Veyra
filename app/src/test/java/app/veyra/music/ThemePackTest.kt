@@ -74,11 +74,11 @@ class ThemePackTest {
     }
     @Test fun allPublishedThemesInstallWithCorrectBrandingAndMinimumVersion() {
         val catalog=ThemePack.json.decodeFromString<ThemeCatalog>(File(project,"themes/catalog.json").readText())
-        assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals"),catalog.themes.map { it.id }.toSet())
+        assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream"),catalog.themes.map { it.id }.toSet())
         for (entry in catalog.themes) {
             val pack=File(project,"themes/packs/${entry.id}-v${entry.version}.zip")
             val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,25)
-            assertEquals(if(entry.id in setOf("playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals")) 3 else 2,m.schema)
+            assertEquals(if(entry.id in setOf("playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals","strawberry-daydream")) 3 else 2,m.schema)
             assertTrue(File(dir,m.assets.getValue("brandIcon")).isFile)
             rejects { ThemePack.validate(m,23) }
             if (entry.id == "midnight-express") {
@@ -106,7 +106,7 @@ class ThemePackTest {
         val bundled=File(project,"app/src/main/assets/theme-catalog.json").readBytes()
         assertArrayEquals(published,bundled)
         val entries=ThemeRepository.parseCatalog(published)
-        assertEquals(16,entries.size)
+        assertEquals(21,entries.size)
         entries.forEach { entry ->
             assertTrue(File(project,"themes/${entry.id}/artwork/preview.webp").isFile)
         }

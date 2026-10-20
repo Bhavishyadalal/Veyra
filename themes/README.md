@@ -3,7 +3,9 @@
 **Latest preview: 0.1.7-beta1 / code 25. Stable 0.1.6 stays separate.**
 Made by **Bhavishya Dalal**.
 
-**New: [five Wayfarer themes, creative Glass Noir icons and themed bottom navigation](WAYFARER.md).** Sixteen themes are now available.
+**New: [five Wayfarer themes, creative Glass Noir icons and themed bottom navigation](WAYFARER.md).** Twenty-one themes are now available.
+
+**Latest: [five Dreamscape themes with more detailed Glass Noir icons and custom transport/navigation glyphs](DREAMSCAPE.md).**
 
 | Theme | Its own atmosphere | Download |
 | --- | --- | --- |
@@ -31,7 +33,7 @@ Made by **Bhavishya Dalal**.
 6. For the standard launcher icon choose **Veyra → Glass Noir · Default**.
    Choose **Original Veyra** in Studio to restore your saved appearance.
 
-All 39 earlier launcher choices are retained; five new theme choices bring the total to 44. Only the visible icon group is composed.
+All 44 earlier launcher choices are retained; Dreamscape adds five more for a total of 49. Only the visible icon group is composed.
 Headers stay reachable; grids, group filters and hints scroll within the chooser
 on smaller displays. Icon changes run off the UI thread and are serialized with
 selection reads so Activity recreation cannot read a half-finished icon switch.
@@ -56,7 +58,7 @@ files, preserving corruption checks. Installed themes and Original remain offlin
 | Player | Custom glyphs, button geometry, themed fill and web/ember playhead | Seek, RTL, elapsed/duration, busy/locked states, haptics and touch targets |
 | Menus / Settings | Theme palette and sculpted action icon housings | Existing actions, account/offline requirements and sleep-timer state |
 | Theme Studio | Compact lazy collection, separate detail page, saved swatches and fixed actions | Checksum validation, download/cancel, confirmation, offline use and removal rules |
-| Android launcher | 44 bundled choices, with adaptive icons and legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
+| Android launcher | 49 bundled choices, with adaptive icons and legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
 
 Web details are drawn behind content without pointer handlers or continuous
 animation loops. Native press feedback and existing reduced-motion preferences

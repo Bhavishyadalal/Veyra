@@ -1,0 +1,1 @@
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@color/theme_vesper_background"/><foreground android:drawable="@mipmap/ic_theme_vesper_foreground"/><monochrome android:drawable="@drawable/ic_vesper_monochrome"/></adaptive-icon>

@@ -75,7 +75,9 @@ def build(c):
  if f'theme_{key}_background' not in text:colorfile.write_text(text.replace('</resources>',f'<color name="theme_{key}_background">{palette["background"]}</color></resources>'))
  for font,origin in [('Manrope','midnight-express'),(c['font'],c['fontTheme'])]:
   shutil.copyfile(ROOT/origin/'fonts'/f'{font}.ttf',base/'fonts'/f'{font}.ttf')
-  shutil.copyfile(ROOT/origin/'licenses'/f'{font}-OFL.txt',base/'licenses'/f'{font}-OFL.txt')
+  notice=ROOT/origin/'licenses'/f'{font}-OFL.txt'
+  if not notice.exists(): notice=ROOT/origin/'fonts'/f'{font}-OFL.txt'
+  shutil.copyfile(notice,base/'licenses'/f'{font}-OFL.txt')
  credit='Original AI-generated scene created for Veyra from user-provided visual references. Reference images are not redistributed. Glass Noir brand icon edited with AI from the official Veyra black-and-white glass waveform. Functional SVG glyphs by Bhavishya Dalal / Veyra.\n'
  if c['id']=='sunset-crew':credit+='Unofficial SpongeBob SquarePants / Patrick Star fan artwork. Characters belong to their respective owners, including Nickelodeon / Paramount. No affiliation or endorsement. Vehicles have no claimed manufacturer affiliation.\n'
  (base/'licenses/ARTWORK.txt').write_text(credit)

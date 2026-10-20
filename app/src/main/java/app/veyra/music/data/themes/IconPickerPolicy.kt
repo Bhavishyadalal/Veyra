@@ -9,7 +9,7 @@ enum class GlassFamily { LIQUID, SAMSUNG, PIXEL }
 object IconPickerPolicy {
     fun collection(icon: AppIcon): IconCollection = when {
         icon.name.startsWith("Atelier") -> IconCollection.ATELIER
-        icon == AppIcon.GoldenAfterglow || icon == AppIcon.LilypondParade || icon == AppIcon.DustbyteOutpost || icon == AppIcon.AlpineEmber || icon == AppIcon.StarfallPals || icon == AppIcon.PumpkinPurr || icon == AppIcon.SunsetCrew || icon == AppIcon.StarrySpirits || icon == AppIcon.AnalogReverie || icon == AppIcon.PetalPromise || icon == AppIcon.MoonlitHerbarium || icon == AppIcon.MidnightExpress || icon == AppIcon.AstralTide || icon == AppIcon.PlaytimeClub || icon == AppIcon.WebSlinger || icon == AppIcon.HalloweenNocturne -> IconCollection.THEMES
+        icon == AppIcon.ChromeVesper || icon == AppIcon.WindowWish || icon == AppIcon.CassetteCorner || icon == AppIcon.AzureBloom || icon == AppIcon.StrawberryDaydream || icon == AppIcon.GoldenAfterglow || icon == AppIcon.LilypondParade || icon == AppIcon.DustbyteOutpost || icon == AppIcon.AlpineEmber || icon == AppIcon.StarfallPals || icon == AppIcon.PumpkinPurr || icon == AppIcon.SunsetCrew || icon == AppIcon.StarrySpirits || icon == AppIcon.AnalogReverie || icon == AppIcon.PetalPromise || icon == AppIcon.MoonlitHerbarium || icon == AppIcon.MidnightExpress || icon == AppIcon.AstralTide || icon == AppIcon.PlaytimeClub || icon == AppIcon.WebSlinger || icon == AppIcon.HalloweenNocturne -> IconCollection.THEMES
         family(icon) != null -> IconCollection.GLASS
         else -> IconCollection.VEYRA
     }

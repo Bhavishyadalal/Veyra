@@ -176,6 +176,61 @@
       "sha256": "3cf7c9297fbe9bdb27a98add59ba81f259f92d93bed7feb7a58a09346ae612ce",
       "bytes": 322616,
       "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/starfall-pals/artwork/preview.webp"
+    },
+    {
+      "id": "chrome-vesper",
+      "name": "Chrome Vesper",
+      "description": "Chrome cruciform filigree, black velvet and garnet light. Gothic headings, cathedral navigation glyphs, faceted transport and an optional silver-chain Glass Noir icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/chrome-vesper-v1.zip",
+      "sha256": "03c25549a9ac56e6da0c6fec7397733a6403bb42f4121f0b33f1e67841cfab18",
+      "bytes": 422992,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/chrome-vesper/artwork/preview.webp"
+    },
+    {
+      "id": "window-wish",
+      "name": "Window Wish",
+      "description": "A moonlit walnut window, clover and original golden chick friends. Fredoka headings, moss-and-cream controls, window navigation glyphs and an optional crescent-window Glass Noir icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/window-wish-v1.zip",
+      "sha256": "7beb099e7732fc22c4b22ed71f20a5419de045476690f1ec25cb0a93da92d014",
+      "bytes": 380432,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/window-wish/artwork/preview.webp"
+    },
+    {
+      "id": "cassette-corner",
+      "name": "Cassette Corner",
+      "description": "An original calico record-shop cat, mint fluorescent light and coral cassette shelves. Bold Rajdhani, tape-deck controls, record navigation glyphs and an optional miniature cassette Glass Noir icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/cassette-corner-v1.zip",
+      "sha256": "2d037b4be5ace5c6c6acce3cd5af93eec6af84711c0ee8f6f9ff563ba4cf2f27",
+      "bytes": 454539,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/cassette-corner/artwork/preview.webp"
+    },
+    {
+      "id": "azure-bloom",
+      "name": "Azure Bloom",
+      "description": "Luminous blue blossom canopy, pink wildflowers and golden fireflies. Space Grotesk headings, moonstone controls, blossom navigation glyphs and an optional tree-under-glass Veyra icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/azure-bloom-v1.zip",
+      "sha256": "f033b7079e1d42faa3633f55ccf2f5ae14227bcd21f185d94a8265a4a4b1a05c",
+      "bytes": 418314,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/azure-bloom/artwork/preview.webp"
+    },
+    {
+      "id": "strawberry-daydream",
+      "name": "Strawberry Daydream",
+      "description": "Pastel cut-paper cat and bunny friends, strawberries and ivory daisies. Fredoka headings, readable plum controls, heart-and-petal glyphs and an optional strawberry-charm Glass Noir icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/strawberry-daydream-v1.zip",
+      "sha256": "b03e728aa0b7c0ba18b11a8e379588ead4dc036144e8244899ea99de0e205468",
+      "bytes": 365993,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/strawberry-daydream/artwork/preview.webp"
     }
   ]
 }
