@@ -251,6 +251,28 @@ private fun bitmap(path:String): androidx.compose.ui.graphics.ImageBitmap {
         Text("Choose an icon above. Your launcher may take a moment to refresh.",style=MaterialTheme.typography.bodySmall,color=pack.muted)
     }
 }
+/** Mask studies use the same encoded master as the launcher density assets. */
+@Composable private fun GlassIconCollection() {
+    Column(Modifier.fillMaxSize().background(Color(0xFF090909)).padding(20.dp),
+        verticalArrangement=Arrangement.spacedBy(18.dp)) {
+        Text("Veyra · themed Glass Noir",style=MaterialTheme.typography.titleLarge,color=Color.White)
+        Text("Rounded square / circle · 48 dp",style=MaterialTheme.typography.bodyMedium,color=Color.LightGray)
+        val entries=listOf("default" to "Glass Noir · unchanged","pumpkin-purr" to "Pumpkin Purr",
+            "sunset-crew" to "Sunset Crew","starry-spirits" to "Starry Spirits","analog-reverie" to "Analog Reverie",
+            "petal-promise" to "Petal Promise","moonlit-herbarium" to "Moonlit Herbarium")
+        entries.forEach { (id,name) ->
+            val file=File(root,if(id=="default")"design/launcher/wave_glass.png" else "themes/launcher-art/$id.webp")
+            val icon=androidx.compose.runtime.remember(file) { Image.makeFromEncoded(file.readBytes()).toComposeImageBitmap() }
+            Row(Modifier.fillMaxWidth().heightIn(min=80.dp),verticalAlignment=Alignment.CenterVertically,
+                horizontalArrangement=Arrangement.spacedBy(14.dp)) {
+                Text(name,Modifier.weight(1f),style=MaterialTheme.typography.titleMedium,color=Color.White)
+                Image(icon,null,Modifier.size(48.dp).clip(RoundedCornerShape(12.dp)))
+                Image(icon,null,Modifier.size(48.dp).clip(androidx.compose.foundation.shape.CircleShape))
+            }
+        }
+        Text("Native component study · not an Android launcher screenshot",style=MaterialTheme.typography.bodySmall,color=Color.LightGray)
+    }
+}
 private fun SemanticsNode.flatten():List<SemanticsNode> = listOf(this)+children.flatMap{it.flatten()}
 fun main() {
     val performance=System.getProperty("veyra.performance")=="true"
@@ -258,7 +280,7 @@ fun main() {
     val output=File(root,if(reference!=null)"themes/previews/$themeId" else if(performance)"verification/performance-preview" else if(reliability)"verification/reliability-preview" else if(midnight)"themes/previews/midnight-express" else if(astral)"themes/previews/astral-tide" else if(playful)"themes/previews/playtime-club" else if(web)"themes/previews/web-slinger" else "themes/previews").apply{mkdirs()}
     val study=System.getProperty("veyra.study").orEmpty()
     val results=mutableListOf<String>()
-    for(kind in (if(reference!=null)listOf("home","player","atmosphere-rtl-large-text") else if(performance)listOf("studio","studio-large-text","studio-rtl-large-text","atmosphere-rtl-large-text") else if(reliability)listOf("apply","apply-large-text","apply-rtl-large-text") else if(astral || midnight)listOf("home","home-large-text","player","studio","studio-large-text","settings") else if(playful) listOf("home","home-large-text","player","studio","studio-large-text","settings","actions") else listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text"))) {
+    for(kind in (if(reference!=null)listOf("home","player","atmosphere-rtl-large-text","glass-icons") else if(performance)listOf("studio","studio-large-text","studio-rtl-large-text","atmosphere-rtl-large-text") else if(reliability)listOf("apply","apply-large-text","apply-rtl-large-text") else if(astral || midnight)listOf("home","home-large-text","player","studio","studio-large-text","settings") else if(playful) listOf("home","home-large-text","player","studio","studio-large-text","settings","actions") else listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text"))) {
         if(study.isNotEmpty() && kind !in study.split(",")) continue
         val width=if(kind.endsWith("large-text"))320 else 390
         var matchingIconCallbacks=0
@@ -270,7 +292,7 @@ fun main() {
                     Surface(Modifier.fillMaxSize(),color=colors.background) {
                         Box(Modifier.fillMaxSize()) {
                             ThemeScene(Modifier.matchParentSize())
-                            when { kind.startsWith("atmosphere")->Column(Modifier.fillMaxWidth().padding(20.dp)) { ThemeAtmosphere("header") }; kind.startsWith("apply")->Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp)) {
+                            when { kind=="glass-icons"->GlassIconCollection(); kind.startsWith("atmosphere")->Column(Modifier.fillMaxWidth().padding(20.dp)) { ThemeAtmosphere("header") }; kind.startsWith("apply")->Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp)) {
                                 Text("Apply "+pack.name, style=MaterialTheme.typography.titleLarge)
                                 Spacer(Modifier.height(16.dp))
                                 ThemeApplyOptions("Your music keeps playing. Original Veyra settings stay saved.",

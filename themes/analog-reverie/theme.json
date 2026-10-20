@@ -3,7 +3,7 @@
   "id": "analog-reverie",
   "name": "Analog Reverie",
   "author": "Bhavishya Dalal",
-  "version": 1,
+  "version": 2,
   "minAppCode": 25,
   "palette": {
     "background": "#181A15",
@@ -45,7 +45,7 @@
     "download": "icons/download.png"
   },
   "files": {
-    "artwork/brand.webp": "845bd66a5fc5dbe300276f4153859ed36ad553074f4f36184074e421af34bd17",
+    "artwork/brand.webp": "30885bb682a258616adda004a8979207ec156098825c632aba831b28620788ab",
     "artwork/preview.webp": "3b34493fcb97eef449c182b0ef17611d42a6534633623fa33a22308cb55cd789",
     "fonts/Manrope.ttf": "e4ed5ec7d50bca15ee2adbf2f0defee141331353c928f46db4cc0b91402ec008",
     "icons/back.png": "6f0e86d6df48d324fa5c74ac373bfa88396e467be0687f80acb2cc15ea789366",
@@ -61,7 +61,7 @@
     "icons/previous.png": "a39f093298585a185c9168f8b76ec96a83429931dbe49840f9e035ae99616a71",
     "icons/queue.png": "3513c4f8ab91fdf32bdc1b662c04b65a0cad02c13a788fc54b55eab10564b0a9",
     "icons/settings.png": "8f263ff676aca7a3b688f334f321a9aa00acbf72e79236bbb96a654b53a11871",
-    "licenses/ARTWORK.txt": "ba1bd6b3c4da975e45e1f5c8d3eca8897262fb676253a1ff29a297527cd46961",
+    "licenses/ARTWORK.txt": "ff7df1fcd2688139908d0d3fa5e3b59c0ee4089136789fe95b8ce1d7f0b575ac",
     "licenses/FONT-NOTES.txt": "24d1a02ed64e27787fd1f1a51b10e41ce7c862823d4aefaf624b3d91a6ea35ec",
     "licenses/Manrope-OFL.txt": "d6a309fcfb963d329a93baf9df66fa5f3c23a4be2b5f67edf24d6cafecde12ac"
   }

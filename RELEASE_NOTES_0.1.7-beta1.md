@@ -5,6 +5,14 @@
 Stable **0.1.6 / code 22** remains separate. This source update does not publish
 an APK or change the Listen Together backend.
 
+## Glass Noir theme icons · pack v2
+
+- Six AI-edited launcher icons preserve Veyra's current silver waveform and black glass case, with each theme's lighting and details.
+- Home branding, icon-picker previews and launcher assets now share the same design. Monochrome mode retains the official waveform silhouette.
+- Update the six reference themes to pack v2 and rebuild the refreshed source for their bundled launcher icons. Selection remains optional; the default Veyra icon is unchanged.
+- Published v1 packs remain available. App version stays **0.1.7-beta1 / code 25**.
+- [Icon study and verification](verification/GLASS-ICONS-0.1.7-beta1.md).
+
 ## Six reference-inspired themes
 
 - **Pumpkin Purr:** cream ghost kittens, pumpkin lanterns, cocoa and rounded Fredoka headings.

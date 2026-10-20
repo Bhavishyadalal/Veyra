@@ -3,7 +3,7 @@
   "id": "moonlit-herbarium",
   "name": "Moonlit Herbarium",
   "author": "Bhavishya Dalal",
-  "version": 1,
+  "version": 2,
   "minAppCode": 25,
   "palette": {
     "background": "#191322",
@@ -45,7 +45,7 @@
     "download": "icons/download.png"
   },
   "files": {
-    "artwork/brand.webp": "3e75242ca7272a86ff62366dd33ffe487281fca608283f101e2f8c788ae02b0f",
+    "artwork/brand.webp": "967702d45aa046ae9d79477c97d5f7a6d606be6399d9cc7fff1e1c7bfeae00cf",
     "artwork/preview.webp": "6a932ade02c04cc5122ad3f8af747112d340dffa6e193a972e09c959092f102e",
     "fonts/Manrope.ttf": "e4ed5ec7d50bca15ee2adbf2f0defee141331353c928f46db4cc0b91402ec008",
     "fonts/SpaceGrotesk.ttf": "f9e5049cec21f99b49940b36014447ffc82e7d628933b255d359b3f43d6de379",
@@ -62,7 +62,7 @@
     "icons/previous.png": "a39f093298585a185c9168f8b76ec96a83429931dbe49840f9e035ae99616a71",
     "icons/queue.png": "3513c4f8ab91fdf32bdc1b662c04b65a0cad02c13a788fc54b55eab10564b0a9",
     "icons/settings.png": "8f263ff676aca7a3b688f334f321a9aa00acbf72e79236bbb96a654b53a11871",
-    "licenses/ARTWORK.txt": "ba1bd6b3c4da975e45e1f5c8d3eca8897262fb676253a1ff29a297527cd46961",
+    "licenses/ARTWORK.txt": "ff7df1fcd2688139908d0d3fa5e3b59c0ee4089136789fe95b8ce1d7f0b575ac",
     "licenses/FONT-NOTES.txt": "24d1a02ed64e27787fd1f1a51b10e41ce7c862823d4aefaf624b3d91a6ea35ec",
     "licenses/Manrope-OFL.txt": "d6a309fcfb963d329a93baf9df66fa5f3c23a4be2b5f67edf24d6cafecde12ac",
     "licenses/SpaceGrotesk-OFL.txt": "564ce565c371c5e5bbf286006565a7c9aa55a9f56e7ca58d56e05d649dd61a72"

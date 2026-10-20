@@ -227,23 +227,40 @@ is reused; real album covers, accounts, playback and queue actions remain native
 
 | Theme | Art direction | Pack | Native studies |
 | --- | --- | --- | --- |
-| **Pumpkin Purr** | Cream ghost kittens, pumpkin lanterns and cocoa paper. Rounded Fredoka headings, soft corners, bubble timeline and an optional ghost-cat waveform icon. | [ZIP](packs/pumpkin-purr-v1.zip) · [SHA-256](packs/pumpkin-purr-v1.zip.sha256) | [Home](previews/pumpkin-purr/home.webp) · [Player](previews/pumpkin-purr/player.webp) · [RTL / large text](previews/pumpkin-purr/atmosphere-rtl-large-text.webp) |
-| **Sunset Crew** | Coastal violet coupes, honey sunset and SpongeBob / Patrick fan-art cameos. Bold Rajdhani headings, road-style timeline and an optional sunset-waveform icon. | [ZIP](packs/sunset-crew-v1.zip) · [SHA-256](packs/sunset-crew-v1.zip.sha256) | [Home](previews/sunset-crew/home.webp) · [Player](previews/sunset-crew/player.webp) · [RTL / large text](previews/sunset-crew/atmosphere-rtl-large-text.webp) |
-| **Starry Spirits** | Gentle sheet ghosts under an original swirling teal-and-gold oil-painted sky. Space Grotesk headings, starlit timeline and an optional spirit-waveform icon. | [ZIP](packs/starry-spirits-v1.zip) · [SHA-256](packs/starry-spirits-v1.zip.sha256) | [Home](previews/starry-spirits/home.webp) · [Player](previews/starry-spirits/player.webp) · [RTL / large text](previews/starry-spirits/atmosphere-rtl-large-text.webp) |
-| **Analog Reverie** | Warm walnut, smoked olive, vinyl and a luminous swallow. Bold Manrope typography, restrained player details and an optional record-waveform icon. | [ZIP](packs/analog-reverie-v1.zip) · [SHA-256](packs/analog-reverie-v1.zip.sha256) | [Home](previews/analog-reverie/home.webp) · [Player](previews/analog-reverie/player.webp) · [RTL / large text](previews/analog-reverie/atmosphere-rtl-large-text.webp) |
-| **Petal Promise** | Ivory stationery, dusky pink tulips, satin bows and watercolor hearts. Ivory artwork over readable plum-rose controls, rounded Fredoka headings and an optional bow-waveform icon. | [ZIP](packs/petal-promise-v1.zip) · [SHA-256](packs/petal-promise-v1.zip.sha256) | [Home](previews/petal-promise/home.webp) · [Player](previews/petal-promise/player.webp) · [RTL / large text](previews/petal-promise/atmosphere-rtl-large-text.webp) |
-| **Moonlit Herbarium** | Lavender wildflowers, ivory moths, a crescent moon and a small garden spirit. Space Grotesk headings, gold accents and an optional moonflower-waveform icon. | [ZIP](packs/moonlit-herbarium-v1.zip) · [SHA-256](packs/moonlit-herbarium-v1.zip.sha256) | [Home](previews/moonlit-herbarium/home.webp) · [Player](previews/moonlit-herbarium/player.webp) · [RTL / large text](previews/moonlit-herbarium/atmosphere-rtl-large-text.webp) |
+| **Pumpkin Purr** | Cream ghost kittens, pumpkin lanterns and cocoa paper. Rounded Fredoka headings, soft corners, bubble timeline and an optional amber Glass Noir waveform icon. | [ZIP](packs/pumpkin-purr-v2.zip) · [SHA-256](packs/pumpkin-purr-v2.zip.sha256) | [Home](previews/pumpkin-purr/home.webp) · [Player](previews/pumpkin-purr/player.webp) · [RTL / large text](previews/pumpkin-purr/atmosphere-rtl-large-text.webp) |
+| **Sunset Crew** | Coastal violet coupes and honey sunset. Unofficial SpongeBob / Patrick fan art; characters belong to Nickelodeon / Paramount, no affiliation. Bold Rajdhani headings, road timeline and an optional violet-and-honey Glass Noir icon. | [ZIP](packs/sunset-crew-v2.zip) · [SHA-256](packs/sunset-crew-v2.zip.sha256) | [Home](previews/sunset-crew/home.webp) · [Player](previews/sunset-crew/player.webp) · [RTL / large text](previews/sunset-crew/atmosphere-rtl-large-text.webp) |
+| **Starry Spirits** | Gentle sheet ghosts under an original swirling teal-and-gold oil-painted sky. Space Grotesk headings, starlit timeline and an optional teal-and-gold Glass Noir icon. | [ZIP](packs/starry-spirits-v2.zip) · [SHA-256](packs/starry-spirits-v2.zip.sha256) | [Home](previews/starry-spirits/home.webp) · [Player](previews/starry-spirits/player.webp) · [RTL / large text](previews/starry-spirits/atmosphere-rtl-large-text.webp) |
+| **Analog Reverie** | Warm walnut, smoked olive, vinyl and a luminous swallow. Bold Manrope typography, restrained player details and an optional champagne Glass Noir waveform icon. | [ZIP](packs/analog-reverie-v2.zip) · [SHA-256](packs/analog-reverie-v2.zip.sha256) | [Home](previews/analog-reverie/home.webp) · [Player](previews/analog-reverie/player.webp) · [RTL / large text](previews/analog-reverie/atmosphere-rtl-large-text.webp) |
+| **Petal Promise** | Ivory stationery, dusky pink tulips, satin bows and watercolor hearts. Ivory artwork over readable plum-rose controls, rounded Fredoka headings and an optional rose Glass Noir waveform icon. | [ZIP](packs/petal-promise-v2.zip) · [SHA-256](packs/petal-promise-v2.zip.sha256) | [Home](previews/petal-promise/home.webp) · [Player](previews/petal-promise/player.webp) · [RTL / large text](previews/petal-promise/atmosphere-rtl-large-text.webp) |
+| **Moonlit Herbarium** | Lavender wildflowers, ivory moths, a crescent moon and a small garden spirit. Space Grotesk headings, gold accents and an optional moonflower-waveform icon. | [ZIP](packs/moonlit-herbarium-v2.zip) · [SHA-256](packs/moonlit-herbarium-v2.zip.sha256) | [Home](previews/moonlit-herbarium/home.webp) · [Player](previews/moonlit-herbarium/player.webp) · [RTL / large text](previews/moonlit-herbarium/atmosphere-rtl-large-text.webp) |
 
 Sunset Crew contains unofficial SpongeBob SquarePants and Patrick Star fan artwork;
 the characters belong to their respective owners, including Nickelodeon / Paramount.
 There is no affiliation or endorsement. This credit is also in the catalog
 description and pack license. The owner's reference images are not redistributed.
 
-All six scenes were created with AI generation; the functional SVG glyphs and
-launcher marks are original vector sources under `source-icons/`. Font files retain
+All six scenes were created with AI generation. Current v2 launcher/Home marks are
+AI edits of the official Glass Noir icon; functional glyphs retain their SVG sources
+under `source-icons/`. The previous vector mark sources remain as historical artwork. Font files retain
 their upstream OFL notices. Rebuild packs offline with
 `python3 themes/build_reference_collection.py`; published versions are immutable.
 The manifest-derived `render-config/` files keep the native study palettes/assets
 aligned with the actual packs. Studies are desktop Compose components, not Android screenshots.
 
 [Collection verification and device limits](../verification/REFERENCE-COLLECTION-0.1.7-beta1.md).
+
+### Glass Noir icon refresh · collection pack v2
+
+The six reference themes now use AI-edited variants of Veyra's current black-and-white
+**Glass Noir** icon (`design/launcher/wave_glass.png`): the same connected silver
+three-lobed waveform and dark glass case, with restrained theme-specific details.
+The matching image is used on Home, in the launcher picker and in launcher density
+assets. Android monochrome mode uses the official waveform silhouette. The default
+Veyra icon remains unchanged.
+
+Refresh Theme Studio, open the theme, choose **Download theme update**, then Apply.
+Launcher selection stays explicit and optional. Rebuild the latest preview source
+for the updated bundled launcher artwork. Published collection v1 packs are retained;
+these are v2 theme updates, with the app still 0.1.7-beta1 / code 25.
+
+[48 dp icon mask study](previews/pumpkin-purr/glass-icons.webp) · [Verification](../verification/GLASS-ICONS-0.1.7-beta1.md).

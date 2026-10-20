@@ -3,7 +3,7 @@
   "id": "sunset-crew",
   "name": "Sunset Crew",
   "author": "Bhavishya Dalal",
-  "version": 1,
+  "version": 2,
   "minAppCode": 25,
   "palette": {
     "background": "#111323",
@@ -45,7 +45,7 @@
     "download": "icons/download.png"
   },
   "files": {
-    "artwork/brand.webp": "41d98ff45e06164322fdbbafa166c440bff57fe49c7917194072d9c907ea6475",
+    "artwork/brand.webp": "4956ad8b8a57b18fff5f14ff920140654492626820782aab43652f2fe98acb76",
     "artwork/preview.webp": "fe909841dd94664d89767e89b971bc8570623dc41f804325f0bd524021c4edfd",
     "fonts/Manrope.ttf": "e4ed5ec7d50bca15ee2adbf2f0defee141331353c928f46db4cc0b91402ec008",
     "fonts/Rajdhani.ttf": "691470dd3286a14e9677940d0bf75796179841ba5215cbda1a2c8910a3226afd",
@@ -62,7 +62,7 @@
     "icons/previous.png": "a39f093298585a185c9168f8b76ec96a83429931dbe49840f9e035ae99616a71",
     "icons/queue.png": "3513c4f8ab91fdf32bdc1b662c04b65a0cad02c13a788fc54b55eab10564b0a9",
     "icons/settings.png": "8f263ff676aca7a3b688f334f321a9aa00acbf72e79236bbb96a654b53a11871",
-    "licenses/ARTWORK.txt": "c59457227c8be7c6fbd062af950933bbae2fdca17c12408640690bc5baad6a04",
+    "licenses/ARTWORK.txt": "25f0a04d814d807a070143be1c652d084dfa91904b4cf2ee44524f89faba8c22",
     "licenses/FONT-NOTES.txt": "24d1a02ed64e27787fd1f1a51b10e41ce7c862823d4aefaf624b3d91a6ea35ec",
     "licenses/Manrope-OFL.txt": "d6a309fcfb963d329a93baf9df66fa5f3c23a4be2b5f67edf24d6cafecde12ac",
     "licenses/Rajdhani-OFL.txt": "f62ef357d3a1c3d27edd35a6e1ba350e8a8d13499797964eeadefbf0b3b15d1f"
