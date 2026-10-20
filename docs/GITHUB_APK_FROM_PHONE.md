@@ -6,8 +6,8 @@ This guide uses the current **Android Release APK** workflow in `.github/workflo
 
 The owner supplied a private backup whose selected certificate matches the published 0.1.5 APK. Its public SHA-256 is `22b5a611d9c62ded21114c28074f4f25c378c2ee70866740623e49221198cb9a`. Private key bytes and credentials are not included here. Matching the certificate is separate from successfully validating the private-key password during a build.
 
-1. Extract the private backup using your device’s file manager. Keep `signing/builder.jks` and `signing/credentials.json` private.
-2. Download `tools/signing-secret-helper.html` from this repository. Save it and open the local file in a browser, then select the extracted JKS and JSON files. It reads files locally, encodes the JKS bytes and exposes four copy buttons. It does not upload or persist the inputs; no online converter is needed.
+1. Keep your private backup ZIP on your own device. No manual extraction is needed.
+2. Download `tools/signing-secret-helper.html` from this repository. Save it and open the local file in a browser, then select the private backup ZIP directly. ZIP support is bundled in the HTML (fflate 0.8.2, MIT); no external script is fetched. It reads only the signing keystore and credential entries, encodes the JKS bytes, and provides Copy name / Copy value buttons for each secret. Values start masked, with Show/Hide and Clear controls. It does not upload or persist the inputs; no online converter is needed.
 3. In GitHub open **Bhavishyadalal/Veyra → Settings → Secrets and variables → Actions**. Use a mobile browser’s Desktop site option if Settings is hidden.
 4. Add four **repository secrets**, copying each helper value into the matching name: `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`. If a secret already exists, update it rather than inventing another name. Never commit the files or passwords. These are the names the existing workflow reads; their presence in repository Settings has not been independently checked.
 5. Close the helper after setup and keep the private backup in your own protected storage.
