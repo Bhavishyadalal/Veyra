@@ -91,7 +91,7 @@ object ThemeRepository {
         }.also { catalogJob = it }
     }
 
-    private fun parseCatalog(bytes: ByteArray): List<ThemeListing> {
+    internal fun parseCatalog(bytes: ByteArray): List<ThemeListing> {
         val c = ThemePack.json.decodeFromString<ThemeCatalog>(bytes.decodeToString())
         require(c.schema == 1 && c.themes.size <= 24 && c.themes.map { it.id }.distinct().size == c.themes.size)
         c.themes.forEach { e ->

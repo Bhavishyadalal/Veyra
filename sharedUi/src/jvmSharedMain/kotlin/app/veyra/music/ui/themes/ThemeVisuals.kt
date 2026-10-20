@@ -80,11 +80,15 @@ fun ThemeAtmosphere(key: String, modifier: Modifier = Modifier, compact: Boolean
         .clip(RoundedCornerShape(theme.rowCorner.dp)).background(theme.surface)) {
         AsyncImage(File(asset), null,
             Modifier.matchParentSize().clearAndSetSemantics {}, contentScale = ContentScale.Crop)
-        // Keep the contrast scrim behind start-aligned text in both layout directions.
-        val scrim = listOf(theme.surface.copy(alpha=.65f), Color.Transparent)
+        // The entire text column needs contrast, including bright artwork and large text.
+        val textFraction = if (LocalDensity.current.fontScale > 1.2f) .85f else .64f
         val rtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
-        Box(Modifier.matchParentSize().background(Brush.horizontalGradient(if (rtl) scrim.reversed() else scrim)))
-        Column(Modifier.fillMaxWidth(if(LocalDensity.current.fontScale > 1.2f) .85f else .64f).padding(20.dp)) {
+        val scrim = if (rtl) arrayOf(0f to theme.surface.copy(alpha=.1f),
+            (1f-textFraction) to theme.surface.copy(alpha=.9f), 1f to theme.surface.copy(alpha=.96f))
+        else arrayOf(0f to theme.surface.copy(alpha=.96f),
+            textFraction to theme.surface.copy(alpha=.9f), 1f to theme.surface.copy(alpha=.1f))
+        Box(Modifier.matchParentSize().background(Brush.horizontalGradient(*scrim)))
+        Column(Modifier.fillMaxWidth(textFraction).padding(20.dp)) {
             Text(theme.name, style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSurface)
             Spacer(Modifier.height(6.dp))
             Text(theme.tagline, style = MaterialTheme.typography.bodySmall,

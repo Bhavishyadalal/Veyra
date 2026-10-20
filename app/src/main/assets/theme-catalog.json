@@ -55,6 +55,72 @@
       "sha256": "b97f7c3ee58de56a35e9294b04abf4f5a3cd93911e84221cd47fbf27d3392377",
       "bytes": 692115,
       "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/midnight-express/artwork/preview.webp"
+    },
+    {
+      "id": "pumpkin-purr",
+      "name": "Pumpkin Purr",
+      "description": "Cream ghost kittens, pumpkin lanterns and cocoa paper. Rounded Fredoka headings, soft corners, bubble timeline and an optional ghost-cat waveform icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/pumpkin-purr-v1.zip",
+      "sha256": "6f082c14d73da688577fd2abbd34941e1c19d7a5f2fe1794fbc2659d890845d2",
+      "bytes": 420193,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/pumpkin-purr/artwork/preview.webp"
+    },
+    {
+      "id": "sunset-crew",
+      "name": "Sunset Crew",
+      "description": "Coastal violet coupes and honey sunset. Unofficial SpongeBob / Patrick fan art; characters belong to Nickelodeon / Paramount, no affiliation. Bold Rajdhani headings, road timeline and an optional sunset-waveform icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/sunset-crew-v1.zip",
+      "sha256": "105302ef0cce608520731166b15e25c21a27ef010bffbbb91dbd9d0e3687a68a",
+      "bytes": 446215,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/sunset-crew/artwork/preview.webp"
+    },
+    {
+      "id": "starry-spirits",
+      "name": "Starry Spirits",
+      "description": "Gentle sheet ghosts under an original swirling teal-and-gold oil-painted sky. Space Grotesk headings, starlit timeline and an optional spirit-waveform icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/starry-spirits-v1.zip",
+      "sha256": "08d94fef10f98595eea225a0d9ba56f62b733a4683e4016b35e2f6bd4c71a5ac",
+      "bytes": 563334,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/starry-spirits/artwork/preview.webp"
+    },
+    {
+      "id": "analog-reverie",
+      "name": "Analog Reverie",
+      "description": "Warm walnut, smoked olive, vinyl and a luminous swallow. Bold Manrope typography, restrained player details and an optional record-waveform icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/analog-reverie-v1.zip",
+      "sha256": "1f0b8cf0177a38fee9fabbed4ecb3372c3f8d93d9683dc0c7befc0f650030169",
+      "bytes": 176989,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/analog-reverie/artwork/preview.webp"
+    },
+    {
+      "id": "petal-promise",
+      "name": "Petal Promise",
+      "description": "Ivory stationery, dusky pink tulips, satin bows and watercolor hearts. Ivory artwork over readable plum-rose controls, rounded Fredoka headings and an optional bow-waveform icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/petal-promise-v1.zip",
+      "sha256": "abfb6dda795baed53235f2060263da9ef859032c2476a8b8c99213178b31adb9",
+      "bytes": 341590,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/petal-promise/artwork/preview.webp"
+    },
+    {
+      "id": "moonlit-herbarium",
+      "name": "Moonlit Herbarium",
+      "description": "Lavender wildflowers, ivory moths, a crescent moon and a small garden spirit. Space Grotesk headings, gold accents and an optional moonflower-waveform icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/moonlit-herbarium-v1.zip",
+      "sha256": "8beb2ed1b64e200fc3522d6892cc4a0b64a2e46372ba4c902d27cf95a364c68e",
+      "bytes": 454185,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/moonlit-herbarium/artwork/preview.webp"
     }
   ]
 }

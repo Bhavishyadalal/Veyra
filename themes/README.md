@@ -212,3 +212,38 @@ Rebuild only this pack with `python3 themes/build_midnight.py`; the checked-in
 artwork/fonts mean no generation service or network is needed to rebuild.
 Original AI-assisted illustrations/vector glyphs by Veyra, made by Bhavishya Dalal.
 Rajdhani Bold and Manrope retain their included SIL Open Font License notices.
+
+## Reference collection — six more worlds
+
+New AI-created compositions inspired by the owner's reference images. These are
+data-only theme packs for **0.1.7-beta1 / code 25**. Stable 0.1.6 / code 22 does
+not have the installer. Rebuild the latest preview source for the six optional
+bundled launcher choices; theme application never selects a launcher automatically.
+
+Each includes a scene, preview/banner/player mapping, an original waveform brand
+mark, bold licensed fonts, thirteen functional glyphs, palette, control corners,
+section decoration and timeline styling. The existing calm/reduced-motion engine
+is reused; real album covers, accounts, playback and queue actions remain native.
+
+| Theme | Art direction | Pack | Native studies |
+| --- | --- | --- | --- |
+| **Pumpkin Purr** | Cream ghost kittens, pumpkin lanterns and cocoa paper. Rounded Fredoka headings, soft corners, bubble timeline and an optional ghost-cat waveform icon. | [ZIP](packs/pumpkin-purr-v1.zip) · [SHA-256](packs/pumpkin-purr-v1.zip.sha256) | [Home](previews/pumpkin-purr/home.webp) · [Player](previews/pumpkin-purr/player.webp) · [RTL / large text](previews/pumpkin-purr/atmosphere-rtl-large-text.webp) |
+| **Sunset Crew** | Coastal violet coupes, honey sunset and SpongeBob / Patrick fan-art cameos. Bold Rajdhani headings, road-style timeline and an optional sunset-waveform icon. | [ZIP](packs/sunset-crew-v1.zip) · [SHA-256](packs/sunset-crew-v1.zip.sha256) | [Home](previews/sunset-crew/home.webp) · [Player](previews/sunset-crew/player.webp) · [RTL / large text](previews/sunset-crew/atmosphere-rtl-large-text.webp) |
+| **Starry Spirits** | Gentle sheet ghosts under an original swirling teal-and-gold oil-painted sky. Space Grotesk headings, starlit timeline and an optional spirit-waveform icon. | [ZIP](packs/starry-spirits-v1.zip) · [SHA-256](packs/starry-spirits-v1.zip.sha256) | [Home](previews/starry-spirits/home.webp) · [Player](previews/starry-spirits/player.webp) · [RTL / large text](previews/starry-spirits/atmosphere-rtl-large-text.webp) |
+| **Analog Reverie** | Warm walnut, smoked olive, vinyl and a luminous swallow. Bold Manrope typography, restrained player details and an optional record-waveform icon. | [ZIP](packs/analog-reverie-v1.zip) · [SHA-256](packs/analog-reverie-v1.zip.sha256) | [Home](previews/analog-reverie/home.webp) · [Player](previews/analog-reverie/player.webp) · [RTL / large text](previews/analog-reverie/atmosphere-rtl-large-text.webp) |
+| **Petal Promise** | Ivory stationery, dusky pink tulips, satin bows and watercolor hearts. Ivory artwork over readable plum-rose controls, rounded Fredoka headings and an optional bow-waveform icon. | [ZIP](packs/petal-promise-v1.zip) · [SHA-256](packs/petal-promise-v1.zip.sha256) | [Home](previews/petal-promise/home.webp) · [Player](previews/petal-promise/player.webp) · [RTL / large text](previews/petal-promise/atmosphere-rtl-large-text.webp) |
+| **Moonlit Herbarium** | Lavender wildflowers, ivory moths, a crescent moon and a small garden spirit. Space Grotesk headings, gold accents and an optional moonflower-waveform icon. | [ZIP](packs/moonlit-herbarium-v1.zip) · [SHA-256](packs/moonlit-herbarium-v1.zip.sha256) | [Home](previews/moonlit-herbarium/home.webp) · [Player](previews/moonlit-herbarium/player.webp) · [RTL / large text](previews/moonlit-herbarium/atmosphere-rtl-large-text.webp) |
+
+Sunset Crew contains unofficial SpongeBob SquarePants and Patrick Star fan artwork;
+the characters belong to their respective owners, including Nickelodeon / Paramount.
+There is no affiliation or endorsement. This credit is also in the catalog
+description and pack license. The owner's reference images are not redistributed.
+
+All six scenes were created with AI generation; the functional SVG glyphs and
+launcher marks are original vector sources under `source-icons/`. Font files retain
+their upstream OFL notices. Rebuild packs offline with
+`python3 themes/build_reference_collection.py`; published versions are immutable.
+The manifest-derived `render-config/` files keep the native study palettes/assets
+aligned with the actual packs. Studies are desktop Compose components, not Android screenshots.
+
+[Collection verification and device limits](../verification/REFERENCE-COLLECTION-0.1.7-beta1.md).

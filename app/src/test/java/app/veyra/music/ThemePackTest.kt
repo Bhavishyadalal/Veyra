@@ -74,11 +74,11 @@ class ThemePackTest {
     }
     @Test fun allPublishedThemesInstallWithCorrectBrandingAndMinimumVersion() {
         val catalog=ThemePack.json.decodeFromString<ThemeCatalog>(File(project,"themes/catalog.json").readText())
-        assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express"),catalog.themes.map { it.id }.toSet())
+        assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium"),catalog.themes.map { it.id }.toSet())
         for (entry in catalog.themes) {
             val pack=File(project,"themes/packs/${entry.id}-v${entry.version}.zip")
             val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,25)
-            assertEquals(if(entry.id == "playtime-club") 3 else 2,m.schema)
+            assertEquals(if(entry.id in setOf("playtime-club","pumpkin-purr","petal-promise")) 3 else 2,m.schema)
             assertTrue(File(dir,m.assets.getValue("brandIcon")).isFile)
             rejects { ThemePack.validate(m,23) }
             if (entry.id == "midnight-express") {
@@ -100,6 +100,20 @@ class ThemePackTest {
                 assertEquals("playful",m.sceneStyle)
             }
         }
+    }
+    @Test fun bundledAndPublishedCatalogsPassTheActualRuntimeUrlPolicy() {
+        val published=File(project,"themes/catalog.json").readBytes()
+        val bundled=File(project,"app/src/main/assets/theme-catalog.json").readBytes()
+        assertArrayEquals(published,bundled)
+        val entries=ThemeRepository.parseCatalog(published)
+        assertEquals(11,entries.size)
+        entries.forEach { entry ->
+            assertTrue(File(project,"themes/${entry.id}/artwork/preview.webp").isFile)
+        }
+        val invalid=ThemePack.json.decodeFromString<ThemeCatalog>(published.decodeToString()).let { c ->
+            c.copy(themes=listOf(c.themes.first().copy(preview="https://example.com/art.webp")))
+        }
+        rejects { ThemeRepository.parseCatalog(ThemePack.json.encodeToString(ThemeCatalog.serializer(),invalid).encodeToByteArray()) }
     }
     @Test fun legacyPacksStillValidateWithoutNewFields() {
         val zip=java.util.zip.ZipFile(File(project,"themes/packs/halloween-nocturne-v2.zip"))

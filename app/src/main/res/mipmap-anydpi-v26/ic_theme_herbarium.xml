@@ -1,0 +1,1 @@
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@color/theme_herbarium_background"/><foreground android:drawable="@mipmap/ic_theme_herbarium_foreground"/><monochrome android:drawable="@drawable/ic_herbarium_monochrome"/></adaptive-icon>

@@ -1,9 +1,22 @@
-# Veyra 0.1.7-beta1 · Listening continuity and five worlds
+# Veyra 0.1.7-beta1 · Listening continuity and eleven worlds
 
 **Preview source · code 25 · Made by Bhavishya Dalal**
 
 Stable **0.1.6 / code 22** remains separate. This source update does not publish
 an APK or change the Listen Together backend.
+
+## Six reference-inspired themes
+
+- **Pumpkin Purr:** cream ghost kittens, pumpkin lanterns, cocoa and rounded Fredoka headings.
+- **Sunset Crew:** violet coastal cars, honey sunset and unofficial SpongeBob / Patrick fan-art cameos with attribution.
+- **Starry Spirits:** gentle ghosts, a swirling teal-and-gold painted sky and starlit details.
+- **Analog Reverie:** smoked olive, walnut, vinyl and a luminous swallow with restrained bold typography.
+- **Petal Promise:** ivory tulips, satin bows and watercolor hearts over readable plum-rose controls.
+- **Moonlit Herbarium:** lavender botanicals, ivory moths, a crescent moon and a quiet garden spirit.
+- Banner contrast now covers the full text column over bright artwork, including large text and RTL.
+- Every pack includes artwork, fonts, functional icons, an original brand mark, control shapes and timeline styling. Six matching launcher choices remain explicit and optional.
+- All previous themes and completed reliability/performance work remain. Version stays **0.1.7-beta1 / code 25**; no APK publication or stable promotion.
+- [Downloads and native previews](themes/README.md#reference-collection--six-more-worlds) · [Verification and limits](verification/REFERENCE-COLLECTION-0.1.7-beta1.md).
 
 ## Performance and theme polish
 

@@ -7,6 +7,12 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 class ThemeLauncherTest {
     @Test fun themesMapOnlyToBundledIconsAndUnknownThemesCannotSelectAnAlias() {
+        assertEquals(AppIcon.PumpkinPurr,AppIcon.forTheme("pumpkin-purr"))
+        assertEquals(AppIcon.SunsetCrew,AppIcon.forTheme("sunset-crew"))
+        assertEquals(AppIcon.StarrySpirits,AppIcon.forTheme("starry-spirits"))
+        assertEquals(AppIcon.AnalogReverie,AppIcon.forTheme("analog-reverie"))
+        assertEquals(AppIcon.PetalPromise,AppIcon.forTheme("petal-promise"))
+        assertEquals(AppIcon.MoonlitHerbarium,AppIcon.forTheme("moonlit-herbarium"))
         assertEquals(AppIcon.MidnightExpress,AppIcon.forTheme("midnight-express"))
         assertEquals(AppIcon.AstralTide,AppIcon.forTheme("astral-tide"))
         assertEquals(AppIcon.PlaytimeClub,AppIcon.forTheme("playtime-club"))

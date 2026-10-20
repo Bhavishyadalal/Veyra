@@ -45,8 +45,18 @@ private val astral=themeId=="astral-tide"
 private val playful=themeId=="playtime-club"
 private val web=themeId=="web-slinger"
 private val dir=File(root,"themes/$themeId")
-private val amber=if(midnight)Color(0xFFFFC778) else if(astral)Color(0xFFA0E8D5) else if(playful)Color(0xFFFFE18A) else if(web)Color(0xFFFF4F66) else Color(0xFFFFC17A)
-private val pack=if(midnight)ThemeVisuals("midnight-express","Midnight Express",Color(0xFFFFC778),
+private val reference=File(root,"themes/render-config/$themeId.properties").takeIf { it.exists() }?.let { file ->
+    java.util.Properties().apply { file.inputStream().use { load(it) } }
+}
+private fun referenceColor(key:String)=Color(0xFF000000L or reference!!.getProperty(key).removePrefix("#").toLong(16))
+private val amber=if(reference!=null)referenceColor("accent") else if(midnight)Color(0xFFFFC778) else if(astral)Color(0xFFA0E8D5) else if(playful)Color(0xFFFFE18A) else if(web)Color(0xFFFF4F66) else Color(0xFFFFC17A)
+private val pack=if(reference!=null) ThemeVisuals(themeId,reference.getProperty("name"),referenceColor("accent"),
+    referenceColor("surface"),referenceColor("raised"),referenceColor("outline"),reference.getProperty("rowCorner").toInt(),
+    reference.getProperty("buttonCorner").toInt(),reference.getProperty("navCorner").toInt(),
+    reference.stringPropertyNames().filter { it.startsWith("asset.") }.associate { it.removePrefix("asset.") to File(dir,reference.getProperty(it)).path },
+    seekStyle=reference.getProperty("seekStyle"),seekHeight=reference.getProperty("seekHeight").toInt(),
+    background=referenceColor("background"),text=referenceColor("text"),muted=referenceColor("muted"),secondary=referenceColor("secondary"),
+    sceneStyle=reference.getProperty("sceneStyle"),tagline=reference.getProperty("tagline")) else if(midnight)ThemeVisuals("midnight-express","Midnight Express",Color(0xFFFFC778),
     Color(0xFF17212E),Color(0xFF263548),Color(0xFF627C98),12,16,24,
     mapOf("header" to File(dir,"artwork/header.webp").path,"player" to File(dir,"artwork/player.webp").path,"brandIcon" to File(dir,"artwork/brand.webp").path)+
         listOf("nav_home","nav_search","nav_explore","nav_library","play","pause","previous","next","settings","download","queue").associateWith{File(dir,"icons/$it.png").path},
@@ -66,24 +76,24 @@ private val pack=if(midnight)ThemeVisuals("midnight-express","Midnight Express",
     text=if(playful)Color(0xFFFAFCFF) else if(web)Color(0xFFF5F8FF) else Color(0xFFFFF4E6),muted=if(playful)Color(0xFFC4D5EE) else if(web)Color(0xFFBAC9DF) else Color(0xFFCFBDAA),
     secondary=if(playful)Color(0xFF8DE8E0) else if(web)Color(0xFF82B9FF) else Color(0xFFC6D2AE),sceneStyle=if(playful)"playful" else if(web)"web" else "mist",
     tagline=if(playful)"A little joy. Every play." else if(web)"Your city. Your soundtrack." else "A different kind of night.")
-private val colors=darkColorScheme(primary=amber,onPrimary=Color(0xFF101010),primaryContainer=if(midnight)Color(0xFF543920) else if(astral)Color(0xFF184C50) else if(playful)Color(0xFF244B77) else if(web)Color(0xFF67172B) else Color(0xFF54321A),onPrimaryContainer=Color(0xFFFFF4E6),
+private val colors=darkColorScheme(primary=amber,onPrimary=Color(0xFF101010),primaryContainer=if(reference!=null)referenceColor("accentContainer") else if(midnight)Color(0xFF543920) else if(astral)Color(0xFF184C50) else if(playful)Color(0xFF244B77) else if(web)Color(0xFF67172B) else Color(0xFF54321A),onPrimaryContainer=Color(0xFFFFF4E6),
     background=pack.background,surface=pack.surface,surfaceVariant=pack.raised,onSurface=pack.text,onBackground=pack.text,
     onSurfaceVariant=pack.muted,outline=pack.outline,outlineVariant=pack.outline).let { scheme ->
-    if(!astral && !midnight) scheme else scheme.copy(onPrimaryContainer=pack.text,
+    if(reference==null && !astral && !midnight) scheme else scheme.copy(onPrimaryContainer=pack.text,
         secondary=pack.secondary,onSecondary=Color(0xFF101010),secondaryContainer=pack.raised,onSecondaryContainer=pack.text,
         tertiary=pack.accent,onTertiary=Color(0xFF101010),tertiaryContainer=pack.raised,onTertiaryContainer=pack.text,
-        surfaceTint=pack.accent,inverseSurface=pack.text,inverseOnSurface=pack.background,inversePrimary=if(midnight)Color(0xFF543920) else Color(0xFF184C50),
+        surfaceTint=pack.accent,inverseSurface=pack.text,inverseOnSurface=pack.background,inversePrimary=if(reference!=null)referenceColor("accentContainer") else if(midnight)Color(0xFF543920) else Color(0xFF184C50),
         surfaceBright=pack.raised,surfaceDim=pack.background,surfaceContainerLowest=pack.background,
         surfaceContainerLow=pack.surface,surfaceContainer=pack.surface,surfaceContainerHigh=pack.raised,surfaceContainerHighest=pack.raised)
 }
-private val heading=FontFamily(Font(File(dir,if(midnight)"fonts/Rajdhani.ttf" else if(astral)"fonts/SpaceGrotesk.ttf" else if(playful)"fonts/Fredoka.ttf" else if(web)"fonts/BarlowCondensed.ttf" else "fonts/GrenzeGotisch.ttf"),FontWeight.Bold))
+private val heading=FontFamily(Font(File(dir,reference?.getProperty("asset.headingFont") ?: if(midnight)"fonts/Rajdhani.ttf" else if(astral)"fonts/SpaceGrotesk.ttf" else if(playful)"fonts/Fredoka.ttf" else if(web)"fonts/BarlowCondensed.ttf" else "fonts/GrenzeGotisch.ttf"),FontWeight.Bold))
 private val body=FontFamily(Font(File(dir,"fonts/Manrope.ttf")))
 private var capturedScroll: androidx.compose.foundation.ScrollState? = null
 private var transportClicks = 0
 private val typography=Typography(
-    headlineLarge=TextStyle(fontFamily=heading,fontSize=32.sp,lineHeight=40.sp),
-    headlineMedium=TextStyle(fontFamily=heading,fontSize=28.sp,lineHeight=36.sp),
-    headlineSmall=TextStyle(fontFamily=heading,fontSize=24.sp,lineHeight=30.sp),
+    headlineLarge=TextStyle(fontFamily=heading,fontWeight=if(reference!=null)FontWeight.ExtraBold else FontWeight.Normal,fontSize=if(reference!=null)30.sp else 32.sp,lineHeight=if(reference!=null)38.sp else 40.sp),
+    headlineMedium=TextStyle(fontFamily=heading,fontWeight=if(reference!=null)FontWeight.Bold else FontWeight.Normal,fontSize=if(reference!=null)24.sp else 28.sp,lineHeight=if(reference!=null)32.sp else 36.sp),
+    headlineSmall=TextStyle(fontFamily=heading,fontWeight=if(reference!=null)FontWeight.Bold else FontWeight.Normal,fontSize=if(reference!=null)22.sp else 24.sp,lineHeight=30.sp),
     titleLarge=TextStyle(fontFamily=body,fontWeight=FontWeight.Bold,fontSize=20.sp,lineHeight=28.sp),
     titleMedium=TextStyle(fontFamily=body,fontWeight=FontWeight.SemiBold,fontSize=16.sp,lineHeight=24.sp),
     bodyLarge=TextStyle(fontFamily=body,fontSize=16.sp,lineHeight=24.sp),
@@ -92,7 +102,11 @@ private val typography=Typography(
     labelLarge=TextStyle(fontFamily=body,fontWeight=FontWeight.Bold,fontSize=14.sp,lineHeight=20.sp),
     labelMedium=TextStyle(fontFamily=body,fontSize=12.sp,lineHeight=16.sp),
 )
-private fun bitmap(path:String)=Image.makeFromEncoded(File(dir,path).readBytes()).toComposeImageBitmap()
+private fun bitmap(path:String): androidx.compose.ui.graphics.ImageBitmap {
+    val key=path.substringAfterLast('/').substringBeforeLast('.')
+    val file=reference?.getProperty("asset.$key")?.let { File(dir,it) } ?: File(dir,path)
+    return Image.makeFromEncoded(file.readBytes()).toComposeImageBitmap()
+}
 @Composable private fun Nav(selected:Int) {
     Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(26.dp)).background(pack.surface).border(1.dp,pack.outline,RoundedCornerShape(26.dp)).padding(6.dp)) {
         listOf("Home","Search","Explore","Library").forEachIndexed { i,name ->
@@ -122,7 +136,7 @@ private fun bitmap(path:String)=Image.makeFromEncoded(File(dir,path).readBytes()
         VeyraBrandContent(rememberVectorPainter(VeyraIcons.MusicNote),wordmarkFont=heading)
         Text("Listen now",style=MaterialTheme.typography.headlineMedium)
         ThemeAtmosphere("header")
-        Column { ThemeSectionRule(); Text(if(midnight)"Take the scenic route." else if(astral)"Find your current." else if(playful)"Let the good times play." else if(web)"The city is listening." else "After dark, all yours.",style=MaterialTheme.typography.headlineMedium) }
+        Column { ThemeSectionRule(); Text(if(reference!=null)pack.tagline else if(midnight)"Take the scenic route." else if(astral)"Find your current." else if(playful)"Let the good times play." else if(web)"The city is listening." else "After dark, all yours.",style=MaterialTheme.typography.headlineMedium) }
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp)) {
             (if(midnight)listOf("Window seat","Last departure") else if(astral)listOf("Moon currents","Deep listening") else if(playful)listOf("Pocket full of joy","Cartoon daydreams") else if(web)listOf("Rooftop rhythms","Night swing") else listOf("Moonlit sessions","Midnight stories")).forEachIndexed { i,name ->
                 Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -145,7 +159,7 @@ private fun bitmap(path:String)=Image.makeFromEncoded(File(dir,path).readBytes()
         Column(Modifier.fillMaxSize().padding(24.dp),verticalArrangement=Arrangement.spacedBy(18.dp)) {
             Header("Now playing")
             Image(bitmap("artwork/player.webp"),null,Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(18.dp)),contentScale=ContentScale.Crop)
-            Text(if(midnight)"Between stations" else if(astral)"Below the surface" else if(playful)"A little joy" else if(web)"Midnight skyline" else "A different kind of night",style=MaterialTheme.typography.headlineMedium)
+            Text(if(reference!=null)pack.tagline else if(midnight)"Between stations" else if(astral)"Below the surface" else if(playful)"A little joy" else if(web)"Midnight skyline" else "A different kind of night",style=MaterialTheme.typography.headlineMedium)
             Text(pack.name+" · Theme preview",style=MaterialTheme.typography.bodyMedium,color=colors.onSurfaceVariant)
             PlayerProgressTrack(fraction={0.34f},height=7.dp,activeColor={Color.White},inactiveColor=Color.Gray)
             PlayerTimelineLabels("1:12","−2:24",amber) { Text("High quality",style=MaterialTheme.typography.labelMedium,color=amber) }
@@ -184,7 +198,7 @@ private fun bitmap(path:String)=Image.makeFromEncoded(File(dir,path).readBytes()
         Row(Modifier.padding(vertical=16.dp),verticalAlignment=Alignment.CenterVertically) {
             Image(bitmap("artwork/player.webp"),null,Modifier.size(64.dp).clip(RoundedCornerShape(12.dp)),contentScale=ContentScale.Crop)
             Column(Modifier.weight(1f).padding(start=14.dp)) {
-                Text(if(midnight)"Between stations" else if(astral)"Below the surface" else if(playful)"A little joy" else if(web)"Midnight skyline" else "A different kind of night",style=MaterialTheme.typography.titleMedium)
+                Text(if(reference!=null)pack.tagline else if(midnight)"Between stations" else if(astral)"Below the surface" else if(playful)"A little joy" else if(web)"Midnight skyline" else "A different kind of night",style=MaterialTheme.typography.titleMedium)
                 Text("Your music · "+pack.name,style=MaterialTheme.typography.bodySmall,color=colors.onSurfaceVariant)
             }
         }
@@ -241,11 +255,11 @@ private fun SemanticsNode.flatten():List<SemanticsNode> = listOf(this)+children.
 fun main() {
     val performance=System.getProperty("veyra.performance")=="true"
     val reliability=System.getProperty("veyra.reliability")=="true"
-    val output=File(root,if(performance)"verification/performance-preview" else if(reliability)"verification/reliability-preview" else if(midnight)"themes/previews/midnight-express" else if(astral)"themes/previews/astral-tide" else if(playful)"themes/previews/playtime-club" else if(web)"themes/previews/web-slinger" else "themes/previews").apply{mkdirs()}
+    val output=File(root,if(reference!=null)"themes/previews/$themeId" else if(performance)"verification/performance-preview" else if(reliability)"verification/reliability-preview" else if(midnight)"themes/previews/midnight-express" else if(astral)"themes/previews/astral-tide" else if(playful)"themes/previews/playtime-club" else if(web)"themes/previews/web-slinger" else "themes/previews").apply{mkdirs()}
     val study=System.getProperty("veyra.study").orEmpty()
     val results=mutableListOf<String>()
-    for(kind in (if(performance)listOf("studio","studio-large-text","studio-rtl-large-text","atmosphere-rtl-large-text") else if(reliability)listOf("apply","apply-large-text","apply-rtl-large-text") else if(astral || midnight)listOf("home","home-large-text","player","studio","studio-large-text","settings") else if(playful) listOf("home","home-large-text","player","studio","studio-large-text","settings","actions") else listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text"))) {
-        if(study.isNotEmpty() && kind != study) continue
+    for(kind in (if(reference!=null)listOf("home","player","atmosphere-rtl-large-text") else if(performance)listOf("studio","studio-large-text","studio-rtl-large-text","atmosphere-rtl-large-text") else if(reliability)listOf("apply","apply-large-text","apply-rtl-large-text") else if(astral || midnight)listOf("home","home-large-text","player","studio","studio-large-text","settings") else if(playful) listOf("home","home-large-text","player","studio","studio-large-text","settings","actions") else listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text"))) {
+        if(study.isNotEmpty() && kind !in study.split(",")) continue
         val width=if(kind.endsWith("large-text"))320 else 390
         var matchingIconCallbacks=0
         lateinit var scene: ImageComposeScene
@@ -297,7 +311,8 @@ fun main() {
             check(pause.boundsInRoot.width >= 96f && pause.boundsInRoot.height >= 96f) { "Transport hit target shrank" }
         }
         val image=scene.render(1_000_000_000L)
-        File(output,"$kind.png").writeBytes(image.encodeToData(EncodedImageFormat.PNG)!!.bytes)
+        val extension=if(reference!=null)"webp" else "png"
+        File(output,"$kind.$extension").writeBytes(image.encodeToData(if(reference!=null)EncodedImageFormat.WEBP else EncodedImageFormat.PNG,if(reference!=null)90 else 100)!!.bytes)
         results+="$kind: native Compose components rendered at $width dp"
         if(kind == "player") results+="Themed transport delivered its native callback once; hit target at least 48 dp."
         scene.close()

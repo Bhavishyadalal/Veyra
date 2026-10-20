@@ -15,6 +15,12 @@ import android.content.pm.PackageManager
  * names so a choice made before the update stays enabled.
  */
 enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val previewRes: Int? = null) {
+    PumpkinPurr("LauncherPurr", R.mipmap.ic_theme_purr, R.string.app_icon_purr, R.mipmap.ic_theme_purr_foreground),
+    SunsetCrew("LauncherSunset", R.mipmap.ic_theme_sunset, R.string.app_icon_sunset, R.mipmap.ic_theme_sunset_foreground),
+    StarrySpirits("LauncherSpirits", R.mipmap.ic_theme_spirits, R.string.app_icon_spirits, R.mipmap.ic_theme_spirits_foreground),
+    AnalogReverie("LauncherAnalog", R.mipmap.ic_theme_analog, R.string.app_icon_analog, R.mipmap.ic_theme_analog_foreground),
+    PetalPromise("LauncherPetal", R.mipmap.ic_theme_petal, R.string.app_icon_petal, R.mipmap.ic_theme_petal_foreground),
+    MoonlitHerbarium("LauncherHerbarium", R.mipmap.ic_theme_herbarium, R.string.app_icon_herbarium, R.mipmap.ic_theme_herbarium_foreground),
     MidnightExpress("LauncherMidnight", R.mipmap.ic_theme_midnight, R.string.app_icon_midnight, R.mipmap.ic_theme_midnight_foreground),
     AstralTide("LauncherAstral", R.mipmap.ic_theme_astral, R.string.app_icon_astral, R.mipmap.ic_theme_astral_foreground),
     PlaytimeClub("LauncherPlaytime", R.mipmap.ic_theme_playtime, R.string.app_icon_playtime, R.mipmap.ic_theme_playtime_foreground),
@@ -43,6 +49,12 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
     companion object {
         /** A data-only theme cannot supply a component name or an arbitrary launcher alias. */
         fun forTheme(id: String?): AppIcon? = when (id) {
+            "pumpkin-purr" -> PumpkinPurr
+            "sunset-crew" -> SunsetCrew
+            "starry-spirits" -> StarrySpirits
+            "analog-reverie" -> AnalogReverie
+            "petal-promise" -> PetalPromise
+            "moonlit-herbarium" -> MoonlitHerbarium
             "midnight-express" -> MidnightExpress
             "astral-tide" -> AstralTide
             "playtime-club" -> PlaytimeClub

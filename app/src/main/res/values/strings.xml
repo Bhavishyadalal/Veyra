@@ -1287,4 +1287,10 @@
     <string name="download_action_track">%1$s %2$s</string>
     <string name="app_icon_astral">Astral Tide</string>
     <string name="app_icon_midnight">Midnight Express</string>
+    <string name="app_icon_purr">Pumpkin Purr</string>
+    <string name="app_icon_sunset">Sunset Crew</string>
+    <string name="app_icon_spirits">Starry Spirits</string>
+    <string name="app_icon_analog">Analog Reverie</string>
+    <string name="app_icon_petal">Petal Promise</string>
+    <string name="app_icon_herbarium">Moonlit Herbarium</string>
 </resources>

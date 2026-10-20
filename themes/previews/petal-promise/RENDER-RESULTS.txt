@@ -1,0 +1,5 @@
+Home: 390 dp; final banner contrast inspected.
+Player: 390 dp; native Pause callback exactly once; target at least 48 dp.
+Banner: 320 dp / 150% text / RTL; final contrast and text wrapping inspected.
+Shared Compose component studies, not Android screenshots. Sample player art is demonstration art.
+Final compressed WebP studies use manifest-derived assets/palette and Android heading weights.
