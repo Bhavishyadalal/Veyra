@@ -1,6 +1,6 @@
 # Veyra · 12-minute Render keep-alive
 
-Stable **0.1.5** and preview **0.1.5-beta1** use the same Veyra backend. A single external cron job supports both app versions; installing a new APK is not required for the scheduler to help them. No repeating phone-side task is added.
+Stable **0.1.6** and completed preview **0.1.6-beta1** use the same Veyra backend. A single external cron job supports both app versions; installing a new APK is not required for the scheduler to help them. No repeating phone-side task is added.
 
 | HTTP cron field | Value |
 | --- | --- |
