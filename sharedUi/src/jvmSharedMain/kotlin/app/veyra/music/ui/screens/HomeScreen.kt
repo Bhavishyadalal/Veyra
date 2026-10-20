@@ -161,6 +161,7 @@ fun HomeScreen(
     showingSaved: Boolean = false,
     updating: Boolean = false,
     homeNotice: String? = null,
+    savedContentLabel: String? = null,
     homeSections: List<HomeSectionOption> = emptyList(),
     onMoveHomeSection: ((String, Int) -> Unit)? = null,
     onHomeSectionVisible: ((String, Boolean) -> Unit)? = null,
@@ -168,7 +169,7 @@ fun HomeScreen(
     onOpenDownloads: (() -> Unit)? = null,
     onOpenLocalMusic: (() -> Unit)? = null,
 ) {
-    PrefetchHomeArtwork(state, enabled = !offline)
+    PrefetchHomeArtwork(state, listState, enabled = !offline)
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
     val homeReducedMotion = rememberVeyraReducedMotion()
     val themePack = app.veyra.music.ui.themes.LocalThemeVisuals.current
@@ -216,7 +217,7 @@ fun HomeScreen(
                     item(key = "home:experience", contentType = "home:experience") {
                         HomeExperienceHeader(offline, showingSaved, updating, homeNotice, homeSections,
                             if (customizable) ({ editingHome = true }) else null,
-                            onOpenDownloads, onOpenLocalMusic, reducedMotion = homeReducedMotion)
+                            onOpenDownloads, onOpenLocalMusic, reducedMotion = homeReducedMotion, savedContentLabel = savedContentLabel)
                     }
                 }
                 if (!signedIn && onSignIn != null) {

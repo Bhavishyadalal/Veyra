@@ -1,6 +1,7 @@
 package app.veyra.music.ui.themes
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Check
@@ -100,3 +101,29 @@ fun ThemeIconChoice(label: String, selected: Boolean, enabled: Boolean, onClick:
             textAlign=androidx.compose.ui.text.style.TextAlign.Center)
     }
 }
+
+/** Apply choices grow with font scaling and expose exactly one checkbox target per row. */
+@Composable
+fun ThemeApplyOptions(
+    hint: String,
+    refreshLabel: String, refresh: Boolean, onRefresh: (Boolean) -> Unit,
+    iconLabel: String?, matchingIcon: Boolean, onMatchingIcon: (Boolean) -> Unit,
+    enabled: Boolean = true,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(hint, style = MaterialTheme.typography.bodyMedium)
+        @Composable fun Option(label: String, checked: Boolean, change: (Boolean) -> Unit) {
+            Row(Modifier.fillMaxWidth()
+                .then(Modifier.toggleableOption(checked, enabled, change))
+                .heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
+                androidx.compose.material3.Checkbox(checked, onCheckedChange = null, enabled = enabled)
+                Text(label, Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+        if (iconLabel != null) Option(iconLabel, matchingIcon, onMatchingIcon)
+        Option(refreshLabel, refresh, onRefresh)
+    }
+}
+
+private fun Modifier.toggleableOption(checked: Boolean, enabled: Boolean, change: (Boolean) -> Unit): Modifier =
+    this.then(Modifier.toggleable(checked, enabled = enabled, role = androidx.compose.ui.semantics.Role.Checkbox, onValueChange = change))

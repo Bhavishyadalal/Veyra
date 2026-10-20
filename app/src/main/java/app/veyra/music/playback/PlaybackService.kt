@@ -1676,6 +1676,7 @@ class PlaybackService : MediaLibraryService() {
             restoreBoundedQueueOrLast(exoPlayer)
         }
         if (restored) {
+            exoPlayer.playWhenReady = false
             publishWidgetState()
         } else {
             MediaWidgetSnapshot.save(this, MediaWidgetSnapshot.EMPTY)
@@ -5929,6 +5930,7 @@ class PlaybackService : MediaLibraryService() {
         preferredPrefetchJob = scope.launch {
             val preferred = runCatching { YtMusicRepository.resolveAudio(next) }
                 .onFailure {
+                    if (it is CancellationException) throw it
                     TrackLog.d(
                         "Veyra",
                         "music-only queue warm-up fell back to video: ${it.message}",

@@ -981,6 +981,8 @@ private fun NowPlayingInTheParty(state: ListenTogether.State) {
 private fun connectionLine(state: ListenTogether.State): String = when {
     state.connection != ListenTogether.Connection.LIVE ->
         stringResource(R.string.listen_together_reconnecting)
+    state.hostReconnecting ->
+        stringResource(R.string.listen_together_host_reconnecting)
     // Live, but the clock has not been measured yet — so the position above is
     // the server's last word on it rather than this device's own reckoning, and
     // saying so is more use than a spinner.

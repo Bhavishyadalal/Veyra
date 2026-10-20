@@ -200,6 +200,9 @@ object ListenTogether {
          * Host is reassigned when a host leaves, so this can go false under a
          * listener mid-party. Everything reading it has to follow.
          */
+        val hostReconnecting: Boolean
+            get() = connection == Connection.LIVE && members.any { it.isHost && !it.connected }
+
         val controlsLocked: Boolean
             get() = inParty && hostOnlyControl && you?.isHost != true
     }
@@ -703,6 +706,7 @@ object ListenTogether {
                         override fun onAvailable(network: Network) {
                             // A real network switch is worth one recheck, unless
                             // it would be skipped as idle anyway (#788).
+                            scope.launch { switchMutex.withLock { if (_state.value.inParty) connect() } }
                             val snapshot = _state.value
                             if (!shouldSkipIdleProbe(
                                     screenActive = isScreenActive,
@@ -1213,9 +1217,21 @@ object ListenTogether {
 
     // ------------------------------------------------------------- socket --
 
+    private val socketMutex = Mutex()
+
+    @Synchronized
     private fun connect() {
         socketJob?.cancel()
-        socketJob = scope.launch { runSocketLoop() }
+        socketJob = scope.launch {
+            // Old cleanup completes before a replacement can publish its session.
+            socketMutex.withLock {
+                if (_state.value.code != null && token != null) {
+                    clock.reset()
+                    _state.update { it.copy(connection = Connection.CONNECTING, clockSynced = false) }
+                    runSocketLoop()
+                }
+            }
+        }
     }
 
     /**
@@ -1240,12 +1256,18 @@ object ListenTogether {
                     request = { header("Authorization", "Bearer $held") },
                 ) {
                     session = this
-                    backoffMs = 1_000L
-                    _state.update { it.copy(connection = Connection.LIVE, error = null) }
+                    _state.update { it.copy(error = null) }
                     launch { pingLoop() }
                     launch { reportLoop() }
-                    for (frame in incoming) {
-                        if (frame is Frame.Text) onFrame(frame.readText())
+                    while (currentScopeActive()) {
+                        // Application heartbeats detect half-open sockets after radio handovers.
+                        val frame = kotlinx.coroutines.withTimeoutOrNull(45_000L) {
+                            incoming.receiveCatching().getOrNull()
+                        } ?: throw java.io.IOException("Room connection stopped responding")
+                        if (frame is Frame.Text) {
+                            onFrame(frame.readText())
+                            if (_state.value.connection == Connection.LIVE) backoffMs = 1_000L
+                        }
                     }
                 }
             } catch (cancelled: CancellationException) {

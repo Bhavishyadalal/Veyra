@@ -142,6 +142,19 @@ object Downloads {
      */
     private val running = LinkedHashMap<String, Job?>()
 
+    private val recovery = linkedMapOf<String, DownloadRequest>()
+    private fun rememberRequest(song: Song, from: String?) = synchronized(lock) {
+        recovery[song.videoId] = DownloadRequest.of(song, from)
+        persistRecovery()
+    }
+    private fun persistRecovery() {
+        if (::prefs.isInitialized) prefs.edit().putString("download_recovery_v1", DownloadRequest.encode(recovery.values)).apply()
+    }
+    private fun forgetRequest(id: String) = synchronized(lock) {
+        recovery.remove(id)
+        persistRecovery()
+    }
+
     fun init(context: Context) {
         prefs = context.getSharedPreferences("veyra_settings", Context.MODE_PRIVATE)
         _saved.value = runCatching {
@@ -153,6 +166,16 @@ object Downloads {
         _collections.value = runCatching {
             json.decodeFromString(collectionSerializer, prefs.getString(KEY_SAVED_COLLECTIONS, null) ?: "{}")
         }.getOrDefault(emptyMap())
+        synchronized(lock) {
+            DownloadRequest.decode(prefs.getString("download_recovery_v1", "[]") ?: "[]").forEach { request ->
+                // Offer an explicit retry even if an older-quality download already exists.
+                // Retry verifies/adopts a complete destination through the normal transfer path.
+                recovery[request.id] = request
+                DownloadSession.queued(request.song(), request.from)
+                fail(request.id, context.getString(app.veyra.music.R.string.download_interrupted))
+            }
+            persistRecovery()
+        }
     }
 
     // ---- Asking -------------------------------------------------------------
@@ -191,10 +214,12 @@ object Downloads {
         }
         synchronized(lock) {
             if (id in pending || id in running) return
+            // Publish request metadata before an existing worker can claim this item.
             pending[id] = song
+            rememberRequest(song, from)
+            _active.update { it + (id to DownloadState.Queued) }
+            DownloadSession.queued(song, from)
         }
-        _active.update { it + (id to DownloadState.Queued) }
-        DownloadSession.queued(song, from)
 
         val app = context.applicationContext
         runCatching {
@@ -794,7 +819,12 @@ object Downloads {
      * forever as already in flight.
      */
     internal fun onStopped() {
-        synchronized(lock) { running.clear() }
+        synchronized(lock) {
+            val interrupted = pending.keys.toList() + running.keys.toList()
+            pending.clear()
+            running.clear()
+            interrupted.forEach { fail(it, "Interrupted. Tap Retry to download again.") }
+        }
     }
 
     /**
@@ -839,7 +869,9 @@ object Downloads {
             DownloadSession.retitle(id, plan.track)
             transfer(context, song, plan)
         } catch (e: CancellationException) {
-            clear(id)
+            if (_active.value[id] is DownloadState.Running) {
+                fail(id, context.getString(app.veyra.music.R.string.download_interrupted))
+            }
             throw e
         } catch (e: Exception) {
             Log.w(TAG, "download failed for $id: ${e.message}", e)
@@ -1230,6 +1262,7 @@ object Downloads {
 
     /** Back to "not downloaded" — used for success, where [saved] takes over, and for cancellation. */
     private fun clear(videoId: String) {
+        forgetRequest(videoId)
         _active.update { it - videoId }
     }
 
@@ -1319,7 +1352,12 @@ object Downloads {
 
     /** Dropped when the sheet is reopened; a failure is worth showing once. */
     fun dismissFailure(videoId: String) {
-        if (_active.value[videoId] is DownloadState.Failed) clear(videoId)
+        if (_active.value[videoId] is DownloadState.Failed) _active.update { it - videoId }
+    }
+
+    fun dismissRecovery(videoId: String) {
+        forgetRequest(videoId)
+        dismissFailure(videoId)
     }
 
     private const val KEY_SAVED = "downloaded_tracks"

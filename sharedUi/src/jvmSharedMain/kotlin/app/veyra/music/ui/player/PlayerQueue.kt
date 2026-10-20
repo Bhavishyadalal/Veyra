@@ -230,6 +230,7 @@ internal fun InlineQueue(
     onRemove: (Int) -> Unit,
     onMove: (Int, Int) -> Unit,
     onClear: () -> Unit,
+    feedback: @Composable () -> Unit = {},
     onScrollingChange: (Boolean) -> Unit = {},
     onDragActiveChange: (Boolean) -> Unit = {},
     /** Phone only: let queue scrolling dismiss/restore the lower half player. */
@@ -239,6 +240,7 @@ internal fun InlineQueue(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
+    val reducedMotion = app.veyra.music.ui.motion.rememberVeyraReducedMotion()
     LaunchedEffect(listState) {
         snapshotFlow { listState.isScrollInProgress }.collect(onScrollingChange)
     }
@@ -265,7 +267,7 @@ internal fun InlineQueue(
         val nowPlayingRow = if (tracks.history.isEmpty()) 0 else tracks.history.size + 1
         val scrolledAway = listState.firstVisibleItemIndex != nowPlayingRow || listState.firstVisibleItemScrollOffset != 0
         if (drag.held == null && nowPlaying != null && scrolledAway) {
-            if (hasScrolledOnce) {
+            if (hasScrolledOnce && !reducedMotion) {
                 listState.animateScrollToItem(nowPlayingRow)
             } else {
                 listState.scrollToItem(nowPlayingRow)
@@ -275,6 +277,7 @@ internal fun InlineQueue(
     }
 
     Column(modifier.fillMaxWidth()) {
+        feedback()
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,

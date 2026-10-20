@@ -45,6 +45,7 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
     var detailId by rememberSaveable { mutableStateOf<String?>(null) }
     var applying by remember { mutableStateOf(false) }
     var restartAfterApply by rememberSaveable { mutableStateOf(false) }
+    var matchingIcon by rememberSaveable(pending) { mutableStateOf(false) }
     var installedOnly by rememberSaveable { mutableStateOf(false) }
     val scope=rememberCoroutineScope()
     val focus=androidx.compose.ui.platform.LocalFocusManager.current
@@ -150,17 +151,26 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
     }
     pending?.let {selection->
         AlertDialog(onDismissRequest={if(!applying)pending=null},title={Text(stringResource(R.string.theme_restart_title))},
-            text={Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                Text(stringResource(R.string.theme_live_apply_hint))
-                Row(Modifier.fillMaxWidth().toggleable(restartAfterApply,enabled=!applying,role=Role.Checkbox,onValueChange={restartAfterApply=it}).heightIn(min=48.dp),verticalAlignment=Alignment.CenterVertically) {
-                    Checkbox(restartAfterApply,onCheckedChange=null,enabled=!applying)
-                    Text(stringResource(R.string.theme_optional_restart),Modifier.weight(1f),style=MaterialTheme.typography.bodyMedium)
-                }
-            }},
+            text={app.veyra.music.ui.themes.ThemeApplyOptions(
+                hint=stringResource(R.string.theme_live_apply_hint),
+                refreshLabel=stringResource(R.string.theme_optional_restart),
+                refresh=restartAfterApply, onRefresh={restartAfterApply=it},
+                iconLabel=if(app.veyra.music.AppIcon.forTheme(selection)!=null) stringResource(R.string.theme_matching_icon) else null,
+                matchingIcon=matchingIcon, onMatchingIcon={matchingIcon=it}, enabled=!applying,
+            )},
             confirmButton={TextButton(enabled=!applying,onClick={
                 applying=true
                 scope.launch {
                     val success=ThemeRepository.apply(selection.takeUnless {it=="@original"})
+                    if(success && matchingIcon) {
+                        val icon=app.veyra.music.AppIcon.forTheme(selection)
+                        if(icon!=null) {
+                            val changed=kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                                runCatching {app.veyra.music.AppIcon.apply(context,icon)}.isSuccess
+                            }
+                            if(!changed) android.widget.Toast.makeText(context,R.string.theme_icon_failed,android.widget.Toast.LENGTH_LONG).show()
+                        }
+                    }
                     applying=false;pending=null
                     if(success) {onDismiss();if(restartAfterApply)context.activity()?.recreate()}
                 }

@@ -132,6 +132,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val homeSections: StateFlow<List<HomeSectionOption>> = _homeSectionOptions.asStateFlow()
     private val _homeShowingSaved = MutableStateFlow(false)
     val homeShowingSaved = _homeShowingSaved.asStateFlow()
+    private val _homeSavedAt = MutableStateFlow<Long?>(null)
+    val homeSavedAt = _homeSavedAt.asStateFlow()
     private val _homeUpdating = MutableStateFlow(false)
     val homeUpdating = _homeUpdating.asStateFlow()
     private val _homeNotice = MutableStateFlow<String?>(null)
@@ -1742,6 +1744,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         homeSnapshotJob?.cancel()
         homeLoadGeneration.incrementAndGet()
         homeOwner = owner
+        _homeSavedAt.value = null
         homeLayoutLoaded = false
         publishHomeState(UiState.Loading)
         _homeLayout.value = HomeLayout()
@@ -1768,6 +1771,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         homeLayoutLoaded = true
         if (_home.value !is UiState.Success && cached != null) {
             _homeShowingSaved.value = true
+            _homeSavedAt.value = cached.savedAt
             publishHomeState(UiState.Success(cached.shelves))
         }
         return true

@@ -218,18 +218,28 @@ private fun bitmap(path:String)=Image.makeFromEncoded(File(dir,path).readBytes()
 }
 private fun SemanticsNode.flatten():List<SemanticsNode> = listOf(this)+children.flatMap{it.flatten()}
 fun main() {
-    val output=File(root,if(playful)"themes/previews/playtime-club" else if(web)"themes/previews/web-slinger" else "themes/previews").apply{mkdirs()}
+    val reliability=System.getProperty("veyra.reliability")=="true"
+    val output=File(root,if(reliability)"verification/reliability-preview" else if(playful)"themes/previews/playtime-club" else if(web)"themes/previews/web-slinger" else "themes/previews").apply{mkdirs()}
     val results=mutableListOf<String>()
-    for(kind in (if(playful) listOf("home","home-large-text","player","studio","studio-large-text","settings","actions") else listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text"))) {
+    for(kind in (if(reliability)listOf("apply","apply-large-text","apply-rtl-large-text") else if(playful) listOf("home","home-large-text","player","studio","studio-large-text","settings","actions") else listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text"))) {
         val width=if(kind.endsWith("large-text"))320 else 390
+        var matchingIconCallbacks=0
         lateinit var scene: ImageComposeScene
         SwingUtilities.invokeAndWait { scene=ImageComposeScene(width*2,1800,density=Density(2f,if(kind.endsWith("large-text"))1.5f else 1f)) {
-            CompositionLocalProvider(LocalThemeVisuals provides pack,LocalVeyraWordmarkFont provides heading) {
+            CompositionLocalProvider(LocalThemeVisuals provides pack,LocalVeyraWordmarkFont provides heading,
+                androidx.compose.ui.platform.LocalLayoutDirection provides if(kind.contains("rtl")) LayoutDirection.Rtl else LayoutDirection.Ltr) {
                 MaterialTheme(colorScheme=colors,typography=typography) {
                     Surface(Modifier.fillMaxSize(),color=colors.background) {
                         Box(Modifier.fillMaxSize()) {
                             ThemeScene(Modifier.matchParentSize())
-                            when { kind.startsWith("home")->Home();kind=="player"->Player();kind.startsWith("actions")->Actions();kind.startsWith("studio")->Studio();kind.startsWith("icons")->IconsStudy();else->Settings() }
+                            when { kind.startsWith("apply")->Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp)) {
+                                Text("Apply "+pack.name, style=MaterialTheme.typography.titleLarge)
+                                Spacer(Modifier.height(16.dp))
+                                ThemeApplyOptions("Your music keeps playing. Original Veyra settings stay saved.",
+                                    "Also refresh the interface",false,{},"Also use the matching launcher icon",false,{matchingIconCallbacks++})
+                                Spacer(Modifier.height(16.dp))
+                                Button(onClick={},modifier=Modifier.fillMaxWidth()) {Text("Apply theme")}
+                            };kind.startsWith("home")->Home();kind=="player"->Player();kind.startsWith("actions")->Actions();kind.startsWith("studio")->Studio();kind.startsWith("icons")->IconsStudy();else->Settings() }
                         }
                     }
                 }
@@ -248,6 +258,14 @@ fun main() {
         }
         val nodes=scene.semanticsOwners.flatMap{it.rootSemanticsNode.flatten()}
         check(nodes.isNotEmpty())
+        if (kind.startsWith("apply")) {
+            val options = nodes.filter { it.config.getOrNull(SemanticsProperties.Role) == Role.Checkbox }
+            check(options.size == 2) { "Expected one accessible checkbox per option" }
+            options.forEach { check(it.boundsInRoot.height >= 96f) { "Apply option target below 48 dp" } }
+            check(options.first().config.getOrNull(SemanticsActions.OnClick)?.action?.invoke() == true)
+            check(matchingIconCallbacks == 1) { "Matching icon callback was not delivered exactly once" }
+            results+="$kind: two checkbox targets >=48 dp; matching-icon callback delivered once."
+        }
         if (kind == "player") {
             val pause = nodes.first { it.config.getOrNull(SemanticsProperties.ContentDescription)?.contains("Pause") == true }
             check(pause.config.getOrNull(SemanticsActions.OnClick)?.action?.invoke() == true)

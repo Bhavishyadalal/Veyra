@@ -1,9 +1,22 @@
-# Veyra 0.1.7-beta1 · Three worlds, one Veyra
+# Veyra 0.1.7-beta1 · Listening continuity and three worlds
 
 **Preview source · code 25 · Made by Bhavishya Dalal**
 
 Stable **0.1.6 / code 22** remains separate. This source update does not publish
 an APK or change the Listen Together backend.
+
+## Listening continuity and recovery
+
+- Saved Home content shows when it was saved; restored playback stays paused.
+- Artwork prefetch follows nearby shelves and cancels obsolete requests.
+- Interrupted downloads return as explicit retries, with Retry failed and available storage/destination feedback.
+- Listen Together recovers on network changes and silent sockets, with host-disconnection feedback.
+- Theme apply offers an explicit, unchecked matching launcher option while preserving existing previews and compact browsing.
+- Queue removal and Clear user queue offer guarded Undo without starting playback.
+- Larger download action targets, track-specific TalkBack labels, growing status text, accessibility-aware undo timing and calmer reduced-motion feedback.
+
+[Implementation, validation and device-check limits](verification/RELIABILITY-0.1.7-beta1.md).
+Version remains **0.1.7-beta1 / code 25**. No new installer is published.
 
 ## Playtime Club
 

@@ -738,6 +738,7 @@ private fun VeyraApp(
     val homeRecentlyPlayedLoading by viewModel.homeRecentlyPlayedLoading.collectAsStateWithLifecycle()
     val homeOnline by viewModel.homeOnline.collectAsStateWithLifecycle()
     val homeShowingSaved by viewModel.homeShowingSaved.collectAsStateWithLifecycle()
+    val homeSavedAt by viewModel.homeSavedAt.collectAsStateWithLifecycle()
     val homeUpdating by viewModel.homeUpdating.collectAsStateWithLifecycle()
     val homeNotice by viewModel.homeNotice.collectAsStateWithLifecycle()
     val homeSections by viewModel.homeSections.collectAsStateWithLifecycle()
@@ -977,10 +978,40 @@ private fun VeyraApp(
         queueNoticeId += 1
         queueNotice = QueueActionNotice(queueNoticeId, message)
     }
+    val queueAccessibility = androidx.compose.ui.platform.LocalAccessibilityManager.current
     LaunchedEffect(queueNotice?.id) {
         val shown = queueNotice ?: return@LaunchedEffect
-        delay(3_000)
+        val baseTimeout = if (shown.undo != null) 10_000L else 3_000L
+        delay(queueAccessibility?.calculateRecommendedTimeoutMillis(baseTimeout, containsText = true, containsControls = shown.undo != null) ?: baseTimeout)
         if (queueNotice?.id == shown.id) queueNotice = null
+    }
+    fun queueIdentity(item: androidx.media3.common.MediaItem): String =
+        item.toSong().queueEntryId ?: item.mediaId
+    fun removeQueueEntries(indices: List<Int>) {
+        val c = controller ?: return
+        if (controlsLocked) return
+        val removed = indices.distinct().sorted().filter { it in 0 until c.mediaItemCount }
+            .map { it to c.getMediaItemAt(it) }
+        if (removed.isEmpty()) return
+        // Removing the current song remains supported; undo must never rewind a new song.
+        val canUndo = removed.none { it.first == c.currentMediaItemIndex } && !partyState.inParty
+        removed.asReversed().forEach { c.removeMediaItem(it.first) }
+        val snapshot = app.veyra.music.playback.QueueUndo(
+            removed, (0 until c.mediaItemCount).map { queueIdentity(c.getMediaItemAt(it)) },
+            c.currentMediaItem?.let(::queueIdentity),
+        )
+        queueNoticeId += 1
+        queueNotice = QueueActionNotice(queueNoticeId, context.getString(R.string.queue_removed, removed.size),
+            if (!canUndo) null else ({
+                if (controller === c && !ListenTogether.state.value.inParty && snapshot.canRestore(
+                        (0 until c.mediaItemCount).map { queueIdentity(c.getMediaItemAt(it)) },
+                        c.currentMediaItem?.let(::queueIdentity))) {
+                    snapshot.removed.forEach { (index, item) -> c.addMediaItem(index, item) }
+                } else {
+                    Toast.makeText(context, R.string.queue_undo_expired, Toast.LENGTH_SHORT).show()
+                }
+                queueNotice = null
+            }))
     }
     // Why a control did nothing, on the same strip above the mini player that
     // already answers "added to queue". Reached from every surface that had a
@@ -2398,7 +2429,7 @@ private fun VeyraApp(
                     c.play()
                 }
             },
-            onRemoveFromQueue = { controller?.removeMediaItem(it) },
+            onRemoveFromQueue = { removeQueueEntries(listOf(it)) },
             onMoveInQueue = { from, to -> controller?.moveMediaItem(from, to) },
             onQueueDragActiveChange = { active -> controller?.setQueueDragActive(active) },
             // The enriched copy, not player.song — otherwise the menu
@@ -2533,10 +2564,12 @@ private fun VeyraApp(
                 showSettings = true
                 showListenTogether = true
             },
+            queueFeedback = { QueueActionNoticeHost(queueNotice) },
             onClearQueue = {
                 // Keep what's playing and context/autoplay; drop user-queued tracks.
                 controller?.let { c ->
-                    QueueCoordinator.clearUserQueue(c)
+                    removeQueueEntries(((c.currentMediaItemIndex + 1) until c.mediaItemCount)
+                        .filter { c.getMediaItemAt(it).toSong().queueTier == app.veyra.music.data.model.QueueTier.USER_QUEUE })
                 }
             },
         )
@@ -3138,6 +3171,9 @@ private fun VeyraApp(
                                 recentlyPlayedLoading = homeRecentlyPlayedLoading,
                                 offline = !homeOnline,
                                 showingSaved = homeShowingSaved,
+                                savedContentLabel = if (homeShowingSaved) homeSavedAt?.let {
+                                    context.getString(R.string.home_saved_at, java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.SHORT).format(java.util.Date(it)))
+                                } else null,
                                 updating = homeUpdating,
                                 homeNotice = homeNotice,
                                 homeSections = homeSections,

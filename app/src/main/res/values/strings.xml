@@ -1271,4 +1271,18 @@
     <string name="theme_saved_appearance">Your saved style</string>
     <string name="app_icon_playtime">Playtime Club</string>
     <string name="theme_playtime_credits">Unofficial fan artwork. Doraemon: Fujiko-Pro / Shogakukan / TV Asahi / Shin-Ei Animation. Crayon Shin-chan: Yoshito Usui / Futabasha / Shin-Ei Animation / TV Asahi. Oggy: Xilam Animation. No affiliation or endorsement.</string>
+    <string name="home_saved_at">Saved %1$s · refreshing when online</string>
+    <string name="theme_matching_icon">Also use the matching launcher icon</string>
+    <string name="theme_icon_failed">Theme applied. Launcher icon could not change; try the app icon chooser.</string>
+    <string name="download_saved_private">Saved in app storage</string>
+    <string name="download_interrupted">Interrupted when Veyra closed. Tap Retry to download again.</string>
+    <string name="download_storage">%1$s available · %2$s</string>
+    <string name="download_storage_public">Music/Veyra</string>
+    <string name="download_storage_private">App storage</string>
+    <string name="download_retry_all">Retry failed</string>
+    <string name="listen_together_host_reconnecting">Host disconnected · waiting for them to reconnect</string>
+    <string name="queue_removed">Removed %1$d from queue</string>
+    <string name="queue_undo_expired">Queue changed. Undo is no longer available.</string>
+    <string name="undo">Undo</string>
+    <string name="download_action_track">%1$s %2$s</string>
 </resources>
