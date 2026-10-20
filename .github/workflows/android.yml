@@ -54,3 +54,4 @@ jobs:
       with:
         name: veyra-prod-release-signed
         path: app/build/outputs/apk/prod/release/*.apk
+        retention-days: 7
