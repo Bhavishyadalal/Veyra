@@ -411,7 +411,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 val appBackdrop = rememberLayerBackdrop(onDraw = paintBackdrop)
                 CompositionLocalProvider(
-                    LocalOverscrollFactory provides iosOverscrollFactory,
+                    LocalOverscrollFactory provides if (rememberVeyraReducedMotion()) null else iosOverscrollFactory,
                     LocalLiquidGlassEnabled provides liquidGlassEnabled,
                     LocalAppBackdrop provides appBackdrop,
                 ) {

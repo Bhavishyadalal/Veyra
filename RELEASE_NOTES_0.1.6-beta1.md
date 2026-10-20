@@ -1,5 +1,14 @@
 # Veyra 0.1.6-beta1 · Your Home, ready sooner
 
+## Scroll bounce refinement
+
+- Return springs start immediately when an edge pull is released, without waiting for list-fling decay.
+- A new touch cancels the old return spring without jumping the current offset.
+- Corrected rubber-band resistance reduces excessive stretch; animated offsets remain in the graphics layer.
+- Subtle/Off motion and disabled system animations skip decorative scroll bounce.
+
+[Implementation and verification limits](verification/SCROLL-MOTION-0.1.6-beta1.md).
+
 ## Settings navigation and Appearance refinement
 
 - One top-left Back control replaces the duplicate row beneath Settings search.
