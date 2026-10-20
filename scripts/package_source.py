@@ -29,7 +29,8 @@ def main():
                 continue
             if p.name in {"local.properties", "key.properties", ".DS_Store", "banner.jpg", "upi_support.jpg"}:
                 continue
-            if p.suffix.lower() in {".zip", ".apk", ".aab", ".jks", ".keystore", ".log"}:
+            is_theme_pack = p.parts[:2] == ("themes", "packs") and p.suffix.lower() == ".zip"
+            if p.suffix.lower() in {".zip", ".apk", ".aab", ".jks", ".keystore", ".log"} and not is_theme_pack:
                 continue
             if p.name.startswith(".env") and p.name != ".env.example":
                 continue
