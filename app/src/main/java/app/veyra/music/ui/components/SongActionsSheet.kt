@@ -14,6 +14,9 @@ import app.veyra.music.ui.motion.veyraPressFeedback
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.ui.platform.LocalDensity
+import app.veyra.music.ui.layout.stackForReadability
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -818,6 +821,8 @@ internal fun ActionRow(
             modifier = Modifier.size(if (menu) 20.dp else 22.dp),
         )
     }
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+    val stackedValue = value != null && stackForReadability(maxWidth.value, LocalDensity.current.fontScale, 360f)
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -840,19 +845,25 @@ internal fun ActionRow(
             iconView()
             Spacer(Modifier.width(18.dp))
         }
+        Column(Modifier.weight(1f)) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
             color = foreground.copy(alpha = alpha),
             maxLines = if (menu) 2 else Int.MAX_VALUE,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f),
         )
+            if (stackedValue && value != null) {
+                Text(value, style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold, color = accent.copy(alpha = alpha),
+                    modifier = Modifier.padding(top = 4.dp))
+            }
+        }
         if (busy) {
             Spacer(Modifier.width(12.dp))
             ActionProgressIndicator(accent)
         }
-        if (value != null) {
+        if (value != null && !stackedValue) {
             Spacer(Modifier.width(12.dp))
             Text(
                 text = value,
@@ -868,6 +879,7 @@ internal fun ActionRow(
             Spacer(Modifier.width(14.dp))
             iconView()
         }
+    }
     }
 }
 

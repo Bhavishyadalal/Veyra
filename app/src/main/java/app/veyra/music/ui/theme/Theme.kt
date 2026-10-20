@@ -6,6 +6,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.veyra.music.data.settings.AppSettings
+import app.veyra.music.ui.components.LocalVeyraContrastControls
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
@@ -82,13 +86,21 @@ private val VeyraTypography = Typography(
     titleLarge = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 28.sp, letterSpacing = (-0.3).sp),
     titleMedium = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = (-0.2).sp),
     titleSmall = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 14.sp, lineHeight = 20.sp),
-    bodyLarge = TextStyle(fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp),
+    bodyLarge = TextStyle(fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 24.sp),
     bodyMedium = TextStyle(fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 20.sp),
     bodySmall = TextStyle(fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = 18.sp),
     labelLarge = TextStyle(fontWeight = FontWeight.Bold, fontSize = 14.sp, lineHeight = 20.sp),
     labelMedium = TextStyle(fontWeight = FontWeight.Bold, fontSize = 12.sp, lineHeight = 16.sp),
     labelSmall = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 11.sp, lineHeight = 16.sp),
 ).withFamily(VeyraFontFamily)
+
+private val StrongerTypography = VeyraTypography.copy(
+    bodyLarge = VeyraTypography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+    bodyMedium = VeyraTypography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+    bodySmall = VeyraTypography.bodySmall.copy(fontWeight = FontWeight.Medium),
+    titleMedium = VeyraTypography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+    titleSmall = VeyraTypography.titleSmall.copy(fontWeight = FontWeight.Bold),
+)
 
 /** Applies [family] to every style in the scale, so nothing is left on Roboto. */
 private fun Typography.withFamily(family: FontFamily) = Typography(
@@ -114,10 +126,15 @@ fun VeyraTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    CompositionLocalProvider(LocalVeyraWordmarkFont provides VeyraWordmarkFont) {
+    val strongerText by AppSettings.strongerText.collectAsStateWithLifecycle()
+    val contrastControls by AppSettings.contrastPlayerControls.collectAsStateWithLifecycle()
+    CompositionLocalProvider(
+        LocalVeyraWordmarkFont provides VeyraWordmarkFont,
+        LocalVeyraContrastControls provides contrastControls,
+    ) {
         MaterialTheme(
             colorScheme = if (darkTheme) DarkColors else LightColors,
-            typography = VeyraTypography,
+            typography = if (strongerText) StrongerTypography else VeyraTypography,
             content = content,
         )
     }

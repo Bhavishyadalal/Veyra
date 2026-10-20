@@ -1,5 +1,6 @@
 package app.veyra.music.ui.components
 
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 
@@ -9,3 +10,6 @@ object VeyraSurfaces {
     val Sheet = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     val MinTouch = 48.dp
 }
+
+/** Supplied by the app theme; no preference collector per player button. */
+val LocalVeyraContrastControls = staticCompositionLocalOf { false }

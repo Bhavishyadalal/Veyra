@@ -441,9 +441,12 @@ internal fun TransportRow(
     onNext: () -> Unit,
     compact: Boolean = false,
 ) {
-    val playSize = if (compact) 52.dp else 68.dp
-    val playTouch = if (compact) 76.dp else 92.dp
-    val skipSize = if (compact) 30.dp else 36.dp
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+    val condensed = compact || maxWidth < 300.dp
+    val skipTouch = if (maxWidth < 220.dp) 48.dp else PLAYER_SKIP_TOUCH_SIZE
+    val playTouch = minOf(if (condensed) 76.dp else 92.dp, maxWidth - skipTouch * 2).coerceAtLeast(48.dp)
+    val playSize = minOf(if (condensed) 52.dp else 68.dp, playTouch - 8.dp)
+    val skipSize = if (condensed) 30.dp else 36.dp
     Row(
         modifier = Modifier.fillMaxWidth(),
         // SpaceAround, not SpaceEvenly: the outer margins take half a gap, so
@@ -455,7 +458,7 @@ internal fun TransportRow(
             icon = Res.drawable.ic_player_previous,
             contentDescription = stringResource(Res.string.widget_previous),
             size = skipSize,
-            touchSize = PLAYER_SKIP_TOUCH_SIZE,
+            touchSize = skipTouch,
             heightScale = 1f,
             onClick = onPrevious,
             enabled = previousEnabled,
@@ -472,12 +475,13 @@ internal fun TransportRow(
             icon = Res.drawable.ic_player_next,
             contentDescription = stringResource(Res.string.widget_next),
             size = skipSize,
-            touchSize = PLAYER_SKIP_TOUCH_SIZE,
+            touchSize = skipTouch,
             heightScale = 1f,
             onClick = onNext,
             enabled = nextEnabled,
             haptic = Haptic.SkipNext,
         )
+    }
     }
 }
 

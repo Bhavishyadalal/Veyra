@@ -196,6 +196,8 @@ fun SettingsScreen(
     val dolbyAtmosSupported = DeviceCodecs.playsDolbyAtmos
     val spatialAudio by AppSettings.spatialAudio.collectAsStateWithLifecycle()
     val nerdStats by AppSettings.showNerdStats.collectAsStateWithLifecycle()
+    val strongerText by AppSettings.strongerText.collectAsStateWithLifecycle()
+    val contrastPlayerControls by AppSettings.contrastPlayerControls.collectAsStateWithLifecycle()
     val reduceAnimation by AppSettings.reduceAnimation.collectAsStateWithLifecycle()
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val liquidGlass by AppSettings.liquidGlass.collectAsStateWithLifecycle()
@@ -747,6 +749,20 @@ fun SettingsScreen(
                         onSelect = { AppSettings.setThemeMode(ThemeMode.entries[it]) },
                         modifier = Modifier.padding(start = ROW_INSET, end = ROW_INSET, bottom = 14.dp),
                     )
+                }
+                val strongerTextTitle = stringResource(R.string.stronger_text)
+                row(strongerTextTitle, "font", "bold", "readability", "accessibility") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = strongerTextTitle,
+                        subtitle = stringResource(R.string.stronger_text_subtitle),
+                        checked = strongerText,
+                        onClick = { AppSettings.setStrongerText(!strongerText) })
+                }
+                val contrastControlsTitle = stringResource(R.string.contrast_player_controls)
+                row(contrastControlsTitle, "contrast", "buttons", "player", "accessibility") {
+                    SettingsRow(icon = SettingsIcons.Icons, title = contrastControlsTitle,
+                        subtitle = stringResource(R.string.contrast_player_controls_subtitle),
+                        checked = contrastPlayerControls,
+                        onClick = { AppSettings.setContrastPlayerControls(!contrastPlayerControls) })
                 }
                 val liquidGlassTitle = stringResource(R.string.liquid_glass)
                 row(liquidGlassTitle, "glass", "blur") {

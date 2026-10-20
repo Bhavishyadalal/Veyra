@@ -1194,4 +1194,8 @@
     <string name="settings_backup_working">Working on your backup…</string>
     <string name="home_layout_save_failed">Could not save your Home layout. Please try again.</string>
     <string name="home_offline_track_unavailable">This item needs a connection. Open Downloads or Local Music to listen offline.</string>
+    <string name="stronger_text">Stronger text</string>
+    <string name="stronger_text_subtitle">Heavier text for easier reading. Keeps your system text size.</string>
+    <string name="contrast_player_controls">Higher-contrast player controls</string>
+    <string name="contrast_player_controls_subtitle">Give player buttons a visible background and outline over artwork.</string>
 </resources>

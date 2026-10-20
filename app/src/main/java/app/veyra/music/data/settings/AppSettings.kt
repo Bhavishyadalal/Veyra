@@ -355,6 +355,8 @@ object AppSettings {
 
     /** Freezes the main player's mesh gradient instead of letting it drift/crossfade. */
     val reduceAnimation = MutableStateFlow(false)
+    val strongerText = MutableStateFlow(false)
+    val contrastPlayerControls = MutableStateFlow(false)
 
     /**
      * Whether the welcome pages (party name, then YouTube sign-in) have been
@@ -854,6 +856,8 @@ object AppSettings {
         shuffleEnabled.value = prefs.getBoolean(KEY_SHUFFLE_ENABLED, false)
         repeatMode.value = prefs.getInt(KEY_REPEAT_MODE, Player.REPEAT_MODE_OFF)
         showNerdStats.value = prefs.getBoolean(KEY_NERD_STATS, false)
+        strongerText.value = prefs.getBoolean(KEY_STRONGER_TEXT, false)
+        contrastPlayerControls.value = prefs.getBoolean(KEY_CONTRAST_PLAYER_CONTROLS, false)
         reduceAnimation.value = prefs.getBoolean(KEY_REDUCE_ANIMATION, false)
         onboardingComplete.value = prefs.getBoolean(KEY_ONBOARDING_COMPLETE, false)
         highPerformanceMode.value = prefs.getBoolean(KEY_HIGH_PERFORMANCE_MODE, false)
@@ -1214,6 +1218,16 @@ object AppSettings {
     fun setThemeMode(value: ThemeMode) {
         themeMode.value = value
         prefs.edit().putString(KEY_THEME, value.name).apply()
+    }
+
+    fun setStrongerText(value: Boolean) {
+        strongerText.value = value
+        prefs.edit().putBoolean(KEY_STRONGER_TEXT, value).apply()
+    }
+
+    fun setContrastPlayerControls(value: Boolean) {
+        contrastPlayerControls.value = value
+        prefs.edit().putBoolean(KEY_CONTRAST_PLAYER_CONTROLS, value).apply()
     }
 
     fun setReduceAnimation(value: Boolean) {
@@ -2017,6 +2031,8 @@ object AppSettings {
     private const val KEY_REPEAT_MODE = "repeat_mode"
     private const val KEY_NERD_STATS = "show_nerd_stats"
     private const val KEY_CACHE_LIMIT = "audio_cache_limit_bytes"
+    private const val KEY_STRONGER_TEXT = "stronger_text"
+    private const val KEY_CONTRAST_PLAYER_CONTROLS = "contrast_player_controls"
     private const val KEY_REDUCE_ANIMATION = "reduce_animation"
     private const val KEY_ONBOARDING_COMPLETE = "onboarding_complete"
     private const val KEY_HIGH_PERFORMANCE_MODE = "high_performance_mode"

@@ -1,5 +1,14 @@
 # Veyra 0.1.6-beta1 · Your Home, ready sooner
 
+## Compact-screen and readability update
+
+- Centered, proportionate buffering indicators in player controls.
+- Adaptive Settings controls, song-menu values, timeline labels and transport spacing.
+- Stronger Settings icon strokes and a more readable default body weight.
+- New saved Appearance options: **Stronger text** and **Higher-contrast player controls**.
+
+[Changes and verification limits](verification/ACCESSIBILITY-0.1.6-beta1.md).
+
 ## Interface and motion update
 
 - Matching surfaces and touch feedback across Settings, player drawers and song menus.

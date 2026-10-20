@@ -4,6 +4,8 @@ This is a preview-only update on `preview/0.1.6-beta1`, retaining version
 **0.1.6-beta1 / code 21**. Stable app code on `main` stays **0.1.5 / code 20**.
 Made by Bhavishya Dalal.
 
+Latest follow-up: [compact layouts, readability and buffering alignment](ACCESSIBILITY-0.1.6-beta1.md).
+
 ## What changed
 
 - **Shared surfaces:** Settings, track actions and player drawers share row/sheet

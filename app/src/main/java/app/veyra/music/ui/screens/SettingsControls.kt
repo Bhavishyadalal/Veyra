@@ -1,5 +1,6 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.layout.stackForReadability
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -121,7 +122,7 @@ internal fun SettingsRow(
             else -> Modifier
         }
     BoxWithConstraints(Modifier.fillMaxWidth()) {
-        val stacked = maxWidth < 360.dp && LocalDensity.current.fontScale > 1.25f
+        val stacked = stackForReadability(maxWidth.value, LocalDensity.current.fontScale, 300f)
         @Composable
         fun EndControl() {
             when {
@@ -230,7 +231,7 @@ internal fun SettingsSubRow(
     subtitle: String? = null,
 ) {
     BoxWithConstraints(Modifier.fillMaxWidth()) {
-        val stacked = maxWidth < 360.dp && LocalDensity.current.fontScale > 1.25f
+        val stacked = stackForReadability(maxWidth.value, LocalDensity.current.fontScale, 300f)
         Row(
             Modifier.fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
