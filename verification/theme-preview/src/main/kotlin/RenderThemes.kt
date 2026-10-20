@@ -239,10 +239,13 @@ private fun bitmap(path:String)=Image.makeFromEncoded(File(dir,path).readBytes()
 }
 private fun SemanticsNode.flatten():List<SemanticsNode> = listOf(this)+children.flatMap{it.flatten()}
 fun main() {
+    val performance=System.getProperty("veyra.performance")=="true"
     val reliability=System.getProperty("veyra.reliability")=="true"
-    val output=File(root,if(reliability)"verification/reliability-preview" else if(midnight)"themes/previews/midnight-express" else if(astral)"themes/previews/astral-tide" else if(playful)"themes/previews/playtime-club" else if(web)"themes/previews/web-slinger" else "themes/previews").apply{mkdirs()}
+    val output=File(root,if(performance)"verification/performance-preview" else if(reliability)"verification/reliability-preview" else if(midnight)"themes/previews/midnight-express" else if(astral)"themes/previews/astral-tide" else if(playful)"themes/previews/playtime-club" else if(web)"themes/previews/web-slinger" else "themes/previews").apply{mkdirs()}
+    val study=System.getProperty("veyra.study").orEmpty()
     val results=mutableListOf<String>()
-    for(kind in (if(reliability)listOf("apply","apply-large-text","apply-rtl-large-text") else if(astral || midnight)listOf("home","home-large-text","player","studio","studio-large-text","settings") else if(playful) listOf("home","home-large-text","player","studio","studio-large-text","settings","actions") else listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text"))) {
+    for(kind in (if(performance)listOf("studio","studio-large-text","studio-rtl-large-text","atmosphere-rtl-large-text") else if(reliability)listOf("apply","apply-large-text","apply-rtl-large-text") else if(astral || midnight)listOf("home","home-large-text","player","studio","studio-large-text","settings") else if(playful) listOf("home","home-large-text","player","studio","studio-large-text","settings","actions") else listOf("home","home-large-text","player","settings","settings-large-text","actions","actions-large-text","studio","studio-large-text","icons","icons-large-text"))) {
+        if(study.isNotEmpty() && kind != study) continue
         val width=if(kind.endsWith("large-text"))320 else 390
         var matchingIconCallbacks=0
         lateinit var scene: ImageComposeScene
@@ -253,7 +256,7 @@ fun main() {
                     Surface(Modifier.fillMaxSize(),color=colors.background) {
                         Box(Modifier.fillMaxSize()) {
                             ThemeScene(Modifier.matchParentSize())
-                            when { kind.startsWith("apply")->Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp)) {
+                            when { kind.startsWith("atmosphere")->Column(Modifier.fillMaxWidth().padding(20.dp)) { ThemeAtmosphere("header") }; kind.startsWith("apply")->Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp)) {
                                 Text("Apply "+pack.name, style=MaterialTheme.typography.titleLarge)
                                 Spacer(Modifier.height(16.dp))
                                 ThemeApplyOptions("Your music keeps playing. Original Veyra settings stay saved.",

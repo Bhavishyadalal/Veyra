@@ -28,6 +28,8 @@ application {
 }
 
 tasks.named<JavaExec>("run") {
+    systemProperty("veyra.study", providers.gradleProperty("study").getOrElse(""))
+    systemProperty("veyra.performance", providers.gradleProperty("performance").getOrElse("false"))
     systemProperty("veyra.reliability", providers.gradleProperty("reliability").getOrElse("false"))
     systemProperty("veyra.theme", providers.gradleProperty("theme").getOrElse("halloween-nocturne"))
 }

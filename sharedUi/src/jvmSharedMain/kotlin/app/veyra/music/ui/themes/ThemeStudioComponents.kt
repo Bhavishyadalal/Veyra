@@ -5,7 +5,6 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Check
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -23,7 +22,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil3.compose.rememberAsyncImagePainter
+import coil3.compose.AsyncImage
 
 /** Native, growing text over an edge-to-edge preview, shared with the rendering harness. */
 @Composable
@@ -32,7 +31,7 @@ fun ThemeStudioArtwork(name: String, model: Any?, badge: String, modifier: Modif
     Box(modifier.fillMaxWidth().heightIn(min=144.dp).clip(shape)
         .background(MaterialTheme.colorScheme.surfaceContainerHigh)
         .border(1.dp,MaterialTheme.colorScheme.outlineVariant.copy(alpha=.5f),shape)) {
-        Image(rememberAsyncImagePainter(model),null,Modifier.matchParentSize(),contentScale=ContentScale.Crop)
+        AsyncImage(model,null,Modifier.matchParentSize(),contentScale=ContentScale.Crop)
         Box(Modifier.matchParentSize().background(Brush.verticalGradient(listOf(
             Color.Black.copy(alpha=.1f),Color.Black.copy(alpha=.15f),Color.Black.copy(alpha=.92f)))))
         Column(Modifier.fillMaxWidth().padding(20.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
@@ -72,7 +71,7 @@ fun ThemeStudioRow(name: String, subtitle: String, model: Any?, active: Boolean,
         .heightIn(min=88.dp).padding(12.dp),verticalAlignment=Alignment.CenterVertically,
         horizontalArrangement=Arrangement.spacedBy(12.dp)) {
         Box(Modifier.size(64.dp).clip(RoundedCornerShape(12.dp)).background(c.surfaceVariant),contentAlignment=Alignment.Center) {
-            if(model!=null) Image(rememberAsyncImagePainter(model),null,Modifier.matchParentSize(),contentScale=ContentScale.Crop)
+            if(model!=null) AsyncImage(model,null,Modifier.matchParentSize(),contentScale=ContentScale.Crop)
             else Text("V",style=MaterialTheme.typography.titleLarge,color=c.primary)
         }
         Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {

@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import java.io.File
 
@@ -77,9 +78,12 @@ fun ThemeAtmosphere(key: String, modifier: Modifier = Modifier, compact: Boolean
     val asset = theme.asset(key) ?: return
     Box(modifier.fillMaxWidth().heightIn(min=if (compact) 128.dp else 196.dp)
         .clip(RoundedCornerShape(theme.rowCorner.dp)).background(theme.surface)) {
-        Image(rememberAsyncImagePainter(File(asset)), null,
+        AsyncImage(File(asset), null,
             Modifier.matchParentSize().clearAndSetSemantics {}, contentScale = ContentScale.Crop)
-        Box(Modifier.matchParentSize().background(Brush.horizontalGradient(listOf(theme.surface.copy(alpha=.65f),Color.Transparent))))
+        // Keep the contrast scrim behind start-aligned text in both layout directions.
+        val scrim = listOf(theme.surface.copy(alpha=.65f), Color.Transparent)
+        val rtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
+        Box(Modifier.matchParentSize().background(Brush.horizontalGradient(if (rtl) scrim.reversed() else scrim)))
         Column(Modifier.fillMaxWidth(if(LocalDensity.current.fontScale > 1.2f) .85f else .64f).padding(20.dp)) {
             Text(theme.name, style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSurface)
             Spacer(Modifier.height(6.dp))
@@ -93,7 +97,7 @@ fun ThemeAtmosphere(key: String, modifier: Modifier = Modifier, compact: Boolean
 fun ThemeBackdrop(key: String, modifier: Modifier = Modifier, visible: Boolean = true) {
     val theme = LocalThemeVisuals.current ?: return
     val path = theme.asset(key) ?: return
-    if (visible) Image(rememberAsyncImagePainter(File(path)), null,
+    if (visible) AsyncImage(File(path), null,
         modifier.clearAndSetSemantics {}, contentScale=ContentScale.Crop, alpha=if(theme.sceneStyle == "playful") .08f else .16f)
 }
 
@@ -113,7 +117,7 @@ fun ThemeScene(modifier: Modifier = Modifier) {
     val theme = LocalThemeVisuals.current ?: return
     Box(modifier.background(theme.background).clearAndSetSemantics {}) {
         theme.asset("header")?.let { path ->
-            Image(rememberAsyncImagePainter(File(path)), null, Modifier.matchParentSize(),
+            AsyncImage(File(path), null, Modifier.matchParentSize(),
                 contentScale = ContentScale.Crop, alignment = androidx.compose.ui.Alignment.CenterEnd, alpha = if(theme.sceneStyle == "playful") .22f else .34f)
         }
         Box(Modifier.matchParentSize().background(Brush.verticalGradient(listOf(

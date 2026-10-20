@@ -5,6 +5,15 @@
 Stable **0.1.6 / code 22** remains separate. This source update does not publish
 an APK or change the Listen Together backend.
 
+## Performance and theme polish
+
+- Independent extra Home feeds load two at a time, keeping their existing display order and cancellation guards.
+- Switching or closing an Explore category cancels its old request; late responses cannot replace a newer category or another listener's view.
+- Download recovery serializes on a single background writer, coalescing queued snapshots during bulk changes and preserving write order.
+- Theme Studio previews, banners and scene backgrounds decode for their displayed size instead of requesting original-size bitmaps.
+- Theme banner contrast follows start-aligned text in RTL layouts.
+- [Focused checks, native component studies and remaining device limits](verification/PERFORMANCE-0.1.7-beta1.md).
+
 ## Listening continuity and recovery
 
 - Saved Home content shows when it was saved; restored playback stays paused.

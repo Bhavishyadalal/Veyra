@@ -1,0 +1,5 @@
+studio: native Compose components rendered at 390 dp
+studio-large-text: native Compose components rendered at 320 dp / 150% text
+studio-rtl-large-text: native Compose components rendered at 320 dp / 150% text, RTL
+atmosphere-rtl-large-text: native Compose components rendered at 320 dp / 150% text, RTL
+Native component studies, not Android screenshots. All four images were visually inspected.

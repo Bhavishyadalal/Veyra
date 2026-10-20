@@ -70,6 +70,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import app.veyra.music.util.loadOrderedBatches
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
@@ -186,6 +187,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private var exploreArtworkJob: Job? = null
     private var exploreGeneration = 0L
     private var exploreLoadJob: Job? = null
+    private var moodGenreJob: Job? = null
+    private var moodGenreGeneration = 0L
     private val _explore = MutableStateFlow<UiState<List<MoodGenreSection>>>(UiState.Loading)
     val explore: StateFlow<UiState<List<MoodGenreSection>>> = _explore.asStateFlow()
 
@@ -1699,10 +1702,19 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun openMoodGenre(item: MoodGenre) {
+        moodGenreJob?.cancel()
+        val generation = ++moodGenreGeneration
+        val identity = listenerKey()
+        val region = Innertube.currentRegion
+        val language = Innertube.currentLanguage
         _selectedMoodGenre.value = item
         _moodGenreShelves.value = UiState.Loading
-        viewModelScope.launch {
-            _moodGenreShelves.value = YtMusicRepository.moodGenreShelves(item.browseId, item.params).fold(
+        moodGenreJob = viewModelScope.launch {
+            val response = YtMusicRepository.moodGenreShelves(item.browseId, item.params)
+            // Cancellation saves work; the guard also rejects providers completing after cancellation.
+            if (generation != moodGenreGeneration || _selectedMoodGenre.value != item ||
+                identity != listenerKey() || region != Innertube.currentRegion || language != Innertube.currentLanguage) return@launch
+            _moodGenreShelves.value = response.fold(
                 onSuccess = { shelves ->
                     if (shelves.isEmpty()) UiState.Error(text(R.string.nothing_to_explore))
                     else UiState.Success(shelves)
@@ -1714,6 +1726,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun closeMoodGenre(): Boolean {
         if (_selectedMoodGenre.value == null) return false
+        ++moodGenreGeneration
+        moodGenreJob?.cancel()
+        moodGenreJob = null
         _selectedMoodGenre.value = null
         return true
     }
@@ -1831,14 +1846,22 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     }
                 }
                 coreRequest.join()
-                for (browseId in YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS) {
-                    if (!isCurrentHomeLoad(identity, generation) || !homeNetwork.online.value) break
-                    try {
-                        withTimeoutOrNull(8_000L) { YtMusicRepository.homeSupplement(browseId) }?.onSuccess { shelves ->
-                            if (isCurrentHomeLoad(identity, generation)) publishHomeShelves(shelves)
-                        }
-                    } finally { homeShelfRequestSettled(identity, generation) }
-                }
+                // Both independent supplements start together, while publication keeps provider order.
+                // The limit also bounds work if more supplement endpoints are added later.
+                loadOrderedBatches(YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS, parallelism = 2,
+                    load = { browseId ->
+                        if (isCurrentHomeLoad(identity, generation) && homeNetwork.online.value) {
+                            withTimeoutOrNull(8_000L) { YtMusicRepository.homeSupplement(browseId) }
+                        } else null
+                    },
+                    publish = { response ->
+                        try {
+                            response?.onSuccess { shelves ->
+                                if (isCurrentHomeLoad(identity, generation)) publishHomeShelves(shelves)
+                            }
+                        } finally { homeShelfRequestSettled(identity, generation) }
+                    },
+                )
             } finally {
                 if (isCurrentHomeLoad(identity, generation)) {
                     _homeUpdating.value = false

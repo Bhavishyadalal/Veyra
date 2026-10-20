@@ -18,6 +18,9 @@ import app.veyra.music.data.sources.TrackMatcher
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import app.veyra.music.util.ConflatedSnapshotWriter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -143,12 +146,20 @@ object Downloads {
     private val running = LinkedHashMap<String, Job?>()
 
     private val recovery = linkedMapOf<String, DownloadRequest>()
+    // One process-lifetime writer keeps older snapshots from overtaking newer ones.
+    // Only the cheap immutable snapshot is taken under the queue lock.
+    private val recoveryWriter = ConflatedSnapshotWriter<List<DownloadRequest>>(
+        CoroutineScope(SupervisorJob() + Dispatchers.IO),
+        onFailure = { Log.w(TAG, "Could not persist download recovery", it) },
+    ) { requests ->
+        prefs.edit().putString("download_recovery_v1", DownloadRequest.encode(requests)).apply()
+    }
     private fun rememberRequest(song: Song, from: String?) = synchronized(lock) {
         recovery[song.videoId] = DownloadRequest.of(song, from)
         persistRecovery()
     }
     private fun persistRecovery() {
-        if (::prefs.isInitialized) prefs.edit().putString("download_recovery_v1", DownloadRequest.encode(recovery.values)).apply()
+        if (::prefs.isInitialized) recoveryWriter.submit(recovery.values.toList())
     }
     private fun forgetRequest(id: String) = synchronized(lock) {
         recovery.remove(id)
