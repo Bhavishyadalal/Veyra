@@ -20,7 +20,7 @@ The owner supplied a private backup whose selected certificate matches the publi
 ## Each build
 
 1. Open **Veyra → Actions → Android Release APK**.
-2. Tap **Run workflow**. Under **Use workflow from**, choose `main` for stable 0.1.6. The completed `preview/0.1.6-beta1` remains available for historical testing; 0.1.7-beta1 is not yet implemented.
+2. Tap **Run workflow**. Under **Use workflow from**, choose `main` for stable 0.1.6. Choose `preview/0.1.7-beta1` for Theme Studio beta testing. Start a new run to build the latest branch commit.
 3. Tap the final **Run workflow** button once. GitHub runs `:app:assembleProdRelease` on its own Ubuntu runner; you can close your browser. R8 can take time. The source’s beta/stable version labels are preserved.
 4. Return to the run. Wait for a green completion check, then scroll to **Artifacts → veyra-prod-release-signed**. Download the artifact ZIP while signed into GitHub.
 5. Extract the artifact ZIP. For the owner’s ARM64 phone, choose the APK whose filename contains `arm64-v8a`. The current source also creates other ABI and universal outputs. Install it using Android’s package installer; allow installation from the browser/file manager if asked. Do not uninstall the existing app just to work around a signing error.

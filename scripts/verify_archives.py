@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Validate retained source archives, checksums and their backend snapshots."""
+import io
 import hashlib
 import json
 from pathlib import Path
@@ -8,7 +9,7 @@ import zipfile
 root = Path(__file__).resolve().parents[1]
 expected = {
     "Veyra_Android_Source_0.1.6_Stable.zip",
-    "Veyra_Android_Source_0.1.4-beta1.zip",
+    "Veyra_Android_Source_0.1.7-beta1.zip",
     "Veyra_Android_Source_0.1.5-beta1.zip",
     "Veyra_Android_Source_0.1.6-beta1.zip",
 }
@@ -40,5 +41,19 @@ for name in sorted(expected):
             assert z.read("Veyra/backend/" + entry["path"]) == (root / "backend" / entry["path"]).read_bytes(), (name, entry["path"])
         assert "Veyra/gradle/wrapper/gradle-wrapper.jar" in z.namelist(), name
         assert "Veyra/settings.gradle.kts" in z.namelist(), name
-        assert not any(p.endswith((".zip", ".apk", ".jks", ".keystore")) for p in paths), name
+        assert not any(p.endswith((".apk", ".aab", ".jks", ".keystore")) for p in paths), name
+        for rel in (p for p in paths if p.endswith(".zip")):
+            assert rel.startswith("themes/packs/"), (name, rel)
+            data = z.read("Veyra/" + rel)
+            expected_hash = z.read("Veyra/" + rel + ".sha256").decode().split()[0]
+            assert hashlib.sha256(data).hexdigest() == expected_hash
+            with zipfile.ZipFile(io.BytesIO(data)) as pack:
+                assert pack.testzip() is None
+                theme = json.loads(pack.read("theme.json"))
+                assert set(pack.namelist()) == set(theme["files"]) | {"theme.json"}
+                assert len(pack.namelist()) <= 49
+                for asset, digest in theme["files"].items():
+                    assert not asset.startswith("/") and ".." not in asset.split("/")
+                    assert asset.endswith((".webp", ".png", ".ttf", ".txt"))
+                    assert hashlib.sha256(pack.read(asset)).hexdigest() == digest
     print(f"Verified {name}: {len(entries)} source files, current backend and matching SHA-256")
