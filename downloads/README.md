@@ -41,3 +41,5 @@ Verify the package's `SOURCE_MANIFEST.json` and checksum before publishing. Copy
 identical refreshed archives across branch catalogs to avoid divergent packages.
 
 Current preview source includes [listening continuity, recovery and accessibility improvements](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/verification/RELIABILITY-0.1.7-beta1.md). Stable Android source is unchanged; source ZIPs are not APKs.
+
+The current preview also includes [Astral Tide](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/themes/README.md#astral-tide--drift-deeper-hear-everything), an original ocean theme and optional manta-waveform launcher. Version remains 0.1.7-beta1 / code 25.
