@@ -2,7 +2,7 @@
 
 > **Stable 0.1.6 / code 22:** promoted from the completed preview, with saved Home, customization, accessibility, navigation and calmer shared motion. [Release notes](RELEASE_NOTES_0.1.6.md). APK publication is pending the owner’s release.
 
-> **Maintenance:** Current stable is 0.1.6 on `main`; completed preview is preserved on `preview/0.1.6-beta1`. Next preview 0.1.7-beta1 is planned, not implemented. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
+> **Maintenance:** Current stable is 0.1.6 on `main`; completed preview is preserved on `preview/0.1.6-beta1`. Current preview 0.1.7-beta1 / code 24 is available on `preview/0.1.7-beta1`. [Theme Studio and native previews](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/themes/README.md). [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
 
 
 > Android Studio import/build guide: [START_HERE.md](START_HERE.md). Historical beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
