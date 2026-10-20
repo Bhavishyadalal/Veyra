@@ -59,7 +59,7 @@ class ThemePackTest {
         val f=zip(entries);val root=temp.newFolder();rejects{ThemePack.install(f,root,listing(f),24)};assertTrue(root.list()!!.isEmpty())
     }
     @Test fun newerEngineAndAppRequirementsFailSafely() {
-        rejects{ThemePack.validate(manifest().copy(schema=3),24)}
+        rejects{ThemePack.validate(manifest().copy(schema=4),24)}
         rejects{ThemePack.validate(manifest().copy(minAppCode=25),24)}
     }
     @Test fun unreadableTextAndUnboundedGeometryAreRejected() {
@@ -72,15 +72,21 @@ class ThemePackTest {
         for(path in listOf("/tmp/file.png","../escape.png","icons/../../escape.ttf","icons/evil.dex","icons\\escape.png","icons//x.png","icons/../x.png")) assertFalse(path,ThemePack.safePath(path))
         assertTrue(ThemePack.safePath("icons/play.png"))
     }
-    @Test fun bothPublishedThemesInstallWithCorrectBrandingAndMinimumVersion() {
+    @Test fun allPublishedThemesInstallWithCorrectBrandingAndMinimumVersion() {
         val catalog=ThemePack.json.decodeFromString<ThemeCatalog>(File(project,"themes/catalog.json").readText())
-        assertEquals(setOf("halloween-nocturne","web-slinger"),catalog.themes.map { it.id }.toSet())
+        assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club"),catalog.themes.map { it.id }.toSet())
         for (entry in catalog.themes) {
             val pack=File(project,"themes/packs/${entry.id}-v${entry.version}.zip")
-            val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,24)
-            assertEquals(2,m.schema)
+            val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,25)
+            assertEquals(if(entry.id == "playtime-club") 3 else 2,m.schema)
             assertTrue(File(dir,m.assets.getValue("brandIcon")).isFile)
             rejects { ThemePack.validate(m,23) }
+            if (entry.id == "playtime-club") {
+                rejects { ThemePack.validate(m,24) }
+                rejects { ThemePack.validate(m.copy(schema=2,minAppCode=24),25) }
+                assertEquals("bubbles",m.seekStyle)
+                assertEquals("playful",m.sceneStyle)
+            }
         }
     }
     @Test fun legacyPacksStillValidateWithoutNewFields() {

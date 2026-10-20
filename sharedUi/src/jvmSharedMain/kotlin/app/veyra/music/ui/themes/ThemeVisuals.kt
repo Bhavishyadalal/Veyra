@@ -91,9 +91,10 @@ fun ThemeAtmosphere(key: String, modifier: Modifier = Modifier, compact: Boolean
 
 @Composable
 fun ThemeBackdrop(key: String, modifier: Modifier = Modifier, visible: Boolean = true) {
-    val path = LocalThemeVisuals.current?.asset(key) ?: return
+    val theme = LocalThemeVisuals.current ?: return
+    val path = theme.asset(key) ?: return
     if (visible) Image(rememberAsyncImagePainter(File(path)), null,
-        modifier.clearAndSetSemantics {}, contentScale=ContentScale.Crop, alpha=0.16f)
+        modifier.clearAndSetSemantics {}, contentScale=ContentScale.Crop, alpha=if(theme.sceneStyle == "playful") .08f else .16f)
 }
 
 /** Painter resources such as service logos keep their original identity and behavior. */
@@ -113,7 +114,7 @@ fun ThemeScene(modifier: Modifier = Modifier) {
     Box(modifier.background(theme.background).clearAndSetSemantics {}) {
         theme.asset("header")?.let { path ->
             Image(rememberAsyncImagePainter(File(path)), null, Modifier.matchParentSize(),
-                contentScale = ContentScale.Crop, alignment = androidx.compose.ui.Alignment.CenterEnd, alpha = .34f)
+                contentScale = ContentScale.Crop, alignment = androidx.compose.ui.Alignment.CenterEnd, alpha = if(theme.sceneStyle == "playful") .22f else .34f)
         }
         Box(Modifier.matchParentSize().background(Brush.verticalGradient(listOf(
             theme.background.copy(alpha = .35f), theme.background.copy(alpha = .50f),
@@ -133,6 +134,21 @@ fun ThemeScene(modifier: Modifier = Modifier) {
                         topLeft=origin-androidx.compose.ui.geometry.Offset(radius,radius),
                         size=androidx.compose.ui.geometry.Size(radius*2,radius*2),
                         style=androidx.compose.ui.graphics.drawscope.Stroke(.7.dp.toPx()))
+                }
+            }
+            if (theme.sceneStyle == "playful") {
+                // Quiet sticker-like bubbles keep the theme present deep in every screen.
+                // Fixed geometry: no background ticker, bitmap churn or invisible touch targets.
+                repeat(12) { i ->
+                    val center = androidx.compose.ui.geometry.Offset(
+                        size.width * ((i * 31 % 97) / 96f), size.height * ((i * 43 % 101) / 100f))
+                    val radius = (10 + i % 4 * 7).dp.toPx()
+                    val color = if (i % 2 == 0) theme.secondary else theme.accent
+                    drawCircle(color.copy(alpha=.055f),radius,center)
+                    drawCircle(color.copy(alpha=.16f),radius,center,
+                        style=androidx.compose.ui.graphics.drawscope.Stroke(1.2.dp.toPx()))
+                    drawCircle(theme.text.copy(alpha=.18f),2.dp.toPx(),
+                        center + androidx.compose.ui.geometry.Offset(-radius*.35f,-radius*.35f))
                 }
             }
             // A restrained constellation continues beyond the hero, even deep in a feed.
@@ -159,6 +175,9 @@ fun ThemeSectionRule(modifier: Modifier = Modifier) {
                 moveTo(c.x,c.y-d);lineTo(c.x+d,c.y);lineTo(c.x,c.y+d);lineTo(c.x-d,c.y);close()
             }
             drawPath(path,theme.accent)
+        } else if (theme.sceneStyle == "playful") {
+            drawCircle(theme.accent,3.dp.toPx(),c)
+            drawCircle(theme.secondary,2.dp.toPx(),c+androidx.compose.ui.geometry.Offset(9.dp.toPx(),0f))
         } else drawCircle(theme.accent,2.dp.toPx(),c)
         drawLine(Brush.horizontalGradient(listOf(theme.accent.copy(alpha=.55f),Color.Transparent)),
             androidx.compose.ui.geometry.Offset(14.dp.toPx(),y),
@@ -171,7 +190,7 @@ fun ThemeSectionRule(modifier: Modifier = Modifier) {
 fun ThemeActionEmblem(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val theme = LocalThemeVisuals.current
     if (theme == null) { content(); return }
-    val shape = if (theme.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(9.dp) else RoundedCornerShape(12.dp)
+    val shape = if (theme.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(9.dp) else RoundedCornerShape(if(theme.sceneStyle == "playful") 19.dp else 12.dp)
     Box(modifier.size(38.dp).clip(shape)
         .background(Brush.linearGradient(listOf(theme.raised,theme.surface)))
         .border(.75.dp, theme.outline.copy(alpha=.65f), shape),

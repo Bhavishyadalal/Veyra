@@ -108,6 +108,7 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
                 LazyColumn(Modifier.fillMaxWidth().weight(1f,fill=false),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
                     item {ThemeStudioArtwork(detail.name,preview,"v${detail.version}")}
                     if(detail.description.isNotBlank()) item {Text(detail.description,style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)}
+                    if(detail.id=="playtime-club") item {Text(stringResource(R.string.theme_playtime_credits),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)}
                     if(m!=null) item {Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                         listOf(m.palette.accent,m.palette.secondary,m.palette.background,m.palette.raised).forEach {color->
                             Box(Modifier.size(22.dp).background(ThemeRepository.color(color),CircleShape))

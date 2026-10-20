@@ -1,6 +1,6 @@
 # Veyra 0.1.7-beta1 · Theme Studio verification
 
-Current preview **0.1.7-beta1 / code 24**. Stable **0.1.6 / code 22** remains separate.
+Current preview **0.1.7-beta1 / code 25**. Stable **0.1.6 / code 22** remains separate.
 No APK assembly or Actions dispatch is part of this update.
 
 ## Current implementation
@@ -33,7 +33,7 @@ No APK assembly or Actions dispatch is part of this update.
 - Studio now uses a lazy collection of 88 dp minimum theme rows. Details are a
   separate internal page; Back returns to the collection. Done stays fixed, and
   Download/Apply/Cancel stay below the detail scroll area.
-- Appearance now has one App icon Settings row. The chooser groups all 18 choices
+- Appearance now has one App icon Settings row. The chooser groups all 19 choices
   into Veyra, Glass and Themes; each Glass family shows four variants. A coverage
   test proves every existing icon appears exactly once across these groups.
 - Chooser uses a lazy adaptive-column grid with scrollable group headers and hints.
@@ -48,7 +48,7 @@ No APK assembly or Actions dispatch is part of this update.
 - Redundant post-install decoding/hash verification was removed. Atomic installation
   still validates before publication, and applying rechecks stored assets on IO.
 
-## Executed checks
+## Earlier compact-Studio checks (code 24)
 
 - Android release resources and Kotlin compilation via focused unit-test tasks;
   **24 JVM tests**, no failures: theme packs (13), launcher mapping/manifest/group coverage (3),
@@ -101,3 +101,20 @@ glyphs remain available when a supported theme icon fails to draw.
 These changes remove identified UI-thread work and eager list/image composition.
 They are not a claim of zero dropped frames across devices. Real-device frame
 profiling, live theme activation and launcher switching remain follow-up checks.
+
+## Playtime Club update · code 25
+
+- Schema 3 adds bounded playful scene and bubble timeline styles, requiring code 25.
+  Schema 1/2 compatibility remains. Old clients cannot download this new pack.
+- New generated fan artwork, original smiling waveform launcher, 13 original rounded
+  glyphs, Fredoka headings and Manrope body text; each font license is bundled.
+- Character credits appear in Studio details, README and the downloadable pack.
+- Player controls use a finite damped spring only for this theme; reduced motion
+  retains the static endpoint. No permanent animation timer is added.
+- **16 focused JVM tests passed**: theme packs (13) and launcher coverage (3),
+  with Android debug resource/Kotlin compilation and no APK assembly. Actual three-pack installation/compatibility/integrity suite
+  and launcher mapping/manifest/group coverage. Existing pack hashes are unchanged.
+- Seven new native studies: Home, Home at 320 dp / 150% text, player, Studio, Studio
+  at 320 dp / 150% text, Settings and actions. The player study checks its native
+  callback and 48 dp minimum target. Existing theme studies remain from code 24.
+- No APK assembly, broad unrelated test suite, device launch or Actions dispatch.

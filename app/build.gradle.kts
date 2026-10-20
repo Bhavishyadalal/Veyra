@@ -477,6 +477,7 @@ tasks.matching { it.name == "installDevDebug" }.configureEach { finalizedBy(veri
 tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
     inputs.files(rootProject.file("themes/catalog.json"),
         rootProject.file("themes/packs/halloween-nocturne-v3.zip"),
-        rootProject.file("themes/packs/web-slinger-v1.zip"))
+        rootProject.file("themes/packs/web-slinger-v1.zip"),
+        rootProject.file("themes/packs/playtime-club-v1.zip"))
         .withPropertyName("themePackFixtures")
 }

@@ -22,6 +22,17 @@
       "sha256": "4346dc2ebdfef65a34040b09b23b6bb412d119323c40a81f4859a8a502916750",
       "bytes": 550378,
       "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/halloween-nocturne/artwork/preview.webp"
+    },
+    {
+      "id": "playtime-club",
+      "name": "Playtime Club",
+      "description": "An unofficial cartoon music party with Doraemon, Shin-chan and Oggy-inspired fan artwork. Rounded Fredoka headings, butter-yellow controls, mint bubbles, soft press feedback and a matching optional Veyra icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/playtime-club-v1.zip",
+      "sha256": "d84fc7de0ff4fdf9accd33cfac62feb29c66660a43e1863bd00bc178fce0a079",
+      "bytes": 442771,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/playtime-club/artwork/preview.webp"
     }
   ]
 }

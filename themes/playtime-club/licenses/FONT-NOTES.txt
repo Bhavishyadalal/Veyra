@@ -1,0 +1,1 @@
+Fredoka: static instance of upstream Fredoka variable font at wght=650, wdth=100, created with fontTools for consistent native headings. Upstream https://github.com/google/fonts/tree/main/ofl/fredoka . Licensed under the included SIL Open Font License.

@@ -236,6 +236,7 @@
           (see AppIcon). Exactly one is enabled at a time; Default is the shipped one.
         -->
         <activity-alias android:name=".LauncherWebSlinger" android:enabled="false" android:exported="true" android:icon="@mipmap/ic_theme_web" android:roundIcon="@mipmap/ic_theme_web" android:label="@string/app_name" android:targetActivity=".MainActivity"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity-alias>
+        <activity-alias android:name=".LauncherPlaytime" android:enabled="false" android:exported="true" android:icon="@mipmap/ic_theme_playtime" android:roundIcon="@mipmap/ic_theme_playtime" android:label="@string/app_name" android:targetActivity=".MainActivity"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity-alias>
         <activity-alias android:name=".LauncherHalloween" android:enabled="false" android:exported="true" android:icon="@mipmap/ic_theme_halloween" android:roundIcon="@mipmap/ic_theme_halloween" android:label="@string/app_name" android:targetActivity=".MainActivity"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity-alias>
         <activity-alias
             android:name=".LauncherDefault"

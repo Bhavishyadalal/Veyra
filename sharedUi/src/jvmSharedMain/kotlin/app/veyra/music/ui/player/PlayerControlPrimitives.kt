@@ -66,8 +66,10 @@ internal fun PlayerControlSurface(
     val available = enabled && !busy && LocalPlayerControlsInteractive.current
     val scale =
         animateFloatAsState(
-            if (pressed && available && !reducedMotion) 0.95f else 1f,
-            tween(playerMotionMillis(reducedMotion, VeyraMotion.Press), easing = VeyraMotion.Easing),
+            if (pressed && available && !reducedMotion) (if (pack?.sceneStyle == "playful") 0.92f else 0.95f) else 1f,
+            if (pack?.sceneStyle == "playful" && !reducedMotion)
+                androidx.compose.animation.core.spring(dampingRatio = .8f, stiffness = 650f)
+            else tween(playerMotionMillis(reducedMotion, VeyraMotion.Press), easing = VeyraMotion.Easing),
             label = "playerControlPress",
         )
     val opacity =
@@ -344,6 +346,19 @@ internal fun PlayerProgressTrack(
             for (strand in 1..8) {
                 val sx=size.width*strand/9
                 if (sx > filled) drawLine(pack.secondary.copy(alpha=.4f),Offset(sx,0f),Offset(sx+size.height,size.height),.7.dp.toPx())
+            }
+        }
+        if (pack?.seekStyle == "bubbles" && factor > .95f) {
+            // Real seek state drives the bubbles; no independent animation clock.
+            val r = size.height * .22f
+            for (dot in 1..14) {
+                val x = size.width * dot / 15f
+                if (x > filled + size.height) drawCircle(pack.secondary.copy(alpha=.65f),r,Offset(x,size.height/2))
+            }
+            if (filled > 0f) {
+                val x=filled.coerceIn(size.height/2,(size.width-size.height/2).coerceAtLeast(size.height/2))
+                drawCircle(pack.text,size.height*.5f,Offset(x,size.height/2))
+                drawCircle(pack.accent,size.height*.23f,Offset(x,size.height/2))
             }
         }
         if (pack?.seekStyle == "ember" && filled > 0f && factor > 0.95f) {

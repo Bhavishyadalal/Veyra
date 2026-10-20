@@ -1,10 +1,11 @@
 # Veyra Theme Studio
 
-**Latest preview: 0.1.7-beta1 / code 24. Stable 0.1.6 stays separate.**
+**Latest preview: 0.1.7-beta1 / code 25. Stable 0.1.6 stays separate.**
 Made by **Bhavishya Dalal**.
 
 | Theme | Its own atmosphere | Download |
 | --- | --- | --- |
+| **Playtime Club v1** | Unofficial cartoon music party, Fredoka rounded headings, yellow/mint details, bubble timeline and soft press feedback | [Theme ZIP](packs/playtime-club-v1.zip) · [SHA-256](packs/playtime-club-v1.zip.sha256) |
 | **Web Slinger v1** | Midnight city, crimson glass, cobalt webs, bold condensed type, angular action details and a web timeline | [Theme ZIP](packs/web-slinger-v1.zip) · [SHA-256](packs/web-slinger-v1.zip.sha256) |
 | **Halloween Nocturne v3** | Moonlit forest, smoked glass, pumpkin amber, gothic headings and an ember timeline | [Theme ZIP](packs/halloween-nocturne-v3.zip) · [SHA-256](packs/halloween-nocturne-v3.zip.sha256) |
 
@@ -87,15 +88,14 @@ include Settings, actions and large-text layouts.
 
 ## Compatibility and validation
 
-The new packs use **schema 2 / minimum app code 24**, so older code-23 preview
-builds show **Update Veyra first**. Previously installed Halloween v1/v2 packs
+Playtime Club uses **schema 3 / minimum app code 25**. Older apps show **Update Veyra first**. Web Slinger and Halloween v3 remain schema 2 / minimum code 24. Previously installed Halloween v1/v2 packs
 remain supported by the new app. Existing published v1/v2 ZIPs stay immutable.
 Theme updates download into a separate version directory and require explicit
 Apply; a download never replaces the currently active theme definition.
 
 Packs are data only. No scripts, executable layouts, component names, remote asset
 references or arbitrary launcher icons can be supplied by a pack. Bundled icon
-mapping recognizes only the two known theme IDs. Unknown themes cannot select an
+mapping recognizes only the three known theme IDs. Unknown themes cannot select an
 Android component. Limits remain ZIP 12 MiB, 48 asset files, 8 MiB per file,
 32 MiB unpacked, 2048-pixel artwork and 256-pixel glyphs/branding icons.
 
@@ -113,7 +113,7 @@ no AI service or network access is needed for rebuilding. Published ZIPs cannot
 be overwritten with changed bytes: bump their manifest version first.
 `--replace-draft` is only for a theme version that has **not** been published.
 
-The builder produces both packs, checksums, catalog and Android icon densities.
+The builder produces all three packs, checksums, catalog and Android icon densities.
 Full atmosphere/fonts remain in downloadable packs; only the catalog and bundled
 launcher artwork are added to Android resources. A theme ZIP is not a launcher
 icon installation mechanism.
@@ -123,3 +123,30 @@ Web Slinger is a web-and-city fan theme; no official comic/film artwork or brand
 logo is included. Manrope, Barlow Condensed and Grenze Gotisch retain their
 included SIL Open Font License notices. [Barlow Condensed source](https://github.com/google/fonts/tree/main/ofl/barlowcondensed)
 · [Android adaptive icon reference](https://developer.android.com/develop/ui/views/launch/icon_design_adaptive).
+
+## Playtime Club · a little joy, every play
+
+A cozy blue cartoon music party with butter-yellow controls, mint bubbles and soft
+rounded Fredoka headings. The theme reaches Home branding, navigation, player
+controls/timeline, action emblems and Settings surfaces. Real music covers remain
+unchanged. Gentle spring press feedback stops at rest and respects reduced motion.
+The matching smiling waveform launcher is optional; choosing a theme does not
+silently change the device icon.
+
+| Home | Player |
+| --- | --- |
+| <img src="previews/playtime-club/home.png" width="280" alt="Playtime Home component study" /> | <img src="previews/playtime-club/player.png" width="280" alt="Playtime player component study" /> |
+
+[All seven native studies](previews/playtime-club) include 320 dp / 150% text Home
+and Theme Studio. Open **index.html** locally for the complete preview gallery.
+These are shared native components in illustrative layouts, not device screenshots.
+
+Character artwork is an **unofficial fan illustration**, without affiliation or
+endorsement. Doraemon: Fujiko-Pro / Shogakukan / TV Asahi / Shin-Ei Animation.
+Crayon Shin-chan: Yoshito Usui / Futabasha / Shin-Ei Animation / TV Asahi.
+Oggy: Xilam Animation. These credits do not grant character rights. Original
+Veyra interface glyphs and waveform icon are distinct from the fan illustration.
+See [artwork notice](playtime-club/licenses/ARTWORK.txt) and included font licenses.
+Fredoka font source: https://github.com/google/fonts/tree/main/ofl/fredoka .
+Design reference search: https://www.pinterest.com/search/pins/?q=cartoon%20music%20app%20ui .
+No Pinterest artwork was copied into the theme.

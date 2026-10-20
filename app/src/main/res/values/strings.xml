@@ -1269,4 +1269,6 @@
     <string name="theme_optional_restart">Also refresh the interface</string>
     <string name="icon_choose">Choose an icon</string>
     <string name="theme_saved_appearance">Your saved style</string>
+    <string name="app_icon_playtime">Playtime Club</string>
+    <string name="theme_playtime_credits">Unofficial fan artwork. Doraemon: Fujiko-Pro / Shogakukan / TV Asahi / Shin-Ei Animation. Crayon Shin-chan: Yoshito Usui / Futabasha / Shin-Ei Animation / TV Asahi. Oggy: Xilam Animation. No affiliation or endorsement.</string>
 </resources>

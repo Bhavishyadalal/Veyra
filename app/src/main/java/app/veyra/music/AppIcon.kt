@@ -15,6 +15,7 @@ import android.content.pm.PackageManager
  * names so a choice made before the update stays enabled.
  */
 enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val previewRes: Int? = null) {
+    PlaytimeClub("LauncherPlaytime", R.mipmap.ic_theme_playtime, R.string.app_icon_playtime, R.mipmap.ic_theme_playtime_foreground),
     WebSlinger("LauncherWebSlinger", R.mipmap.ic_theme_web, R.string.app_icon_web_slinger, R.mipmap.ic_theme_web_foreground),
     HalloweenNocturne("LauncherHalloween", R.mipmap.ic_theme_halloween, R.string.app_icon_halloween, R.mipmap.ic_theme_halloween_foreground),
     Default("LauncherDefault", R.mipmap.ic_wave_glass, R.string.app_icon_wave_default, R.mipmap.ic_wave_glass_foreground),
@@ -40,6 +41,7 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
     companion object {
         /** A data-only theme cannot supply a component name or an arbitrary launcher alias. */
         fun forTheme(id: String?): AppIcon? = when (id) {
+            "playtime-club" -> PlaytimeClub
             "web-slinger" -> WebSlinger
             "halloween-nocturne" -> HalloweenNocturne
             else -> null

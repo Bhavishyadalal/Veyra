@@ -4,3 +4,6 @@ downloads export-ignore
 downloads/** export-ignore
 # Preserve upstream font licence bytes, including their original whitespace.
 themes/web-slinger/licenses/BarlowCondensed-OFL.txt -text -whitespace
+
+# Preserve the upstream Fredoka SIL license verbatim.
+themes/playtime-club/licenses/Fredoka-OFL.txt -text -whitespace

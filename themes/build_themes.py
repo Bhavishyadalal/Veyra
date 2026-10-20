@@ -82,3 +82,7 @@ for id,key,bg in [('web-slinger','web','#070C18'),('halloween-nocturne','hallowe
  (adaptive/f'ic_theme_{key}.xml').write_text(f'<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@color/theme_{key}_background"/><foreground android:drawable="@mipmap/ic_theme_{key}_foreground"/><monochrome android:drawable="@drawable/ic_wave_monochrome"/></adaptive-icon>\n')
 colors=res/'values/theme_icon_colors.xml'
 colors.write_text('<resources><color name="theme_web_background">#070C18</color><color name="theme_halloween_background">#0D0B09</color></resources>\n')
+
+# Additional schema-3 fan theme; old published packs above remain byte-for-byte immutable.
+import runpy
+runpy.run_path(str(root / "build_playtime.py"), run_name="__main__")

@@ -65,24 +65,26 @@ object ThemePack {
         path.substringAfterLast('.').lowercase() in setOf("webp", "png", "ttf", "txt")
 
     fun validate(manifest: ThemeManifest, appCode: Int) {
-        require(manifest.schema in 1..2) { "This theme needs an unsupported theme engine." }
+        require(manifest.schema in 1..3) { "This theme needs an unsupported theme engine." }
         require(manifest.id.matches(Regex("[a-z0-9][a-z0-9-]{0,47}"))) { "Invalid theme ID." }
         require(manifest.name.length in 1..60 && manifest.author.length in 1..80)
         require(manifest.version in 1..10000 && manifest.minAppCode in 23..appCode) { "Update Veyra before installing this theme." }
         require(manifest.rowCorner in 8..28 && manifest.buttonCorner in 12..36 && manifest.navCorner in 18..48)
         require(manifest.files.size in 1..48 && manifest.files.all { safePath(it.key) && hashPattern.matches(it.value) })
         require(manifest.assets.keys.all { it in assetKeys })
-        require(manifest.sceneStyle in setOf("mist", "web"))
+        require(manifest.sceneStyle in setOf("mist", "web", "playful"))
         require(manifest.tagline.length in 1..80 && manifest.tagline.none { it.isISOControl() })
         if (manifest.schema == 1) {
             require("brandIcon" !in manifest.assets && manifest.sceneStyle == "mist" && manifest.seekStyle != "web")
         } else require(manifest.minAppCode >= 24) { "This theme needs the updated theme engine." }
+        if (manifest.schema < 3) require(manifest.sceneStyle != "playful" && manifest.seekStyle != "bubbles")
+        else require(manifest.minAppCode >= 25) { "This theme needs the playful theme engine." }
         require(manifest.assets.keys.containsAll(setOf("header", "player", "preview", "headingFont", "bodyFont")))
         require(manifest.assets.values.all { it in manifest.files })
         for ((key, path) in manifest.assets) {
             require(if (key.endsWith("Font")) path.endsWith(".ttf") else path.endsWith(".png") || path.endsWith(".webp"))
         }
-        require(manifest.seekStyle in setOf("plain", "ember", "web") && manifest.seekHeight in 6..12)
+        require(manifest.seekStyle in setOf("plain", "ember", "web", "bubbles") && manifest.seekHeight in 6..12)
         val p = manifest.palette
         listOf(p.background,p.surface,p.raised,p.accent,p.accentContainer,p.text,p.muted,p.outline,p.secondary)
             .forEach { require(it.matches(Regex("#[0-9A-Fa-f]{6}"))) { "Invalid theme color." } }
