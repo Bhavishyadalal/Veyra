@@ -2,12 +2,13 @@ package app.veyra.music.data.themes
 
 import app.veyra.music.AppIcon
 
-enum class IconCollection { VEYRA, GLASS, THEMES }
+enum class IconCollection { VEYRA, GLASS, THEMES, ATELIER }
 enum class GlassFamily { LIQUID, SAMSUNG, PIXEL }
 
 /** Every existing icon belongs to one small, browsable collection. */
 object IconPickerPolicy {
     fun collection(icon: AppIcon): IconCollection = when {
+        icon.name.startsWith("Atelier") -> IconCollection.ATELIER
         icon == AppIcon.PumpkinPurr || icon == AppIcon.SunsetCrew || icon == AppIcon.StarrySpirits || icon == AppIcon.AnalogReverie || icon == AppIcon.PetalPromise || icon == AppIcon.MoonlitHerbarium || icon == AppIcon.MidnightExpress || icon == AppIcon.AstralTide || icon == AppIcon.PlaytimeClub || icon == AppIcon.WebSlinger || icon == AppIcon.HalloweenNocturne -> IconCollection.THEMES
         family(icon) != null -> IconCollection.GLASS
         else -> IconCollection.VEYRA

@@ -36,6 +36,25 @@ class ThemeLauncherTest {
         AppIcon.entries.forEach { assertTrue(it.alias,states.containsKey(it.alias)) }
         assertEquals(setOf("LauncherDefault"),states.filterValues { it=="true" }.keys)
     }
+    @Test fun atelierAddsTwelveStandaloneChoicesWithoutThemeBindings() {
+        val project=generateSequence(File(requireNotNull(System.getProperty("user.dir")))) { it.parentFile }
+            .first { File(it,"design/launcher/atelier/catalog.json").exists() }
+        val catalog=kotlinx.serialization.json.Json.parseToJsonElement(
+            File(project,"design/launcher/atelier/catalog.json").readText()).let {
+                it as kotlinx.serialization.json.JsonObject
+            }.getValue("icons") as kotlinx.serialization.json.JsonArray
+        val choices=app.veyra.music.data.themes.IconPickerPolicy.options(
+            app.veyra.music.data.themes.IconCollection.ATELIER,app.veyra.music.data.themes.GlassFamily.LIQUID)
+        assertEquals(12,choices.size)
+        assertEquals(39,AppIcon.entries.size)
+        val expected=catalog.map { row ->
+            val id=((row as kotlinx.serialization.json.JsonObject).getValue("id") as kotlinx.serialization.json.JsonPrimitive).content
+            assertNull(AppIcon.forTheme(id))
+            "Atelier"+id.split('-').joinToString("") { it.replaceFirstChar(Char::uppercase) }
+        }.toSet()
+        assertEquals(expected,choices.map { it.name }.toSet())
+        choices.forEach { assertNull(app.veyra.music.data.themes.IconPickerPolicy.family(it)) }
+    }
     @Test fun groupedPickerRetainsEveryExistingIconExactlyOnce() {
         val p=app.veyra.music.data.themes.IconPickerPolicy
         val family=app.veyra.music.data.themes.GlassFamily.entries

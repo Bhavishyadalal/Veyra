@@ -1293,4 +1293,17 @@
     <string name="app_icon_analog">Analog Reverie</string>
     <string name="app_icon_petal">Petal Promise</string>
     <string name="app_icon_herbarium">Moonlit Herbarium</string>
+    <string name="icon_collection_atelier">Glass Atelier</string>
+    <string name="app_icon_atelier_aurora_veil">Aurora Veil</string>
+    <string name="app_icon_atelier_sakura_pearl">Sakura Pearl</string>
+    <string name="app_icon_atelier_obsidian_gold">Obsidian Gold</string>
+    <string name="app_icon_atelier_glacier_blue">Glacier Blue</string>
+    <string name="app_icon_atelier_ruby_velvet">Ruby Velvet</string>
+    <string name="app_icon_atelier_emerald_dew">Emerald Dew</string>
+    <string name="app_icon_atelier_lunar_eclipse">Lunar Eclipse</string>
+    <string name="app_icon_atelier_cosmic_prism">Cosmic Prism</string>
+    <string name="app_icon_atelier_rose_quartz">Rose Quartz</string>
+    <string name="app_icon_atelier_ember_forge">Ember Forge</string>
+    <string name="app_icon_atelier_ocean_opal">Ocean Opal</string>
+    <string name="app_icon_atelier_royal_sapphire">Royal Sapphire</string>
 </resources>

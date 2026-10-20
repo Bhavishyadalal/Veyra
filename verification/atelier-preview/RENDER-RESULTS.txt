@@ -1,0 +1,7 @@
+masks-one: native component study rendered.
+masks-two: native component study rendered.
+picker-large-text: six radio targets >=48 dp; selection callback once; 320 dp / 150% text.
+picker-large-text: native component study rendered.
+picker-rtl-large-text: six radio targets >=48 dp; selection callback once; 320 dp / 150% text.
+picker-rtl-large-text: native component study rendered.
+Native shared components with illustrative layout; not Android screenshots or device launcher tests.

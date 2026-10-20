@@ -15,6 +15,18 @@ import android.content.pm.PackageManager
  * names so a choice made before the update stays enabled.
  */
 enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val previewRes: Int? = null) {
+    AtelierAuroraVeil("LauncherAtelierAuroraVeil", R.mipmap.ic_atelier_aurora_veil, R.string.app_icon_atelier_aurora_veil, R.mipmap.ic_atelier_aurora_veil_foreground),
+    AtelierSakuraPearl("LauncherAtelierSakuraPearl", R.mipmap.ic_atelier_sakura_pearl, R.string.app_icon_atelier_sakura_pearl, R.mipmap.ic_atelier_sakura_pearl_foreground),
+    AtelierObsidianGold("LauncherAtelierObsidianGold", R.mipmap.ic_atelier_obsidian_gold, R.string.app_icon_atelier_obsidian_gold, R.mipmap.ic_atelier_obsidian_gold_foreground),
+    AtelierGlacierBlue("LauncherAtelierGlacierBlue", R.mipmap.ic_atelier_glacier_blue, R.string.app_icon_atelier_glacier_blue, R.mipmap.ic_atelier_glacier_blue_foreground),
+    AtelierRubyVelvet("LauncherAtelierRubyVelvet", R.mipmap.ic_atelier_ruby_velvet, R.string.app_icon_atelier_ruby_velvet, R.mipmap.ic_atelier_ruby_velvet_foreground),
+    AtelierEmeraldDew("LauncherAtelierEmeraldDew", R.mipmap.ic_atelier_emerald_dew, R.string.app_icon_atelier_emerald_dew, R.mipmap.ic_atelier_emerald_dew_foreground),
+    AtelierLunarEclipse("LauncherAtelierLunarEclipse", R.mipmap.ic_atelier_lunar_eclipse, R.string.app_icon_atelier_lunar_eclipse, R.mipmap.ic_atelier_lunar_eclipse_foreground),
+    AtelierCosmicPrism("LauncherAtelierCosmicPrism", R.mipmap.ic_atelier_cosmic_prism, R.string.app_icon_atelier_cosmic_prism, R.mipmap.ic_atelier_cosmic_prism_foreground),
+    AtelierRoseQuartz("LauncherAtelierRoseQuartz", R.mipmap.ic_atelier_rose_quartz, R.string.app_icon_atelier_rose_quartz, R.mipmap.ic_atelier_rose_quartz_foreground),
+    AtelierEmberForge("LauncherAtelierEmberForge", R.mipmap.ic_atelier_ember_forge, R.string.app_icon_atelier_ember_forge, R.mipmap.ic_atelier_ember_forge_foreground),
+    AtelierOceanOpal("LauncherAtelierOceanOpal", R.mipmap.ic_atelier_ocean_opal, R.string.app_icon_atelier_ocean_opal, R.mipmap.ic_atelier_ocean_opal_foreground),
+    AtelierRoyalSapphire("LauncherAtelierRoyalSapphire", R.mipmap.ic_atelier_royal_sapphire, R.string.app_icon_atelier_royal_sapphire, R.mipmap.ic_atelier_royal_sapphire_foreground),
     PumpkinPurr("LauncherPurr", R.mipmap.ic_theme_purr, R.string.app_icon_purr, R.mipmap.ic_theme_purr_foreground),
     SunsetCrew("LauncherSunset", R.mipmap.ic_theme_sunset, R.string.app_icon_sunset, R.mipmap.ic_theme_sunset_foreground),
     StarrySpirits("LauncherSpirits", R.mipmap.ic_theme_spirits, R.string.app_icon_spirits, R.mipmap.ic_theme_spirits_foreground),

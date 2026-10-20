@@ -92,6 +92,7 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
                                     IconCollection.VEYRA->R.string.icon_collection_veyra
                                     IconCollection.GLASS->R.string.icon_collection_glass
                                     IconCollection.THEMES->R.string.icon_collection_themes
+                                    IconCollection.ATELIER->R.string.icon_collection_atelier
                                 }))})
                         }
                     }

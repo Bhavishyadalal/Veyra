@@ -17,7 +17,7 @@ sourceSets.main {
     kotlin.srcDir(veyraRoot.resolve("sharedUi/src/jvmSharedMain/kotlin/app/veyra/music/ui"))
     kotlin.srcDir(veyraRoot.resolve("app/src/main/java/app/veyra/music/ui/screens"))
     kotlin.srcDir(veyraRoot.resolve("app/src/main/java/app/veyra/music/ui/components"))
-    kotlin.include("RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt", "**/ThemeStudioComponents.kt", "**/VeyraBrandContent.kt",
+    kotlin.include("RenderAtelier.kt", "RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt", "**/ThemeStudioComponents.kt", "**/VeyraBrandContent.kt",
         "**/PlayerControlPrimitives.kt", "**/PlayerInteractionPolicy.kt", "**/PlayerScrubState.kt",
         "**/ReadableLayout.kt", "**/Customization.kt", "**/VeyraSurfaces.kt", "**/VeyraMotion.kt", "**/VeyraIcons.kt", "**/SettingsIcons.kt",
         "SettingsControls.kt", "VeyraSwitchColors.kt", "**/HomeComponents.kt")
@@ -32,4 +32,11 @@ tasks.named<JavaExec>("run") {
     systemProperty("veyra.performance", providers.gradleProperty("performance").getOrElse("false"))
     systemProperty("veyra.reliability", providers.gradleProperty("reliability").getOrElse("false"))
     systemProperty("veyra.theme", providers.gradleProperty("theme").getOrElse("halloween-nocturne"))
+}
+
+// Isolated native studies for standalone launcher choices; no existing theme renders run.
+tasks.register<JavaExec>("runAtelier") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("app.veyra.music.ui.atelier.RenderAtelierKt")
+    systemProperty("veyra.root", veyraRoot)
 }

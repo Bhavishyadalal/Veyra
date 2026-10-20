@@ -5,6 +5,15 @@
 Stable **0.1.6 / code 22** remains separate. This source update does not publish
 an APK or change the Listen Together backend.
 
+## Glass Atelier · twelve standalone launcher choices
+
+- Aurora Veil, Sakura Pearl, Obsidian Gold, Glacier Blue, Ruby Velvet, Emerald Dew, Lunar Eclipse, Cosmic Prism, Rose Quartz, Ember Forge, Ocean Opal and Royal Sapphire.
+- AI-created glass/material variants keep the current silver Veyra waveform recognizable.
+- A separate **Glass Atelier** picker collection keeps the new choices manageable. They change only the launcher icon and remain independent of the active theme.
+- Includes five density sets, adaptive launcher resources and the official monochrome waveform; previous icons and theme packs remain unchanged.
+- Version stays **0.1.7-beta1 / code 25**. Requires rebuilding the refreshed source; no APK publication.
+- [Artwork and previews](design/launcher/atelier/README.md) · [Verification](verification/ATELIER-ICONS-0.1.7-beta1.md).
+
 ## Glass Noir theme icons · pack v2
 
 - Six AI-edited launcher icons preserve Veyra's current silver waveform and black glass case, with each theme's lighting and details.

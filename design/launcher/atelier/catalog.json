@@ -1,0 +1,18 @@
+{
+  "collection": "Glass Atelier",
+  "reference": "design/launcher/wave_glass.png",
+  "icons": [
+    {"id":"aurora-veil","name":"Aurora Veil","description":"Emerald and cyan aurora ribbons in dark polar glass."},
+    {"id":"sakura-pearl","name":"Sakura Pearl","description":"Pearl silver, blush reflections and delicate cherry blossoms."},
+    {"id":"obsidian-gold","name":"Obsidian Gold","description":"Deep obsidian glass with precise gold Art Deco accents."},
+    {"id":"glacier-blue","name":"Glacier Blue","description":"Ice-blue refractions and fine frozen crystal details."},
+    {"id":"ruby-velvet","name":"Ruby Velvet","description":"Rich ruby glass, crimson edges and garnet glints."},
+    {"id":"emerald-dew","name":"Emerald Dew","description":"Jade glass, botanical etchings and clear dew droplets."},
+    {"id":"lunar-eclipse","name":"Lunar Eclipse","description":"Smoked platinum glass with a quiet eclipse halo."},
+    {"id":"cosmic-prism","name":"Cosmic Prism","description":"Violet, magenta and cyan prism refractions on black."},
+    {"id":"rose-quartz","name":"Rose Quartz","description":"Blush quartz, mineral striations and champagne highlights."},
+    {"id":"ember-forge","name":"Ember Forge","description":"Basalt-black glass, copper trim and subtle amber embers."},
+    {"id":"ocean-opal","name":"Ocean Opal","description":"Turquoise opal, pearly caustics and tiny glass bubbles."},
+    {"id":"royal-sapphire","name":"Royal Sapphire","description":"Sapphire glass, platinum trim and refined faceted corners."}
+  ]
+}
