@@ -1,5 +1,6 @@
 package app.veyra.music.ui.player
 
+import app.veyra.music.ui.customization.artworkShape
 import app.veyra.music.sharedui.resources.*
 import app.veyra.music.ui.components.ExplicitSongTitle
 
@@ -744,7 +745,9 @@ private fun InlineQueueRow(
             // Disabled rather than ignored: a tap that ripples and then does
             // nothing reads as the app having missed it.
             .clickable(enabled = !locked, role = androidx.compose.ui.semantics.Role.Button, onClick = onClick)
-            .padding(vertical = 6.dp),
+            .padding(vertical = (app.veyra.music.ui.customization.songRowPadding(
+                app.veyra.music.ui.customization.LocalListSpacing.current,
+                androidx.compose.ui.platform.LocalDensity.current.fontScale) + 2).dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (draggable) {
@@ -776,8 +779,8 @@ private fun InlineQueueRow(
             contentDescription = null,
             modifier = Modifier
                 .size(44.dp)
-                .clip(RoundedCornerShape(6.dp))
-                .thumbnailBorder(RoundedCornerShape(6.dp))
+                .clip(artworkShape(RoundedCornerShape(6.dp)))
+                .thumbnailBorder(artworkShape(RoundedCornerShape(6.dp)))
                 .background(Color.White.copy(alpha = 0.08f)),
         )
         Spacer(Modifier.width(12.dp))

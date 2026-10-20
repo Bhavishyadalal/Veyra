@@ -11,6 +11,14 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class NavigationTransitionsTest {
+    @Test fun subtleMotionStillHasAFadeButOffAlwaysWins() {
+        val subtle = navigationTransition(NavigationMotion.Forward, false, false, subtleMotion = true)
+        assertTrue(subtle.targetContentEnter != EnterTransition.None)
+        val off = navigationTransition(NavigationMotion.Forward, true, false, subtleMotion = true)
+        assertEquals(EnterTransition.None, off.targetContentEnter)
+        assertEquals(ExitTransition.None, off.initialContentExit)
+    }
+
     @Test fun reducedMotionDisablesEveryPageEnterAndExitIncludingRtl() {
         for (rtl in listOf(false, true)) for (motion in NavigationMotion.entries) {
             val transition = navigationTransition(motion, reduceMotion = true, rtl = rtl)

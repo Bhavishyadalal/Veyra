@@ -1,5 +1,15 @@
 # Veyra 0.1.6-beta1 · Your Home, ready sooner
 
+## Customization, state and welcome artwork
+
+- Saved accent, artwork-corner, list-spacing and Full/Subtle/Off motion presets.
+- Configurable priority action in the player menu; existing actions and account rules remain.
+- Confirmed, scoped resets for appearance and player customization.
+- Settings category/search scroll restoration and Back/scroll state for the sleep-timer picker.
+- Bundled silver-wave artwork on welcome name entry, hidden while typing.
+
+[Details, reset scope and verification](verification/CUSTOMIZATION-0.1.6-beta1.md).
+
 ## Compact-screen and readability update
 
 - Centered, proportionate buffering indicators in player controls.

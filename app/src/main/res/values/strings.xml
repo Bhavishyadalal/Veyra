@@ -1198,4 +1198,24 @@
     <string name="stronger_text_subtitle">Heavier text for easier reading. Keeps your system text size.</string>
     <string name="contrast_player_controls">Higher-contrast player controls</string>
     <string name="contrast_player_controls_subtitle">Give player buttons a visible background and outline over artwork.</string>
+    <string name="custom_accent">Accent palette</string>
+    <string name="custom_accent_hint">App accent colors; player artwork colors remain tied to the song.</string>
+    <string-array name="custom_accent_options"><item>Veyra</item><item>Teal</item><item>Amber</item><item>Rose</item></string-array>
+    <string name="custom_artwork_corners">Artwork corners</string>
+    <string name="custom_artwork_corners_hint">Choose the cover style for tiles, track thumbnails and player artwork.</string>
+    <string-array name="custom_corner_options"><item>Original</item><item>Soft</item><item>Rounded</item><item>Square</item></string-array>
+    <string name="custom_list_spacing">Song list spacing</string>
+    <string name="custom_list_spacing_hint">Compact reduces row padding. Large system text keeps comfortable spacing.</string>
+    <string-array name="custom_spacing_options"><item>Comfortable</item><item>Compact</item></string-array>
+    <string name="custom_motion_level">Motion level</string>
+    <string name="custom_motion_level_hint">Subtle keeps page fades and quiets decorative motion. System-disabled animations always take priority.</string>
+    <string-array name="custom_motion_options"><item>Full</item><item>Subtle</item><item>Off</item></string-array>
+    <string name="custom_player_shortcut">Priority player action</string>
+    <string name="custom_player_shortcut_hint">Move one action to the top of the player’s three-dot menu. Account actions still require sign-in.</string>
+    <string-array name="custom_shortcut_options"><item>Original order</item><item>Download</item><item>Favorite</item><item>Sleep timer</item><item>Add to playlist</item></string-array>
+    <string name="custom_reset_appearance">Reset appearance customization</string>
+    <string name="custom_reset_appearance_hint">Reset accent, cover corners, list spacing, stronger text and motion. Keep accounts, playlists and downloads.</string>
+    <string name="custom_reset_player">Reset player customization</string>
+    <string name="custom_reset_player_hint">Restore the original menu order and turn off higher-contrast controls. Keep playback, accounts and downloads.</string>
+    <string name="custom_reset_confirm">Reset</string>
 </resources>

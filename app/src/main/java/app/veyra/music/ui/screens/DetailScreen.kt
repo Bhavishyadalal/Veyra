@@ -1,5 +1,6 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.customization.artworkShape
 import android.os.Build
 import app.veyra.music.R
 
@@ -881,6 +882,7 @@ private fun ReleaseHeader(
     onArtistClick: ((String, String) -> Unit)?,
     onToggleLibrary: (() -> Unit)?,
 ) {
+    val sleeveShape = app.veyra.music.ui.customization.artworkShape(SLEEVE_SHAPE)
     val imageContext = LocalPlatformContext.current
     val headerArtwork = remember(imageContext, page.thumbnailUrl) {
         ImageRequest.Builder(imageContext)
@@ -905,9 +907,10 @@ private fun ReleaseHeader(
         Box(
             Modifier
                 .size(sleeveSize)
-                .shadow(SLEEVE_SHADOW, SLEEVE_SHAPE)
+                .shadow(SLEEVE_SHADOW, sleeveShape)
                 .background(palette.elevated)
-                .thumbnailBorder(SLEEVE_SHAPE),
+                .clip(sleeveShape)
+                .thumbnailBorder(sleeveShape),
         ) {
             // A cover that isn't there, or wouldn't load — a device folder, a
             // playlist with nothing on it yet, files with no picture — gets a
@@ -1951,8 +1954,8 @@ private fun CompactSongRow(
                 contentDescription = null,
                 modifier = Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(7.dp))
-                    .thumbnailBorder(RoundedCornerShape(7.dp))
+                    .clip(artworkShape(RoundedCornerShape(7.dp)))
+                    .thumbnailBorder(artworkShape(RoundedCornerShape(7.dp)))
                     .background(palette.elevated),
             )
             if (isCurrent && isPlaying) SearchPlayingBars(Modifier.align(Alignment.Center))
@@ -2010,8 +2013,8 @@ private fun SuggestedSongRow(
                 contentDescription = null,
                 modifier = Modifier
                     .size(52.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .thumbnailBorder(RoundedCornerShape(8.dp))
+                    .clip(artworkShape(RoundedCornerShape(8.dp)))
+                    .thumbnailBorder(artworkShape(RoundedCornerShape(8.dp)))
                     .background(palette.elevated),
             )
             if (isCurrent && isPlaying) SearchPlayingBars(Modifier.align(Alignment.Center))
@@ -2210,8 +2213,8 @@ private fun SectionCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(10.dp))
-                .thumbnailBorder(RoundedCornerShape(10.dp))
+                .clip(artworkShape(RoundedCornerShape(10.dp)))
+                .thumbnailBorder(artworkShape(RoundedCornerShape(10.dp)))
                 .background(palette.elevated),
         )
         Spacer(Modifier.height(8.dp))

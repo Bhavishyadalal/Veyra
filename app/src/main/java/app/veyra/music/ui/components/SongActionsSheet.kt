@@ -1,7 +1,13 @@
 package app.veyra.music.ui.components
 
+import app.veyra.music.ui.customization.artworkShape
 import app.veyra.music.R
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.runtime.saveable.rememberSaveable
+import app.veyra.music.data.settings.AppSettings
+import app.veyra.music.ui.customization.PlayerShortcut
 import android.net.Uri
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.progressBarRangeInfo
@@ -207,7 +213,9 @@ fun SongActionsSheet(
      */
     presentation: SongActionsPresentation = SongActionsPresentation.Sheet,
 ) {
-    var pickingSleepTimer by remember { mutableStateOf(false) }
+    var pickingSleepTimer by rememberSaveable(song.videoId) { mutableStateOf(false) }
+    BackHandler(enabled = pickingSleepTimer) { pickingSleepTimer = false }
+    val chosenShortcut by AppSettings.playerShortcut.collectAsStateWithLifecycle()
     val menu = presentation == SongActionsPresentation.Menu
     // Read from the thumbnail the row that opened this sheet was already
     // showing, not a larger copy of it: the tint is a blur and a handful of
@@ -228,7 +236,26 @@ fun SongActionsSheet(
     // rate, save, queue into a playlist, fetch again, or share a link for.
     val isOffline = song.localUri != null
 
+    val priority = if (showSleepTimer && !menu) chosenShortcut else PlayerShortcut.NONE
+    @Composable
+    fun PriorityAction() {
+        when (priority) {
+            PlayerShortcut.DOWNLOAD -> DownloadRow(song, palette, isOffline, onDownload)
+            PlayerShortcut.FAVORITE -> if (signedIn && !isOffline) ActionRow(
+                icon = if (liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+                label = stringResource(if (liked) R.string.remove_from_liked else R.string.like),
+                tint = if (liked) palette.accent else null,
+                accent = palette.accent, onClick = onToggleLike)
+            PlayerShortcut.PLAYLIST -> if (signedIn && !isOffline) ActionRow(
+                Icons.AutoMirrored.Rounded.PlaylistAdd, stringResource(R.string.add_to_playlist),
+                accent = palette.accent, onClick = onAddToPlaylist)
+            PlayerShortcut.SLEEP_TIMER -> ActionRow(Icons.Rounded.Bedtime, stringResource(R.string.sleep_timer),
+                value = sleepTimerStatus(), accent = palette.accent) { pickingSleepTimer = true }
+            PlayerShortcut.NONE -> Unit
+        }
+    }
     val rows: @Composable ColumnScope.() -> Unit = {
+        PriorityAction()
         // Leads the list whenever it's available: which recording is playing
         // is the one question that has to be answered before any of the rows
         // below mean anything — there is no point rating, queueing or
@@ -276,6 +303,7 @@ fun SongActionsSheet(
         }
 
         if (signedIn && !isOffline) {
+            if (priority != PlayerShortcut.FAVORITE) {
             ActionRow(
                 icon = if (liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
                 label = if (liked) stringResource(R.string.remove_from_liked) else stringResource(R.string.like),
@@ -283,6 +311,7 @@ fun SongActionsSheet(
                 accent = palette.accent,
                 onClick = onToggleLike,
             )
+            }
             ActionRow(
                 icon = if (disliked) Icons.Rounded.ThumbDown else Icons.Rounded.ThumbDownOffAlt,
                 label = if (disliked) stringResource(R.string.undo_dislike) else stringResource(R.string.dislike),
@@ -290,12 +319,14 @@ fun SongActionsSheet(
                 accent = palette.accent,
                 onClick = onToggleDislike,
             )
+            if (priority != PlayerShortcut.PLAYLIST) {
             ActionRow(
                 icon = Icons.AutoMirrored.Rounded.PlaylistAdd,
                 label = stringResource(R.string.add_to_playlist),
                 accent = palette.accent,
                 onClick = onAddToPlaylist,
             )
+            }
             onRemoveFromPlaylist?.let {
                 ActionRow(
                     icon = Icons.Rounded.PlaylistRemove,
@@ -307,7 +338,7 @@ fun SongActionsSheet(
             GroupSeparator(palette)
         }
 
-        DownloadRow(song, palette, isOffline, onDownload)
+        if (priority != PlayerShortcut.DOWNLOAD) DownloadRow(song, palette, isOffline, onDownload)
         WebDavUploadRow(song, palette, isOffline, onUploadToWebDav)
         ActionRow(
             icon = Icons.Rounded.Radio,
@@ -347,7 +378,7 @@ fun SongActionsSheet(
                 accent = palette.accent,
             ) { onOpenArtist(id) }
         }
-        if (showSleepTimer) {
+        if (showSleepTimer && priority != PlayerShortcut.SLEEP_TIMER) {
             ActionRow(
                 icon = Icons.Rounded.Bedtime,
                 label = stringResource(R.string.sleep_timer),
@@ -387,7 +418,7 @@ fun SongActionsSheet(
         return
     }
 
-    TintedSheet(palette = palette, imageUrl = song.thumbnailUrl, modifier = modifier) {
+    TintedSheet(palette = palette, imageUrl = song.thumbnailUrl, modifier = modifier, scrollKey = pickingSleepTimer) {
         if (pickingSleepTimer) {
             SleepTimerPicker(palette = palette, onBack = { pickingSleepTimer = false })
             return@TintedSheet
@@ -472,8 +503,10 @@ private fun TintedSheet(
     palette: ArtworkPalette,
     imageUrl: String?,
     modifier: Modifier = Modifier,
+    scrollKey: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val scrollStates = rememberSaveableStateHolder()
     val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.85f
     Box(
         modifier
@@ -508,12 +541,12 @@ private fun TintedSheet(
                         .background(palette.onBackground.copy(alpha = 0.35f)),
                 )
             }
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
-                content = content,
-            )
+            scrollStates.SaveableStateProvider(scrollKey) {
+                Column(
+                    Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+                    content = content,
+                )
+            }
         }
     }
 }
@@ -853,7 +886,7 @@ internal fun ActionRow(
             maxLines = if (menu) 2 else Int.MAX_VALUE,
             overflow = TextOverflow.Ellipsis,
         )
-            if (stackedValue && value != null) {
+            if (stackedValue) {
                 Text(value, style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold, color = accent.copy(alpha = alpha),
                     modifier = Modifier.padding(top = 4.dp))
@@ -947,8 +980,8 @@ internal fun SheetTrackHeader(
             contentDescription = null,
             modifier = Modifier
                 .size(52.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .thumbnailBorder(RoundedCornerShape(8.dp))
+                .clip(artworkShape(RoundedCornerShape(8.dp)))
+                .thumbnailBorder(artworkShape(RoundedCornerShape(8.dp)))
                 .background(MaterialTheme.colorScheme.surfaceVariant),
         )
         Spacer(Modifier.width(14.dp))

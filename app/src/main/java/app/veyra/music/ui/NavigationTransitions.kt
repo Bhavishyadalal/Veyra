@@ -15,10 +15,11 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 
 /** Opaque destination surfaces stay present under the entering page, avoiding a dark flash. */
-fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: Boolean): ContentTransform {
+fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: Boolean, subtleMotion: Boolean = false): ContentTransform {
     val direction = if (rtl) -1 else 1
     val transition = when {
         reduceMotion || motion == NavigationMotion.None -> EnterTransition.None togetherWith ExitTransition.None
+        subtleMotion -> (fadeIn(tween(VeyraMotion.Feedback)) togetherWith fadeOut(tween(VeyraMotion.Press))).apply { targetContentZIndex = 1f }
         motion == NavigationMotion.Tab ->
             (fadeIn(tween(VeyraMotion.Feedback)) togetherWith ExitTransition.None).apply { targetContentZIndex = 1f }
         motion == NavigationMotion.Back ->

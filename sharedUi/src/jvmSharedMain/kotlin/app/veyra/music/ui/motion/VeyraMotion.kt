@@ -1,5 +1,6 @@
 package app.veyra.music.ui.motion
 
+import app.veyra.music.ui.customization.LocalSubtleMotion
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.runtime.Composable
@@ -24,10 +25,10 @@ object VeyraMotion {
 
 /** Honor both Veyra's preference and Android's animation-duration scale. */
 @Composable
-fun rememberVeyraReducedMotion(): Boolean {
+fun rememberVeyraReducedMotion(includeSubtle: Boolean = true): Boolean {
     val preference by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     val system = rememberCoroutineScope().coroutineContext[MotionDurationScale]?.scaleFactor ?: 1f
-    return preference || system == 0f
+    return preference || system == 0f || (includeSubtle && LocalSubtleMotion.current)
 }
 
 /** Tonal feedback inside the caller's clip; layout and touch targets never move. */

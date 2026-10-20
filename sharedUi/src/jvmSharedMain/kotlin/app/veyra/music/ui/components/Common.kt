@@ -1,5 +1,9 @@
 package app.veyra.music.ui.components
 
+import app.veyra.music.ui.customization.artworkShape
+import app.veyra.music.ui.customization.LocalListSpacing
+import app.veyra.music.ui.customization.songRowPadding
+
 import app.veyra.music.ui.LocalPullToRefreshEnabled
 import app.veyra.music.ui.AppUiHost
 import app.veyra.music.ui.AppUi
@@ -514,7 +518,7 @@ private fun SongRowContent(
             .background(activeBackground)
             .longPressMenuClickable(onClick = onClick, onLongClick = onLongPress)
             .contextClick(onMore ?: onLongPress)
-            .padding(horizontal = PAGE_GUTTER, vertical = 4.dp),
+            .padding(horizontal = PAGE_GUTTER, vertical = songRowPadding(LocalListSpacing.current, androidx.compose.ui.platform.LocalDensity.current.fontScale).dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (trackNumber != null) {
@@ -550,8 +554,8 @@ private fun SongRowContent(
                     contentDescription = null,
                     modifier = Modifier
                         .matchParentSize()
-                        .clip(RoundedCornerShape(8.dp))
-                        .thumbnailBorder(RoundedCornerShape(8.dp))
+                        .clip(artworkShape(RoundedCornerShape(8.dp)))
+                        .thumbnailBorder(artworkShape(RoundedCornerShape(8.dp)))
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                 )
                 if (searchPlayingStyle && isCurrent && isPlaying) {

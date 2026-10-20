@@ -132,7 +132,7 @@ fun OnboardingScreen(
     val foreground = rememberIsForeground()
     val keyboardUp = WindowInsets.isImeVisible
     val systemScale = rememberCoroutineScope().coroutineContext[MotionDurationScale]?.scaleFactor ?: 1f
-    val reduceMotion = reduceAnimation || systemScale == 0f || !foreground
+    val reduceMotion = reduceAnimation || app.veyra.music.ui.customization.LocalSubtleMotion.current || systemScale == 0f || !foreground
     var introduced by rememberSaveable { mutableStateOf(false) }
     val phase = remember { Animatable(if (introduced || reduceMotion) 1f else 0f) }
     // One short foreground reveal, then completely still. Typing/backgrounding settles it.
@@ -367,6 +367,14 @@ private fun ColumnScope.NamePage(
         if (!keyboardUp) {
             VeyraBrand(prominent = !compact, color = WelcomeCream, reveal = phase)
             Spacer(Modifier.height(if (compact) 12.dp else 16.dp))
+            AsyncImage(
+                model = R.drawable.welcome_silver_wave,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxWidth().height(if (compact) 96.dp else 148.dp)
+                    .clip(RoundedCornerShape(24.dp)),
+            )
+            Spacer(Modifier.height(16.dp))
         }
         FlowingTitle(stringResource(R.string.onboarding_personalize_title), reduceMotion)
         Spacer(Modifier.height(if (compact) 16.dp else 28.dp))

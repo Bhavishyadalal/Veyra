@@ -1,5 +1,8 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.customization.*
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.saveable.mapSaver
 import android.content.Context
 import android.content.Intent
 import android.media.AudioFormat
@@ -196,6 +199,12 @@ fun SettingsScreen(
     val dolbyAtmosSupported = DeviceCodecs.playsDolbyAtmos
     val spatialAudio by AppSettings.spatialAudio.collectAsStateWithLifecycle()
     val nerdStats by AppSettings.showNerdStats.collectAsStateWithLifecycle()
+    val accentPalette by AppSettings.accentPalette.collectAsStateWithLifecycle()
+    val artworkCorners by AppSettings.artworkCorners.collectAsStateWithLifecycle()
+    val listSpacing by AppSettings.listSpacing.collectAsStateWithLifecycle()
+    val subtleMotion by AppSettings.subtleMotion.collectAsStateWithLifecycle()
+    val playerShortcut by AppSettings.playerShortcut.collectAsStateWithLifecycle()
+    var resetCustomization by rememberSaveable { mutableStateOf<String?>(null) }
     val strongerText by AppSettings.strongerText.collectAsStateWithLifecycle()
     val contrastPlayerControls by AppSettings.contrastPlayerControls.collectAsStateWithLifecycle()
     val reduceAnimation by AppSettings.reduceAnimation.collectAsStateWithLifecycle()
@@ -379,19 +388,22 @@ fun SettingsScreen(
         if (searching) searchQuery = "" else category = null
     }
 
-    // What is left after a keystroke is a different list, and the offset the
-    // last one was scrolled to means nothing in it.
-    val scrollState = rememberSaveable(saver = ScrollState.Saver) { ScrollState(0) }
+    val scrollPositions = rememberSaveable(saver = mapSaver<MutableMap<String, Int>>(
+        save = { it.toMap() },
+        restore = { values -> values.mapValues { (_, value) -> (value as? Int ?: 0).coerceAtLeast(0) }.toMutableMap() },
+    )) { mutableMapOf() }
+    val scrollKey = if (searching) "search" else category?.name ?: "overview"
+    val scrollState = remember(scrollKey) { ScrollState(scrollPositions[scrollKey] ?: 0) }
+    androidx.compose.runtime.DisposableEffect(scrollKey, scrollState) {
+        onDispose { scrollPositions[scrollKey] = scrollState.value }
+    }
+    LaunchedEffect(scrollKey, scrollState) {
+        snapshotFlow { scrollState.value }.collect { scrollPositions[scrollKey] = it }
+    }
     var isFirstSearchComposition by remember { mutableStateOf(true) }
-    LaunchedEffect(searchQuery, category) {
-        if (isFirstSearchComposition && searchQuery.isEmpty()) {
-            // Skip the initial composition during Activity recreation:
-            // rememberSaveable already restored the scroll position.
-            isFirstSearchComposition = false
-        } else {
-            isFirstSearchComposition = false
-            scrollState.scrollTo(0)
-        }
+    LaunchedEffect(searchQuery) {
+        if (!isFirstSearchComposition && searchQuery.isNotBlank()) scrollState.scrollTo(0)
+        isFirstSearchComposition = false
     }
 
     val reducedMotion = rememberVeyraReducedMotion()
@@ -749,6 +761,49 @@ fun SettingsScreen(
                         onSelect = { AppSettings.setThemeMode(ThemeMode.entries[it]) },
                         modifier = Modifier.padding(start = ROW_INSET, end = ROW_INSET, bottom = 14.dp),
                     )
+                }
+                row(stringResource(R.string.custom_accent), "accent", "color", "palette") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_accent),
+                        subtitle = stringResource(R.string.custom_accent_hint))
+                    SegmentedControl(options = androidx.compose.ui.res.stringArrayResource(R.array.custom_accent_options).toList(),
+                        selectedIndex = AccentPalette.entries.indexOf(accentPalette), onSelect = { AppSettings.setAccentPalette(AccentPalette.entries[it]) },
+                        modifier = Modifier.padding(horizontal = ROW_INSET, vertical = 8.dp))
+                }
+                row(stringResource(R.string.custom_artwork_corners), "artwork", "corners", "covers") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_artwork_corners),
+                        subtitle = stringResource(R.string.custom_artwork_corners_hint))
+                    SegmentedControl(options = androidx.compose.ui.res.stringArrayResource(R.array.custom_corner_options).toList(),
+                        selectedIndex = ArtworkCorners.entries.indexOf(artworkCorners), onSelect = { AppSettings.setArtworkCorners(ArtworkCorners.entries[it]) },
+                        modifier = Modifier.padding(horizontal = ROW_INSET, vertical = 8.dp))
+                }
+                row(stringResource(R.string.custom_list_spacing), "density", "spacing", "compact") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_list_spacing),
+                        subtitle = stringResource(R.string.custom_list_spacing_hint))
+                    SegmentedControl(options = androidx.compose.ui.res.stringArrayResource(R.array.custom_spacing_options).toList(),
+                        selectedIndex = ListSpacing.entries.indexOf(listSpacing), onSelect = { AppSettings.setListSpacing(ListSpacing.entries[it]) },
+                        modifier = Modifier.padding(horizontal = ROW_INSET, vertical = 8.dp))
+                }
+                row(stringResource(R.string.custom_motion_level), "motion", "animation") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_motion_level),
+                        subtitle = stringResource(R.string.custom_motion_level_hint))
+                    SegmentedControl(options = androidx.compose.ui.res.stringArrayResource(R.array.custom_motion_options).toList(),
+                        selectedIndex = if (reduceAnimation) 2 else if (subtleMotion) 1 else 0, onSelect = { AppSettings.setMotionLevel(MotionLevel.entries[it]) },
+                        modifier = Modifier.padding(horizontal = ROW_INSET, vertical = 8.dp))
+                }
+                row(stringResource(R.string.custom_player_shortcut), "player", "shortcut", "download", "sleep", "favorite") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_player_shortcut),
+                        subtitle = stringResource(R.string.custom_player_shortcut_hint))
+                    SegmentedControl(options = androidx.compose.ui.res.stringArrayResource(R.array.custom_shortcut_options).toList(),
+                        selectedIndex = PlayerShortcut.entries.indexOf(playerShortcut), onSelect = { AppSettings.setPlayerShortcut(PlayerShortcut.entries[it]) },
+                        modifier = Modifier.padding(horizontal = ROW_INSET, vertical = 8.dp))
+                }
+                row(stringResource(R.string.custom_reset_appearance), "reset", "appearance") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_reset_appearance),
+                        onClick = { resetCustomization = "appearance" })
+                }
+                row(stringResource(R.string.custom_reset_player), "reset", "player", "shortcut") {
+                    SettingsRow(icon = SettingsIcons.Sound, title = stringResource(R.string.custom_reset_player),
+                        onClick = { resetCustomization = "player" })
                 }
                 val strongerTextTitle = stringResource(R.string.stronger_text)
                 row(strongerTextTitle, "font", "bold", "readability", "accessibility") {
@@ -1387,6 +1442,17 @@ fun SettingsScreen(
         }
     }
 
+    if (resetCustomization != null) {
+        val scope = resetCustomization
+        AlertDialog(onDismissRequest = { resetCustomization = null },
+            title = { Text(stringResource(if (scope == "appearance") R.string.custom_reset_appearance else R.string.custom_reset_player)) },
+            text = { Text(stringResource(if (scope == "appearance") R.string.custom_reset_appearance_hint else R.string.custom_reset_player_hint)) },
+            confirmButton = { TextButton(onClick = {
+                if (scope == "appearance") AppSettings.resetAppearanceCustomization() else AppSettings.resetPlayerCustomization()
+                resetCustomization = null
+            }) { Text(stringResource(R.string.custom_reset_confirm)) } },
+            dismissButton = { TextButton(onClick = { resetCustomization = null }) { Text(stringResource(R.string.cancel)) } })
+    }
     if (pickingDownloadQuality) {
         ModalBottomSheet(
             onDismissRequest = { pickingDownloadQuality = false },

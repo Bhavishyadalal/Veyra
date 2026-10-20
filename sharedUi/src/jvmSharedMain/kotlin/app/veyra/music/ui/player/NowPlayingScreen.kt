@@ -862,6 +862,8 @@ fun NowPlayingScreen(
     // read, not the number of them: the frame comes back at `frameCapturePx`
     // rather than full-bleed, and is averaged on a stride off the main thread.
     val reducedBackdropEffects by PlayerSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
+    val customSleeveCorner = app.veyra.music.ui.customization.artworkCorner(24.dp)
+    val customLandscapeCorner = app.veyra.music.ui.customization.artworkCorner(LANDSCAPE_ART_CORNER)
     val reducedBackdropMotion = rememberVeyraReducedMotion()
     // Keep the initial palette, without repeated GPU readbacks in reduced-effects mode.
     val meshRefreshMs = if (reducedBackdropEffects || reducedBackdropMotion) null else MESH_REFRESH_MS
@@ -1797,10 +1799,10 @@ fun NowPlayingScreen(
             val landscapeArtShape: () -> Shape = {
                 val t = dockT()
                 if (dock == null || t >= 1f) {
-                    dockFrame.cornerShape(LANDSCAPE_ART_CORNER)
+                    dockFrame.cornerShape(customLandscapeCorner)
                 } else {
                     val scale = landscapeDockPose()?.scale?.takeIf { it > 0f } ?: 1f
-                    dockFrame.cornerShape(lerp(dock.miniArtCorner(), LANDSCAPE_ART_CORNER, t) / scale)
+                    dockFrame.cornerShape(lerp(dock.miniArtCorner(), customLandscapeCorner, t) / scale)
                 }
             }
 
@@ -2805,7 +2807,7 @@ fun NowPlayingScreen(
                         // it docks.
                         fun sleeveShown(): Float = bannerShown() * dockT()
                         fun sleeveCorner(): Dp {
-                            val corner = 24.dp * (1f - sleeveShown())
+                            val corner = customSleeveCorner * (1f - sleeveShown())
                             val t = dockT()
                             return if (dock == null || t >= 1f) corner else lerp(dock.miniArtCorner(), corner, t)
                         }
