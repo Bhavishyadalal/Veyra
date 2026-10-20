@@ -18,7 +18,14 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - uses: android-actions/setup-android@v3
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        # The action defaults to "tools platform-tools", but Google's obsolete
+        # "tools" package is no longer available. Command-line tools are
+        # installed by the action itself; only platform-tools is needed here.
+        packages: platform-tools
+        log-accepted-android-sdk-licenses: false
 
     - name: Install Android build tools
       run: sdkmanager "platforms;android-36" "platforms;android-37.0" "build-tools;35.0.0" "ndk;27.0.12077973" "cmake;3.22.1"
