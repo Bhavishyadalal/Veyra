@@ -45,3 +45,5 @@ Current preview source includes [listening continuity, recovery and accessibilit
 The current preview also includes [Astral Tide](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/themes/README.md#astral-tide--drift-deeper-hear-everything), an original ocean theme and optional manta-waveform launcher. Version remains 0.1.7-beta1 / code 25.
 
 The latest preview adds [Midnight Express](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/themes/README.md#midnight-express--your-next-stop-another-song), an original night-train theme and optional ticket-waveform launcher. Stable 0.1.6 / code 22 source ZIP remains unchanged for release builds.
+
+The refreshed preview includes [bounded Home loading, Explore request cancellation, background download recovery writes and theme image/RTL polish](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/verification/PERFORMANCE-0.1.7-beta1.md). It remains 0.1.7-beta1 / code 25; stable source and published theme packs are unchanged.
