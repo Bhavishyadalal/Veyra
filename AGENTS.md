@@ -1,8 +1,18 @@
 # Veyra maintenance rules
 
-- Current stable Android source: `main`, version 0.1.5 / code 20. Current preview:
-  `preview/0.1.6-beta1`, version 0.1.6-beta1 / code 21. Keep preview UI/features out
-  of stable until the owner explicitly promotes them. Older branches are historical.
+- Current stable Android source: `main` and `stable/0.1.6`, version 0.1.6 / code 22.
+  Completed preview `preview/0.1.6-beta1` remains version 0.1.6-beta1 / code 21.
+  Next preview 0.1.7-beta1 theme packs are planned, not implemented or released.
+  Keep future preview features out of stable until the owner promotes them.
+  Older branches retain their historical Android code and version.
+- For app/version/download changes, also update and push the separate website
+  repository `Bhavishyadalal/Veyra-website`. This is the owner's standing request.
+  Read its `AGENTS.md`; update `src/config.js` source/checksum/change-note links,
+  current version labels and any affected external links. Keep stable and preview
+  distinct, verify real app branch files, and never claim an unpublished APK exists.
+  Website URL: `https://veyra-website-mauve.vercel.app/`. Verify build, type checks
+  and relevant mobile/desktop links before pushing; do not claim Vercel deployment
+  succeeded solely because Git push succeeded.
 - Canonical server source is `Bhavishyadalal/Veyra-backend` on `main`. The app's
   `backend/` is a snapshot, not a separate deployment. Read `docs/BACKEND_SYNC.md`
   and verify its manifest before backend changes. Mirror future canonical fixes
