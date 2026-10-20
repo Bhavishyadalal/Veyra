@@ -1286,4 +1286,5 @@
     <string name="undo">Undo</string>
     <string name="download_action_track">%1$s %2$s</string>
     <string name="app_icon_astral">Astral Tide</string>
+    <string name="app_icon_midnight">Midnight Express</string>
 </resources>

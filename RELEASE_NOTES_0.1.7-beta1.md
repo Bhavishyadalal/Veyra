@@ -1,4 +1,4 @@
-# Veyra 0.1.7-beta1 · Listening continuity and four worlds
+# Veyra 0.1.7-beta1 · Listening continuity and five worlds
 
 **Preview source · code 25 · Made by Bhavishya Dalal**
 
@@ -17,6 +17,15 @@ an APK or change the Listen Together backend.
 
 [Implementation, validation and device-check limits](verification/RELIABILITY-0.1.7-beta1.md).
 Version remains **0.1.7-beta1 / code 25**. No new installer is published.
+
+## Midnight Express
+
+- Original rain-soaked night-train scenes, amber carriage light and coal-blue surfaces.
+- Bold Rajdhani timetable-style headings, thirteen weighted glyphs, ticket-like corners and a parallel route timeline.
+- Optional original ticket-waveform launcher, offered explicitly during theme application.
+- Uses the existing engine and reduced-motion behavior; real music artwork and all completed reliability features remain.
+- Version stays 0.1.7-beta1 / code 25. Theme pack needs code 25; its bundled launcher needs the refreshed source.
+- [Native previews, validation and limits](verification/MIDNIGHT-EXPRESS-0.1.7-beta1.md). No APK publication.
 
 ## Astral Tide
 

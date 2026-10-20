@@ -44,6 +44,17 @@
       "sha256": "399985796c9caec40ec4e2f2f1d12136cc30a3424dbac798f2c2f22f1d436d22",
       "bytes": 521115,
       "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/astral-tide/artwork/preview.webp"
+    },
+    {
+      "id": "midnight-express",
+      "name": "Midnight Express",
+      "description": "Rainy night-train windows, warm amber light and coal-blue surfaces. Bold Rajdhani timetable-style headings, custom controls, a parallel route timeline and an optional ticket-waveform Veyra icon.",
+      "version": 1,
+      "minAppCode": 25,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/midnight-express-v1.zip",
+      "sha256": "b97f7c3ee58de56a35e9294b04abf4f5a3cd93911e84221cd47fbf27d3392377",
+      "bytes": 692115,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/midnight-express/artwork/preview.webp"
     }
   ]
 }

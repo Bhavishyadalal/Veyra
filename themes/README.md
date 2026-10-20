@@ -5,6 +5,7 @@ Made by **Bhavishya Dalal**.
 
 | Theme | Its own atmosphere | Download |
 | --- | --- | --- |
+| **Midnight Express v1** | Original rainy night train, amber carriage lights, bold Rajdhani headings, route-style timeline and optional ticket-waveform icon | [Theme ZIP](packs/midnight-express-v1.zip) · [SHA-256](packs/midnight-express-v1.zip.sha256) |
 | **Astral Tide v1** | Original bioluminescent ocean, bold Space Grotesk headings, sea-glass controls, champagne starlight and a manta-waveform icon | [Theme ZIP](packs/astral-tide-v1.zip) · [SHA-256](packs/astral-tide-v1.zip.sha256) |
 | **Playtime Club v1** | Unofficial cartoon music party, Fredoka rounded headings, yellow/mint details, bubble timeline and soft press feedback | [Theme ZIP](packs/playtime-club-v1.zip) · [SHA-256](packs/playtime-club-v1.zip.sha256) |
 | **Web Slinger v1** | Midnight city, crimson glass, cobalt webs, bold condensed type, angular action details and a web timeline | [Theme ZIP](packs/web-slinger-v1.zip) · [SHA-256](packs/web-slinger-v1.zip.sha256) |
@@ -28,7 +29,7 @@ Made by **Bhavishya Dalal**.
 6. For the standard launcher icon choose **Veyra → Glass Noir · Default**.
    Choose **Original Veyra** in Studio to restore your saved appearance.
 
-All 20 launcher choices are retained. Only the visible icon group is composed.
+All 21 launcher choices are retained. Only the visible icon group is composed.
 Headers stay reachable; grids, group filters and hints scroll within the chooser
 on smaller displays. Icon changes run off the UI thread and are serialized with
 selection reads so Activity recreation cannot read a half-finished icon switch.
@@ -53,7 +54,7 @@ files, preserving corruption checks. Installed themes and Original remain offlin
 | Player | Custom glyphs, button geometry, themed fill and web/ember playhead | Seek, RTL, elapsed/duration, busy/locked states, haptics and touch targets |
 | Menus / Settings | Theme palette and sculpted action icon housings | Existing actions, account/offline requirements and sleep-timer state |
 | Theme Studio | Compact lazy collection, separate detail page, saved swatches and fixed actions | Checksum validation, download/cancel, confirmation, offline use and removal rules |
-| Android launcher | Four bundled adaptive icon choices, with legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
+| Android launcher | Five bundled adaptive icon choices, with legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
 
 Web details are drawn behind content without pointer handlers or continuous
 animation loops. Native press feedback and existing reduced-motion preferences
@@ -96,7 +97,7 @@ Apply; a download never replaces the currently active theme definition.
 
 Packs are data only. No scripts, executable layouts, component names, remote asset
 references or arbitrary launcher icons can be supplied by a pack. Bundled icon
-mapping recognizes only the four known theme IDs. Unknown themes cannot select an
+mapping recognizes only the five known theme IDs. Unknown themes cannot select an
 Android component. Limits remain ZIP 12 MiB, 48 asset files, 8 MiB per file,
 32 MiB unpacked, 2048-pixel artwork and 256-pixel glyphs/branding icons.
 
@@ -114,7 +115,7 @@ no AI service or network access is needed for rebuilding. Published ZIPs cannot
 be overwritten with changed bytes: bump their manifest version first.
 `--replace-draft` is only for a theme version that has **not** been published.
 
-The builder produces all four packs, checksums, catalog and Android icon densities.
+The builder produces all five packs, checksums, catalog and Android icon densities.
 Full atmosphere/fonts remain in downloadable packs; only the catalog and bundled
 launcher artwork are added to Android resources. A theme ZIP is not a launcher
 icon installation mechanism.
@@ -182,3 +183,32 @@ The illustrations and vector manta-waveform mark are original AI-assisted Veyra
 artwork, not a film/comic character or official franchise asset. Made by
 Bhavishya Dalal. Space Grotesk and Manrope retain their included SIL Open Font
 License notices; the bold Space Grotesk static instance is documented in the pack.
+
+## Midnight Express · your next stop, another song
+
+A quiet night journey through rain and mountains: warm carriage windows, an
+art-deco reading lamp, coal-blue surfaces, amber controls and pale-blue details.
+Bold Rajdhani headings evoke railway timetables while Manrope keeps body text
+familiar. Thirteen weighted navigation/player/action glyphs, restrained ticket-like
+corners and the existing parallel-strand/diamond timeline give it its own rhythm.
+An original Veyra ticket-waveform mark ties Home branding to the optional launcher.
+No film scene or real railway branding is used.
+
+Schema 2 / minimum code 25. Existing playback, queue actions, actual song covers,
+compact Studio, font scaling, RTL back icon and reduced-motion controls remain.
+No background animation loop, new app dependency or engine schema is added.
+The optional bundled launcher requires the refreshed preview source; earlier
+code-25 installations can use the data pack without offering that icon.
+
+| Home | Player |
+| --- | --- |
+| <img src="previews/midnight-express/home.png" width="280" alt="Midnight Express Home component study" /> | <img src="previews/midnight-express/player.png" width="280" alt="Midnight Express player component study" /> |
+
+[Six new native component studies](previews/midnight-express) include Home and
+Studio at 320 dp / 150% text. These are illustrative desktop Compose layouts
+using shared components, not full Android device screenshots. See
+[verification and limits](../verification/MIDNIGHT-EXPRESS-0.1.7-beta1.md).
+Rebuild only this pack with `python3 themes/build_midnight.py`; the checked-in
+artwork/fonts mean no generation service or network is needed to rebuild.
+Original AI-assisted illustrations/vector glyphs by Veyra, made by Bhavishya Dalal.
+Rajdhani Bold and Manrope retain their included SIL Open Font License notices.
