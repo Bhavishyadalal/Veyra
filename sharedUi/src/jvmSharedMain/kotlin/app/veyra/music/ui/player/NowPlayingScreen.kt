@@ -1,5 +1,7 @@
 package app.veyra.music.ui.player
 
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
+
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.unit.constrainHeight
@@ -341,9 +343,9 @@ private const val ARTWORK_DRAG_SHRINK_SCALE = 0.94f
  * gesture specifically: it visibly lags a quick scrub and keeps settling after
  * the finger has already lifted.
  *
- * The phone layout keeps its own bouncy spring ([artScale]) — it is answering a
- * different thing there, a sleeve that also collapses into a header, and the
- * bounce is the signature.
+ * The phone layout keeps its own gentle scale ([artScale]) — it is answering a
+ * different thing there: a sleeve that also collapses into a header.
+ * A quiet settle preserves focus.
  */
 private val ArtworkScaleEasing = CubicBezierEasing(0.215f, 0.61f, 0.355f, 1f)
 private const val ARTWORK_SCALE_DURATION_MS = 500
@@ -860,7 +862,9 @@ fun NowPlayingScreen(
     // read, not the number of them: the frame comes back at `frameCapturePx`
     // rather than full-bleed, and is averaged on a stride off the main thread.
     val reducedBackdropEffects by PlayerSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
-    val reducedBackdropMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
+    val customSleeveCorner = app.veyra.music.ui.customization.artworkCorner(24.dp)
+    val customLandscapeCorner = app.veyra.music.ui.customization.artworkCorner(LANDSCAPE_ART_CORNER)
+    val reducedBackdropMotion = rememberVeyraReducedMotion()
     // Keep the initial palette, without repeated GPU readbacks in reduced-effects mode.
     val meshRefreshMs = if (reducedBackdropEffects || reducedBackdropMotion) null else MESH_REFRESH_MS
 
@@ -1075,11 +1079,12 @@ fun NowPlayingScreen(
     // [QUEUE_CARRY_FRACTION] has to fall back to 0 just as surely as one that
     // carried has to finish reaching 1.
     var queueReleased by remember { mutableIntStateOf(0) }
-    LaunchedEffect(queueOpen, queueDragging, queueReleased) {
+    LaunchedEffect(queueOpen, queueDragging, queueReleased, reducedBackdropMotion) {
         if (queueDragging) return@LaunchedEffect
         val target = if (queueOpen) 1f else 0f
         val from = queueSlide.floatValue
         if (from == target) return@LaunchedEffect
+        if (reducedBackdropMotion) { queueSlide.floatValue = target; return@LaunchedEffect }
         animate(
             initialValue = from,
             targetValue = target,
@@ -1121,10 +1126,10 @@ fun NowPlayingScreen(
 
     // Signature Apple Music touch: the sleeve shrinks back while paused.
     val artScale by animateFloatAsState(
-        targetValue = if (isPlaying) 1f else 0.86f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioLowBouncy,
-            stiffness = Spring.StiffnessLow,
+        targetValue = if (isPlaying) 1f else 0.92f,
+        animationSpec = tween(
+            durationMillis = playerMotionMillis(reducedBackdropMotion, 260),
+            easing = app.veyra.music.ui.motion.VeyraMotion.Easing,
         ),
         label = "artScale",
     )
@@ -1794,10 +1799,10 @@ fun NowPlayingScreen(
             val landscapeArtShape: () -> Shape = {
                 val t = dockT()
                 if (dock == null || t >= 1f) {
-                    dockFrame.cornerShape(LANDSCAPE_ART_CORNER)
+                    dockFrame.cornerShape(customLandscapeCorner)
                 } else {
                     val scale = landscapeDockPose()?.scale?.takeIf { it > 0f } ?: 1f
-                    dockFrame.cornerShape(lerp(dock.miniArtCorner(), LANDSCAPE_ART_CORNER, t) / scale)
+                    dockFrame.cornerShape(lerp(dock.miniArtCorner(), customLandscapeCorner, t) / scale)
                 }
             }
 
@@ -2802,7 +2807,7 @@ fun NowPlayingScreen(
                         // it docks.
                         fun sleeveShown(): Float = bannerShown() * dockT()
                         fun sleeveCorner(): Dp {
-                            val corner = 24.dp * (1f - sleeveShown())
+                            val corner = customSleeveCorner * (1f - sleeveShown())
                             val t = dockT()
                             return if (dock == null || t >= 1f) corner else lerp(dock.miniArtCorner(), corner, t)
                         }

@@ -1,4 +1,4 @@
-> **Current stable source: 0.1.5, code 20.** Preview UI refinements are promoted to main; the beta suffix is removed. No APK included. [Current verification](verification/STABLE-0.1.5-PROMOTION.md). Older version notes below are historical.
+> **Current preview source: 0.1.6-beta1, code 21.** Open this complete project in Android Studio. Stable 0.1.5 remains on main. [Current verification and device checklist](verification/HOME-0.1.6-beta1-RESULTS.md). No APK included.
 
 > **Veyra 0.1.1:** Stable source update, version code 14. See verification/STABLE-0.1.1-RESULTS.md for current checks and the Android compile blocker. No APK included.
 

@@ -1,3 +1,5 @@
+> This branch is preview 0.1.6-beta1/code 21. The stable reports below are historical; main remains on 0.1.5/code 20. [Current preview checks](verification/HOME-0.1.6-beta1-RESULTS.md).
+
 # Veyra 0.1.5 · preview promoted to stable
 
 Version **0.1.5**, version code **20**, beta suffix empty. Includes preview Home, player and Settings refinements plus Veyra-owned Listen Together/presence and shared external cron support. Package identity, signing configuration and existing app data remain unchanged. Code 20 is higher than both the previous beta (18) and stable (19).

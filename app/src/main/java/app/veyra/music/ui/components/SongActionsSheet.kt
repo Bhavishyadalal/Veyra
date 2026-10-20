@@ -1,11 +1,28 @@
 package app.veyra.music.ui.components
 
+import app.veyra.music.ui.customization.artworkShape
 import app.veyra.music.R
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.runtime.saveable.rememberSaveable
+import app.veyra.music.data.settings.AppSettings
+import app.veyra.music.ui.customization.PlayerShortcut
 import android.net.Uri
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.progressBarRangeInfo
+import androidx.compose.ui.semantics.semantics
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
+import app.veyra.music.ui.motion.veyraPressFeedback
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.ui.platform.LocalDensity
+import app.veyra.music.ui.layout.stackForReadability
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -16,6 +33,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -195,7 +213,9 @@ fun SongActionsSheet(
      */
     presentation: SongActionsPresentation = SongActionsPresentation.Sheet,
 ) {
-    var pickingSleepTimer by remember { mutableStateOf(false) }
+    var pickingSleepTimer by rememberSaveable(song.videoId) { mutableStateOf(false) }
+    BackHandler(enabled = pickingSleepTimer) { pickingSleepTimer = false }
+    val chosenShortcut by AppSettings.playerShortcut.collectAsStateWithLifecycle()
     val menu = presentation == SongActionsPresentation.Menu
     // Read from the thumbnail the row that opened this sheet was already
     // showing, not a larger copy of it: the tint is a blur and a handful of
@@ -216,7 +236,26 @@ fun SongActionsSheet(
     // rate, save, queue into a playlist, fetch again, or share a link for.
     val isOffline = song.localUri != null
 
+    val priority = if (showSleepTimer && !menu) chosenShortcut else PlayerShortcut.NONE
+    @Composable
+    fun PriorityAction() {
+        when (priority) {
+            PlayerShortcut.DOWNLOAD -> DownloadRow(song, palette, isOffline, onDownload)
+            PlayerShortcut.FAVORITE -> if (signedIn && !isOffline) ActionRow(
+                icon = if (liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+                label = stringResource(if (liked) R.string.remove_from_liked else R.string.like),
+                tint = if (liked) palette.accent else null,
+                accent = palette.accent, onClick = onToggleLike)
+            PlayerShortcut.PLAYLIST -> if (signedIn && !isOffline) ActionRow(
+                Icons.AutoMirrored.Rounded.PlaylistAdd, stringResource(R.string.add_to_playlist),
+                accent = palette.accent, onClick = onAddToPlaylist)
+            PlayerShortcut.SLEEP_TIMER -> ActionRow(Icons.Rounded.Bedtime, stringResource(R.string.sleep_timer),
+                value = sleepTimerStatus(), accent = palette.accent) { pickingSleepTimer = true }
+            PlayerShortcut.NONE -> Unit
+        }
+    }
     val rows: @Composable ColumnScope.() -> Unit = {
+        PriorityAction()
         // Leads the list whenever it's available: which recording is playing
         // is the one question that has to be answered before any of the rows
         // below mean anything — there is no point rating, queueing or
@@ -243,6 +282,7 @@ fun SongActionsSheet(
                     ),
                     accent = palette.accent,
                     enabled = onRollbackToOriginal != null || !upgradeQualityInProgress,
+                    busy = onRollbackToOriginal == null && upgradeQualityInProgress,
                     onClick = it,
                 )
             }
@@ -263,6 +303,7 @@ fun SongActionsSheet(
         }
 
         if (signedIn && !isOffline) {
+            if (priority != PlayerShortcut.FAVORITE) {
             ActionRow(
                 icon = if (liked) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
                 label = if (liked) stringResource(R.string.remove_from_liked) else stringResource(R.string.like),
@@ -270,6 +311,7 @@ fun SongActionsSheet(
                 accent = palette.accent,
                 onClick = onToggleLike,
             )
+            }
             ActionRow(
                 icon = if (disliked) Icons.Rounded.ThumbDown else Icons.Rounded.ThumbDownOffAlt,
                 label = if (disliked) stringResource(R.string.undo_dislike) else stringResource(R.string.dislike),
@@ -277,12 +319,14 @@ fun SongActionsSheet(
                 accent = palette.accent,
                 onClick = onToggleDislike,
             )
+            if (priority != PlayerShortcut.PLAYLIST) {
             ActionRow(
                 icon = Icons.AutoMirrored.Rounded.PlaylistAdd,
                 label = stringResource(R.string.add_to_playlist),
                 accent = palette.accent,
                 onClick = onAddToPlaylist,
             )
+            }
             onRemoveFromPlaylist?.let {
                 ActionRow(
                     icon = Icons.Rounded.PlaylistRemove,
@@ -294,7 +338,7 @@ fun SongActionsSheet(
             GroupSeparator(palette)
         }
 
-        DownloadRow(song, palette, isOffline, onDownload)
+        if (priority != PlayerShortcut.DOWNLOAD) DownloadRow(song, palette, isOffline, onDownload)
         WebDavUploadRow(song, palette, isOffline, onUploadToWebDav)
         ActionRow(
             icon = Icons.Rounded.Radio,
@@ -334,7 +378,7 @@ fun SongActionsSheet(
                 accent = palette.accent,
             ) { onOpenArtist(id) }
         }
-        if (showSleepTimer) {
+        if (showSleepTimer && priority != PlayerShortcut.SLEEP_TIMER) {
             ActionRow(
                 icon = Icons.Rounded.Bedtime,
                 label = stringResource(R.string.sleep_timer),
@@ -374,7 +418,7 @@ fun SongActionsSheet(
         return
     }
 
-    TintedSheet(palette = palette, imageUrl = song.thumbnailUrl, modifier = modifier) {
+    TintedSheet(palette = palette, imageUrl = song.thumbnailUrl, modifier = modifier, scrollKey = pickingSleepTimer) {
         if (pickingSleepTimer) {
             SleepTimerPicker(palette = palette, onBack = { pickingSleepTimer = false })
             return@TintedSheet
@@ -459,8 +503,10 @@ private fun TintedSheet(
     palette: ArtworkPalette,
     imageUrl: String?,
     modifier: Modifier = Modifier,
+    scrollKey: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val scrollStates = rememberSaveableStateHolder()
     val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.85f
     Box(
         modifier
@@ -495,17 +541,17 @@ private fun TintedSheet(
                         .background(palette.onBackground.copy(alpha = 0.35f)),
                 )
             }
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
-                content = content,
-            )
+            scrollStates.SaveableStateProvider(scrollKey) {
+                Column(
+                    Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+                    content = content,
+                )
+            }
         }
     }
 }
 
-private val SHEET_SHAPE = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+private val SHEET_SHAPE = VeyraSurfaces.Sheet
 
 /**
  * One row carrying the whole life of a download: start it, watch it, cancel it,
@@ -791,13 +837,15 @@ internal fun ActionRow(
     tint: Color? = null,
     accent: Color = MaterialTheme.colorScheme.primary,
     enabled: Boolean = true,
+    busy: Boolean = false,
     onClick: () -> Unit,
 ) {
     val menu = LocalActionRowStyle.current == ActionRowStyle.Menu
+    val interaction = remember { MutableInteractionSource() }
     // The popup sits on a surface rather than the page background, so its
     // text follows the surface's colour — the two differ in light mode.
     val foreground = if (menu) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onBackground
-    val alpha = if (enabled) 1f else 0.4f
+    val alpha = if (enabled || busy) 1f else 0.4f
     val iconView: @Composable () -> Unit = {
         Icon(
             imageVector = icon,
@@ -806,15 +854,20 @@ internal fun ActionRow(
             modifier = Modifier.size(if (menu) 20.dp else 22.dp),
         )
     }
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+    val stackedValue = value != null && stackForReadability(maxWidth.value, LocalDensity.current.fontScale, 360f)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(enabled = enabled, onClick = onClick)
+            .clip(VeyraSurfaces.Row)
+            .veyraPressFeedback(interaction, accent, enabled && !busy)
+            .clickable(interactionSource = interaction, indication = null, enabled = enabled && !busy, role = Role.Button, onClick = onClick)
+            .semantics { if (busy) progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate }
             .then(
                 if (menu) {
-                    Modifier.heightIn(min = 46.dp).padding(horizontal = 18.dp, vertical = 11.dp)
+                    Modifier.heightIn(min = 48.dp).padding(horizontal = 18.dp, vertical = 12.dp)
                 } else {
-                    Modifier.padding(horizontal = 22.dp, vertical = 15.dp)
+                    Modifier.heightIn(min = 56.dp).padding(horizontal = 22.dp, vertical = 15.dp)
                 },
             ),
         verticalAlignment = Alignment.CenterVertically,
@@ -825,27 +878,41 @@ internal fun ActionRow(
             iconView()
             Spacer(Modifier.width(18.dp))
         }
+        Column(Modifier.weight(1f)) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
             color = foreground.copy(alpha = alpha),
             maxLines = if (menu) 2 else Int.MAX_VALUE,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f),
         )
-        if (value != null) {
+            if (stackedValue) {
+                Text(value, style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold, color = accent.copy(alpha = alpha),
+                    modifier = Modifier.padding(top = 4.dp))
+            }
+        }
+        if (busy) {
+            Spacer(Modifier.width(12.dp))
+            ActionProgressIndicator(accent)
+        }
+        if (value != null && !stackedValue) {
             Spacer(Modifier.width(12.dp))
             Text(
                 text = value,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
                 color = accent.copy(alpha = alpha),
-                maxLines = 1,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.widthIn(max = 120.dp),
             )
         }
         if (menu) {
             Spacer(Modifier.width(14.dp))
             iconView()
         }
+    }
     }
 }
 
@@ -863,7 +930,7 @@ private fun LoadingActionRow(icon: ImageVector, label: String, palette: ArtworkP
             .fillMaxWidth()
             .then(
                 if (menu) {
-                    Modifier.heightIn(min = 46.dp).padding(horizontal = 18.dp, vertical = 11.dp)
+                    Modifier.heightIn(min = 48.dp).padding(horizontal = 18.dp, vertical = 12.dp)
                 } else {
                     Modifier.padding(horizontal = 22.dp, vertical = 15.dp)
                 },
@@ -883,11 +950,7 @@ private fun LoadingActionRow(icon: ImageVector, label: String, palette: ArtworkP
             color = palette.onBackground.copy(alpha = 0.4f),
             modifier = Modifier.weight(1f),
         )
-        CircularProgressIndicator(
-            color = palette.onBackgroundVariant,
-            strokeWidth = 2.dp,
-            modifier = Modifier.size(16.dp),
-        )
+        ActionProgressIndicator(palette.onBackgroundVariant)
     }
 }
 
@@ -917,8 +980,8 @@ internal fun SheetTrackHeader(
             contentDescription = null,
             modifier = Modifier
                 .size(52.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .thumbnailBorder(RoundedCornerShape(8.dp))
+                .clip(artworkShape(RoundedCornerShape(8.dp)))
+                .thumbnailBorder(artworkShape(RoundedCornerShape(8.dp)))
                 .background(MaterialTheme.colorScheme.surfaceVariant),
         )
         Spacer(Modifier.width(14.dp))
@@ -948,4 +1011,16 @@ internal fun SheetHeading(text: String) {
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 4.dp),
     )
+}
+
+/** A static progress arc replaces the rotating indicator under reduced motion. */
+@Composable
+private fun ActionProgressIndicator(color: Color) {
+    if (rememberVeyraReducedMotion()) {
+        CircularProgressIndicator(progress = { 0.75f }, color = color,
+            strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
+    } else {
+        CircularProgressIndicator(color = color, strokeWidth = 2.dp,
+            modifier = Modifier.size(18.dp))
+    }
 }

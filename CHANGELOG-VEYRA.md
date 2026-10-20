@@ -1,3 +1,11 @@
+# Veyra 0.1.6-beta1 · saved, personal and offline Home
+
+- Restore a bounded per-listener Home snapshot before network refresh; preserve useful content during refresh/failure. No auth cookies, stream URLs or paging tokens are persisted in snapshots.
+- Add native section ordering, visibility and reset controls with saved per-listener preferences, accessible actions and reduced-motion handling.
+- Add offline Home messaging and existing Downloads/Local Music entry points; downloaded cached tracks use verified local files and existing playback guards.
+- Keep source/runtime compatibility with Veyra's independently hosted backend and shared external cron. Stable playback/download/Settings/Listen Together sources remain unchanged.
+- Preview 0.1.6-beta1/code 21 on its own branch. No APK or stable merge. See verification/HOME-0.1.6-beta1-RESULTS.md for 85 focused tests, native component checks and the remaining full Android build/device limits.
+
 # Veyra 0.1.5 · preview refinements promoted to stable
 
 - Promote the complete preview Settings, player and Home presentation to stable main, including reusable controls, pressed/loading feedback, seek cancellation, reduced-motion behavior, artwork fallbacks and stable feed identities.

@@ -1,7 +1,17 @@
 package app.veyra.music.ui.player
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.snap
+import app.veyra.music.ui.motion.VeyraMotion
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.paneTitle
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -25,7 +35,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -54,6 +63,7 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.veyra.music.ui.components.VeyraSurfaces
 import app.veyra.music.ui.components.optimizedHazeEffect
 import app.veyra.music.ui.utils.containSheetGestures
 import dev.chrisbanes.haze.HazeState
@@ -61,7 +71,7 @@ import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
 import kotlin.math.roundToInt
 
-internal val DRAWER_SHAPE = RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)
+internal val DRAWER_SHAPE = VeyraSurfaces.Sheet
 
 /**
  * The widest the drawer itself gets, however wide the window behind it is.
@@ -76,7 +86,7 @@ internal val DRAWER_SHAPE = RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)
  * No effect on a phone, which is narrower than this everywhere it runs.
  */
 internal val DRAWER_MAX_WIDTH = 640.dp
-internal val ROW_SHAPE = RoundedCornerShape(16.dp)
+internal val ROW_SHAPE = VeyraSurfaces.Row
 internal val SCRIM_COLOR = Color.Black.copy(alpha = 0.5f)
 
 /**
@@ -110,23 +120,36 @@ fun PlayerDrawer(
 ) {
     val reduceDynamicBlur by PlayerSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
 
+    val reduceMotion = rememberVeyraReducedMotion()
+    val dismiss by rememberUpdatedState(onDismiss)
+    val visibility = remember { MutableTransitionState(false) }
+    var dismissing by remember { mutableStateOf(false) }
+    var dragging by remember { mutableStateOf(false) }
+    val requestDismiss: () -> Unit = {
+        if (!dismissing) { dismissing = true; visibility.targetState = false }
+    }
+    LaunchedEffect(Unit) { if (!dismissing) visibility.targetState = true }
+    LaunchedEffect(dismissing, visibility.isIdle, visibility.currentState) {
+        if (dismissing && visibility.isIdle && !visibility.currentState) dismiss()
+    }
+    PlayerBackHandler(enabled = true, onBack = requestDismiss)
+
     // How far the drawer has been dragged down, in pixels. Released, it either
     // springs back or goes — see [DISMISS_DRAG_FRACTION].
     var drag by remember { mutableFloatStateOf(0f) }
     var height by remember { mutableIntStateOf(0) }
-    val offset by animateFloatAsState(
+    val offset = animateFloatAsState(
         targetValue = drag,
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        animationSpec = if (dragging || reduceMotion) snap() else spring(stiffness = Spring.StiffnessMediumLow),
         label = "playerDrawerOffset",
     )
     // Fades with the drawer rather than staying at full strength under a sheet
     // halfway off the screen, which is what makes the drag feel connected.
-    val scrimAlpha = if (height > 0) (1f - offset / height).coerceIn(0f, 1f) else 1f
-
-    // Flipped on the first composition so the drawer travels up from the edge
-    // instead of appearing over the player fully formed.
-    var shown by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { shown = true }
+    val scrimVisibility = animateFloatAsState(
+        if (visibility.targetState) 1f else 0f,
+        tween(VeyraMotion.duration(reduceMotion, VeyraMotion.Exit)),
+        label = "playerDrawerScrim",
+    )
 
     // The drawer's rows scroll, and that scroll takes the finger before the
     // drag detector below ever sees it. So a pull down past the top of the
@@ -140,7 +163,8 @@ fun PlayerDrawer(
     // answers to its own drag alone, because a scroll leftover means something
     // else there and must not be read as a pull.
     val dismissOnRelease: () -> Unit = {
-        if (height > 0 && drag > height * DISMISS_DRAG_FRACTION) onDismiss() else drag = 0f
+        dragging = false
+        if (height > 0 && drag > height * DISMISS_DRAG_FRACTION) requestDismiss() else drag = 0f
     }
     val drawerScroll = remember {
         object : NestedScrollConnection {
@@ -152,7 +176,7 @@ fun PlayerDrawer(
             }
 
             override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
-                if (source == NestedScrollSource.UserInput && available.y > 0f) drag += available.y
+                if (source == NestedScrollSource.UserInput && available.y > 0f) { dragging = true; drag += available.y }
                 // Upward leftover is taken only as far as the drawer has already
                 // been dragged. Returning all of it would hand the player sheet
                 // — the very thing this connection is here to keep clear — the
@@ -182,18 +206,23 @@ fun PlayerDrawer(
         modifier = modifier
             .fillMaxSize()
             .containSheetGestures()
-            .background(SCRIM_COLOR.copy(alpha = SCRIM_COLOR.alpha * scrimAlpha))
+            .drawBehind {
+                val travelAlpha = if (height > 0) (1f - (if (dragging) drag else offset.value) / height).coerceIn(0f, 1f) else 1f
+                drawRect(SCRIM_COLOR.copy(alpha = SCRIM_COLOR.alpha * travelAlpha * scrimVisibility.value))
+            }
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
-                onClick = onDismiss,
+                onClick = requestDismiss,
             ),
         contentAlignment = Alignment.BottomCenter,
     ) {
         AnimatedVisibility(
-            visible = shown,
-            enter = slideInVertically(tween(260, easing = FastOutSlowInEasing)) { it },
-            exit = slideOutVertically(tween(180)) { it },
+            visibleState = visibility,
+            enter = slideInVertically(tween(VeyraMotion.duration(reduceMotion, VeyraMotion.Enter), easing = VeyraMotion.Easing)) { it } +
+                fadeIn(tween(VeyraMotion.duration(reduceMotion, VeyraMotion.Feedback))),
+            exit = slideOutVertically(tween(VeyraMotion.duration(reduceMotion, VeyraMotion.Exit))) { it } +
+                fadeOut(tween(VeyraMotion.duration(reduceMotion, VeyraMotion.Exit))),
         ) {
         Column(
             modifier = Modifier
@@ -205,8 +234,9 @@ fun PlayerDrawer(
                 // own BottomCenter alignment once it is narrower.
                 .widthIn(max = DRAWER_MAX_WIDTH)
                 .fillMaxWidth()
+                .semantics { paneTitle = title }
                 .onSizeChanged { height = it.height }
-                .offset { IntOffset(0, offset.roundToInt()) }
+                .offset { IntOffset(0, (if (dragging) drag else offset.value).roundToInt()) }
                 .clip(DRAWER_SHAPE)
                 .then(
                     if (reduceDynamicBlur) {
@@ -231,8 +261,9 @@ fun PlayerDrawer(
                 .then(if (drawerFollowsListScroll) Modifier.nestedScroll(drawerScroll) else Modifier)
                 .pointerInput(height) {
                     detectVerticalDragGestures(
+                        onDragStart = { dragging = true },
                         onDragEnd = dismissOnRelease,
-                        onDragCancel = { drag = 0f },
+                        onDragCancel = { dragging = false; drag = 0f },
                     ) { _, delta ->
                         drag = (drag + delta).coerceAtLeast(0f)
                     }
@@ -261,6 +292,7 @@ fun PlayerDrawer(
                 color = Color.White,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .semantics { heading() }
                     .padding(start = 4.dp, bottom = titleGap),
             )
             content()

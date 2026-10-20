@@ -199,7 +199,7 @@ class EqualizerProcessor : BaseAudioProcessor() {
         return inputAudioFormat
     }
 
-    override fun onFlush() {
+    override fun onFlush(streamMetadata: AudioProcessor.StreamMetadata) {
         state.fill(0f)
         running.fill(false)
         limiter.reset()

@@ -1,5 +1,6 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.customization.artworkShape
 import app.veyra.music.ui.components.contextClick
 import androidx.compose.ui.unit.Dp
 import app.veyra.music.sharedui.resources.*
@@ -722,8 +723,8 @@ private fun TypeaheadSongRow(
                 contentDescription = null,
                 modifier = Modifier
                     .size(52.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .thumbnailBorder(RoundedCornerShape(8.dp))
+                    .clip(artworkShape(RoundedCornerShape(8.dp)))
+                    .thumbnailBorder(artworkShape(RoundedCornerShape(8.dp)))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
             )
             if (isCurrent && isPlaying) SearchPlayingBars(Modifier.align(Alignment.Center))
@@ -894,8 +895,8 @@ private fun RecentSearchEntityRow(
                 contentDescription = null,
                 modifier = Modifier
                     .size(52.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .thumbnailBorder(RoundedCornerShape(8.dp))
+                    .clip(artworkShape(RoundedCornerShape(8.dp)))
+                    .thumbnailBorder(artworkShape(RoundedCornerShape(8.dp)))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
             )
             if (isCurrent && isPlaying) {

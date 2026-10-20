@@ -2040,7 +2040,7 @@ class PlaybackService : MediaLibraryService() {
                 val canCrossfade = standbyPlayer != null &&
                     (activePlayer.isPlaying || activePlayer.playbackState == Player.STATE_READY)
 
-                if (!canCrossfade || standbyPlayer == null) {
+                if (!canCrossfade) {
                     val pos = (activePlayer.currentPosition + alignmentOffsetMs).coerceAtLeast(0L)
                     val wasPlaying = activePlayer.playWhenReady
                     activePlayer.replaceMediaItem(currentIndex, targetMediaItem)
@@ -6167,7 +6167,7 @@ class PlaybackService : MediaLibraryService() {
                 // such escape hatch; the equaliser screen says so, and the
                 // equaliser itself is unaffected because it runs upstream in
                 // [PrecisionAudioSink], not here.
-                .setEnableAudioTrackPlaybackParams(
+                .setEnableAudioOutputPlaybackParameters(
                     enableAudioTrackPlaybackParams || enableFloatOutput,
                 )
                 .setAudioProcessorChain(
@@ -7389,6 +7389,8 @@ class PlaybackService : MediaLibraryService() {
             if (cast.active) cast.setVolume(volume / 100f) else super.setDeviceVolume(volume, flags)
         }
 
+        // Preserve dispatch from older controllers; new controllers use the flags overload.
+        @Deprecated("Legacy Media3 callback; use the overload with flags.")
         @Suppress("DEPRECATION")
         override fun setDeviceVolume(volume: Int) {
             if (cast.active) cast.setVolume(volume / 100f) else super.setDeviceVolume(volume)
@@ -7398,6 +7400,8 @@ class PlaybackService : MediaLibraryService() {
             if (cast.active) nudgeReceiverVolume(+VOLUME_STEP) else super.increaseDeviceVolume(flags)
         }
 
+        // Preserve dispatch from older controllers; new controllers use the flags overload.
+        @Deprecated("Legacy Media3 callback; use the overload with flags.")
         @Suppress("DEPRECATION")
         override fun increaseDeviceVolume() {
             if (cast.active) nudgeReceiverVolume(+VOLUME_STEP) else super.increaseDeviceVolume()
@@ -7407,6 +7411,8 @@ class PlaybackService : MediaLibraryService() {
             if (cast.active) nudgeReceiverVolume(-VOLUME_STEP) else super.decreaseDeviceVolume(flags)
         }
 
+        // Preserve dispatch from older controllers; new controllers use the flags overload.
+        @Deprecated("Legacy Media3 callback; use the overload with flags.")
         @Suppress("DEPRECATION")
         override fun decreaseDeviceVolume() {
             if (cast.active) nudgeReceiverVolume(-VOLUME_STEP) else super.decreaseDeviceVolume()
@@ -7416,6 +7422,8 @@ class PlaybackService : MediaLibraryService() {
             if (!cast.active) super.setDeviceMuted(muted, flags)
         }
 
+        // Preserve dispatch from older controllers; new controllers use the flags overload.
+        @Deprecated("Legacy Media3 callback; use the overload with flags.")
         @Suppress("DEPRECATION")
         override fun setDeviceMuted(muted: Boolean) {
             if (!cast.active) super.setDeviceMuted(muted)
@@ -7782,7 +7790,7 @@ class PlaybackService : MediaLibraryService() {
                 .add(swapVersionCommand)
                 .add(queueDragCommand)
                 .build()
-            return MediaSession.ConnectionResult.AcceptedResultBuilder(session)
+            return MediaSession.ConnectionResult.AcceptedResultBuilder(session, controller)
                 .setAvailablePlayerCommands(MediaSession.ConnectionResult.DEFAULT_PLAYER_COMMANDS)
                 .setAvailableSessionCommands(sessionCommands)
                 .build()
@@ -7866,7 +7874,7 @@ class PlaybackService : MediaLibraryService() {
                         .setTitle(getString(R.string.app_name))
                         .setIsBrowsable(true)
                         .setIsPlayable(false)
-                        .setFolderType(MediaMetadata.FOLDER_TYPE_MIXED)
+                        .setMediaType(MediaMetadata.MEDIA_TYPE_FOLDER_MIXED)
                         .setExtras(rootExtras)
                         .build(),
                 )
@@ -7894,15 +7902,15 @@ class PlaybackService : MediaLibraryService() {
             val isGridFolder = parentId == MEDIA_ROOT_ID || parentId == MEDIA_PLAYLISTS_ID
             val items: List<MediaItem> = when (parentId) {
                 MEDIA_ROOT_ID -> listOf(
-                    createFolderItem(MEDIA_QUICK_PICKS_ID, getString(R.string.auto_quick_picks), folderType = MediaMetadata.FOLDER_TYPE_PLAYLISTS),
-                    createFolderItem(MEDIA_RECENTS_ID, getString(R.string.auto_recents), folderType = MediaMetadata.FOLDER_TYPE_PLAYLISTS),
-                    createFolderItem(MEDIA_PLAYLISTS_ID, getString(R.string.playlists), folderType = MediaMetadata.FOLDER_TYPE_PLAYLISTS, isGrid = true),
-                    createFolderItem(MEDIA_LIKED_ID, getString(R.string.auto_liked), folderType = MediaMetadata.FOLDER_TYPE_PLAYLISTS),
-                    createFolderItem(MEDIA_MORE_ID, getString(R.string.more), folderType = MediaMetadata.FOLDER_TYPE_MIXED),
+                    createFolderItem(MEDIA_QUICK_PICKS_ID, getString(R.string.auto_quick_picks), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS),
+                    createFolderItem(MEDIA_RECENTS_ID, getString(R.string.auto_recents), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS),
+                    createFolderItem(MEDIA_PLAYLISTS_ID, getString(R.string.playlists), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS, isGrid = true),
+                    createFolderItem(MEDIA_LIKED_ID, getString(R.string.auto_liked), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS),
+                    createFolderItem(MEDIA_MORE_ID, getString(R.string.more), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_MIXED),
                 )
                 MEDIA_MORE_ID -> listOf(
-                    createFolderItem(MEDIA_DOWNLOADS_ID, getString(R.string.downloads), folderType = MediaMetadata.FOLDER_TYPE_MIXED),
-                    createFolderItem(MEDIA_LOCAL_MUSIC_ID, getString(R.string.local_music), folderType = MediaMetadata.FOLDER_TYPE_MIXED),
+                    createFolderItem(MEDIA_DOWNLOADS_ID, getString(R.string.downloads), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_MIXED),
+                    createFolderItem(MEDIA_LOCAL_MUSIC_ID, getString(R.string.local_music), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_MIXED),
                 )
                 MEDIA_RECENTS_ID -> {
                     val snapshot = snapshotRecents()
@@ -8086,14 +8094,14 @@ class PlaybackService : MediaLibraryService() {
                             .setTitle(getString(R.string.app_name))
                             .setIsBrowsable(true)
                             .setIsPlayable(false)
-                            .setFolderType(MediaMetadata.FOLDER_TYPE_MIXED)
+                            .setMediaType(MediaMetadata.MEDIA_TYPE_FOLDER_MIXED)
                             .build(),
                     ).build()
-                MEDIA_RECENTS_ID -> createFolderItem(MEDIA_RECENTS_ID, getString(R.string.auto_recents), folderType = MediaMetadata.FOLDER_TYPE_PLAYLISTS)
-                MEDIA_QUICK_PICKS_ID -> createFolderItem(MEDIA_QUICK_PICKS_ID, getString(R.string.auto_quick_picks), folderType = MediaMetadata.FOLDER_TYPE_PLAYLISTS)
-                MEDIA_PLAYLISTS_ID -> createFolderItem(MEDIA_PLAYLISTS_ID, getString(R.string.playlists), folderType = MediaMetadata.FOLDER_TYPE_PLAYLISTS, isGrid = true)
-                MEDIA_MORE_ID -> createFolderItem(MEDIA_MORE_ID, getString(R.string.more), folderType = MediaMetadata.FOLDER_TYPE_MIXED)
-                MEDIA_LIKED_ID -> createFolderItem(MEDIA_LIKED_ID, getString(R.string.auto_liked), folderType = MediaMetadata.FOLDER_TYPE_PLAYLISTS)
+                MEDIA_RECENTS_ID -> createFolderItem(MEDIA_RECENTS_ID, getString(R.string.auto_recents), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS)
+                MEDIA_QUICK_PICKS_ID -> createFolderItem(MEDIA_QUICK_PICKS_ID, getString(R.string.auto_quick_picks), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS)
+                MEDIA_PLAYLISTS_ID -> createFolderItem(MEDIA_PLAYLISTS_ID, getString(R.string.playlists), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS, isGrid = true)
+                MEDIA_MORE_ID -> createFolderItem(MEDIA_MORE_ID, getString(R.string.more), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_MIXED)
+                MEDIA_LIKED_ID -> createFolderItem(MEDIA_LIKED_ID, getString(R.string.auto_liked), mediaType = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS)
                 MEDIA_DOWNLOADS_ID -> createFolderItem(MEDIA_DOWNLOADS_ID, getString(R.string.downloads))
                 MEDIA_LOCAL_MUSIC_ID -> createFolderItem(MEDIA_LOCAL_MUSIC_ID, getString(R.string.local_music))
                 "msg:login_required" -> createLoginPromptItem()
@@ -8112,7 +8120,7 @@ class PlaybackService : MediaLibraryService() {
                             createGridPlaylistItem(
                                 mediaId = mediaId,
                                 title = if (mediaId.contains("MPREb_")) "Album" else getString(R.string.playlists),
-                                folderType = if (mediaId.contains("MPREb_")) MediaMetadata.FOLDER_TYPE_ALBUMS else MediaMetadata.FOLDER_TYPE_PLAYLISTS,
+                                mediaType = if (mediaId.contains("MPREb_")) MediaMetadata.MEDIA_TYPE_FOLDER_ALBUMS else MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS,
                             )
                         } else {
                             createInfoItem(
@@ -8130,6 +8138,7 @@ class PlaybackService : MediaLibraryService() {
         override fun onPlaybackResumption(
             mediaSession: MediaSession,
             controller: MediaSession.ControllerInfo,
+            isForPlayback: Boolean,
         ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> = scope.future(Dispatchers.IO) {
             // 1. If player currently holds items in its queue, resume from it
             val activePlayer = player
@@ -8406,7 +8415,7 @@ class PlaybackService : MediaLibraryService() {
         title: String,
         subtitle: String? = null,
         artworkUrl: String? = null,
-        folderType: Int = MediaMetadata.FOLDER_TYPE_PLAYLISTS,
+        mediaType: Int = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS,
     ): MediaItem = MediaItem.Builder()
         .setMediaId(mediaId)
         .setMediaMetadata(
@@ -8416,7 +8425,7 @@ class PlaybackService : MediaLibraryService() {
                 .setArtworkUri(artworkUrl?.artworkAt(NOTIFICATION_ART_PX)?.let(Uri::parse))
                 .setIsBrowsable(true)
                 .setIsPlayable(false)
-                .setFolderType(folderType)
+                .setMediaType(mediaType)
                 .setExtras(buildContentStyleBundle(CONTENT_STYLE_GRID_ITEM_HINT_VALUE, CONTENT_STYLE_LIST_ITEM_HINT_VALUE))
                 .build(),
         )
@@ -8471,14 +8480,14 @@ class PlaybackService : MediaLibraryService() {
         title = item.title,
         subtitle = item.subtitle,
         artworkUrl = item.thumbnailUrl,
-        folderType = if (item.browseId.startsWith("MPREb_")) MediaMetadata.FOLDER_TYPE_ALBUMS else MediaMetadata.FOLDER_TYPE_PLAYLISTS,
+        mediaType = if (item.browseId.startsWith("MPREb_")) MediaMetadata.MEDIA_TYPE_FOLDER_ALBUMS else MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS,
     )
 
     private fun createFolderItem(
         mediaId: String,
         title: String,
         subtitle: String? = null,
-        folderType: Int = MediaMetadata.FOLDER_TYPE_MIXED,
+        mediaType: Int = MediaMetadata.MEDIA_TYPE_FOLDER_MIXED,
         isGrid: Boolean = false,
     ): MediaItem {
         val style = if (isGrid) CONTENT_STYLE_GRID_ITEM_HINT_VALUE else CONTENT_STYLE_LIST_ITEM_HINT_VALUE
@@ -8491,7 +8500,7 @@ class PlaybackService : MediaLibraryService() {
                     .setSubtitle(subtitle)
                     .setIsBrowsable(true)
                     .setIsPlayable(false)
-                    .setFolderType(if (isGrid && folderType == MediaMetadata.FOLDER_TYPE_MIXED) MediaMetadata.FOLDER_TYPE_ALBUMS else folderType)
+                    .setMediaType(if (isGrid && mediaType == MediaMetadata.MEDIA_TYPE_FOLDER_MIXED) MediaMetadata.MEDIA_TYPE_FOLDER_ALBUMS else mediaType)
                     .setExtras(extras)
                     .build(),
             )
@@ -8519,7 +8528,7 @@ class PlaybackService : MediaLibraryService() {
                 mediaMetadata.buildUpon()
                     .setIsBrowsable(true)
                     .setIsPlayable(true)
-                    .setFolderType(MediaMetadata.FOLDER_TYPE_ALBUMS)
+                    .setMediaType(MediaMetadata.MEDIA_TYPE_FOLDER_ALBUMS)
                     .setExtras(newExtras)
                     .build(),
             )
@@ -8549,7 +8558,7 @@ class PlaybackService : MediaLibraryService() {
                         .setArtworkUri(thumbnailUrl.artworkAt(NOTIFICATION_ART_PX)?.let { Uri.parse(it) })
                         .setIsBrowsable(true)
                         .setIsPlayable(false)
-                        .setFolderType(MediaMetadata.FOLDER_TYPE_ALBUMS)
+                        .setMediaType(MediaMetadata.MEDIA_TYPE_FOLDER_ALBUMS)
                         .build(),
                 )
                 .build()

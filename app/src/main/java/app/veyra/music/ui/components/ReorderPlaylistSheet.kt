@@ -1,5 +1,6 @@
 package app.veyra.music.ui.components
 
+import app.veyra.music.ui.customization.artworkShape
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -282,8 +283,8 @@ private fun ReorderRow(
             contentDescription = null,
             modifier = Modifier
                 .size(44.dp)
-                .clip(RoundedCornerShape(7.dp))
-                .thumbnailBorder(RoundedCornerShape(7.dp))
+                .clip(artworkShape(RoundedCornerShape(7.dp)))
+                .thumbnailBorder(artworkShape(RoundedCornerShape(7.dp)))
                 .background(MaterialTheme.colorScheme.surfaceVariant),
         )
         Spacer(Modifier.width(16.dp))

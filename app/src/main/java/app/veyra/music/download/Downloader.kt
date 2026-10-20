@@ -111,7 +111,7 @@ object Downloader {
 
             response.use {
                 if (it.code !in 200..299) error("Download failed (HTTP ${it.code})")
-                val body = it.body ?: error("Download failed: empty response")
+                val body = it.body
                 val source = body.byteStream()
                 var readForChunk = 0L
                 while (readForChunk < length) {
@@ -175,7 +175,7 @@ object Downloader {
 
         Http.client.newCall(request).execute().use { response ->
             if (response.code !in 200..299) error("Download failed (HTTP ${response.code})")
-            val body = response.body ?: error("Download failed: empty response")
+            val body = response.body
             val total = response.header("Content-Length")?.toLongOrNull()?.takeIf { it > 0 }
             val source = body.byteStream()
             val buffer = ByteArray(BUFFER_BYTES)
@@ -226,7 +226,7 @@ object Downloader {
                 if (response.code !in 200..299) return@use false
                 val type = response.header("Content-Type").orEmpty().lowercase()
                 if ("mpegurl" in type || "vnd.apple.mpegurl" in type) return@use false
-                val head = response.body?.byteStream()?.readNBytes(32) ?: return@use false
+                val head = response.body.byteStream().readNBytes(32)
                 if (head.startsWith("#EXTM3U".toByteArray())) return@use false
                 when (format.codec?.lowercase()) {
                     "flac", "x-flac" -> head.startsWith("fLaC".toByteArray())

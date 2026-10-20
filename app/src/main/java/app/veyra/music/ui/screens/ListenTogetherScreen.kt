@@ -38,7 +38,7 @@ import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.Dns
 import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material.icons.rounded.Logout
+import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Share
@@ -68,10 +68,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.ClipEntry
+import android.content.ClipData
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -142,7 +143,7 @@ fun ListenTogetherScreen(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val clipboard = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
 
     val state by ListenTogether.state.collectAsStateWithLifecycle()
@@ -461,12 +462,14 @@ fun ListenTogetherScreen(
                         shareInvite()
                     },
                     onCopyCode = {
-                        clipboard.setText(AnnotatedString(state.code.orEmpty()))
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.copy_code),
-                            Toast.LENGTH_SHORT,
-                        ).show()
+                        scope.launch {
+                            clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Veyra room code", state.code.orEmpty())))
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.copy_code),
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
                     },
                 )
             }
@@ -503,7 +506,7 @@ fun ListenTogetherScreen(
         } else {
             InAParty(
                 state = state,
-                onCopy = { clipboard.setText(AnnotatedString(state.code.orEmpty())) },
+                onCopy = { scope.launch { clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Veyra room code", state.code.orEmpty()))) } },
                 onShare = { sheet = PartySheet.Invite },
                 onShareLink = shareInvite,
                 onLeave = { scope.launch { ListenTogether.leaveParty() } },
@@ -913,7 +916,7 @@ private fun InAParty(
 
     SettingsGroup {
         SettingsRow(
-            icon = Icons.Rounded.Logout,
+            icon = Icons.AutoMirrored.Rounded.Logout,
             title = stringResource(R.string.listen_together_leave),
             subtitle = stringResource(R.string.listen_together_leave_subtitle),
             onClick = onLeave,

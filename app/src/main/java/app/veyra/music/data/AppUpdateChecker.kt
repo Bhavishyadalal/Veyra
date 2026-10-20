@@ -70,7 +70,7 @@ object AppUpdateChecker {
         runCatching {
             val request = Request.Builder().url(LATEST_RELEASE_URL).build()
             val body = Http.client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) null else response.body?.string()
+                if (!response.isSuccessful) null else response.body.string()
             } ?: return@runCatching
             val release = json.parseToJsonElement(body) as? JsonObject ?: return@runCatching
             val tag = release["tag_name"]?.jsonPrimitive?.contentOrNull ?: return@runCatching
@@ -148,7 +148,7 @@ object AppUpdateChecker {
             val request = Request.Builder().url(url).build()
             Http.client.newCall(request).execute().use { response ->
                 check(response.isSuccessful) { "Download failed: HTTP ${response.code}" }
-                val body = response.body ?: error("Empty download body")
+                val body = response.body
                 val total = body.contentLength().takeIf { it > 0 }
 
                 body.byteStream().use { input ->
@@ -215,6 +215,8 @@ object AppUpdateChecker {
             if (opened) return
         }
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+        // Keep the established OEM package-installer intent and URI grant behavior.
+        @Suppress("DEPRECATION")
         context.startActivity(
             Intent(Intent.ACTION_INSTALL_PACKAGE)
                 .setDataAndType(uri, "application/vnd.android.package-archive")

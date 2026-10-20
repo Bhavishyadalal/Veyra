@@ -220,7 +220,7 @@ object WebDavClient {
                 if (response.code != 207 && response.code !in 200..299) {
                     throw WebDavException("Listing failed with ${response.code}")
                 }
-                val body = response.body?.string().orEmpty()
+                val body = response.body.string()
                 if (body.isBlank()) return@runCatching emptyList()
                 parseMultistatus(body, dirUrl)
             }

@@ -1,5 +1,6 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.customization.artworkShape
 import android.os.Build
 import app.veyra.music.R
 
@@ -275,6 +276,7 @@ private fun String.looksLikeCredit() = CREDIT_SEPARATOR.containsMatchIn(this)
  */
 @Composable
 fun DetailScreen(
+    isActive: Boolean = true,
     page: DetailPage,
     currentSong: Song?,
     isPlaying: Boolean,
@@ -418,7 +420,7 @@ fun DetailScreen(
     val closeSearch = { onSearchingChange(false) }
     // Back closes the search first — this handler is registered after the one
     // that pops the page, so it is the one that answers while it's enabled.
-    BackHandler(enabled = searching) { closeSearch() }
+    BackHandler(enabled = isActive && activeShelf == null && searching) { closeSearch() }
 
     // Each surviving row still knows where it sat in the full running order, so
     // an album's track numbers stay the album's rather than becoming positions
@@ -441,7 +443,7 @@ fun DetailScreen(
     } else {
         emptyList()
     }
-    BackHandler(enabled = folderState?.selecting == true) { folderState?.clear() }
+    BackHandler(enabled = isActive && activeShelf == null && folderState?.selecting == true) { folderState?.clear() }
 
     // What marks a row as already downloaded, tinted from the sleeve like the
     // rest of the page. Null on any page that is itself a reading of this
@@ -881,6 +883,15 @@ private fun ReleaseHeader(
     onArtistClick: ((String, String) -> Unit)?,
     onToggleLibrary: (() -> Unit)?,
 ) {
+    val sleeveShape = app.veyra.music.ui.customization.artworkShape(SLEEVE_SHAPE)
+    val imageContext = LocalPlatformContext.current
+    val headerArtwork = remember(imageContext, page.thumbnailUrl) {
+        ImageRequest.Builder(imageContext)
+            .data(page.thumbnailUrl.artworkAt(HEADER_ART_PX))
+            .size(HEADER_ART_PX)
+            .placeholderMemoryCacheKey(page.thumbnailUrl.artworkAt(CARD_ART_PX))
+            .build()
+    }
     val (credit, meta) = page.headerLines(songs.size, songs.playtime())
     // Every row on a release carries the same credit — see [pageCredit] — so
     // the first one speaks for the whole page, the same source the rows'
@@ -897,9 +908,10 @@ private fun ReleaseHeader(
         Box(
             Modifier
                 .size(sleeveSize)
-                .shadow(SLEEVE_SHADOW, SLEEVE_SHAPE)
+                .shadow(SLEEVE_SHADOW, sleeveShape)
                 .background(palette.elevated)
-                .thumbnailBorder(SLEEVE_SHAPE),
+                .clip(sleeveShape)
+                .thumbnailBorder(sleeveShape),
         ) {
             // A cover that isn't there, or wouldn't load — a device folder, a
             // playlist with nothing on it yet, files with no picture — gets a
@@ -916,7 +928,7 @@ private fun ReleaseHeader(
                 )
             }
             AsyncImage(
-                model = page.thumbnailUrl.artworkAt(HEADER_ART_PX),
+                model = headerArtwork,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 onState = { artFailed = it is AsyncImagePainter.State.Error },
@@ -1238,7 +1250,7 @@ private fun ArtistHeader(
             // (white paper to transparency, strokes to white); vectors are
             // tinted at draw time instead.
             val isSignatureScan = logoUrl == null && signature != null && !isSignatureSvg
-            val aspect = (if (logoUrl != null) appleArt?.logoAspect else signature?.aspect)
+            val aspect = (if (logoUrl != null) appleArt.logoAspect else signature?.aspect)
                 ?.coerceIn(0.4f, 6f) ?: 1f
             // Remembered, and at the size the URL already names: nothing about the
             // load waits on layout to decide how big to decode, and a recomposition
@@ -1285,8 +1297,7 @@ private fun ArtistHeader(
                     when (state) {
                         is AsyncImagePainter.State.Success -> logoShown = true
                         is AsyncImagePainter.State.Error -> {
-                            val cause = (state as? AsyncImagePainter.State.Error)
-                                ?.result?.throwable?.let { "${it.javaClass.simpleName}: ${it.message}" }
+                            val cause = state.result.throwable.let { "${it.javaClass.simpleName}: ${it.message}" }
                             Log.d("ArtistHeader", "image load failed: $imageUrl attempt $attempt cause=$cause")
                             failed = true
                         }
@@ -1944,8 +1955,8 @@ private fun CompactSongRow(
                 contentDescription = null,
                 modifier = Modifier
                     .size(48.dp)
-                    .clip(RoundedCornerShape(7.dp))
-                    .thumbnailBorder(RoundedCornerShape(7.dp))
+                    .clip(artworkShape(RoundedCornerShape(7.dp)))
+                    .thumbnailBorder(artworkShape(RoundedCornerShape(7.dp)))
                     .background(palette.elevated),
             )
             if (isCurrent && isPlaying) SearchPlayingBars(Modifier.align(Alignment.Center))
@@ -2003,8 +2014,8 @@ private fun SuggestedSongRow(
                 contentDescription = null,
                 modifier = Modifier
                     .size(52.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .thumbnailBorder(RoundedCornerShape(8.dp))
+                    .clip(artworkShape(RoundedCornerShape(8.dp)))
+                    .thumbnailBorder(artworkShape(RoundedCornerShape(8.dp)))
                     .background(palette.elevated),
             )
             if (isCurrent && isPlaying) SearchPlayingBars(Modifier.align(Alignment.Center))
@@ -2203,8 +2214,8 @@ private fun SectionCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(10.dp))
-                .thumbnailBorder(RoundedCornerShape(10.dp))
+                .clip(artworkShape(RoundedCornerShape(10.dp)))
+                .thumbnailBorder(artworkShape(RoundedCornerShape(10.dp)))
                 .background(palette.elevated),
         )
         Spacer(Modifier.height(8.dp))

@@ -1,13 +1,15 @@
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
-> **Maintenance:** Current stable is 0.1.5 on `main`; current preview is 0.1.6-beta1 on `preview/0.1.6-beta1`. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md). This branch retains its own Android UI/version.
+> **Stable 0.1.6 / code 22:** promoted from the completed preview, with saved Home, customization, accessibility, navigation and calmer shared motion. [Release notes](RELEASE_NOTES_0.1.6.md). APK publication is pending the owner’s release.
+
+> **Maintenance:** Current stable is 0.1.6 on `main`; completed preview is preserved on `preview/0.1.6-beta1`. Next preview 0.1.7-beta1 is planned, not implemented. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
 
 
 > Android Studio import/build guide: [START_HERE.md](START_HERE.md). Historical beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
 
 # Veyra
 
-> **Stable source: 0.1.5, code 20.** Includes the promoted preview Home, player and Settings refinements. [Download Android Studio source](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.5_Stable.zip) · [Separate preview 0.1.5-beta1](https://github.com/Bhavishyadalal/Veyra/tree/preview/0.1.5-beta1) · [Verification and limits](verification/backend-migration/README.md).
+> **Stable: 0.1.6, code 22.** [Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.6_Stable.zip) · [Verification limits](verification/SCROLL-MOTION-0.1.6-beta1.md).
 
 A personal Android music player with Manrope typography, selectable launcher styles and a dark listening interface.
 
@@ -42,11 +44,17 @@ APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for 
 
 Both stable and preview use the same backend. [Configure your external 12-minute cron job](docs/RENDER_KEEPALIVE.md), including its exact URL, method, timeout and expected response. The backend's existing GitHub schedule remains available as a fallback. No app-side background timer is required.
 
-## Latest update: 0.1.5 — Veyra-owned Listen Together
+## Stable 0.1.6 — Home ready sooner
+
+Restore a previously loaded Home before fetching fresh shelves, keep it visible during refresh/failure, and customize section order/visibility per account/channel. Offline Home provides direct access to existing Downloads and Local Music; cached online-only items are clearly distinguished from downloaded songs. A first successful online load is required to populate the snapshot. Images use existing Coil caching and fallbacks; music is not downloaded automatically.
+
+[Release notes](RELEASE_NOTES_0.1.6.md) · [Native component review](design/home016-preview/README.md) · [Checks and device checklist](verification/HOME-0.1.6-beta1-RESULTS.md). No APK or backend deployment is generated here.
+
+## Previous stable: 0.1.5 — Veyra-owned Listen Together
 
 Rooms, invite links and app presence now use **https://veyra-listen-together.onrender.com**. Saved old managed server addresses migrate safely; old membership tokens are discarded without being sent to another service. Intentional custom servers, guest listening and optional Google profiles remain supported. Old-service rooms require a new invite.
 
-The backend lives in [Veyra-backend](https://github.com/Bhavishyadalal/Veyra-backend). Its [12-minute keep-alive workflow](https://github.com/Bhavishyadalal/Veyra-backend/actions/workflows/render-keepalive.yml) is independent of the phone app. GitHub schedules are best effort; Render restarts still clear in-memory rooms. The [`backend/`](backend/) folder mirrors the active standalone server, including its fixes and external cron helpers. [Mirror provenance and verification](docs/BACKEND_SYNC.md). Render deployment and the active keep-alive schedule remain managed by the separate backend repository.
+The backend lives in [Veyra-backend](https://github.com/Bhavishyadalal/Veyra-backend). Its [12-minute keep-alive workflow](https://github.com/Bhavishyadalal/Veyra-backend/actions/workflows/render-keepalive.yml) is independent of the phone app. GitHub schedules are best effort; Render restarts still clear in-memory rooms. The backend folder mirrors the current standalone Veyra server; the obsolete Oracle workflow is removed. See [backend provenance](docs/BACKEND_SYNC.md).
 
 This stable source now includes the Home, player and Settings refinements previously developed on preview/0.1.5-beta1. The historical preview branch is preserved. The beta suffix is removed; version code 20 permits upgrades from preview code 18 and the earlier stable code 19. No APK or GitHub release is published by this promotion. Local verification and the owner's device report are recorded separately in [the migration report](verification/backend-migration/README.md).
 
@@ -77,7 +85,7 @@ Download `downloads/Veyra_Android_Source_0.1.1_Stable.zip`, extract the whole fo
 
 Build dependencies require `dl.google.com`, Maven Central, the Gradle plugin portal, and **jitpack.io**. The current SDK package name is `android-37.0`; an older existing SDK can be selected with `-PveyraCompileSdk=android-37`. Do not disable TLS or artifact verification to work around access failures.
 
-GitHub runs the normal checks on `main`. Signed releases and contributor maintenance are manual workflows. Backend deployment is managed in [Veyra-backend](https://github.com/Bhavishyadalal/Veyra-backend); the obsolete Oracle deployment workflow has been removed from this app repository.
+GitHub runs the normal checks on `main`. Signed releases, contributor maintenance and backend deployment are manual workflows; configure your own secrets and `BACKEND_HEALTH_URL` before using them.
 
 ## What changed
 

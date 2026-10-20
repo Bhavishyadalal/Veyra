@@ -15,7 +15,7 @@ object SettingsIcons {
         viewportWidth = 24f, viewportHeight = 24f,
     ).addPath(
         pathData = addPathNodes(data), fill = null,
-        stroke = SolidColor(Color.Black), strokeLineWidth = 2f,
+        stroke = SolidColor(Color.Black), strokeLineWidth = 2.25f,
         strokeLineCap = StrokeCap.Round, strokeLineJoin = StrokeJoin.Round,
     ).build()
     val Account: ImageVector by lazy { glyph("veyra_account", "M20 21v-2a7 7 0 0 0-14 0v2 M12 12a4 4 0 1 0 0-8a4 4 0 0 0 0 8") }

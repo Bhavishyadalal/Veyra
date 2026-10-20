@@ -47,7 +47,7 @@ snapshot, not an automatic cross-repository deployment pipeline.
 
 ## Android tracks and downloads
 
-Current stable Android **0.1.5 / code 20** is on `main`. Current preview
+Current stable Android **0.1.6 / code 22** is on `main`. Completed preview
 **0.1.6-beta1 / code 21** is on `preview/0.1.6-beta1`. Older branches retain their
 own version and UI; only their backend/client migration and archive maintenance
 are updated. Do not promote preview UI to stable as part of backend synchronization.

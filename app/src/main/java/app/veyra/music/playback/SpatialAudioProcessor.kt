@@ -69,7 +69,7 @@ class SpatialAudioProcessor : BaseAudioProcessor() {
             delayLeft = FloatArray(delaySamples)
             delayRight = FloatArray(delaySamples)
         }
-        onFlush()
+        onFlush(AudioProcessor.StreamMetadata.DEFAULT)
     }
 
     /**
@@ -148,7 +148,7 @@ class SpatialAudioProcessor : BaseAudioProcessor() {
         return inputAudioFormat
     }
 
-    override fun onFlush() {
+    override fun onFlush(streamMetadata: AudioProcessor.StreamMetadata) {
         delayLeft.fill(0f)
         delayRight.fill(0f)
         delayIndex = 0

@@ -1,7 +1,11 @@
 package app.veyra.music.ui.player
 
+import app.veyra.music.ui.layout.stackForReadability
+import app.veyra.music.ui.components.LocalVeyraContrastControls
+import app.veyra.music.ui.components.VeyraSurfaces
+import app.veyra.music.ui.motion.VeyraMotion
+
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -51,25 +55,28 @@ internal fun PlayerControlSurface(
     framed: Boolean = false,
     content: @Composable BoxScope.() -> Unit,
 ) {
+    val contrast = LocalVeyraContrastControls.current
+    val controlBackground = if (contrast && containerColor == Color.Transparent) tint.copy(alpha = 0.12f) else containerColor
+    val indicatorSize = if ((visualSize ?: 48.dp) >= 64.dp) 36.dp else 24.dp
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
     val available = enabled && !busy && LocalPlayerControlsInteractive.current
     val scale =
         animateFloatAsState(
             if (pressed && available && !reducedMotion) 0.95f else 1f,
-            tween(playerMotionMillis(reducedMotion, 120), easing = FastOutSlowInEasing),
+            tween(playerMotionMillis(reducedMotion, VeyraMotion.Press), easing = VeyraMotion.Easing),
             label = "playerControlPress",
         )
     val opacity =
         animateFloatAsState(
             if (enabled || busy) 1f else 0.35f,
-            tween(playerMotionMillis(reducedMotion, 140)),
+            tween(playerMotionMillis(reducedMotion, VeyraMotion.Feedback)),
             label = "playerControlAvailability",
         )
     Box(
         modifier
-            .heightIn(min = 48.dp)
-            .widthIn(min = 48.dp)
+            .heightIn(min = VeyraSurfaces.MinTouch)
+            .widthIn(min = VeyraSurfaces.MinTouch)
             .clip(shape)
             .clickable(
                 interactionSource = interaction,
@@ -93,9 +100,9 @@ internal fun PlayerControlSurface(
                     alpha = opacity.value
                 }
                 .clip(shape)
-                .background(containerColor)
+                .background(controlBackground)
                 .then(
-                    if (framed)
+                    if (framed || contrast)
                         Modifier.background(
                                 Brush.verticalGradient(
                                     listOf(tint.copy(alpha = 0.13f), Color.Transparent)
@@ -112,13 +119,14 @@ internal fun PlayerControlSurface(
         ) {
             Crossfade(
                 busy,
-                animationSpec = tween(playerMotionMillis(reducedMotion, 140)),
+                modifier = Modifier.fillMaxSize(),
+                animationSpec = tween(playerMotionMillis(reducedMotion, VeyraMotion.Feedback)),
                 label = "playerControlBusy",
             ) { waiting ->
-                Box(contentAlignment = Alignment.Center) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     if (waiting) {
                         if (reducedMotion)
-                            Canvas(Modifier.size(28.dp)) {
+                            Canvas(Modifier.size(indicatorSize)) {
                                 drawArc(
                                     tint,
                                     -90f,
@@ -129,7 +137,7 @@ internal fun PlayerControlSurface(
                             }
                         else
                             CircularProgressIndicator(
-                                Modifier.size(28.dp),
+                                Modifier.size(indicatorSize),
                                 color = tint,
                                 strokeWidth = 2.dp,
                             )
@@ -167,7 +175,7 @@ internal fun PlayerTrackInput(
     Box(
         modifier
             .fillMaxWidth()
-            .heightIn(min = 48.dp)
+            .heightIn(min = VeyraSurfaces.MinTouch)
             .semantics {
                 description?.let { contentDescription = it }
                 valueDescription?.let { stateDescription = it }
@@ -330,7 +338,7 @@ internal fun PlayerTimelineLabels(
 ) {
     val fontScale = androidx.compose.ui.platform.LocalDensity.current.fontScale
     BoxWithConstraints(modifier.fillMaxWidth()) {
-        val stacked = maxWidth < 300.dp || fontScale > 1.25f
+        val stacked = stackForReadability(maxWidth.value, fontScale, 320f)
         Column(Modifier.fillMaxWidth()) {
             Box(Modifier.fillMaxWidth()) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -340,7 +348,10 @@ internal fun PlayerTimelineLabels(
                             androidx.compose.material3.MaterialTheme.typography.labelMedium.copy(
                                 fontFeatureSettings = "tnum"
                             ),
-                        color = tint.copy(alpha = 0.72f),
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
+                        color = tint.copy(alpha = 0.82f),
                     )
                     androidx.compose.material3.Text(
                         remaining,
@@ -348,7 +359,11 @@ internal fun PlayerTimelineLabels(
                             androidx.compose.material3.MaterialTheme.typography.labelMedium.copy(
                                 fontFeatureSettings = "tnum"
                             ),
-                        color = tint.copy(alpha = 0.72f),
+                        maxLines = 1,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
+                        color = tint.copy(alpha = 0.82f),
                     )
                 }
                 if (!stacked)

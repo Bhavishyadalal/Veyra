@@ -1,5 +1,7 @@
 package app.veyra.music.data.settings
 
+import app.veyra.music.ui.customization.*
+
 import app.veyra.music.data.webdav.update
 import android.content.Context
 import android.content.SharedPreferences
@@ -355,6 +357,13 @@ object AppSettings {
 
     /** Freezes the main player's mesh gradient instead of letting it drift/crossfade. */
     val reduceAnimation = MutableStateFlow(false)
+    val accentPalette = MutableStateFlow(AccentPalette.DEFAULT)
+    val artworkCorners = MutableStateFlow(ArtworkCorners.DEFAULT)
+    val listSpacing = MutableStateFlow(ListSpacing.COMFORTABLE)
+    val subtleMotion = MutableStateFlow(false)
+    val playerShortcut = MutableStateFlow(PlayerShortcut.NONE)
+    val strongerText = MutableStateFlow(false)
+    val contrastPlayerControls = MutableStateFlow(false)
 
     /**
      * Whether the welcome pages (party name, then YouTube sign-in) have been
@@ -854,6 +863,13 @@ object AppSettings {
         shuffleEnabled.value = prefs.getBoolean(KEY_SHUFFLE_ENABLED, false)
         repeatMode.value = prefs.getInt(KEY_REPEAT_MODE, Player.REPEAT_MODE_OFF)
         showNerdStats.value = prefs.getBoolean(KEY_NERD_STATS, false)
+        accentPalette.value = savedChoice(prefs.getString("accent_palette", null), AccentPalette.DEFAULT)
+        artworkCorners.value = savedChoice(prefs.getString("artwork_corners", null), ArtworkCorners.DEFAULT)
+        listSpacing.value = savedChoice(prefs.getString("list_spacing", null), ListSpacing.COMFORTABLE)
+        playerShortcut.value = savedChoice(prefs.getString("player_shortcut", null), PlayerShortcut.NONE)
+        subtleMotion.value = prefs.getBoolean("subtle_motion", false) && !prefs.getBoolean(KEY_REDUCE_ANIMATION, false)
+        strongerText.value = prefs.getBoolean(KEY_STRONGER_TEXT, false)
+        contrastPlayerControls.value = prefs.getBoolean(KEY_CONTRAST_PLAYER_CONTROLS, false)
         reduceAnimation.value = prefs.getBoolean(KEY_REDUCE_ANIMATION, false)
         onboardingComplete.value = prefs.getBoolean(KEY_ONBOARDING_COMPLETE, false)
         highPerformanceMode.value = prefs.getBoolean(KEY_HIGH_PERFORMANCE_MODE, false)
@@ -1216,7 +1232,38 @@ object AppSettings {
         prefs.edit().putString(KEY_THEME, value.name).apply()
     }
 
+    fun setAccentPalette(value: AccentPalette) { accentPalette.value = value; prefs.edit().putString("accent_palette", value.name).apply() }
+    fun setArtworkCorners(value: ArtworkCorners) { artworkCorners.value = value; prefs.edit().putString("artwork_corners", value.name).apply() }
+    fun setListSpacing(value: ListSpacing) { listSpacing.value = value; prefs.edit().putString("list_spacing", value.name).apply() }
+    fun setPlayerShortcut(value: PlayerShortcut) { playerShortcut.value = value; prefs.edit().putString("player_shortcut", value.name).apply() }
+    fun setMotionLevel(value: MotionLevel) {
+        setReduceAnimation(value == MotionLevel.OFF)
+        subtleMotion.value = value == MotionLevel.SUBTLE
+        prefs.edit().putBoolean("subtle_motion", subtleMotion.value).apply()
+    }
+    fun resetAppearanceCustomization() {
+        prefs.edit().remove("accent_palette").remove("artwork_corners").remove("list_spacing")
+            .remove(KEY_STRONGER_TEXT).remove("subtle_motion").remove(KEY_REDUCE_ANIMATION).apply()
+        readAll()
+    }
+    fun resetPlayerCustomization() {
+        prefs.edit().remove("player_shortcut").remove(KEY_CONTRAST_PLAYER_CONTROLS).apply()
+        readAll()
+    }
+
+    fun setStrongerText(value: Boolean) {
+        strongerText.value = value
+        prefs.edit().putBoolean(KEY_STRONGER_TEXT, value).apply()
+    }
+
+    fun setContrastPlayerControls(value: Boolean) {
+        contrastPlayerControls.value = value
+        prefs.edit().putBoolean(KEY_CONTRAST_PLAYER_CONTROLS, value).apply()
+    }
+
     fun setReduceAnimation(value: Boolean) {
+        subtleMotion.value = false
+        prefs.edit().putBoolean("subtle_motion", false).apply()
         reduceAnimation.value = value
         if (value) highPerformanceMode.value = false
         val editor = prefs.edit().putBoolean(KEY_REDUCE_ANIMATION, value)
@@ -2017,6 +2064,8 @@ object AppSettings {
     private const val KEY_REPEAT_MODE = "repeat_mode"
     private const val KEY_NERD_STATS = "show_nerd_stats"
     private const val KEY_CACHE_LIMIT = "audio_cache_limit_bytes"
+    private const val KEY_STRONGER_TEXT = "stronger_text"
+    private const val KEY_CONTRAST_PLAYER_CONTROLS = "contrast_player_controls"
     private const val KEY_REDUCE_ANIMATION = "reduce_animation"
     private const val KEY_ONBOARDING_COMPLETE = "onboarding_complete"
     private const val KEY_HIGH_PERFORMANCE_MODE = "high_performance_mode"

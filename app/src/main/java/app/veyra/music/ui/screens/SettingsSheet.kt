@@ -1,5 +1,9 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.customization.*
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.saveable.mapSaver
+import androidx.compose.ui.graphics.Color
 import android.content.Context
 import android.content.Intent
 import android.media.AudioFormat
@@ -7,10 +11,11 @@ import android.media.audiofx.AudioEffect
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
+import app.veyra.music.ui.motion.VeyraMotion
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -38,7 +43,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Notes
 import androidx.compose.material.icons.automirrored.rounded.VolumeOff
 import androidx.compose.material.icons.rounded.Animation
@@ -64,14 +68,13 @@ import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.LocalOffer
 import androidx.compose.material.icons.rounded.MotionPhotosOff
 import androidx.compose.material.icons.rounded.MusicOff
-import androidx.compose.material.icons.rounded.PlaylistPlay
+import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.rounded.SmartDisplay
 import androidx.compose.material.icons.rounded.Storage
 import androidx.compose.material.icons.rounded.SurroundSound
 import androidx.compose.material.icons.rounded.Translate
 import androidx.compose.material.icons.rounded.VisibilityOff
-import androidx.compose.material.icons.rounded.VolumeOff
-import androidx.compose.material.icons.rounded.VolumeUp
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Waves
 import androidx.compose.material.icons.rounded.WebAssetOff
 import androidx.compose.material.icons.rounded.Wifi
@@ -161,6 +164,7 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(
     /** The window's width, for the gates that depend on it. */
     windowWidth: Dp,
+    navigationState: SettingsNavigationState,
     signedIn: Boolean,
     account: Account?,
     onSignIn: () -> Unit,
@@ -194,6 +198,14 @@ fun SettingsScreen(
     val dolbyAtmosSupported = DeviceCodecs.playsDolbyAtmos
     val spatialAudio by AppSettings.spatialAudio.collectAsStateWithLifecycle()
     val nerdStats by AppSettings.showNerdStats.collectAsStateWithLifecycle()
+    val accentPalette by AppSettings.accentPalette.collectAsStateWithLifecycle()
+    val artworkCorners by AppSettings.artworkCorners.collectAsStateWithLifecycle()
+    val listSpacing by AppSettings.listSpacing.collectAsStateWithLifecycle()
+    val subtleMotion by AppSettings.subtleMotion.collectAsStateWithLifecycle()
+    val playerShortcut by AppSettings.playerShortcut.collectAsStateWithLifecycle()
+    var resetCustomization by rememberSaveable { mutableStateOf<String?>(null) }
+    val strongerText by AppSettings.strongerText.collectAsStateWithLifecycle()
+    val contrastPlayerControls by AppSettings.contrastPlayerControls.collectAsStateWithLifecycle()
     val reduceAnimation by AppSettings.reduceAnimation.collectAsStateWithLifecycle()
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val liquidGlass by AppSettings.liquidGlass.collectAsStateWithLifecycle()
@@ -270,7 +282,7 @@ fun SettingsScreen(
 
     // Search spans all categories; an empty query shows the selected category,
     // exactly as if the field weren't there.
-    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var searchQuery by navigationState::query
     var picking by remember { mutableStateOf<QualityTarget?>(null) }
     var pickingDownloadQuality by remember { mutableStateOf(false) }
     var pickingAutomixPerformance by remember { mutableStateOf(false) }
@@ -368,36 +380,39 @@ fun SettingsScreen(
     // Made fresh on every pass rather than remembered: it tallies the rows
     // that answered to the query, and that tally has to start from zero each
     // time the query changes.
-    var category by rememberSaveable { mutableStateOf<SettingsCategory?>(null) }
+    var category by navigationState::category
     val searching = searchQuery.isNotBlank()
     val search = SettingsSearch(searchQuery, category)
-    BackHandler(enabled = category != null || searching) {
-        if (searching) searchQuery = "" else category = null
-    }
 
-    // What is left after a keystroke is a different list, and the offset the
-    // last one was scrolled to means nothing in it.
-    val scrollState = rememberSaveable(saver = ScrollState.Saver) { ScrollState(0) }
+    val scrollPositions = rememberSaveable(saver = mapSaver<MutableMap<String, Int>>(
+        save = { it.toMap() },
+        restore = { values -> values.mapValues { (_, value) -> (value as? Int ?: 0).coerceAtLeast(0) }.toMutableMap() },
+    )) { mutableMapOf() }
+    val scrollKey = if (searching) "search" else category?.name ?: "overview"
+    val scrollState = remember(scrollKey) { ScrollState(scrollPositions[scrollKey] ?: 0) }
+    androidx.compose.runtime.DisposableEffect(scrollKey, scrollState) {
+        onDispose { scrollPositions[scrollKey] = scrollState.value }
+    }
+    LaunchedEffect(scrollKey, scrollState) {
+        snapshotFlow { scrollState.value }.collect { scrollPositions[scrollKey] = it }
+    }
     var isFirstSearchComposition by remember { mutableStateOf(true) }
-    LaunchedEffect(searchQuery, category) {
-        if (isFirstSearchComposition && searchQuery.isEmpty()) {
-            // Skip the initial composition during Activity recreation:
-            // rememberSaveable already restored the scroll position.
-            isFirstSearchComposition = false
-        } else {
-            isFirstSearchComposition = false
-            scrollState.scrollTo(0)
-        }
+    LaunchedEffect(searchQuery) {
+        if (!isFirstSearchComposition && searchQuery.isNotBlank()) scrollState.scrollTo(0)
+        isFirstSearchComposition = false
     }
 
+    val reducedMotion = rememberVeyraReducedMotion()
+    var categoryIntroduced by remember { mutableStateOf(false) }
     val categoryAlpha = remember { Animatable(1f) }
-    LaunchedEffect(category, reduceAnimation) {
-        if (reduceAnimation) {
+    LaunchedEffect(category, reducedMotion) {
+        if (reducedMotion || !categoryIntroduced) {
             categoryAlpha.snapTo(1f)
         } else {
-            categoryAlpha.snapTo(0f)
-            categoryAlpha.animateTo(1f, tween(180))
+            categoryAlpha.snapTo(0.55f)
+            categoryAlpha.animateTo(1f, tween(VeyraMotion.Section, easing = VeyraMotion.Easing))
         }
+        categoryIntroduced = true
     }
 
     Column(
@@ -417,16 +432,12 @@ fun SettingsScreen(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 4.dp),
         )
 
-        if (category != null && !searching) {
-            TextButton(onClick = { category = null }, modifier = Modifier.padding(horizontal = 12.dp)) {
-                Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.settings))
-            }
-        }
         Column(
             Modifier.weight(1f).verticalScroll(scrollState)
-                .graphicsLayer { alpha = categoryAlpha.value },
+                .graphicsLayer {
+                    alpha = categoryAlpha.value
+                    translationY = if (reducedMotion) 0f else (1f - categoryAlpha.value) * 10.dp.toPx()
+                },
         ) {
             if (category == null && !searching) {
                 SettingsOverview(onSelect = { category = it })
@@ -612,7 +623,7 @@ fun SettingsScreen(
                 val loudnessTitle = stringResource(R.string.loudness_normalization)
                 row(loudnessTitle, "loudness", "volume", "normalize", "replaygain", "lufs") {
                     SettingsRow(
-                        icon = Icons.Rounded.VolumeUp,
+                        icon = Icons.AutoMirrored.Rounded.VolumeUp,
                         title = loudnessTitle,
                         subtitle = stringResource(R.string.loudness_normalization_subtitle),
                         checked = loudnessNormalization,
@@ -633,7 +644,7 @@ fun SettingsScreen(
                 if (!smartFade) {
                     val crossfadeTitle = stringResource(R.string.crossfade)
                     val crossfadeOff = stringResource(R.string.off)
-                    row(crossfadeTitle, "fade", "gapless") {
+                    row(crossfadeTitle, "fade", "gapless", reveal = true, reducedMotion = reducedMotion) {
                         SliderRow(
                             icon = Icons.Rounded.Waves,
                             title = crossfadeTitle,
@@ -732,13 +743,63 @@ fun SettingsScreen(
             SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.appearance)) {
                 val themeTitle = stringResource(R.string.theme)
                 row(themeTitle, "dark mode", "light mode") {
-                    SettingsRow(icon = Icons.Rounded.Brightness4, title = themeTitle)
-                    SegmentedControl(
+                    SettingsPresetRow(icon = Icons.Rounded.Brightness4, title = themeTitle, subtitle = "",
                         options = ThemeMode.entries.map { it.localizedLabel() },
                         selectedIndex = ThemeMode.entries.indexOf(theme),
-                        onSelect = { AppSettings.setThemeMode(ThemeMode.entries[it]) },
-                        modifier = Modifier.padding(start = ROW_INSET, end = ROW_INSET, bottom = 14.dp),
-                    )
+                        onSelect = { AppSettings.setThemeMode(ThemeMode.entries[it]) })
+                }
+                row(stringResource(R.string.custom_accent), "accent", "color", "palette") {
+                    SettingsPresetRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_accent),
+                        subtitle = stringResource(R.string.custom_accent_hint),
+                        options = androidx.compose.ui.res.stringArrayResource(R.array.custom_accent_options).toList(),
+                        selectedIndex = AccentPalette.entries.indexOf(accentPalette), onSelect = { AppSettings.setAccentPalette(AccentPalette.entries[it]) },
+                        swatches = listOf(Color(0xFFD9C4FF), Color(0xFF9BE1D5), Color(0xFFFFD58A), Color(0xFFFFB1C4)))
+                }
+                row(stringResource(R.string.custom_artwork_corners), "artwork", "corners", "covers") {
+                    SettingsPresetRow(icon = SettingsIcons.Icons, title = stringResource(R.string.custom_artwork_corners),
+                        subtitle = stringResource(R.string.custom_artwork_corners_hint),
+                        options = androidx.compose.ui.res.stringArrayResource(R.array.custom_corner_options).toList(),
+                        selectedIndex = ArtworkCorners.entries.indexOf(artworkCorners), onSelect = { AppSettings.setArtworkCorners(ArtworkCorners.entries[it]) })
+                }
+                row(stringResource(R.string.custom_list_spacing), "density", "spacing", "compact") {
+                    SettingsPresetRow(icon = SettingsIcons.Library, title = stringResource(R.string.custom_list_spacing),
+                        subtitle = stringResource(R.string.custom_list_spacing_hint),
+                        options = androidx.compose.ui.res.stringArrayResource(R.array.custom_spacing_options).toList(),
+                        selectedIndex = ListSpacing.entries.indexOf(listSpacing), onSelect = { AppSettings.setListSpacing(ListSpacing.entries[it]) })
+                }
+                row(stringResource(R.string.custom_motion_level), "motion", "animation") {
+                    SettingsPresetRow(icon = SettingsIcons.Performance, title = stringResource(R.string.custom_motion_level),
+                        subtitle = stringResource(R.string.custom_motion_level_hint),
+                        options = androidx.compose.ui.res.stringArrayResource(R.array.custom_motion_options).toList(),
+                        selectedIndex = if (reduceAnimation) 2 else if (subtleMotion) 1 else 0, onSelect = { AppSettings.setMotionLevel(MotionLevel.entries[it]) })
+                }
+                row(stringResource(R.string.custom_player_shortcut), "player", "shortcut", "download", "sleep", "favorite") {
+                    SettingsPresetRow(icon = SettingsIcons.Sound, title = stringResource(R.string.custom_player_shortcut),
+                        subtitle = stringResource(R.string.custom_player_shortcut_hint),
+                        options = androidx.compose.ui.res.stringArrayResource(R.array.custom_shortcut_options).toList(),
+                        selectedIndex = PlayerShortcut.entries.indexOf(playerShortcut), onSelect = { AppSettings.setPlayerShortcut(PlayerShortcut.entries[it]) })
+                }
+                row(stringResource(R.string.custom_reset_appearance), "reset", "appearance") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_reset_appearance),
+                        onClick = { resetCustomization = "appearance" })
+                }
+                row(stringResource(R.string.custom_reset_player), "reset", "player", "shortcut") {
+                    SettingsRow(icon = SettingsIcons.Sound, title = stringResource(R.string.custom_reset_player),
+                        onClick = { resetCustomization = "player" })
+                }
+                val strongerTextTitle = stringResource(R.string.stronger_text)
+                row(strongerTextTitle, "font", "bold", "readability", "accessibility") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = strongerTextTitle,
+                        subtitle = stringResource(R.string.stronger_text_subtitle),
+                        checked = strongerText,
+                        onClick = { AppSettings.setStrongerText(!strongerText) })
+                }
+                val contrastControlsTitle = stringResource(R.string.contrast_player_controls)
+                row(contrastControlsTitle, "contrast", "buttons", "player", "accessibility") {
+                    SettingsRow(icon = SettingsIcons.Icons, title = contrastControlsTitle,
+                        subtitle = stringResource(R.string.contrast_player_controls_subtitle),
+                        checked = contrastPlayerControls,
+                        onClick = { AppSettings.setContrastPlayerControls(!contrastPlayerControls) })
                 }
                 val liquidGlassTitle = stringResource(R.string.liquid_glass)
                 row(liquidGlassTitle, "glass", "blur") {
@@ -803,7 +864,7 @@ fun SettingsScreen(
                 // that cost repeated on every loop — see AppSettings.canvasOverCellular.
                 if (animatedCanvas) {
                     val coverCellularTitle = stringResource(R.string.animated_cover_cellular)
-                    row(coverCellularTitle, "canvas", "cellular", divided = false) {
+                    row(coverCellularTitle, "canvas", "cellular", divided = false, reveal = true, reducedMotion = reducedMotion) {
                         SettingsSubRow(
                             title = coverCellularTitle,
                             checked = canvasOverCellular,
@@ -811,7 +872,7 @@ fun SettingsScreen(
                         )
                     }
                     val spotifyCanvasTitle = stringResource(R.string.integrate_spotify_canvas)
-                    row(spotifyCanvasTitle, "spotify", "canvas", divided = false) {
+                    row(spotifyCanvasTitle, "spotify", "canvas", divided = false, reveal = true, reducedMotion = reducedMotion) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -843,7 +904,7 @@ fun SettingsScreen(
                 }
                 if (signatureApiEnabled) {
                     val signatureUrlTitle = stringResource(R.string.artist_signatures_url)
-                    row(signatureUrlTitle, "signature", "api", "url", divided = false) {
+                    row(signatureUrlTitle, "signature", "api", "url", divided = false, reveal = true, reducedMotion = reducedMotion) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -967,7 +1028,7 @@ fun SettingsScreen(
                 }
                 if (highPerformanceMode) {
                     val refreshRateTitle = stringResource(R.string.refresh_rate)
-                    row(refreshRateTitle, "hz", "frame rate") {
+                    row(refreshRateTitle, "hz", "frame rate", reveal = true, reducedMotion = reducedMotion) {
                         SettingsRow(
                             icon = VeyraIcons.FrameRate,
                             title = refreshRateTitle,
@@ -1140,7 +1201,7 @@ fun SettingsScreen(
                 val playNextOnSwipeTitle = stringResource(R.string.play_next_on_swipe)
                 row(playNextOnSwipeTitle, "swipe", "queue") {
                     SettingsRow(
-                        icon = Icons.Rounded.PlaylistPlay,
+                        icon = Icons.AutoMirrored.Rounded.PlaylistPlay,
                         title = playNextOnSwipeTitle,
                         subtitle = if (swipeToPlayNext) {
                             stringResource(R.string.swipe_plays_next)
@@ -1174,7 +1235,7 @@ fun SettingsScreen(
                 val hideVolumeBarTitle = stringResource(R.string.hide_volume_bar)
                 row(hideVolumeBarTitle, "volume", "player") {
                     SettingsRow(
-                        icon = Icons.Rounded.VolumeOff,
+                        icon = Icons.AutoMirrored.Rounded.VolumeOff,
                         title = hideVolumeBarTitle,
                         subtitle = stringResource(R.string.hide_volume_bar_subtitle),
                         checked = hideVolumeBar,
@@ -1363,6 +1424,17 @@ fun SettingsScreen(
         }
     }
 
+    if (resetCustomization != null) {
+        val scope = resetCustomization
+        AlertDialog(onDismissRequest = { resetCustomization = null },
+            title = { Text(stringResource(if (scope == "appearance") R.string.custom_reset_appearance else R.string.custom_reset_player)) },
+            text = { Text(stringResource(if (scope == "appearance") R.string.custom_reset_appearance_hint else R.string.custom_reset_player_hint)) },
+            confirmButton = { TextButton(onClick = {
+                if (scope == "appearance") AppSettings.resetAppearanceCustomization() else AppSettings.resetPlayerCustomization()
+                resetCustomization = null
+            }) { Text(stringResource(R.string.custom_reset_confirm)) } },
+            dismissButton = { TextButton(onClick = { resetCustomization = null }) { Text(stringResource(R.string.cancel)) } })
+    }
     if (pickingDownloadQuality) {
         ModalBottomSheet(
             onDismissRequest = { pickingDownloadQuality = false },
@@ -1782,7 +1854,7 @@ private fun DownloadQualitySheet(selected: DownloadQuality, onSelect: (DownloadQ
  * Categories use existing translated labels. Search spans them all; otherwise
  * only the selected category composes its controls.
  */
-private enum class SettingsCategory(val title: Int, val summary: List<Int>, val icon: ImageVector) {
+internal enum class SettingsCategory(val title: Int, val summary: List<Int>, val icon: ImageVector) {
     ACCOUNT(R.string.account_integrations, listOf(R.string.scrobbling, R.string.listen_together), SettingsIcons.Account),
     SOUND(R.string.playback, listOf(R.string.audio_quality, R.string.equalizer), SettingsIcons.Sound),
     APPEARANCE(R.string.appearance, listOf(R.string.theme, R.string.app_icon), SettingsIcons.Appearance),
@@ -1819,7 +1891,7 @@ private class SettingsGroupScope(
     private val search: SettingsSearch<SettingsCategory>,
     private val header: String?,
 ) {
-    class Entry(val divided: Boolean, val content: @Composable () -> Unit)
+    class Entry(val identity: List<String?>, val divided: Boolean, val content: @Composable () -> Unit)
 
     val entries = mutableListOf<Entry>()
 
@@ -1836,11 +1908,16 @@ private class SettingsGroupScope(
     fun row(
         vararg keywords: String?,
         divided: Boolean = true,
+        reveal: Boolean = false,
+        reducedMotion: Boolean = false,
         content: @Composable () -> Unit,
     ) {
         // The header counts for every row beneath it: searching "playback"
         // should turn up the playback group entire, not nothing at all.
-        if (search.matches(header, *keywords)) entries += Entry(divided, content)
+        if (search.matches(header, *keywords)) entries += Entry(keywords.toList(), divided) {
+            if (reveal) SettingsOptionsReveal(reducedMotion = reducedMotion, content = content)
+            else content()
+        }
     }
 }
 
@@ -1866,14 +1943,16 @@ private fun SearchableSettingsGroup(
     if (scope.entries.isEmpty()) return
     SettingsGroup(header = header, footer = footer, topSpacing = topSpacing) {
         scope.entries.forEachIndexed { index, entry ->
-            when {
-                index > 0 && entry.divided -> RowDivider()
-                // An undivided row is drawn tight to the top because something
-                // it belongs to is usually above it. Filtered down to itself it
-                // has nothing to sit under, so it is given that room back.
-                index == 0 && !entry.divided -> Spacer(Modifier.height(10.dp))
+            androidx.compose.runtime.key(entry.identity) {
+                when {
+                    index > 0 && entry.divided -> RowDivider()
+                    // An undivided row is drawn tight to the top because something
+                    // it belongs to is usually above it. Filtered down to itself it
+                    // has nothing to sit under, so it is given that room back.
+                    index == 0 && !entry.divided -> Spacer(Modifier.height(10.dp))
+                }
+                entry.content()
             }
-            entry.content()
         }
     }
 }

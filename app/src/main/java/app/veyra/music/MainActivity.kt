@@ -71,7 +71,7 @@ import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.IosShare
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Sort
+import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Upgrade
 import app.veyra.music.data.listentogether.ServerConnectionState
 import androidx.compose.material3.DropdownMenu
@@ -109,14 +109,15 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.ClipEntry
+import android.content.ClipData
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -171,6 +172,7 @@ import app.veyra.music.ui.screens.CACHE_FOLDER_BROWSE_ID
 import app.veyra.music.ui.screens.ListenTogetherScreen
 import app.veyra.music.ui.screens.PartyServerEditor
 import app.veyra.music.ui.screens.SignatureApiEditor
+import app.veyra.music.ui.screens.SettingsNavigationState
 import app.veyra.music.ui.screens.SettingsScreen
 import app.veyra.music.ui.screens.SourceEditorAlert
 import app.veyra.music.ui.screens.SourcesScreen
@@ -234,6 +236,7 @@ import app.veyra.music.ui.MainViewModel
 import app.veyra.music.ui.NavigationDestination
 import app.veyra.music.ui.NavigationMotion
 import app.veyra.music.ui.NavigationMotionPolicy
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 import app.veyra.music.ui.navigationTransition
 import app.veyra.music.ui.SearchSource
 import app.veyra.music.ui.components.BottomFadeScrim
@@ -408,7 +411,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 val appBackdrop = rememberLayerBackdrop(onDraw = paintBackdrop)
                 CompositionLocalProvider(
-                    LocalOverscrollFactory provides iosOverscrollFactory,
+                    LocalOverscrollFactory provides if (rememberVeyraReducedMotion()) null else iosOverscrollFactory,
                     LocalLiquidGlassEnabled provides liquidGlassEnabled,
                     LocalAppBackdrop provides appBackdrop,
                 ) {
@@ -495,7 +498,7 @@ private fun VeyraApp(
     viewModel: MainViewModel = viewModel(),
 ) {
     val context = LocalContext.current
-    val clipboard = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
     val hazeState = remember { HazeState() }
     // Recording the backdrop layer costs a draw pass, so it only runs when a
     // liquid-glass surface (the nav bar or artwork-page back button) can sample it.
@@ -542,7 +545,9 @@ private fun VeyraApp(
     // player and no artwork flying between the two. Everything below that
     // takes part in the docking asks for [activeDock] / this, never for the
     // dock or the motion directly.
-    val reducePlayerMotion by AppSettings.reduceAnimation.collectAsStateWithLifecycle()
+    val subtleScreenMotion = app.veyra.music.ui.customization.LocalSubtleMotion.current
+    val reduceScreenMotion = rememberVeyraReducedMotion(includeSubtle = false)
+    val reducePlayerMotion = reduceScreenMotion || subtleScreenMotion
     val activeDock = playerDock.takeIf { !reducePlayerMotion }
     playerSheetMotion.flingVelocity = with(LocalDensity.current) { PLAYER_PULL_FLING_VELOCITY.toPx() }
     // How the app takes the player down, whatever for: a back press, or a page
@@ -570,6 +575,7 @@ private fun VeyraApp(
      */
     var webSession by remember { mutableStateOf<WebSessionMode?>(null) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
+    val settingsNavigation = rememberSaveable(saver = SettingsNavigationState.Saver) { SettingsNavigationState() }
     // Replay: the page, the stories over it, and the share sheet over those.
     // Three states rather than one enum because they stack — the stories are
     // opened from the page and the share sheet from either, and closing one
@@ -729,6 +735,11 @@ private fun VeyraApp(
     val homeLoadingMore by viewModel.homeLoadingMore.collectAsStateWithLifecycle()
     val homePageError by viewModel.homePageError.collectAsStateWithLifecycle()
     val homeRecentlyPlayedLoading by viewModel.homeRecentlyPlayedLoading.collectAsStateWithLifecycle()
+    val homeOnline by viewModel.homeOnline.collectAsStateWithLifecycle()
+    val homeShowingSaved by viewModel.homeShowingSaved.collectAsStateWithLifecycle()
+    val homeUpdating by viewModel.homeUpdating.collectAsStateWithLifecycle()
+    val homeNotice by viewModel.homeNotice.collectAsStateWithLifecycle()
+    val homeSections by viewModel.homeSections.collectAsStateWithLifecycle()
 
     // The top bar's icon is the quiet, always-there nudge; this is the
     // once-per-launch popup version of the same news. `updateDialogShown`
@@ -1471,7 +1482,7 @@ private fun VeyraApp(
                 }.getOrDefault(false)
             }
         }
-        if (player.song?.videoId == song.videoId) {
+        if (player.song.videoId == song.videoId) {
             hasAlternateVersion = exists
         }
     }
@@ -2584,12 +2595,14 @@ private fun VeyraApp(
         // One back step out of Settings, or out of any tab but Home, lands on
         // Home rather than exiting — only Home itself hands back to the system,
         // which is what actually closes/minimizes the app.
+        val settingsBack: () -> Unit = {
+            if (!settingsNavigation.back()) {
+                showSettings = false
+                if (detail == null && !showReplay) selectedTab = TAB_HOME
+            }
+        }
         BackHandler(enabled = showSettings && !showSpotify && !showAccountScrobbling && !showSources && !showListenTogether && !showEqualizer && !showReplay) {
-            showSettings = false
-            // Only when Settings was the whole of what was on screen. Opened
-            // over Replay or over a release page, closing it reveals that again
-            // rather than throwing both away.
-            if (detail == null && !showReplay) selectedTab = TAB_HOME
+            settingsBack()
         }
         BackHandler(
             enabled = detail == null && !showSettings && !showAccountScrobbling && !showSpotify &&
@@ -2661,7 +2674,7 @@ private fun VeyraApp(
                     targetState = NavigationDestination(destinationKey, destinationDepth),
                     contentKey = { it.key },
                     transitionSpec = {
-                        navigationTransition(NavigationMotionPolicy.between(initialState, targetState), reducePlayerMotion, motionRtl)
+                        navigationTransition(NavigationMotionPolicy.between(initialState, targetState), reduceScreenMotion, motionRtl, subtleScreenMotion)
                     },
                     modifier = Modifier
                         .hazeSource(hazeState)
@@ -2846,6 +2859,7 @@ private fun VeyraApp(
                             EqualizerScreen(contentPadding = listPadding)
                         } else if (key == "settings") {
                             SettingsScreen(
+                                navigationState = settingsNavigation,
                                 windowWidth = windowWidth,
                                 signedIn = signedIn,
                                 account = account,
@@ -2999,6 +3013,7 @@ private fun VeyraApp(
                                 )
                             }
                             DetailScreen(
+                                isActive = key == destinationKey && settingsSubScreen == null && !showHistory,
                                 page = page,
                                 currentSong = player.song,
                                 isPlaying = player.isPlaying,
@@ -3075,7 +3090,21 @@ private fun VeyraApp(
                                 title = stringResource(R.string.listen_now),
                                 signedIn = signedIn,
                                 onSignIn = { webSession = WebSessionMode.SIGN_IN },
-                                onItemClick = { item, shelfTitle ->
+                                onItemClick = homeItem@{ item, shelfTitle ->
+                                    if (!homeOnline) {
+                                        val id = item.videoId
+                                        val savedUri = id?.let { Downloads.saved.value[it] }
+                                        if (savedUri == null) {
+                                            showQueueNotice(context.getString(R.string.home_offline_track_unavailable))
+                                        } else scope.launch {
+                                            val songs = Downloads.getDownloadedSongs(context)
+                                            val index = songs.indexOfFirst { it.videoId == id || it.localPath == savedUri }
+                                            if (index >= 0) playFrom(songs, index,
+                                                QueueSource(context.getString(R.string.downloads), PlaybackSourceType.BROWSE, "local:downloads"))
+                                            else showQueueNotice(context.getString(R.string.home_offline_track_unavailable))
+                                        }
+                                        return@homeItem
+                                    }
                                     val song = shelfSong(item)
                                     // Hoisted because ShelfItem lives in :shared, and
                                     // Kotlin will not smart-cast a public nullable
@@ -3105,13 +3134,27 @@ private fun VeyraApp(
                                 loadMoreError = homePageError,
                                 onRetryMore = viewModel::retryMoreHome,
                                 recentlyPlayedLoading = homeRecentlyPlayedLoading,
+                                offline = !homeOnline,
+                                showingSaved = homeShowingSaved,
+                                updating = homeUpdating,
+                                homeNotice = homeNotice,
+                                homeSections = homeSections,
+                                onMoveHomeSection = viewModel::moveHomeSection,
+                                onHomeSectionVisible = viewModel::setHomeSectionVisible,
+                                onResetHomeSections = viewModel::resetHomeSections,
+                                onOpenDownloads = {
+                                    onLibraryItemClick(ShelfItem(context.getString(R.string.downloads), "", null, null, "local:downloads"))
+                                },
+                                onOpenLocalMusic = {
+                                    onLibraryItemClick(ShelfItem(context.getString(R.string.local_music), "", null, null, "local:all"))
+                                },
                             )
                             TAB_EXPLORE -> AnimatedContent(
                                 targetState = selectedMoodGenre,
                                 contentKey = { it?.browseId ?: "explore" },
                                 transitionSpec = {
                                     navigationTransition(if (targetState == null) NavigationMotion.Back else NavigationMotion.Forward,
-                                        reducePlayerMotion, motionRtl)
+                                        reduceScreenMotion, motionRtl, subtleScreenMotion)
                                 },
                                 modifier = Modifier.fillMaxSize(),
                                 label = "exploreCategory",
@@ -3212,7 +3255,7 @@ private fun VeyraApp(
                                 },
                                 onBrowseClick = { item ->
                                     viewModel.recordEntity(SearchHistoryEntity(
-                                        id = item.browseId ?: "",
+                                        id = item.browseId,
                                         title = item.title,
                                         subtitle = item.subtitle.ifBlank { "" },
                                         artworkUrl = item.thumbnailUrl,
@@ -3391,7 +3434,7 @@ private fun VeyraApp(
                         // The main page already owns transitions to/from Discord or Spotify.
                         val motion = if (initialState.second != targetState.second) NavigationMotion.None
                             else if (targetState.first == null) NavigationMotion.Back else NavigationMotion.Forward
-                        navigationTransition(motion, reducePlayerMotion, motionRtl)
+                        navigationTransition(motion, reduceScreenMotion, motionRtl, subtleScreenMotion)
                     },
                     modifier = Modifier.fillMaxSize(),
                     label = "settingsSubScreen",
@@ -3608,9 +3651,12 @@ private fun VeyraApp(
                             showEqualizer = false
                             if (settingsSubScreen == "equalizer") settingsSubScreen = null
                         })
+                        showReplay -> ({
+                            showReplay = false
+                            if (settingsSubScreen == "replay") settingsSubScreen = null
+                        })
                         settingsSubScreen != null -> ({ settingsSubScreen = null })
-                        showSettings -> ({ showSettings = false })
-                        showReplay -> ({ showReplay = false })
+                        showSettings -> settingsBack
                         detailActiveShelf != null -> ({ detailActiveShelf = null })
                         detail != null -> ({ viewModel.closeDetail(); Unit })
                         selectedMoodGenre != null -> ({ viewModel.closeMoodGenre(); Unit })
@@ -3762,7 +3808,7 @@ private fun VeyraApp(
                                 Box {
                                     IconButton(onClick = { librarySortMenuOpen = true }) {
                                         Icon(
-                                            Icons.Rounded.Sort,
+                                            Icons.AutoMirrored.Rounded.Sort,
                                             contentDescription = stringResource(R.string.sort_library),
                                             tint = MaterialTheme.colorScheme.onSurface,
                                         )
@@ -3816,7 +3862,7 @@ private fun VeyraApp(
                                     onClick = { if (isLocalDetail) folderMenuOpen = true else songSortMenuOpen = true },
                                 ) {
                                     Icon(
-                                        Icons.Rounded.Sort,
+                                        Icons.AutoMirrored.Rounded.Sort,
                                         contentDescription = stringResource(
                                             if (isLocalDetail) R.string.sort_music else R.string.sort_songs,
                                         ),
@@ -4266,7 +4312,6 @@ private fun VeyraApp(
                     val original = convertedFromVideo
                     val originalAudio = convertedFromAudio
                     when {
-                        c == null -> Unit
                         original != null && (
                             convertedAudioId == song.videoId ||
                                 convertedAudioId == versionEffectiveSong.videoId ||
@@ -4429,7 +4474,7 @@ private fun VeyraApp(
                     controller?.currentMediaItem?.mediaId == song.videoId
                 ) {
                     {
-                        controller?.revertToOriginal()
+                        controller.revertToOriginal()
                         songActions = null
                     }
                 } else {
@@ -4474,7 +4519,7 @@ private fun VeyraApp(
                         songActions = null
                         scope.launch {
                             val text = TrackLog.forTrack(song, NerdStats.current.value)
-                            clipboard.setText(AnnotatedString(text))
+                            clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Veyra track log", text)))
                             // The line count, not just "copied": it is the
                             // one thing the system's own paste confirmation
                             // doesn't say, and an empty log is a real

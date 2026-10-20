@@ -1,6 +1,19 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.layout.stackForReadability
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.core.tween
+import app.veyra.music.ui.motion.VeyraMotion
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import app.veyra.music.ui.motion.veyraPressFeedback
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -30,6 +43,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import app.veyra.music.ui.components.VeyraSurfaces
 import app.veyra.music.ui.components.veyraSwitchColors
 import app.veyra.music.ui.icons.SettingsIcons
 
@@ -90,6 +104,7 @@ internal fun SettingsRow(
     destructive: Boolean = false,
     onCheckedChange: ((Boolean) -> Unit)? = null,
 ) {
+    val interaction = remember { MutableInteractionSource() }
     val scheme = MaterialTheme.colorScheme
     val tint = if (destructive) scheme.error else scheme.primary
     val action =
@@ -99,14 +114,16 @@ internal fun SettingsRow(
                     value = checked,
                     enabled = enabled,
                     role = Role.Switch,
+                    interactionSource = interaction,
+                    indication = null,
                     onValueChange = { onClick() },
                 )
             onClick != null ->
-                Modifier.clickable(enabled = enabled, role = Role.Button, onClick = onClick)
+                Modifier.clickable(interactionSource = interaction, indication = null, enabled = enabled, role = Role.Button, onClick = onClick)
             else -> Modifier
         }
     BoxWithConstraints(Modifier.fillMaxWidth()) {
-        val stacked = maxWidth < 360.dp && LocalDensity.current.fontScale > 1.25f
+        val stacked = stackForReadability(maxWidth.value, LocalDensity.current.fontScale, 300f)
         @Composable
         fun EndControl() {
             when {
@@ -131,7 +148,8 @@ internal fun SettingsRow(
         }
         Row(
             Modifier.fillMaxWidth()
-                .clip(RoundedCornerShape(18.dp))
+                .clip(VeyraSurfaces.Row)
+                .veyraPressFeedback(interaction, tint, enabled)
                 .then(action)
                 .semantics(mergeDescendants = true) {}
                 .heightIn(min = if (emphasized) 92.dp else 80.dp)
@@ -214,7 +232,7 @@ internal fun SettingsSubRow(
     subtitle: String? = null,
 ) {
     BoxWithConstraints(Modifier.fillMaxWidth()) {
-        val stacked = maxWidth < 360.dp && LocalDensity.current.fontScale > 1.25f
+        val stacked = stackForReadability(maxWidth.value, LocalDensity.current.fontScale, 300f)
         Row(
             Modifier.fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
@@ -372,7 +390,7 @@ internal fun SegmentedControl(
             val chosen = index == selectedIndex
             Row(
                 modifier
-                    .clip(RoundedCornerShape(18.dp))
+                    .clip(VeyraSurfaces.Row)
                     .background(
                         if (chosen) MaterialTheme.colorScheme.primaryContainer
                         else Color.Transparent
@@ -521,7 +539,7 @@ internal fun SettingsIconChoice(
 ) {
     Column(
         modifier
-            .clip(RoundedCornerShape(18.dp))
+            .clip(VeyraSurfaces.Row)
             .selectable(selected = selected, role = Role.RadioButton, onClick = onSelect)
             .padding(horizontal = 8.dp, vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -624,6 +642,99 @@ internal fun SettingsAccountSummary(
         if (onClick != null) {
             Spacer(Modifier.width(12.dp))
             Chevron()
+        }
+    }
+}
+
+/** Reveal dependent controls without retaining hidden, clickable settings on exit. */
+@Composable
+internal fun SettingsOptionsReveal(
+    reducedMotion: Boolean,
+    content: @Composable () -> Unit,
+) {
+    val visibility = remember { MutableTransitionState(reducedMotion).apply { targetState = true } }
+    AnimatedVisibility(
+        visibleState = visibility,
+        enter = if (reducedMotion) EnterTransition.None else
+            fadeIn(tween(VeyraMotion.Feedback)) +
+                expandVertically(tween(VeyraMotion.Section, easing = VeyraMotion.Easing)),
+        exit = ExitTransition.None,
+    ) {
+        Column(Modifier.fillMaxWidth()) { content() }
+    }
+}
+
+/** Quiet value row; choices live in a bounded sheet rather than filling the settings page. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun SettingsPresetRow(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    options: List<String>,
+    selectedIndex: Int,
+    onSelect: (Int) -> Unit,
+    swatches: List<Color>? = null,
+) {
+    var choosing by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+    val focus = androidx.compose.ui.platform.LocalFocusManager.current
+    SettingsRow(icon = icon, title = title, subtitle = subtitle.takeIf { it.isNotBlank() },
+        onClick = { focus.clearFocus(); choosing = true },
+        trailing = {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                swatches?.getOrNull(selectedIndex)?.let { color ->
+                    Box(Modifier.size(12.dp).clip(CircleShape).background(color)
+                        .border(0.5.dp, MaterialTheme.colorScheme.outline, CircleShape))
+                }
+                Text(options.getOrNull(selectedIndex).orEmpty(),
+                    style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+                    maxLines = 2, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                    modifier = Modifier.widthIn(max = 112.dp))
+                Chevron()
+            }
+        })
+    if (choosing) {
+        ModalBottomSheet(onDismissRequest = { choosing = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = MaterialTheme.colorScheme.surface,
+            shape = VeyraSurfaces.Sheet,
+        ) {
+            Column(Modifier.fillMaxWidth().heightIn(max = 480.dp)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp).padding(bottom = 24.dp)) {
+                Text(title, style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.semantics { heading() }.padding(bottom = 8.dp))
+                if (subtitle.isNotBlank()) Text(subtitle, style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 14.dp))
+                Column(Modifier.fillMaxWidth().selectableGroup()) {
+                    options.forEachIndexed { index, label ->
+                        val selected = index == selectedIndex
+                        val interaction = remember { MutableInteractionSource() }
+                        Row(Modifier.fillMaxWidth().clip(VeyraSurfaces.Row)
+                            .veyraPressFeedback(interaction, MaterialTheme.colorScheme.primary)
+                            .selectable(selected = selected, role = Role.RadioButton,
+                                interactionSource = interaction, indication = null,
+                                onClick = { if (!selected) onSelect(index); choosing = false })
+                            .heightIn(min = 56.dp).padding(horizontal = 12.dp, vertical = 14.dp),
+                            verticalAlignment = Alignment.CenterVertically) {
+                            swatches?.getOrNull(index)?.let { color ->
+                                Box(Modifier.size(20.dp).clip(CircleShape).background(color)
+                                    .border(0.5.dp, MaterialTheme.colorScheme.outline, CircleShape))
+                                Spacer(Modifier.width(14.dp))
+                            }
+                            Text(label, modifier = Modifier.weight(1f),
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium)
+                            Spacer(Modifier.width(12.dp))
+                            Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+                                if (selected) Icon(Icons.Rounded.Check, null,
+                                    tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(22.dp))
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

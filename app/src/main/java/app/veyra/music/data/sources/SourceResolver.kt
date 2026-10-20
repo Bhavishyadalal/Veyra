@@ -201,7 +201,7 @@ object SourceResolver {
         if (pinned != null) {
             attempt(pinned) {
                 if (picked) {
-                    (pinned as AddonSource).stream(trackId, request, stereoOnly = pickedMix == MIX_STEREO)
+                    pinned.stream(trackId, request, stereoOnly = pickedMix == MIX_STEREO)
                 } else {
                     pinned.stream(trackId, request)
                 }

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "common",
+    "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-common/1.11.0/media3-common-1.11.0.aar",
+    "classesSha256": "fad3cb29c07e44874c8dcada6e700fdb790874f650d6c53ebb5b98cb27f924e7"
+  },
+  {
+    "name": "session",
+    "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-session/1.11.0/media3-session-1.11.0.aar",
+    "classesSha256": "f3e80078d59a8ab40b99984db4c5fc95b7b05cf775ff737a293d9d7ffe68e58d"
+  },
+  {
+    "name": "exoplayer",
+    "url": "https://dl.google.com/dl/android/maven2/androidx/media3/media3-exoplayer/1.11.0/media3-exoplayer-1.11.0.aar",
+    "classesSha256": "ba370a2ab5955cc4a0d1ee0e296812d8a8264678579c4c5c655111a41fa8f8c0"
+  },
+  {
+    "name": "compose",
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-android/1.10.5/ui-android-1.10.5.aar",
+    "classesSha256": "acdd7ee205db6db222038f4f5694d3448f90d8b1deeb260f26c165d332e5a376"
+  },
+  {
+    "name": "runtime",
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-android/1.10.5/runtime-android-1.10.5.aar",
+    "classesSha256": "9517d45d6aa1d849481531663d136e01f4937cf02d299fb302c02ef754907e43"
+  },
+  {
+    "name": "experimental",
+    "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-experimental/1.4.1/annotation-experimental-1.4.1.aar",
+    "classesSha256": "f97daae3e5fa12312593041412661117b7d82fa70ff2a1db45bb7092f1ce19ee"
+  }
+]

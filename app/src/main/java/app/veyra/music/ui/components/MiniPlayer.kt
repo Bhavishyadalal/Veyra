@@ -1,5 +1,7 @@
 package app.veyra.music.ui.components
 
+import app.veyra.music.ui.customization.artworkCorner
+import app.veyra.music.ui.customization.artworkShape
 import app.veyra.music.R
 
 import androidx.compose.foundation.background
@@ -252,7 +254,7 @@ internal fun Modifier.miniPlayerGestures(
                 change.consume()
                 start = change
             }
-            val slopped = start ?: return@awaitEachGesture
+            val slopped = start
 
             if (!vertical) {
                 var dragged = slopped.position.x - down.position.x
@@ -414,9 +416,9 @@ fun MiniPlayer(
                 contentDescription = null,
                 modifier = Modifier
                     .size(40.dp)
-                    .playerDockArt(dock, ART_CORNER)
-                    .clip(RoundedCornerShape(ART_CORNER))
-                    .thumbnailBorder(RoundedCornerShape(ART_CORNER))
+                    .playerDockArt(dock, artworkCorner(ART_CORNER))
+                    .clip(artworkShape(RoundedCornerShape(ART_CORNER)))
+                    .thumbnailBorder(artworkShape(RoundedCornerShape(ART_CORNER)))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
             )
             Spacer(Modifier.width(10.dp))

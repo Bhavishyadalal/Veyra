@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Velocity
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ private fun rubberBand(rawDistance: Float, containerPx: Float): Float {
     val dimension = containerPx.takeIf { it > 0f } ?: fallbackContainerPx
     val distance = abs(rawDistance)
     val banded = (1f - 1f / (distance * rubberBandConstant / dimension + 1f)) *
-        dimension / rubberBandConstant
+        dimension
     return banded * sign(rawDistance)
 }
 
@@ -59,6 +60,8 @@ private fun rubberBand(rawDistance: Float, containerPx: Float): Float {
 private class IosOverscrollEffect : OverscrollEffect {
     private val rawPullX = mutableFloatStateOf(0f)
     private val rawPullY = mutableFloatStateOf(0f)
+    private var settleX: Job? = null
+    private var settleY: Job? = null
     private var containerWidthPx = 0f
     private var containerHeightPx = 0f
 
@@ -70,6 +73,12 @@ private class IosOverscrollEffect : OverscrollEffect {
         source: NestedScrollSource,
         performScroll: (Offset) -> Offset,
     ): Offset {
+        // A new touch owns the offset immediately; an old spring must not write
+        // over the drag on the next frame. Preserve its current position.
+        if (source == NestedScrollSource.UserInput) {
+            settleX?.cancel()
+            settleY?.cancel()
+        }
         // When pulling back from an existing stretch, settle the stretch before
         // allowing the list itself to scroll. This keeps the motion continuous.
         val paidX = payDown(rawPullX, delta.x)
@@ -99,13 +108,23 @@ private class IosOverscrollEffect : OverscrollEffect {
         velocity: Velocity,
         performFling: suspend (Velocity) -> Velocity,
     ) {
-        val consumed = performFling(velocity)
-        val leftover = velocity - consumed
-        if (!isInProgress && leftover == Velocity.Zero) return
-
         coroutineScope {
-            launch { settle(rawPullX, leftover.x) }
-            launch { settle(rawPullY, leftover.y) }
+            val stretchedX = rawPullX.floatValue != 0f
+            val stretchedY = rawPullY.floatValue != 0f
+            settleX?.cancel()
+            settleY?.cancel()
+            // Start the return on release, not after the list's decay finishes.
+            // A stretched axis belongs to the spring, so it cannot also fling
+            // the list beneath it and leave the content apparently stuck.
+            if (stretchedX) settleX = launch { settle(rawPullX, velocity.x) }
+            if (stretchedY) settleY = launch { settle(rawPullY, velocity.y) }
+            val scrollVelocity = Velocity(
+                if (stretchedX) 0f else velocity.x,
+                if (stretchedY) 0f else velocity.y,
+            )
+            val leftover = scrollVelocity - performFling(scrollVelocity)
+            if (!stretchedX) settleX = launch { settle(rawPullX, leftover.x) }
+            if (!stretchedY) settleY = launch { settle(rawPullY, leftover.y) }
         }
     }
 
@@ -134,6 +153,7 @@ private class IosOverscrollEffect : OverscrollEffect {
                 },
             ),
         ) { value, _ -> pull.floatValue = value }
+        pull.floatValue = 0f
     }
 
     override val node: DelegatableNode = IosOverscrollNode(

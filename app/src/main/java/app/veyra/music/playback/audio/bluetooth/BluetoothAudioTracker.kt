@@ -168,7 +168,7 @@ class BluetoothAudioTracker(private val context: Context) {
         }
 
         try {
-            val adapter = BluetoothAdapter.getDefaultAdapter()
+            val adapter = context.getSystemService(android.bluetooth.BluetoothManager::class.java)?.adapter
             adapter?.getProfileProxy(context, profileListener, BluetoothProfile.A2DP)
         } catch (e: Throwable) {
             Log.w(TAG, "Failed to bind A2DP profile proxy", e)
@@ -193,7 +193,7 @@ class BluetoothAudioTracker(private val context: Context) {
         val proxy = a2dpProfile
         if (proxy != null) {
             try {
-                BluetoothAdapter.getDefaultAdapter()?.closeProfileProxy(BluetoothProfile.A2DP, proxy)
+                context.getSystemService(android.bluetooth.BluetoothManager::class.java)?.adapter?.closeProfileProxy(BluetoothProfile.A2DP, proxy)
             } catch (_: Throwable) {
             }
             a2dpProfile = null
@@ -299,6 +299,8 @@ class BluetoothAudioTracker(private val context: Context) {
             btDevice?.productName?.toString()?.trim() ?: _telemetry.value.deviceName ?: "Bluetooth Device"
         }
 
+        // Some OEMs expose the codec payload only through the legacy untyped Bundle API.
+        @Suppress("DEPRECATION")
         val codecStatus = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(EXTRA_CODEC_STATUS, android.bluetooth.BluetoothCodecStatus::class.java)
         } else {
@@ -337,6 +339,8 @@ class BluetoothAudioTracker(private val context: Context) {
         codecConfig: android.bluetooth.BluetoothCodecConfig,
         deviceName: String,
     ): BluetoothTelemetry {
+        // Numeric codec IDs remain the fallback below API 35 and for OEM telemetry.
+        @Suppress("DEPRECATION")
         val codecType = codecConfig.codecType
         val sampleRateMask = codecConfig.sampleRate
         val bitsMask = codecConfig.bitsPerSample

@@ -181,7 +181,7 @@ class EqualizerProcessorTest {
         processor.setTuning(enabled = true, curve = manualCurve(EqualizerPreset.BASS_BOOST.bands), balance = 0f)
         val format = AudioProcessor.AudioFormat(SAMPLE_RATE, 2, C.ENCODING_PCM_16BIT)
         processor.configure(format)
-        processor.flush()
+        processor.flush(AudioProcessor.StreamMetadata.DEFAULT)
 
         val chunk = stereoTone(1_000.0, frames = 4_096)
         drain(processor, chunk)
@@ -279,7 +279,7 @@ class EqualizerProcessorTest {
     private fun run(processor: EqualizerProcessor, input: ShortArray): ShortArray {
         val format = AudioProcessor.AudioFormat(SAMPLE_RATE, 2, C.ENCODING_PCM_16BIT)
         processor.configure(format)
-        processor.flush()
+        processor.flush(AudioProcessor.StreamMetadata.DEFAULT)
         val output = ShortArray(input.size)
         var written = 0
         var offset = 0

@@ -1,5 +1,6 @@
 package app.veyra.music.ui.components
 
+import app.veyra.music.ui.customization.artworkShape
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandHorizontally
@@ -303,8 +304,8 @@ private fun DownloadManagerRow(
                 contentDescription = null,
                 modifier = Modifier
                     .size(ART_SIZE)
-                    .clip(RoundedCornerShape(8.dp))
-                    .thumbnailBorder(RoundedCornerShape(8.dp))
+                    .clip(artworkShape(RoundedCornerShape(8.dp)))
+                    .thumbnailBorder(artworkShape(RoundedCornerShape(8.dp)))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
             )
             // A finished or failed track is stated over its own cover rather

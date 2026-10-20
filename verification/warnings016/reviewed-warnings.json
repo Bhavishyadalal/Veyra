@@ -1,0 +1,696 @@
+{
+  "reviewedWarnings": 115,
+  "fullAndroidCompileVerified": false,
+  "warnings": [
+    {
+      "path": "app/src/main/java/app/veyra/music/MainActivity.kt",
+      "originalLine": 498,
+      "warning": "'val LocalClipboardManager: ProvidableCompositionLocal<ClipboardManager>' is deprecated. Use LocalClipboard instead which supports suspend functions.",
+      "resolution": "Migrate to suspending LocalClipboard and ClipEntry inside the existing coroutine scope."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/MainActivity.kt",
+      "originalLine": 1479,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'Song'.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/MainActivity.kt",
+      "originalLine": 3248,
+      "warning": "Elvis operator (?:) always returns the left operand of non-nullable type 'String'.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/MainActivity.kt",
+      "originalLine": 3798,
+      "warning": "'val Icons.Rounded.Sort: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Sort.",
+      "resolution": "Use the AutoMirrored rounded icon and matching import."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/MainActivity.kt",
+      "originalLine": 3852,
+      "warning": "'val Icons.Rounded.Sort: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Sort.",
+      "resolution": "Use the AutoMirrored rounded icon and matching import."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/MainActivity.kt",
+      "originalLine": 4302,
+      "warning": "Condition is always 'false'.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/MainActivity.kt",
+      "originalLine": 4465,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'MediaController'.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/AppUpdateChecker.kt",
+      "originalLine": 73,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/AppUpdateChecker.kt",
+      "originalLine": 151,
+      "warning": "Elvis operator (?:) always returns the left operand of non-nullable type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/AppUpdateChecker.kt",
+      "originalLine": 219,
+      "warning": "'static field ACTION_INSTALL_PACKAGE: String' is deprecated. Deprecated in Java.",
+      "resolution": "Keep established OEM installer fallback; scoped deprecation annotation with rationale."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/canvas/AppleArtistArt.kt",
+      "originalLine": 209,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/canvas/AppleMusicCanvas.kt",
+      "originalLine": 402,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/canvas/ArtistSignatures.kt",
+      "originalLine": 233,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/canvas/CanvasHttp.kt",
+      "originalLine": 20,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/canvas/CanvasHttp.kt",
+      "originalLine": 36,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/canvas/SpotifyCanvas.kt",
+      "originalLine": 329,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/canvas/SpotifyCanvas.kt",
+      "originalLine": 363,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/canvas/SpotifyToken.kt",
+      "originalLine": 306,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/canvas/SpotifyToken.kt",
+      "originalLine": 355,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/innertube/potoken/PoTokenWebView.kt",
+      "originalLine": 387,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/remote/EmbeddedArt.kt",
+      "originalLine": 226,
+      "warning": "Redundant call of conversion method.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/remote/EmbeddedArt.kt",
+      "originalLine": 230,
+      "warning": "Redundant call of conversion method.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/remote/EmbeddedArt.kt",
+      "originalLine": 236,
+      "warning": "Redundant call of conversion method.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/remote/EmbeddedArt.kt",
+      "originalLine": 237,
+      "warning": "Redundant call of conversion method.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/remote/EmbeddedArt.kt",
+      "originalLine": 404,
+      "warning": "Redundant call of conversion method.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/remote/EmbeddedArt.kt",
+      "originalLine": 408,
+      "warning": "Redundant call of conversion method.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/remote/EmbeddedArt.kt",
+      "originalLine": 413,
+      "warning": "Redundant call of conversion method.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/remote/RemoteArtReader.kt",
+      "originalLine": 41,
+      "warning": "Elvis operator (?:) always returns the left operand of non-nullable type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/scrobbling/ListenBrainzManager.kt",
+      "originalLine": 50,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/scrobbling/ListenBrainzManager.kt",
+      "originalLine": 100,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/sources/SourceResolver.kt",
+      "originalLine": 204,
+      "warning": "No cast needed.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/sources/addon/AddonClient.kt",
+      "originalLine": 345,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/sources/addon/SourceFormats.kt",
+      "originalLine": 220,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/sources/module/ModuleManager.kt",
+      "originalLine": 139,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/sources/module/ModuleManager.kt",
+      "originalLine": 223,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/sources/module/QuickJsExecutor.kt",
+      "originalLine": 512,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/spotify/LocalPlaylistStore.kt",
+      "originalLine": 51,
+      "warning": "Java type mismatch: inferred type is 'Nothing?', but 'String' was expected.",
+      "resolution": "Use non-null empty JSON default and preserve optional metadata filtering."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/spotify/LocalPlaylistStore.kt",
+      "originalLine": 52,
+      "warning": "Java type mismatch: inferred type is 'Nothing?', but 'String' was expected.",
+      "resolution": "Use non-null empty JSON default and preserve optional metadata filtering."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/spotify/LocalPlaylistStore.kt",
+      "originalLine": 53,
+      "warning": "Java type mismatch: inferred type is 'Nothing?', but 'String' was expected.",
+      "resolution": "Use non-null empty JSON default and preserve optional metadata filtering."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/spotify/LocalPlaylistStore.kt",
+      "originalLine": 54,
+      "warning": "Java type mismatch: inferred type is 'Nothing?', but 'String' was expected.",
+      "resolution": "Use non-null empty JSON default and preserve optional metadata filtering."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/spotify/LocalPlaylistStore.kt",
+      "originalLine": 55,
+      "warning": "Java type mismatch: inferred type is 'Nothing?', but 'String' was expected.",
+      "resolution": "Use non-null empty JSON default and preserve optional metadata filtering."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/stats/ArtistFacts.kt",
+      "originalLine": 239,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/data/webdav/WebDavClient.kt",
+      "originalLine": 223,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/download/Downloader.kt",
+      "originalLine": 114,
+      "warning": "Elvis operator (?:) always returns the left operand of non-nullable type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/download/Downloader.kt",
+      "originalLine": 178,
+      "warning": "Elvis operator (?:) always returns the left operand of non-nullable type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/download/Downloader.kt",
+      "originalLine": 229,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/download/ManifestFile.kt",
+      "originalLine": 65,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/download/MediaTagger.kt",
+      "originalLine": 417,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/download/OfflineDash.kt",
+      "originalLine": 89,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/download/OfflineDash.kt",
+      "originalLine": 103,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/download/OfflineHls.kt",
+      "originalLine": 39,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/download/OfflineHls.kt",
+      "originalLine": 60,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'ResponseBody'.",
+      "resolution": "Use OkHttp 5 non-null response body; retain status, parsing and resource-lifetime handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/EqualizerProcessor.kt",
+      "originalLine": 202,
+      "warning": "This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.",
+      "resolution": "Migrate to the current Media3 callback signature and preserve reset/resumption behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 2043,
+      "warning": "Condition is always 'false'.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 6170,
+      "warning": "'fun setEnableAudioTrackPlaybackParams(p0: Boolean): DefaultAudioSink.Builder' is deprecated. Deprecated in Java.",
+      "resolution": "Use setEnableAudioOutputPlaybackParameters with the same setting value."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7393,
+      "warning": "This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.",
+      "resolution": "Retain legacy device-volume overload, explicitly mark deprecated, preserve modern flag-taking overload."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7402,
+      "warning": "This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.",
+      "resolution": "Retain legacy device-volume overload, explicitly mark deprecated, preserve modern flag-taking overload."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7411,
+      "warning": "This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.",
+      "resolution": "Retain legacy device-volume overload, explicitly mark deprecated, preserve modern flag-taking overload."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7420,
+      "warning": "This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.",
+      "resolution": "Retain legacy device-volume overload, explicitly mark deprecated, preserve modern flag-taking overload."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7785,
+      "warning": "'constructor(p0: MediaSession): MediaSession.ConnectionResult.AcceptedResultBuilder' is deprecated. Deprecated in Java.",
+      "resolution": "Pass the current session and controller to the supported constructor."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7869,
+      "warning": "'fun setFolderType(p0: Int?): MediaMetadata.Builder' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7869,
+      "warning": "'static field FOLDER_TYPE_MIXED: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7897,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7898,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7899,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7900,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7901,
+      "warning": "'static field FOLDER_TYPE_MIXED: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7904,
+      "warning": "'static field FOLDER_TYPE_MIXED: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 7905,
+      "warning": "'static field FOLDER_TYPE_MIXED: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8089,
+      "warning": "'fun setFolderType(p0: Int?): MediaMetadata.Builder' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8089,
+      "warning": "'static field FOLDER_TYPE_MIXED: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8092,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8093,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8094,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8095,
+      "warning": "'static field FOLDER_TYPE_MIXED: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8096,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8115,
+      "warning": "'static field FOLDER_TYPE_ALBUMS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8115,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8130,
+      "warning": "This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.",
+      "resolution": "Migrate to the current Media3 callback signature and preserve reset/resumption behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8409,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8419,
+      "warning": "'fun setFolderType(p0: Int?): MediaMetadata.Builder' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8474,
+      "warning": "'static field FOLDER_TYPE_ALBUMS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8474,
+      "warning": "'static field FOLDER_TYPE_PLAYLISTS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8481,
+      "warning": "'static field FOLDER_TYPE_MIXED: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8494,
+      "warning": "'fun setFolderType(p0: Int?): MediaMetadata.Builder' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8494,
+      "warning": "'static field FOLDER_TYPE_MIXED: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8494,
+      "warning": "'static field FOLDER_TYPE_ALBUMS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8522,
+      "warning": "'fun setFolderType(p0: Int?): MediaMetadata.Builder' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8522,
+      "warning": "'static field FOLDER_TYPE_ALBUMS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8552,
+      "warning": "'fun setFolderType(p0: Int?): MediaMetadata.Builder' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/PlaybackService.kt",
+      "originalLine": 8552,
+      "warning": "'static field FOLDER_TYPE_ALBUMS: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Use folder media type with explicit browsable/playable flags; preserve the folder tree."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/SpatialAudioProcessor.kt",
+      "originalLine": 151,
+      "warning": "This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.",
+      "resolution": "Migrate to the current Media3 callback signature and preserve reset/resumption behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/TransitionFilterProcessor.kt",
+      "originalLine": 246,
+      "warning": "This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.",
+      "resolution": "Migrate to the current Media3 callback signature and preserve reset/resumption behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/audio/PrecisionAudioSink.kt",
+      "originalLine": 176,
+      "warning": "'fun setPreferredBufferSizeOverride(p0: Int): AudioSink.AudioSinkConfig.Builder' is deprecated. Deprecated in Java.",
+      "resolution": "Preserve buffer override while translating precision PCM format; local compatibility annotation."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/audio/PrecisionAudioSink.kt",
+      "originalLine": 176,
+      "warning": "'field preferredBufferSizeOverride: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Preserve buffer override while translating precision PCM format; local compatibility annotation."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/audio/PrecisionAudioSink.kt",
+      "originalLine": 203,
+      "warning": "'fun setPreferredBufferSizeOverride(p0: Int): AudioSink.AudioSinkConfig.Builder' is deprecated. Deprecated in Java.",
+      "resolution": "Preserve buffer override while translating precision PCM format; local compatibility annotation."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/audio/PrecisionAudioSink.kt",
+      "originalLine": 203,
+      "warning": "'field preferredBufferSizeOverride: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Preserve buffer override while translating precision PCM format; local compatibility annotation."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/audio/bluetooth/BluetoothAudioTracker.kt",
+      "originalLine": 171,
+      "warning": "'static fun getDefaultAdapter(): BluetoothAdapter!' is deprecated. Deprecated in Java.",
+      "resolution": "Obtain the adapter from BluetoothManager; preserve lifecycle and error handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/audio/bluetooth/BluetoothAudioTracker.kt",
+      "originalLine": 196,
+      "warning": "'static fun getDefaultAdapter(): BluetoothAdapter!' is deprecated. Deprecated in Java.",
+      "resolution": "Obtain the adapter from BluetoothManager; preserve lifecycle and error handling."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/audio/bluetooth/BluetoothAudioTracker.kt",
+      "originalLine": 307,
+      "warning": "'fun get(p0: String!): Any?' is deprecated. Deprecated in Java.",
+      "resolution": "Keep older/OEM Bluetooth telemetry fallback with a scoped compatibility annotation."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/audio/bluetooth/BluetoothAudioTracker.kt",
+      "originalLine": 340,
+      "warning": "'val codecType: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Keep older/OEM Bluetooth telemetry fallback with a scoped compatibility annotation."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/playback/smart/AudioDecoder.kt",
+      "originalLine": 234,
+      "warning": "'static field INFO_OUTPUT_BUFFERS_CHANGED: Int' is deprecated. Deprecated in Java.",
+      "resolution": "Retain handling via the existing ignored-negative-output branch without the deprecated constant."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/MainViewModel.kt",
+      "originalLine": 1517,
+      "warning": "This declaration is in a preview state and can be changed in a backwards-incompatible manner with a best-effort migration. Its usage should be marked with '@kotlinx.coroutines.FlowPreview' or '@OptIn(kotlinx.coroutines.FlowPreview::class)' if you accept the drawback of relying on preview API",
+      "resolution": "Opt in on the debounced local flow declaration only."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/components/MiniPlayer.kt",
+      "originalLine": 255,
+      "warning": "Elvis operator (?:) always returns the left operand of non-nullable type 'PointerInputChange'.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/player/AndroidLyricsShareSheet.kt",
+      "originalLine": 140,
+      "warning": "'val Icons.Rounded.Undo: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Undo.",
+      "resolution": "Use the AutoMirrored rounded icon and matching import."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/player/CanvasArtworkPlayer.kt",
+      "originalLine": 86,
+      "warning": "Annotation 'androidx.media3.common.util.UnstableApi' is not annotated with '@RequiresOptIn'. '@OptIn' has no effect.",
+      "resolution": "Use AndroidX annotation opt-in for this Java marker instead of ineffective Kotlin OptIn."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/player/CanvasArtworkPlayer.kt",
+      "originalLine": 422,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'TextureView'.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/player/LyricsShareCard.kt",
+      "originalLine": 191,
+      "warning": "Redundant call of conversion method.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/screens/DetailScreen.kt",
+      "originalLine": 1241,
+      "warning": "Unnecessary safe call on a non-null receiver of type 'AppleArtistArt'.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/screens/DetailScreen.kt",
+      "originalLine": 1288,
+      "warning": "No cast needed.",
+      "resolution": "Remove the redundant operation proven by the compiler; preserve surrounding behavior."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/screens/ListenTogetherScreen.kt",
+      "originalLine": 145,
+      "warning": "'val LocalClipboardManager: ProvidableCompositionLocal<ClipboardManager>' is deprecated. Use LocalClipboard instead which supports suspend functions.",
+      "resolution": "Migrate to suspending LocalClipboard and ClipEntry inside the existing coroutine scope."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/screens/ListenTogetherScreen.kt",
+      "originalLine": 916,
+      "warning": "'val Icons.Rounded.Logout: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Logout.",
+      "resolution": "Use the AutoMirrored rounded icon and matching import."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/screens/SettingsSheet.kt",
+      "originalLine": 615,
+      "warning": "'val Icons.Rounded.VolumeUp: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.VolumeUp.",
+      "resolution": "Use the AutoMirrored rounded icon and matching import."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/screens/SettingsSheet.kt",
+      "originalLine": 1143,
+      "warning": "'val Icons.Rounded.PlaylistPlay: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.PlaylistPlay.",
+      "resolution": "Use the AutoMirrored rounded icon and matching import."
+    },
+    {
+      "path": "app/src/main/java/app/veyra/music/ui/screens/SettingsSheet.kt",
+      "originalLine": 1177,
+      "warning": "'val Icons.Rounded.VolumeOff: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.VolumeOff.",
+      "resolution": "Use the AutoMirrored rounded icon and matching import."
+    }
+  ]
+}
