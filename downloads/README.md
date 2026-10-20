@@ -55,3 +55,5 @@ The latest source refresh includes [six AI-edited Glass Noir theme icons](https:
 The refreshed preview adds [Glass Atelier: twelve standalone glass launcher icons](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/design/launcher/atelier/README.md), in a separate picker collection independent of themes. [Verification](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/verification/ATELIER-ICONS-0.1.7-beta1.md). App remains 0.1.7-beta1 / code 25; no APK is included.
 
 The latest preview adds five [Wayfarer themes](../themes/WAYFARER.md) and themed bottom navigation. Source ZIPs retain Android/backend source, theme packs/artwork/fonts and preview renderers; generated images under `themes/previews/` stay available in the GitHub gallery instead of being duplicated in every source download.
+
+The current preview also includes five [Dreamscape themes](../themes/DREAMSCAPE.md), matching optional launcher/Home icons and custom navigation/transport glyphs. [Verification](../verification/DREAMSCAPE-COLLECTION-0.1.7-beta1.md). Version remains 0.1.7-beta1 / code 25.
