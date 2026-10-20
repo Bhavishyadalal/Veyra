@@ -7,14 +7,14 @@ its licenses, manifest and cron helpers. Each has a `.zip.sha256` checksum besid
 | Track | Version | Source ZIP | Branch |
 | --- | --- | --- | --- |
 | Current stable | 0.1.6 / code 22 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.6_Stable.zip) | `main` |
-| Completed preview | 0.1.6-beta1 / code 21 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.6-beta1/downloads/Veyra_Android_Source_0.1.6-beta1.zip) | `preview/0.1.6-beta1` |
+| Current preview | 0.1.7-beta1 / code 23 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.7-beta1/downloads/Veyra_Android_Source_0.1.7-beta1.zip) | `preview/0.1.7-beta1` |
+| Earlier preview | 0.1.6-beta1 / code 21 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.6-beta1/downloads/Veyra_Android_Source_0.1.6-beta1.zip) | `preview/0.1.6-beta1` |
 | Earlier preview | 0.1.5-beta1 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip) | `preview/0.1.5-beta1` |
-| Earlier preview | 0.1.4-beta1 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.4-beta1/downloads/Veyra_Android_Source_0.1.4-beta1.zip) | `preview/0.1.4-beta1` |
 
 Extract the entire `Veyra` folder and open it in Android Studio. These are source
 projects, not APKs. Keep stable and preview directories separate. Earlier previews
 retain their historical app versions/UI and now have the backend migration;
-prefer current stable for normal use. Next preview 0.1.7-beta1 is planned; no theme-pack implementation or download exists yet. No new APK is produced here.
+prefer current stable for normal use. Preview 0.1.7-beta1 adds [Theme Studio, the Halloween pack and native previews](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/themes/README.md). Stable 0.1.6 does not include the installer. No new APK is produced here.
 
 Rooms, invites and presence use **https://veyra-listen-together.onrender.com**.
 Custom room servers remain supported. Retired operator hostnames exist only in
