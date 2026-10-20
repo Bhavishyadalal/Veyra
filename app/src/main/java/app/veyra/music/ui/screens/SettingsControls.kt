@@ -8,7 +8,6 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.FastOutSlowInEasing
 import app.veyra.music.ui.motion.VeyraMotion
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import app.veyra.music.ui.motion.veyraPressFeedback
@@ -658,7 +657,7 @@ internal fun SettingsOptionsReveal(
         visibleState = visibility,
         enter = if (reducedMotion) EnterTransition.None else
             fadeIn(tween(VeyraMotion.Feedback)) +
-                expandVertically(tween(VeyraMotion.Section, easing = FastOutSlowInEasing)),
+                expandVertically(tween(VeyraMotion.Section, easing = VeyraMotion.Easing)),
         exit = ExitTransition.None,
     ) {
         Column(Modifier.fillMaxWidth()) { content() }

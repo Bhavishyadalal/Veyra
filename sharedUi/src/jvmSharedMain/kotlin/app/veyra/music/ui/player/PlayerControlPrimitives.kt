@@ -6,7 +6,6 @@ import app.veyra.music.ui.components.VeyraSurfaces
 import app.veyra.music.ui.motion.VeyraMotion
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -65,7 +64,7 @@ internal fun PlayerControlSurface(
     val scale =
         animateFloatAsState(
             if (pressed && available && !reducedMotion) 0.95f else 1f,
-            tween(playerMotionMillis(reducedMotion, VeyraMotion.Press), easing = FastOutSlowInEasing),
+            tween(playerMotionMillis(reducedMotion, VeyraMotion.Press), easing = VeyraMotion.Easing),
             label = "playerControlPress",
         )
     val opacity =

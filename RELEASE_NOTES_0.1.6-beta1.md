@@ -1,5 +1,12 @@
 # Veyra 0.1.6-beta1 · Your Home, ready sooner
 
+## Calmer shared motion
+
+- Consistent easing and brief, coordinated page/control/drawer timings.
+- Shorter navigation travel and a bottom tab indicator that settles without repeated bounce.
+- Gentle player artwork scaling with reduced-motion support.
+- Settings category changes retain partial visibility instead of flashing from fully transparent.
+
 ## Scroll bounce refinement
 
 - Return springs start immediately when an edge pull is released, without waiting for list-fling decay.

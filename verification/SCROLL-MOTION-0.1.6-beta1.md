@@ -18,6 +18,19 @@ layer; no per-frame layout measurement or composition was added. This applies
 to descendants using the shared Compose overscroll factory, including Settings.
 Other independently implemented animations are not replaced by this change.
 
+## Calmer shared transitions
+
+Page transitions now travel a shorter distance, with a shared deceleration curve
+for navigation, Settings reveals, player drawers and player controls. Shared
+enter/exit timings are 260/200 ms, section changes 220 ms and feedback 160 ms.
+Press response stays at 100 ms. The bottom navigation spring is critically
+damped rather than repeatedly overshooting. Player artwork uses a smaller
+pause-scale change (0.92) and a bounded tween respecting reduced motion.
+Settings category fades start partially visible to avoid an abrupt blank flash.
+These changes do not add network work, permanent animation loops, or delay
+playback actions. Existing gesture-driven player-sheet physics remain intact.
+They refine the shared paths; independent specialty animations remain separate.
+
 ## Verification
 
 Android release Kotlin compilation and the eight existing motion-policy and

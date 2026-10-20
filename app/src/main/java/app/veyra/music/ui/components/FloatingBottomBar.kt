@@ -114,19 +114,8 @@ internal val TAB_VERTICAL_PADDING = 9.dp
 /** The gap between a tab's glyph and its label, in both bars. */
 internal val TAB_ICON_LABEL_GAP = 3.dp
 
-/**
- * The spring the selection indicator and the tab glyphs both travel on.
- *
- * Damping 0.72 rather than the 0.5 it was: half-damped overshoots two or three
- * times, and a run of diminishing bounces is what makes a control read as a
- * spring rather than as a material. This settles on the second approach — one
- * soft pass beyond the mark and done — which is the difference between bouncy
- * and alive.
- *
- * Stiffness 320 puts the whole movement at roughly a third of a second, quick
- * enough that the tap and the arrival feel like one event.
- */
-internal val GlassSpring = spring<Float>(dampingRatio = 0.72f, stiffness = 320f)
+/** A single calm settle shared by the tab indicator and glyphs. */
+internal val GlassSpring = spring<Float>(dampingRatio = 1f, stiffness = 320f)
 
 /**
  * How far the indicator elongates along its travel, at full stride.

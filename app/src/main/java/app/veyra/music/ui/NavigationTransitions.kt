@@ -2,7 +2,6 @@ package app.veyra.music.ui
 
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.FastOutSlowInEasing
 import app.veyra.music.ui.motion.VeyraMotion
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
@@ -23,12 +22,12 @@ fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: B
         motion == NavigationMotion.Tab ->
             (fadeIn(tween(VeyraMotion.Feedback)) togetherWith ExitTransition.None).apply { targetContentZIndex = 1f }
         motion == NavigationMotion.Back ->
-            (slideInHorizontally(tween(VeyraMotion.Enter, easing = FastOutSlowInEasing)) { -direction * it / 40 } togetherWith
-                (slideOutHorizontally(tween(VeyraMotion.Enter, easing = FastOutSlowInEasing)) { direction * it / 14 } + fadeOut(tween(VeyraMotion.Exit))))
+            (slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { -direction * it / 60 } togetherWith
+                (slideOutHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 20 } + fadeOut(tween(VeyraMotion.Exit))))
                 .apply { targetContentZIndex = -1f }
         else ->
-            ((slideInHorizontally(tween(VeyraMotion.Enter, easing = FastOutSlowInEasing)) { direction * it / 14 } + fadeIn(tween(VeyraMotion.Exit))) togetherWith
-                slideOutHorizontally(tween(VeyraMotion.Enter, easing = FastOutSlowInEasing)) { -direction * it / 40 })
+            ((slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 20 } + fadeIn(tween(VeyraMotion.Exit))) togetherWith
+                slideOutHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { -direction * it / 60 })
                 .apply { targetContentZIndex = 1f }
     }
     // Destinations own their scroll state and fill the viewport. Interpolating

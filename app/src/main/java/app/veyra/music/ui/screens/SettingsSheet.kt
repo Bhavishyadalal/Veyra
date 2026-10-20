@@ -16,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import app.veyra.music.ui.motion.VeyraMotion
 import app.veyra.music.ui.motion.rememberVeyraReducedMotion
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -410,8 +409,8 @@ fun SettingsScreen(
         if (reducedMotion || !categoryIntroduced) {
             categoryAlpha.snapTo(1f)
         } else {
-            categoryAlpha.snapTo(0f)
-            categoryAlpha.animateTo(1f, tween(VeyraMotion.Section, easing = FastOutSlowInEasing))
+            categoryAlpha.snapTo(0.55f)
+            categoryAlpha.animateTo(1f, tween(VeyraMotion.Section, easing = VeyraMotion.Easing))
         }
         categoryIntroduced = true
     }

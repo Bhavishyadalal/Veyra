@@ -15,11 +15,12 @@ import app.veyra.music.ui.player.PlayerSettings
 
 /** One finite timing scale for pages, drawers and controls. No permanent animation. */
 object VeyraMotion {
+    val Easing = androidx.compose.animation.core.CubicBezierEasing(0.2f, 0f, 0f, 1f)
     const val Press = 100
-    const val Feedback = 140
-    const val Enter = 240
-    const val Exit = 180
-    const val Section = 180
+    const val Feedback = 160
+    const val Enter = 260
+    const val Exit = 200
+    const val Section = 220
     fun duration(reduced: Boolean, millis: Int): Int = if (reduced) 0 else millis.coerceAtLeast(0)
 }
 

@@ -343,9 +343,9 @@ private const val ARTWORK_DRAG_SHRINK_SCALE = 0.94f
  * gesture specifically: it visibly lags a quick scrub and keeps settling after
  * the finger has already lifted.
  *
- * The phone layout keeps its own bouncy spring ([artScale]) — it is answering a
- * different thing there, a sleeve that also collapses into a header, and the
- * bounce is the signature.
+ * The phone layout keeps its own gentle scale ([artScale]) — it is answering a
+ * different thing there: a sleeve that also collapses into a header.
+ * A quiet settle preserves focus.
  */
 private val ArtworkScaleEasing = CubicBezierEasing(0.215f, 0.61f, 0.355f, 1f)
 private const val ARTWORK_SCALE_DURATION_MS = 500
@@ -1126,10 +1126,10 @@ fun NowPlayingScreen(
 
     // Signature Apple Music touch: the sleeve shrinks back while paused.
     val artScale by animateFloatAsState(
-        targetValue = if (isPlaying) 1f else 0.86f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioLowBouncy,
-            stiffness = Spring.StiffnessLow,
+        targetValue = if (isPlaying) 1f else 0.92f,
+        animationSpec = tween(
+            durationMillis = playerMotionMillis(reducedBackdropMotion, 260),
+            easing = app.veyra.music.ui.motion.VeyraMotion.Easing,
         ),
         label = "artScale",
     )
