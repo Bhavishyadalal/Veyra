@@ -111,7 +111,8 @@ fun GlassNavBar(
     // Held for the same reason [tabs] is. The glass factory below closes over
     // this shape, and a fresh RoundedCornerShape each pass means a fresh factory
     // lambda, which the tab bar sees as a changed argument and recomposes on.
-    val pillShape = remember { RoundedCornerShape(percent = 50) }
+    val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    val pillShape = remember(pack?.navCorner) { pack?.let { RoundedCornerShape(it.navCorner.dp) } ?: RoundedCornerShape(percent = 50) }
     val contentColor = glassContentColor()
     val selectedColor = MaterialTheme.colorScheme.onPrimaryContainer
     val selectedBackground = MaterialTheme.colorScheme.primaryContainer
@@ -233,7 +234,8 @@ fun GlassNavBar(
                                 .semantics { selected = isSelected; role = Role.Tab },
                             contentAlignment = Alignment.Center,
                         ) {
-                            Icon(
+                            app.veyra.music.ui.themes.ThemeIcon(
+                                themeKey = listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
                                 imageVector = tab.icon,
                                 contentDescription = tab.label,
                                 tint = tint,
@@ -247,7 +249,8 @@ fun GlassNavBar(
                 tab(
                     key = index,
                     icon = {
-                        Icon(
+                        app.veyra.music.ui.themes.ThemeIcon(
+                            themeKey = listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
                             imageVector = tab.icon,
                             contentDescription = tab.label,
                             tint = tint,

@@ -55,8 +55,11 @@ internal fun PlayerControlSurface(
     framed: Boolean = false,
     content: @Composable BoxScope.() -> Unit,
 ) {
+    val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    val controlTint = pack?.accent ?: tint
+    val effectiveShape = pack?.let { androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp) } ?: shape
     val contrast = LocalVeyraContrastControls.current
-    val controlBackground = if (contrast && containerColor == Color.Transparent) tint.copy(alpha = 0.12f) else containerColor
+    val controlBackground = if (contrast && containerColor == Color.Transparent) controlTint.copy(alpha = 0.12f) else if (pack != null && containerColor == Color.Transparent) pack.raised.copy(alpha=0.7f) else containerColor
     val indicatorSize = if ((visualSize ?: 48.dp) >= 64.dp) 36.dp else 24.dp
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
@@ -77,7 +80,7 @@ internal fun PlayerControlSurface(
         modifier
             .heightIn(min = VeyraSurfaces.MinTouch)
             .widthIn(min = VeyraSurfaces.MinTouch)
-            .clip(shape)
+            .clip(effectiveShape)
             .clickable(
                 interactionSource = interaction,
                 indication = null,
@@ -99,20 +102,20 @@ internal fun PlayerControlSurface(
                     scaleY = scale.value
                     alpha = opacity.value
                 }
-                .clip(shape)
+                .clip(effectiveShape)
                 .background(controlBackground)
                 .then(
-                    if (framed || contrast)
+                    if (framed || contrast || pack != null)
                         Modifier.background(
                                 Brush.verticalGradient(
-                                    listOf(tint.copy(alpha = 0.13f), Color.Transparent)
+                                    listOf(controlTint.copy(alpha = 0.13f), Color.Transparent)
                                 )
                             )
-                            .border(1.dp, tint.copy(alpha = 0.13f), shape)
+                            .border(1.dp, controlTint.copy(alpha = 0.13f), effectiveShape)
                     else Modifier
                 )
                 .background(
-                    if (pressed && available) tint.copy(alpha = 0.12f) else Color.Transparent
+                    if (pressed && available) controlTint.copy(alpha = 0.12f) else Color.Transparent
                 )
                 .clearAndSetSemantics {},
             contentAlignment = Alignment.Center,
@@ -138,7 +141,7 @@ internal fun PlayerControlSurface(
                         else
                             CircularProgressIndicator(
                                 Modifier.size(indicatorSize),
-                                color = tint,
+                                color = controlTint,
                                 strokeWidth = 2.dp,
                             )
                     } else content()
@@ -242,6 +245,7 @@ internal val LocalPlayerControlsInteractive = compositionLocalOf { true }
 @Composable
 internal fun PlayerTransportControl(
     painter: androidx.compose.ui.graphics.painter.Painter,
+    themeKey: String? = null,
     description: String,
     onClick: () -> Unit,
     iconSize: Dp,
@@ -254,6 +258,9 @@ internal fun PlayerTransportControl(
     containerColor: Color = Color.Transparent,
     heightScale: Float = 1f,
 ) {
+    val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    val path = themeKey?.let { pack?.asset(it) }
+    val themedPainter = if (path == null) painter else coil3.compose.rememberAsyncImagePainter(java.io.File(path), placeholder=painter, error=painter)
     PlayerControlSurface(
         description,
         onClick,
@@ -270,14 +277,14 @@ internal fun PlayerTransportControl(
         containerColor = if (emphasized) Color.Black.copy(alpha = 0.32f) else containerColor,
     ) {
         Crossfade(
-            painter,
+            themedPainter,
             animationSpec = tween(playerMotionMillis(reducedMotion, 150)),
             label = "playerTransportGlyph",
         ) { current ->
             androidx.compose.material3.Icon(
                 current,
                 null,
-                tint = tint,
+                tint = pack?.accent ?: tint,
                 modifier = Modifier.size(iconSize).graphicsLayer { scaleY = heightScale },
             )
         }
@@ -296,9 +303,10 @@ internal fun PlayerProgressTrack(
     fillFactor: () -> Float = { 1f },
 ) {
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    Canvas(Modifier.fillMaxWidth().height(height).graphicsLayer { scaleX = if (rtl) -1f else 1f }) {
+    val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    Canvas(Modifier.fillMaxWidth().height(if (pack == null) height else height * (pack.seekHeight/7f)).graphicsLayer { scaleX = if (rtl) -1f else 1f }) {
         val radius = androidx.compose.ui.geometry.CornerRadius(size.height / 2f)
-        drawRoundRect(inactiveColor, cornerRadius = radius)
+        drawRoundRect(pack?.outline ?: inactiveColor, cornerRadius = radius)
         transitionWindow
             ?.takeIf { it.start.isFinite() && it.endInclusive.isFinite() }
             ?.let { window ->
@@ -316,7 +324,7 @@ internal fun PlayerProgressTrack(
         val filled = size.width * playerFraction(fraction()) * factor
         if (filled > 0f)
             drawRoundRect(
-                activeColor(),
+                pack?.accent ?: activeColor(),
                 size =
                     androidx.compose.ui.geometry.Size(
                         filled.coerceAtLeast(size.height * factor).coerceAtMost(size.width),
@@ -324,6 +332,13 @@ internal fun PlayerProgressTrack(
                     ),
                 cornerRadius = radius,
             )
+        if (pack?.seekStyle == "ember" && filled > 0f && factor > 0.95f) {
+            // A quiet ember playhead, with no extra animation or input surface.
+            drawCircle(pack.accent, radius = size.height * .65f,
+                center = Offset(filled.coerceIn(0f,size.width), size.height/2))
+            drawCircle(Color(0xFFFFF1D4), radius = size.height * .22f,
+                center = Offset(filled.coerceIn(0f,size.width), size.height/2))
+        }
     }
 }
 

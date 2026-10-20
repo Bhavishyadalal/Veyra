@@ -1218,4 +1218,24 @@
     <string name="custom_reset_player">Reset player customization</string>
     <string name="custom_reset_player_hint">Restore the original menu order and turn off higher-contrast controls. Keep playback, accounts and downloads.</string>
     <string name="custom_reset_confirm">Reset</string>
+    <string name="theme_packs">Theme studio</string>
+    <string name="theme_packs_subtitle">Download artwork, fonts, icons and player styles</string>
+    <string name="theme_packs_description">A new atmosphere for every screen. Download once, keep it offline, and return to your original appearance anytime.</string>
+    <string name="theme_original">Original Veyra</string>
+    <string name="theme_active">Currently active</string>
+    <string name="theme_restore_hint">Restore your saved appearance preferences</string>
+    <string name="theme_apply">Apply theme</string>
+    <string name="theme_download">Download theme</string>
+    <string name="theme_update_required">Update Veyra first</string>
+    <string name="theme_catalog_empty">No themes loaded yet. Refresh the catalog when you are online.</string>
+    <string name="theme_refresh_catalog">Refresh theme catalog</string>
+    <string name="theme_safety_hint">A theme overrides supported colors, heading fonts and control styles until you return to Original Veyra. Your accounts, downloads, playlists and playback controls stay yours. Original appearance remains available offline.</string>
+    <string name="theme_restart_title">Apply and restart the interface?</string>
+    <string name="theme_restart_description">Veyra will refresh its screens to load the theme. Music keeps playing. Your library, accounts and original appearance preferences are preserved.</string>
+    <string name="theme_apply_restart">Apply &amp; restart UI</string>
+    <string name="theme_later">Later</string>
+    <string name="theme_remove">Remove downloaded theme</string>
+    <string name="theme_remove_description">This removes the unused theme files from this device. You can download the theme again later.</string>
+    <string name="theme_done">Done</string>
+    <string name="theme_download_update">Download theme update</string>
 </resources>

@@ -1,15 +1,15 @@
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
-> **Stable 0.1.6 / code 22:** promoted from the completed preview, with saved Home, customization, accessibility, navigation and calmer shared motion. [Release notes](RELEASE_NOTES_0.1.6.md). APK publication is pending the owner’s release.
+> **Preview 0.1.7-beta1 / code 23:** Theme Studio and Halloween Nocturne. [Theme ZIP and native previews](themes/README.md) · [Release notes](RELEASE_NOTES_0.1.7-beta1.md). Stable remains 0.1.6 / code 22; no APK is published here.
 
-> **Maintenance:** Current stable is 0.1.6 on `main`; completed preview is preserved on `preview/0.1.6-beta1`. Next preview 0.1.7-beta1 is planned, not implemented. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
+> **Maintenance:** Current stable is 0.1.6 on `main`; completed preview is preserved on `preview/0.1.6-beta1`. Current preview 0.1.7-beta1 is on `preview/0.1.7-beta1`. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
 
 
 > Android Studio import/build guide: [START_HERE.md](START_HERE.md). Historical beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
 
 # Veyra
 
-> **Stable: 0.1.6, code 22.** [Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.6_Stable.zip) · [Verification limits](verification/SCROLL-MOTION-0.1.6-beta1.md).
+> **Preview branch:** [0.1.7-beta1 Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.7-beta1/downloads/Veyra_Android_Source_0.1.7-beta1.zip). [Stable source](https://github.com/Bhavishyadalal/Veyra/tree/main) stays separate.
 
 A personal Android music player with Manrope typography, selectable launcher styles and a dark listening interface.
 
@@ -43,6 +43,14 @@ APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for 
 ## External cron and keep-alive
 
 Both stable and preview use the same backend. [Configure your external 12-minute cron job](docs/RENDER_KEEPALIVE.md), including its exact URL, method, timeout and expected response. The backend's existing GitHub schedule remains available as a fallback. No app-side background timer is required.
+
+## Preview 0.1.7-beta1 — Theme Studio
+
+Download Halloween Nocturne from Settings → Appearance → Theme studio. It includes
+original artwork, licensed fonts, custom navigation and transport glyphs, themed
+native buttons and an ember timeline. Installation is validated and applying asks
+before refreshing the UI. Original appearance, music, accounts and existing
+controls remain available. [Theme guide and native previews](themes/README.md).
 
 ## Stable 0.1.6 — Home ready sooner
 

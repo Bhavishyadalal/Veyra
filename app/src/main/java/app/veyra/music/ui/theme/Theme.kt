@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.veyra.music.data.settings.AppSettings
@@ -133,7 +134,22 @@ fun VeyraTheme(
     val subtle by AppSettings.subtleMotion.collectAsStateWithLifecycle()
     val strongerText by AppSettings.strongerText.collectAsStateWithLifecycle()
     val contrastControls by AppSettings.contrastPlayerControls.collectAsStateWithLifecycle()
+    val packState by app.veyra.music.data.themes.ThemeRepository.active.collectAsStateWithLifecycle()
+    val pack = packState
+    val manifest = pack?.let { app.veyra.music.data.themes.ThemeRepository.activeManifest() }
+    val selectedTypography = remember(pack, strongerText) {
+        val base = if (strongerText) StrongerTypography else VeyraTypography
+        if (pack == null) base else runCatching {
+            val body = FontFamily(Font(java.io.File(pack.assets.getValue("bodyFont"))))
+            val heading = FontFamily(Font(java.io.File(pack.assets.getValue("headingFont")), FontWeight.Bold))
+            val t = base.withFamily(body)
+            t.copy(displayLarge=t.displayLarge.copy(fontFamily=heading), displayMedium=t.displayMedium.copy(fontFamily=heading),
+                displaySmall=t.displaySmall.copy(fontFamily=heading), headlineLarge=t.headlineLarge.copy(fontFamily=heading),
+                headlineMedium=t.headlineMedium.copy(fontFamily=heading), headlineSmall=t.headlineSmall.copy(fontFamily=heading))
+        }.getOrDefault(base)
+    }
     CompositionLocalProvider(
+        app.veyra.music.ui.themes.LocalThemeVisuals provides pack,
         LocalArtworkCorners provides corners,
         LocalListSpacing provides spacing,
         LocalSubtleMotion provides subtle,
@@ -141,8 +157,13 @@ fun VeyraTheme(
         LocalVeyraContrastControls provides contrastControls,
     ) {
         MaterialTheme(
-            colorScheme = paletteFor(accent, darkTheme),
-            typography = if (strongerText) StrongerTypography else VeyraTypography,
+            colorScheme = manifest?.let { packPalette(it.palette) } ?: paletteFor(accent, darkTheme),
+            typography = selectedTypography,
+            shapes = if (pack == null) androidx.compose.material3.Shapes() else androidx.compose.material3.Shapes(
+                small = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),
+                medium = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.rowCorner.toFloat())),
+                large = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),
+                extraLarge = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.navCorner.toFloat()))),
             content = content,
         )
     }
@@ -185,4 +206,19 @@ private fun paletteFor(accent: AccentPalette, dark: Boolean): androidx.compose.m
         onPrimary = if (dark) Color(0xFF101715) else Color.White,
         primaryContainer = if (dark) pair.second else pair.first,
         onPrimaryContainer = if (dark) Color.White else Color(0xFF171313))
+}
+
+/** Halloween is an intentionally dark art direction, independent of the saved base theme. */
+private fun packPalette(p: app.veyra.music.data.themes.ThemePalette): androidx.compose.material3.ColorScheme {
+    fun c(value:String) = app.veyra.music.data.themes.ThemeRepository.color(value)
+    return darkColorScheme(primary=c(p.accent),onPrimary=Color(0xFF101010),
+        primaryContainer=c(p.accentContainer),onPrimaryContainer=c(p.text),
+        secondary=c(p.secondary),onSecondary=Color(0xFF101010),secondaryContainer=c(p.raised),onSecondaryContainer=c(p.text),
+        tertiary=c(p.accent),onTertiary=Color(0xFF101010),tertiaryContainer=c(p.raised),onTertiaryContainer=c(p.text),
+        background=c(p.background),onBackground=c(p.text),surface=c(p.surface),onSurface=c(p.text),
+        surfaceVariant=c(p.raised),onSurfaceVariant=c(p.muted),surfaceTint=c(p.accent),
+        outline=c(p.outline),outlineVariant=c(p.outline),inverseSurface=c(p.text),inverseOnSurface=c(p.background),
+        inversePrimary=c(p.accentContainer),surfaceBright=c(p.raised),surfaceDim=c(p.background),
+        surfaceContainerLowest=c(p.background),surfaceContainerLow=c(p.surface),surfaceContainer=c(p.surface),
+        surfaceContainerHigh=c(p.raised),surfaceContainerHighest=c(p.raised))
 }

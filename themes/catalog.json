@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "themes": [
+    {
+      "id": "halloween-nocturne",
+      "name": "Halloween Nocturne",
+      "description": "Smoked glass, warm pumpkin amber and gothic headings. Original night artwork, custom navigation glyphs, sculpted player buttons and an ember seek bar.",
+      "version": 1,
+      "minAppCode": 23,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/packs/halloween-nocturne-v1.zip",
+      "sha256": "64b54273059aed3ea4f89629008672791f4be7c6f81b999c16221c14816130ac",
+      "bytes": 567299,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/halloween-nocturne/artwork/preview.webp"
+    }
+  ]
+}

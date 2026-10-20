@@ -283,6 +283,8 @@ fun SettingsScreen(
     // Search spans all categories; an empty query shows the selected category,
     // exactly as if the field weren't there.
     var searchQuery by navigationState::query
+    var showThemeGallery by rememberSaveable { mutableStateOf(false) }
+    if (showThemeGallery) ThemeGallery(onDismiss = { showThemeGallery = false })
     var picking by remember { mutableStateOf<QualityTarget?>(null) }
     var pickingDownloadQuality by remember { mutableStateOf(false) }
     var pickingAutomixPerformance by remember { mutableStateOf(false) }
@@ -439,6 +441,7 @@ fun SettingsScreen(
                     translationY = if (reducedMotion) 0f else (1f - categoryAlpha.value) * 10.dp.toPx()
                 },
         ) {
+            if (!searching) app.veyra.music.ui.themes.ThemeAtmosphere("header", Modifier.padding(horizontal=20.dp, vertical=8.dp), compact=true)
             if (category == null && !searching) {
                 SettingsOverview(onSelect = { category = it })
             }
@@ -741,6 +744,10 @@ fun SettingsScreen(
             }
 
             SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.appearance)) {
+                row(stringResource(R.string.theme_packs), "themes", "halloween", "fonts", "icons") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.theme_packs),
+                        subtitle = stringResource(R.string.theme_packs_subtitle), onClick = { showThemeGallery = true })
+                }
                 val themeTitle = stringResource(R.string.theme)
                 row(themeTitle, "dark mode", "light mode") {
                     SettingsPresetRow(icon = Icons.Rounded.Brightness4, title = themeTitle, subtitle = "",

@@ -148,7 +148,7 @@ internal fun SettingsRow(
         }
         Row(
             Modifier.fillMaxWidth()
-                .clip(VeyraSurfaces.Row)
+                .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { RoundedCornerShape(it.rowCorner.dp) } ?: VeyraSurfaces.Row)
                 .veyraPressFeedback(interaction, tint, enabled)
                 .then(action)
                 .semantics(mergeDescendants = true) {}
@@ -170,10 +170,10 @@ internal fun SettingsRow(
                         tint = tint.copy(alpha = if (enabled) 1f else 0.45f),
                     )
                 else if (icon != null)
-                    Icon(
-                        icon,
-                        null,
-                        Modifier.size(ICON_SIZE),
+                    app.veyra.music.ui.themes.ThemeIcon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(ICON_SIZE),
                         tint = tint.copy(alpha = if (enabled) 1f else 0.45f),
                     )
             }
@@ -390,7 +390,7 @@ internal fun SegmentedControl(
             val chosen = index == selectedIndex
             Row(
                 modifier
-                    .clip(VeyraSurfaces.Row)
+                    .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { RoundedCornerShape(it.rowCorner.dp) } ?: VeyraSurfaces.Row)
                     .background(
                         if (chosen) MaterialTheme.colorScheme.primaryContainer
                         else Color.Transparent
@@ -539,7 +539,7 @@ internal fun SettingsIconChoice(
 ) {
     Column(
         modifier
-            .clip(VeyraSurfaces.Row)
+            .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { RoundedCornerShape(it.rowCorner.dp) } ?: VeyraSurfaces.Row)
             .selectable(selected = selected, role = Role.RadioButton, onClick = onSelect)
             .padding(horizontal = 8.dp, vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -711,7 +711,7 @@ internal fun SettingsPresetRow(
                     options.forEachIndexed { index, label ->
                         val selected = index == selectedIndex
                         val interaction = remember { MutableInteractionSource() }
-                        Row(Modifier.fillMaxWidth().clip(VeyraSurfaces.Row)
+                        Row(Modifier.fillMaxWidth().clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { RoundedCornerShape(it.rowCorner.dp) } ?: VeyraSurfaces.Row)
                             .veyraPressFeedback(interaction, MaterialTheme.colorScheme.primary)
                             .selectable(selected = selected, role = Role.RadioButton,
                                 interactionSource = interaction, indication = null,

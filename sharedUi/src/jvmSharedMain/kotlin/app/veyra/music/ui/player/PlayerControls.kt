@@ -66,7 +66,7 @@ import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Headphones
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -743,6 +743,13 @@ private fun TransportGlyph(
     val haptics = rememberHaptics()
     val reduceMotion = LocalPlayerReducedMotion.current
     PlayerTransportControl(painter = painterResource(icon), description = contentDescription,
+        themeKey = when (icon) {
+            Res.drawable.ic_player_play -> "play"
+            Res.drawable.ic_player_pause -> "pause"
+            Res.drawable.ic_player_next -> "next"
+            Res.drawable.ic_player_previous -> "previous"
+            else -> null
+        },
         onClick = { haptics.play(haptic); onClick() }, iconSize = size, touchSize = touchSize,
         enabled = enabled, busy = busy, emphasized = emphasized, reducedMotion = reduceMotion,
         tint = tint, containerColor = containerColor, heightScale = heightScale)

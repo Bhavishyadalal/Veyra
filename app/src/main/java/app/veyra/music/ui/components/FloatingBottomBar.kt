@@ -154,7 +154,8 @@ fun FloatingBottomBar(
     modifier: Modifier = Modifier,
 ) {
     if (tabs.isEmpty()) return
-    val pillShape = RoundedCornerShape(28.dp)
+    val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    val pillShape = RoundedCornerShape((pack?.navCorner ?: 28).dp)
     val container = MaterialTheme.colorScheme.surface
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val useGlass = LocalLiquidGlassEnabled.current && isGlassSupported()
@@ -304,6 +305,7 @@ fun FloatingBottomBar(
             val adaptiveTint = if (useGlass) glassTint else null
             tabs.forEachIndexed { index, tab ->
                 BottomBarItem(
+                    themeKey = listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
                     tab = tab,
                     selected = index == selectedIndex,
                     glassSpec = glassSpec,
@@ -319,6 +321,7 @@ fun FloatingBottomBar(
 
 @Composable
 private fun BottomBarItem(
+    themeKey: String,
     tab: BottomTab,
     selected: Boolean,
     glassSpec: AnimationSpec<Float>,
@@ -361,7 +364,8 @@ private fun BottomBarItem(
             }
             .padding(vertical = TAB_VERTICAL_PADDING),
     ) {
-        Icon(
+        app.veyra.music.ui.themes.ThemeIcon(
+            themeKey = themeKey,
             imageVector = tab.icon,
             contentDescription = null,
             tint = tint,
