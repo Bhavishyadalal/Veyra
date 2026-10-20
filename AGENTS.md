@@ -31,3 +31,11 @@
   push, rewrite history, delete tags or remove release assets without explicit scope.
 - Record verification limits honestly: focused Kotlin tests and local WebSocket
   probes do not prove a full Android build, real device behavior or live Render uptime.
+
+- Owner delegates ongoing GitHub storage housekeeping: set new Actions artifacts
+  to 7-day retention, keep APKs out of Git commits, and follow the existing
+  stable/preview source-ZIP cap. Preserve private signing backups outside Git.
+  Prefer Release assets for published APKs. Do not delete release assets, tags,
+  current user downloads, or rewrite Git history under general housekeeping.
+  Retention changes affect new artifacts; do not claim old artifacts were purged
+  or account-level storage was checked without direct evidence.
