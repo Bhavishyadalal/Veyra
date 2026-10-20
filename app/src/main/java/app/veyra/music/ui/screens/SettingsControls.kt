@@ -105,6 +105,7 @@ internal fun SettingsRow(
     onCheckedChange: ((Boolean) -> Unit)? = null,
 ) {
     val interaction = remember { MutableInteractionSource() }
+    val theme = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val scheme = MaterialTheme.colorScheme
     val tint = if (destructive) scheme.error else scheme.primary
     val action =
@@ -158,8 +159,9 @@ internal fun SettingsRow(
         ) {
             Box(
                 Modifier.size(ICON_SLOT)
-                    .clip(CircleShape)
-                    .background(if (emphasized) tint.copy(alpha = 0.10f) else Color.Transparent),
+                    .clip(if (theme != null) RoundedCornerShape(12.dp) else CircleShape)
+                    .background(if (theme != null) theme.raised else if (emphasized) tint.copy(alpha = 0.10f) else Color.Transparent)
+                    .then(if (theme != null) Modifier.border(.75.dp,theme.outline.copy(alpha=.65f),RoundedCornerShape(12.dp)) else Modifier),
                 contentAlignment = Alignment.Center,
             ) {
                 if (iconPainter != null)

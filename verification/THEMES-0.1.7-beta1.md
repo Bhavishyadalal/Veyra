@@ -28,7 +28,30 @@ The two font files retain their SIL Open Font License notices in the pack. Theme
 assets live outside Android resources, so the artwork/fonts are downloaded on
 selection rather than bundled into every APK. Only catalog metadata is bundled.
 
-## Executed checks
+## Refinement after device feedback
+
+The screenshot showed a burgundy song menu because artwork-derived palettes
+bypassed the theme. Active themes now return their validated palette before
+cover decoding, and artwork backdrops use the local themed scene. Original mode
+retains the existing cover-derived palette. The menu keeps its original actions,
+callbacks, enabled/busy rules and saveable sleep-timer/scroll behavior.
+
+Main app and Settings surfaces now draw local forest artwork, a dark readability
+scrim and a static sparse constellation. No animations or network requests were
+added to these layers. They expose no interactive semantics or pointer handlers.
+Shared thumbnail borders and actual HomeArtworkFrame components use amber edges;
+Home headings get decorative rules. Settings icons and song menu icons share
+sculpted housings. The native glass navigation surface retains its implementation.
+
+The current revision compiles Android release Kotlin and runs 18 focused JVM
+tests: pack validation (10), player quality menu (4), Settings navigation (4).
+Six native studies cover Home, player, Settings, large-text Settings and normal /
+large-text action components. Action rows in these desktop studies are illustrative;
+the background and icon housings are the actual shared components. The real Android
+sheet is not rendered by this desktop tool. Theme v1 remains immutable; v2 is a
+separate checked pack with the same supported manifest schema.
+
+## Initial implementation checks
 
 - Android release Kotlin compilation and **30 focused JVM tests**, no failures:
   theme pack (10), Settings navigation (4), navigation transitions (4), existing

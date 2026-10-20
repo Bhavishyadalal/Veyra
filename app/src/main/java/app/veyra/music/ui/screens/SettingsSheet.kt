@@ -417,10 +417,10 @@ fun SettingsScreen(
         categoryIntroduced = true
     }
 
+    Box(modifier.fillMaxSize()) {
+    app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize())
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(contentPadding),
+        modifier = Modifier.fillMaxSize().padding(contentPadding),
     ) {
         SettingsPageHeader(
             title = stringResource(if (searching) R.string.settings else category?.title ?: R.string.settings),
@@ -1399,6 +1399,7 @@ fun SettingsScreen(
                 )
             }
         }
+    }
     }
 
     picking?.let { target ->

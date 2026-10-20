@@ -60,6 +60,12 @@ fun ArtworkBackdrop(
      */
     artPx: Int = CARD_ART_PX,
 ) {
+    if (app.veyra.music.ui.themes.LocalThemeVisuals.current != null) {
+        Box(modifier.background(palette.background)) {
+            app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize())
+        }
+        return
+    }
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val canBlur = !reduceDynamicBlur && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 

@@ -288,14 +288,15 @@ internal fun HomeArtworkFrame(
     artwork: @Composable BoxScope.() -> Unit,
     action: @Composable () -> Unit,
 ) {
-    val shape = RoundedCornerShape(if (compact) 20.dp else 26.dp)
+    val theme = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    val shape = RoundedCornerShape(theme?.let { (it.rowCorner + if (compact) 4 else 10).dp } ?: if (compact) 20.dp else 26.dp)
     Box(
         modifier
             .clip(shape)
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .border(
                 1.dp,
-                if (current) accent.copy(alpha = .65f) else Color.White.copy(alpha = .12f),
+                if (current) accent.copy(alpha = .65f) else theme?.outline?.copy(alpha = .8f) ?: Color.White.copy(alpha = .12f),
                 shape,
             )
     ) {
@@ -319,7 +320,7 @@ internal fun HomeArtworkFrame(
                     Brush.verticalGradient(
                         0f to Color.Black.copy(alpha = .06f),
                         .25f to Color.Transparent,
-                        1f to Color.Black.copy(alpha = .94f),
+                        1f to (theme?.surface ?: Color.Black).copy(alpha = .96f),
                     )
                 )
         )
@@ -345,7 +346,7 @@ internal fun HomeArtworkFrame(
                 Box(
                     Modifier.size(40.dp)
                         .clip(CircleShape)
-                        .background(Color.White.copy(alpha = .18f)),
+                        .background(theme?.accent?.copy(alpha = .25f) ?: Color.White.copy(alpha = .18f)),
                     contentAlignment = Alignment.Center,
                 ) {
                     action()

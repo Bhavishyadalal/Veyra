@@ -103,6 +103,11 @@ fun rememberArtworkPalette(
     artPx: Int = CARD_ART_PX,
     keyColors: ArtworkKeyColors? = null,
 ): ArtworkPalette {
+    val theme = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    if (theme != null) return remember(theme) {
+        ArtworkPalette(theme.background, theme.surface, theme.raised, theme.accent,
+            theme.text, theme.muted, theme.outline.copy(alpha = .4f))
+    }
     val scheme = MaterialTheme.colorScheme
     val reduceAnimation by PlayerPlatform.host.settings.reduceAnimation.collectAsStateWithLifecycle()
     // Always asked, so the composable call is unconditional; handed nothing to

@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.foundation.border
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.background
@@ -30,6 +31,8 @@ data class ThemeVisuals(
     val raised: Color, val outline: Color, val rowCorner: Int, val buttonCorner: Int,
     val navCorner: Int, val assets: Map<String, String>,
     val seekStyle: String = "plain", val seekHeight: Int = 7, val version: Int = 1,
+    val background: Color = surface,
+    val text: Color = Color(0xFFFFF4E6), val muted: Color = Color(0xFFCFBDAA),
 ) {
     fun asset(key: String): String? = assets[key]
 }
@@ -70,7 +73,7 @@ fun ThemeIcon(
 fun ThemeAtmosphere(key: String, modifier: Modifier = Modifier, compact: Boolean = false) {
     val theme = LocalThemeVisuals.current ?: return
     val asset = theme.asset(key) ?: return
-    Box(modifier.fillMaxWidth().heightIn(min=if (compact) 112.dp else 168.dp)
+    Box(modifier.fillMaxWidth().heightIn(min=if (compact) 128.dp else 196.dp)
         .clip(RoundedCornerShape(theme.rowCorner.dp)).background(theme.surface)) {
         Image(rememberAsyncImagePainter(File(asset)), null,
             Modifier.matchParentSize().clearAndSetSemantics {}, contentScale = ContentScale.Crop)
@@ -99,3 +102,54 @@ fun ThemeIcon(
     modifier: Modifier = Modifier,
     tint: Color = androidx.compose.material3.LocalContentColor.current,
 ) { Icon(painter,contentDescription,modifier,tint) }
+
+
+/** Static local artwork and cached ornaments: no timers, shaders or touch interception. */
+@Composable
+fun ThemeScene(modifier: Modifier = Modifier) {
+    val theme = LocalThemeVisuals.current ?: return
+    Box(modifier.background(theme.background).clearAndSetSemantics {}) {
+        theme.asset("header")?.let { path ->
+            Image(rememberAsyncImagePainter(File(path)), null, Modifier.matchParentSize(),
+                contentScale = ContentScale.Crop, alignment = androidx.compose.ui.Alignment.CenterEnd, alpha = .34f)
+        }
+        Box(Modifier.matchParentSize().background(Brush.verticalGradient(listOf(
+            theme.background.copy(alpha = .35f), theme.background.copy(alpha = .50f),
+            theme.background.copy(alpha = .35f)))))
+        androidx.compose.foundation.Canvas(Modifier.matchParentSize()) {
+            // A restrained constellation continues beyond the hero, even deep in a feed.
+            repeat(24) { i ->
+                val x = size.width * ((i * 37 % 101) / 100f)
+                val y = size.height * ((i * 61 % 103) / 102f)
+                drawCircle(theme.accent.copy(alpha = if (i % 3 == 0) .26f else .12f),
+                    (if (i % 3 == 0) 1.3f else .7f).dp.toPx(), androidx.compose.ui.geometry.Offset(x,y))
+            }
+        }
+    }
+}
+
+/** Small decorative rule used by real section headings, without extra spoken content. */
+@Composable
+fun ThemeSectionRule(modifier: Modifier = Modifier) {
+    val theme = LocalThemeVisuals.current ?: return
+    androidx.compose.foundation.Canvas(modifier.fillMaxWidth().height(12.dp).clearAndSetSemantics {}) {
+        val y = size.height / 2
+        val c = androidx.compose.ui.geometry.Offset(4.dp.toPx(),y)
+        drawCircle(theme.accent,2.dp.toPx(),c)
+        drawLine(Brush.horizontalGradient(listOf(theme.accent.copy(alpha=.55f),Color.Transparent)),
+            androidx.compose.ui.geometry.Offset(14.dp.toPx(),y),
+            androidx.compose.ui.geometry.Offset(size.width,y), .8.dp.toPx())
+    }
+}
+
+/** Decorative icon housing only: the containing row owns its single button semantics. */
+@Composable
+fun ThemeActionEmblem(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    val theme = LocalThemeVisuals.current
+    if (theme == null) { content(); return }
+    val shape = RoundedCornerShape(12.dp)
+    Box(modifier.size(38.dp).clip(shape)
+        .background(Brush.linearGradient(listOf(theme.raised,theme.surface)))
+        .border(.75.dp, theme.outline.copy(alpha=.65f), shape),
+        contentAlignment=androidx.compose.ui.Alignment.Center) { content() }
+}

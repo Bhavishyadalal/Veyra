@@ -20,7 +20,7 @@ sourceSets.main {
     kotlin.include("RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt",
         "**/PlayerControlPrimitives.kt", "**/PlayerInteractionPolicy.kt", "**/PlayerScrubState.kt",
         "**/ReadableLayout.kt", "**/Customization.kt", "**/VeyraSurfaces.kt", "**/VeyraMotion.kt", "**/VeyraIcons.kt", "**/SettingsIcons.kt",
-        "SettingsControls.kt", "VeyraSwitchColors.kt")
+        "SettingsControls.kt", "VeyraSwitchColors.kt", "**/HomeComponents.kt")
 }
 application {
     mainClass.set("app.veyra.music.ui.player.RenderThemesKt")

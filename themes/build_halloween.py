@@ -39,11 +39,11 @@ if 'LICENSE.txt' in files:
  (base/'licenses').mkdir(exist_ok=True);(base/'LICENSE.txt').replace(base/'licenses/ARTWORK.txt')
  files={str(p.relative_to(base)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(base.rglob('*')) if p.is_file() and p.name!='theme.json'}
 manifest={'schema':1,'id':'halloween-nocturne','name':'Halloween Nocturne','author':'Bhavishya Dalal',
- 'version':1,'minAppCode':23,'palette':{'background':'#0D0B09','surface':'#17120F','raised':'#261D17',
+ 'version':2,'minAppCode':23,'palette':{'background':'#0D0B09','surface':'#17120F','raised':'#261D17',
  'accent':'#FFC17A','accentContainer':'#54321A','text':'#FFF4E6','muted':'#CFBDAA','outline':'#6C5038','secondary':'#C6D2AE'},
  'rowCorner':14,'buttonCorner':18,'navCorner':26,'seekStyle':'ember','seekHeight':8,'assets':assets,'files':files}
 (base/'theme.json').write_text(json.dumps(manifest,indent=2)+'\n')
-pack=root/'packs/halloween-nocturne-v1.zip';pack.parent.mkdir(exist_ok=True)
+pack=root/'packs/halloween-nocturne-v2.zip';pack.parent.mkdir(exist_ok=True)
 with zipfile.ZipFile(pack,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
  for p in sorted(base.rglob('*')):
   if p.is_file():
@@ -52,8 +52,8 @@ with zipfile.ZipFile(pack,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
 digest=hashlib.sha256(pack.read_bytes()).hexdigest();pack.with_suffix('.zip.sha256').write_text(f'{digest}  {pack.name}\n')
 url='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.7-beta1/themes/'
 catalog={'schema':1,'themes':[{'id':manifest['id'],'name':manifest['name'],
- 'description':'Smoked glass, warm pumpkin amber and gothic headings. Original night artwork, custom navigation glyphs, sculpted player buttons and an ember seek bar.',
- 'version':1,'minAppCode':23,'url':url+'packs/'+pack.name,'sha256':digest,'bytes':pack.stat().st_size,
+ 'description':'Smoked glass, warm pumpkin amber and gothic headings. Moonlit forest atmosphere throughout the interface, framed artwork, themed song menus, custom navigation glyphs, sculpted buttons and an ember seek bar.',
+ 'version':2,'minAppCode':23,'url':url+'packs/'+pack.name,'sha256':digest,'bytes':pack.stat().st_size,
  'preview':url+'halloween-nocturne/artwork/preview.webp'}]}
 (root/'catalog.json').write_text(json.dumps(catalog,indent=2)+'\n')
 (root.parent/'app/src/main/assets/theme-catalog.json').write_text(json.dumps(catalog,indent=2)+'\n')

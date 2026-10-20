@@ -2547,6 +2547,7 @@ private fun VeyraApp(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
+        app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize())
         // A pushed album/artist/playlist page replaces the tab content but
         // leaves the tab bar and mini player in place.
         // Replay's three layers unwind in the order they were opened. Ahead of

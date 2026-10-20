@@ -3,7 +3,7 @@
   "id": "halloween-nocturne",
   "name": "Halloween Nocturne",
   "author": "Bhavishya Dalal",
-  "version": 1,
+  "version": 2,
   "minAppCode": 23,
   "palette": {
     "background": "#0D0B09",
@@ -42,9 +42,9 @@
     "download": "icons/download.png"
   },
   "files": {
-    "artwork/header.webp": "bb158ae2248b2a11f8a93e8019ca5ed00dfa5616aaa08f6dad1bc097178136cd",
+    "artwork/header.webp": "d2b53b7d1e4060865b432499ce536d734bd87f4ac29f89f2765cab625cbd8a94",
     "artwork/player.webp": "30161baf86bb805fdca485aa1f19355274ab4b90ea7a9675ee0db6fbacabe194",
-    "artwork/preview.webp": "0fee66d897e6628aebf25ee1d86be0b8a32fc2c6057e93041b1c7639faf9c610",
+    "artwork/preview.webp": "c1dac7601c6e2e95afd3be54fc97eeae34403e5a5cdde0c4a4621eef749459ee",
     "fonts/GrenzeGotisch-OFL.txt": "9cf7c9ed6ffce550b62663cf49e61869d288ccd218d4ff472a7b721c61c9456a",
     "fonts/GrenzeGotisch.ttf": "701b299d8dc002a2b4bea2ff0f1272c0e4081a2835914354804565c410d0c637",
     "fonts/Manrope-OFL.txt": "d6a309fcfb963d329a93baf9df66fa5f3c23a4be2b5f67edf24d6cafecde12ac",

@@ -9,6 +9,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.automirrored.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ImageComposeScene
 import androidx.compose.ui.Alignment
@@ -25,6 +28,7 @@ import androidx.compose.ui.text.platform.Font
 import androidx.compose.ui.unit.*
 import app.veyra.music.ui.themes.*
 import app.veyra.music.ui.icons.*
+import app.veyra.music.ui.screens.HomeArtworkFrame
 import app.veyra.music.ui.screens.SettingsRow
 import app.veyra.music.ui.screens.SettingsPresetRow
 import java.io.File
@@ -85,14 +89,14 @@ private fun bitmap(path:String)=Image.makeFromEncoded(File(dir,path).readBytes()
     Column(Modifier.fillMaxSize().padding(20.dp),verticalArrangement=Arrangement.spacedBy(18.dp)) {
         Header("Listen now")
         ThemeAtmosphere("header")
-        Text("After dark, all yours.",style=MaterialTheme.typography.headlineMedium)
+        Column { ThemeSectionRule(); Text("After dark, all yours.",style=MaterialTheme.typography.headlineMedium) }
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp)) {
             listOf("Moonlit sessions","Midnight stories").forEachIndexed { i,name ->
                 Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                    Image(bitmap(if(i==0)"artwork/player.webp" else "artwork/header.webp"),null,
-                        Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(14.dp)),contentScale=ContentScale.Crop)
-                    Text(name,style=MaterialTheme.typography.titleMedium)
-                    Text("Find your frequency",style=MaterialTheme.typography.bodySmall,color=colors.onSurfaceVariant)
+                    HomeArtworkFrame(name,"Find your frequency",compact=true,current=false,currentLabel="Playing",accent=amber,
+                        modifier=Modifier.fillMaxWidth().aspectRatio(.78f),
+                        artwork={ Image(bitmap(if(i==0)"artwork/player.webp" else "artwork/header.webp"),null,
+                            Modifier.fillMaxSize(),contentScale=ContentScale.Crop) },action={})
                 }
             }
         }
@@ -138,18 +142,44 @@ private fun bitmap(path:String)=Image.makeFromEncoded(File(dir,path).readBytes()
         Text("Your accounts, music and saved preferences stay unchanged.",style=MaterialTheme.typography.bodySmall,color=colors.onSurfaceVariant)
     }
 }
+@Composable private fun Actions() {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal=20.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
+        Spacer(Modifier.height(12.dp))
+        Box(Modifier.align(Alignment.CenterHorizontally).size(34.dp,4.dp).background(amber.copy(alpha=.45f),RoundedCornerShape(4.dp)))
+        ThemeSectionRule()
+        Row(Modifier.padding(vertical=16.dp),verticalAlignment=Alignment.CenterVertically) {
+            Image(bitmap("artwork/player.webp"),null,Modifier.size(64.dp).clip(RoundedCornerShape(12.dp)),contentScale=ContentScale.Crop)
+            Column(Modifier.weight(1f).padding(start=14.dp)) {
+                Text("A different kind of night",style=MaterialTheme.typography.titleMedium)
+                Text("Your music · Halloween Nocturne",style=MaterialTheme.typography.bodySmall,color=colors.onSurfaceVariant)
+            }
+        }
+        val glyphs=listOf(Icons.AutoMirrored.Rounded.Undo,Icons.Rounded.Download,Icons.Rounded.Radio,Icons.AutoMirrored.Rounded.PlaylistPlay,Icons.AutoMirrored.Rounded.QueueMusic,Icons.Rounded.Album,Icons.Rounded.Person,Icons.Rounded.Bedtime,Icons.Rounded.Tune,Icons.Rounded.Share,Icons.Rounded.BugReport)
+        val labels=listOf("Revert to original","Download","Start radio","Play next","Add to queue","Open album","Open artist","Sleep timer","Lyrics offset","Share","Copy log")
+        labels.forEachIndexed { i,label ->
+            if(i in listOf(1,5,7)) HorizontalDivider(color=pack.outline.copy(alpha=.4f),modifier=Modifier.padding(vertical=6.dp))
+            Row(Modifier.fillMaxWidth().heightIn(min=60.dp).padding(vertical=10.dp),verticalAlignment=Alignment.CenterVertically) {
+                ThemeActionEmblem { ThemeIcon(glyphs[i],null,Modifier.size(22.dp),tint=amber) }
+                Text(label,Modifier.weight(1f).padding(start=14.dp),style=MaterialTheme.typography.bodyLarge)
+            }
+        }
+    }
+}
 private fun SemanticsNode.flatten():List<SemanticsNode> = listOf(this)+children.flatMap{it.flatten()}
 fun main() {
     val output=File(root,"themes/previews").apply{mkdirs()}
     val results=mutableListOf<String>()
-    for(kind in listOf("home","player","settings","settings-large-text")) {
+    for(kind in listOf("home","player","settings","settings-large-text","actions","actions-large-text")) {
         val width=if(kind.endsWith("large-text"))320 else 390
         lateinit var scene: ImageComposeScene
         SwingUtilities.invokeAndWait { scene=ImageComposeScene(width*2,1800,density=Density(2f,if(kind.endsWith("large-text"))1.5f else 1f)) {
             CompositionLocalProvider(LocalThemeVisuals provides pack) {
                 MaterialTheme(colorScheme=colors,typography=typography) {
                     Surface(Modifier.fillMaxSize(),color=colors.background) {
-                        when(kind){"home"->Home();"player"->Player();else->Settings()}
+                        Box(Modifier.fillMaxSize()) {
+                            ThemeScene(Modifier.matchParentSize())
+                            when { kind=="home"->Home();kind=="player"->Player();kind.startsWith("actions")->Actions();else->Settings() }
+                        }
                     }
                 }
             }

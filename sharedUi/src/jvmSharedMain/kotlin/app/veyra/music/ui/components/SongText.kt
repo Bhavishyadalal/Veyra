@@ -34,7 +34,8 @@ import app.veyra.music.data.model.Song
 fun Modifier.thumbnailBorder(shape: Shape): Modifier = composed {
     this.border(
         width = 1.dp,
-        color = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.15f) else Color.Black.copy(alpha = 0.15f),
+        color = app.veyra.music.ui.themes.LocalThemeVisuals.current?.outline?.copy(alpha = .75f)
+            ?: if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.15f) else Color.Black.copy(alpha = 0.15f),
         shape = shape
     )
 }

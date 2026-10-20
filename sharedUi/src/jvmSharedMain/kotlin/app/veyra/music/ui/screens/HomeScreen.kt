@@ -600,6 +600,7 @@ internal fun SectionHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
+            app.veyra.music.ui.themes.ThemeSectionRule(Modifier.padding(end = 24.dp))
             Text(
                 modifier = Modifier.semantics { heading() },
                 text = displayTitle,

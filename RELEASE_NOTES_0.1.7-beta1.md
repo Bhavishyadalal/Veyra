@@ -36,3 +36,16 @@ Original Veyra. No executable theme code or replacement action logic is accepted
 No APK was assembled or release uploaded during this work. Build the preview by
 starting a **new** Android Release APK workflow on `preview/0.1.7-beta1`; re-running
 an older workflow run uses its original commit.
+
+## Halloween refinement · theme pack v2
+
+- Persistent moonlit forest atmosphere on the main app surface and Settings.
+- Amber artwork frames, warmer Home tile captions and decorative section rules.
+- Theme colors now take priority over cover-derived colors in song sheets and
+  detail palettes; original Veyra keeps its artwork-color behavior.
+- Refined song menu icon housings, track header and action grouping; all original
+  callbacks, online/offline rules, sleep timer and quality controls remain.
+- Matching Settings icon surfaces and a framed native navigation bar.
+- New original artwork; v2 installs alongside v1 until explicitly applied.
+
+Source-only update. Stable 0.1.6 is unchanged; no APK is produced here.

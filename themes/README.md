@@ -7,9 +7,26 @@ Smoked black glass, pumpkin amber, moonlit artwork and gothic display type.
 Body copy stays readable; music artwork, navigation destinations and action
 callbacks keep their original meaning.
 
-[Download the theme ZIP](packs/halloween-nocturne-v1.zip) · [SHA-256](packs/halloween-nocturne-v1.zip.sha256)
+[Download the theme ZIP](packs/halloween-nocturne-v2.zip) · [SHA-256](packs/halloween-nocturne-v2.zip.sha256)
 · [Catalog](catalog.json) · [Manifest](halloween-nocturne/theme.json)
 · [Offline preview gallery](index.html)
+
+## Refined Halloween theme · pack v2
+
+- New original moonlit-forest artwork and a persistent, darkened atmosphere behind
+  main screens and Settings, including when Home is scrolled beyond its header.
+- Amber frames on shared thumbnails and Home feature tiles, warmer caption
+  gradients, ornamental section rules and a framed navigation surface.
+- Song sheets and artwork-derived detail palettes now honor the active theme.
+  Red album covers no longer turn the selected Halloween theme burgundy.
+- Song menu icons have matching sculpted housings, a larger track thumbnail and
+  clearer action groups. All existing actions and eligibility rules remain.
+- Settings icon housings match the menu and player styling. Background layers
+  have no pointer handlers, network fetches, continuous timers or shaders.
+
+Build the latest preview source for the new interface changes. In Theme studio,
+choose the version 2 update, download it, then Apply. Existing v1 installations
+remain usable until you choose to update; the original v1 ZIP is preserved.
 
 ## Use it in the app
 
@@ -41,12 +58,20 @@ glass implementation, labels, touch handling and destinations.
 | --- | --- |
 | <img src="previews/settings.png" width="280" alt="Halloween Settings controls" /> | <img src="previews/settings-large-text.png" width="280" alt="Large-text Settings layout" /> |
 
+| Song actions study | 320 dp, 150% text action study |
+| --- | --- |
+| <img src="previews/actions.png" width="280" alt="Themed action icon and background components" /> | <img src="previews/actions-large-text.png" width="280" alt="Large-text action components" /> |
+
+The action studies use the real shared background/icon housing with illustrative
+menu rows; the Android sheet itself is checked by Android Kotlin compilation,
+not rendered as a full Android window here.
+
 ## What a theme can change
 
 | Component | Theme-owned presentation | Preserved behavior |
 | --- | --- | --- |
 | App screens | Dark palette, surfaces, heading/body fonts, Material shape roles | Content, route hierarchy, system font scaling |
-| Home / Settings | Original decorative header artwork | Songs, account access, search and scroll state |
+| Home / Settings | Persistent atmosphere, artwork frames, section details and icon housings | Songs, account access, search and scroll state |
 | Navigation | Home/Search/Explore/Library glyphs, container radius and colors | Labels, accessibility roles, destinations and gestures |
 | Player buttons | Native framed surfaces, corner geometry and transport icon assets | Play/pause/skip, busy/locked states, haptics, touch targets |
 | Player timeline | Accent fill, track thickness and ember playhead | Seek gestures, RTL, elapsed/duration, loading/mix feedback |

@@ -3,4 +3,6 @@ player: native Compose components rendered at 390 dp
 Themed transport delivered its native callback once; hit target at least 48 dp.
 settings: native Compose components rendered at 390 dp
 settings-large-text: native Compose components rendered at 320 dp
+actions: native Compose components rendered at 390 dp
+actions-large-text: native Compose components rendered at 320 dp
 Native component studies, not full-device screenshots. Album artwork in the sample player is demonstration art.

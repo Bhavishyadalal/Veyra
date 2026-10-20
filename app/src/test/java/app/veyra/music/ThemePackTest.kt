@@ -21,16 +21,16 @@ class ThemePackTest {
     }
     private fun listing(file: File) = catalog().copy(bytes=file.length(),sha256=ThemePack.sha256(file.readBytes()))
     @Test fun officialPackInstallsWithExactlyItsDeclaredAssetsAndNoExecutableContent() {
-        val pack=File(project,"themes/packs/halloween-nocturne-v1.zip")
+        val pack=File(project,"themes/packs/halloween-nocturne-v2.zip")
         val root=temp.newFolder()
         val (m,dir)=ThemePack.install(pack,root,catalog(),23)
-        assertEquals("halloween-nocturne-v1",dir.name)
+        assertEquals("halloween-nocturne-v2",dir.name)
         assertEquals(manifest(),m)
         assertEquals(m.files.keys+"theme.json",dir.walkTopDown().filter{it.isFile}.map{it.relativeTo(dir).invariantSeparatorsPath}.toSet())
         assertEquals(setOf(dir.name),root.list()!!.toSet())
     }
     @Test fun decoderFailurePreservesAnExistingWorkingInstallation() {
-        val pack=File(project,"themes/packs/halloween-nocturne-v1.zip")
+        val pack=File(project,"themes/packs/halloween-nocturne-v2.zip")
         val root=temp.newFolder()
         val (_,dir)=ThemePack.install(pack,root,catalog(),23)
         val original=File(dir,"theme.json").readBytes()
