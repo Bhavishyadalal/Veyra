@@ -2,7 +2,7 @@
 
 - Current stable Android source: `main` and `stable/0.1.6`, version 0.1.6 / code 22.
   Completed preview `preview/0.1.6-beta1` remains version 0.1.6-beta1 / code 21.
-  Current preview `preview/0.1.7-beta1`, version 0.1.7-beta1 / code 24, adds Theme Studio, Web Slinger, Halloween Nocturne and optional themed launcher icons.
+  Current preview `preview/0.1.7-beta1`, version 0.1.7-beta1 / code 25, adds Theme Studio, Playtime Club, Web Slinger, Halloween Nocturne and optional themed launcher icons.
   Keep future preview features out of stable until the owner promotes them.
   Older branches retain their historical Android code and version.
 - For app/version/download changes, also update and push the separate website
