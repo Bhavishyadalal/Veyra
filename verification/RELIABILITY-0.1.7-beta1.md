@@ -15,7 +15,7 @@ Prepared 21 October 2026. Made by Bhavishya Dalal.
 ## Validation
 
 - Android resource generation and Kotlin/Java compilation passed through `:app:testProdDebugUnitTest`.
-- 93 focused JUnit tests passed: PreviewReliabilityTest 4, DownloadSessionTest 19, QueueCoordinatorTest 44, QueueUrlWarmupTest 5, ListenTogetherIdleHealthTest 5, ThemePackTest 13, ThemeLauncherTest 3. Zero failures/errors. A final download-admission ordering refinement is additionally checked with the 23 recovery/session tests.
+- 93 focused JUnit tests passed: PreviewReliabilityTest 4, DownloadSessionTest 19, QueueCoordinatorTest 44, QueueUrlWarmupTest 5, ListenTogetherIdleHealthTest 5, ThemePackTest 13, ThemeLauncherTest 3. Zero failures/errors. A final download-admission ordering refinement is additionally checked with the 23 recovery/session tests. The retained Undo callback uses a Compose-updated controller reference; its lifecycle guard is compiled and checked with the 48 reliability/queue tests.
 - `python3 scripts/verify_app_backend.py` passed: official Veyra endpoint, migration and token guards present.
 - Actual shared `ThemeApplyOptions` rendered at 390 dp, 320 dp/150% text, and 320 dp/150% text/RTL. Images inspected for wrapping and overlap. Each study verifies two checkbox semantics targets, each at least 48 dp high, and delivers the matching-icon callback exactly once. [Studies](reliability-preview/).
 - Website: `npm run typecheck`, `npm run build`, and the `FAQ and external download links` Playwright test passed on mobile and desktop Chromium (2 tests).

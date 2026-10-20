@@ -960,6 +960,7 @@ private fun VeyraApp(
         }
     }
     val controller = rememberMediaController()
+    val liveQueueController = androidx.compose.runtime.rememberUpdatedState(controller)
     val player = rememberPlayerState(controller)
     // A resume in a party is performed on the instant the server schedules, not
     // when it was pressed, and nothing about the player moves in between — so
@@ -1003,7 +1004,7 @@ private fun VeyraApp(
         queueNoticeId += 1
         queueNotice = QueueActionNotice(queueNoticeId, context.getString(R.string.queue_removed, removed.size),
             if (!canUndo) null else ({
-                if (controller === c && !ListenTogether.state.value.inParty && snapshot.canRestore(
+                if (liveQueueController.value === c && !ListenTogether.state.value.inParty && snapshot.canRestore(
                         (0 until c.mediaItemCount).map { queueIdentity(c.getMediaItemAt(it)) },
                         c.currentMediaItem?.let(::queueIdentity))) {
                     snapshot.removed.forEach { (index, item) -> c.addMediaItem(index, item) }
