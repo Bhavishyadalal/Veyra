@@ -59,3 +59,5 @@ The latest preview adds five [Wayfarer themes](../themes/WAYFARER.md) and themed
 The current preview also includes five [Dreamscape themes](../themes/DREAMSCAPE.md), matching optional launcher/Home icons and custom navigation/transport glyphs. [Verification](../verification/DREAMSCAPE-COLLECTION-0.1.7-beta1.md). Version remains 0.1.7-beta1 / code 25.
 
 The current preview adds twenty [Worlds themes](../themes/WORLDS.md), bringing the catalog to 41 themes and the picker to 69 icons. Rebuild the latest preview: older builds retain a 24-theme catalog cap and cannot add launcher aliases through packs. App remains 0.1.7-beta1 / code 25. [Verification](../verification/WORLDS-COLLECTION-0.1.7-beta1.md).
+
+Latest preview maintenance: [submission review, bug fixes and verification limits](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/verification/SUBMISSION-REVIEW-0.1.7-beta1.md).
