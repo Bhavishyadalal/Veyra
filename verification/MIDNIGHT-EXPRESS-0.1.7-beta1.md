@@ -65,8 +65,8 @@ verified, not regenerated from preview. It is **42,796,227 bytes**, version
 
 `4f062857d87810cf207e3cd27b66b4eba8a9876ff57eac5fe87cd733ad24c7f3`
 
-[Stable Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.6_Stable.zip)
-· [Checksum](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.6_Stable.zip.sha256).
+[Stable Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/466433e6e8f29666af1cfb012b14b4a8c77b7ad7/downloads/Veyra_Android_Source_0.1.6_Stable.zip)
+· [Checksum](https://github.com/Bhavishyadalal/Veyra/raw/466433e6e8f29666af1cfb012b14b4a8c77b7ad7/downloads/Veyra_Android_Source_0.1.6_Stable.zip.sha256).
 It remains unchanged. A source ZIP is not an APK: build/sign with the intended
 release key, then upload the resulting APK to the appropriate release.
 

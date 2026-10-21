@@ -1,10 +1,13 @@
 # Veyra maintenance rules
 
-- Current stable Android source: `main` and `stable/0.1.6`, version 0.1.6 / code 22.
-  Completed preview `preview/0.1.6-beta1` remains version 0.1.6-beta1 / code 21.
-  Current preview `preview/0.1.7-beta1`, version 0.1.7-beta1 / code 25, includes Theme Studio, forty-one published themes (the previous twenty-one plus twenty Worlds themes) and optional themed launcher icons. Glass Atelier adds twelve separate launcher choices without theme bindings.
-  Keep future preview features out of stable until the owner promotes them.
-  Older branches retain their historical Android code and version.
+- Current stable Android source: `main` and `stable/0.1.7`, version 0.1.7 / code 26.
+  Promoted from preview commit `466433e6e8f29666af1cfb012b14b4a8c77b7ad7` at the owner's request.
+  Includes Theme Studio, forty-one published themes and sixty-nine optional launcher choices.
+  `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
+  `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
+  Keep future preview features out of stable until the owner explicitly promotes them.
+  Promotion does not establish APK publication, device validation or clean lint: see
+  `verification/STABLE-0.1.7-PROMOTION.md` and the preserved submission-review inventory.
 - For app/version/download changes, also update and push the separate website
   repository `Bhavishyadalal/Veyra-website`. This is the owner's standing request.
   Read its `AGENTS.md`; update `src/config.js` source/checksum/change-note links,

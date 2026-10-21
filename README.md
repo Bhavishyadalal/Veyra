@@ -1,3 +1,5 @@
+> **Historical branch:** Android source/version here is preserved. Current stable is [Veyra 0.1.7 / code 26](https://github.com/Bhavishyadalal/Veyra/tree/main). [Current source downloads](https://github.com/Bhavishyadalal/Veyra/blob/main/downloads/README.md). Status text below describes this branch before promotion.
+
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
 > **Preview 0.1.7-beta1 / code 25:** Theme Studio, Midnight Express, Astral Tide, Playtime Club, Web Slinger, Halloween Nocturne and optional matching launcher icons. [Theme ZIP and native previews](themes/README.md) · [Release notes](RELEASE_NOTES_0.1.7-beta1.md). Stable remains 0.1.6 / code 22; no APK is published here.
