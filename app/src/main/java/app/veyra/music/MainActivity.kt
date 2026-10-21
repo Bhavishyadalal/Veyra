@@ -522,7 +522,10 @@ private fun VeyraApp(
     // What folds [GlassNavBar] between its expanded and inline shapes. Held here
     // rather than inside the bar because the page's scroll is what drives it,
     // and the page is a sibling of the bar rather than a child.
+    val scrollPlayerAnimations by AppSettings.scrollPlayerAnimations.collectAsStateWithLifecycle()
+    val foldingNavigation = scrollPlayerAnimations && !rememberVeyraReducedMotion()
     val navBarScroll = rememberFloatingTabBarScrollConnection()
+    LaunchedEffect(foldingNavigation) { navBarScroll.expand() }
     val rootExperience = remember {AppSettings.experience.map {it.forAppRoot()}.distinctUntilChanged()}
     val experience by rootExperience.collectAsStateWithLifecycle(initialValue=AppSettings.experience.value.forAppRoot())
     var selectedTab by rememberSaveable { mutableIntStateOf(AppSettings.experience.value.startupTab.takeIf {it in 0..3} ?: 0) }
@@ -2710,7 +2713,8 @@ private fun VeyraApp(
         // a row, and the player is the right. Off a tablet the row has the
         // one child it always had and changes nothing.
         Row(Modifier.fillMaxSize()) {
-            Box(Modifier.weight(1f).fillMaxHeight()) {
+            Box(Modifier.weight(1f).fillMaxHeight()
+                .then(if (foldingNavigation) Modifier.nestedScroll(navBarScroll) else Modifier)) {
                 val destinationKey = when {
                     showSpotify && detail == null -> "spotify"
                     showDiscord -> "discord"
@@ -2757,28 +2761,7 @@ private fun VeyraApp(
                     },
                     modifier = Modifier
                         .hazeSource(hazeState)
-                        .then(
-                            if (glassActive) {
-                                Modifier
-                                    // Not under "reduce dynamic blur": nothing
-                                    // samples the layer then, and recording a
-                                    // whole page into one for no reader is the
-                                    // cost that setting exists to remove.
-                                    .then(
-                                        if (glassSamplesBackdrop) {
-                                            Modifier.layerBackdrop(appBackdrop)
-                                        } else {
-                                            Modifier
-                                        },
-                                    )
-                                    // Every page's scroll passes through here, so
-                                    // the glass bar collapses on all of them
-                                    // without each one having to know about it.
-                                    .nestedScroll(navBarScroll)
-                            } else {
-                                Modifier
-                            },
-                        ),
+                        .then(if (glassSamplesBackdrop) Modifier.layerBackdrop(appBackdrop) else Modifier),
                     label = "content",
                 ) { destination ->
                     val key = destination.key
@@ -4096,7 +4079,7 @@ private fun VeyraApp(
                     }
                 }
 
-                if (glassActive) Column(
+                if (foldingNavigation) Column(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .widthIn(max = FLOATING_BAR_MAX_WIDTH)
@@ -4104,10 +4087,8 @@ private fun VeyraApp(
                         .onSizeChanged { floatingBarsHeight.intValue = it.height },
                 ) {
                     QueueActionNoticeHost(queueNotice)
-                    // Liquid glass replaces the two stacked bars with the single
-                    // component they are stacked to imitate: the now playing
-                    // controls dock into the tab bar rather than riding above it,
-                    // and the pair folds together on scroll. See [GlassNavBar].
+                    // The shared folding layout uses glass or tonal material;
+                    // its animation preference is independent of Liquid Glass.
                     GlassNavBar(
                         tabs = navigationTabs,
                         selectedIndex = navigationSelection,

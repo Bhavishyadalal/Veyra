@@ -86,9 +86,9 @@ import app.veyra.music.ui.player.PlayerDock
  * [scrollConnection], which the page's scroll has to be dispatched into for any
  * of this to move; see MainActivity's `nestedScroll`.
  *
- * Every surface here samples the app backdrop through [Modifier.liquidGlass], so
- * this is only ever used where that is supported and switched on — off either,
- * MainActivity draws [MiniPlayer] and [FloatingBottomBar] instead.
+ * Folding is independent of material. Glass samples the app backdrop only when
+ * enabled and supported; otherwise surfaces use opaque theme-aware tonal fills.
+ * MainActivity uses stacked bars when scroll-player animations are disabled.
  *
  * [song] null means nothing is playing, and the accessory is simply absent: the
  * bar is then the tab pill and Search alone, and the collapse still works.
@@ -121,7 +121,8 @@ fun GlassNavBar(
     val experience by AppSettings.experience.collectAsStateWithLifecycle()
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val pillShape = remember(pack?.navCorner) { pack?.let { RoundedCornerShape(it.navCorner.dp) } ?: RoundedCornerShape(percent = 50) }
-    val contentColor = pack?.text ?: glassContentColor()
+    val glassEnabled = LocalLiquidGlassEnabled.current && isGlassSupported()
+    val contentColor = pack?.text ?: if (glassEnabled) glassContentColor() else MaterialTheme.colorScheme.onSurface
     val selectedColor = MaterialTheme.colorScheme.onPrimaryContainer
     val selectedBackground = MaterialTheme.colorScheme.primaryContainer
     val unselectedColor = pack?.muted ?: contentColor.copy(alpha = 0.65f)
@@ -142,8 +143,13 @@ fun GlassNavBar(
     // A factory, not a value — see the note in FloatingTabBar's header. Each of
     // the three surfaces gets its own glass modifier and so its own shape cache.
     val glassSurface: @Composable () -> Modifier = {
-        if (pack != null) Modifier.themeNavigationSurface(pillShape)
-        else Modifier.liquidGlass(shape = pillShape)
+        when {
+            pack != null -> Modifier.themeNavigationSurface(pillShape)
+            glassEnabled -> Modifier.liquidGlass(shape = pillShape)
+            else -> Modifier.clip(pillShape)
+                .background(MaterialTheme.colorScheme.surfaceContainer, pillShape)
+                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, pillShape)
+        }
     }
 
     FloatingTabBar(
@@ -224,8 +230,8 @@ fun GlassNavBar(
         ),
         // Held too: this is declared `Any?`, so a fresh list every pass is a
         // changed argument by identity and defeats skipping on its own.
-        contentKey = remember(selectedIndex, tabs, contentColor, selectedColor, selectedBackground, pack) {
-            listOf(selectedIndex, tabs, contentColor, selectedColor, selectedBackground, pack)
+        contentKey = remember(selectedIndex, tabs, contentColor, selectedColor, selectedBackground, pack, glassEnabled) {
+            listOf(selectedIndex, tabs, contentColor, selectedColor, selectedBackground, pack, glassEnabled)
         },
     ) {
         tabs.forEachIndexed { index, tab ->

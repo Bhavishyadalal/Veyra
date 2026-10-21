@@ -1377,4 +1377,6 @@
     <string name="experience_home_layout">Your home layout</string>
     <string name="experience_nav_destinations">Visible destinations</string>
     <string name="experience_nav_behavior">Navigation behavior</string>
+    <string name="scroll_player_animations">Scroll player animations</string>
+    <string name="scroll_player_animations_hint">Fold the mini player into navigation while scrolling, with or without Liquid Glass. Respects reduced motion.</string>
 </resources>

@@ -760,7 +760,7 @@ private fun SharedTransitionScope.ExpandedTabs(
     pill.reduceMotion = reduceAnimation
     // The lens samples the recorded page, and "reduce dynamic blur" stops that
     // recording. There the flat pill carries the whole motion on its own.
-    val glassPill = isGlassSupported() && !reduceDynamicBlur
+    val glassPill = app.veyra.music.ui.components.LocalLiquidGlassEnabled.current && isGlassSupported() && !reduceDynamicBlur
     val barGlass = rememberLayerBackdrop()
     val tabRow = rememberLayerBackdrop()
 
@@ -863,7 +863,7 @@ private fun SharedTransitionScope.ExpandedTabs(
                     modifier = Modifier
                         .fillMaxWidth()
                         .onSizeChanged { rowSize = it }
-                        .layerBackdrop(tabRow)
+                        .then(if (glassPill) Modifier.layerBackdrop(tabRow) else Modifier)
                         .pointerInput(Unit) {
                             if (currentSelectedTabIndex < 0 || tabStepPx <= 0f) return@pointerInput
 

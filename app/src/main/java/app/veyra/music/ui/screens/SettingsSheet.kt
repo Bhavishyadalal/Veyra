@@ -209,6 +209,7 @@ fun SettingsScreen(
     val reduceAnimation by AppSettings.reduceAnimation.collectAsStateWithLifecycle()
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val liquidGlass by AppSettings.liquidGlass.collectAsStateWithLifecycle()
+    val scrollPlayerAnimations by AppSettings.scrollPlayerAnimations.collectAsStateWithLifecycle()
     val liquidGlassSupported = isGlassSupported()
     val lyricsBlur by AppSettings.lyricsBlur.collectAsStateWithLifecycle()
     val animatedCanvas by AppSettings.animatedCanvas.collectAsStateWithLifecycle()
@@ -827,6 +828,16 @@ fun SettingsScreen(
                         enabled = liquidGlassSupported,
                         checked = liquidGlass,
                         onClick = { AppSettings.setLiquidGlass(!liquidGlass) },
+                    )
+                }
+                val scrollAnimationsTitle = stringResource(R.string.scroll_player_animations)
+                row(scrollAnimationsTitle, "scroll", "mini player", "fold", "collapse", "animations") {
+                    SettingsRow(
+                        icon = Icons.Rounded.AutoAwesome,
+                        title = scrollAnimationsTitle,
+                        subtitle = stringResource(R.string.scroll_player_animations_hint),
+                        checked = scrollPlayerAnimations,
+                        onClick = { AppSettings.setScrollPlayerAnimations(!scrollPlayerAnimations) },
                     )
                 }
                 // Left out where the player won't honour it: a window too wide for
