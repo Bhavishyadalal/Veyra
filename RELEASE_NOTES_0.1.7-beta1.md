@@ -1,5 +1,18 @@
 # Veyra 0.1.7-beta1 · Listening continuity and eleven worlds
 
+## Worlds collection — twenty new themes
+
+- All fifteen proposed worlds: Stained Glass Sonata, Firefly Railway, Porcelain Moon, Black Honey, Sakura Arcade, Cloud Post Office, Copper Canyon Radio, Midnight Aquarium, Sunday Bakery, Rose Circuit, Clockwork Garden, Snowglobe Village, Indigo Atelier, Prism Playground and Silent Cinema.
+- Five image-inspired Quiet Horizons themes: Riverside Pause, Pixel Stargazer, Roaming Cosmos, Blue Hour Sanctuary and Celestial Current. Error-message overlays are omitted; the blue garden receives a distinct wisteria-and-stream composition.
+- Forty original AI scenes/icon edits, licensed heading/body fonts, readable palettes, thirteen functional glyphs per pack, navigation motifs, themed corners and timelines. Matching Home/launcher marks preserve the official silver Veyra waveform.
+- Catalog now supports 41 themes within a bounded 64-theme / 65,536-byte policy. Existing lazy collection and launcher grid stay compact. A new cap-boundary test covers the parser change.
+- Twenty optional launcher aliases bring the picker to 69 choices. Previous choices, published packs, default icon, account/playback behavior and stable source are preserved.
+- Latest source rebuild is required for the expanded catalog and aliases. Theme ZIPs are not APKs. App remains 0.1.7-beta1 / code 25; no stable promotion.
+- New artwork uses compact WebP exports, earlier pack bytes stay immutable, and source ZIPs use stronger lossless ZIP compression.
+
+[Downloads, artwork and native previews](themes/WORLDS.md) · [Verification and device limits](verification/WORLDS-COLLECTION-0.1.7-beta1.md)
+
+
 ## Dreamscape collection
 
 - Five more themes from the owner's references: Chrome Vesper, Window Wish, Cassette Corner, Azure Bloom and Strawberry Daydream.

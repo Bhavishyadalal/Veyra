@@ -27,6 +27,26 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
     AtelierEmberForge("LauncherAtelierEmberForge", R.mipmap.ic_atelier_ember_forge, R.string.app_icon_atelier_ember_forge, R.mipmap.ic_atelier_ember_forge_foreground),
     AtelierOceanOpal("LauncherAtelierOceanOpal", R.mipmap.ic_atelier_ocean_opal, R.string.app_icon_atelier_ocean_opal, R.mipmap.ic_atelier_ocean_opal_foreground),
     AtelierRoyalSapphire("LauncherAtelierRoyalSapphire", R.mipmap.ic_atelier_royal_sapphire, R.string.app_icon_atelier_royal_sapphire, R.mipmap.ic_atelier_royal_sapphire_foreground),
+    StainedGlassSonata("LauncherWorldStainedGlassSonata", R.mipmap.ic_theme_worldstainedglasssonata, R.string.app_icon_worldstainedglasssonata, R.mipmap.ic_theme_worldstainedglasssonata_foreground),
+    FireflyRailway("LauncherWorldFireflyRailway", R.mipmap.ic_theme_worldfireflyrailway, R.string.app_icon_worldfireflyrailway, R.mipmap.ic_theme_worldfireflyrailway_foreground),
+    PorcelainMoon("LauncherWorldPorcelainMoon", R.mipmap.ic_theme_worldporcelainmoon, R.string.app_icon_worldporcelainmoon, R.mipmap.ic_theme_worldporcelainmoon_foreground),
+    BlackHoney("LauncherWorldBlackHoney", R.mipmap.ic_theme_worldblackhoney, R.string.app_icon_worldblackhoney, R.mipmap.ic_theme_worldblackhoney_foreground),
+    SakuraArcade("LauncherWorldSakuraArcade", R.mipmap.ic_theme_worldsakuraarcade, R.string.app_icon_worldsakuraarcade, R.mipmap.ic_theme_worldsakuraarcade_foreground),
+    CloudPostOffice("LauncherWorldCloudPostOffice", R.mipmap.ic_theme_worldcloudpostoffice, R.string.app_icon_worldcloudpostoffice, R.mipmap.ic_theme_worldcloudpostoffice_foreground),
+    CopperCanyonRadio("LauncherWorldCopperCanyonRadio", R.mipmap.ic_theme_worldcoppercanyonradio, R.string.app_icon_worldcoppercanyonradio, R.mipmap.ic_theme_worldcoppercanyonradio_foreground),
+    MidnightAquarium("LauncherWorldMidnightAquarium", R.mipmap.ic_theme_worldmidnightaquarium, R.string.app_icon_worldmidnightaquarium, R.mipmap.ic_theme_worldmidnightaquarium_foreground),
+    SundayBakery("LauncherWorldSundayBakery", R.mipmap.ic_theme_worldsundaybakery, R.string.app_icon_worldsundaybakery, R.mipmap.ic_theme_worldsundaybakery_foreground),
+    RoseCircuit("LauncherWorldRoseCircuit", R.mipmap.ic_theme_worldrosecircuit, R.string.app_icon_worldrosecircuit, R.mipmap.ic_theme_worldrosecircuit_foreground),
+    ClockworkGarden("LauncherWorldClockworkGarden", R.mipmap.ic_theme_worldclockworkgarden, R.string.app_icon_worldclockworkgarden, R.mipmap.ic_theme_worldclockworkgarden_foreground),
+    SnowglobeVillage("LauncherWorldSnowglobeVillage", R.mipmap.ic_theme_worldsnowglobevillage, R.string.app_icon_worldsnowglobevillage, R.mipmap.ic_theme_worldsnowglobevillage_foreground),
+    IndigoAtelier("LauncherWorldIndigoAtelier", R.mipmap.ic_theme_worldindigoatelier, R.string.app_icon_worldindigoatelier, R.mipmap.ic_theme_worldindigoatelier_foreground),
+    PrismPlayground("LauncherWorldPrismPlayground", R.mipmap.ic_theme_worldprismplayground, R.string.app_icon_worldprismplayground, R.mipmap.ic_theme_worldprismplayground_foreground),
+    SilentCinema("LauncherWorldSilentCinema", R.mipmap.ic_theme_worldsilentcinema, R.string.app_icon_worldsilentcinema, R.mipmap.ic_theme_worldsilentcinema_foreground),
+    RiversidePause("LauncherWorldRiversidePause", R.mipmap.ic_theme_worldriversidepause, R.string.app_icon_worldriversidepause, R.mipmap.ic_theme_worldriversidepause_foreground),
+    PixelStargazer("LauncherWorldPixelStargazer", R.mipmap.ic_theme_worldpixelstargazer, R.string.app_icon_worldpixelstargazer, R.mipmap.ic_theme_worldpixelstargazer_foreground),
+    RoamingCosmos("LauncherWorldRoamingCosmos", R.mipmap.ic_theme_worldroamingcosmos, R.string.app_icon_worldroamingcosmos, R.mipmap.ic_theme_worldroamingcosmos_foreground),
+    BlueHourSanctuary("LauncherWorldBlueHourSanctuary", R.mipmap.ic_theme_worldbluehoursanctuary, R.string.app_icon_worldbluehoursanctuary, R.mipmap.ic_theme_worldbluehoursanctuary_foreground),
+    CelestialCurrent("LauncherWorldCelestialCurrent", R.mipmap.ic_theme_worldcelestialcurrent, R.string.app_icon_worldcelestialcurrent, R.mipmap.ic_theme_worldcelestialcurrent_foreground),
     ChromeVesper("LauncherVesper", R.mipmap.ic_theme_vesper, R.string.app_icon_vesper, R.mipmap.ic_theme_vesper_foreground),
     WindowWish("LauncherWish", R.mipmap.ic_theme_wish, R.string.app_icon_wish, R.mipmap.ic_theme_wish_foreground),
     CassetteCorner("LauncherCassette", R.mipmap.ic_theme_cassette, R.string.app_icon_cassette, R.mipmap.ic_theme_cassette_foreground),
@@ -71,6 +91,26 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
     companion object {
         /** A data-only theme cannot supply a component name or an arbitrary launcher alias. */
         fun forTheme(id: String?): AppIcon? = when (id) {
+            "stained-glass-sonata" -> StainedGlassSonata
+            "firefly-railway" -> FireflyRailway
+            "porcelain-moon" -> PorcelainMoon
+            "black-honey" -> BlackHoney
+            "sakura-arcade" -> SakuraArcade
+            "cloud-post-office" -> CloudPostOffice
+            "copper-canyon-radio" -> CopperCanyonRadio
+            "midnight-aquarium" -> MidnightAquarium
+            "sunday-bakery" -> SundayBakery
+            "rose-circuit" -> RoseCircuit
+            "clockwork-garden" -> ClockworkGarden
+            "snowglobe-village" -> SnowglobeVillage
+            "indigo-atelier" -> IndigoAtelier
+            "prism-playground" -> PrismPlayground
+            "silent-cinema" -> SilentCinema
+            "riverside-pause" -> RiversidePause
+            "pixel-stargazer" -> PixelStargazer
+            "roaming-cosmos" -> RoamingCosmos
+            "blue-hour-sanctuary" -> BlueHourSanctuary
+            "celestial-current" -> CelestialCurrent
             "chrome-vesper" -> ChromeVesper
             "window-wish" -> WindowWish
             "cassette-corner" -> CassetteCorner

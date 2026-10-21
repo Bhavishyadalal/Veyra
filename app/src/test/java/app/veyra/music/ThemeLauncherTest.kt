@@ -7,6 +7,26 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 class ThemeLauncherTest {
     @Test fun themesMapOnlyToBundledIconsAndUnknownThemesCannotSelectAnAlias() {
+        assertEquals(AppIcon.StainedGlassSonata,AppIcon.forTheme("stained-glass-sonata"))
+        assertEquals(AppIcon.FireflyRailway,AppIcon.forTheme("firefly-railway"))
+        assertEquals(AppIcon.PorcelainMoon,AppIcon.forTheme("porcelain-moon"))
+        assertEquals(AppIcon.BlackHoney,AppIcon.forTheme("black-honey"))
+        assertEquals(AppIcon.SakuraArcade,AppIcon.forTheme("sakura-arcade"))
+        assertEquals(AppIcon.CloudPostOffice,AppIcon.forTheme("cloud-post-office"))
+        assertEquals(AppIcon.CopperCanyonRadio,AppIcon.forTheme("copper-canyon-radio"))
+        assertEquals(AppIcon.MidnightAquarium,AppIcon.forTheme("midnight-aquarium"))
+        assertEquals(AppIcon.SundayBakery,AppIcon.forTheme("sunday-bakery"))
+        assertEquals(AppIcon.RoseCircuit,AppIcon.forTheme("rose-circuit"))
+        assertEquals(AppIcon.ClockworkGarden,AppIcon.forTheme("clockwork-garden"))
+        assertEquals(AppIcon.SnowglobeVillage,AppIcon.forTheme("snowglobe-village"))
+        assertEquals(AppIcon.IndigoAtelier,AppIcon.forTheme("indigo-atelier"))
+        assertEquals(AppIcon.PrismPlayground,AppIcon.forTheme("prism-playground"))
+        assertEquals(AppIcon.SilentCinema,AppIcon.forTheme("silent-cinema"))
+        assertEquals(AppIcon.RiversidePause,AppIcon.forTheme("riverside-pause"))
+        assertEquals(AppIcon.PixelStargazer,AppIcon.forTheme("pixel-stargazer"))
+        assertEquals(AppIcon.RoamingCosmos,AppIcon.forTheme("roaming-cosmos"))
+        assertEquals(AppIcon.BlueHourSanctuary,AppIcon.forTheme("blue-hour-sanctuary"))
+        assertEquals(AppIcon.CelestialCurrent,AppIcon.forTheme("celestial-current"))
         assertEquals(AppIcon.ChromeVesper,AppIcon.forTheme("chrome-vesper"))
         assertEquals(AppIcon.WindowWish,AppIcon.forTheme("window-wish"))
         assertEquals(AppIcon.CassetteCorner,AppIcon.forTheme("cassette-corner"))
@@ -56,7 +76,7 @@ class ThemeLauncherTest {
         val choices=app.veyra.music.data.themes.IconPickerPolicy.options(
             app.veyra.music.data.themes.IconCollection.ATELIER,app.veyra.music.data.themes.GlassFamily.LIQUID)
         assertEquals(12,choices.size)
-        assertEquals(49,AppIcon.entries.size)
+        assertEquals(69,AppIcon.entries.size)
         val expected=catalog.map { row ->
             val id=((row as kotlinx.serialization.json.JsonObject).getValue("id") as kotlinx.serialization.json.JsonPrimitive).content
             assertNull(AppIcon.forTheme(id))

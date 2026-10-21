@@ -5,7 +5,7 @@ styles='''*{box-sizing:border-box}body{margin:0;background:#070c18;color:#f5f8ff
 
 import json
 catalog=json.loads((r/'catalog.json').read_text())['themes']
-html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Veyra · Theme Studio</title><style>'+styles+'</style></head><body><main><header><div class="eyebrow">VEYRA / THEME STUDIO</div><h1>Twenty-one worlds.<br>One Veyra.</h1><p>Original atmosphere, custom navigation, native music controls and optional matching launcher icons. Preview 0.1.7-beta1 / code 25.</p><p>Native component studies in illustrative layouts, not Android screenshots. Sample player artwork is demonstration art.</p><nav class="actions"><a href="README.md">Installation and compatibility</a>'
+html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Veyra · Theme Studio</title><style>'+styles+'</style></head><body><main><header><div class="eyebrow">VEYRA / THEME STUDIO</div><h1>Forty-one worlds.<br>One Veyra.</h1><p>Original atmosphere, custom navigation, native music controls and optional matching launcher icons. Preview 0.1.7-beta1 / code 25.</p><p>Native component studies in illustrative layouts, not Android screenshots. Sample player artwork is demonstration art.</p><nav class="actions"><a href="README.md">Installation and compatibility</a>'
 for t in catalog: html+=f'<a href="#{t["id"]}">{escape(t["name"])}</a>'
 html+='</nav></header>'
 for t in catalog:

@@ -40,3 +40,21 @@ tasks.register<JavaExec>("runAtelier") {
     mainClass.set("app.veyra.music.ui.atelier.RenderAtelierKt")
     systemProperty("veyra.root", veyraRoot)
 }
+
+// Standard JavaExec tasks keep each new theme in an isolated JVM.
+val worldIds = Regex("\\\"id\\\": \\\"([^\\\"]+)\\\"")
+    .findAll(veyraRoot.resolve("themes/worlds-designs.json").readText()).map { it.groupValues[1] }.toList()
+val worldExpanded = setOf("stained-glass-sonata", "cloud-post-office", "copper-canyon-radio", "blue-hour-sanctuary", "celestial-current", "silent-cinema")
+check(worldIds.size == 20)
+val worldStudies = worldIds.map { id ->
+    tasks.register<JavaExec>("renderWorld-$id") {
+        dependsOn("classes")
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("app.veyra.music.ui.player.RenderThemesKt")
+        maxHeapSize = "1g"
+        systemProperty("veyra.root", veyraRoot)
+        systemProperty("veyra.theme", id)
+        systemProperty("veyra.study", if (id in worldExpanded) "home,player,navigation-rtl-large-text" else "home,player")
+    }
+}
+tasks.register("runWorlds") { dependsOn(worldStudies) }

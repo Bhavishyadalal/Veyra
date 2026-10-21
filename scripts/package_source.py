@@ -22,7 +22,7 @@ def main():
     manifest = []
     archive = root / "downloads" / args.name
     archive.parent.mkdir(exist_ok=True)
-    with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
+    with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for rel in sorted(filter(None, paths)):
             p = Path(rel)
             # Generated native study images remain in Git; ship their renderer, not

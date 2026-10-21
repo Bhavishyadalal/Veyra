@@ -74,11 +74,11 @@ class ThemePackTest {
     }
     @Test fun allPublishedThemesInstallWithCorrectBrandingAndMinimumVersion() {
         val catalog=ThemePack.json.decodeFromString<ThemeCatalog>(File(project,"themes/catalog.json").readText())
-        assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream"),catalog.themes.map { it.id }.toSet())
+        assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream","stained-glass-sonata","firefly-railway","porcelain-moon","black-honey","sakura-arcade","cloud-post-office","copper-canyon-radio","midnight-aquarium","sunday-bakery","rose-circuit","clockwork-garden","snowglobe-village","indigo-atelier","prism-playground","silent-cinema","riverside-pause","pixel-stargazer","roaming-cosmos","blue-hour-sanctuary","celestial-current"),catalog.themes.map { it.id }.toSet())
         for (entry in catalog.themes) {
             val pack=File(project,"themes/packs/${entry.id}-v${entry.version}.zip")
             val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,25)
-            assertEquals(if(entry.id in setOf("playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals","strawberry-daydream")) 3 else 2,m.schema)
+            assertEquals(if(entry.id in setOf("playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals","strawberry-daydream","cloud-post-office","sunday-bakery","snowglobe-village","prism-playground")) 3 else 2,m.schema)
             assertTrue(File(dir,m.assets.getValue("brandIcon")).isFile)
             rejects { ThemePack.validate(m,23) }
             if (entry.id == "midnight-express") {
@@ -106,7 +106,7 @@ class ThemePackTest {
         val bundled=File(project,"app/src/main/assets/theme-catalog.json").readBytes()
         assertArrayEquals(published,bundled)
         val entries=ThemeRepository.parseCatalog(published)
-        assertEquals(21,entries.size)
+        assertEquals(41,entries.size)
         entries.forEach { entry ->
             assertTrue(File(project,"themes/${entry.id}/artwork/preview.webp").isFile)
         }
@@ -132,4 +132,16 @@ class ThemePackTest {
         rejects{ThemePack.readBounded(ByteArray(1025).inputStream(),1024)}
         assertEquals(1024,ThemePack.readBounded(ByteArray(1024).inputStream(),1024).size)
     }
+    @Test fun expandedCatalogStillHasAFiniteThemeLimit() {
+        val entry=catalog()
+        val prefix=entry.url.substringBefore("packs/")
+        val entries=(0 until 65).map { i ->
+            val id="bounded-$i"
+            entry.copy(id=id,url=prefix+"packs/$id-v${entry.version}.zip",preview=prefix+"$id/artwork/preview.webp")
+        }
+        fun encoded(items: List<ThemeListing>)=ThemePack.json.encodeToString(ThemeCatalog.serializer(),ThemeCatalog(1,items)).encodeToByteArray()
+        assertEquals(64,ThemeRepository.parseCatalog(encoded(entries.take(64))).size)
+        rejects { ThemeRepository.parseCatalog(encoded(entries)) }
+    }
+
 }

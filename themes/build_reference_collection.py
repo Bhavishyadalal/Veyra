@@ -59,13 +59,13 @@ def build(c):
  # Density resizing is asset compilation; the master design is never drawn/recolored here.
  full=Image.open(ROOT/'launcher-art'/f'{c["id"]}.webp').convert('RGB')
  assert full.width == full.height and full.width >= 1024, 'Use the reviewed AI Glass Noir master'
- full.resize((512,512),Image.Resampling.LANCZOS).save(base/'artwork/brand.webp',quality=94,method=6)
+ full.resize((512,512),Image.Resampling.LANCZOS).save(base/'artwork/brand.webp',quality=c.get('brandQuality',94),method=6)
  res=ROOT.parent/'app/src/main/res';key=c['alias'].lower()
  for density,scale in [('mdpi',1),('hdpi',1.5),('xhdpi',2),('xxhdpi',3),('xxxhdpi',4)]:
   for suffix,dp in [('',48),('_foreground',108)]:
    side=int(dp*scale)
    destination=res/f'mipmap-{density}'/f'ic_theme_{key}{suffix}.webp'
-   full.resize((side,side),Image.Resampling.LANCZOS).save(destination,quality=96,method=6)
+   full.resize((side,side),Image.Resampling.LANCZOS).save(destination,quality=c.get('iconQuality',96),method=6)
    # Keep one resource per name when replacing the previous PNG encoding.
    destination.with_suffix('.png').unlink(missing_ok=True)
  (res/f'mipmap-anydpi-v26/ic_theme_{key}.xml').write_text(f'<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@color/theme_{key}_background"/><foreground android:drawable="@mipmap/ic_theme_{key}_foreground"/><monochrome android:drawable="@drawable/ic_{key}_monochrome"/></adaptive-icon>\n')

@@ -1,0 +1,1 @@
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@color/theme_worldbluehoursanctuary_background"/><foreground android:drawable="@mipmap/ic_theme_worldbluehoursanctuary_foreground"/><monochrome android:drawable="@drawable/ic_worldbluehoursanctuary_monochrome"/></adaptive-icon>
