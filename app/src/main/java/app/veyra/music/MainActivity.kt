@@ -5235,7 +5235,6 @@ private fun VeyraApp(
         }
 
         if (showAccountSelector) {
-            BackHandler { showAccountSelector = false }
             AccountProfileSelector(
                 accounts = googleAccounts,
                 activeAccountId = activeAccountId,

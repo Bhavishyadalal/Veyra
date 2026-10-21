@@ -496,10 +496,16 @@ fun DetailScreen(
         }
     }
 
+    val reduceShelfMotion = app.veyra.music.ui.motion.rememberVeyraReducedMotion(includeSubtle = false)
+    val shelfRtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
+    val subtleShelfMotion = app.veyra.music.ui.customization.LocalSubtleMotion.current
     AnimatedContent(
         targetState = activeShelf,
         transitionSpec = {
-            fadeIn(animationSpec = tween(220)) togetherWith fadeOut(animationSpec = tween(180))
+            app.veyra.music.ui.navigationTransition(
+                if (targetState == null) app.veyra.music.ui.NavigationMotion.Back else app.veyra.music.ui.NavigationMotion.Forward,
+                reduceShelfMotion, shelfRtl, subtleShelfMotion,
+            )
         },
         label = "artist_shelf_transition",
         modifier = modifier.fillMaxSize(),

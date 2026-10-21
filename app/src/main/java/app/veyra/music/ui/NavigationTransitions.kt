@@ -20,14 +20,14 @@ fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: B
         reduceMotion || motion == NavigationMotion.None -> EnterTransition.None togetherWith ExitTransition.None
         subtleMotion -> (fadeIn(tween(VeyraMotion.Feedback)) togetherWith fadeOut(tween(VeyraMotion.Press))).apply { targetContentZIndex = 1f }
         motion == NavigationMotion.Tab ->
-            (fadeIn(tween(VeyraMotion.Feedback)) togetherWith ExitTransition.None).apply { targetContentZIndex = 1f }
+            ((slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 24 } + fadeIn(tween(VeyraMotion.Feedback))) togetherWith fadeOut(tween(VeyraMotion.Exit))).apply { targetContentZIndex = 1f }
         motion == NavigationMotion.Back ->
-            (slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { -direction * it / 60 } togetherWith
-                (slideOutHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 20 } + fadeOut(tween(VeyraMotion.Exit))))
+            (slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { -direction * it / 16 } togetherWith
+                (slideOutHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 5 } + fadeOut(tween(VeyraMotion.Exit))))
                 .apply { targetContentZIndex = -1f }
         else ->
-            ((slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 20 } + fadeIn(tween(VeyraMotion.Exit))) togetherWith
-                slideOutHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { -direction * it / 60 })
+            ((slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 5 } + fadeIn(tween(VeyraMotion.Exit))) togetherWith
+                slideOutHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { -direction * it / 16 })
                 .apply { targetContentZIndex = 1f }
     }
     // Destinations own their scroll state and fill the viewport. Interpolating

@@ -2,6 +2,15 @@
 
 **Preview Android source · version code 27 · based on stable 0.1.7**
 
+## Flowing navigation and account panel
+
+- Account selector slides and scales from the avatar corner, with a fading backdrop and a complete closing animation before account actions or Settings open.
+- Back presses, outside taps and repeated actions use one guarded dismissal path.
+- Shared pages, tabs and artist shelves use coordinated forward/back slides; Settings categories slide in the navigation direction.
+- Reduced motion, subtle motion, system animation scale and right-to-left layouts remain supported. Full-screen lists keep fixed measured sizes during transitions.
+
+[Focused verification and device-testing limits](verification/FLOWING-MOTION-0.1.8-beta1.md)
+
 ## Experience foundation — stage 1
 
 - Optional immersive player with song/theme/blended/minimal backgrounds, positioned synced lyrics and accessible controls.

@@ -403,11 +403,14 @@ fun SettingsScreen(
     val reducedMotion = rememberVeyraReducedMotion()
     var categoryIntroduced by remember { mutableStateOf(false) }
     val categoryAlpha = remember { Animatable(1f) }
+    var categoryDirection by remember { mutableStateOf(1f) }
+    val categoryRtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
     LaunchedEffect(category, reducedMotion) {
         if (reducedMotion || !categoryIntroduced) {
             categoryAlpha.snapTo(1f)
         } else {
-            categoryAlpha.snapTo(0.55f)
+            categoryDirection = (if (category == null) -1f else 1f) * (if (categoryRtl) -1f else 1f)
+            categoryAlpha.snapTo(0f)
             categoryAlpha.animateTo(1f, tween(VeyraMotion.Section, easing = VeyraMotion.Easing))
         }
         categoryIntroduced = true
@@ -432,8 +435,8 @@ fun SettingsScreen(
         Column(
             Modifier.weight(1f).verticalScroll(scrollState)
                 .graphicsLayer {
-                    alpha = categoryAlpha.value
-                    translationY = if (reducedMotion) 0f else (1f - categoryAlpha.value) * 10.dp.toPx()
+                    alpha = .55f + .45f * categoryAlpha.value
+                    translationX = if (reducedMotion) 0f else categoryDirection * (1f - categoryAlpha.value) * 28.dp.toPx()
                 },
         ) {
             if (!searching) app.veyra.music.ui.themes.ThemeAtmosphere("header", Modifier.padding(horizontal=20.dp, vertical=8.dp), compact=true)

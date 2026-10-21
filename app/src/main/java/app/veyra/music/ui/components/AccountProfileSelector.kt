@@ -1,5 +1,19 @@
 package app.veyra.music.ui.components
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.TransformOrigin
+import app.veyra.music.ui.motion.VeyraMotion
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -62,54 +76,88 @@ fun AccountProfileSelector(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val reducedMotion = rememberVeyraReducedMotion()
+    val visibility = remember { MutableTransitionState(false) }
+    var afterClose by remember { mutableStateOf<(() -> Unit)?>(null) }
+    // Retain the panel until its exit finishes. Back, scrim and actions share
+    // this path, including taps during entry and zero-duration system motion.
+    fun close(action: () -> Unit) {
+        if (afterClose == null) {
+            afterClose = action
+            visibility.targetState = false
+        }
+    }
+    LaunchedEffect(Unit) { visibility.targetState = true }
+    LaunchedEffect(visibility.isIdle, visibility.currentState, afterClose) {
+        if (visibility.isIdle && !visibility.currentState) afterClose?.invoke()
+    }
+    BackHandler { close(onDismiss) }
+    val origin = TransformOrigin(if (androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl) 0f else 1f, 0f)
+    val enter = VeyraMotion.duration(reducedMotion, VeyraMotion.Enter)
+    val exit = VeyraMotion.duration(reducedMotion, VeyraMotion.Exit)
     var managing by remember { mutableStateOf(false) }
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val shape = MaterialTheme.shapes.extraLarge
-    Column(
-        modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.scrim.copy(alpha = .48f))
-            .clickable(onClick = onDismiss),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    AnimatedVisibility(
+        visibleState = visibility,
+        enter = fadeIn(tween(enter, easing = VeyraMotion.Easing)),
+        exit = fadeOut(tween(exit, easing = VeyraMotion.Easing)),
+        modifier = modifier.fillMaxSize(),
     ) {
-        Surface(
-            color = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.onSurface,
-            shape = shape,
-            modifier = Modifier
-                .padding(top = 56.dp, start = 20.dp, end = 20.dp)
-                .fillMaxWidth()
-                .clip(shape)
-                .then(
-                    if (reduceDynamicBlur) {
-                        Modifier.background(MaterialTheme.colorScheme.surface)
-                    } else {
-                        Modifier.optimizedHazeEffect(
-                            state = hazeState,
-                            style = HazeMaterials.thin(MaterialTheme.colorScheme.surface),
-                        )
-                    },
-                )
-                .clickable(onClick = {}),
+        Column(
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.scrim.copy(alpha = .48f))
+                .clickable { close(onDismiss) },
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            LazyColumn {
-                item { Text(stringResource(R.string.switch_account), style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(20.dp, 18.dp, 20.dp, 8.dp)) }
-                accounts.forEach { account ->
-                item {
-                    Text(account.email.ifBlank { account.name.ifBlank { stringResource(R.string.accounts) } },
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(20.dp, 12.dp, 20.dp, 4.dp))
+            Surface(
+                color = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                shape = shape,
+                modifier = Modifier
+                    .animateEnterExit(
+                        enter = slideInVertically(tween(enter, easing = VeyraMotion.Easing)) { if (reducedMotion) 0 else -it / 12 } +
+                            scaleIn(tween(enter, easing = VeyraMotion.Easing), initialScale = if (reducedMotion) 1f else .94f,
+                                transformOrigin = origin),
+                        exit = slideOutVertically(tween(exit, easing = VeyraMotion.Easing)) { if (reducedMotion) 0 else -it / 16 } +
+                            scaleOut(tween(exit, easing = VeyraMotion.Easing), targetScale = if (reducedMotion) 1f else .97f,
+                                transformOrigin = origin),
+                    )
+                    .padding(top = 56.dp, start = 20.dp, end = 20.dp)
+                    .fillMaxWidth()
+                    .clip(shape)
+                    .then(
+                        if (reduceDynamicBlur) {
+                            Modifier.background(MaterialTheme.colorScheme.surface)
+                        } else {
+                            Modifier.optimizedHazeEffect(
+                                state = hazeState,
+                                style = HazeMaterials.thin(MaterialTheme.colorScheme.surface),
+                            )
+                        },
+                    )
+                    .clickable(onClick = {}),
+            ) {
+                LazyColumn {
+                    item { Text(stringResource(R.string.switch_account), style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(20.dp, 18.dp, 20.dp, 8.dp)) }
+                    accounts.forEach { account ->
+                    item {
+                        Text(account.email.ifBlank { account.name.ifBlank { stringResource(R.string.accounts) } },
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(20.dp, 12.dp, 20.dp, 4.dp))
+                    }
+                    items(account.profiles.size) { index ->
+                        val profile = account.profiles[index]
+                        ProfileRow(profile, account.accountId == activeAccountId && profile.profileId == activeProfileId,
+                            managing, { close { onSelect(account, profile); onDismiss() } }, { close { onRemoveAccount(account) } })
+                    }
+                    }
+                    item { SelectorAction(Icons.Rounded.Add, stringResource(R.string.add_account), { close(onAddAccount) }) }
+                    item { SelectorAction(Icons.Rounded.ManageAccounts, stringResource(R.string.manage_accounts)) { managing = !managing } }
+                    item { SelectorAction(Icons.Rounded.Settings, stringResource(R.string.settings), { close(onOpenSettings) }) }
                 }
-                items(account.profiles.size) { index ->
-                    val profile = account.profiles[index]
-                    ProfileRow(profile, account.accountId == activeAccountId && profile.profileId == activeProfileId,
-                        managing, { onSelect(account, profile); onDismiss() }, { onRemoveAccount(account) })
-                }
-                }
-                item { SelectorAction(Icons.Rounded.Add, stringResource(R.string.add_account), onAddAccount) }
-                item { SelectorAction(Icons.Rounded.ManageAccounts, stringResource(R.string.manage_accounts)) { managing = !managing } }
-                item { SelectorAction(Icons.Rounded.Settings, stringResource(R.string.settings), onOpenSettings) }
             }
         }
     }
