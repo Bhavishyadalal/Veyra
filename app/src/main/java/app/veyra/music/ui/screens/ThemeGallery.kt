@@ -68,8 +68,8 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
         Column(Modifier.fillMaxWidth().heightIn(max=androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp.dp*.88f)) {
             // Header stays reachable while either collection or details scrolls.
             Row(Modifier.fillMaxWidth().padding(horizontal=12.dp),verticalAlignment=Alignment.CenterVertically) {
-                if(detail!=null) IconButton(onClick={detailId=null},enabled=!applying) {
-                    Icon(Icons.AutoMirrored.Rounded.ArrowBack,stringResource(R.string.theme_back_collection))
+                if(detail!=null) IconButton(onClick={detailId=null},enabled=!applying,modifier=Modifier.size(48.dp)) {
+                    app.veyra.music.ui.themes.ThemeIcon(Icons.AutoMirrored.Rounded.ArrowBack,stringResource(R.string.theme_back_collection))
                 }
                 Text(stringResource(if(detail==null)R.string.theme_packs else R.string.theme_details),Modifier.weight(1f),style=MaterialTheme.typography.titleLarge)
                 if(detail==null) IconButton(onClick={ThemeRepository.refreshCatalog(force=true)},enabled=!applying) {
@@ -99,7 +99,10 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
                     items(visible,key={it.id}) { listing->
                         val m=installed[listing.id]
                         val local=ThemeRepository.directory(listing.id)
-                        val preview=if(m!=null && local!=null) File(local,m.assets.getValue("preview")) else listing.preview
+                        val preview=remember(listing.id,listing.version,listing.preview,m,local) {
+                            app.veyra.music.ui.themes.themePreviewRequest(context,listing.id,m?.version ?: listing.version,
+                                if(m!=null && local!=null) File(local,m.assets.getValue("preview")) else listing.preview)
+                        }
                         val status=when {
                             transfer?.id==listing.id->stringResource(R.string.theme_downloading)
                             active?.id==listing.id->stringResource(R.string.theme_active)
@@ -113,13 +116,16 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
                     if(visible.isEmpty() && available.isNotEmpty() && query.isNotBlank()) item {
                         Text(stringResource(R.string.theme_no_search_results),style=MaterialTheme.typography.bodyMedium)
                     }
-                    item(key="icon") {AppIconSetting(initialCollection=IconCollection.THEMES)}
+                    item(key="icon") {AppIconSetting()}
                     message?.let {value->item(key="message") {Text(value,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)}}
                 }
             } else {
                 val m=installed[detail.id]
                 val local=ThemeRepository.directory(detail.id)
-                val preview=if(m!=null && local!=null)File(local,m.assets.getValue("preview")) else detail.preview
+                val preview=remember(detail.id,detail.version,detail.preview,m,local) {
+                    app.veyra.music.ui.themes.themePreviewRequest(context,detail.id,m?.version ?: detail.version,
+                        if(m!=null && local!=null) File(local,m.assets.getValue("preview")) else detail.preview,detail=true)
+                }
                 val download=transfer?.takeIf {it.id==detail.id}
                 LazyColumn(Modifier.fillMaxWidth().weight(1f,fill=false),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
                     item {ThemeStudioArtwork(detail.name,preview,"v${detail.version}")}

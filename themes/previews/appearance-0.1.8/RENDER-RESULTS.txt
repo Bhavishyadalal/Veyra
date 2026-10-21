@@ -1,0 +1,7 @@
+home: native components rendered; one callback; checked targets >=48 dp.
+search-large-text: native components rendered; one callback; checked targets >=48 dp.
+library-rtl-large-text: native components rendered; one callback; checked targets >=48 dp.
+fonts-rtl-large-text: native components rendered; one callback; checked targets >=48 dp.
+brand-gothic-large-text: native components rendered; one callback; checked targets >=48 dp.
+fonts-light-large-text: native components rendered; one callback; checked targets >=48 dp.
+Shared components in illustrative layouts, not Android screenshots or device behavior tests.

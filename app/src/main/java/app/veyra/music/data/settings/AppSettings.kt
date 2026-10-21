@@ -358,6 +358,7 @@ object AppSettings {
     /** Freezes the main player's mesh gradient instead of letting it drift/crossfade. */
     val reduceAnimation = MutableStateFlow(false)
     val accentPalette = MutableStateFlow(AccentPalette.DEFAULT)
+    val appearanceFont = MutableStateFlow(app.veyra.music.data.themes.AppearanceFont.FOLLOW_THEME)
     val artworkCorners = MutableStateFlow(ArtworkCorners.DEFAULT)
     val listSpacing = MutableStateFlow(ListSpacing.COMFORTABLE)
     val subtleMotion = MutableStateFlow(false)
@@ -864,6 +865,7 @@ object AppSettings {
         repeatMode.value = prefs.getInt(KEY_REPEAT_MODE, Player.REPEAT_MODE_OFF)
         showNerdStats.value = prefs.getBoolean(KEY_NERD_STATS, false)
         accentPalette.value = savedChoice(prefs.getString("accent_palette", null), AccentPalette.DEFAULT)
+        appearanceFont.value = app.veyra.music.data.themes.AppearanceFont.fromStoredName(prefs.getString("appearance_font", null))
         artworkCorners.value = savedChoice(prefs.getString("artwork_corners", null), ArtworkCorners.DEFAULT)
         listSpacing.value = savedChoice(prefs.getString("list_spacing", null), ListSpacing.COMFORTABLE)
         playerShortcut.value = savedChoice(prefs.getString("player_shortcut", null), PlayerShortcut.NONE)
@@ -1233,6 +1235,10 @@ object AppSettings {
     }
 
     fun setAccentPalette(value: AccentPalette) { accentPalette.value = value; prefs.edit().putString("accent_palette", value.name).apply() }
+    fun setAppearanceFont(value: app.veyra.music.data.themes.AppearanceFont) {
+        appearanceFont.value = value
+        prefs.edit().putString("appearance_font", value.name).apply()
+    }
     fun setArtworkCorners(value: ArtworkCorners) { artworkCorners.value = value; prefs.edit().putString("artwork_corners", value.name).apply() }
     fun setListSpacing(value: ListSpacing) { listSpacing.value = value; prefs.edit().putString("list_spacing", value.name).apply() }
     fun setPlayerShortcut(value: PlayerShortcut) { playerShortcut.value = value; prefs.edit().putString("player_shortcut", value.name).apply() }
@@ -1242,7 +1248,7 @@ object AppSettings {
         prefs.edit().putBoolean("subtle_motion", subtleMotion.value).apply()
     }
     fun resetAppearanceCustomization() {
-        prefs.edit().remove("accent_palette").remove("artwork_corners").remove("list_spacing")
+        prefs.edit().remove("accent_palette").remove("artwork_corners").remove("list_spacing").remove("appearance_font")
             .remove(KEY_STRONGER_TEXT).remove("subtle_motion").remove(KEY_REDUCE_ANIMATION).apply()
         readAll()
     }

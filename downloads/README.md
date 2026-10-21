@@ -37,3 +37,5 @@ python3 scripts/verify_archives.py
 Rooms, invites and presence use **https://veyra-listen-together.onrender.com**. Custom servers remain supported. [Backend provenance](https://github.com/Bhavishyadalal/Veyra/blob/main/docs/BACKEND_SYNC.md) · [External cron setup](https://github.com/Bhavishyadalal/Veyra/blob/main/backend/CRON_SETUP.md).
 
 Website source is maintained separately in [Veyra-website](https://github.com/Bhavishyadalal/Veyra-website). Website/media/backend standalone ZIPs are not reintroduced. No APK build, Actions dispatch, signing operation or deployment is part of this source promotion. Known translation/lint and device-testing limits are preserved in the promotion report.
+
+The refreshed **0.1.8-beta1 / code 27** preview source also includes [theme polish and independent fonts](../verification/APPEARANCE-0.1.8-beta1.md). The stable source archive is unchanged by this preview update.

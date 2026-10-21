@@ -744,6 +744,7 @@ fun SettingsScreen(
             }
 
             SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.appearance)) {
+                row(stringResource(R.string.appearance_fonts), "font", "typography", "typeface") { FontSetting() }
                 row(stringResource(R.string.theme_packs), "themes", "halloween", "fonts", "icons") {
                     SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.theme_packs),
                         subtitle = stringResource(R.string.theme_packs_subtitle), onClick = { showThemeGallery = true })

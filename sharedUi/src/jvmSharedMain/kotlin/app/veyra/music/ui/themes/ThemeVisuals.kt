@@ -7,6 +7,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.border
@@ -56,6 +58,15 @@ fun ThemeIcon(
         "bc_lyrics_quote" -> "lyrics"
         else -> when (themeKey.substringAfterLast('.')) {
             "ArrowBack" -> "back"
+            "PlayArrow" -> "play"
+            "Pause" -> "pause"
+            "SkipPrevious" -> "previous"
+            "SkipNext" -> "next"
+            "Home" -> "nav_home"
+            "Search" -> "nav_search"
+            "Explore" -> "nav_explore"
+            "LibraryMusic" -> "nav_library"
+            "Settings" -> "settings"
             "Download", "DownloadForOffline", "FileDownload" -> "download"
             "QueueMusic" -> "queue"
             else -> themeKey
@@ -66,7 +77,9 @@ fun ThemeIcon(
     else {
         val painter = rememberAsyncImagePainter(File(path), placeholder = androidx.compose.ui.graphics.vector.rememberVectorPainter(imageVector), error = androidx.compose.ui.graphics.vector.rememberVectorPainter(imageVector))
         val rtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
-        Image(painter, contentDescription, modifier.graphicsLayer { if (key == "back" && rtl) scaleX = -1f },
+        // Match Material Icon's default 24 dp footprint; pack bitmaps have much
+        // larger intrinsic sizes. Explicit caller sizing still takes precedence.
+        Image(painter, contentDescription, modifier.size(24.dp).graphicsLayer { if (key == "back" && rtl) scaleX = -1f },
             colorFilter = if (tint == Color.Unspecified) null else ColorFilter.tint(tint))
     }
 }
@@ -116,17 +129,38 @@ fun ThemeIcon(
 
 
 /** Static local artwork and cached ornaments: no timers, shaders or touch interception. */
+fun themeSceneScrimAlpha(theme: ThemeVisuals): Float {
+    // Even the brightest possible artwork must leave body/status text readable.
+    fun readable(scrim: Float): Boolean {
+        val artwork=.70f*(1f-scrim)
+        val background=Color(
+            theme.background.red*(1f-artwork)+artwork,
+            theme.background.green*(1f-artwork)+artwork,
+            theme.background.blue*(1f-artwork)+artwork).luminance()
+        return listOf(theme.text,theme.muted).all { color ->
+            val foreground=color.luminance()
+            (maxOf(foreground,background)+.05f)/(minOf(foreground,background)+.05f)>=4.5f
+        }
+    }
+    var low=.50f; var high=1f
+    repeat(12) {val mid=(low+high)/2f;if(readable(mid))high=mid else low=mid}
+    return high
+}
+
 @Composable
-fun ThemeScene(modifier: Modifier = Modifier) {
+fun ThemeScene(modifier: Modifier = Modifier, prominent: Boolean = false) {
     val theme = LocalThemeVisuals.current ?: return
+    val scrim=remember(theme) {themeSceneScrimAlpha(theme)}
     Box(modifier.background(theme.background).clearAndSetSemantics {}) {
         theme.asset("header")?.let { path ->
             AsyncImage(File(path), null, Modifier.matchParentSize(),
-                contentScale = ContentScale.Crop, alignment = androidx.compose.ui.Alignment.CenterEnd, alpha = if(theme.sceneStyle == "playful") .22f else .34f)
+                contentScale = ContentScale.Crop, alignment = androidx.compose.ui.Alignment.CenterEnd,
+                alpha = if(prominent) .70f else if(theme.sceneStyle == "playful") .22f else .34f)
         }
         Box(Modifier.matchParentSize().background(Brush.verticalGradient(listOf(
-            theme.background.copy(alpha = .35f), theme.background.copy(alpha = .50f),
-            theme.background.copy(alpha = .35f)))))
+            theme.background.copy(alpha = if(prominent) scrim else .35f),
+            theme.background.copy(alpha = if(prominent) maxOf(scrim,.72f) else .50f),
+            theme.background.copy(alpha = if(prominent) maxOf(scrim,.65f) else .35f)))))
         androidx.compose.foundation.Canvas(Modifier.matchParentSize()) {
             if (theme.sceneStyle == "web") {
                 val origin = androidx.compose.ui.geometry.Offset(size.width * 1.04f, -size.height * .04f)

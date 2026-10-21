@@ -24,6 +24,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 
+/** Uses the same Typography as the active preset, without changing app settings. */
+@Composable
+fun ThemeFontChoice(label: String, selected: Boolean, onClick: () -> Unit) {
+    Row(Modifier.fillMaxWidth().selectable(selected=selected,role=androidx.compose.ui.semantics.Role.RadioButton,
+        onClick=onClick).heightIn(min=48.dp).padding(vertical=4.dp),verticalAlignment=Alignment.CenterVertically) {
+        androidx.compose.material3.RadioButton(selected=selected,onClick=null)
+        Spacer(Modifier.width(10.dp))
+        Text(label,Modifier.weight(1f),style=MaterialTheme.typography.bodyLarge,color=MaterialTheme.colorScheme.onSurface)
+    }
+}
+
+@Composable
+fun ThemeFontPreview(heading: String, body: String, typography: androidx.compose.material3.Typography) {
+    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))
+        .background(MaterialTheme.colorScheme.surfaceContainerLow).padding(14.dp),
+        verticalArrangement=Arrangement.spacedBy(6.dp)) {
+        Text(heading,style=typography.headlineSmall.copy(textDirection=androidx.compose.ui.text.style.TextDirection.Content),color=MaterialTheme.colorScheme.onSurface)
+        Text(body,style=typography.bodyMedium.copy(textDirection=androidx.compose.ui.text.style.TextDirection.Content),color=MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
 /** Native, growing text over an edge-to-edge preview, shared with the rendering harness. */
 @Composable
 fun ThemeStudioArtwork(name: String, model: Any?, badge: String, modifier: Modifier = Modifier) {
@@ -71,6 +92,9 @@ fun ThemeStudioRow(name: String, subtitle: String, model: Any?, active: Boolean,
         .heightIn(min=88.dp).padding(10.dp),verticalAlignment=Alignment.CenterVertically,
         horizontalArrangement=Arrangement.spacedBy(12.dp)) {
         Box(Modifier.width(88.dp).height(72.dp).clip(RoundedCornerShape(12.dp)).background(c.surfaceVariant),contentAlignment=Alignment.Center) {
+            // Visible while cold/offline decoding fails; cache-hit requests supply
+            // their previous pixels immediately instead of fading through a blank.
+            if(model!=null) Text("♪",style=MaterialTheme.typography.titleLarge,color=c.onSurfaceVariant)
             if(model!=null) AsyncImage(model,null,Modifier.matchParentSize(),contentScale=ContentScale.Crop)
             else Text("V",style=MaterialTheme.typography.titleLarge,color=c.primary)
         }

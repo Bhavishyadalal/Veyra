@@ -481,3 +481,36 @@ tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
         rootProject.file("themes/packs/playtime-club-v1.zip"))
         .withPropertyName("themePackFixtures")
 }
+
+// Reuse the licensed font sources already shipped in the theme project. Generate
+// Android resources instead of duplicating these binaries in Git/source ZIPs.
+val appearanceFontSources = mapOf(
+    "manrope" to "midnight-express/fonts/Manrope.ttf",
+    "fredoka" to "playtime-club/fonts/Fredoka.ttf",
+    "space_grotesk" to "astral-tide/fonts/SpaceGrotesk.ttf",
+    "rajdhani" to "midnight-express/fonts/Rajdhani.ttf",
+    "barlow_condensed" to "web-slinger/fonts/BarlowCondensed.ttf",
+    "grenze_gotisch" to "halloween-nocturne/fonts/GrenzeGotisch.ttf",
+)
+val prepareAppearanceFonts = tasks.register<Copy>("prepareAppearanceFonts") {
+    into(layout.buildDirectory.dir("generated/appearanceFonts"))
+    appearanceFontSources.forEach { (name, path) ->
+        from(rootProject.file("themes/$path")) {
+            into("font")
+            rename { "appearance_$name.ttf" }
+        }
+    }
+}
+val prepareAppearanceFontLicenses = tasks.register<Copy>("prepareAppearanceFontLicenses") {
+    into(layout.buildDirectory.dir("generated/appearanceFontLicenses/font-licenses"))
+    appearanceFontSources.values.forEach { path ->
+        val theme = path.substringBefore('/')
+        val name = path.substringAfterLast('/').removeSuffix(".ttf")
+        val notice = rootProject.file("themes/$theme/licenses/$name-OFL.txt")
+            .takeIf { it.exists() } ?: rootProject.file("themes/$theme/fonts/$name-OFL.txt")
+        from(notice)
+    }
+}
+android.sourceSets.getByName("main").res.srcDir(prepareAppearanceFonts.map { it.destinationDir })
+android.sourceSets.getByName("main").assets.srcDir(layout.buildDirectory.dir("generated/appearanceFontLicenses"))
+tasks.named("preBuild") { dependsOn(prepareAppearanceFonts, prepareAppearanceFontLicenses) }

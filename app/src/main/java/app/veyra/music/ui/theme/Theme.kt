@@ -123,12 +123,16 @@ private fun Typography.withFamily(family: FontFamily) = Typography(
     labelSmall = labelSmall.copy(fontFamily = family),
 )
 
+internal fun defaultAppearanceTypography(strongerText: Boolean): Typography =
+    if (strongerText) StrongerTypography else VeyraTypography
+
 @Composable
 fun VeyraTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
     val accent by AppSettings.accentPalette.collectAsStateWithLifecycle()
+    val appearanceFont by AppSettings.appearanceFont.collectAsStateWithLifecycle()
     val corners by AppSettings.artworkCorners.collectAsStateWithLifecycle()
     val spacing by AppSettings.listSpacing.collectAsStateWithLifecycle()
     val subtle by AppSettings.subtleMotion.collectAsStateWithLifecycle()
@@ -138,16 +142,9 @@ fun VeyraTheme(
     val pack = packState
     // Keep fonts and palette on the same activation snapshot during live updates.
     val manifest = remember(pack) { pack?.let { app.veyra.music.data.themes.ThemeRepository.activeManifest() } }
-    val selectedTypography = remember(pack, strongerText) {
+    val selectedTypography = remember(pack, strongerText, appearanceFont) {
         val base = if (strongerText) StrongerTypography else VeyraTypography
-        if (pack == null) base else runCatching {
-            val body = FontFamily(Font(java.io.File(pack.assets.getValue("bodyFont"))))
-            val heading = FontFamily(Font(java.io.File(pack.assets.getValue("headingFont")), FontWeight.Bold))
-            val t = base.withFamily(body)
-            t.copy(displayLarge=t.displayLarge.copy(fontFamily=heading), displayMedium=t.displayMedium.copy(fontFamily=heading),
-                displaySmall=t.displaySmall.copy(fontFamily=heading), headlineLarge=t.headlineLarge.copy(fontFamily=heading),
-                headlineMedium=t.headlineMedium.copy(fontFamily=heading), headlineSmall=t.headlineSmall.copy(fontFamily=heading))
-        }.getOrDefault(base)
+        runCatching { appearanceTypography(base, appearanceFont, pack) }.getOrDefault(base)
     }
     CompositionLocalProvider(
         app.veyra.music.ui.themes.LocalThemeVisuals provides pack,

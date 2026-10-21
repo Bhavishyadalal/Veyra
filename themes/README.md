@@ -1,3 +1,5 @@
+> **Beta 0.1.8:** Appearance → Fonts overrides theme typography independently; All opens first in the icon picker. Studio uses revision-aware cached previews, and main screens show stronger static theme artwork. [Verification](../verification/APPEARANCE-0.1.8-beta1.md). These app changes require the beta source; stable-compatible theme packs remain unchanged.
+
 # Veyra Theme Studio
 
 **Stable: 0.1.7 / code 26 · Preview: 0.1.8-beta1 / code 27.**
@@ -33,7 +35,7 @@ Made by **Bhavishya Dalal**.
    remains available when you want a full screen refresh; it is optional.
 5. Open **App icon** in Studio or Appearance. Browse **Veyra**, **Glass** or
    **Themes** or **Glass Atelier**. Glass has Liquid, Samsung and Pixel groups, each with four variants.
-   The current choice opens first in Appearance; Studio opens the Themes group.
+   Both entry points open All; filter by collection when needed.
 6. For the standard launcher icon choose **Veyra → Glass Noir · Default**.
    Choose **Original Veyra** in Studio to restore your saved appearance.
 

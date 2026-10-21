@@ -293,7 +293,7 @@ fun FrostedTopBar(
                 } else {
                     IconButton(
                         onClick = onBack,
-                        modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp),
+                        modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp).size(48.dp),
                     ) {
                         Icon(
                             Icons.AutoMirrored.Rounded.ArrowBack,
@@ -341,7 +341,11 @@ private fun ArtworkPageBackButton(
     hazeState: HazeState?,
     modifier: Modifier = Modifier,
 ) {
-    val shape = CircleShape
+    val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    val shape = pack?.let {
+        if(it.sceneStyle=="web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp)
+        else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp)
+    } ?: CircleShape
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val useLiquidGlass = LocalLiquidGlassEnabled.current && isGlassSupported()
     val contentColor = if (useLiquidGlass && !reduceDynamicBlur) {
@@ -353,7 +357,7 @@ private fun ArtworkPageBackButton(
     IconButton(
         onClick = onClick,
         modifier = modifier
-            .size(44.dp)
+            .size(48.dp)
             .then(artworkPageSurface(shape = shape, hazeState = hazeState)),
     ) {
         Icon(

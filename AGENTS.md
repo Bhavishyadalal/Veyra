@@ -9,6 +9,10 @@
   `preview/0.1.8-beta1` is 0.1.8-beta1 / code 27 with 74 launcher choices.
   Five Keepsake packs remain compatible with stable code 26, including its original
   256 px brand-icon validation. Their new launcher aliases and UI polish are preview-only.
+  Preview also has independent fonts, the All icon filter and revised scene/preview
+  rendering: see `verification/APPEARANCE-0.1.8-beta1.md`. Font resources and OFL
+  assets are generated from existing licensed theme sources; keep those sources
+  in source ZIPs and avoid duplicating font binaries.
   Stable and this new preview include the theme brand-artwork bounds correction;
   see `verification/THEME-INSTALL-0.1.7.md` before changing theme validation.
   Promotion does not establish APK publication, device validation or clean lint: see

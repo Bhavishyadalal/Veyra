@@ -30,7 +30,7 @@ import kotlinx.coroutines.withContext
 
 /** A single ordinary Settings row replaces the formerly expanded eighteen-icon grid. */
 @Composable
-internal fun AppIconSetting(initialCollection: IconCollection? = null) {
+internal fun AppIconSetting() {
     val context=LocalContext.current
     var choosing by rememberSaveable { mutableStateOf(false) }
     var current by remember { mutableStateOf<AppIcon?>(null) }
@@ -40,18 +40,18 @@ internal fun AppIconSetting(initialCollection: IconCollection? = null) {
     SettingsRow(icon=SettingsIcons.Icons,title=stringResource(R.string.app_icon),
         subtitle=current?.let { stringResource(it.labelRes) } ?: stringResource(R.string.icon_choose),
         onClick={choosing=true})
-    if(choosing) AppIconChooser(initialCollection,onDismiss={choosing=false},onChanged={current=it})
+    if(choosing) AppIconChooser(onDismiss={choosing=false},onChanged={current=it})
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> Unit, onChanged: (AppIcon) -> Unit) {
+private fun AppIconChooser(onDismiss: () -> Unit, onChanged: (AppIcon) -> Unit) {
     val context=LocalContext.current
     val textResources = androidx.compose.ui.platform.LocalResources.current
     val scope=rememberCoroutineScope()
     val reducedMotion=app.veyra.music.ui.motion.rememberVeyraReducedMotion()
     var selected by remember { mutableStateOf<AppIcon?>(null) }
-    var groupName by rememberSaveable { mutableStateOf(initialCollection?.name ?: IconCollection.VEYRA.name) }
+    var groupName by rememberSaveable { mutableStateOf(IconCollection.ALL.name) }
     var familyName by rememberSaveable { mutableStateOf(GlassFamily.LIQUID.name) }
     var initialized by rememberSaveable { mutableStateOf(false) }
     var changing by remember { mutableStateOf(false) }
@@ -61,7 +61,6 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
         val actual=withContext(Dispatchers.IO) { AppIcon.current(context) }
         selected=actual
         if(!initialized) {
-            groupName=(initialCollection ?: IconPickerPolicy.collection(actual)).name
             familyName=(IconPickerPolicy.family(actual) ?: GlassFamily.LIQUID).name
             initialized=true
         }
@@ -105,6 +104,7 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
                         IconCollection.entries.forEach { collection ->
                             FilterChip(selected=collection==group,onClick={groupName=collection.name;query=""},enabled=!changing,
                                 label={Text(stringResource(when(collection) {
+                                    IconCollection.ALL->R.string.icon_collection_all
                                     IconCollection.VEYRA->R.string.icon_collection_veyra
                                     IconCollection.GLASS->R.string.icon_collection_glass
                                     IconCollection.THEMES->R.string.icon_collection_themes

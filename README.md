@@ -1,3 +1,5 @@
+> **Beta 0.1.8 theme polish:** stronger screen backgrounds, independent font presets, All icons and cached Studio previews. [Changes and verification](verification/APPEARANCE-0.1.8-beta1.md). Stable Android remains unchanged.
+
 > **New: [five Keepsake themes](themes/KEEPSAKE.md)** work on stable 0.1.7. Their five new launcher icons and the searchable Studio/icon picker are exclusive to beta 0.1.8.
 
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)

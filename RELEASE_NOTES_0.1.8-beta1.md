@@ -2,6 +2,18 @@
 
 **Preview Android source · version code 27 · based on stable 0.1.7**
 
+## Theme polish and independent fonts
+
+- More visible themed backgrounds across Home, Search and Library, with a contrast-aware scrim and static artwork.
+- Cleaner Home branding: removed the decorative waveform and tightened icon/wordmark alignment.
+- **All** opens first in the icon picker, with all 74 choices searchable together; existing filters remain.
+- Cached, revision-aware Studio previews with decoded-image placeholders, bounded thumbnail/detail sizing and no unnecessary preview fade-in.
+- **Appearance → Fonts:** Follow theme, Veyra default and six licensed independent presets, with preview before Apply and saved choices across theme changes.
+- Consistent themed glyphs and Back-button geometry; corrected bitmap glyph sizing while retaining accessible targets and existing actions.
+- No character/gyro additions. Stable Android and published packs remain unchanged.
+
+[Verification and known limits](verification/APPEARANCE-0.1.8-beta1.md)
+
 ## Keepsake collection
 
 Five new themes bring the catalog to **46**: Patchwork Picnic, Clover Requiem, Sunroom Mixtape, Concrete Afterhours and Matcha Mischief. Each combines original AI artwork, licensed typography, readable palettes, coordinated transport/navigation glyphs and existing reduced-motion-aware theme behavior.

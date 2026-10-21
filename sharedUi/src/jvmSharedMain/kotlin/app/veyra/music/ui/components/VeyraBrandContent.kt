@@ -65,7 +65,10 @@ fun VeyraBrandContent(
                 })
             Text(if (pack?.sceneStyle == "web") "VEYRA" else "Veyra", style = TextStyle(fontFamily = wordmarkFont,
                 fontWeight = if (pack?.asset("brandIcon") != null) FontWeight.Bold else FontWeight.Normal, fontSynthesis = FontSynthesis.None,
-                fontSize = wordSize, lineHeight = wordSize * 1.45f, letterSpacing = 0.sp),
+                fontSize = wordSize, lineHeight = wordSize * 1.10f, letterSpacing = 0.sp,
+                lineHeightStyle = androidx.compose.ui.text.style.LineHeightStyle(
+                    androidx.compose.ui.text.style.LineHeightStyle.Alignment.Center,
+                    androidx.compose.ui.text.style.LineHeightStyle.Trim.Both)),
                 color = color, maxLines = 1, softWrap = false,
                 modifier = Modifier.graphicsLayer {
                     val progress = ((reveal() - 0.15f) / 0.85f).coerceIn(0f, 1f)

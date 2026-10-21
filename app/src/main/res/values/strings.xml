@@ -1214,7 +1214,7 @@
     <string name="custom_player_shortcut_hint">Move one action to the top of the player’s three-dot menu. Account actions still require sign-in.</string>
     <string-array name="custom_shortcut_options"><item>Original order</item><item>Download</item><item>Favorite</item><item>Sleep timer</item><item>Add to playlist</item></string-array>
     <string name="custom_reset_appearance">Reset appearance customization</string>
-    <string name="custom_reset_appearance_hint">Reset accent, cover corners, list spacing, stronger text and motion. Keep accounts, playlists and downloads.</string>
+    <string name="custom_reset_appearance_hint">Reset fonts, accent, cover corners, list spacing, stronger text and motion. Keep accounts, playlists and downloads.</string>
     <string name="custom_reset_player">Reset player customization</string>
     <string name="custom_reset_player_hint">Restore the original menu order and turn off higher-contrast controls. Keep playback, accounts and downloads.</string>
     <string name="custom_reset_confirm">Reset</string>
@@ -1347,4 +1347,18 @@
     <string name="app_icon_sunroommixtape" translatable="false">Sunroom Mixtape</string>
     <string name="app_icon_concreteafterhours" translatable="false">Concrete Afterhours</string>
     <string name="app_icon_matchamischief" translatable="false">Matcha Mischief</string>
+    <string name="icon_collection_all">All</string>
+    <string name="appearance_fonts">Fonts</string>
+    <string name="font_follow_theme">Follow theme</string>
+    <string name="font_veyra_default">Veyra default</string>
+    <string name="font_manrope" translatable="false">Manrope</string>
+    <string name="font_fredoka" translatable="false">Fredoka</string>
+    <string name="font_space_grotesk" translatable="false">Space Grotesk</string>
+    <string name="font_rajdhani" translatable="false">Rajdhani</string>
+    <string name="font_barlow_condensed" translatable="false">Barlow Condensed</string>
+    <string name="font_grenze_gotisch" translatable="false">Grenze Gotisch</string>
+    <string name="font_preview_heading">Your music, your style.</string>
+    <string name="font_preview_body">Clear song titles. Comfortable reading.</string>
+    <string name="font_selection_hint">Your font choice stays when you change themes. Follow theme restores each theme’s own typography. Font licenses are included with the app.</string>
+    <string name="font_apply">Apply font</string>
 </resources>

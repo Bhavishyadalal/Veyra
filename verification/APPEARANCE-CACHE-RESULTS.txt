@@ -1,0 +1,8 @@
+Cold load: network image decoded and cached.
+Warm reopening: memory hit; no HTTP request.
+New revision: old cached pixels not reused.
+Failed request: retry recovers when the server becomes available.
+Offline fresh loader: disk hit after memory/process-equivalent reset.
+Offline cache miss: explicit failure, not a stuck loading result.
+Versioned HTTPS URL and memory placeholder identity verified.
+Desktop Coil 3.0.4 probe; Android lifecycle/network behavior remains unverified.

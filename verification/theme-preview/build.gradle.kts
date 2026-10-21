@@ -10,6 +10,8 @@ dependencies {
     implementation("org.jetbrains.compose.material:material-icons-extended-desktop:1.7.3")
     implementation("org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose-desktop:2.8.4")
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    // Same network/cache implementation as the app, used by the cache probe.
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
 }
 kotlin { jvmToolchain(17) }
 val veyraRoot = projectDir.resolve("../..").canonicalFile
@@ -17,7 +19,7 @@ sourceSets.main {
     kotlin.srcDir(veyraRoot.resolve("sharedUi/src/jvmSharedMain/kotlin/app/veyra/music/ui"))
     kotlin.srcDir(veyraRoot.resolve("app/src/main/java/app/veyra/music/ui/screens"))
     kotlin.srcDir(veyraRoot.resolve("app/src/main/java/app/veyra/music/ui/components"))
-    kotlin.include("RenderKeepsake.kt", "RenderAtelier.kt", "RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt", "**/ThemeNavigation.kt", "**/ThemeStudioComponents.kt", "**/VeyraBrandContent.kt",
+    kotlin.include("RenderAppearance.kt", "ProbeThemeCache.kt", "**/ThemePreviewRequests.kt", "RenderKeepsake.kt", "RenderAtelier.kt", "RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt", "**/ThemeNavigation.kt", "**/ThemeStudioComponents.kt", "**/VeyraBrandContent.kt",
         "**/PlayerControlPrimitives.kt", "**/PlayerInteractionPolicy.kt", "**/PlayerScrubState.kt",
         "**/ReadableLayout.kt", "**/Customization.kt", "**/VeyraSurfaces.kt", "**/VeyraMotion.kt", "**/VeyraIcons.kt", "**/SettingsIcons.kt",
         "SettingsControls.kt", "VeyraSwitchColors.kt", "**/HomeComponents.kt")
@@ -76,3 +78,15 @@ val keepsakeStudies = listOf("patchwork-picnic","clover-requiem","sunroom-mixtap
     }
 }
 tasks.register("runKeepsake") { dependsOn(keepsakeStudies) }
+
+tasks.register<JavaExec>("probeThemeCache") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("app.veyra.music.ui.appearance.ProbeThemeCacheKt")
+    systemProperty("veyra.root", veyraRoot)
+}
+tasks.register<JavaExec>("renderAppearance") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("app.veyra.music.ui.appearance.RenderAppearanceKt")
+    systemProperty("veyra.root", veyraRoot)
+    systemProperty("veyra.appearance.study", providers.gradleProperty("appearanceStudy").getOrElse(""))
+}

@@ -573,8 +573,6 @@ private fun HomeTitle(title: String, modifier: Modifier = Modifier) {
     HomeHeading(title, stringResource(Res.string.home_hero_subtitle),
         modifier.fillMaxWidth().padding(horizontal = PAGE_GUTTER, vertical = 18.dp)) {
         VeyraBrand(Modifier.weight(1f), color = colors.onBackground, reveal = { reveal.value })
-        VeyraWaveform(Modifier.size(32.dp).clearAndSetSemantics { },
-            color = colors.onBackground.copy(alpha = 0.65f), progress = { reveal.value })
     }
 }
 
