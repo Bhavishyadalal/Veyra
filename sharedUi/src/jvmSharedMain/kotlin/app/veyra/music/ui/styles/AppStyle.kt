@@ -24,7 +24,7 @@ fun AppStyle.visuals(assets:Map<String,String> = emptyMap()):ThemeVisuals? {
         raised=if(editorial)Color(0xFFE8DAC5) else if(room)Color(0xFF254A36) else Color(0xFF102641),
         outline=if(editorial)Color(0xFFAB947C) else if(room)Color(0xFF7D8C68) else Color(0xFF365C84),
         rowCorner=if(editorial)3 else 12,buttonCorner=if(editorial)8 else 18,navCorner=if(editorial)10 else 22,
-        assets=assets,background=if(editorial)Color(0xFFF9F1E4) else if(room)Color(0xFF10271C) else Color(0xFF040C17),
+        assets=if(room)assets else emptyMap(),background=if(editorial)Color(0xFFF9F1E4) else if(room)Color(0xFF10271C) else Color(0xFF040C17),
         text=if(editorial)Color(0xFF261A18) else if(room)Color(0xFFFFF2D6) else Color(0xFFDDEFFF),
         muted=if(editorial)Color(0xFF64554D) else if(room)Color(0xFFCBCCA9) else Color(0xFF9EB5D0),
         sceneStyle="app_${name.lowercase()}",tagline="")

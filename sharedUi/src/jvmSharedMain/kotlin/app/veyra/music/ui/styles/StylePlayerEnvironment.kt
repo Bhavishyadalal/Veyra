@@ -13,13 +13,14 @@ fun StylePlayerEnvironment(content:@Composable ()->Unit) {
     val pack=remember {requireNotNull(AppStyle.MUSIC_EDITORIAL.visuals()).copy(
         background=Color(0xFF211116),surface=Color(0xFF321B22),raised=Color(0xFF48232E),
         text=Color(0xFFFFF1DB),muted=Color(0xFFD5BDAC),accent=Color(0xFFF0D5B4),outline=Color(0xFF96726D))}
-    CompositionLocalProvider(LocalThemeVisuals provides pack) {
-        MaterialTheme(colorScheme=darkColorScheme(primary=pack.accent,onPrimary=pack.background,background=pack.background,
+    val colorScheme=remember(pack) { darkColorScheme(primary=pack.accent,onPrimary=pack.background,background=pack.background,
             onBackground=pack.text,surface=pack.surface,onSurface=pack.text,surfaceVariant=pack.raised,onSurfaceVariant=pack.muted,
             surfaceContainerLow=pack.surface,surfaceContainer=pack.surface,surfaceContainerHigh=pack.raised,
             surfaceContainerHighest=pack.raised,outline=pack.outline,secondary=pack.accent,onSecondary=pack.background,
             secondaryContainer=pack.raised,onSecondaryContainer=pack.text,tertiary=pack.accent,onTertiary=pack.background,
             tertiaryContainer=pack.raised,onTertiaryContainer=pack.text,primaryContainer=pack.raised,onPrimaryContainer=pack.text,
-            surfaceContainerLowest=pack.background,surfaceBright=pack.raised,surfaceDim=pack.background),typography=MaterialTheme.typography,shapes=MaterialTheme.shapes,content=content)
+            surfaceContainerLowest=pack.background,surfaceBright=pack.raised,surfaceDim=pack.background) }
+    CompositionLocalProvider(LocalThemeVisuals provides pack) {
+        MaterialTheme(colorScheme=colorScheme,typography=MaterialTheme.typography,shapes=MaterialTheme.shapes,content=content)
     }
 }

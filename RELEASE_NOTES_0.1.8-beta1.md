@@ -2,6 +2,16 @@
 
 **Preview Android source · version code 27 · based on stable 0.1.7**
 
+## Search lifecycle and rendering efficiency
+
+- Query edits, filter changes and source changes cancel obsolete pagination and speculative top-result work. Only one continuation can run for the current search.
+- Loading state clears on completion/cancellation; delayed cleanup cannot hide the next search's spinner. Existing request-ID guards still reject stale results.
+- Cached search results also warm their top song. Shared stream resolution remains independent so canceling search cannot cancel a track another playback caller needs.
+- Listening Room botanical artwork cannot leak into Editorial or After Dark during a live style switch.
+- Theme palettes, corner shapes and Editorial's player palette are reused until their inputs change, reducing repeated object creation.
+
+[Focused verification and limits](verification/LOGIC-PERFORMANCE-0.1.8-beta1.md)
+
 ## App-style composition refinement
 
 - **Music Editorial:** alternating portrait/square cover pairs, aligned captions, burgundy section rules and a compact magazine masthead.

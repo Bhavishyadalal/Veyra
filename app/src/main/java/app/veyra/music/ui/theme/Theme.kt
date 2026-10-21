@@ -166,6 +166,16 @@ fun VeyraTheme(
             appStyleTypography(base, heading, FontFamily(Font(R.font.appearance_manrope)))
         } else runCatching { appearanceTypography(base, appearanceFont, pack) }.getOrDefault(base)
     }
+    val colorScheme = remember(appStyle, manifest, accent, darkTheme) {
+        if (appStyle.custom) appStyle.colorScheme() else manifest?.let { packPalette(it.palette) } ?: paletteFor(accent, darkTheme)
+    }
+    val shapes = remember(pack?.buttonCorner, pack?.rowCorner, pack?.navCorner) {
+        if (pack == null) androidx.compose.material3.Shapes() else androidx.compose.material3.Shapes(
+            small = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),
+            medium = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.rowCorner.toFloat())),
+            large = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),
+            extraLarge = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.navCorner.toFloat())))
+    }
     CompositionLocalProvider(
         LocalAppStyle provides appStyle,
         app.veyra.music.ui.themes.LocalThemeVisuals provides pack,
@@ -176,13 +186,9 @@ fun VeyraTheme(
         LocalVeyraContrastControls provides contrastControls,
     ) {
         MaterialTheme(
-            colorScheme = if(appStyle.custom)appStyle.colorScheme() else manifest?.let { packPalette(it.palette) } ?: paletteFor(accent, darkTheme),
+            colorScheme = colorScheme,
             typography = selectedTypography,
-            shapes = if (pack == null) androidx.compose.material3.Shapes() else androidx.compose.material3.Shapes(
-                small = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),
-                medium = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.rowCorner.toFloat())),
-                large = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),
-                extraLarge = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.navCorner.toFloat()))),
+            shapes = shapes,
             content = content,
         )
     }

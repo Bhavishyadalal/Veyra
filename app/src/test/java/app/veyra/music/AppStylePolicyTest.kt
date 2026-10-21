@@ -41,4 +41,12 @@ class AppStylePolicyTest {
         val room=AppStyle.LISTENING_ROOM.visuals(mapOf("header" to "local-botanical.webp"))!!
         assertEquals("local-botanical.webp",room.asset("header"))
     }
+    @Test fun leavingListeningRoomRejectsItsRetainedArtworkDuringStyleSwitch() {
+        val retained = mapOf("header" to "local-botanical.webp")
+        assertEquals(retained, effectiveStyleVisuals(AppStyle.LISTENING_ROOM, null, retained)!!.assets)
+        for (style in listOf(AppStyle.MUSIC_EDITORIAL, AppStyle.AFTER_DARK)) {
+            assertTrue(effectiveStyleVisuals(style, null, retained)!!.assets.isEmpty())
+        }
+        assertNull(effectiveStyleVisuals(AppStyle.ORIGINAL, null, retained))
+    }
 }

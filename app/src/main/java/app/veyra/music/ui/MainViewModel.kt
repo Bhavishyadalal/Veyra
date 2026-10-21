@@ -69,6 +69,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import app.veyra.music.util.loadOrderedBatches
 import kotlinx.coroutines.async
@@ -341,6 +342,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val searchCache = LruCache<String, SearchCacheEntry>(SEARCH_CACHE_ENTRIES)
     private var searchSession: SearchSession? = null
+    private val searchWork = SearchBackgroundWork(viewModelScope) { _searchLoadingMore.value = it }
 
     /** Synced lyrics for whatever is playing; null while unknown or absent. */
     private val _lyrics = MutableStateFlow<List<LyricLine>?>(null)
@@ -2180,7 +2182,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         // does not emit a replacement network request.
         newestRequestId.incrementAndGet()
         searchSession = null
-        _searchLoadingMore.value = false
+        searchWork.cancel()
         addonSearchJob?.cancel()
         _addonResults.value = null
         _query.value = newValue
@@ -2271,7 +2273,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         if (_searchSource.value == source) return
         newestRequestId.incrementAndGet()
         searchSession = null
-        _searchLoadingMore.value = false
+        searchWork.cancel()
         addonSearchJob?.cancel()
         _searchSource.value = source
         _suggestions.value = emptyList()
@@ -2349,14 +2351,14 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             // id it would be checked against has already moved past it.
             newestRequestId.incrementAndGet()
             searchSession = null
-            _searchLoadingMore.value = false
+            searchWork.cancel()
             _results.value = null
             return
         }
         val id = newestRequestId.incrementAndGet()
         _searchScrollReset.value += 1
         searchSession = null
-        _searchLoadingMore.value = false
+        searchWork.cancel()
         searchRequests.tryEmit(SearchRequest(query, _filter.value, id, anonymous))
     }
 
@@ -2364,12 +2366,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * The search pipeline, started once and left running for the lifetime of
      * the view model.
      *
-     * The point of it being one long-lived collector is that a new search no
-     * longer cancels the request before it out of a fresh coroutine.
-     * Cancelling a call mid-flight tears down its socket, and on a pooled HTTP
-     * client that is felt by whatever picks that connection up next — which is
-     * how one search could end in "Software caused connection abort" for a
-     * request that was never itself in any trouble.
+     * New submissions cancel the previous first-page lookup through collectLatest;
+     * request IDs also reject late responses after edits or source changes.
      *
      * There is no debounce here any more, and nothing to absorb: a search is
      * only ever asked for by a deliberate act — the search button, a
@@ -2395,6 +2393,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 // records it in the account's history.
                 if (exact != null && request.anonymous) {
                     searchSession = SearchSession(key, request.requestId, request.filter, exact.continuation)
+                    prefetchTopResult(exact.rows)
                     return@collectLatest
                 }
 
@@ -2426,10 +2425,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun loadMoreSearchResults() {
         val session = searchSession ?: return
         val token = session.continuation ?: return
-        if (_searchLoadingMore.value) return
-        _searchLoadingMore.value = true
-        viewModelScope.launch {
+        searchWork.continueSearch {
             val next = YtMusicRepository.searchContinuation(token, session.filter)
+            currentCoroutineContext().ensureActive()
             val stillCurrent = searchSession == session && session.requestId == newestRequestId.get()
             if (stillCurrent) {
                 next.onSuccess { page ->
@@ -2439,7 +2437,6 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     searchSession = session.copy(continuation = page.continuation)
                     _results.value = UiState.Success(merged)
                 }
-                _searchLoadingMore.value = false
             }
         }
     }
@@ -2576,8 +2573,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * not when it's tapped. [AudioCache] gives a head start to whatever's
      * already queued; a fresh search has nothing queued yet, and the top
      * result is overwhelmingly what gets tapped — see [play][MainActivity.play].
-     * The exact search result is warmed because video tracks now play their
-     * own audio by default; catalogue matching is only requested manually.
+     * Follows the same source-substitution policy as playback. Obsolete work
+     * is canceled when the query, filter or source changes.
      */
     private fun prefetchTopResult(rows: List<SearchResult>) {
         val song = rows.firstNotNullOfOrNull {
@@ -2587,13 +2584,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 is SearchResult.Browse -> null
             }
         } ?: return
-        viewModelScope.launch {
-            runCatching {
+        searchWork.prefetch {
+            try {
                 val audio = song
                 // A source-backed row resolves through its own source already
                 // and never takes the YouTube path — warming either half of
                 // this for one would be work nothing asks for.
-                if (SourceRegistry.parseTrackKey(audio.videoId) != null) return@runCatching
+                if (SourceRegistry.parseTrackKey(audio.videoId) != null) return@prefetch
                 // JioSaavn first, on the same reasoning as the queue's
                 // read-ahead: it is the copy that will actually be played if it
                 // has the track, so warming YouTube's URL instead warms the one
@@ -2610,13 +2607,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                         isVideo = audio.isVideo,
                     ),
                 )
+                currentCoroutineContext().ensureActive()
                 if (warmed != null) {
                     StreamChoice.remember(audio.videoId, warmed, substituted = true)
-                    return@runCatching
+                    return@prefetch
                 }
                 // Disabled, or hasn't got it: the tap path falls back to
                 // YouTube, so that is what is worth having ready.
                 StreamResolver.resolve(audio.videoId)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                // Speculative warming must never turn a search into an error.
             }
         }
     }
