@@ -715,6 +715,7 @@ fun NowPlayingScreen(
      */
     onQueueDragActiveChange: (Boolean) -> Unit = {},
     onClearQueue: () -> Unit,
+    queueFeedback: @Composable () -> Unit = {},
     onOpenMenu: () -> Unit,
     onOpenAlbum: (String) -> Unit,
     /**
@@ -1740,7 +1741,7 @@ fun NowPlayingScreen(
     // Back to plain white while a Spotify Canvas fills the screen: the video
     // is the backdrop then, not the sleeve the tint was read from.
     val playerTint by animateColorAsState(
-        targetValue = if (spotifyCanvasPresentation) Color.White else artworkTint,
+        targetValue = if (spotifyCanvasPresentation) Color.White else app.veyra.music.ui.themes.LocalThemeVisuals.current?.accent ?: artworkTint,
         animationSpec = tween(durationMillis = 360, easing = FastOutSlowInEasing),
         label = "playerTint",
     )
@@ -2060,6 +2061,7 @@ fun NowPlayingScreen(
                             onRemove = onRemoveFromQueue,
                             onMove = onMoveInQueue,
                             onClear = onClearQueue,
+                            feedback = queueFeedback,
                             onDragActiveChange = onQueueDragActiveChange,
                             modifier = Modifier.fillMaxSize(),
                         )
@@ -2199,6 +2201,7 @@ fun NowPlayingScreen(
                     }
                 }
 
+                app.veyra.music.ui.themes.ThemeBackdrop("player", Modifier.fillMaxSize(), visible = !spotifyCanvasPresentation)
                 // This transparent top gradient is always present while the modal
                 // player owns the system bar. Its opacity follows the actual top-band
                 // artwork, rather than changing the status-bar glyph colour per cover.
@@ -3509,6 +3512,7 @@ fun NowPlayingScreen(
                                     onRemove = onRemoveFromQueue,
                                     onMove = onMoveInQueue,
                                     onClear = onClearQueue,
+                            feedback = queueFeedback,
                                     onScrollingChange = { queueScrolling = it },
                                     onDragActiveChange = onQueueDragActiveChange,
                                     collapsePlayerOnScroll = true,

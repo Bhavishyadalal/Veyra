@@ -11,8 +11,8 @@ buildscript {
     }
 }
 /* Phone version. Keep beta markers until publishing a signed stable release. */
-extra["veyraVersionCode"] = 22
-extra["veyraVersionName"] = "0.1.6"
+extra["veyraVersionCode"] = 26
+extra["veyraVersionName"] = "0.1.7"
 
 /*
  * Bump this by hand before cutting each sideloaded test build ("beta2",

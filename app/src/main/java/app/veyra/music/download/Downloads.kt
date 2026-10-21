@@ -18,6 +18,9 @@ import app.veyra.music.data.sources.TrackMatcher
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import app.veyra.music.util.ConflatedSnapshotWriter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -26,6 +29,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.builtins.MapSerializer
@@ -124,23 +128,31 @@ object Downloads {
      */
     val collections: StateFlow<Map<String, SavedCollection>> = _collections.asStateFlow()
 
-    /** Waiting, in the order asked for. Guarded by [lock]. */
-    private val pending = LinkedHashMap<String, Song>()
-
     private val lock = Any()
+    // A cancelled transfer keeps its claim until cleanup completes. A retry may
+    // queue immediately, but cannot write the same destination concurrently.
+    private val work = DownloadWorkQueue<Song> { it.videoId }
 
-    /**
-     * The tracks taken off the queue and not yet finished, to the job fetching
-     * each — null in the gap between a worker claiming a track and its job
-     * existing.
-     *
-     * A map rather than the single slot this used to be, because several
-     * downloads run at once now. That plurality is the only reason it is here:
-     * [cancel] has to find *this* track's job among several, and a worker
-     * claiming the next track must not be able to step on another worker's.
-     * Guarded by [lock].
-     */
-    private val running = LinkedHashMap<String, Job?>()
+    private val recovery = linkedMapOf<String, DownloadRequest>()
+    // One process-lifetime writer keeps older snapshots from overtaking newer ones.
+    // Only the cheap immutable snapshot is taken under the queue lock.
+    private val recoveryWriter = ConflatedSnapshotWriter<List<DownloadRequest>>(
+        CoroutineScope(SupervisorJob() + Dispatchers.IO),
+        onFailure = { Log.w(TAG, "Could not persist download recovery", it) },
+    ) { requests ->
+        prefs.edit().putString("download_recovery_v1", DownloadRequest.encode(requests)).apply()
+    }
+    private fun rememberRequest(song: Song, from: String?) = synchronized(lock) {
+        recovery[song.videoId] = DownloadRequest.of(song, from)
+        persistRecovery()
+    }
+    private fun persistRecovery() {
+        if (::prefs.isInitialized) recoveryWriter.submit(recovery.values.toList())
+    }
+    private fun forgetRequest(id: String) = synchronized(lock) {
+        recovery.remove(id)
+        persistRecovery()
+    }
 
     fun init(context: Context) {
         prefs = context.getSharedPreferences("veyra_settings", Context.MODE_PRIVATE)
@@ -153,6 +165,16 @@ object Downloads {
         _collections.value = runCatching {
             json.decodeFromString(collectionSerializer, prefs.getString(KEY_SAVED_COLLECTIONS, null) ?: "{}")
         }.getOrDefault(emptyMap())
+        synchronized(lock) {
+            DownloadRequest.decode(prefs.getString("download_recovery_v1", "[]") ?: "[]").forEach { request ->
+                // Offer an explicit retry even if an older-quality download already exists.
+                // Retry verifies/adopts a complete destination through the normal transfer path.
+                recovery[request.id] = request
+                DownloadSession.queued(request.song(), request.from)
+                fail(request.id, context.getString(app.veyra.music.R.string.download_interrupted))
+            }
+            persistRecovery()
+        }
     }
 
     // ---- Asking -------------------------------------------------------------
@@ -190,11 +212,12 @@ object Downloads {
             return
         }
         synchronized(lock) {
-            if (id in pending || id in running) return
-            pending[id] = song
+            if (!work.enqueue(song)) return
+            // Publish request metadata before an existing worker can claim this item.
+            rememberRequest(song, from)
+            _active.update { it + (id to DownloadState.Queued) }
+            DownloadSession.queued(song, from)
         }
-        _active.update { it + (id to DownloadState.Queued) }
-        DownloadSession.queued(song, from)
 
         val app = context.applicationContext
         runCatching {
@@ -204,32 +227,21 @@ object Downloads {
             // means the queue has nothing to drain it and would sit there
             // looking accepted forever.
             Log.w(TAG, "could not start the download service: ${it.message}")
-            synchronized(lock) { pending.remove(id) }
-            fail(id, "Downloads can't start right now")
+            synchronized(lock) {
+                if (work.rejectPending(id)) fail(id, "Downloads can't start right now")
+            }
         }
     }
 
-    /**
-     * Drop [videoId] from the queue, or stop it if it is one of the ones
-     * running.
-     *
-     * Dropping it from [running] is what makes this safe in the gap between a
-     * track being dequeued and its job existing: a cancel landing in that
-     * window finds no job to stop, but [onRunning] then finds the id it was
-     * told to run is no longer wanted, and stops it on arrival.
-     */
+    /** Stop this request; a same-id retry waits until its old claim is released. */
     fun cancel(videoId: String) {
         val job = synchronized(lock) {
-            pending.remove(videoId)
-            if (videoId !in running) return@synchronized null
-            running.remove(videoId)
+            val cancelled = work.cancel(videoId)
+            clear(videoId)
+            DownloadSession.forget(videoId)
+            cancelled
         }
         job?.cancel()
-        clear(videoId)
-        // A download the user called off is not something they need reminding to
-        // check on, so it leaves the manager rather than sitting in it as a
-        // permanent "cancelled" row.
-        DownloadSession.forget(videoId)
     }
 
     // ---- The record ---------------------------------------------------------
@@ -610,10 +622,12 @@ object Downloads {
         saved: (Map<String, String>) -> Map<String, String>,
         meta: (Map<String, SavedSongMetadata>) -> Map<String, SavedSongMetadata>,
     ) {
-        val savedMap = _saved.updateAndGet(saved)
-        val metaMap = _savedMetadata.updateAndGet(meta)
-        if (!::prefs.isInitialized) return
         synchronized(recordLock) {
+            // Snapshot creation and persistence share one critical section;
+            // locking only apply() allowed an older completion to write last.
+            val savedMap = _saved.updateAndGet(saved)
+            val metaMap = _savedMetadata.updateAndGet(meta)
+            if (!::prefs.isInitialized) return
             prefs.edit()
                 .putString(KEY_SAVED, json.encodeToString(serializer, savedMap))
                 .putString(KEY_SAVED_METADATA, json.encodeToString(metadataSerializer, metaMap))
@@ -760,41 +774,26 @@ object Downloads {
      * instant where a track is in neither the queue nor the running slot and a
      * [cancel] for it would quietly do nothing.
      */
-    internal fun takeNext(): Song? = synchronized(lock) {
-        val entry = pending.entries.firstOrNull() ?: return null
-        pending.remove(entry.key)
-        running[entry.key] = null
-        entry.value
+    internal fun takeNext(): DownloadWorkQueue.Claim<Song>? = synchronized(lock) { work.takeNext() }
+
+    internal fun onRunning(claim: DownloadWorkQueue.Claim<Song>, job: Job) {
+        synchronized(lock) { work.attach(claim, job) }
     }
 
-    /** Attach the job fetching [videoId], unless it has been cancelled meanwhile. */
-    internal fun onRunning(videoId: String, job: Job) {
-        val cancelled = synchronized(lock) {
-            if (videoId !in running) return@synchronized true
-            running[videoId] = job
-            false
-        }
-        if (cancelled) job.cancel()
+    internal fun onIdle(claim: DownloadWorkQueue.Claim<Song>) {
+        synchronized(lock) { work.finish(claim) }
     }
 
-    /** [videoId] is finished, one way or another, and no longer holds a worker. */
-    internal fun onIdle(videoId: String) {
-        synchronized(lock) { running.remove(videoId) }
-    }
+    internal fun busy(): Boolean = synchronized(lock) { work.busy }
 
-    /** Whether anything is still queued or in flight — see [DownloadService]'s workers. */
-    internal fun busy(): Boolean = synchronized(lock) { pending.isNotEmpty() || running.isNotEmpty() }
-
-    /**
-     * The service is gone, so nothing is running any more.
-     *
-     * Distinct from [onIdle], which is one worker reporting one finished track.
-     * This is the whole drain going away at once — every claim in [running] is
-     * void, and leaving one behind would have [enqueue] refuse that track
-     * forever as already in flight.
-     */
     internal fun onStopped() {
-        synchronized(lock) { running.clear() }
+        synchronized(lock) {
+            work.stop().forEach { fail(it, "Interrupted. Tap Retry to download again.") }
+        }
+    }
+
+    private inline fun publish(claim: DownloadWorkQueue.Claim<Song>, action: () -> Unit) {
+        synchronized(lock) { if (work.accepts(claim)) action() }
     }
 
     /**
@@ -821,14 +820,17 @@ object Downloads {
      * shared between them but the two state flows, and both are written through
      * atomic updates for exactly that reason.
      */
-    internal suspend fun run(context: Context, song: Song) = withContext(Dispatchers.IO) {
+    internal suspend fun run(context: Context, claim: DownloadWorkQueue.Claim<Song>) = withContext(Dispatchers.IO) {
+        val song = claim.item
         val id = song.videoId
         // Set before the lookup, not after it. Resolving where a lossless track
         // comes from is the long part of a download, and leaving the row on
         // "Queued" for all of it reads as a queue that has stopped rather than
         // one that is working.
-        _active.update { it + (id to DownloadState.Running(0f)) }
-        DownloadSession.running(id, 0f)
+        publish(claim) {
+            _active.update { it + (id to DownloadState.Running(0f)) }
+            DownloadSession.running(id, 0f)
+        }
 
         try {
             val plan = prepare(context, song)
@@ -836,14 +838,19 @@ object Downloads {
             // video is the wrong title and the wrong cover for the file actually
             // being written. Corrected here rather than left to disagree with
             // the notification and with the Downloads page afterwards.
-            DownloadSession.retitle(id, plan.track)
-            transfer(context, song, plan)
+            kotlinx.coroutines.currentCoroutineContext().ensureActive()
+            publish(claim) { DownloadSession.retitle(id, plan.track) }
+            transfer(context, claim, plan)
         } catch (e: CancellationException) {
-            clear(id)
+            publish(claim) {
+                if (_active.value[id] is DownloadState.Running) {
+                    fail(id, context.getString(app.veyra.music.R.string.download_interrupted))
+                }
+            }
             throw e
         } catch (e: Exception) {
             Log.w(TAG, "download failed for $id: ${e.message}", e)
-            fail(id, e.friendly())
+            publish(claim) { fail(id, e.friendly()) }
         }
     }
 
@@ -927,16 +934,18 @@ object Downloads {
      * commits or aborts, so a caller is free to call it a second time with a
      * freshly resolved plan without the first attempt leaving anything behind.
      */
-    private suspend fun transfer(context: Context, song: Song, plan: Prepared) {
+    private suspend fun transfer(context: Context, claim: DownloadWorkQueue.Claim<Song>, plan: Prepared) {
+        val song = claim.item
         val id = song.videoId
+        val workContext = kotlinx.coroutines.currentCoroutineContext()
+        workContext.ensureActive()
         val track = plan.track
 
         // Already there from a previous run the record lost track of — adopt it
         // rather than writing a second copy beside it.
         plan.alreadyAt?.let { uri ->
             remember(song, track, uri)
-            DownloadSession.done(id)
-            clear(id)
+            publish(claim) { DownloadSession.done(id); clear(id) }
             return
         }
         val route = plan.route ?: error("Nothing to download")
@@ -971,8 +980,7 @@ object Downloads {
                 if (alreadyThere != null) {
                     Log.d(TAG, "$name is already in Music; adopting it")
                     remember(song, track, alreadyThere)
-                    DownloadSession.done(id)
-                    clear(id)
+                    publish(claim) { DownloadSession.done(id); clear(id) }
                     return@coroutineScope
                 }
 
@@ -980,8 +988,11 @@ object Downloads {
                 if (manifest != null) {
                     val onSegment: (Long, Long) -> Unit = { written, total ->
                         val fraction = written.toFloat() / total
-                        _active.update { it + (id to DownloadState.Running(fraction)) }
-                        DownloadSession.running(id, fraction)
+                        workContext.ensureActive()
+                        publish(claim) {
+                            _active.update { it + (id to DownloadState.Running(fraction)) }
+                            DownloadSession.running(id, fraction)
+                        }
                     }
                     val savedUri = if (manifest.dash) {
                         OfflineDash.save(
@@ -1005,8 +1016,7 @@ object Downloads {
                         )
                     }
                     remember(song, track, savedUri, route.downloadFormat)
-                    DownloadSession.done(id)
-                    clear(id)
+                    publish(claim) { DownloadSession.done(id); clear(id) }
                     Log.d(TAG, "saved offline ${if (manifest.dash) "DASH" else "HLS"} package for $name")
                     return@coroutineScope
                 }
@@ -1016,8 +1026,11 @@ object Downloads {
                 destination.openStream().use { sink ->
                     route.write(sink) { written, total ->
                         val fraction = written.toFloat() / total
-                        _active.update { it + (id to DownloadState.Running(fraction)) }
-                        DownloadSession.running(id, fraction)
+                        workContext.ensureActive()
+                        publish(claim) {
+                            _active.update { it + (id to DownloadState.Running(fraction)) }
+                            DownloadSession.running(id, fraction)
+                        }
                     }
                 }
                 val words = lyrics?.await()
@@ -1026,11 +1039,11 @@ object Downloads {
                 // concurrent album workers from exposing untagged tracks.
                 MediaTagger.embed(context, destination.tagUri, track, route.extension, words, cover)
                 val artworkUri = MediaTagger.persistArtwork(context, track.thumbnailUrl, cover)
+                workContext.ensureActive()
                 val savedUri = destination.commit()
                 pending = null
                 remember(song, track, savedUri, route.downloadFormat, artworkUri)
-                DownloadSession.done(id)
-                clear(id)
+                publish(claim) { DownloadSession.done(id); clear(id) }
                 Log.d(TAG, "saved $name")
             }
         } catch (e: Throwable) {
@@ -1230,6 +1243,7 @@ object Downloads {
 
     /** Back to "not downloaded" — used for success, where [saved] takes over, and for cancellation. */
     private fun clear(videoId: String) {
+        forgetRequest(videoId)
         _active.update { it - videoId }
     }
 
@@ -1319,7 +1333,13 @@ object Downloads {
 
     /** Dropped when the sheet is reopened; a failure is worth showing once. */
     fun dismissFailure(videoId: String) {
-        if (_active.value[videoId] is DownloadState.Failed) clear(videoId)
+        _active.update { if (it[videoId] is DownloadState.Failed) it - videoId else it }
+    }
+
+    fun dismissRecovery(videoId: String) = synchronized(lock) {
+        if (_active.value[videoId] is DownloadState.Queued || _active.value[videoId] is DownloadState.Running) return@synchronized
+        forgetRequest(videoId)
+        dismissFailure(videoId)
     }
 
     private const val KEY_SAVED = "downloaded_tracks"

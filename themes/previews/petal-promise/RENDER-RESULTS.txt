@@ -1,0 +1,3 @@
+Home refreshed for collection v2 Glass Noir branding at 390 dp; visually inspected.
+Player and 320 dp / 150% text / RTL banner studies are retained from the verified collection release; their components were not changed in the icon refresh.
+Native Compose component studies, not Android screenshots.

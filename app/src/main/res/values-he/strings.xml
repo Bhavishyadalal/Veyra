@@ -53,14 +53,17 @@
     <plurals name="song_count_plural">
         <item quantity="one">%1$d שיר</item>
         <item quantity="other">%1$d שירים</item>
+        <item quantity="two">%1$d שירים</item>
     </plurals>
     <plurals name="artist_count">
         <item quantity="one">%1$d אמן</item>
         <item quantity="other">%1$d אמנים</item>
+        <item quantity="two">%1$d אמנים</item>
     </plurals>
     <plurals name="album_count">
         <item quantity="one">%1$d אלבום</item>
         <item quantity="other">%1$d אלבומים</item>
+        <item quantity="two">%1$d אלבומים</item>
     </plurals>
     <string name="songs">שירים</string>
     <string name="artists">אמנים</string>
@@ -79,6 +82,7 @@
     <plurals name="downloading_song_count">
         <item quantity="one">מוריד %1$d שיר</item>
         <item quantity="other">מוריד %1$d שירים</item>
+        <item quantity="two">מוריד %1$d שירים</item>
     </plurals>
     <string name="source">מקורות</string>
     <string name="lossless_audio">אודיו Lossless</string>
@@ -507,6 +511,7 @@
     <plurals name="replay_minutes_unit">
         <item quantity="one">%1$s דקה</item>
         <item quantity="other">%1$s דקות</item>
+        <item quantity="two">%1$s דקות</item>
     </plurals>
     <string name="replay_mostly_around">, רובם סביב %1$s.</string>
     <string name="replay_private_counting">נבנה באופן פרטי מההיסטוריה המקומית שלך</string>
@@ -614,58 +619,72 @@
     <plurals name="downloads_failed_count">
         <item quantity="one">הורדות · %1$d נכשלה</item>
         <item quantity="other">הורדות · %1$d נכשלו</item>
+        <item quantity="two">הורדות · %1$d נכשלו</item>
     </plurals>
     <plurals name="download_waiting_count">
         <item quantity="one">%1$d ממתינה</item>
         <item quantity="other">%1$d ממתינות</item>
+        <item quantity="two">%1$d ממתינות</item>
     </plurals>
     <plurals name="download_done_count">
         <item quantity="one">%1$d הסתיימה</item>
         <item quantity="other">%1$d הסתיימו</item>
+        <item quantity="two">%1$d הסתיימו</item>
     </plurals>
     <plurals name="download_failed_count">
         <item quantity="one">%1$d נכשלה</item>
         <item quantity="other">%1$d נכשלו</item>
+        <item quantity="two">%1$d נכשלו</item>
     </plurals>
     <plurals name="all_songs_downloaded">
         <item quantity="one">כל השיר ה-%1$d ירד</item>
         <item quantity="other">כל %1$d השירים ירדו</item>
+        <item quantity="two">כל %1$d השירים ירדו</item>
     </plurals>
     <plurals name="hour_count">
         <item quantity="one">שעה %1$d</item>
         <item quantity="other">%1$d שעות</item>
+        <item quantity="two">%1$d שעות</item>
     </plurals>
     <plurals name="songs_will_play_next">
         <item quantity="one">שיר %1$d יתנגן בהמשך</item>
         <item quantity="other">%1$d שירים יתנגנו בהמשך</item>
+        <item quantity="two">%1$d שירים יתנגנו בהמשך</item>
     </plurals>
     <plurals name="songs_added_to_queue">
         <item quantity="one">שיר %1$d נוסף לתור</item>
         <item quantity="other">%1$d שירים נוספו לתור</item>
+        <item quantity="two">%1$d שירים נוספו לתור</item>
     </plurals>
     <plurals name="log_copied_line_count">
         <item quantity="one">יומן הועתק · שורה %1$d</item>
         <item quantity="other">יומן הועתק · %1$d שורות</item>
+        <item quantity="two">יומן הועתק · %1$d שורות</item>
     </plurals>
     <plurals name="minute_count">
         <item quantity="one">דקה %1$d</item>
         <item quantity="other">%1$d דקות</item>
+        <item quantity="two">%1$d דקות</item>
     </plurals>
     <plurals name="replay_artist_count">
         <item quantity="one">אמן %1$s</item>
         <item quantity="other">%1$s אמנים</item>
+        <item quantity="two">%1$s אמנים</item>
     </plurals>
     <plurals name="replay_play_count">
         <item quantity="one">הפעלה %1$s</item>
         <item quantity="other">%1$s הפעלות</item>
+        <item quantity="two">%1$s הפעלות</item>
     </plurals>
     <plurals name="replay_song_count">
         <item quantity="one">שיר %1$s</item>
         <item quantity="other">%1$s שירים</item>
+        <item quantity="two">%1$s שירים</item>
     </plurals>
     <plurals name="listening_month_count">
         <item quantity="one">חודש %1$d של האזנה</item>
         <item quantity="other">%1$d חודשי האזנה</item>
+        <item quantity="two">%1$d חודשי האזנה</item>
     </plurals>
     <string name="hebrew">עברית</string>
 
@@ -779,6 +798,7 @@
     <plurals name="track_count_plural">
         <item quantity="one">רצועה %1$d</item>
         <item quantity="other">%1$d רצועות</item>
+        <item quantity="two">%1$d רצועות</item>
     </plurals>
 
     <string name="account_profiles_help">לחשבון Google יכולים להיות פרופילים אישיים ועסקיים, לכל אחד ספרייה והיסטוריה משלו.</string>
@@ -909,7 +929,7 @@
 
     <string name="selected_account">חשבון נבחר</string>
 
-    <string name="shelf_100_on_repeat">בלופ חוזר</string>
+    <string name="shelf_100_on_repeat" formatted="false">בלופ חוזר</string>
 
     <string name="shelf_artists_on_the_rise">אמנים בצמיחה</string>
 
@@ -1229,10 +1249,12 @@
     <plurals name="add_to_playlists_count">
         <item quantity="one">הוסף לרשימת השמעה %1$d</item>
         <item quantity="other">הוסף ל-%1$d רשימות השמעה</item>
+        <item quantity="two">הוסף ל-%1$d רשימות השמעה</item>
     </plurals>
     <plurals name="added_to_playlists_notice">
         <item quantity="one">נוסף לרשימת השמעה %1$d</item>
         <item quantity="other">נוסף ל-%1$d רשימות השמעה</item>
+        <item quantity="two">נוסף ל-%1$d רשימות השמעה</item>
     </plurals>
     <string name="party_queue_full">התור מלא (עד %d שירים במסיבה)</string>
 

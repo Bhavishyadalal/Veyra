@@ -1,0 +1,1 @@
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@color/theme_worldriversidepause_background"/><foreground android:drawable="@mipmap/ic_theme_worldriversidepause_foreground"/><monochrome android:drawable="@drawable/ic_worldriversidepause_monochrome"/></adaptive-icon>

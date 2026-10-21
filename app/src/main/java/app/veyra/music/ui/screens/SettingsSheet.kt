@@ -118,9 +118,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import app.veyra.music.AppIcon
 import app.veyra.music.R
 import app.veyra.music.data.LocalMediaRepository
 import app.veyra.music.data.NerdStats
@@ -161,6 +159,7 @@ import kotlinx.coroutines.launch
 /** Searchable settings with category navigation and shared, accessible controls. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 fun SettingsScreen(
     /** The window's width, for the gates that depend on it. */
     windowWidth: Dp,
@@ -183,6 +182,7 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
 
     val wifiQuality by AppSettings.audioQualityWifi.collectAsStateWithLifecycle()
     val cellularQuality by AppSettings.audioQualityCellular.collectAsStateWithLifecycle()
@@ -229,7 +229,7 @@ fun SettingsScreen(
     val outputStatus by AudioOutputStatus.current.collectAsStateWithLifecycle()
     val playingDolbyAtmos by remember {
         NerdStats.current.map { it?.isDolbyAtmos == true }.distinctUntilChanged()
-    }.collectAsStateWithLifecycle(initialValue = NerdStats.current.value?.isDolbyAtmos == true)
+    }.collectAsStateWithLifecycle(initialValue = remember { NerdStats.current.value?.isDolbyAtmos == true })
     val cacheLimitBytes by AppSettings.audioCacheLimitBytes.collectAsStateWithLifecycle()
     val showCacheFolder by AppSettings.showCacheFolder.collectAsStateWithLifecycle()
     val downloadQuality by AppSettings.downloadQuality.collectAsStateWithLifecycle()
@@ -283,6 +283,8 @@ fun SettingsScreen(
     // Search spans all categories; an empty query shows the selected category,
     // exactly as if the field weren't there.
     var searchQuery by navigationState::query
+    var showThemeGallery by rememberSaveable { mutableStateOf(false) }
+    if (showThemeGallery) ThemeGallery(onDismiss = { showThemeGallery = false })
     var picking by remember { mutableStateOf<QualityTarget?>(null) }
     var pickingDownloadQuality by remember { mutableStateOf(false) }
     var pickingAutomixPerformance by remember { mutableStateOf(false) }
@@ -331,14 +333,14 @@ fun SettingsScreen(
         if (target == null) return@rememberLauncherForActivityResult
         backupScope.launch {
             exporting = true
-            exportStatus = context.getString(R.string.settings_backup_working)
+            exportStatus = textResources.getString(R.string.settings_backup_working)
             try {
                 exportStatus = Backup.exportTo(context, target).fold(
                     onSuccess = { months ->
-                        context.getString(R.string.export_succeeded, context.countOfMonths(months))
+                        textResources.getString(R.string.export_succeeded, context.countOfMonths(months))
                     },
                     onFailure = {
-                        context.getString(R.string.export_failed, it.message ?: context.getString(R.string.unknown_error))
+                        textResources.getString(R.string.export_failed, it.message ?: textResources.getString(R.string.unknown_error))
                     },
                 )
             } finally {
@@ -352,14 +354,14 @@ fun SettingsScreen(
         if (source == null) return@rememberLauncherForActivityResult
         backupScope.launch {
             importing = true
-            importStatus = context.getString(R.string.settings_backup_working)
+            importStatus = textResources.getString(R.string.settings_backup_working)
             try {
                 importStatus = Backup.importFrom(context, source).fold(
                     onSuccess = {
-                        context.getString(R.string.import_succeeded, context.countOfMonths(it.months), it.from)
+                        textResources.getString(R.string.import_succeeded, context.countOfMonths(it.months), it.from)
                     },
                     onFailure = {
-                        context.getString(R.string.import_failed, it.message ?: context.getString(R.string.unknown_error))
+                        textResources.getString(R.string.import_failed, it.message ?: textResources.getString(R.string.unknown_error))
                     },
                 )
             } finally {
@@ -415,10 +417,10 @@ fun SettingsScreen(
         categoryIntroduced = true
     }
 
+    Box(modifier.fillMaxSize()) {
+    app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize())
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(contentPadding),
+        modifier = Modifier.fillMaxSize().padding(contentPadding),
     ) {
         SettingsPageHeader(
             title = stringResource(if (searching) R.string.settings else category?.title ?: R.string.settings),
@@ -439,6 +441,7 @@ fun SettingsScreen(
                     translationY = if (reducedMotion) 0f else (1f - categoryAlpha.value) * 10.dp.toPx()
                 },
         ) {
+            if (!searching) app.veyra.music.ui.themes.ThemeAtmosphere("header", Modifier.padding(horizontal=20.dp, vertical=8.dp), compact=true)
             if (category == null && !searching) {
                 SettingsOverview(onSelect = { category = it })
             }
@@ -741,6 +744,10 @@ fun SettingsScreen(
             }
 
             SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.appearance)) {
+                row(stringResource(R.string.theme_packs), "themes", "halloween", "fonts", "icons") {
+                    SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.theme_packs),
+                        subtitle = stringResource(R.string.theme_packs_subtitle), onClick = { showThemeGallery = true })
+                }
                 val themeTitle = stringResource(R.string.theme)
                 row(themeTitle, "dark mode", "light mode") {
                     SettingsPresetRow(icon = Icons.Rounded.Brightness4, title = themeTitle, subtitle = "",
@@ -1143,7 +1150,7 @@ fun SettingsScreen(
                             val loader = SingletonImageLoader.get(context)
                             loader.memoryCache?.clear()
                             loader.diskCache?.clear()
-                            Toast.makeText(context, context.getString(R.string.image_cache_cleared), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, textResources.getString(R.string.image_cache_cleared), Toast.LENGTH_SHORT).show()
                         },
                     )
                 }
@@ -1277,8 +1284,7 @@ fun SettingsScreen(
             SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.app_icon)) {
                 val appIconTitle = stringResource(R.string.app_icon)
                 row(appIconTitle, "icon", "launcher", "logo", "glass", "frost") {
-                    SettingsRow(icon = SettingsIcons.Icons, title = appIconTitle, subtitle = stringResource(R.string.app_icon_picker_hint))
-                    AppIconPicker()
+                    AppIconSetting()
                 }
             }
 
@@ -1342,7 +1348,7 @@ fun SettingsScreen(
                                     runCatching {
                                         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                                     }.onFailure {
-                                        Toast.makeText(context, context.getString(R.string.creator_link_unavailable), Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, textResources.getString(R.string.creator_link_unavailable), Toast.LENGTH_SHORT).show()
                                     }
                                 },
                             )
@@ -1360,7 +1366,7 @@ fun SettingsScreen(
                                 runCatching {
                                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/bhavishya_dalal_/")))
                                 }.onFailure {
-                                    Toast.makeText(context, context.getString(R.string.creator_link_unavailable), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, textResources.getString(R.string.creator_link_unavailable), Toast.LENGTH_SHORT).show()
                                 }
                             },
                         )
@@ -1392,6 +1398,7 @@ fun SettingsScreen(
                 )
             }
         }
+    }
     }
 
     picking?.let { target ->
@@ -1475,7 +1482,7 @@ fun SettingsScreen(
                 TextButton(onClick = {
                     confirmClearSongCache = false
                     AudioCache.clear {
-                        Toast.makeText(context, context.getString(R.string.song_cache_cleared), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, textResources.getString(R.string.song_cache_cleared), Toast.LENGTH_SHORT).show()
                     }
                 }) {
                     Text(stringResource(R.string.clear))
@@ -1654,10 +1661,10 @@ fun SettingsScreen(
                                         showLastfmLoginDialog = false
                                     }
                                     .onFailure { e ->
-                                        lastfmError = e.message ?: context.getString(R.string.login_failed)
+                                        lastfmError = e.message ?: textResources.getString(R.string.login_failed)
                                     }
                             } catch (e: Exception) {
-                                lastfmError = e.message ?: context.getString(R.string.login_failed)
+                                lastfmError = e.message ?: textResources.getString(R.string.login_failed)
                             } finally {
                                 lastfmLoading = false
                             }
@@ -1996,58 +2003,5 @@ internal fun SettingsGroup(
                 top = 8.dp,
             ),
         )
-    }
-}
-
-@Composable
-private fun AppIconPicker() {
-    val context = LocalContext.current
-    var selected by remember { mutableStateOf(AppIcon.current(context)) }
-    androidx.compose.foundation.layout.BoxWithConstraints(
-        Modifier.fillMaxWidth().padding(horizontal = ROW_INSET, vertical = 8.dp),
-    ) {
-        val fontScale = LocalDensity.current.fontScale
-        val columns = when {
-            maxWidth / fontScale < 220.dp -> 1
-            maxWidth >= 340.dp && fontScale <= 1.2f -> 3
-            else -> 2
-        }
-        Column(Modifier.selectableGroup(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            AppIcon.entries.chunked(columns).forEach { row ->
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                    row.forEach { option ->
-                        val checked = option == selected
-                        SettingsIconChoice(
-                            label = stringResource(option.labelRes),
-                            selected = checked,
-                            modifier = Modifier.weight(1f),
-                            onSelect = {
-                                if (!checked) {
-                                    runCatching { AppIcon.apply(context, option) }
-                                        .onSuccess {
-                                            selected = AppIcon.current(context)
-                                            Toast.makeText(context, context.getString(R.string.app_icon_changed), Toast.LENGTH_SHORT).show()
-                                        }.onFailure {
-                                            Toast.makeText(context, context.getString(R.string.app_icon_failed), Toast.LENGTH_SHORT).show()
-                                        }
-                                }
-                            },
-                        ) {
-                            Box(Modifier.size(68.dp).clip(RoundedCornerShape(18.dp))) {
-                                val preview = option.previewRes
-                                if (preview != null) {
-                                    Image(painterResource(preview), null, modifier = Modifier.fillMaxSize().scale(1.5f), contentScale = ContentScale.Fit)
-                                } else {
-                                    AndroidView(factory = { ctx -> android.widget.ImageView(ctx) },
-                                        update = { it.setImageResource(option.iconRes) }, modifier = Modifier.fillMaxSize())
-                                }
-                            }
-
-                        }
-                    }
-                    repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
-                }
-            }
-        }
     }
 }

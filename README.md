@@ -1,15 +1,15 @@
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
-> **Stable 0.1.6 / code 22:** promoted from the completed preview, with saved Home, customization, accessibility, navigation and calmer shared motion. [Release notes](RELEASE_NOTES_0.1.6.md). APK publication is pending the owner’s release.
+> **Stable 0.1.7 / code 26:** promoted from the completed 0.1.7-beta1 source at the owner’s request. Theme Studio, 41 themes, 69 launcher choices and listening/recovery fixes. [Release notes](RELEASE_NOTES_0.1.7.md) · [Promotion checks and limits](verification/STABLE-0.1.7-PROMOTION.md). No APK is published by this source promotion.
 
-> **Maintenance:** Current stable is 0.1.6 on `main`; completed preview is preserved on `preview/0.1.6-beta1`. Current preview 0.1.7-beta1 / code 24 is available on `preview/0.1.7-beta1`. [Theme Studio and native previews](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/themes/README.md). [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
+> **Maintenance:** Current stable is on `main` and `stable/0.1.7`. The historical preview stays on `preview/0.1.7-beta1` (code 25); historical stable 0.1.6 stays on `stable/0.1.6`. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
 
 
 > Android Studio import/build guide: [START_HERE.md](START_HERE.md). Historical beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
 
 # Veyra
 
-> **Stable: 0.1.6, code 22.** [Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.6_Stable.zip) · [Verification limits](verification/SCROLL-MOTION-0.1.6-beta1.md).
+> **Preview branch:** [0.1.7-beta1 Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.7-beta1/downloads/Veyra_Android_Source_0.1.7-beta1.zip). [Stable source](https://github.com/Bhavishyadalal/Veyra/tree/main) stays separate.
 
 A personal Android music player with Manrope typography, selectable launcher styles and a dark listening interface.
 
@@ -44,7 +44,29 @@ APKs are written under `app/build/outputs/apk/dev/debug/`. Choose arm64-v8a for 
 
 Both stable and preview use the same backend. [Configure your external 12-minute cron job](docs/RENDER_KEEPALIVE.md), including its exact URL, method, timeout and expected response. The backend's existing GitHub schedule remains available as a fallback. No app-side background timer is required.
 
-## Stable 0.1.6 — Home ready sooner
+## Midnight Express — your next stop, another song
+
+An original rainy night-train theme with warm amber carriage lighting, coal-blue
+surfaces, bold Rajdhani headings, route-style player details and an optional
+Veyra ticket-waveform launcher. [Theme and previews](themes/README.md#midnight-express--your-next-stop-another-song)
+· [Verification](verification/MIDNIGHT-EXPRESS-0.1.7-beta1.md).
+
+## Astral Tide — drift deeper, hear everything
+
+An original bioluminescent ocean theme: luminous manta rays, bold Space Grotesk
+headings, sea-glass mint controls and an optional manta-waveform launcher icon.
+[Theme pack and native studies](themes/README.md#astral-tide--drift-deeper-hear-everything)
+· [Verification and limits](verification/ASTRAL-TIDE-0.1.7-beta1.md).
+
+## Stable 0.1.7 — Theme Studio
+
+Download Halloween Nocturne from Settings → Appearance → Theme studio. It includes
+original artwork, licensed fonts, custom navigation and transport glyphs, themed
+native buttons and an ember timeline. Installation is validated and applying asks
+before refreshing the UI. Original appearance, music, accounts and existing
+controls remain available. [Theme guide and native previews](themes/README.md).
+
+## Previous stable 0.1.6 — Home ready sooner
 
 Restore a previously loaded Home before fetching fresh shelves, keep it visible during refresh/failure, and customize section order/visibility per account/channel. Offline Home provides direct access to existing Downloads and Local Music; cached online-only items are clearly distinguished from downloaded songs. A first successful online load is required to populate the snapshot. Images use existing Coil caching and fallbacks; music is not downloaded automatically.
 

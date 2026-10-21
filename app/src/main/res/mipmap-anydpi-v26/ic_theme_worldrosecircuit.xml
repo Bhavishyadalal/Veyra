@@ -1,0 +1,1 @@
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@color/theme_worldrosecircuit_background"/><foreground android:drawable="@mipmap/ic_theme_worldrosecircuit_foreground"/><monochrome android:drawable="@drawable/ic_worldrosecircuit_monochrome"/></adaptive-icon>

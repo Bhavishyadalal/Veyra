@@ -143,6 +143,7 @@ fun ListenTogetherScreen(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
 
@@ -202,7 +203,7 @@ fun ListenTogetherScreen(
         state.code?.let { partyCode ->
             val message = inviteLinkFor(partyCode) +
                 System.lineSeparator() + System.lineSeparator() +
-                context.getString(R.string.listen_together_share_text, partyCode)
+                textResources.getString(R.string.listen_together_share_text, partyCode)
             context.startActivity(
                 Intent.createChooser(
                     Intent(Intent.ACTION_SEND).apply {
@@ -466,7 +467,7 @@ fun ListenTogetherScreen(
                             clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Veyra room code", state.code.orEmpty())))
                             Toast.makeText(
                                 context,
-                                context.getString(R.string.copy_code),
+                                textResources.getString(R.string.copy_code),
                                 Toast.LENGTH_SHORT,
                             ).show()
                         }
@@ -981,6 +982,8 @@ private fun NowPlayingInTheParty(state: ListenTogether.State) {
 private fun connectionLine(state: ListenTogether.State): String = when {
     state.connection != ListenTogether.Connection.LIVE ->
         stringResource(R.string.listen_together_reconnecting)
+    state.hostReconnecting ->
+        stringResource(R.string.listen_together_host_reconnecting)
     // Live, but the clock has not been measured yet — so the position above is
     // the server's last word on it rather than this device's own reckoning, and
     // saying so is more use than a spinner.

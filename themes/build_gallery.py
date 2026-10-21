@@ -1,0 +1,21 @@
+from pathlib import Path
+from html import escape
+r=Path(__file__).resolve().parent
+styles='''*{box-sizing:border-box}body{margin:0;background:#070c18;color:#f5f8ff;font-family:Manrope,system-ui,sans-serif;line-height:1.65}main{max-width:1320px;margin:auto;padding:clamp(20px,5vw,70px)}h1,h2{font-family:Barlow,system-ui,sans-serif;line-height:1.05}h1{font-size:clamp(52px,9vw,110px);margin:20px 0}h2{font-size:clamp(40px,6vw,72px);margin:20px 0}p{max-width:800px;color:#bac9df}a{color:var(--accent,#ff4f66);text-underline-offset:5px}header,section{padding:35px 0 55px;border-bottom:1px solid #33415a}.eyebrow{color:var(--accent,#ff4f66);font-size:12px;letter-spacing:.2em}.hero{display:block;width:100%;max-height:480px;object-fit:cover;border-radius:26px;margin:24px 0}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0}.actions a{border:1px solid #4d6384;border-radius:14px;padding:12px 18px;text-decoration:none}.actions a:focus-visible{outline:3px solid #82b9ff;outline-offset:4px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:30px}.grid img{width:100%;height:auto;border-radius:20px;border:1px solid #33415a}figure{margin:0}figcaption{font-size:12px;color:#bac9df;padding-top:10px}footer{padding-top:35px;color:#bac9df}#midnight-express{--accent:#ffc778}#midnight-express h2{font-family:Rajdhani,sans-serif}#astral-tide{--accent:#a0e8d5}#astral-tide h2{font-family:SpaceGrotesk,sans-serif}.playful{--accent:#ffe18a}.playful h2{font-family:Fredoka,sans-serif}.halloween{--accent:#ffc17a}.halloween h2{font-family:Grenze,serif}.icons{display:flex;gap:18px;align-items:center}.icons img{width:88px;border-radius:20px}@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.grid{grid-template-columns:1fr}figure{max-width:380px;margin:auto}}'''
+
+import json
+catalog=json.loads((r/'catalog.json').read_text())['themes']
+html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Veyra · Theme Studio</title><style>'+styles+'</style></head><body><main><header><div class="eyebrow">VEYRA / THEME STUDIO</div><h1>Forty-one worlds.<br>One Veyra.</h1><p>Original atmosphere, custom navigation, native music controls and optional matching launcher icons. Stable 0.1.7 / code 26.</p><p>Native component studies in illustrative layouts, not Android screenshots. Sample player artwork is demonstration art.</p><nav class="actions"><a href="README.md">Installation and compatibility</a>'
+for t in catalog: html+=f'<a href="#{t["id"]}">{escape(t["name"])}</a>'
+html+='</nav></header>'
+for t in catalog:
+ id=t['id'];m=json.loads((r/id/'theme.json').read_text());folder=r/'previews'/id
+ if id=='halloween-nocturne':folder=r/'previews'
+ html+=f'<section id="{id}" style="--accent:{m["palette"]["accent"]}"><div class="eyebrow">PACK V{t["version"]}</div><h2>{escape(t["name"])}</h2><p>{escape(t["description"])}</p><img class="hero" loading="lazy" src="{id}/{m["assets"]["preview"]}" alt="{escape(t["name"])} scene"><div class="icons"><img loading="lazy" src="{id}/{m["assets"]["brandIcon"]}" alt="Matching Veyra icon"><p>Matching Home branding; launcher selection is explicit and optional.</p></div><nav class="actions"><a href="packs/{id}-v{t["version"]}.zip" download>Download theme ZIP</a><a href="packs/{id}-v{t["version"]}.zip.sha256">SHA-256</a></nav><div class="grid">'
+ for file in sorted(folder.glob('*')):
+  if file.suffix not in {'.png','.webp'}:continue
+  path=file.relative_to(r);label=file.stem.replace('-',' ')
+  html+=f'<figure><a href="{path}"><img loading="lazy" src="{path}" alt="{escape(t["name"]+" · "+label)}"></a><figcaption>{escape(label)} · native component study</figcaption></figure>'
+ html+='</div></section>'
+html+='<footer>Settings → Appearance → Theme studio. Theme ZIPs are not APKs. Latest source rebuild required for bundled launcher aliases and navigation polish. Historical stable 0.1.6 is retained separately. Artwork and font licenses remain inside every pack. Generated studies stay in this repository; source ZIPs include the renderer and theme assets.</footer></main></body></html>'
+(r/'index.html').write_text(html)

@@ -1,0 +1,1 @@
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@color/theme_worldcoppercanyonradio_background"/><foreground android:drawable="@mipmap/ic_theme_worldcoppercanyonradio_foreground"/><monochrome android:drawable="@drawable/ic_worldcoppercanyonradio_monochrome"/></adaptive-icon>

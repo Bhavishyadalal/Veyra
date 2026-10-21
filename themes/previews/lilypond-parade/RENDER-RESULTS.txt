@@ -1,0 +1,8 @@
+home: native Compose components rendered at 390 dp
+player: native Compose components rendered at 390 dp
+Themed transport delivered its native callback once; hit target at least 48 dp.
+navigation-large-text: sixteen tab targets >=48 dp; four selected states; one selection callback.
+navigation-large-text: native Compose components rendered at 320 dp
+navigation-rtl-large-text: sixteen tab targets >=48 dp; four selected states; one selection callback.
+navigation-rtl-large-text: native Compose components rendered at 320 dp
+Native component studies, not full-device screenshots. Album artwork in the sample player is demonstration art.

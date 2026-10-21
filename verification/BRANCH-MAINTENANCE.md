@@ -1,5 +1,18 @@
 # Branch and archive maintenance verification
 
+## 21 October 2026 — preview reliability archive refresh
+
+Current stable remains 0.1.6 / code 22; current preview remains 0.1.7-beta1 / code 25.
+The reliability implementation is confined to `preview/0.1.7-beta1`. The refreshed
+preview ZIP, its checksum and `downloads/README.md` are mirrored byte-for-byte to
+all eight maintained branch catalogs. Other branches retain their Android source
+and version declarations exactly. The retained set is current stable 0.1.6 plus
+previews 0.1.7-beta1, 0.1.6-beta1 and 0.1.5-beta1.
+
+[Current implementation/verification](RELIABILITY-0.1.7-beta1.md) lives on the
+preview branch. The older report below records earlier maintenance; its old
+version/branch counts and historical JitPack limitation do not describe this run.
+
 ## Scope
 
 All six app branches receive the same 41-file backend snapshot from standalone

@@ -38,6 +38,7 @@ internal fun HomeExperienceHeader(
     onDownloads: (() -> Unit)?,
     onLocalMusic: (() -> Unit)?,
     reducedMotion: Boolean = false,
+    savedContentLabel: String? = null,
 ) {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
     Column(Modifier.fillMaxWidth().padding(horizontal = PAGE_GUTTER), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -65,6 +66,8 @@ internal fun HomeExperienceHeader(
                     }), style = MaterialTheme.typography.labelLarge)
                     if (offline || showingSaved || notice != null) Text(
                         if (offline) stringResource(Res.string.home_offline_subtitle) else notice ?: stringResource(Res.string.home_saved_subtitle),
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (showingSaved && savedContentLabel != null) Text(savedContentLabel,
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
@@ -121,6 +124,7 @@ internal fun HomeSectionEditorContent(
     onReset: () -> Unit,
     onDismiss: () -> Unit,
     reducedMotion: Boolean = false,
+    savedContentLabel: String? = null,
 ) {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
     Column {

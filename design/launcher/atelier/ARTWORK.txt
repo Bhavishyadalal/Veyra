@@ -1,0 +1,1 @@
+Glass Atelier: twelve AI-edited variants of the official Veyra Glass Noir icon, created for Veyra at the owner's request. Reference: design/launcher/wave_glass.png. The silver connected waveform remains Veyra's brand identity. These are standalone launcher artwork, not theme packs. Encoding and density resizing are performed by the checked-in asset compilation script.

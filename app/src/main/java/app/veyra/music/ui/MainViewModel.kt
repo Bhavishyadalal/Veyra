@@ -70,6 +70,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import app.veyra.music.util.loadOrderedBatches
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
@@ -113,6 +114,7 @@ import java.util.concurrent.atomic.AtomicLong
 /** What the Search tab searches: YouTube Music, or the Local Music folder on this device. */
 enum class SearchSource { YOUTUBE, LIBRARY, ADDONS }
 
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val authStore = AuthStore(app)
@@ -132,6 +134,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val homeSections: StateFlow<List<HomeSectionOption>> = _homeSectionOptions.asStateFlow()
     private val _homeShowingSaved = MutableStateFlow(false)
     val homeShowingSaved = _homeShowingSaved.asStateFlow()
+    private val _homeSavedAt = MutableStateFlow<Long?>(null)
+    val homeSavedAt = _homeSavedAt.asStateFlow()
     private val _homeUpdating = MutableStateFlow(false)
     val homeUpdating = _homeUpdating.asStateFlow()
     private val _homeNotice = MutableStateFlow<String?>(null)
@@ -184,6 +188,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private var exploreArtworkJob: Job? = null
     private var exploreGeneration = 0L
     private var exploreLoadJob: Job? = null
+    private var moodGenreJob: Job? = null
+    private var moodGenreGeneration = 0L
     private val _explore = MutableStateFlow<UiState<List<MoodGenreSection>>>(UiState.Loading)
     val explore: StateFlow<UiState<List<MoodGenreSection>>> = _explore.asStateFlow()
 
@@ -1697,10 +1703,19 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun openMoodGenre(item: MoodGenre) {
+        moodGenreJob?.cancel()
+        val generation = ++moodGenreGeneration
+        val identity = listenerKey()
+        val region = Innertube.currentRegion
+        val language = Innertube.currentLanguage
         _selectedMoodGenre.value = item
         _moodGenreShelves.value = UiState.Loading
-        viewModelScope.launch {
-            _moodGenreShelves.value = YtMusicRepository.moodGenreShelves(item.browseId, item.params).fold(
+        moodGenreJob = viewModelScope.launch {
+            val response = YtMusicRepository.moodGenreShelves(item.browseId, item.params)
+            // Cancellation saves work; the guard also rejects providers completing after cancellation.
+            if (generation != moodGenreGeneration || _selectedMoodGenre.value != item ||
+                identity != listenerKey() || region != Innertube.currentRegion || language != Innertube.currentLanguage) return@launch
+            _moodGenreShelves.value = response.fold(
                 onSuccess = { shelves ->
                     if (shelves.isEmpty()) UiState.Error(text(R.string.nothing_to_explore))
                     else UiState.Success(shelves)
@@ -1712,6 +1727,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun closeMoodGenre(): Boolean {
         if (_selectedMoodGenre.value == null) return false
+        ++moodGenreGeneration
+        moodGenreJob?.cancel()
+        moodGenreJob = null
         _selectedMoodGenre.value = null
         return true
     }
@@ -1742,6 +1760,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         homeSnapshotJob?.cancel()
         homeLoadGeneration.incrementAndGet()
         homeOwner = owner
+        _homeSavedAt.value = null
         homeLayoutLoaded = false
         publishHomeState(UiState.Loading)
         _homeLayout.value = HomeLayout()
@@ -1768,6 +1787,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         homeLayoutLoaded = true
         if (_home.value !is UiState.Success && cached != null) {
             _homeShowingSaved.value = true
+            _homeSavedAt.value = cached.savedAt
             publishHomeState(UiState.Success(cached.shelves))
         }
         return true
@@ -1827,14 +1847,22 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     }
                 }
                 coreRequest.join()
-                for (browseId in YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS) {
-                    if (!isCurrentHomeLoad(identity, generation) || !homeNetwork.online.value) break
-                    try {
-                        withTimeoutOrNull(8_000L) { YtMusicRepository.homeSupplement(browseId) }?.onSuccess { shelves ->
-                            if (isCurrentHomeLoad(identity, generation)) publishHomeShelves(shelves)
-                        }
-                    } finally { homeShelfRequestSettled(identity, generation) }
-                }
+                // Both independent supplements start together, while publication keeps provider order.
+                // The limit also bounds work if more supplement endpoints are added later.
+                loadOrderedBatches(YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS, parallelism = 2,
+                    load = { browseId ->
+                        if (isCurrentHomeLoad(identity, generation) && homeNetwork.online.value) {
+                            withTimeoutOrNull(8_000L) { YtMusicRepository.homeSupplement(browseId) }
+                        } else null
+                    },
+                    publish = { response ->
+                        try {
+                            response?.onSuccess { shelves ->
+                                if (isCurrentHomeLoad(identity, generation)) publishHomeShelves(shelves)
+                            }
+                        } finally { homeShelfRequestSettled(identity, generation) }
+                    },
+                )
             } finally {
                 if (isCurrentHomeLoad(identity, generation)) {
                     _homeUpdating.value = false
@@ -2130,6 +2158,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         searchSubmitted = true
         _suggestions.value = emptyList()
         _typeaheadResults.value = emptyList()
+        if (_searchSource.value == SearchSource.ADDONS) {
+            runAddonSearch(term.trim())
+            return
+        }
+        if (_searchSource.value == SearchSource.LIBRARY) return
         // Picking a suggestion or history item is deliberate, but it must NOT
         // pollute the user's YTMusic server-side search history — only an
         // explicit keyboard submission should do that.  Use the anonymous
@@ -2142,6 +2175,14 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun clearSearchHistory() = SearchHistory.clear()
 
     fun onQueryChange(newValue: String) {
+        if (_query.value == newValue) return
+        // Invalidate both first-page and continuation replies even when clearing
+        // does not emit a replacement network request.
+        newestRequestId.incrementAndGet()
+        searchSession = null
+        _searchLoadingMore.value = false
+        addonSearchJob?.cancel()
+        _addonResults.value = null
         _query.value = newValue
         if (newValue.isBlank()) {
             searchSubmitted = false
@@ -2213,7 +2254,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 val longest = perAddon.maxOfOrNull { it.size } ?: 0
                 for (i in 0 until longest) perAddon.forEach { rows -> rows.getOrNull(i)?.let(::add) }
             }
-            _addonResults.value = UiState.Success(merged)
+            if (_query.value.trim() == q && _searchSource.value == SearchSource.ADDONS && searchSubmitted) {
+                _addonResults.value = UiState.Success(merged)
+            }
         }
     }
 
@@ -2226,6 +2269,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      */
     fun setSearchSource(source: SearchSource) {
         if (_searchSource.value == source) return
+        newestRequestId.incrementAndGet()
+        searchSession = null
+        _searchLoadingMore.value = false
+        addonSearchJob?.cancel()
         _searchSource.value = source
         _suggestions.value = emptyList()
         _typeaheadResults.value = emptyList()
@@ -2335,6 +2382,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private fun startSearchPipeline() = viewModelScope.launch {
         searchRequests
             .collectLatest { request ->
+                if (!searchResponseIsCurrent(request.requestId, newestRequestId.get(), _searchSource.value == SearchSource.YOUTUBE)) return@collectLatest
                 val key = cacheKey(request.query, request.filter)
                 // Something to look at immediately: the exact answer if this
                 // query has been run before, otherwise the closest earlier
@@ -2362,7 +2410,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 val result = YtMusicRepository.searchPage(request.query, request.filter, request.anonymous)
                 // A search that has been superseded shouldn't land on screen,
                 // whether it succeeded or failed.
-                if (request.requestId != newestRequestId.get()) return@collectLatest
+                if (!searchResponseIsCurrent(request.requestId, newestRequestId.get(), _searchSource.value == SearchSource.YOUTUBE)) return@collectLatest
                 _results.value = result.fold(
                     onSuccess = { page -> published(page, key, request.requestId) },
                     onFailure = { failure -> UiState.Error(failure.friendly()) },
@@ -2420,7 +2468,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         // moved on: typed further, or searched — which empties [_suggestions],
         // and a late answer writing to it would reopen the suggestions over
         // the results the user is by then reading.
-        fun stillWanted(input: String) = _query.value == input && !searchSubmitted
+        fun stillWanted(input: String) = typeaheadIsCurrent(input, _query.value, searchSubmitted, _searchSource.value == SearchSource.YOUTUBE)
 
         suggestRequests
             .debounce(SUGGEST_DEBOUNCE_MS)
@@ -2445,25 +2493,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         suggestRequests
             .debounce(TYPEAHEAD_MEDIA_DEBOUNCE_MS)
             .collectLatest { input ->
-                if (input.isBlank()) {
-                    _typeaheadResults.value = emptyList()
-                    return@collectLatest
-                }
-                // Only show media results while the user is still typing — not
-                // reading committed search results. The query-text check on its
-                // own isn't enough: a late suggestion callback can repopulate
-                // _suggestions after submission, and we must not re-open the
-                // typeahead dropdown under an already-committed search.
-                if (searchSubmitted) {
-                    _typeaheadResults.value = emptyList()
-                    return@collectLatest
-                }
+                if (!typeaheadIsCurrent(input, _query.value, searchSubmitted, _searchSource.value == SearchSource.YOUTUBE)) return@collectLatest
                 val result = YtMusicRepository.searchTypeahead(input).getOrNull()
-                // If the field moved on, drop the result silently.
-                if (_query.value != input) {
-                    _typeaheadResults.value = emptyList()
-                    return@collectLatest
-                }
+                // Recheck submission/source after suspension, not just query text.
+                if (!typeaheadIsCurrent(input, _query.value, searchSubmitted, _searchSource.value == SearchSource.YOUTUBE)) return@collectLatest
                 // Cap results so the dropdown doesn't grow unbounded.
                 _typeaheadResults.value = result?.rows.orEmpty().take(TYPEAHEAD_MAX_RESULTS)
             }

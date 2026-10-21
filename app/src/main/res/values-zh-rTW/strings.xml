@@ -883,7 +883,7 @@
 
     <string name="selected_account">已選賬號</string>
 
-    <string name="shelf_100_on_repeat">迴圈播放</string>
+    <string name="shelf_100_on_repeat" formatted="false">迴圈播放</string>
 
     <string name="shelf_artists_on_the_rise">新星藝人</string>
 

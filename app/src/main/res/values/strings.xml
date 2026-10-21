@@ -1086,7 +1086,7 @@
 
     <string name="shelf_sad">Sad</string>
 
-    <string name="shelf_100_on_repeat">100% on repeat</string>
+    <string name="shelf_100_on_repeat" formatted="false">100% on repeat</string>
 
     <string name="shelf_new_albums_singles">New albums &amp; singles</string>
 
@@ -1218,4 +1218,122 @@
     <string name="custom_reset_player">Reset player customization</string>
     <string name="custom_reset_player_hint">Restore the original menu order and turn off higher-contrast controls. Keep playback, accounts and downloads.</string>
     <string name="custom_reset_confirm">Reset</string>
+    <string name="theme_packs">Theme studio</string>
+    <string name="theme_packs_subtitle">Download artwork, fonts, icons and player styles</string>
+    <string name="theme_packs_description">A new atmosphere for every screen. Download once, keep it offline, and return to your original appearance anytime.</string>
+    <string name="theme_original">Original Veyra</string>
+    <string name="theme_active">Currently active</string>
+    <string name="theme_restore_hint">Restore your saved appearance preferences</string>
+    <string name="theme_apply">Apply theme</string>
+    <string name="theme_download">Download theme</string>
+    <string name="theme_update_required">Update Veyra first</string>
+    <string name="theme_catalog_empty">No themes loaded yet. Refresh the catalog when you are online.</string>
+    <string name="theme_refresh_catalog">Refresh theme catalog</string>
+    <string name="theme_safety_hint">A theme overrides supported colors, heading fonts and control styles until you return to Original Veyra. Your accounts, downloads, playlists and playback controls stay yours. Original appearance remains available offline.</string>
+    <string name="theme_restart_title">Apply this theme?</string>
+    <string name="theme_restart_description">Veyra will refresh its screens to load the theme. Music keeps playing. Your library, accounts and original appearance preferences are preserved.</string>
+    <string name="theme_apply_restart">Apply &amp; restart UI</string>
+    <string name="theme_later">Later</string>
+    <string name="theme_remove">Remove downloaded theme</string>
+    <string name="theme_remove_description">This removes the unused theme files from this device. You can download the theme again later.</string>
+    <string name="theme_done">Done</string>
+    <string name="theme_download_update">Download theme update</string>
+    <string name="app_icon_web_slinger" translatable="false">Web Slinger</string>
+    <string name="app_icon_halloween" translatable="false">Halloween Nocturne</string>
+    <string name="theme_collection_title">Make it feel like you.</string>
+    <string name="theme_collection_description">New worlds for your music. Explore artwork, type, icons and player details, then keep your favourites offline.</string>
+    <string name="theme_all">All themes</string>
+    <string name="theme_downloaded">Downloaded</string>
+    <string name="theme_discover">Discover</string>
+    <string name="theme_no_downloads">Your downloaded themes will appear here.</string>
+    <string name="theme_includes">Artwork · Fonts · Controls · Branding</string>
+    <string name="theme_launcher_title">The finishing touch</string>
+    <string name="theme_launcher_hint">Choose a matching home-screen icon separately. Your launcher may take a moment to refresh.</string>
+    <string name="theme_use_launcher">Use matching app icon</string>
+    <string name="theme_restore_launcher">Restore original app icon</string>
+    <string name="theme_launcher_confirm">Change the app icon?</string>
+    <string name="theme_current_launcher">Current app icon: %1$s</string>
+    <string name="icon_collection_veyra" translatable="false">Veyra</string>
+    <string name="icon_collection_glass">Glass</string>
+    <string name="icon_collection_themes">Themes</string>
+    <string name="icon_family_liquid">Liquid</string>
+    <string name="icon_family_samsung" translatable="false">Samsung</string>
+    <string name="icon_family_pixel" translatable="false">Pixel</string>
+    <string name="icon_chooser_hint">Choose an icon above. Your launcher may take a moment to refresh.</string>
+    <string name="theme_back_collection">Back to themes</string>
+    <string name="theme_details">Theme details</string>
+    <string name="theme_downloading">Downloading…</string>
+    <string name="theme_verifying">Verifying files…</string>
+    <string name="theme_applying">Applying…</string>
+    <string name="theme_live_apply_hint">Update the look while keeping your place and your music playing.</string>
+    <string name="theme_optional_restart">Also refresh the interface</string>
+    <string name="icon_choose">Choose an icon</string>
+    <string name="theme_saved_appearance">Your saved style</string>
+    <string name="app_icon_playtime" translatable="false">Playtime Club</string>
+    <string name="theme_playtime_credits" translatable="false">Unofficial fan artwork. Doraemon: Fujiko-Pro / Shogakukan / TV Asahi / Shin-Ei Animation. Crayon Shin-chan: Yoshito Usui / Futabasha / Shin-Ei Animation / TV Asahi. Oggy: Xilam Animation. No affiliation or endorsement.</string>
+    <string name="home_saved_at">Saved %1$s · refreshing when online</string>
+    <string name="theme_matching_icon">Also use the matching launcher icon</string>
+    <string name="theme_icon_failed">Theme applied. Launcher icon could not change; try the app icon chooser.</string>
+    <string name="download_saved_private">Saved in app storage</string>
+    <string name="download_interrupted">Interrupted when Veyra closed. Tap Retry to download again.</string>
+    <string name="download_storage">%1$s available · %2$s</string>
+    <string name="download_storage_public" translatable="false">Music/Veyra</string>
+    <string name="download_storage_private">App storage</string>
+    <string name="download_retry_all">Retry failed</string>
+    <string name="listen_together_host_reconnecting">Host disconnected · waiting for them to reconnect</string>
+    <string name="queue_removed">Removed %1$d from queue</string>
+    <string name="queue_undo_expired">Queue changed. Undo is no longer available.</string>
+    <string name="undo">Undo</string>
+    <string name="download_action_track">%1$s %2$s</string>
+    <string name="app_icon_astral" translatable="false">Astral Tide</string>
+    <string name="app_icon_midnight" translatable="false">Midnight Express</string>
+    <string name="app_icon_purr" translatable="false">Pumpkin Purr</string>
+    <string name="app_icon_sunset" translatable="false">Sunset Crew</string>
+    <string name="app_icon_spirits" translatable="false">Starry Spirits</string>
+    <string name="app_icon_analog" translatable="false">Analog Reverie</string>
+    <string name="app_icon_petal" translatable="false">Petal Promise</string>
+    <string name="app_icon_herbarium" translatable="false">Moonlit Herbarium</string>
+    <string name="icon_collection_atelier">Glass Atelier</string>
+    <string name="app_icon_atelier_aurora_veil" translatable="false">Aurora Veil</string>
+    <string name="app_icon_atelier_sakura_pearl" translatable="false">Sakura Pearl</string>
+    <string name="app_icon_atelier_obsidian_gold" translatable="false">Obsidian Gold</string>
+    <string name="app_icon_atelier_glacier_blue" translatable="false">Glacier Blue</string>
+    <string name="app_icon_atelier_ruby_velvet" translatable="false">Ruby Velvet</string>
+    <string name="app_icon_atelier_emerald_dew" translatable="false">Emerald Dew</string>
+    <string name="app_icon_atelier_lunar_eclipse" translatable="false">Lunar Eclipse</string>
+    <string name="app_icon_atelier_cosmic_prism" translatable="false">Cosmic Prism</string>
+    <string name="app_icon_atelier_rose_quartz" translatable="false">Rose Quartz</string>
+    <string name="app_icon_atelier_ember_forge" translatable="false">Ember Forge</string>
+    <string name="app_icon_atelier_ocean_opal" translatable="false">Ocean Opal</string>
+    <string name="app_icon_atelier_royal_sapphire" translatable="false">Royal Sapphire</string>
+    <string name="app_icon_afterglow" translatable="false">Golden Afterglow</string>
+    <string name="app_icon_lilypond" translatable="false">Lilypond Parade</string>
+    <string name="app_icon_dustbyte" translatable="false">Dustbyte Outpost</string>
+    <string name="app_icon_alpine" translatable="false">Alpine Ember</string>
+    <string name="app_icon_starfall" translatable="false">Starfall Pals</string>
+    <string name="app_icon_vesper" translatable="false">Chrome Vesper</string>
+    <string name="app_icon_wish" translatable="false">Window Wish</string>
+    <string name="app_icon_cassette" translatable="false">Cassette Corner</string>
+    <string name="app_icon_azure" translatable="false">Azure Bloom</string>
+    <string name="app_icon_daydream" translatable="false">Strawberry Daydream</string>
+    <string name="app_icon_worldstainedglasssonata" translatable="false">Stained Glass Sonata</string>
+    <string name="app_icon_worldfireflyrailway" translatable="false">Firefly Railway</string>
+    <string name="app_icon_worldporcelainmoon" translatable="false">Porcelain Moon</string>
+    <string name="app_icon_worldblackhoney" translatable="false">Black Honey</string>
+    <string name="app_icon_worldsakuraarcade" translatable="false">Sakura Arcade</string>
+    <string name="app_icon_worldcloudpostoffice" translatable="false">Cloud Post Office</string>
+    <string name="app_icon_worldcoppercanyonradio" translatable="false">Copper Canyon Radio</string>
+    <string name="app_icon_worldmidnightaquarium" translatable="false">Midnight Aquarium</string>
+    <string name="app_icon_worldsundaybakery" translatable="false">Sunday Bakery</string>
+    <string name="app_icon_worldrosecircuit" translatable="false">Rose Circuit</string>
+    <string name="app_icon_worldclockworkgarden" translatable="false">Clockwork Garden</string>
+    <string name="app_icon_worldsnowglobevillage" translatable="false">Snowglobe Village</string>
+    <string name="app_icon_worldindigoatelier" translatable="false">Indigo Atelier</string>
+    <string name="app_icon_worldprismplayground" translatable="false">Prism Playground</string>
+    <string name="app_icon_worldsilentcinema" translatable="false">Silent Cinema</string>
+    <string name="app_icon_worldriversidepause" translatable="false">Riverside Pause</string>
+    <string name="app_icon_worldpixelstargazer" translatable="false">Pixel Stargazer</string>
+    <string name="app_icon_worldroamingcosmos" translatable="false">Roaming Cosmos</string>
+    <string name="app_icon_worldbluehoursanctuary" translatable="false">Blue Hour Sanctuary</string>
+    <string name="app_icon_worldcelestialcurrent" translatable="false">Celestial Current</string>
 </resources>

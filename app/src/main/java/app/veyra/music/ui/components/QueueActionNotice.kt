@@ -29,6 +29,7 @@ import app.veyra.music.data.settings.AppSettings
 data class QueueActionNotice(
     val id: Int,
     val message: String,
+    val undo: (() -> Unit)? = null,
 )
 
 /** Brief queue confirmation shown immediately above the mini player. */
@@ -37,7 +38,7 @@ fun QueueActionNoticeHost(
     notice: QueueActionNotice?,
     modifier: Modifier = Modifier,
 ) {
-    val reduceAnimation by AppSettings.reduceAnimation.collectAsStateWithLifecycle()
+    val reduceAnimation = app.veyra.music.ui.motion.rememberVeyraReducedMotion()
 
     AnimatedContent(
         targetState = notice,
@@ -55,8 +56,8 @@ fun QueueActionNoticeHost(
     ) { current ->
         if (current != null) {
             Surface(
-                color = Color(0xFF282828),
-                contentColor = Color.White,
+                color = MaterialTheme.colorScheme.inverseSurface,
+                contentColor = MaterialTheme.colorScheme.inverseOnSurface,
                 shape = RoundedCornerShape(5.dp),
                 shadowElevation = 4.dp,
                 modifier = Modifier
@@ -65,11 +66,18 @@ fun QueueActionNoticeHost(
                     .padding(bottom = 8.dp)
                     .semantics { liveRegion = LiveRegionMode.Polite },
             ) {
-                Text(
-                    text = current.message,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
-                )
+                androidx.compose.foundation.layout.Row(
+                    Modifier.padding(start = 16.dp, end = 8.dp),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                ) {
+                    Text(current.message, style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.weight(1f).padding(vertical = 12.dp))
+                    current.undo?.let { action ->
+                        androidx.compose.material3.TextButton(onClick = action) {
+                            Text(androidx.compose.ui.res.stringResource(app.veyra.music.R.string.undo), color = MaterialTheme.colorScheme.inversePrimary)
+                        }
+                    }
+                }
             }
         }
     }

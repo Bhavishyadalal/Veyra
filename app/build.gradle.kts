@@ -471,3 +471,13 @@ val verifyDevInstall = tasks.register("verifyDevInstall") {
     }
 }
 tasks.matching { it.name == "installDevDebug" }.configureEach { finalizedBy(verifyDevInstall) }
+
+// Theme tests exercise the published data pack, not only compiled Kotlin classes.
+// Re-run them when pack/catalog bytes change, including in a source-ZIP checkout.
+tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+    inputs.files(rootProject.file("themes/catalog.json"),
+        rootProject.file("themes/packs/halloween-nocturne-v3.zip"),
+        rootProject.file("themes/packs/web-slinger-v1.zip"),
+        rootProject.file("themes/packs/playtime-club-v1.zip"))
+        .withPropertyName("themePackFixtures")
+}

@@ -1,0 +1,202 @@
+[
+  {
+    "id": "stained-glass-sonata",
+    "name": "Stained Glass Sonata",
+    "scene": "Jewel-colored original stained-glass rose windows and geometric sapphire, emerald and ruby panels in a midnight stone music conservatory, soft luminous shafts, exquisite architectural fine art.",
+    "icon": "Dark leaded glass with ruby, sapphire and emerald stained-glass framing, tiny rose-window jewel and platinum tracery.",
+    "family": "jewel",
+    "font": "GrenzeGotisch",
+    "motif": "facets",
+    "tagline": "Every shade has a sound."
+  },
+  {
+    "id": "firefly-railway",
+    "name": "Firefly Railway",
+    "scene": "A tiny countryside railway platform at summer dusk, warm brass lanterns, clover and tall grass, glowing fireflies, distant amber train lights, intimate painterly storybook landscape.",
+    "icon": "Walnut-smoked glass with miniature station clock, lantern and tiny firefly jewels, moss enamel edging.",
+    "family": "moss",
+    "font": "Fredoka",
+    "motif": "rail",
+    "tagline": "The last light stays for your song."
+  },
+  {
+    "id": "porcelain-moon",
+    "name": "Porcelain Moon",
+    "scene": "Elegant cobalt-painted ivory porcelain moon jars, delicate cloud scrolls, lunar discs and plum-blossom branches in a quiet ink-blue alcove, refined ceramic still life.",
+    "icon": "Cobalt-and-ivory glazed porcelain trim around dark blue glass, fine painted cloud curls and a tiny crescent ceramic charm.",
+    "family": "cobalt",
+    "font": "Manrope",
+    "motif": "porcelain",
+    "tagline": "Paint the night in blue."
+  },
+  {
+    "id": "black-honey",
+    "name": "Black Honey",
+    "scene": "Obsidian mineral slabs, translucent amber honey chambers, tiny gilded bee and sculptural honeycomb in a dramatic black botanical still life, warm gold refracted light.",
+    "icon": "Obsidian glass filled with translucent dark honey, gold honeycomb corners and one tiny elegant bee charm.",
+    "family": "honey",
+    "font": "SpaceGrotesk",
+    "motif": "hex",
+    "tagline": "Slow gold. Deep sound."
+  },
+  {
+    "id": "sakura-arcade",
+    "name": "Sakura Arcade",
+    "scene": "Nostalgic Japanese arcade entrance at dusk beneath cherry blossoms, violet game cabinets, coral buttons and cyan rain reflections, original hand-painted anime city scene, abstract screens with no text.",
+    "icon": "Violet glass with coral enamel arcade buttons, tiny joystick and translucent cherry blossom petals.",
+    "family": "sakura",
+    "font": "Rajdhani",
+    "motif": "arcade",
+    "tagline": "One more song. One more life."
+  },
+  {
+    "id": "cloud-post-office",
+    "name": "Cloud Post Office",
+    "scene": "Floating sky islands with tiny ivory and sky-blue post-office cottages, miniature envelopes flying between soft cream clouds, gold sun rays, original whimsical cut-paper storybook world.",
+    "icon": "Sky-blue smoked glass framed by pearly clouds, tiny enamel envelope and miniature red mailbox charm.",
+    "family": "sky",
+    "font": "Fredoka",
+    "motif": "cloud",
+    "tagline": "A little song, sent skyward."
+  },
+  {
+    "id": "copper-canyon-radio",
+    "name": "Copper Canyon Radio",
+    "scene": "Weathered copper radio observatory in a red desert canyon, turquoise mineral seams, antenna silhouettes and a glowing analog dial, cinematic painted sunset, no lettering.",
+    "icon": "Weathered copper rim and dark turquoise glass, miniature analog tuning dial, engraved antenna lines and mineral inlays.",
+    "family": "copper",
+    "font": "Rajdhani",
+    "motif": "radio",
+    "tagline": "Tune into the open horizon."
+  },
+  {
+    "id": "midnight-aquarium",
+    "name": "Midnight Aquarium",
+    "scene": "A tranquil midnight aquarium with translucent pink jellyfish, luminous sea-glass plants, fine coral silhouettes and deep teal water, magical underwater illustration.",
+    "icon": "Deep teal aquarium glass with miniature translucent jellyfish, pearl bubbles and coral-pink edging.",
+    "family": "ocean",
+    "font": "SpaceGrotesk",
+    "motif": "aquarium",
+    "tagline": "Stay a little deeper."
+  },
+  {
+    "id": "sunday-bakery",
+    "name": "Sunday Bakery",
+    "scene": "Cozy neighborhood bakery window on a gentle Sunday, strawberry pastries, croissants, buttercream ceramics, gingham paper and warm espresso, hand-painted original cozy still life, no lettering.",
+    "icon": "Espresso glass with buttercream ceramic trim, tiny strawberry pastry and sculpted croissant charm, warm pink highlights.",
+    "family": "bakery",
+    "font": "Fredoka",
+    "motif": "bakery",
+    "tagline": "Freshly baked little melodies."
+  },
+  {
+    "id": "rose-circuit",
+    "name": "Rose Circuit",
+    "scene": "Luxury black ceramic and rose-gold circuit board architecture, precise glowing fine traces, smoked crystal modules and sculptural futuristic rose forms, cinematic restrained technology still life.",
+    "icon": "Black ceramic glass with precise rose-gold circuit etchings and small crystalline rose node, clean luminous edges.",
+    "family": "rose",
+    "font": "SpaceGrotesk",
+    "motif": "circuit",
+    "tagline": "A softer kind of future."
+  },
+  {
+    "id": "clockwork-garden",
+    "name": "Clockwork Garden",
+    "scene": "Antique brass clock mechanisms inside an ivy-filled glass terrarium, tiny fern leaves, a delicate clock face and warm sun motes, intricate botanical mechanical diorama, no readable numerals or letters.",
+    "icon": "Smoked olive terrarium glass, miniature brass clock gears, ivy leaves and one tiny clock face framing the center.",
+    "family": "clock",
+    "font": "Manrope",
+    "motif": "clock",
+    "tagline": "Let the hours grow quiet."
+  },
+  {
+    "id": "snowglobe-village",
+    "name": "Snowglobe Village",
+    "scene": "A tiny village of snowy blue rooftops and warm amber windows inside a delicate glass snowglobe, winter pines, deep midnight blue and soft pearl snow, cozy original miniature illustration.",
+    "icon": "Midnight-blue snowglobe glass with miniature snowy rooftops along base, pearl snowflakes and warm window jewels.",
+    "family": "winter",
+    "font": "Fredoka",
+    "motif": "snow",
+    "tagline": "Warm windows. Winter songs."
+  },
+  {
+    "id": "indigo-atelier",
+    "name": "Indigo Atelier",
+    "scene": "Japanese indigo denim textiles, cream sashiko stitching, copper rivets, folded fabric and quiet handcrafted tools, sophisticated tactile editorial still life with original stitched geometric motifs.",
+    "icon": "Indigo-textured dark glass with cream sashiko-stitched edge pattern, copper rivets and subtle woven depth.",
+    "family": "indigo",
+    "font": "Manrope",
+    "motif": "stitch",
+    "tagline": "Made slowly. Played often."
+  },
+  {
+    "id": "prism-playground",
+    "name": "Prism Playground",
+    "scene": "Translucent acrylic arches, stacked cobalt, coral and lemon geometric toys, pearly clear spheres and sculptural light refractions in a playful original design playground, no characters or lettering.",
+    "icon": "Layered translucent acrylic dark case, cobalt, coral and lemon modular geometric edges, polished clear prism corners.",
+    "family": "prism",
+    "font": "Fredoka",
+    "motif": "prism",
+    "tagline": "Find your brighter frequency."
+  },
+  {
+    "id": "silent-cinema",
+    "name": "Silent Cinema",
+    "scene": "Elegant black-and-white film photograph of a quiet vintage cinema foyer, silver film grain, velvet seats, a luminous projector beam and one restrained red ticket accent, original cinematic composition, no text.",
+    "icon": "Black-and-white silver glass framed by a film-strip window, tiny projector lens and restrained red ticket charm.",
+    "family": "mono",
+    "font": "BarlowCondensed",
+    "motif": "film",
+    "tagline": "Let the picture sing."
+  },
+  {
+    "id": "riverside-pause",
+    "name": "Riverside Pause",
+    "scene": "Original hand-painted anime river beneath a monumental bridge, charcoal pillars, silver-gold sun glitter, small figure and friendly fluffy dog on a wooden pier, pigeons above water, serene unplugged afternoon. No error message, no dinosaur graphic, no lettering.",
+    "icon": "Charcoal glass with shimmering silver-gold river ripples, miniature pier, tiny dog charm and bridge-arch frame.",
+    "family": "river",
+    "font": "Manrope",
+    "motif": "river",
+    "tagline": "Step outside. Keep the song."
+  },
+  {
+    "id": "pixel-stargazer",
+    "name": "Pixel Stargazer",
+    "scene": "Exquisite original pixel-art Milky Way in cyan, indigo and dusty pink above a dark rocky stargazing summit, carefully placed crisp pixel stars and one quiet distant planet. No text or quotes.",
+    "icon": "Obsidian glass containing miniature pixel-art cyan-pink galaxy along edges, tiny stepped summit and diamond pixel stars.",
+    "family": "cosmos",
+    "font": "Rajdhani",
+    "motif": "pixel",
+    "tagline": "A thousand stars. One favourite song."
+  },
+  {
+    "id": "roaming-cosmos",
+    "name": "Roaming Cosmos",
+    "scene": "Original hand-painted anime blue camper van in golden meadow at night, warm cabin lights, tiny traveler sitting on roof, vast sapphire star sky, distant twilight horizon, cozy road-trip wonder. No brands, no error messages, no lettering.",
+    "icon": "Sapphire glass with miniature blue camper van and golden meadow along base, warm headlamp jewels and starry roofline.",
+    "family": "camper",
+    "font": "SpaceGrotesk",
+    "motif": "camper",
+    "tagline": "Park beneath a wider sky."
+  },
+  {
+    "id": "blue-hour-sanctuary",
+    "name": "Blue Hour Sanctuary",
+    "scene": "Original moonlit blue wisteria garden sanctuary: cascading periwinkle flowers around an arched garden gate, pale blue grasses, pink wildflowers, floating warm lanterns over a narrow reflective stream, serene painterly depth. Distinct garden composition, not a single-tree portrait. No lettering.",
+    "icon": "Midnight moonstone glass with sculpted blue wisteria arch, tiny warm lantern and pink blossom jewels around lower corners.",
+    "family": "blue",
+    "font": "Manrope",
+    "motif": "garden",
+    "tagline": "Leave a little room for wonder."
+  },
+  {
+    "id": "celestial-current",
+    "name": "Celestial Current",
+    "scene": "Original flowing oil-painted deep blue celestial river, pale gold tiny fish swimming through lavender and sapphire brushstroke currents, scattered warm stars, rose and yellow glowing specks, elegant dreamy aquatic cosmos. No letters.",
+    "icon": "Deep sapphire liquid glass with miniature pale-gold fish, pearl star trail and lavender oil-swirled currents around the rim.",
+    "family": "current",
+    "font": "SpaceGrotesk",
+    "motif": "current",
+    "tagline": "Follow the gentlest current."
+  }
+]

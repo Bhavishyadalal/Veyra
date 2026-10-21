@@ -1,0 +1,7 @@
+apply: two checkbox targets >=48 dp; matching-icon callback delivered once.
+apply: native Compose components rendered at 390 dp
+apply-large-text: two checkbox targets >=48 dp; matching-icon callback delivered once.
+apply-large-text: native Compose components rendered at 320 dp
+apply-rtl-large-text: two checkbox targets >=48 dp; matching-icon callback delivered once.
+apply-rtl-large-text: native Compose components rendered at 320 dp
+Native component studies, not full-device screenshots. Album artwork in the sample player is demonstration art.

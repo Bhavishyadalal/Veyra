@@ -129,6 +129,7 @@ fun SourcesScreen(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
     val configs by SourceRegistry.configs.collectAsStateWithLifecycle()
     val wifiQuality by AppSettings.audioQualityWifi.collectAsStateWithLifecycle()
     val cellularQuality by AppSettings.audioQualityCellular.collectAsStateWithLifecycle()
@@ -363,7 +364,7 @@ fun SourcesScreen(
                 subtitle = stringResource(R.string.upgrade_length_slack_subtitle),
                 value = stringResource(R.string.seconds_short, upgradeLengthSlackSeconds),
                 sliderValue = upgradeLengthSlackSeconds.toFloat(),
-                formatValue = { context.getString(R.string.seconds_short, it.roundToInt()) },
+                formatValue = { textResources.getString(R.string.seconds_short, it.roundToInt()) },
                 onSliderValue = {
                     AppSettings.setUpgradeLengthSlackSeconds(it.roundToInt())
                 },
@@ -401,6 +402,7 @@ private fun RemoteLibrarySection(
     onDisconnect: () -> Unit,
 ) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
     val scope = rememberCoroutineScope()
     var testing by remember { mutableStateOf(false) }
     var testResult by remember { mutableStateOf<String?>(null) }
@@ -423,12 +425,12 @@ private fun RemoteLibrarySection(
                     scope.launch {
                         onTest().fold(
                             onSuccess = {
-                                testResult = context.getString(R.string.connected)
+                                testResult = textResources.getString(R.string.connected)
                             },
                             onFailure = {
-                                testResult = context.getString(
+                                testResult = textResources.getString(
                                     testFailedRes,
-                                    it.message ?: context.getString(R.string.failed),
+                                    it.message ?: textResources.getString(R.string.failed),
                                 )
                             },
                         )

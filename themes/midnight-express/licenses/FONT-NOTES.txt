@@ -1,0 +1,1 @@
+Rajdhani Bold: upstream static weight-700 font from https://github.com/google/fonts/tree/main/ofl/rajdhani . Original SIL Open Font License notice preserved. Manrope reused from existing licensed Veyra theme assets. No network or font conversion is needed to rebuild the pack.

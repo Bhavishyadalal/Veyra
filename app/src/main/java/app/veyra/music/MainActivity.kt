@@ -77,7 +77,7 @@ import app.veyra.music.data.listentogether.ServerConnectionState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -387,7 +387,8 @@ class MainActivity : AppCompatActivity() {
             LaunchedEffect(highPerformance, performanceRefreshRate, composeView) {
                 applyPerformanceMode(highPerformance, performanceRefreshRate, composeView)
             }
-            val darkTheme = when (theme) {
+            val activePack by app.veyra.music.data.themes.ThemeRepository.active.collectAsStateWithLifecycle()
+            val darkTheme = if (activePack != null) true else when (theme) {
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
                 ThemeMode.LIGHT -> false
                 ThemeMode.DARK -> true
@@ -481,6 +482,7 @@ class MainActivity : AppCompatActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 private fun VeyraApp(
     darkTheme: Boolean,
     /** The width of the window this is laid out in — see the call site. */
@@ -498,6 +500,7 @@ private fun VeyraApp(
     viewModel: MainViewModel = viewModel(),
 ) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
     val clipboard = LocalClipboard.current
     val hazeState = remember { HazeState() }
     // Recording the backdrop layer costs a draw pass, so it only runs when a
@@ -737,6 +740,7 @@ private fun VeyraApp(
     val homeRecentlyPlayedLoading by viewModel.homeRecentlyPlayedLoading.collectAsStateWithLifecycle()
     val homeOnline by viewModel.homeOnline.collectAsStateWithLifecycle()
     val homeShowingSaved by viewModel.homeShowingSaved.collectAsStateWithLifecycle()
+    val homeSavedAt by viewModel.homeSavedAt.collectAsStateWithLifecycle()
     val homeUpdating by viewModel.homeUpdating.collectAsStateWithLifecycle()
     val homeNotice by viewModel.homeNotice.collectAsStateWithLifecycle()
     val homeSections by viewModel.homeSections.collectAsStateWithLifecycle()
@@ -958,6 +962,7 @@ private fun VeyraApp(
         }
     }
     val controller = rememberMediaController()
+    val liveQueueController = androidx.compose.runtime.rememberUpdatedState(controller)
     val player = rememberPlayerState(controller)
     // A resume in a party is performed on the instant the server schedules, not
     // when it was pressed, and nothing about the player moves in between — so
@@ -976,10 +981,40 @@ private fun VeyraApp(
         queueNoticeId += 1
         queueNotice = QueueActionNotice(queueNoticeId, message)
     }
+    val queueAccessibility = androidx.compose.ui.platform.LocalAccessibilityManager.current
     LaunchedEffect(queueNotice?.id) {
         val shown = queueNotice ?: return@LaunchedEffect
-        delay(3_000)
+        val baseTimeout = if (shown.undo != null) 10_000L else 3_000L
+        delay(queueAccessibility?.calculateRecommendedTimeoutMillis(baseTimeout, containsText = true, containsControls = shown.undo != null) ?: baseTimeout)
         if (queueNotice?.id == shown.id) queueNotice = null
+    }
+    fun queueIdentity(item: androidx.media3.common.MediaItem): String =
+        item.toSong().queueEntryId ?: item.mediaId
+    fun removeQueueEntries(indices: List<Int>) {
+        val c = controller ?: return
+        if (controlsLocked) return
+        val removed = indices.distinct().sorted().filter { it in 0 until c.mediaItemCount }
+            .map { it to c.getMediaItemAt(it) }
+        if (removed.isEmpty()) return
+        // Removing the current song remains supported; undo must never rewind a new song.
+        val canUndo = removed.none { it.first == c.currentMediaItemIndex } && !partyState.inParty
+        removed.asReversed().forEach { c.removeMediaItem(it.first) }
+        val snapshot = app.veyra.music.playback.QueueUndo(
+            removed, (0 until c.mediaItemCount).map { queueIdentity(c.getMediaItemAt(it)) },
+            c.currentMediaItem?.let(::queueIdentity),
+        )
+        queueNoticeId += 1
+        queueNotice = QueueActionNotice(queueNoticeId, textResources.getString(R.string.queue_removed, removed.size),
+            if (!canUndo) null else ({
+                if (liveQueueController.value === c && !ListenTogether.state.value.inParty && snapshot.canRestore(
+                        (0 until c.mediaItemCount).map { queueIdentity(c.getMediaItemAt(it)) },
+                        c.currentMediaItem?.let(::queueIdentity))) {
+                    snapshot.removed.forEach { (index, item) -> c.addMediaItem(index, item) }
+                } else {
+                    Toast.makeText(context, R.string.queue_undo_expired, Toast.LENGTH_SHORT).show()
+                }
+                queueNotice = null
+            }))
     }
     // Why a control did nothing, on the same strip above the mini player that
     // already answers "added to queue". Reached from every surface that had a
@@ -1198,7 +1233,7 @@ private fun VeyraApp(
             val summary = app.veyra.music.data.webdav.WebDavUploads.upload(context, songs)
             if (summary.total > 0) {
                 showQueueNotice(
-                    context.getString(
+                    textResources.getString(
                         R.string.webdav_upload_summary,
                         summary.uploaded,
                         summary.skipped,
@@ -1588,7 +1623,7 @@ private fun VeyraApp(
                 activeController.commitRadioQueue()
                 Toast.makeText(
                     context,
-                    context.getString(R.string.radio_started, song.title),
+                    textResources.getString(R.string.radio_started, song.title),
                     Toast.LENGTH_SHORT,
                 ).show()
             }
@@ -1603,7 +1638,7 @@ private fun VeyraApp(
                 if (ListenTogether.state.value.inParty) {
                     val upcoming = (it.mediaItemCount - (it.currentMediaItemIndex + 1)).coerceAtLeast(0)
                     if (upcoming >= 25) {
-                        showQueueNotice(context.getString(R.string.party_queue_full, 25))
+                        showQueueNotice(textResources.getString(R.string.party_queue_full, 25))
                         return@launch
                     }
                 }
@@ -1622,7 +1657,7 @@ private fun VeyraApp(
                     playbackSourceId = current?.playbackSourceId,
                 ).asQueueEntry(QueueTier.USER_QUEUE)
                 it.addMediaItem(at, queued.toMediaItem())
-                showQueueNotice(context.getString(R.string.song_added_to_queue))
+                showQueueNotice(textResources.getString(R.string.song_added_to_queue))
             }
         }
     }
@@ -1633,7 +1668,7 @@ private fun VeyraApp(
                 if (ListenTogether.state.value.inParty) {
                     val upcoming = (it.mediaItemCount - (it.currentMediaItemIndex + 1)).coerceAtLeast(0)
                     if (upcoming >= 25) {
-                        showQueueNotice(context.getString(R.string.party_queue_full, 25))
+                        showQueueNotice(textResources.getString(R.string.party_queue_full, 25))
                         return@launch
                     }
                 }
@@ -1652,7 +1687,7 @@ private fun VeyraApp(
                     playbackSourceId = current?.playbackSourceId,
                 ).asQueueEntry(QueueTier.USER_QUEUE)
                 it.addMediaItem(at, queued.toMediaItem())
-                showQueueNotice(context.getString(R.string.song_will_play_next))
+                showQueueNotice(textResources.getString(R.string.song_will_play_next))
             }
         }
     }
@@ -1685,7 +1720,7 @@ private fun VeyraApp(
         artwork: String? = null,
     ) {
         if (browseId != null) {
-            val credit = subtitle ?: context.getString(
+            val credit = subtitle ?: textResources.getString(
                 if (type == BrowseType.ARTIST) R.string.artist else R.string.album,
             )
             viewModel.openDetail(browseId, name, credit, artwork, type)
@@ -1705,7 +1740,7 @@ private fun VeyraApp(
             if (hit == null) {
                 Toast.makeText(
                     context,
-                    context.getString(R.string.couldnt_find, name),
+                    textResources.getString(R.string.couldnt_find, name),
                     Toast.LENGTH_SHORT,
                 ).show()
             } else {
@@ -1749,7 +1784,7 @@ private fun VeyraApp(
                         val upcoming = (c.mediaItemCount - (c.currentMediaItemIndex + 1)).coerceAtLeast(0)
                         val slotsLeft = (25 - upcoming).coerceAtLeast(0)
                         if (slotsLeft <= 0) {
-                            showQueueNotice(context.getString(R.string.party_queue_full, 25))
+                            showQueueNotice(textResources.getString(R.string.party_queue_full, 25))
                             return@launch
                         }
                         songs.take(slotsLeft)
@@ -1813,7 +1848,7 @@ private fun VeyraApp(
                 if (song == null) {
                     Toast.makeText(
                         context,
-                        context.getString(R.string.couldnt_open_link),
+                        textResources.getString(R.string.couldnt_open_link),
                         Toast.LENGTH_SHORT,
                     ).show()
                 } else {
@@ -1949,12 +1984,12 @@ private fun VeyraApp(
         when {
             target.songs.isNotEmpty() -> stamp(target.songs)
             target.browseId == null ->
-                Toast.makeText(context, context.getString(R.string.no_tracks_here), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, textResources.getString(R.string.no_tracks_here), Toast.LENGTH_SHORT).show()
             else -> viewModel.collectSongs(target.browseId, target.thumbnailUrl) { result ->
                 result.fold(
                     onSuccess = stamp,
                     onFailure = {
-                        val message = it.message ?: context.getString(R.string.couldnt_load_tracks)
+                        val message = it.message ?: textResources.getString(R.string.couldnt_load_tracks)
                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                     },
                 )
@@ -1995,7 +2030,7 @@ private fun VeyraApp(
             // The one case where refusing is fatal: below API 29 there is no
             // other way to reach the Music folder.
             else -> Toast
-                .makeText(context, context.getString(R.string.storage_required_save), Toast.LENGTH_SHORT)
+                .makeText(context, textResources.getString(R.string.storage_required_save), Toast.LENGTH_SHORT)
                 .show()
         }
     }
@@ -2007,7 +2042,7 @@ private fun VeyraApp(
             viewModel.reloadLocalDetail("local:downloads")
             viewModel.loadLibrarySongs()
         } else {
-            Toast.makeText(context, context.getString(R.string.storage_required_read), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, textResources.getString(R.string.storage_required_read), Toast.LENGTH_SHORT).show()
         }
     }
     val mediaPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -2147,12 +2182,12 @@ private fun VeyraApp(
             // long message. So this one is said whatever the count.
             blocked -> Toast.makeText(
                 context,
-                context.getString(R.string.wifi_only_download_refusal),
+                textResources.getString(R.string.wifi_only_download_refusal),
                 Toast.LENGTH_LONG,
             ).show()
             requested.size > 1 -> {
                 val message = if (songs.isEmpty()) {
-                    context.getString(R.string.already_downloaded)
+                    textResources.getString(R.string.already_downloaded)
                 } else {
                     context.resources.getQuantityString(
                         R.plurals.downloading_song_count,
@@ -2397,7 +2432,7 @@ private fun VeyraApp(
                     c.play()
                 }
             },
-            onRemoveFromQueue = { controller?.removeMediaItem(it) },
+            onRemoveFromQueue = { removeQueueEntries(listOf(it)) },
             onMoveInQueue = { from, to -> controller?.moveMediaItem(from, to) },
             onQueueDragActiveChange = { active -> controller?.setQueueDragActive(active) },
             // The enriched copy, not player.song — otherwise the menu
@@ -2437,7 +2472,7 @@ private fun VeyraApp(
                     viewModel.openDetail(
                         id,
                         name,
-                        context.getString(R.string.artist),
+                        textResources.getString(R.string.artist),
                         null,
                         BrowseType.ARTIST,
                     )
@@ -2448,14 +2483,14 @@ private fun VeyraApp(
                             viewModel.openDetail(
                                 found,
                                 name,
-                                context.getString(R.string.artist),
+                                textResources.getString(R.string.artist),
                                 null,
                                 BrowseType.ARTIST,
                             )
                         } else {
                             Toast.makeText(
                                 context,
-                                context.getString(R.string.couldnt_find, name),
+                                textResources.getString(R.string.couldnt_find, name),
                                 Toast.LENGTH_SHORT,
                             ).show()
                         }
@@ -2532,10 +2567,12 @@ private fun VeyraApp(
                 showSettings = true
                 showListenTogether = true
             },
+            queueFeedback = { QueueActionNoticeHost(queueNotice) },
             onClearQueue = {
                 // Keep what's playing and context/autoplay; drop user-queued tracks.
                 controller?.let { c ->
-                    QueueCoordinator.clearUserQueue(c)
+                    removeQueueEntries(((c.currentMediaItemIndex + 1) until c.mediaItemCount)
+                        .filter { c.getMediaItemAt(it).toSong().queueTier == app.veyra.music.data.model.QueueTier.USER_QUEUE })
                 }
             },
         )
@@ -2546,6 +2583,7 @@ private fun VeyraApp(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
+        app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize())
         // A pushed album/artist/playlist page replaces the tab content but
         // leaves the tab bar and mini player in place.
         // Replay's three layers unwind in the order they were opened. Ahead of
@@ -2797,7 +2835,7 @@ private fun VeyraApp(
                                     viewModel.openDetail(
                                         browseId = SPOTIFY_PAGE_PREFIX + playlist.id,
                                         title = playlist.name,
-                                        subtitle = playlist.owner ?: context.getString(R.string.spotify),
+                                        subtitle = playlist.owner ?: textResources.getString(R.string.spotify),
                                         thumbnailUrl = playlist.imageUrl,
                                         type = BrowseType.PLAYLIST,
                                     )
@@ -3095,13 +3133,13 @@ private fun VeyraApp(
                                         val id = item.videoId
                                         val savedUri = id?.let { Downloads.saved.value[it] }
                                         if (savedUri == null) {
-                                            showQueueNotice(context.getString(R.string.home_offline_track_unavailable))
+                                            showQueueNotice(textResources.getString(R.string.home_offline_track_unavailable))
                                         } else scope.launch {
                                             val songs = Downloads.getDownloadedSongs(context)
                                             val index = songs.indexOfFirst { it.videoId == id || it.localPath == savedUri }
                                             if (index >= 0) playFrom(songs, index,
-                                                QueueSource(context.getString(R.string.downloads), PlaybackSourceType.BROWSE, "local:downloads"))
-                                            else showQueueNotice(context.getString(R.string.home_offline_track_unavailable))
+                                                QueueSource(textResources.getString(R.string.downloads), PlaybackSourceType.BROWSE, "local:downloads"))
+                                            else showQueueNotice(textResources.getString(R.string.home_offline_track_unavailable))
                                         }
                                         return@homeItem
                                     }
@@ -3136,6 +3174,9 @@ private fun VeyraApp(
                                 recentlyPlayedLoading = homeRecentlyPlayedLoading,
                                 offline = !homeOnline,
                                 showingSaved = homeShowingSaved,
+                                savedContentLabel = if (homeShowingSaved) homeSavedAt?.let {
+                                    textResources.getString(R.string.home_saved_at, java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.SHORT).format(java.util.Date(it)))
+                                } else null,
                                 updating = homeUpdating,
                                 homeNotice = homeNotice,
                                 homeSections = homeSections,
@@ -3143,10 +3184,10 @@ private fun VeyraApp(
                                 onHomeSectionVisible = viewModel::setHomeSectionVisible,
                                 onResetHomeSections = viewModel::resetHomeSections,
                                 onOpenDownloads = {
-                                    onLibraryItemClick(ShelfItem(context.getString(R.string.downloads), "", null, null, "local:downloads"))
+                                    onLibraryItemClick(ShelfItem(textResources.getString(R.string.downloads), "", null, null, "local:downloads"))
                                 },
                                 onOpenLocalMusic = {
-                                    onLibraryItemClick(ShelfItem(context.getString(R.string.local_music), "", null, null, "local:all"))
+                                    onLibraryItemClick(ShelfItem(textResources.getString(R.string.local_music), "", null, null, "local:all"))
                                 },
                             )
                             TAB_EXPLORE -> AnimatedContent(
@@ -3363,13 +3404,13 @@ private fun VeyraApp(
                                         index,
                                         if (searchSource == SearchSource.ADDONS) {
                                             QueueSource(
-                                                context.getString(R.string.search_source_addons),
+                                                textResources.getString(R.string.search_source_addons),
                                                 PlaybackSourceType.BROWSE,
                                                 "addons:search",
                                             )
                                         } else {
                                             QueueSource(
-                                                context.getString(R.string.local_music),
+                                                textResources.getString(R.string.local_music),
                                                 PlaybackSourceType.BROWSE,
                                                 "local:all",
                                             )
@@ -4444,7 +4485,7 @@ private fun VeyraApp(
                     )
                 },
                 onOpenArtist = { id ->
-                    openPage(id, song.artist, context.getString(R.string.artist), BrowseType.ARTIST)
+                    openPage(id, song.artist, textResources.getString(R.string.artist), BrowseType.ARTIST)
                 },
                 // Only the player's copy of a track is ever missing these
                 // and backfilling — a row opened from a list already has
@@ -4632,10 +4673,10 @@ private fun VeyraApp(
                                         added > 1 -> context.resources.getQuantityString(
                                             R.plurals.added_to_playlists_notice, added, added,
                                         )
-                                        added == 1 -> context.getString(R.string.song_added_to_playlist)
+                                        added == 1 -> textResources.getString(R.string.song_added_to_playlist)
                                         alreadyThere > 0 && failed == 0 ->
-                                            context.getString(R.string.song_already_in_playlist)
-                                        else -> context.getString(R.string.failed)
+                                            textResources.getString(R.string.song_already_in_playlist)
+                                        else -> textResources.getString(R.string.failed)
                                     },
                                 )
                             }
@@ -4663,7 +4704,7 @@ private fun VeyraApp(
                         songs,
                     ) { browseId, pTitle, savedLocally ->
                         showQueueNotice(
-                            context.getString(
+                            textResources.getString(
                                 if (savedLocally && signedIn) R.string.spotify_import_local_fallback
                                 else R.string.spotify_import_done,
                                 pTitle,
@@ -4804,7 +4845,7 @@ private fun VeyraApp(
                         if (!nowPinned && id !in pinnedPlaylists) {
                             Toast.makeText(
                                 context,
-                                context.getString(
+                                textResources.getString(
                                     R.string.pinned_playlist_limit,
                                     AppSettings.MAX_PINNED_PLAYLISTS,
                                 ),
@@ -4830,7 +4871,7 @@ private fun VeyraApp(
                             if (reorderTarget != p) return@loadPlaylistEntries
                             reorderEntries = result.fold(
                                 onSuccess = { UiState.Success(it) },
-                                onFailure = { UiState.Error(context.getString(R.string.failed)) },
+                                onFailure = { UiState.Error(textResources.getString(R.string.failed)) },
                             )
                         }
                     }
@@ -4917,7 +4958,7 @@ private fun VeyraApp(
                         viewModel.reorderPlaylist(target, original, reordered) { saved ->
                             reorderSaving = false
                             showQueueNotice(
-                                context.getString(if (saved) R.string.playlist_reordered else R.string.reorder_failed),
+                                textResources.getString(if (saved) R.string.playlist_reordered else R.string.reorder_failed),
                             )
                             if (saved && reorderTarget == target) reorderTarget = null
                         }
@@ -5213,10 +5254,10 @@ private fun VeyraApp(
                                     showLastfmLogin = false
                                 }
                                 .onFailure { e ->
-                                    lastfmError = e.message ?: context.getString(R.string.login_failed)
+                                    lastfmError = e.message ?: textResources.getString(R.string.login_failed)
                                 }
                         } catch (e: Exception) {
-                            lastfmError = e.message ?: context.getString(R.string.login_failed)
+                            lastfmError = e.message ?: textResources.getString(R.string.login_failed)
                         } finally {
                             lastfmLoading = false
                         }
@@ -5234,16 +5275,16 @@ private fun VeyraApp(
                 description = stringResource(R.string.webdav_description),
                 fields = listOf(
                     FieldConfig(
-                        initial = AppSettings.webdavUrl.value,
+                        initial = remember { AppSettings.webdavUrl.value },
                         placeholder = stringResource(R.string.webdav_server_url_hint),
                         keyboardType = KeyboardType.Uri,
                     ),
                     FieldConfig(
-                        initial = AppSettings.webdavUsername.value,
+                        initial = remember { AppSettings.webdavUsername.value },
                         placeholder = stringResource(R.string.username),
                     ),
                     FieldConfig(
-                        initial = AppSettings.webdavPassword.value,
+                        initial = remember { AppSettings.webdavPassword.value },
                         placeholder = stringResource(R.string.password),
                         keyboardType = KeyboardType.Password,
                         isPassword = true,
@@ -5276,24 +5317,24 @@ private fun VeyraApp(
                 description = stringResource(R.string.smb_description),
                 fields = listOf(
                     FieldConfig(
-                        initial = AppSettings.smbHost.value,
+                        initial = remember { AppSettings.smbHost.value },
                         placeholder = stringResource(R.string.smb_server_hint),
                         keyboardType = KeyboardType.Uri,
                     ),
                     FieldConfig(
-                        initial = AppSettings.smbShare.value,
+                        initial = remember { AppSettings.smbShare.value },
                         placeholder = stringResource(R.string.smb_share_hint),
                     ),
                     FieldConfig(
-                        initial = AppSettings.smbBasePath.value,
+                        initial = remember { AppSettings.smbBasePath.value },
                         placeholder = stringResource(R.string.smb_folder_hint),
                     ),
                     FieldConfig(
-                        initial = AppSettings.smbUsername.value,
+                        initial = remember { AppSettings.smbUsername.value },
                         placeholder = stringResource(R.string.username),
                     ),
                     FieldConfig(
-                        initial = AppSettings.smbPassword.value,
+                        initial = remember { AppSettings.smbPassword.value },
                         placeholder = stringResource(R.string.password),
                         keyboardType = KeyboardType.Password,
                         isPassword = true,

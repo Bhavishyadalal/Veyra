@@ -1,0 +1,1 @@
+Bundled fonts retain their upstream SIL Open Font License notices. No font files were modified.

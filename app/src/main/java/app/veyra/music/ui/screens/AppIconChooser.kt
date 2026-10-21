@@ -1,0 +1,138 @@
+package app.veyra.music.ui.screens
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import app.veyra.music.AppIcon
+import app.veyra.music.R
+import app.veyra.music.data.themes.*
+import app.veyra.music.ui.icons.SettingsIcons
+import app.veyra.music.ui.themes.ThemeIconChoice
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+/** A single ordinary Settings row replaces the formerly expanded eighteen-icon grid. */
+@Composable
+internal fun AppIconSetting(initialCollection: IconCollection? = null) {
+    val context=LocalContext.current
+    var choosing by rememberSaveable { mutableStateOf(false) }
+    var current by remember { mutableStateOf<AppIcon?>(null) }
+    LaunchedEffect(choosing) {
+        if(!choosing) current=withContext(Dispatchers.IO) { AppIcon.current(context) }
+    }
+    SettingsRow(icon=SettingsIcons.Icons,title=stringResource(R.string.app_icon),
+        subtitle=current?.let { stringResource(it.labelRes) } ?: stringResource(R.string.icon_choose),
+        onClick={choosing=true})
+    if(choosing) AppIconChooser(initialCollection,onDismiss={choosing=false},onChanged={current=it})
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@Composable
+private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> Unit, onChanged: (AppIcon) -> Unit) {
+    val context=LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
+    val scope=rememberCoroutineScope()
+    val reducedMotion=app.veyra.music.ui.motion.rememberVeyraReducedMotion()
+    var selected by remember { mutableStateOf<AppIcon?>(null) }
+    var groupName by rememberSaveable { mutableStateOf(initialCollection?.name ?: IconCollection.VEYRA.name) }
+    var familyName by rememberSaveable { mutableStateOf(GlassFamily.LIQUID.name) }
+    var initialized by rememberSaveable { mutableStateOf(false) }
+    var changing by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        val actual=withContext(Dispatchers.IO) { AppIcon.current(context) }
+        selected=actual
+        if(!initialized) {
+            groupName=(initialCollection ?: IconPickerPolicy.collection(actual)).name
+            familyName=(IconPickerPolicy.family(actual) ?: GlassFamily.LIQUID).name
+            initialized=true
+        }
+    }
+    val group=IconCollection.valueOf(groupName)
+    val family=GlassFamily.valueOf(familyName)
+    val options=remember(group,family) { IconPickerPolicy.options(group,family) }
+    ModalBottomSheet(onDismissRequest={if(!changing)onDismiss()},
+        sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),containerColor=MaterialTheme.colorScheme.background) {
+        Column(Modifier.fillMaxWidth().heightIn(max=LocalConfiguration.current.screenHeightDp.dp*.85f)
+            .padding(horizontal=20.dp).padding(bottom=24.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+            Row(Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.app_icon),Modifier.weight(1f),style=MaterialTheme.typography.titleLarge)
+                TextButton(onClick=onDismiss,enabled=!changing) {Text(stringResource(R.string.theme_done))}
+            }
+            if(selected==null || changing) {
+                if(reducedMotion) LinearProgressIndicator(progress={.65f},modifier=Modifier.fillMaxWidth())
+                else LinearProgressIndicator(Modifier.fillMaxWidth())
+            }
+            LazyVerticalGrid(columns=GridCells.Fixed(when {
+                    LocalDensity.current.fontScale>1.8f || LocalConfiguration.current.screenWidthDp<280->1
+                    LocalConfiguration.current.screenWidthDp>=600 && LocalDensity.current.fontScale<1.4f->4
+                    else->2
+                }),
+                modifier=Modifier.fillMaxWidth().weight(1f,fill=false).selectableGroup(),
+                verticalArrangement=Arrangement.spacedBy(10.dp),horizontalArrangement=Arrangement.spacedBy(10.dp),
+                contentPadding=PaddingValues(vertical=8.dp)) {
+                item(key="collections",span={GridItemSpan(maxLineSpan)}) {
+                    FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                        IconCollection.entries.forEach { collection ->
+                            FilterChip(selected=collection==group,onClick={groupName=collection.name},enabled=!changing,
+                                label={Text(stringResource(when(collection) {
+                                    IconCollection.VEYRA->R.string.icon_collection_veyra
+                                    IconCollection.GLASS->R.string.icon_collection_glass
+                                    IconCollection.THEMES->R.string.icon_collection_themes
+                                    IconCollection.ATELIER->R.string.icon_collection_atelier
+                                }))})
+                        }
+                    }
+                }
+                if(group==IconCollection.GLASS) item(key="families",span={GridItemSpan(maxLineSpan)}) {
+                    FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                        GlassFamily.entries.forEach { f ->
+                            FilterChip(selected=f==family,onClick={familyName=f.name},enabled=!changing,
+                                label={Text(stringResource(when(f) {
+                                    GlassFamily.LIQUID->R.string.icon_family_liquid
+                                    GlassFamily.SAMSUNG->R.string.icon_family_samsung
+                                    GlassFamily.PIXEL->R.string.icon_family_pixel
+                                }))})
+                        }
+                    }
+                }
+                items(options,key={it.alias}) { option ->
+                    ThemeIconChoice(stringResource(option.labelRes),selected==option,!changing && selected!=null,
+                        onClick={if(selected!=option) {
+                            changing=true;error=false
+                            scope.launch {
+                                val success=withContext(Dispatchers.IO) { runCatching { AppIcon.apply(context,option) }.isSuccess }
+                                changing=false
+                                if(success) {
+                                    selected=option;onChanged(option)
+                                    android.widget.Toast.makeText(context,textResources.getString(R.string.app_icon_changed),android.widget.Toast.LENGTH_SHORT).show()
+                                } else error=true
+                            }
+                        }}) {
+                        AndroidView(factory={android.widget.ImageView(it)},update={it.setImageResource(option.iconRes)},modifier=Modifier.fillMaxSize())
+                    }
+                }
+                if(error) item(key="error",span={GridItemSpan(maxLineSpan)}) {
+                    Text(stringResource(R.string.app_icon_failed),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.error)
+                }
+                item(key="hint",span={GridItemSpan(maxLineSpan)}) {
+                    Text(stringResource(R.string.icon_chooser_hint),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+        }
+    }
+}

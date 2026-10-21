@@ -904,7 +904,7 @@
 
     <string name="selected_account">Ausgewähltes Konto</string>
 
-    <string name="shelf_100_on_repeat">In Dauerschleife</string>
+    <string name="shelf_100_on_repeat" formatted="false">In Dauerschleife</string>
 
     <string name="shelf_artists_on_the_rise">Aufstrebende Künstler</string>
 

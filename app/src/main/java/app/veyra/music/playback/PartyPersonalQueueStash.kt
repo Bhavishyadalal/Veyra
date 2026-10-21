@@ -51,8 +51,9 @@ object PartyPersonalQueueStash {
             }
             return false
         }
-        val songs = (0 until player.mediaItemCount).mapNotNull { idx ->
-            player.getMediaItemAt(idx).toSong().takeUnless { it.isDeviceFile() }
+        val songs = (0 until player.mediaItemCount).map { idx ->
+            // Personal restoration is local to this phone, not the shared party wire.
+            player.getMediaItemAt(idx).toSong()
         }
         if (songs.isEmpty()) return false
         val safeIndex = player.currentMediaItemIndex.coerceIn(0, songs.size - 1)
@@ -180,9 +181,6 @@ object PartyPersonalQueueStash {
             )
         }
     }
-
-    private fun Song.isDeviceFile(): Boolean =
-        videoId.startsWith("content://") || videoId.startsWith("file://")
 
     private const val PREFS_NAME = "veyra_party_queue_stash"
     private const val KEY_STASH = "stashed_queue"

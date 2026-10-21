@@ -67,7 +67,7 @@ import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material.icons.rounded.Videocam
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -358,6 +358,7 @@ fun SongActionsSheet(
             accent = palette.accent,
             onClick = onAddToQueue,
         )
+        if (app.veyra.music.ui.themes.LocalThemeVisuals.current != null) GroupSeparator(palette)
         when (val id = song.albumId) {
             null -> if (resolvingLinks) {
                 LoadingActionRow(Icons.Rounded.Album, stringResource(R.string.open_album), palette)
@@ -378,6 +379,7 @@ fun SongActionsSheet(
                 accent = palette.accent,
             ) { onOpenArtist(id) }
         }
+        if (app.veyra.music.ui.themes.LocalThemeVisuals.current != null && (showSleepTimer || onLyricsOffset != null)) GroupSeparator(palette)
         if (showSleepTimer && priority != PlayerShortcut.SLEEP_TIMER) {
             ActionRow(
                 icon = Icons.Rounded.Bedtime,
@@ -424,6 +426,9 @@ fun SongActionsSheet(
             return@TintedSheet
         }
 
+        if (app.veyra.music.ui.themes.LocalThemeVisuals.current != null) {
+            app.veyra.music.ui.themes.ThemeSectionRule(Modifier.padding(horizontal = 22.dp))
+        }
         SheetTrackHeader(song, subtitleColor = palette.onBackgroundVariant)
         HorizontalDivider(thickness = 0.5.dp, color = palette.divider)
         rows()
@@ -845,12 +850,13 @@ internal fun ActionRow(
     // The popup sits on a surface rather than the page background, so its
     // text follows the surface's colour — the two differ in light mode.
     val foreground = if (menu) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onBackground
+    val themed = app.veyra.music.ui.themes.LocalThemeVisuals.current != null
     val alpha = if (enabled || busy) 1f else 0.4f
     val iconView: @Composable () -> Unit = {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = (tint ?: foreground).copy(alpha = alpha),
+            tint = (tint ?: if (themed) accent else foreground).copy(alpha = alpha),
             modifier = Modifier.size(if (menu) 20.dp else 22.dp),
         )
     }
@@ -867,7 +873,7 @@ internal fun ActionRow(
                 if (menu) {
                     Modifier.heightIn(min = 48.dp).padding(horizontal = 18.dp, vertical = 12.dp)
                 } else {
-                    Modifier.heightIn(min = 56.dp).padding(horizontal = 22.dp, vertical = 15.dp)
+                    Modifier.heightIn(min = 56.dp).padding(horizontal = 22.dp, vertical = if (themed) 11.dp else 15.dp)
                 },
             ),
         verticalAlignment = Alignment.CenterVertically,
@@ -875,8 +881,8 @@ internal fun ActionRow(
         // A context menu reads label-first with the glyph at the far edge;
         // the sheet keeps the glyph leading, like every other list in the app.
         if (!menu) {
-            iconView()
-            Spacer(Modifier.width(18.dp))
+            app.veyra.music.ui.themes.ThemeActionEmblem { iconView() }
+            Spacer(Modifier.width(if (themed) 14.dp else 18.dp))
         }
         Column(Modifier.weight(1f)) {
         Text(
@@ -979,7 +985,7 @@ internal fun SheetTrackHeader(
             model = song.artworkAt(ROW_ART_PX),
             contentDescription = null,
             modifier = Modifier
-                .size(52.dp)
+                .size(if (app.veyra.music.ui.themes.LocalThemeVisuals.current != null) 64.dp else 52.dp)
                 .clip(artworkShape(RoundedCornerShape(8.dp)))
                 .thumbnailBorder(artworkShape(RoundedCornerShape(8.dp)))
                 .background(MaterialTheme.colorScheme.surfaceVariant),

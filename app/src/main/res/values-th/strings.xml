@@ -1174,7 +1174,7 @@
     <string name="shelf_sad">Sad</string>
 
 
-    <string name="shelf_100_on_repeat">100% on repeat</string>
+    <string name="shelf_100_on_repeat" formatted="false">100% on repeat</string>
 
 
     <string name="shelf_new_albums_singles">New albums &amp; singles</string>

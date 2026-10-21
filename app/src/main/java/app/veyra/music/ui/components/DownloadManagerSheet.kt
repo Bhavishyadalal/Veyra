@@ -84,13 +84,14 @@ import app.veyra.music.ui.haptics.rememberHaptics
 fun TopBarDownloadButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     val session by DownloadSession.state.collectAsStateWithLifecycle()
 
+    val reduced = app.veyra.music.ui.motion.rememberVeyraReducedMotion()
     val haptics = rememberHaptics()
     // Animated, because the fraction lands in steps — one track at a time, plus
     // whatever the running one reports — and a ring that jumps in twenty-fifths
     // reads as a stutter rather than as progress.
     val progress by animateFloatAsState(
         targetValue = session.fraction,
-        animationSpec = tween(300),
+        animationSpec = tween(if(reduced) 0 else 300),
         label = "downloadRingProgress",
     )
     val failed = session.failed > 0
@@ -99,7 +100,7 @@ fun TopBarDownloadButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
             failed -> MaterialTheme.colorScheme.error
             else -> MaterialTheme.colorScheme.primary
         },
-        animationSpec = tween(220),
+        animationSpec = tween(if(reduced) 0 else 220),
         label = "downloadRingTint",
     )
 
@@ -109,13 +110,13 @@ fun TopBarDownloadButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
         // Open the slot first; the glyph arrives as the pill approaches its
         // new width. Siblings move with the expanding slot and make room rather
         // than jumping directly to their final positions.
-        enter = expandHorizontally(
+        enter = if(reduced) androidx.compose.animation.EnterTransition.None else expandHorizontally(
             animationSpec = tween(260),
             expandFrom = Alignment.End,
         ) + fadeIn(
             animationSpec = tween(durationMillis = 160, delayMillis = 100),
         ),
-        exit = fadeOut(
+        exit = if(reduced) androidx.compose.animation.ExitTransition.None else fadeOut(
             animationSpec = tween(120),
         ) + shrinkHorizontally(
             animationSpec = tween(durationMillis = 220, delayMillis = 60),
@@ -194,6 +195,7 @@ fun TopBarDownloadButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 fun DownloadManagerSheet(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val export by app.veyra.music.data.settings.AppSettings.exportDownloads.collectAsStateWithLifecycle()
     val session by DownloadSession.state.collectAsStateWithLifecycle()
     // Newest ask last, the order the queue will actually reach them in.
     val items = remember(session.items) { session.items.sortedBy { it.sequence } }
@@ -236,6 +238,7 @@ fun DownloadManagerSheet(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
             } else {
                 TextButton(
                     onClick = {
+                        items.forEach { Downloads.dismissRecovery(it.videoId) }
                         DownloadSession.clear()
                         onDismiss()
                     },
@@ -264,6 +267,22 @@ fun DownloadManagerSheet(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
             Spacer(Modifier.height(8.dp))
         }
 
+        val available by androidx.compose.runtime.produceState<String?>(null, session.busy, export) {
+            value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                runCatching {
+                    val location = if (export) android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_MUSIC) else context.filesDir
+                    android.text.format.Formatter.formatShortFileSize(context, android.os.StatFs(location.absolutePath).availableBytes)
+                }.getOrNull()
+            }
+        }
+        available?.let { free ->
+            Text(stringResource(R.string.download_storage, free, stringResource(if(export) R.string.download_storage_public else R.string.download_storage_private)),
+                modifier = Modifier.padding(horizontal=20.dp, vertical=8.dp), style=MaterialTheme.typography.bodySmall,
+                color=MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        if (session.failed > 0) TextButton(onClick = {
+            items.filter { it.progress is DownloadProgress.Failed }.forEach { Downloads.enqueue(context, it.song, it.from) }
+        }, modifier = Modifier.padding(horizontal=12.dp)) { Text(stringResource(R.string.download_retry_all)) }
         HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline)
 
         // Capped rather than left to grow: a hundred-track playlist would
@@ -289,6 +308,10 @@ private fun DownloadManagerRow(
     onCancel: () -> Unit,
     onRetry: () -> Unit,
 ) {
+    val rowContext = LocalContext.current
+    val savedDestinations by Downloads.saved.collectAsStateWithLifecycle()
+
+    val reduced = app.veyra.music.ui.motion.rememberVeyraReducedMotion()
     val progress = item.progress
     val failed = progress as? DownloadProgress.Failed
 
@@ -360,7 +383,9 @@ private fun DownloadManagerRow(
             when (progress) {
                 is DownloadProgress.Queued -> RowStatus(stringResource(R.string.queued))
                 is DownloadProgress.Running -> {
-                    LinearProgressIndicator(
+                    if (progress.fraction <= 0f && !reduced) LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth().height(3.dp),
+                    ) else LinearProgressIndicator(
                         // Indeterminate until the first response names a
                         // length — a bar frozen at nothing reads as broken.
                         progress = { progress.fraction },
@@ -382,7 +407,13 @@ private fun DownloadManagerRow(
                         },
                     )
                 }
-                is DownloadProgress.Done -> RowStatus(stringResource(R.string.saved_to_veyra_folder))
+                is DownloadProgress.Done -> RowStatus(stringResource(when (
+                    app.veyra.music.download.downloadLocation(savedDestinations[item.videoId], rowContext.filesDir.absolutePath)
+                ) {
+                    app.veyra.music.download.DownloadLocation.PRIVATE -> R.string.download_saved_private
+                    app.veyra.music.download.DownloadLocation.PUBLIC -> R.string.saved_to_veyra_folder
+                    app.veyra.music.download.DownloadLocation.UNKNOWN -> R.string.downloaded
+                }))
                 is DownloadProgress.Failed ->
                     RowStatus(progress.reason, MaterialTheme.colorScheme.error)
             }
@@ -392,9 +423,9 @@ private fun DownloadManagerRow(
         // track can be stopped, a failed one can be asked for again, and a
         // finished one needs nothing at all.
         when {
-            failed != null -> RowAction(Icons.Rounded.Refresh, stringResource(R.string.retry), onRetry)
-            !progress.settled -> RowAction(Icons.Rounded.Close, stringResource(R.string.cancel), onCancel)
-            else -> Spacer(Modifier.width(36.dp))
+            failed != null -> RowAction(Icons.Rounded.Refresh, stringResource(R.string.download_action_track, stringResource(R.string.retry), item.song.title), onRetry)
+            !progress.settled -> RowAction(Icons.Rounded.Close, stringResource(R.string.download_action_track, stringResource(R.string.cancel), item.song.title), onCancel)
+            else -> Spacer(Modifier.width(48.dp))
         }
     }
 }
@@ -405,8 +436,6 @@ private fun RowStatus(text: String, color: Color = MaterialTheme.colorScheme.onS
         text = text,
         style = MaterialTheme.typography.labelMedium,
         color = color,
-        maxLines = 2,
-        overflow = TextOverflow.Ellipsis,
     )
 }
 
@@ -418,7 +447,7 @@ private fun RowAction(
 ) {
     Box(
         modifier = Modifier
-            .size(36.dp)
+            .size(48.dp)
             .clip(CircleShape)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,

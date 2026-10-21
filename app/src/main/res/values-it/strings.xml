@@ -887,7 +887,7 @@
     <string name="loudness_gain_db">%1$s dB</string>
     <string name="loudness_lufs">%1$s LUFS</string>
 
-    <string name="shelf_100_on_repeat">In ripetizione continua</string>
+    <string name="shelf_100_on_repeat" formatted="false">In ripetizione continua</string>
 
     <string name="shelf_artists_on_the_rise">Artisti emergenti</string>
 

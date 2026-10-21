@@ -161,6 +161,7 @@ fun HomeScreen(
     showingSaved: Boolean = false,
     updating: Boolean = false,
     homeNotice: String? = null,
+    savedContentLabel: String? = null,
     homeSections: List<HomeSectionOption> = emptyList(),
     onMoveHomeSection: ((String, Int) -> Unit)? = null,
     onHomeSectionVisible: ((String, Boolean) -> Unit)? = null,
@@ -168,9 +169,10 @@ fun HomeScreen(
     onOpenDownloads: (() -> Unit)? = null,
     onOpenLocalMusic: (() -> Unit)? = null,
 ) {
-    PrefetchHomeArtwork(state, enabled = !offline)
+    PrefetchHomeArtwork(state, listState, enabled = !offline)
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
     val homeReducedMotion = rememberVeyraReducedMotion()
+    val themePack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     var editingHome by rememberSaveable { mutableStateOf(false) }
     val customizable = onMoveHomeSection != null && onHomeSectionVisible != null && onResetHomeSections != null
     val displayState = if (offline && state is UiState.Loading) UiState.Success(emptyList<HomeShelf>()) else state
@@ -206,11 +208,16 @@ fun HomeScreen(
                 if (title != null) {
                     item(key = "home:heading", contentType = "heading") { HomeTitle(title) }
                 }
+                if (themePack != null) {
+                    item(key = "home:theme-atmosphere", contentType = "theme-artwork") {
+                        app.veyra.music.ui.themes.ThemeAtmosphere("header", Modifier.padding(horizontal = PAGE_GUTTER, vertical = 8.dp))
+                    }
+                }
                 if (customizable || offline || showingSaved || updating || homeNotice != null) {
                     item(key = "home:experience", contentType = "home:experience") {
                         HomeExperienceHeader(offline, showingSaved, updating, homeNotice, homeSections,
                             if (customizable) ({ editingHome = true }) else null,
-                            onOpenDownloads, onOpenLocalMusic, reducedMotion = homeReducedMotion)
+                            onOpenDownloads, onOpenLocalMusic, reducedMotion = homeReducedMotion, savedContentLabel = savedContentLabel)
                     }
                 }
                 if (!signedIn && onSignIn != null) {
@@ -594,6 +601,7 @@ internal fun SectionHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
+            app.veyra.music.ui.themes.ThemeSectionRule(Modifier.padding(end = 24.dp))
             Text(
                 modifier = Modifier.semantics { heading() },
                 text = displayTitle,

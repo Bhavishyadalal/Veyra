@@ -62,6 +62,7 @@ fun SpotifyImportAlert(
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
     val scope = rememberCoroutineScope()
     var link by remember { mutableStateOf("") }
     var privacy by remember { mutableStateOf(PlaylistPrivacy.PRIVATE) }
@@ -73,26 +74,26 @@ fun SpotifyImportAlert(
     fun start() {
         val id = SpotifyImporter.extractPlaylistId(link)
         if (id == null) {
-            status = context.getString(R.string.spotify_import_invalid)
+            status = textResources.getString(R.string.spotify_import_invalid)
             failed = true
             return
         }
         working = true
         failed = false
-        status = context.getString(R.string.spotify_import_fetching)
+        status = textResources.getString(R.string.spotify_import_fetching)
         scope.launch {
             try {
                 val (name, tracks) = SpotifyImporter.fetchPlaylistTracks(id)
                 val (songs, missed) = SpotifyImporter.resolveToSongs(tracks) { done, total ->
-                    status = context.getString(R.string.spotify_import_matching, done, total)
+                    status = textResources.getString(R.string.spotify_import_matching, done, total)
                 }
-                if (songs.isEmpty()) error(context.getString(R.string.spotify_import_none))
+                if (songs.isEmpty()) error(textResources.getString(R.string.spotify_import_none))
                 onImported(name, privacy, songs)
                 if (missed.isEmpty()) onDismiss() else unmatched = missed
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                status = context.getString(R.string.spotify_import_failed, e.message.orEmpty())
+                status = textResources.getString(R.string.spotify_import_failed, e.message.orEmpty())
                 failed = true
             }
             working = false
