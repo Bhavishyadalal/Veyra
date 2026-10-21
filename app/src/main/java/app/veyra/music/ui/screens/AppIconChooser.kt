@@ -7,6 +7,9 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -53,6 +56,7 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
     var initialized by rememberSaveable { mutableStateOf(false) }
     var changing by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf(false) }
+    var query by rememberSaveable { mutableStateOf("") }
     LaunchedEffect(Unit) {
         val actual=withContext(Dispatchers.IO) { AppIcon.current(context) }
         selected=actual
@@ -65,6 +69,7 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
     val group=IconCollection.valueOf(groupName)
     val family=GlassFamily.valueOf(familyName)
     val options=remember(group,family) { IconPickerPolicy.options(group,family) }
+    val visible=options.filter { textResources.getString(it.labelRes).contains(query.trim(),ignoreCase=true) }
     ModalBottomSheet(onDismissRequest={if(!changing)onDismiss()},
         sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),containerColor=MaterialTheme.colorScheme.background) {
         Column(Modifier.fillMaxWidth().heightIn(max=LocalConfiguration.current.screenHeightDp.dp*.85f)
@@ -77,6 +82,16 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
                 if(reducedMotion) LinearProgressIndicator(progress={.65f},modifier=Modifier.fillMaxWidth())
                 else LinearProgressIndicator(Modifier.fillMaxWidth())
             }
+            selected?.let { current ->
+                Text(stringResource(R.string.icon_current_selection,stringResource(current.labelRes)),
+                    style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            OutlinedTextField(value=query,onValueChange={query=it},singleLine=true,enabled=!changing,
+                modifier=Modifier.fillMaxWidth(),label={Text(stringResource(R.string.icon_search))},
+                leadingIcon={Icon(Icons.Rounded.Search,null)},
+                trailingIcon={if(query.isNotEmpty()) IconButton(onClick={query=""},enabled=!changing) {
+                    Icon(Icons.Rounded.Close,stringResource(R.string.theme_clear_search))
+                }},shape=androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
             LazyVerticalGrid(columns=GridCells.Fixed(when {
                     LocalDensity.current.fontScale>1.8f || LocalConfiguration.current.screenWidthDp<280->1
                     LocalConfiguration.current.screenWidthDp>=600 && LocalDensity.current.fontScale<1.4f->4
@@ -88,7 +103,7 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
                 item(key="collections",span={GridItemSpan(maxLineSpan)}) {
                     FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                         IconCollection.entries.forEach { collection ->
-                            FilterChip(selected=collection==group,onClick={groupName=collection.name},enabled=!changing,
+                            FilterChip(selected=collection==group,onClick={groupName=collection.name;query=""},enabled=!changing,
                                 label={Text(stringResource(when(collection) {
                                     IconCollection.VEYRA->R.string.icon_collection_veyra
                                     IconCollection.GLASS->R.string.icon_collection_glass
@@ -101,7 +116,7 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
                 if(group==IconCollection.GLASS) item(key="families",span={GridItemSpan(maxLineSpan)}) {
                     FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                         GlassFamily.entries.forEach { f ->
-                            FilterChip(selected=f==family,onClick={familyName=f.name},enabled=!changing,
+                            FilterChip(selected=f==family,onClick={familyName=f.name;query=""},enabled=!changing,
                                 label={Text(stringResource(when(f) {
                                     GlassFamily.LIQUID->R.string.icon_family_liquid
                                     GlassFamily.SAMSUNG->R.string.icon_family_samsung
@@ -110,7 +125,10 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
                         }
                     }
                 }
-                items(options,key={it.alias}) { option ->
+                if(visible.isEmpty()) item(key="empty",span={GridItemSpan(maxLineSpan)}) {
+                    Text(stringResource(R.string.icon_no_search_results),style=MaterialTheme.typography.bodyMedium)
+                }
+                items(visible,key={it.alias}) { option ->
                     ThemeIconChoice(stringResource(option.labelRes),selected==option,!changing && selected!=null,
                         onClick={if(selected!=option) {
                             changing=true;error=false
@@ -123,7 +141,7 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
                                 } else error=true
                             }
                         }}) {
-                        AndroidView(factory={android.widget.ImageView(it)},update={it.setImageResource(option.iconRes)},modifier=Modifier.fillMaxSize())
+                        AndroidView(factory={android.widget.ImageView(it)},update={it.setImageResource(option.previewRes ?: option.iconRes)},modifier=Modifier.fillMaxSize())
                     }
                 }
                 if(error) item(key="error",span={GridItemSpan(maxLineSpan)}) {

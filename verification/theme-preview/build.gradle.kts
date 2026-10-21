@@ -17,7 +17,7 @@ sourceSets.main {
     kotlin.srcDir(veyraRoot.resolve("sharedUi/src/jvmSharedMain/kotlin/app/veyra/music/ui"))
     kotlin.srcDir(veyraRoot.resolve("app/src/main/java/app/veyra/music/ui/screens"))
     kotlin.srcDir(veyraRoot.resolve("app/src/main/java/app/veyra/music/ui/components"))
-    kotlin.include("RenderAtelier.kt", "RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt", "**/ThemeNavigation.kt", "**/ThemeStudioComponents.kt", "**/VeyraBrandContent.kt",
+    kotlin.include("RenderKeepsake.kt", "RenderAtelier.kt", "RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt", "**/ThemeNavigation.kt", "**/ThemeStudioComponents.kt", "**/VeyraBrandContent.kt",
         "**/PlayerControlPrimitives.kt", "**/PlayerInteractionPolicy.kt", "**/PlayerScrubState.kt",
         "**/ReadableLayout.kt", "**/Customization.kt", "**/VeyraSurfaces.kt", "**/VeyraMotion.kt", "**/VeyraIcons.kt", "**/SettingsIcons.kt",
         "SettingsControls.kt", "VeyraSwitchColors.kt", "**/HomeComponents.kt")
@@ -58,3 +58,21 @@ val worldStudies = worldIds.map { id ->
     }
 }
 tasks.register("runWorlds") { dependsOn(worldStudies) }
+
+tasks.register<JavaExec>("runKeepsakeUi") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("app.veyra.music.ui.keepsake.RenderKeepsakeKt")
+    systemProperty("veyra.root", veyraRoot)
+}
+val keepsakeStudies = listOf("patchwork-picnic","clover-requiem","sunroom-mixtape","concrete-afterhours","matcha-mischief").map { id ->
+    tasks.register<JavaExec>("renderKeepsake-$id") {
+        dependsOn("classes")
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("app.veyra.music.ui.player.RenderThemesKt")
+        maxHeapSize = "1g"
+        systemProperty("veyra.root", veyraRoot)
+        systemProperty("veyra.theme", id)
+        systemProperty("veyra.study", "home,player,navigation-rtl-large-text")
+    }
+}
+tasks.register("runKeepsake") { dependsOn(keepsakeStudies) }

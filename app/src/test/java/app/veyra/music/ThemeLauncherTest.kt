@@ -48,6 +48,11 @@ class ThemeLauncherTest {
         assertEquals(AppIcon.PlaytimeClub,AppIcon.forTheme("playtime-club"))
         assertEquals(AppIcon.WebSlinger,AppIcon.forTheme("web-slinger"))
         assertEquals(AppIcon.HalloweenNocturne,AppIcon.forTheme("halloween-nocturne"))
+        assertEquals(AppIcon.PatchworkPicnic,AppIcon.forTheme("patchwork-picnic"))
+        assertEquals(AppIcon.CloverRequiem,AppIcon.forTheme("clover-requiem"))
+        assertEquals(AppIcon.SunroomMixtape,AppIcon.forTheme("sunroom-mixtape"))
+        assertEquals(AppIcon.ConcreteAfterhours,AppIcon.forTheme("concrete-afterhours"))
+        assertEquals(AppIcon.MatchaMischief,AppIcon.forTheme("matcha-mischief"))
         assertNull(AppIcon.forTheme(".MainActivity"))
         assertNull(AppIcon.forTheme(null))
         assertNull(AppIcon.forTheme("untrusted-pack"))
@@ -76,7 +81,7 @@ class ThemeLauncherTest {
         val choices=app.veyra.music.data.themes.IconPickerPolicy.options(
             app.veyra.music.data.themes.IconCollection.ATELIER,app.veyra.music.data.themes.GlassFamily.LIQUID)
         assertEquals(12,choices.size)
-        assertEquals(69,AppIcon.entries.size)
+        assertEquals(74,AppIcon.entries.size)
         val expected=catalog.map { row ->
             val id=((row as kotlinx.serialization.json.JsonObject).getValue("id") as kotlinx.serialization.json.JsonPrimitive).content
             assertNull(AppIcon.forTheme(id))

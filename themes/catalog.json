@@ -2,6 +2,61 @@
   "schema": 1,
   "themes": [
     {
+      "id": "patchwork-picnic",
+      "name": "Patchwork Picnic",
+      "description": "Cream puppy stickers, caramel gingham, coffee and denim. Fredoka headings, stitched navigation, soft transport controls and a warm picnic palette.",
+      "version": 1,
+      "minAppCode": 26,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/packs/patchwork-picnic-v1.zip",
+      "sha256": "1985dbdde3d431ccb2946ac80af8300b461c40c878dfa18a0257f6ea6548aad5",
+      "bytes": 486167,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/patchwork-picnic/artwork/preview.webp"
+    },
+    {
+      "id": "clover-requiem",
+      "name": "Clover Requiem",
+      "description": "An original masked meadow spirit and little black cat among periwinkle flowers. Moss, ivory and chartreuse, flower navigation and a firefly timeline.",
+      "version": 1,
+      "minAppCode": 26,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/packs/clover-requiem-v1.zip",
+      "sha256": "b3289730e35e0e845866cac73a2bb10b0af9d584af46be162038db1482c73fb3",
+      "bytes": 440530,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/clover-requiem/artwork/preview.webp"
+    },
+    {
+      "id": "sunroom-mixtape",
+      "name": "Sunroom Mixtape",
+      "description": "Golden window light, headphones, vinyl and walnut floors. Bold Manrope typography, cassette controls and warm analog navigation details.",
+      "version": 1,
+      "minAppCode": 26,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/packs/sunroom-mixtape-v1.zip",
+      "sha256": "2c0ef309cdfc0bd70dbfc9e36c6cc7eb025245be42b0c4e7a8377e8dc70ba406",
+      "bytes": 342511,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/sunroom-mixtape/artwork/preview.webp"
+    },
+    {
+      "id": "concrete-afterhours",
+      "name": "Concrete Afterhours",
+      "description": "Original underground streetwear illustration, graphite concrete and safety amber. Bold Rajdhani headings, architectural glyphs and a rail-line timeline.",
+      "version": 1,
+      "minAppCode": 26,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/packs/concrete-afterhours-v1.zip",
+      "sha256": "ce598d5b70d7c9a29e9d4898b8ec901b292c614f32484f261c990c969c13c0da",
+      "bytes": 455326,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/concrete-afterhours/artwork/preview.webp"
+    },
+    {
+      "id": "matcha-mischief",
+      "name": "Matcha Mischief",
+      "description": "Original black cat, fluffy bunny and frog-hood bear in a matcha-paper collage. Cream-and-forest controls, clover navigation and rounded Fredoka headings.",
+      "version": 1,
+      "minAppCode": 26,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/packs/matcha-mischief-v1.zip",
+      "sha256": "307d1c591dad507f6a9556ce5e6cbbc851538703736a16ca8b26ea34b5f0cb35",
+      "bytes": 488189,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/matcha-mischief/artwork/preview.webp"
+    },
+    {
       "id": "web-slinger",
       "name": "Web Slinger",
       "description": "Midnight city, crimson glass and cobalt webs. Bold condensed headings, themed Veyra branding, angular control details, web timeline and an optional matching launcher icon.",

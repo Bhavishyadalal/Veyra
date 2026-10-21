@@ -4,6 +4,14 @@
 
 > Promoted from 0.1.7-beta1 at the owner's request. This is an Android Studio source release. No APK, signing operation, GitHub release/tag or deployment is created by this promotion.
 
+## Keepsake · Five new downloadable themes
+
+Patchwork Picnic, Clover Requiem, Sunroom Mixtape, Concrete Afterhours and Matcha Mischief bring the shared catalog to **46 themes**. Their data packs work with stable 0.1.7 / code 26, including its original 256 px brand-icon validator. Refresh Theme studio to discover them.
+
+Stable Android code, UI and its 69 launcher choices are unchanged. The five new matching launcher choices and Studio/icon-picker polish are exclusive to beta 0.1.8.
+
+[Collection and downloads](themes/KEEPSAKE.md) · [Stable compatibility verification](verification/KEEPSAKE-STABLE-0.1.7.md)
+
 ## A new atmosphere for your music
 
 ### Theme installation correction · 21 October 2026

@@ -1336,4 +1336,15 @@
     <string name="app_icon_worldroamingcosmos" translatable="false">Roaming Cosmos</string>
     <string name="app_icon_worldbluehoursanctuary" translatable="false">Blue Hour Sanctuary</string>
     <string name="app_icon_worldcelestialcurrent" translatable="false">Celestial Current</string>
+    <string name="theme_search">Search themes</string>
+    <string name="theme_clear_search">Clear search</string>
+    <string name="theme_no_search_results">No matching themes. Try another name or mood.</string>
+    <string name="icon_search">Search icons</string>
+    <string name="icon_no_search_results">No matching icons in this collection.</string>
+    <string name="icon_current_selection">Current icon: %1$s</string>
+    <string name="app_icon_patchworkpicnic" translatable="false">Patchwork Picnic</string>
+    <string name="app_icon_cloverrequiem" translatable="false">Clover Requiem</string>
+    <string name="app_icon_sunroommixtape" translatable="false">Sunroom Mixtape</string>
+    <string name="app_icon_concreteafterhours" translatable="false">Concrete Afterhours</string>
+    <string name="app_icon_matchamischief" translatable="false">Matcha Mischief</string>
 </resources>

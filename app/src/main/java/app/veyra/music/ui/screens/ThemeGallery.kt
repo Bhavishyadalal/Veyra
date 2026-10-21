@@ -13,6 +13,8 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -47,6 +49,7 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
     var restartAfterApply by rememberSaveable { mutableStateOf(false) }
     var matchingIcon by rememberSaveable(pending) { mutableStateOf(false) }
     var installedOnly by rememberSaveable { mutableStateOf(false) }
+    var query by rememberSaveable { mutableStateOf("") }
     val scope=rememberCoroutineScope()
     val focus=androidx.compose.ui.platform.LocalFocusManager.current
     LaunchedEffect(Unit) {focus.clearFocus();ThemeRepository.clearMessage();ThemeRepository.refreshCatalog()}
@@ -56,6 +59,8 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
         }
     }
     val detail=available.firstOrNull {it.id==detailId}
+    val visible=available.filter { (!installedOnly || it.id in installed) &&
+        (query.isBlank() || it.name.contains(query.trim(),ignoreCase=true) || it.description.contains(query.trim(),ignoreCase=true)) }
     LaunchedEffect(detailId,available) {if(detailId!=null && detail==null)detailId=null}
     BackHandler(enabled=detailId!=null && !applying) {detailId=null}
     ModalBottomSheet(onDismissRequest={if(!applying)onDismiss()},
@@ -73,6 +78,13 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
                 TextButton(onClick=onDismiss,enabled=!applying) {Text(stringResource(R.string.theme_done))}
             }
             if(detail==null) {
+                OutlinedTextField(value=query,onValueChange={query=it},singleLine=true,
+                    modifier=Modifier.fillMaxWidth().padding(horizontal=20.dp),
+                    label={Text(stringResource(R.string.theme_search))},
+                    leadingIcon={Icon(Icons.Rounded.Search,null)},
+                    trailingIcon={if(query.isNotEmpty()) IconButton(onClick={query=""}) {
+                        Icon(Icons.Rounded.Close,stringResource(R.string.theme_clear_search))
+                    }},shape=androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
                 FlowRow(Modifier.padding(horizontal=20.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                     FilterChip(selected=!installedOnly,onClick={installedOnly=false},label={Text(stringResource(R.string.theme_all))})
                     FilterChip(selected=installedOnly,onClick={installedOnly=true},label={Text(stringResource(R.string.theme_downloaded))})
@@ -84,7 +96,7 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
                             stringResource(if(active==null)R.string.theme_active else R.string.theme_saved_appearance),null,active==null,
                             onClick={if(active!=null)pending="@original"},enabled=active!=null && !applying)
                     }
-                    items(available.filter {!installedOnly || it.id in installed},key={it.id}) { listing->
+                    items(visible,key={it.id}) { listing->
                         val m=installed[listing.id]
                         val local=ThemeRepository.directory(listing.id)
                         val preview=if(m!=null && local!=null) File(local,m.assets.getValue("preview")) else listing.preview
@@ -98,6 +110,9 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
                     }
                     if(installedOnly && installed.isEmpty()) item {Text(stringResource(R.string.theme_no_downloads),style=MaterialTheme.typography.bodyMedium)}
                     if(available.isEmpty()) item {Text(stringResource(R.string.theme_catalog_empty),style=MaterialTheme.typography.bodyMedium)}
+                    if(visible.isEmpty() && available.isNotEmpty() && query.isNotBlank()) item {
+                        Text(stringResource(R.string.theme_no_search_results),style=MaterialTheme.typography.bodyMedium)
+                    }
                     item(key="icon") {AppIconSetting(initialCollection=IconCollection.THEMES)}
                     message?.let {value->item(key="message") {Text(value,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)}}
                 }

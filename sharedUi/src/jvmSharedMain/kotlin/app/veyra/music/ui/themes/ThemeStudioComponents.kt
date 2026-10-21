@@ -68,9 +68,9 @@ fun ThemeStudioRow(name: String, subtitle: String, model: Any?, active: Boolean,
         .clip(RoundedCornerShape(16.dp))
         .background(if(active)c.primaryContainer.copy(alpha=.3f) else c.surfaceContainerLow)
         .clickable(enabled=enabled,role=androidx.compose.ui.semantics.Role.Button,onClick=onClick)
-        .heightIn(min=88.dp).padding(12.dp),verticalAlignment=Alignment.CenterVertically,
+        .heightIn(min=88.dp).padding(10.dp),verticalAlignment=Alignment.CenterVertically,
         horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-        Box(Modifier.size(64.dp).clip(RoundedCornerShape(12.dp)).background(c.surfaceVariant),contentAlignment=Alignment.Center) {
+        Box(Modifier.width(88.dp).height(72.dp).clip(RoundedCornerShape(12.dp)).background(c.surfaceVariant),contentAlignment=Alignment.Center) {
             if(model!=null) AsyncImage(model,null,Modifier.matchParentSize(),contentScale=ContentScale.Crop)
             else Text("V",style=MaterialTheme.typography.titleLarge,color=c.primary)
         }
@@ -91,11 +91,15 @@ fun ThemeIconChoice(label: String, selected: Boolean, enabled: Boolean, onClick:
     val shape=RoundedCornerShape(16.dp)
     Column(modifier.fillMaxWidth().clip(shape)
         .background(if(selected)c.primaryContainer else c.surfaceContainerLow)
-        .border(if(selected)1.5.dp else .5.dp,if(selected)c.primary else c.outlineVariant,shape)
+        .border(if(selected)1.5.dp else .5.dp,if(selected)c.primary else c.outlineVariant.copy(alpha=.35f),shape)
         .selectable(selected,enabled=enabled,role=androidx.compose.ui.semantics.Role.RadioButton,onClick=onClick)
         .heightIn(min=108.dp).padding(12.dp),horizontalAlignment=Alignment.CenterHorizontally,
         verticalArrangement=Arrangement.spacedBy(8.dp)) {
-        Box(Modifier.size(48.dp),contentAlignment=Alignment.Center) { icon() }
+        Box(Modifier.fillMaxWidth(),contentAlignment=Alignment.Center) {
+            Box(Modifier.size(64.dp),contentAlignment=Alignment.Center) { icon() }
+            if(selected) androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.Rounded.Check,null,
+                tint=c.primary,modifier=Modifier.align(Alignment.TopEnd).size(16.dp))
+        }
         Text(label,style=MaterialTheme.typography.labelLarge,color=if(selected)c.onPrimaryContainer else c.onSurface,
             textAlign=androidx.compose.ui.text.style.TextAlign.Center)
     }

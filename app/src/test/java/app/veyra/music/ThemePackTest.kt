@@ -10,6 +10,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 class ThemePackTest {
+    private val keepsakeIds=setOf("patchwork-picnic","clover-requiem","sunroom-mixtape","concrete-afterhours","matcha-mischief")
     @get:Rule val temp = TemporaryFolder()
     private val project: File get() = generateSequence(File(requireNotNull(System.getProperty("user.dir")))) { it.parentFile }
         .first { File(it,"themes/catalog.json").exists() }
@@ -39,6 +40,9 @@ class ThemePackTest {
                 dimension(26) to dimension(28)
             }
             ThemePack.validateImageBounds(key,width,height)
+            if(m.id in keepsakeIds && key !in setOf("header","player","preview")) {
+                assertTrue("${m.id}: $key must also pass the original stable image-size rule",width in 1..256 && height in 1..256)
+            }
         }
     }
     @Test fun officialPackInstallsWithExactlyItsDeclaredAssetsAndNoExecutableContent() {
@@ -61,6 +65,17 @@ class ThemePackTest {
         rejects { ThemePack.validateImageBounds("header",2049,2048) }
         rejects { ThemePack.validateImageBounds("brandIcon",-1,-1) }
         rejects { ThemePack.validateImageBounds("preview",0,100) }
+    }
+    @Test fun keepsakePacksInstallOnStable26WithoutTheBetaEngineOrLauncherAliases() {
+        val entries=ThemePack.json.decodeFromString<ThemeCatalog>(File(project,"themes/catalog.json").readText()).themes
+            .filter {it.id in keepsakeIds}
+        assertEquals(5,entries.size)
+        entries.forEach { entry ->
+            val (m,_)=ThemePack.install(File(project,"themes/packs/${entry.id}-v${entry.version}.zip"),
+                temp.newFolder(),entry,26,::validatePublishedImageBounds)
+            assertEquals(26,m.minAppCode)
+            rejects {ThemePack.validate(m,25)}
+        }
     }
     @Test fun decoderFailurePreservesAnExistingWorkingInstallation() {
         val pack=File(project,"themes/packs/halloween-nocturne-v3.zip")
@@ -107,11 +122,11 @@ class ThemePackTest {
     }
     @Test fun allPublishedThemesInstallWithCorrectBrandingAndMinimumVersion() {
         val catalog=ThemePack.json.decodeFromString<ThemeCatalog>(File(project,"themes/catalog.json").readText())
-        assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream","stained-glass-sonata","firefly-railway","porcelain-moon","black-honey","sakura-arcade","cloud-post-office","copper-canyon-radio","midnight-aquarium","sunday-bakery","rose-circuit","clockwork-garden","snowglobe-village","indigo-atelier","prism-playground","silent-cinema","riverside-pause","pixel-stargazer","roaming-cosmos","blue-hour-sanctuary","celestial-current"),catalog.themes.map { it.id }.toSet())
+        assertEquals(setOf("patchwork-picnic","clover-requiem","sunroom-mixtape","concrete-afterhours","matcha-mischief","halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream","stained-glass-sonata","firefly-railway","porcelain-moon","black-honey","sakura-arcade","cloud-post-office","copper-canyon-radio","midnight-aquarium","sunday-bakery","rose-circuit","clockwork-garden","snowglobe-village","indigo-atelier","prism-playground","silent-cinema","riverside-pause","pixel-stargazer","roaming-cosmos","blue-hour-sanctuary","celestial-current"),catalog.themes.map { it.id }.toSet())
         for (entry in catalog.themes) {
             val pack=File(project,"themes/packs/${entry.id}-v${entry.version}.zip")
             val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,BuildConfig.VERSION_CODE,::validatePublishedImageBounds)
-            assertEquals(if(entry.id in setOf("playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals","strawberry-daydream","cloud-post-office","sunday-bakery","snowglobe-village","prism-playground")) 3 else 2,m.schema)
+            assertEquals(if(entry.id in setOf("patchwork-picnic","matcha-mischief","playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals","strawberry-daydream","cloud-post-office","sunday-bakery","snowglobe-village","prism-playground")) 3 else 2,m.schema)
             assertTrue(File(dir,m.assets.getValue("brandIcon")).isFile)
             rejects { ThemePack.validate(m,23) }
             if (entry.id == "midnight-express") {
@@ -139,7 +154,7 @@ class ThemePackTest {
         val bundled=File(project,"app/src/main/assets/theme-catalog.json").readBytes()
         assertArrayEquals(published,bundled)
         val entries=ThemeRepository.parseCatalog(published)
-        assertEquals(41,entries.size)
+        assertEquals(46,entries.size)
         entries.forEach { entry ->
             assertTrue(File(project,"themes/${entry.id}/artwork/preview.webp").isFile)
         }

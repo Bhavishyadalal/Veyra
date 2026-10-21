@@ -1,0 +1,4 @@
+studio: five native selection targets >=48 dp; callback once; font scale 1.0.
+icons-large-text: five native selection targets >=48 dp; callback once; font scale 1.5.
+icons-rtl-large-text: five native selection targets >=48 dp; callback once; font scale 1.5.
+Shared components in illustrative layouts, not Android screenshots or full-screen/device validation.

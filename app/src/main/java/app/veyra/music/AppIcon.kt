@@ -15,6 +15,11 @@ import android.content.pm.PackageManager
  * names so a choice made before the update stays enabled.
  */
 enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val previewRes: Int? = null) {
+    PatchworkPicnic("LauncherPatchworkPicnic", R.mipmap.ic_theme_patchworkpicnic, R.string.app_icon_patchworkpicnic, R.mipmap.ic_theme_patchworkpicnic_foreground),
+    CloverRequiem("LauncherCloverRequiem", R.mipmap.ic_theme_cloverrequiem, R.string.app_icon_cloverrequiem, R.mipmap.ic_theme_cloverrequiem_foreground),
+    SunroomMixtape("LauncherSunroomMixtape", R.mipmap.ic_theme_sunroommixtape, R.string.app_icon_sunroommixtape, R.mipmap.ic_theme_sunroommixtape_foreground),
+    ConcreteAfterhours("LauncherConcreteAfterhours", R.mipmap.ic_theme_concreteafterhours, R.string.app_icon_concreteafterhours, R.mipmap.ic_theme_concreteafterhours_foreground),
+    MatchaMischief("LauncherMatchaMischief", R.mipmap.ic_theme_matchamischief, R.string.app_icon_matchamischief, R.mipmap.ic_theme_matchamischief_foreground),
     AtelierAuroraVeil("LauncherAtelierAuroraVeil", R.mipmap.ic_atelier_aurora_veil, R.string.app_icon_atelier_aurora_veil, R.mipmap.ic_atelier_aurora_veil_foreground),
     AtelierSakuraPearl("LauncherAtelierSakuraPearl", R.mipmap.ic_atelier_sakura_pearl, R.string.app_icon_atelier_sakura_pearl, R.mipmap.ic_atelier_sakura_pearl_foreground),
     AtelierObsidianGold("LauncherAtelierObsidianGold", R.mipmap.ic_atelier_obsidian_gold, R.string.app_icon_atelier_obsidian_gold, R.mipmap.ic_atelier_obsidian_gold_foreground),
@@ -91,6 +96,11 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
     companion object {
         /** A data-only theme cannot supply a component name or an arbitrary launcher alias. */
         fun forTheme(id: String?): AppIcon? = when (id) {
+            "patchwork-picnic" -> PatchworkPicnic
+            "clover-requiem" -> CloverRequiem
+            "sunroom-mixtape" -> SunroomMixtape
+            "concrete-afterhours" -> ConcreteAfterhours
+            "matcha-mischief" -> MatchaMischief
             "stained-glass-sonata" -> StainedGlassSonata
             "firefly-railway" -> FireflyRailway
             "porcelain-moon" -> PorcelainMoon
