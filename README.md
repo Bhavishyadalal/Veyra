@@ -1,3 +1,5 @@
+> **Historical branch:** Android source/version here is preserved. Current stable is [Veyra 0.1.7 / code 26](https://github.com/Bhavishyadalal/Veyra/tree/main). [Current source downloads](https://github.com/Bhavishyadalal/Veyra/blob/main/downloads/README.md). Status text below describes this branch before promotion.
+
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
 > **Stable 0.1.6 / code 22:** promoted from the completed preview, with saved Home, customization, accessibility, navigation and calmer shared motion. [Release notes](RELEASE_NOTES_0.1.6.md). APK publication is pending the owner’s release.
