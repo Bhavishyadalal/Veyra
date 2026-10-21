@@ -2,6 +2,14 @@
 
 **Preview Android source · version code 27 · based on stable 0.1.7**
 
+## Settings and transition refinement
+
+- Simpler Player, Mini player, Gestures and Network sections, plus coordinated cards for Home, navigation and imported fonts.
+- Lazy preset lists, cached country labels and fewer subscriptions while sheets are closed.
+- Less simultaneous page motion and no extra account-panel blur sampling during transitions; preset pickers finish closing before applying a choice.
+
+[Verification and limits](verification/SETTINGS-MOTION-POLISH-0.1.8-beta1.md)
+
 ## Flowing navigation and account panel
 
 - Account selector slides and scales from the avatar corner, with a fading backdrop and a complete closing animation before account actions or Settings open.

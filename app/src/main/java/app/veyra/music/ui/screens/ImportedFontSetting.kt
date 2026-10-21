@@ -3,6 +3,8 @@ package app.veyra.music.ui.screens
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -23,7 +25,6 @@ import kotlinx.coroutines.launch
     var slot by rememberSaveable {mutableStateOf("app")}
     var busy by remember {mutableStateOf(false)}
     var message by remember {mutableStateOf<String?>(null)}
-    val options by AppSettings.experience.collectAsStateWithLifecycle()
     val scope=rememberCoroutineScope()
     val context=LocalContext.current
     val picker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {uri->
@@ -40,18 +41,24 @@ import kotlinx.coroutines.launch
         }
     }
     SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.font_import_title),subtitle=stringResource(R.string.font_import_hint),onClick={open=true})
-    if(open)ModalBottomSheet(onDismissRequest={if(!busy)open=false}) {
+    if(!open)return
+    val options by AppSettings.experience.collectAsStateWithLifecycle()
+    ModalBottomSheet(onDismissRequest={if(!busy)open=false}) {
         app.veyra.music.ui.themes.ThemeComponentSurface {
-        Column(Modifier.fillMaxWidth().padding(24.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
+        Column(Modifier.fillMaxWidth().heightIn(max=680.dp).verticalScroll(rememberScrollState()).padding(24.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
             Text(stringResource(R.string.font_import_title),style=MaterialTheme.typography.headlineSmall)
             Text(stringResource(R.string.font_import_hint),style=MaterialTheme.typography.bodyMedium)
             listOf("app" to R.string.font_import_app,"lyrics" to R.string.font_import_lyrics).forEach {(key,label)->
+                ExperienceSection(stringResource(label)) {
                 OutlinedButton(enabled=!busy,onClick={slot=key;picker.launch(arrayOf("font/*","application/x-font-ttf","application/x-font-opentype","application/octet-stream"))},modifier=Modifier.fillMaxWidth()) {Text(stringResource(label))}
                 val hash=if(key=="app")options.appFont else options.lyricsFont
                 if(hash.isNotBlank())TextButton(enabled=!busy,onClick={val latest=AppSettings.experience.value;AppSettings.setExperience(if(key=="app")latest.copy(appFont="") else latest.copy(lyricsFont=""))}) {Text(stringResource(R.string.font_import_reset,stringResource(label)))}
             }
+            }
+            ExperienceSection(stringResource(R.string.font_import_lyrics)) {
             SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.font_lyrics_size),subtitle="${(options.lyricsScale*100).toInt()}%",options=listOf("80%","100%","120%","150%"),selectedIndex=listOf(.8f,1f,1.2f,1.5f).indexOf(options.lyricsScale).coerceAtLeast(0),onSelect={AppSettings.setExperience(options.copy(lyricsScale=listOf(.8f,1f,1.2f,1.5f)[it]))})
             SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.font_lyrics_center),checked=options.centeredLyrics,onClick={AppSettings.setExperience(options.copy(centeredLyrics=!options.centeredLyrics))})
+            }
             if(busy)LinearProgressIndicator(Modifier.fillMaxWidth())
             message?.let {Text(it,style=MaterialTheme.typography.bodyMedium)}
         }

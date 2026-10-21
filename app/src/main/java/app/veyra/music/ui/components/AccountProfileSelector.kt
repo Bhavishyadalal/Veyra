@@ -96,7 +96,6 @@ fun AccountProfileSelector(
     val enter = VeyraMotion.duration(reducedMotion, VeyraMotion.Enter)
     val exit = VeyraMotion.duration(reducedMotion, VeyraMotion.Exit)
     var managing by remember { mutableStateOf(false) }
-    val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val shape = MaterialTheme.shapes.extraLarge
     AnimatedVisibility(
         visibleState = visibility,
@@ -125,16 +124,9 @@ fun AccountProfileSelector(
                     .padding(top = 56.dp, start = 20.dp, end = 20.dp)
                     .fillMaxWidth()
                     .clip(shape)
-                    .then(
-                        if (reduceDynamicBlur) {
-                            Modifier.background(MaterialTheme.colorScheme.surface)
-                        } else {
-                            Modifier.optimizedHazeEffect(
-                                state = hazeState,
-                                style = HazeMaterials.thin(MaterialTheme.colorScheme.surface),
-                            )
-                        },
-                    )
+                    // A stable tonal surface avoids sampling the full moving page
+                    // into a second blur layer on every transition frame.
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                     .clickable(onClick = {}),
             ) {
                 LazyColumn {

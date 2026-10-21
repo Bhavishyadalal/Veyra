@@ -19,15 +19,20 @@ fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: B
     val transition = when {
         reduceMotion || motion == NavigationMotion.None -> EnterTransition.None togetherWith ExitTransition.None
         subtleMotion -> (fadeIn(tween(VeyraMotion.Feedback)) togetherWith fadeOut(tween(VeyraMotion.Press))).apply { targetContentZIndex = 1f }
+        // Keep the parent stationary: moving two artwork/blur-backed pages at
+        // once adds rendering work and makes text appear to swim on slow frames.
         motion == NavigationMotion.Tab ->
-            ((slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 24 } + fadeIn(tween(VeyraMotion.Feedback))) togetherWith fadeOut(tween(VeyraMotion.Exit))).apply { targetContentZIndex = 1f }
+            (fadeIn(tween(VeyraMotion.Feedback)) togetherWith
+                fadeOut(tween(1, delayMillis = VeyraMotion.Feedback))).apply { targetContentZIndex = 1f }
         motion == NavigationMotion.Back ->
-            (slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { -direction * it / 16 } togetherWith
-                (slideOutHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 5 } + fadeOut(tween(VeyraMotion.Exit))))
+            (EnterTransition.None togetherWith
+                (slideOutHorizontally(tween(VeyraMotion.Exit, easing = VeyraMotion.Easing)) { direction * it / 10 } +
+                    fadeOut(tween(VeyraMotion.Exit, easing = VeyraMotion.Easing))))
                 .apply { targetContentZIndex = -1f }
         else ->
-            ((slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 5 } + fadeIn(tween(VeyraMotion.Exit))) togetherWith
-                slideOutHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { -direction * it / 16 })
+            ((slideInHorizontally(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing)) { direction * it / 10 } +
+                fadeIn(tween(VeyraMotion.Enter, easing = VeyraMotion.Easing))) togetherWith
+                fadeOut(tween(1, delayMillis = VeyraMotion.Enter)))
                 .apply { targetContentZIndex = 1f }
     }
     // Destinations own their scroll state and fill the viewport. Interpolating

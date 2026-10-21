@@ -1,5 +1,7 @@
 package app.veyra.music.ui.screens
 
+import kotlinx.coroutines.launch
+
 import app.veyra.music.ui.layout.stackForReadability
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.AnimatedVisibility
@@ -681,7 +683,7 @@ internal fun SettingsPresetRow(
 ) {
     var choosing by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
     val focus = androidx.compose.ui.platform.LocalFocusManager.current
-    SettingsRow(icon = icon, title = title, enabled = enabled, subtitle = subtitle.takeIf { it.isNotBlank() },
+    SettingsRow(icon = icon, title = title, enabled = enabled, subtitle = subtitle.takeIf { it.isNotBlank() && it != options.getOrNull(selectedIndex) },
         onClick = { focus.clearFocus(); choosing = true },
         trailing = {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -697,43 +699,59 @@ internal fun SettingsPresetRow(
             }
         })
     if (choosing && enabled) {
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val scope = androidx.compose.runtime.rememberCoroutineScope()
+        var committing by remember { mutableStateOf(false) }
         ModalBottomSheet(onDismissRequest = { choosing = false },
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            sheetState = sheetState,
             containerColor = MaterialTheme.colorScheme.surface,
             shape = VeyraSurfaces.Sheet,
         ) {
-            Column(Modifier.fillMaxWidth().heightIn(max = 480.dp)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp).padding(bottom = 24.dp)) {
-                Text(title, style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.semantics { heading() }.padding(bottom = 8.dp))
-                if (subtitle.isNotBlank()) Text(subtitle, style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(bottom = 14.dp))
-                Column(Modifier.fillMaxWidth().selectableGroup()) {
-                    options.forEachIndexed { index, label ->
-                        val selected = index == selectedIndex
-                        val interaction = remember { MutableInteractionSource() }
-                        Row(Modifier.fillMaxWidth().clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { RoundedCornerShape(it.rowCorner.dp) } ?: VeyraSurfaces.Row)
-                            .veyraPressFeedback(interaction, MaterialTheme.colorScheme.primary)
-                            .selectable(selected = selected, role = Role.RadioButton,
-                                interactionSource = interaction, indication = null,
-                                onClick = { if (!selected) onSelect(index); choosing = false })
-                            .heightIn(min = 56.dp).padding(horizontal = 12.dp, vertical = 14.dp),
-                            verticalAlignment = Alignment.CenterVertically) {
-                            swatches?.getOrNull(index)?.let { color ->
-                                Box(Modifier.size(20.dp).clip(CircleShape).background(color)
-                                    .border(0.5.dp, MaterialTheme.colorScheme.outline, CircleShape))
-                                Spacer(Modifier.width(14.dp))
-                            }
-                            Text(label, modifier = Modifier.weight(1f),
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium)
-                            Spacer(Modifier.width(12.dp))
-                            Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
-                                if (selected) Icon(Icons.Rounded.Check, null,
-                                    tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(22.dp))
-                            }
+            val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+            androidx.compose.foundation.lazy.LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxWidth().heightIn(max = 480.dp).selectableGroup(),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 20.dp, end = 20.dp, bottom = 24.dp),
+            ) {
+                item {
+                    Text(title, style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.semantics { heading() }.padding(bottom = 8.dp))
+                    if (subtitle.isNotBlank()) Text(subtitle, style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 14.dp))
+                }
+                items(options.size) { index ->
+                    val label = options[index]
+                    val selected = index == selectedIndex
+                    val interaction = remember { MutableInteractionSource() }
+                    Row(Modifier.fillMaxWidth().clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { RoundedCornerShape(it.rowCorner.dp) } ?: VeyraSurfaces.Row)
+                        .veyraPressFeedback(interaction, MaterialTheme.colorScheme.primary)
+                        .selectable(selected = selected, role = Role.RadioButton,
+                            interactionSource = interaction, indication = null,
+                            onClick = {
+                                if (!committing) {
+                                    committing = true
+                                    scope.launch {
+                                        sheetState.hide()
+                                        if (!selected) onSelect(index)
+                                        choosing = false
+                                    }
+                                }
+                            })
+                        .heightIn(min = 56.dp).padding(horizontal = 12.dp, vertical = 14.dp),
+                        verticalAlignment = Alignment.CenterVertically) {
+                        swatches?.getOrNull(index)?.let { color ->
+                            Box(Modifier.size(20.dp).clip(CircleShape).background(color)
+                                .border(0.5.dp, MaterialTheme.colorScheme.outline, CircleShape))
+                            Spacer(Modifier.width(14.dp))
+                        }
+                        Text(label, modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium)
+                        Spacer(Modifier.width(12.dp))
+                        Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+                            if (selected) Icon(Icons.Rounded.Check, null,
+                                tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(22.dp))
                         }
                     }
                 }

@@ -1370,4 +1370,11 @@
     <string name="style_apply">Apply style</string>
     <string name="style_original_only">Available in Original. Your selection stays saved.</string>
     <string name="style_themes_suspended">This app style has its own palette and fonts. Switch to Original to apply downloadable themes.</string>
+    <string name="experience_section_player">Player</string>
+    <string name="experience_section_mini">Mini player</string>
+    <string name="experience_section_gestures">Gestures</string>
+    <string name="experience_section_network">Network</string>
+    <string name="experience_home_layout">Your home layout</string>
+    <string name="experience_nav_destinations">Visible destinations</string>
+    <string name="experience_nav_behavior">Navigation behavior</string>
 </resources>
