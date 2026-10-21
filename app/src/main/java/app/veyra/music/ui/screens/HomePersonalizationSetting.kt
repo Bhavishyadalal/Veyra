@@ -26,6 +26,7 @@ import app.veyra.music.ui.icons.SettingsIcons
         Column(Modifier.fillMaxWidth().heightIn(max=650.dp).verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.home_personalize),style=MaterialTheme.typography.headlineSmall)
             ExperienceSection(stringResource(R.string.experience_home_layout)) {
+            SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.pin_home_header),subtitle=stringResource(R.string.pin_home_header_hint),checked=options.pinHomeHeader,onClick={val latest=AppSettings.experience.value;AppSettings.setExperience(latest.copy(pinHomeHeader=!latest.pinHomeHeader))})
             OutlinedTextField(value=options.homeGreeting,onValueChange={AppSettings.setExperience(options.copy(homeGreeting=it.take(100)))},label={Text(stringResource(R.string.home_greeting))},singleLine=true,modifier=Modifier.fillMaxWidth())
             SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.home_speed_dial),checked=options.homeSpeedDial,onClick={AppSettings.setExperience(options.copy(homeSpeedDial=!options.homeSpeedDial))})
             SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.home_quick_radio),checked=options.quickPicksRadio,onClick={AppSettings.setExperience(options.copy(quickPicksRadio=!options.quickPicksRadio))})

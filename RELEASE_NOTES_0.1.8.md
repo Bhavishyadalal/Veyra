@@ -6,7 +6,7 @@ The completed 0.1.8 beta is now the stable Android source on `main` and `stable/
 
 ## Home and theme integration
 
-- Original Home now keeps its existing branding and greeting pinned above the feed, with a thin divider and continuous background artwork.
+- Original Home keeps its existing branding and greeting pinned above the feed, with a thin divider and continuous background artwork. **Settings → Appearance → Home personalization → Pin Home header** lets you switch back to a scrolling header.
 - Removed the separate theme showcase cards from Home and Settings.
 - Library listening-stat cards now match theme artwork, colors and typography instead of a separate dark card treatment.
 

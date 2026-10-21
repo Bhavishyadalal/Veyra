@@ -1379,4 +1379,6 @@
     <string name="experience_nav_behavior">Navigation behavior</string>
     <string name="scroll_player_animations">Scroll player animations</string>
     <string name="scroll_player_animations_hint">Fold the mini player into navigation while scrolling, with or without Liquid Glass. Respects reduced motion.</string>
+    <string name="pin_home_header">Pin Home header</string>
+    <string name="pin_home_header_hint">Keep Original Home branding and greeting above the scrolling feed. Short windows keep the header scrollable.</string>
 </resources>

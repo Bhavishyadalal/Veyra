@@ -193,7 +193,7 @@ fun HomeScreen(
     BoxWithConstraints(modifier.fillMaxSize()) {
     // Preserve the exact Original heading. Very short windows keep a scrollable
     // heading so large branding cannot consume the entire usable feed viewport.
-    val pinnedHeading = title != null && !appStyle.custom && maxHeight >= 420.dp
+    val pinnedHeading = experience.pinHomeHeader && title != null && !appStyle.custom && maxHeight >= 420.dp
     Column(Modifier.fillMaxSize()) {
         if (pinnedHeading) {
             HomeTitle(experience.homeGreeting.ifBlank { requireNotNull(title) },

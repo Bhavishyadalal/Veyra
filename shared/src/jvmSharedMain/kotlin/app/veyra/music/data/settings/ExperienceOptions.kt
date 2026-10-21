@@ -38,6 +38,7 @@ data class ExperienceOptions(
     val miniPlayerProgress: MiniPlayerProgress = MiniPlayerProgress.NONE,
     val miniSkipButtons: Boolean = true,
     val homeGreeting: String = "",
+    val pinHomeHeader: Boolean = true,
     val homeSpeedDial: Boolean = false,
     val homeShortcuts: List<Int> = emptyList(),
     val quickPicksRadio: Boolean = true,
