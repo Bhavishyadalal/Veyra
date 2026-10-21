@@ -1,63 +1,33 @@
 # Veyra source downloads
 
-Only the current stable Android source and the newest three preview source ZIPs
-are retained here. All include the current Veyra backend snapshot under `backend/`,
-its licenses, manifest and cron helpers. Each has a `.zip.sha256` checksum beside it.
+Current stable Android source and the newest three historical preview source ZIPs are retained here. These are complete Android Studio projects, **not APKs**. Each ZIP includes licenses, the Veyra backend snapshot/provenance and a SHA-256 sidecar.
 
-| Track | Version | Source ZIP | Branch |
+| Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
-| Current stable | 0.1.6 / code 22 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.6_Stable.zip) | `main` |
-| Current preview | 0.1.7-beta1 / code 25 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.7-beta1/downloads/Veyra_Android_Source_0.1.7-beta1.zip) | `preview/0.1.7-beta1` |
-| Earlier preview | 0.1.6-beta1 / code 21 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.6-beta1/downloads/Veyra_Android_Source_0.1.6-beta1.zip) | `preview/0.1.6-beta1` |
-| Earlier preview | 0.1.5-beta1 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip) | `preview/0.1.5-beta1` |
+| Current stable · `main`, `stable/0.1.7` | 0.1.7 / code 26 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.7_Stable.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.7_Stable.zip.sha256) |
+| Historical preview | 0.1.7-beta1 / code 25 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.7-beta1/downloads/Veyra_Android_Source_0.1.7-beta1.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.7-beta1/downloads/Veyra_Android_Source_0.1.7-beta1.zip.sha256) |
+| Historical preview | 0.1.6-beta1 / code 21 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.6-beta1/downloads/Veyra_Android_Source_0.1.6-beta1.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.6-beta1/downloads/Veyra_Android_Source_0.1.6-beta1.zip.sha256) |
+| Historical preview | 0.1.5-beta1 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip.sha256) |
 
-Extract the entire `Veyra` folder and open it in Android Studio. These are source
-projects, not APKs. Keep stable and preview directories separate. Earlier previews
-retain their historical app versions/UI and now have the backend migration;
-prefer current stable for normal use. Preview 0.1.7-beta1 adds [Theme Studio, Playtime Club, Web Slinger, Halloween branding and native previews](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/themes/README.md). Stable 0.1.6 does not include the installer. No new APK is produced here.
+Stable 0.1.7 is promoted from preview commit `466433e6e8f29666af1cfb012b14b4a8c77b7ad7`. It includes Theme Studio, 41 themes, 69 launcher choices and the listening/recovery/search fixes. The preview branch remains version 0.1.7-beta1; promotion does not turn its ZIP into a stable build.
 
-Rooms, invites and presence use **https://veyra-listen-together.onrender.com**.
-Custom room servers remain supported. Retired operator hostnames exist only in
-migration rejection policy/tests, never as active Android destinations.
+[Stable release notes](https://github.com/Bhavishyadalal/Veyra/blob/main/RELEASE_NOTES_0.1.7.md) · [Promotion checks and known limits](https://github.com/Bhavishyadalal/Veyra/blob/main/verification/STABLE-0.1.7-PROMOTION.md) · [Theme collection](https://github.com/Bhavishyadalal/Veyra/blob/main/themes/README.md)
 
-[Backend provenance](../docs/BACKEND_SYNC.md) · [External cron setup](../backend/CRON_SETUP.md)
-· [Maintenance verification and build limits](../verification/BRANCH-MAINTENANCE.md)
+## Historical stable 0.1.6
 
-Website source is maintained separately in
-[Bhavishyadalal/Veyra-website](https://github.com/Bhavishyadalal/Veyra-website).
-Artwork remains browsable in this repository's [media kit](../media-kit/README.md).
-Old stable/candidate, website, media-kit and standalone-backend ZIPs and their
-checksum sidecars have been removed from all app branch tips. Their source code,
-artwork and legal notices are preserved. Git history and release assets are unchanged;
-this cleanup reduces branch checkouts, not historical repository storage.
+The original stable 0.1.6 archive remains available through an immutable historical commit: [source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/466433e6e8f29666af1cfb012b14b4a8c77b7ad7/downloads/Veyra_Android_Source_0.1.6_Stable.zip) · [checksum](https://github.com/Bhavishyadalal/Veyra/raw/466433e6e8f29666af1cfb012b14b4a8c77b7ad7/downloads/Veyra_Android_Source_0.1.6_Stable.zip.sha256). Historical Android code remains on `stable/0.1.6`. No Git history, tags or release assets are deleted.
 
-For future refreshes, stage source changes and run from the matching branch:
+## Open and verify
+
+Extract the entire `Veyra` folder and open it in Android Studio. Keep stable and preview folders separate. Verify the sidecar and the ZIP's `SOURCE_MANIFEST.json`. Source packages omit credentials, local configuration, signing material, APKs and duplicated generated component-study images; renderer sources and all theme assets/packs remain included.
+
+Stage source before packaging:
 
 ```sh
-python3 scripts/package_source.py Veyra_Android_Source_VERSION.zip
+python3 scripts/package_source.py Veyra_Android_Source_0.1.7_Stable.zip
+python3 scripts/verify_archives.py
 ```
 
-Verify the package's `SOURCE_MANIFEST.json` and checksum before publishing. Copy
-identical refreshed archives across branch catalogs to avoid divergent packages.
+Rooms, invites and presence use **https://veyra-listen-together.onrender.com**. Custom servers remain supported. [Backend provenance](https://github.com/Bhavishyadalal/Veyra/blob/main/docs/BACKEND_SYNC.md) · [External cron setup](https://github.com/Bhavishyadalal/Veyra/blob/main/backend/CRON_SETUP.md).
 
-Current preview source includes [listening continuity, recovery and accessibility improvements](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/verification/RELIABILITY-0.1.7-beta1.md). Stable Android source is unchanged; source ZIPs are not APKs.
-
-The current preview also includes [Astral Tide](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/themes/README.md#astral-tide--drift-deeper-hear-everything), an original ocean theme and optional manta-waveform launcher. Version remains 0.1.7-beta1 / code 25.
-
-The latest preview adds [Midnight Express](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/themes/README.md#midnight-express--your-next-stop-another-song), an original night-train theme and optional ticket-waveform launcher. Stable 0.1.6 / code 22 source ZIP remains unchanged for release builds.
-
-The refreshed preview includes [bounded Home loading, Explore request cancellation, background download recovery writes and theme image/RTL polish](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/verification/PERFORMANCE-0.1.7-beta1.md). It remains 0.1.7-beta1 / code 25; stable source and published theme packs are unchanged.
-
-The newest preview includes [six reference-inspired themes](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/themes/README.md#reference-collection--six-more-worlds), bringing the catalog to eleven, with six optional bundled launcher marks. [Verification and compatibility limits](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/verification/REFERENCE-COLLECTION-0.1.7-beta1.md). Version remains 0.1.7-beta1 / code 25; stable 0.1.6 and previously published packs remain unchanged.
-
-The latest source refresh includes [six AI-edited Glass Noir theme icons](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/verification/GLASS-ICONS-0.1.7-beta1.md), keeping Veyra's current black-and-white glass waveform identity across Home and optional launchers. Collection packs are now v2; published v1 packs and stable 0.1.6 remain unchanged.
-
-The refreshed preview adds [Glass Atelier: twelve standalone glass launcher icons](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/design/launcher/atelier/README.md), in a separate picker collection independent of themes. [Verification](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/verification/ATELIER-ICONS-0.1.7-beta1.md). App remains 0.1.7-beta1 / code 25; no APK is included.
-
-The latest preview adds five [Wayfarer themes](../themes/WAYFARER.md) and themed bottom navigation. Source ZIPs retain Android/backend source, theme packs/artwork/fonts and preview renderers; generated images under `themes/previews/` stay available in the GitHub gallery instead of being duplicated in every source download.
-
-The current preview also includes five [Dreamscape themes](../themes/DREAMSCAPE.md), matching optional launcher/Home icons and custom navigation/transport glyphs. [Verification](../verification/DREAMSCAPE-COLLECTION-0.1.7-beta1.md). Version remains 0.1.7-beta1 / code 25.
-
-The current preview adds twenty [Worlds themes](../themes/WORLDS.md), bringing the catalog to 41 themes and the picker to 69 icons. Rebuild the latest preview: older builds retain a 24-theme catalog cap and cannot add launcher aliases through packs. App remains 0.1.7-beta1 / code 25. [Verification](../verification/WORLDS-COLLECTION-0.1.7-beta1.md).
-
-Latest preview maintenance: [submission review, bug fixes and verification limits](https://github.com/Bhavishyadalal/Veyra/blob/preview/0.1.7-beta1/verification/SUBMISSION-REVIEW-0.1.7-beta1.md).
+Website source is maintained separately in [Veyra-website](https://github.com/Bhavishyadalal/Veyra-website). Website/media/backend standalone ZIPs are not reintroduced. No APK build, Actions dispatch, signing operation or deployment is part of this source promotion. Known translation/lint and device-testing limits are preserved in the promotion report.
