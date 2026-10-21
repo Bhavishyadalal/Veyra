@@ -89,8 +89,13 @@ kotlin {
             api("org.jetbrains.compose.ui:ui-desktop:$CMP_DESKTOP")
         }
         jvmTest.dependencies {
+            // Offscreen production-UI tests need the same Skia native ABI as Linux's desktop target.
+            if (System.getProperty("os.name").contains("Linux") && System.getProperty("os.arch") in listOf("amd64","x86_64")) {
+                runtimeOnly("org.jetbrains.skiko:skiko-awt-runtime-linux-x64:0.150.1")
+            }
             implementation(kotlin("test"))
             implementation("junit:junit:4.13.2")
+            runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.10.2")
         }
         androidMain.dependencies {
             // The phone's own versions, so nothing here moves them.

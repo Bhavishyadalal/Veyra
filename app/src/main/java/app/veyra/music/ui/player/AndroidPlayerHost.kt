@@ -23,6 +23,11 @@ import app.veyra.music.data.lyrics.LyricLine
 import app.veyra.music.data.lyrics.LyricsTranslation
 import app.veyra.music.data.model.Song
 import app.veyra.music.data.settings.AppSettings
+import app.veyra.music.ui.theme.withFamily
+import app.veyra.music.data.settings.rememberImportedFont
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.veyra.music.data.settings.LastPlayerScreen
 import app.veyra.music.playback.AudioOutputStatus
 import app.veyra.music.playback.AudioRouting
@@ -53,6 +58,8 @@ class AndroidPlayerHost(context: Context) : PlayerHost {
     private val main = Handler(Looper.getMainLooper())
 
     override val settings: PlayerSettingsSource = object : PlayerSettingsSource {
+        override val experience get() = AppSettings.experience
+        override fun setExperience(value: app.veyra.music.data.settings.ExperienceOptions) = AppSettings.setExperience(value)
         override val animatedCanvas get() = AppSettings.animatedCanvas
         override val audioQualityCellular get() = AppSettings.audioQualityCellular
         override val audioQualityWifi get() = AppSettings.audioQualityWifi
@@ -85,6 +92,18 @@ class AndroidPlayerHost(context: Context) : PlayerHost {
 
         override fun setLastPlayerScreen(value: LastPlayerScreen) = AppSettings.setLastPlayerScreen(value)
         override fun setLyricsOffsetMs(value: Int) = AppSettings.setLyricsOffsetMs(value)
+    }
+
+    @Composable
+    override fun LyricsTypography(content: @Composable () -> Unit) {
+        val options by AppSettings.experience.collectAsStateWithLifecycle()
+        val family=rememberImportedFont(options.lyricsFont)
+        val base=androidx.compose.material3.MaterialTheme.typography
+        val typography=remember(base,family) {if(family==null)base else base.withFamily(family)}
+        val density=androidx.compose.ui.platform.LocalDensity.current
+        androidx.compose.runtime.CompositionLocalProvider(LocalLyricsCentered provides options.centeredLyrics,androidx.compose.ui.platform.LocalDensity provides androidx.compose.ui.unit.Density(density.density,density.fontScale*options.lyricsScale)) {
+            androidx.compose.material3.MaterialTheme(typography=typography,content=content)
+        }
     }
 
     override fun cachedCanvas(song: Song): CanvasArtwork? = CanvasRepository.cached(song)

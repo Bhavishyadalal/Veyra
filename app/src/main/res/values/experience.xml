@@ -1,0 +1,97 @@
+<resources>
+  <string name="immersive_mode">Immersive mode</string>
+  <string name="immersive_exit">Return to player</string>
+  <string name="immersive_settings">Immersive settings</string>
+  <string name="immersive_no_lyrics">No lyrics available. Enjoy the artwork.</string>
+  <string name="immersive_previous">Previous song</string>
+  <string name="immersive_next">Next song</string>
+  <string name="immersive_pause">Pause</string>
+  <string name="immersive_play">Play</string>
+  <string name="immersive_background">Background</string>
+  <string name="immersive_cover">Artwork fit</string>
+  <string name="immersive_lyrics_position">Lyrics position</string>
+  <string name="immersive_lyrics_source">Lyrics source</string>
+  <string name="immersive_lyrics_timing">Lyrics timing</string>
+  <string name="immersive_song_options">Song options</string>
+  <string name="experience_title">Your listening experience</string>
+  <string name="experience_subtitle">Immersive artwork, gestures and data controls</string>
+  <string name="experience_data_saver">Data Saver</string>
+  <string name="experience_data_saver_hint">On metered networks, use smaller artwork and pause motion covers and speculative stream warming.</string>
+  <string name="experience_double_tap">Double-tap artwork to seek</string>
+  <string name="experience_hold_seek">Hold Previous or Next to seek</string>
+  <string name="experience_off">Off</string>
+  <string name="experience_seconds">%1$d seconds</string>
+  <string name="experience_track_length">Show total track duration</string>
+  <string name="experience_track_length_hint">Display total length instead of remaining time.</string>
+  <string name="widget_lyrics_empty">Your next lyric, right here.</string>
+  <string name="widget_sleeve_label">Veyra · Sleeve</string>
+  <string name="widget_sleeve_description">A framed cover and playback controls.</string>
+  <string name="widget_vinyl_label">Veyra · Vinyl</string>
+  <string name="widget_vinyl_description">A quiet record with your current song.</string>
+  <string name="widget_strip_label">Veyra · Studio strip</string>
+  <string name="widget_strip_description">Compact song information and playback controls.</string>
+  <string name="widget_lyrics_label">Veyra · Lyrics</string>
+  <string name="widget_lyrics_description">Current lyrics with accessible playback controls.</string>
+  <string name="widget_studio_label">Veyra · Listening studio</string>
+  <string name="widget_studio_description">Artwork, a static waveform and your song.</string>
+  <string name="font_import_title">Your own fonts</string>
+  <string name="font_import_hint">Import a TTF or OTF up to 4 MB. App fonts apply to Original; lyrics can use a separate font.</string>
+  <string name="font_import_app">Choose app font</string>
+  <string name="font_import_lyrics">Choose lyrics font</string>
+  <string name="font_import_reset">Reset: %1$s</string>
+  <string name="font_import_success">Font imported and applied.</string>
+  <string name="font_import_error">Cannot import this font.</string>
+  <string name="font_lyrics_size">Lyrics size</string>
+  <string name="backup_preview_title">Review this backup</string>
+  <string name="backup_preview_details">Version %1$s · %2$d months · %3$d settings
+Created %4$s
+Your current preferences and listening history will be replaced. Account secrets and existing audio files stay on this device.</string>
+  <string name="navigation_custom_title">Navigation, your way</string>
+  <string name="navigation_custom_hint">Choose two to five tabs and reorder them. Home stays available. Glass navigation retains its integrated player.</string>
+  <string name="navigation_move_up">Move up</string>
+  <string name="navigation_hide">Hide</string>
+  <string name="navigation_add">Add %1$s</string>
+  <string name="navigation_start">Open the app on</string>
+  <string name="navigation_labels">Tab labels</string>
+  <string name="navigation_labels_always">Always visible</string>
+  <string name="navigation_labels_selected">Selected tab only</string>
+  <string name="navigation_labels_hidden">Icons only</string>
+  <string name="navigation_design">Navigation shape</string>
+  <string name="navigation_floating">Floating</string>
+  <string name="navigation_docked">Docked</string>
+  <string name="navigation_minimal">Minimal</string>
+  <string name="navigation_search_keyboard">Open keyboard when entering Search</string>
+  <string name="navigation_reset">Reset navigation</string>
+  <string name="home_speed_dial">Speed Dial</string>
+  <string name="home_personalize">Make Home yours</string>
+  <string name="home_personalize_hint">Your greeting, shortcut tiles and go-to music.</string>
+  <string name="home_greeting">Your greeting (optional)</string>
+  <string name="home_quick_radio">Quick Picks starts a radio</string>
+  <string name="home_shortcuts">Shortcut tiles (up to six)</string>
+  <string name="mini_player_design">Mini player design</string>
+  <string name="mini_player_progress">Mini player progress</string>
+  <string name="mini_player_skip">Show mini player skip button</string>
+  <string-array name="experience_shortcuts">
+    <item>Downloads</item>
+    <item>Local music</item>
+    <item>Library</item>
+    <item>Replay</item>
+    <item>Search</item>
+    <item>Equalizer</item>
+    <item>Listen Together</item>
+    <item>Liked songs</item>
+  </string-array>
+  <string name="preload_title">Load ahead</string>
+  <string name="preload_opening">Next song opening</string>
+  <string name="preload_next">Whole next song</string>
+  <string name="preload_three">Next three songs</string>
+  <string name="preload_cellular">Allow loading ahead on mobile data</string>
+  <string name="content_country">Content country</string>
+  <string name="content_country_auto">Follow app locale</string>
+  <string name="font_lyrics_center">Center lyrics (keep duet lanes)</string>
+  <string name="transport_appearance">Player buttons</string>
+  <string name="scrubber_appearance">Progress bar</string>
+  <string name="output_device_visibility">Show output device caption</string>
+  <string name="artwork_pause_shrink">Shrink artwork when paused</string>
+  <string name="font_import_active">Imported app font</string>
+</resources>

@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.constrain
 import androidx.compose.ui.unit.Constraints
 import app.veyra.music.playback.PlaybackPosition
 import app.veyra.music.sharedui.resources.*
+import androidx.compose.material3.TextButton
+import androidx.compose.foundation.gestures.detectTapGestures
 
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.animation.Crossfade
@@ -752,6 +754,7 @@ fun NowPlayingScreen(
     windowHeight: Dp,
     modifier: Modifier = Modifier,
 ) {
+    val experience by PlayerSettings.experience.collectAsStateWithLifecycle()
     val density = LocalDensity.current
     val haptics = rememberHaptics()
     // Keep the two credit lines inside their band when system text size increases.
@@ -788,6 +791,7 @@ fun NowPlayingScreen(
     var showCast by remember { mutableStateOf(false) }
     var showAudioOutput by remember { mutableStateOf(false) }
     var showLyricsProviders by remember { mutableStateOf(false) }
+    var immersiveTiming by remember { mutableStateOf(false) }
     // Gated on the Bluetooth permission the first time — see [rememberOutputPicker].
     val openAudioOutput = rememberOutputPicker { showAudioOutput = true }
     // Listening in a party whose host has taken the controls: the transport
@@ -1127,7 +1131,7 @@ fun NowPlayingScreen(
 
     // Signature Apple Music touch: the sleeve shrinks back while paused.
     val artScale by animateFloatAsState(
-        targetValue = if (isPlaying) 1f else 0.92f,
+        targetValue = if (isPlaying || !experience.shrinkArtworkOnPause) 1f else 0.92f,
         animationSpec = tween(
             durationMillis = playerMotionMillis(reducedBackdropMotion, 260),
             easing = app.veyra.music.ui.motion.VeyraMotion.Easing,
@@ -1454,6 +1458,16 @@ fun NowPlayingScreen(
     // screen, the landscape one on the sleeve alone — the right column there is
     // full of horizontal sliders and a lyric list that should not be one stray
     // sideways drag away from changing the song.
+    val seekBy: (Long) -> Unit = {delta ->
+        if(controlsLocked)onBlockedControl() else onSeek(app.veyra.music.data.settings.boundedSeek(position.positionMs,delta,durationMs))
+    }
+    val latestSeekBy by rememberUpdatedState(seekBy)
+    val seekDoubleTap = Modifier.pointerInput(experience.doubleTapSeekSeconds,lyricsOpen,queueOpen,song.videoId) {
+        if(experience.doubleTapSeekSeconds<=0 || lyricsOpen || queueOpen)return@pointerInput
+        detectTapGestures(onDoubleTap={point ->
+            latestSeekBy((if(point.x<size.width/2f)-1 else 1)*experience.doubleTapSeekSeconds*1000L)
+        })
+    }
     val skipSwipeGesture = Modifier.pointerInput(showAudioPipeline, showCast, panelScrolling, controlsLocked) {
         if (showAudioPipeline || showCast || panelScrolling) return@pointerInput
         var total = 0f
@@ -1532,7 +1546,7 @@ fun NowPlayingScreen(
             modifier = Modifier.fillMaxWidth().height(20.dp),
             contentAlignment = Alignment.TopCenter,
         ) {
-            OutputCaption(
+            if(experience.showOutputDevice)OutputCaption(
                 accountName = accountName,
                 onOpenOutput = openAudioOutput,
                 onOpenMembers = openListenTogetherMembers,
@@ -1585,10 +1599,10 @@ fun NowPlayingScreen(
                 },
             )
         }
-        if (lyricsOffsetOpen) {
+        if (lyricsOffsetOpen || immersiveTiming) {
             LyricsOffsetSheet(
                 hazeState = playerHaze,
-                onDismiss = onDismissLyricsOffset,
+                onDismiss = { immersiveTiming=false; onDismissLyricsOffset() },
             )
         }
         lyricsShare?.let { request ->
@@ -1598,6 +1612,18 @@ fun NowPlayingScreen(
                 onDismiss = { lyricsShare = null },
             )
         }
+    }
+
+    if (experience.immersive) {
+        ImmersivePlayer(song=song, artwork=remoteArt, canvas=canvas, isPlaying=isPlaying,
+            position=position,durationMs=durationMs,lines=lyricsTranslation.displayedLyrics,
+            looking=lyrics==null && !lyricsUnavailable,options=experience,onOptions=PlayerSettings::setExperience,
+            onExit={PlayerSettings.setExperience(experience.copy(immersive=false))},onPlayPause=onPlayPause,
+            onPrevious=onPrevious,onNext=onNext,hasPrevious=hasPrevious,hasNext=hasNext,
+            locked=controlsLocked,onBlocked=onBlockedControl,onSeek=seekToLyric,
+            onSource={showLyricsProviders=true},onTiming={immersiveTiming=true},onSongOptions=onOpenMenu)
+        playerOverlays()
+        return
     }
 
     // A landscape window — a tablet, or a phone on its side — takes an entirely
@@ -1865,6 +1891,7 @@ fun NowPlayingScreen(
                                     }
                                 }
                                 .then(skipSwipeGesture)
+                                .then(seekDoubleTap)
                                 .graphicsLayer {
                                     // The paused shrink and the swipe nudge are
                                     // let go of on the way, as the portrait
@@ -1966,6 +1993,7 @@ fun NowPlayingScreen(
                                     onPrevious = onPrevious,
                                     onPlayPause = onPlayPause,
                                     onNext = onNext,
+                                    onSeekBy = seekBy,
                                     compact = compact,
                                 )
                             },
@@ -2877,6 +2905,7 @@ fun NowPlayingScreen(
                                 // banner included — a source on the surrounding layout
                                 // only captured its mesh backdrop.
                                 .hazeSource(playerHaze)
+                                .then(seekDoubleTap)
                                 .graphicsLayer {
                                     // Hands its opacity to a full-bleed clip as the clip
                                     // takes over, and takes it straight back if there
@@ -3660,6 +3689,7 @@ fun NowPlayingScreen(
                         onPrevious = onPrevious,
                         onPlayPause = onPlayPause,
                         onNext = onNext,
+                        onSeekBy = seekBy,
                     )
 
                     // Keep the volume slot's full footprint when its contents are

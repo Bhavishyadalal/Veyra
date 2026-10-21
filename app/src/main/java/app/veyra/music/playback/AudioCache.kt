@@ -1,5 +1,8 @@
 package app.veyra.music.playback
 
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+
 import android.content.Context
 import android.media.MediaDataSource
 import android.net.Uri
@@ -898,6 +901,8 @@ object AudioCache {
      * of skips only wherever the listener actually lands is worth chasing.
      */
     fun prefetchQueue(upcoming: List<Upcoming>) {
+        val options=AppSettings.experience.value
+        if(AppSettings.meteredConnection.value!=false && (options.dataSaver || !options.preloadCellular)) {cancel();return}
         val mediaIds = upcoming.map { it.mediaId }
         if (mediaIds == pendingQueue) return
         android.util.Log.d("BCFetchDebug", "prefetchQueue: head ${pendingQueue.firstOrNull()} -> ${mediaIds.firstOrNull()}")
@@ -934,48 +939,16 @@ object AudioCache {
         // whenever the modules are slow, and warming it here is what makes the
         // race worth running at all.
         val substitutable = SourceResolver.canSubstituteForYouTube()
-        job = videoIds.firstOrNull()?.let { next ->
-            val target = upcoming.firstOrNull { it.mediaId == next }?.target
-            // A track the listener reverted plays from its own `#original`
-            // rendition — see [OriginalVersion] — while read-ahead builds its
-            // spec from an id alone and so writes under the plain key. Every
-            // byte of that would land in an entry playback is never going to
-            // read, and pinning a substitute for it would pin a source it is
-            // never going to use. The URL half below is still worth having: a
-            // reverted track resolves through YouTube, which is what it warms.
-            val pinnedToYouTube = OriginalVersion.isPinned(next)
-            scope.launch {
-                // Independent of optional substitute lookup: a slow addon must not
-                // prevent the next track's YouTube fallback from being ready.
-                launch {
-                    warmQueueUrls(
-                        ids = videoIds.take(QUEUE_LOOKAHEAD + 1),
-                        skip = { StreamChoice.of(it) != null },
-                        resolve = { StreamResolver.resolve(it); Unit },
-                        onFailure = { id, failure ->
-                            TrackLog.d(TAG, "queue warm-up skipped $id: ${failure.message}", about = id)
-                        },
-                    )
-                }
-                // With substitution on, the *bytes* half above used to be
-                // switched off outright, and the paragraph explaining why is
-                // still correct as far as it goes: read-ahead resolving to
-                // YouTube on its own would write Opus into the entry a
-                // higher-ranked source is about to fill.
-                //
-                // What it treated as impossible was knowing the answer in
-                // advance. A quick source can be asked *here* — see
-                // [SourceResolver.prefetchSubstitute] — and once its stream is
-                // recorded in [StreamChoice], the question stops being open:
-                // every later resolve for this track, read-ahead's own included,
-                // is held to that one stream. Both writers then agree on the
-                // file and on the `#alt` key it lands under, which is exactly
-                // the condition the byte half was missing.
-                //
-                // A source that is disabled, doesn't have the track, or fails
-                // leaves nothing pinned, and this falls through to the same
-                // URL-only warm-up it did before — YouTube resolves the track at
-                // playback time as usual.
+        job = if(videoIds.isEmpty()) null else scope.launch {
+            launch {
+                warmQueueUrls(ids=videoIds.take(QUEUE_LOOKAHEAD+1),skip={StreamChoice.of(it)!=null},
+                    resolve={StreamResolver.resolve(it);Unit},onFailure={id,failure->TrackLog.d(TAG,"warm-up failed: ${failure.message}",about=id)})
+            }
+            val count=if(options.preload==app.veyra.music.data.settings.PreloadPolicy.NEXT_THREE)3 else 1
+            for(next in videoIds.take(count)) {
+                currentCoroutineContext().ensureActive()
+                val target=upcoming.firstOrNull {it.mediaId==next}?.target
+                val pinnedToYouTube=OriginalVersion.isPinned(next)
                 val warmed = if (substitutable && target != null && !pinnedToYouTube) {
                     runCatching { SourceResolver.prefetchSubstitute(target) }
                         .onFailure {
@@ -991,12 +964,10 @@ object AudioCache {
                 // outranks YouTube and read-ahead is the only writer, or a
                 // source has been pinned and every writer now resolves to it.
                 val cacheBytes = (!substitutable || warmed != null) && !pinnedToYouTube
-                if (cacheBytes) {
-                    launch(TrackLog.about(next)) {
-                        delay(PREFETCH_DELAY_MS)
-                        fetch(next, 0, PRELOAD_BYTES)
-                        fetchWhole(next)
-                    }
+                if(cacheBytes) {
+                    delay(PREFETCH_DELAY_MS)
+                    fetch(next,0,PRELOAD_BYTES)
+                    if(options.preload!=app.veyra.music.data.settings.PreloadPolicy.OPENING)fetchWhole(next)
                 }
             }
         }
@@ -1046,7 +1017,7 @@ object AudioCache {
             // [pendingQueue] actually wants read ahead, every further attempt
             // is spent on a track something else now owns, and asking again
             // in five seconds would only be wrong for longer.
-            if (pendingQueue.firstOrNull() != videoId) {
+            if (videoId !in pendingQueue.take(if(AppSettings.experience.value.preload==app.veyra.music.data.settings.PreloadPolicy.NEXT_THREE)3 else 1)) {
                 TrackLog.d(TAG, "$videoId is no longer the read-ahead target; stopping", about = videoId)
                 return
             }

@@ -39,6 +39,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 
+internal enum class ControlDecoration { DEFAULT, GLYPHS, RINGS, FILLED }
+
 /** Fixed hit region, animated visual only. The same surface serves transport, menus and modes. */
 @Composable
 internal fun PlayerControlSurface(
@@ -55,6 +57,8 @@ internal fun PlayerControlSurface(
     containerColor: Color = Color.Transparent,
     framed: Boolean = false,
     grouped: Boolean = false,
+    onHold: (() -> Unit)? = null,
+    decoration: ControlDecoration = ControlDecoration.DEFAULT,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
@@ -62,10 +66,26 @@ internal fun PlayerControlSurface(
     val effectiveShape = if (grouped) RectangleShape else pack?.let { if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp) else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp) } ?: shape
     val contrast = LocalVeyraContrastControls.current
     val controlBackground = if (grouped) containerColor else if (contrast && containerColor == Color.Transparent) controlTint.copy(alpha = 0.12f) else if (pack != null && containerColor == Color.Transparent) pack.raised.copy(alpha=0.7f) else containerColor
+    val decoratedBackground = when(decoration) {
+        ControlDecoration.GLYPHS,ControlDecoration.RINGS -> Color.Transparent
+        ControlDecoration.FILLED -> controlTint.copy(alpha=.2f)
+        else -> controlBackground
+    }
     val indicatorSize = if ((visualSize ?: 48.dp) >= 64.dp) 36.dp else 24.dp
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
     val available = enabled && !busy && LocalPlayerControlsInteractive.current
+    var held by remember {mutableStateOf(false)}
+    val currentHold by rememberUpdatedState(onHold)
+    val holdTimeout=androidx.compose.ui.platform.LocalViewConfiguration.current.longPressTimeoutMillis
+    LaunchedEffect(pressed,available,onHold!=null) {
+        if(pressed && available && onHold!=null) {
+            held=false
+            kotlinx.coroutines.delay(holdTimeout)
+            held=true
+            while(true) {currentHold?.invoke();kotlinx.coroutines.delay(400)}
+        }
+    }
     val scale =
         animateFloatAsState(
             if (pressed && available && !reducedMotion && !grouped) (if (pack?.sceneStyle == "playful") 0.92f else 0.95f) else 1f,
@@ -90,7 +110,7 @@ internal fun PlayerControlSurface(
                 indication = null,
                 enabled = available,
                 role = Role.Button,
-                onClick = onClick,
+                onClick = {if(held)held=false else onClick()},
             )
             .semantics {
                 contentDescription = description
@@ -107,9 +127,9 @@ internal fun PlayerControlSurface(
                     alpha = opacity.value
                 }
                 .clip(effectiveShape)
-                .background(controlBackground)
+                .background(decoratedBackground)
                 .then(
-                    if (!grouped && (framed || contrast || pack != null))
+                    if (!grouped && decoration!=ControlDecoration.GLYPHS && (decoration==ControlDecoration.RINGS || framed || contrast || pack != null))
                         Modifier.background(
                                 Brush.verticalGradient(
                                     listOf(controlTint.copy(alpha = 0.13f), Color.Transparent)
@@ -261,6 +281,8 @@ internal fun PlayerTransportControl(
     tint: Color = Color.White,
     containerColor: Color = Color.Transparent,
     heightScale: Float = 1f,
+    onHold: (() -> Unit)? = null,
+    decoration: ControlDecoration = ControlDecoration.DEFAULT,
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val path = themeKey?.let { pack?.asset(it) }
@@ -271,6 +293,8 @@ internal fun PlayerTransportControl(
         Modifier.size(touchSize),
         enabled = enabled,
         busy = busy,
+        onHold = onHold,
+        decoration = decoration,
         reducedMotion = reducedMotion,
         tint = tint,
         visualSize = if (emphasized) touchSize - 8.dp else touchSize,
@@ -305,6 +329,7 @@ internal fun PlayerProgressTrack(
     markerColor: Color = Color.White.copy(alpha = 0.5f),
     transitionWindow: ClosedFloatingPointRange<Float>? = null,
     fillFactor: () -> Float = { 1f },
+    thumbVisible: Boolean = false,
 ) {
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
@@ -369,6 +394,10 @@ internal fun PlayerProgressTrack(
                 center = Offset(filled.coerceIn(0f,size.width), size.height/2))
             drawCircle(Color(0xFFFFF1D4), radius = size.height * .22f,
                 center = Offset(filled.coerceIn(0f,size.width), size.height/2))
+        }
+        if(thumbVisible) {
+            val radius=6.dp.toPx()
+            drawCircle(pack?.accent ?: activeColor(),radius,Offset(filled.coerceIn(minOf(radius,size.width/2),maxOf(size.width-radius,size.width/2)),size.height/2))
         }
     }
 }

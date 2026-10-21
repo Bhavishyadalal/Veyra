@@ -207,6 +207,7 @@ internal fun PlayerScrubber(
     centerLabel: @Composable BoxScope.() -> Unit = {},
 ) {
     val controlsLocked = rememberControlsLocked()
+    val experience by PlayerSettings.experience.collectAsStateWithLifecycle()
     val shown = playerFraction(shown())
     val safeDuration = durationMs.coerceAtLeast(0L)
     val elapsed = (shown.toDouble() * safeDuration).toLong().coerceIn(0L, safeDuration)
@@ -221,6 +222,8 @@ internal fun PlayerScrubber(
     Column(Modifier.fillMaxWidth()) {
         ThinSlider(
             value = shown,
+            idleHeight=when(experience.scrubberAppearance) {app.veyra.music.data.settings.ScrubberAppearance.HAIRLINE->3.dp;app.veyra.music.data.settings.ScrubberAppearance.BOLD->10.dp;else->7.dp},
+            thumbVisible=experience.scrubberAppearance==app.veyra.music.data.settings.ScrubberAppearance.THUMB,
             onValueChange = onScrub,
             onValueChangeFinished = onScrubFinished,
             onValueChangeCancelled = onScrubCancelled,
@@ -234,7 +237,7 @@ internal fun PlayerScrubber(
             transitionWindow = transitionWindow,
         )
         PlayerTimelineLabels(
-            elapsed = formatTime(elapsed), remaining = "-" + formatTime(safeDuration - elapsed),
+            elapsed = formatTime(elapsed), remaining = if (experience.showTrackLength) formatTime(safeDuration) else "-" + formatTime(safeDuration - elapsed),
             tint = LocalPlayerTint.current, modifier = Modifier.offset(y = (-15).dp),
         ) {
             // Pinned to the box's own centre rather than squeezed into the gap
@@ -440,7 +443,9 @@ internal fun TransportRow(
     onPlayPause: () -> Unit,
     onNext: () -> Unit,
     compact: Boolean = false,
+    onSeekBy: ((Long) -> Unit)? = null,
 ) {
+    val experience by PlayerSettings.experience.collectAsStateWithLifecycle()
     BoxWithConstraints(Modifier.fillMaxWidth()) {
     val condensed = compact || maxWidth < 300.dp
     val skipTouch = if (maxWidth < 220.dp) 48.dp else PLAYER_SKIP_TOUCH_SIZE
@@ -461,6 +466,7 @@ internal fun TransportRow(
             touchSize = skipTouch,
             heightScale = 1f,
             onClick = onPrevious,
+            onHold = onSeekBy?.takeIf {experience.holdSeekSeconds>0}?.let {seek -> {seek(-experience.holdSeekSeconds*1000L)}},
             enabled = previousEnabled,
             haptic = Haptic.SkipPrevious,
         )
@@ -478,6 +484,7 @@ internal fun TransportRow(
             touchSize = skipTouch,
             heightScale = 1f,
             onClick = onNext,
+            onHold = onSeekBy?.takeIf {experience.holdSeekSeconds>0}?.let {seek -> {seek(experience.holdSeekSeconds*1000L)}},
             enabled = nextEnabled,
             haptic = Haptic.SkipNext,
         )
@@ -739,7 +746,9 @@ private fun TransportGlyph(
     containerColor: Color = Color.Transparent,
     busy: Boolean = false,
     emphasized: Boolean = false,
+    onHold: (() -> Unit)? = null,
 ) {
+    val experience by PlayerSettings.experience.collectAsStateWithLifecycle()
     val haptics = rememberHaptics()
     val reduceMotion = LocalPlayerReducedMotion.current
     PlayerTransportControl(painter = painterResource(icon), description = contentDescription,
@@ -752,7 +761,7 @@ private fun TransportGlyph(
         },
         onClick = { haptics.play(haptic); onClick() }, iconSize = size, touchSize = touchSize,
         enabled = enabled, busy = busy, emphasized = emphasized, reducedMotion = reduceMotion,
-        tint = tint, containerColor = containerColor, heightScale = heightScale)
+        tint = tint, containerColor = containerColor, heightScale = heightScale, onHold=onHold,decoration=ControlDecoration.entries[experience.transportAppearance.ordinal])
 }
 
 /** Skip controls retain a full touch target around their smaller glyphs. */

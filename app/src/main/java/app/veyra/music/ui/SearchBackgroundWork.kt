@@ -35,6 +35,11 @@ internal class SearchBackgroundWork(
         prefetch = scope.launch { block() }
     }
 
+    fun cancelPrefetch() {
+        prefetch?.cancel()
+        prefetch=null
+    }
+
     fun cancel() {
         continuationOwner = null
         continuation?.cancel()

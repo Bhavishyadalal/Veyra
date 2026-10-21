@@ -3,6 +3,8 @@ package app.veyra.music.ui.theme
 import app.veyra.music.ui.customization.*
 import app.veyra.music.ui.styles.*
 import android.app.Activity
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -106,7 +108,7 @@ private val StrongerTypography = VeyraTypography.copy(
 )
 
 /** Applies [family] to every style in the scale, so nothing is left on Roboto. */
-private fun Typography.withFamily(family: FontFamily) = Typography(
+internal fun Typography.withFamily(family: FontFamily) = Typography(
     displayLarge = displayLarge.copy(fontFamily = family),
     displayMedium = displayMedium.copy(fontFamily = family),
     displaySmall = displaySmall.copy(fontFamily = family),
@@ -133,6 +135,9 @@ fun VeyraTheme(
     content: @Composable () -> Unit,
 ) {
     val appStyle by AppSettings.appStyle.collectAsStateWithLifecycle()
+    val fontSelection = remember {AppSettings.experience.map {it.appFont}.distinctUntilChanged()}
+    val importedHash by fontSelection.collectAsStateWithLifecycle(initialValue=AppSettings.experience.value.appFont)
+    val importedFont = app.veyra.music.data.settings.rememberImportedFont(if(appStyle.custom) "" else importedHash)
     val accent by AppSettings.accentPalette.collectAsStateWithLifecycle()
     val appearanceFont by AppSettings.appearanceFont.collectAsStateWithLifecycle()
     val corners by AppSettings.artworkCorners.collectAsStateWithLifecycle()
@@ -158,13 +163,14 @@ fun VeyraTheme(
     val pack = remember(appStyle,packState,styleAssets) { effectiveStyleVisuals(appStyle,packState,styleAssets) }
     // Keep fonts and palette on the same activation snapshot during live updates.
     val manifest = remember(pack,appStyle) { pack?.takeUnless {appStyle.custom}?.let { app.veyra.music.data.themes.ThemeRepository.activeManifest() } }
-    val selectedTypography = remember(pack, strongerText, appearanceFont, appStyle) {
+    val selectedTypography = remember(pack, strongerText, appearanceFont, appStyle, importedFont) {
         val base = if (strongerText) StrongerTypography else VeyraTypography
         if (appStyle.custom) {
             val heading = if(appStyle==AppStyle.AFTER_DARK) FontFamily(Font(R.font.appearance_barlow_condensed,FontWeight.Bold))
                 else FontFamily(Font(R.font.app_style_serif,FontWeight.Bold))
             appStyleTypography(base, heading, FontFamily(Font(R.font.appearance_manrope)))
-        } else runCatching { appearanceTypography(base, appearanceFont, pack) }.getOrDefault(base)
+        } else if (importedFont != null) base.withFamily(importedFont)
+        else runCatching { appearanceTypography(base, appearanceFont, pack) }.getOrDefault(base)
     }
     val colorScheme = remember(appStyle, manifest, accent, darkTheme) {
         if (appStyle.custom) appStyle.colorScheme() else manifest?.let { packPalette(it.palette) } ?: paletteFor(accent, darkTheme)

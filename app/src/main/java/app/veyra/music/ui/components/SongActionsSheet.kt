@@ -64,6 +64,7 @@ import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.ThumbDown
 import androidx.compose.material.icons.rounded.ThumbDownOffAlt
 import androidx.compose.material.icons.rounded.Tune
+import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.Videocam
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -196,6 +197,8 @@ fun SongActionsSheet(
     onCopyLog: (() -> Unit)? = null,
     /** Opens the timing control offered only by the main player's menu. */
     onLyricsOffset: (() -> Unit)? = null,
+    onImmersive: (() -> Unit)? = null,
+    immersiveEnabled: Boolean = false,
     /**
      * True while a lookup for this track's album/artist ids is still in
      * flight, so it isn't yet known whether "Open album" and "Open artist"
@@ -392,6 +395,9 @@ fun SongActionsSheet(
         // completed downloads use the same player lyric clock (including
         // embedded synced lyrics), so they need this control just as much as
         // streamed songs do.
+        onImmersive?.let { action ->
+            ActionRow(icon=Icons.Rounded.Fullscreen,label=stringResource(if(immersiveEnabled)R.string.immersive_exit else R.string.immersive_mode),accent=palette.accent,onClick=action)
+        }
         onLyricsOffset?.let {
             ActionRow(
                 icon = Icons.Rounded.Tune,

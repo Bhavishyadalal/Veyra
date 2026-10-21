@@ -9,6 +9,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
@@ -57,14 +59,14 @@ fun Modifier.themeNavigationSurface(shape: Shape): Modifier {
 @Composable
 fun ThemeNavigationItem(
     label: String, selected: Boolean, tint: Color, onClick: () -> Unit,
-    modifier: Modifier = Modifier, icon: @Composable () -> Unit,
+    modifier: Modifier = Modifier, showLabel: Boolean = true, icon: @Composable () -> Unit,
 ) {
     Column(modifier.clip(RoundedCornerShape(22.dp)).heightIn(min = 48.dp)
-        .selectable(selected = selected, role = Role.Tab, onClick = onClick)
+        .semantics {contentDescription=label}.selectable(selected = selected, role = Role.Tab, onClick = onClick)
         .padding(vertical = 9.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         icon()
-        Spacer(Modifier.height(3.dp))
-        Text(label, style = app.veyra.music.ui.styles.styleNavigationLabelStyle(),
+        if(showLabel)Spacer(Modifier.height(3.dp))
+        if(showLabel)Text(label, style = app.veyra.music.ui.styles.styleNavigationLabelStyle(),
             textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.fillMaxWidth(),
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
             color = tint, maxLines = 2, overflow = TextOverflow.Ellipsis)

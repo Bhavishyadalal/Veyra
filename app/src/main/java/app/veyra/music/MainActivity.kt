@@ -1,5 +1,8 @@
 package app.veyra.music
 
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.distinctUntilChanged
+import app.veyra.music.data.settings.forAppRoot
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -68,6 +71,8 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.Folder
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.IosShare
 import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Person
@@ -518,7 +523,9 @@ private fun VeyraApp(
     // rather than inside the bar because the page's scroll is what drives it,
     // and the page is a sibling of the bar rather than a child.
     val navBarScroll = rememberFloatingTabBarScrollConnection()
-    var selectedTab by rememberSaveable { mutableIntStateOf(0) }
+    val rootExperience = remember {AppSettings.experience.map {it.forAppRoot()}.distinctUntilChanged()}
+    val experience by rootExperience.collectAsStateWithLifecycle(initialValue=AppSettings.experience.value.forAppRoot())
+    var selectedTab by rememberSaveable { mutableIntStateOf(AppSettings.experience.value.startupTab.takeIf {it in 0..3} ?: 0) }
     /**
      * Whether the player's sheet is up. The player is always a full-screen
      * take-over raised over the page, on every window size — the library
@@ -1216,12 +1223,32 @@ private fun VeyraApp(
     val sharedLinkLabel = stringResource(R.string.shared_link)
     val tabs = remember(homeLabel, exploreLabel, libraryLabel, searchLabel) {
         listOf(
-            BottomTab(homeLabel, VeyraIcons.Home),
-            BottomTab(searchLabel, VeyraIcons.TabSearch),
-            BottomTab(exploreLabel, VeyraIcons.TabExplore),
-            BottomTab(libraryLabel, VeyraIcons.TabLibrary),
+            BottomTab(homeLabel, VeyraIcons.Home, "nav_home"),
+            BottomTab(searchLabel, VeyraIcons.TabSearch, "nav_search"),
+            BottomTab(exploreLabel, VeyraIcons.TabExplore, "nav_explore"),
+            BottomTab(libraryLabel, VeyraIcons.TabLibrary, "nav_library"),
         )
     }
+
+    val navigationTargets = experience.navigation
+    val navigationTabs = remember(tabs,navigationTargets,replayLabel) {navigationTargets.map {target->
+        when(target) {
+            4->BottomTab(context.getString(R.string.local_music),Icons.Rounded.Folder,"local_files")
+            5->BottomTab(replayLabel,Icons.Rounded.History,"replay")
+            6->BottomTab(context.getString(R.string.settings),Icons.Rounded.Settings,"settings")
+            else->tabs[target]
+        }
+    }}
+    val preferredNavigationTarget = when {
+        showSettings -> 6
+        showReplay -> 5
+        detail?.browseId == "local:all" -> 4
+        else -> selectedTab
+    }
+    val navigationSelection = navigationTargets.indexOf(preferredNavigationTarget).takeIf {it>=0}
+        ?: navigationTargets.indexOf(selectedTab).takeIf {it>=0}
+        ?: navigationTargets.indexOf(0)
+
 
     val scope = rememberCoroutineScope()
 
@@ -2083,6 +2110,19 @@ private fun VeyraApp(
             )
         }
     }
+    var startupHandled by rememberSaveable {mutableStateOf(false)}
+    LaunchedEffect(Unit) {
+        if(!startupHandled) {
+            startupHandled=true
+            when(experience.startupTab) {
+                1->searchFocusRequested=experience.searchKeyboard
+                4->onLibraryItemClick(ShelfItem(textResources.getString(R.string.local_music),"",null,null,"local:all"))
+                5->showReplay=true
+                6->showSettings=true
+            }
+        }
+    }
+
     // Takes a list so a single tap on an album/playlist header can queue the
     // whole thing — the permission dance only needs to happen once for the
     // batch, not once per track.
@@ -3151,10 +3191,13 @@ private fun VeyraApp(
                                     // property declared in another module.
                                     val browseId = item.browseId
                                     when {
-                                        song != null -> playRadio(
-                                            song,
-                                            QueueSource(shelfTitle, PlaybackSourceType.HOME),
-                                        )
+                                        song != null -> {
+                                            if(!experience.quickPicksRadio && (shelfTitle.equals("Quick picks",true) || shelfTitle.equals(textResources.getString(R.string.shelf_quick_picks),true))) {
+                                                val tracks=(homeState as? UiState.Success)?.data?.firstOrNull {it.title==shelfTitle}?.items.orEmpty().mapNotNull {shelfSong(it)}
+                                                val index=tracks.indexOfFirst {it.videoId==song.videoId}
+                                                if(index>=0)playFrom(tracks,index,QueueSource(shelfTitle,PlaybackSourceType.HOME)) else playRadio(song,QueueSource(shelfTitle,PlaybackSourceType.HOME))
+                                            } else playRadio(song,QueueSource(shelfTitle,PlaybackSourceType.HOME))
+                                        }
                                         browseId != null -> viewModel.openDetail(
                                             browseId = browseId,
                                             title = item.title,
@@ -3191,6 +3234,16 @@ private fun VeyraApp(
                                 onOpenLocalMusic = {
                                     onLibraryItemClick(ShelfItem(textResources.getString(R.string.local_music), "", null, null, "local:all"))
                                 },
+                                onHomeShortcut={target->when(target) {
+                                    0->onLibraryItemClick(ShelfItem(textResources.getString(R.string.downloads),"",null,null,"local:downloads"))
+                                    1->onLibraryItemClick(ShelfItem(textResources.getString(R.string.local_music),"",null,null,"local:all"))
+                                    2->selectedTab=TAB_LIBRARY
+                                    3->showReplay=true
+                                    4->{selectedTab=TAB_SEARCH;searchFocusRequested=experience.searchKeyboard}
+                                    5->showEqualizer=true
+                                    6->showListenTogether=true
+                                    7->if(signedIn)onLibraryItemClick(ShelfItem(textResources.getString(R.string.auto_liked),"",null,null,"LM")) else {webSession=WebSessionMode.SIGN_IN}
+                                }},
                             )
                             TAB_EXPLORE -> AnimatedContent(
                                 targetState = selectedMoodGenre,
@@ -4015,7 +4068,8 @@ private fun VeyraApp(
                 )
 
                 // One tab handler, whichever bar is drawing it.
-                val onTabSelected: (Int) -> Unit = { index ->
+                val onTabSelected: (Int) -> Unit = { navigationIndex ->
+                    val index = navigationTargets.getOrElse(navigationIndex) {TAB_HOME}
                     viewModel.clearDetail()
                     viewModel.closeMoodGenre()
                     showSettings = false
@@ -4027,13 +4081,18 @@ private fun VeyraApp(
                     settingsSubScreen = null
                     showHistory = false
                     libraryShowAll = null
-                    selectedTab = index
+                    if(index in 0..3)selectedTab=index else if(index==4)selectedTab=TAB_LIBRARY
+                    when(index) {
+                        4->onLibraryItemClick(ShelfItem(textResources.getString(R.string.local_music),"",null,null,"local:all"))
+                        5->showReplay=true
+                        6->showSettings=true
+                    }
 
                     // Every search tab tap resets the field, focuses it, and opens
                     // the keyboard through SearchScreen's focus request.
                     if (index == TAB_SEARCH) {
                         viewModel.onQueryChange("")
-                        searchFocusRequested = true
+                        searchFocusRequested = experience.searchKeyboard
                     }
                 }
 
@@ -4050,8 +4109,8 @@ private fun VeyraApp(
                     // controls dock into the tab bar rather than riding above it,
                     // and the pair folds together on scroll. See [GlassNavBar].
                     GlassNavBar(
-                        tabs = tabs,
-                        selectedIndex = selectedTab,
+                        tabs = navigationTabs,
+                        selectedIndex = navigationSelection,
                         onTabSelected = onTabSelected,
                         scrollConnection = navBarScroll,
                         song = player.song,
@@ -4091,6 +4150,7 @@ private fun VeyraApp(
                     player.song?.let { song ->
                         MiniPlayer(
                             song = song,
+                            position = player.position, durationMs = player.durationMs,
                             isPlaying = player.isPlaying,
                             isLoading = playPauseBusy,
                             hazeState = hazeState,
@@ -4113,8 +4173,8 @@ private fun VeyraApp(
                         Spacer(Modifier.height(8.dp))
                     }
                     FloatingBottomBar(
-                        tabs = tabs,
-                        selectedIndex = selectedTab,
+                        tabs = navigationTabs,
+                        selectedIndex = navigationSelection,
                         hazeState = hazeState,
                         onTabSelected = onTabSelected,
                     )
@@ -4581,6 +4641,8 @@ private fun VeyraApp(
                 } else {
                     null
                 },
+                onImmersive = if(fromPlayer) ({songActions=null;val latest=AppSettings.experience.value;AppSettings.setExperience(latest.copy(immersive=!latest.immersive))}) else null,
+                immersiveEnabled=experience.immersive,
                 onLyricsOffset = if (fromPlayer) {
                     {
                         songActions = null

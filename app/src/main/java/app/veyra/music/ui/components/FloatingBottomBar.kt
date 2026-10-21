@@ -72,6 +72,7 @@ import kotlin.math.roundToInt
 data class BottomTab(
     val label: String,
     val icon: ImageVector,
+    val themeKey: String? = null,
 )
 
 /**
@@ -157,7 +158,12 @@ fun FloatingBottomBar(
 ) {
     if (tabs.isEmpty()) return
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
-    val pillShape = RoundedCornerShape((pack?.navCorner ?: 28).dp)
+    val experience by AppSettings.experience.collectAsStateWithLifecycle()
+    val pillShape = when(experience.navigationDesign) {
+        app.veyra.music.data.settings.NavigationDesign.DOCKED -> RoundedCornerShape(topStart=20.dp,topEnd=20.dp)
+        app.veyra.music.data.settings.NavigationDesign.MINIMAL -> RoundedCornerShape(12.dp)
+        else -> RoundedCornerShape((pack?.navCorner ?: 28).dp)
+    }
     val container = MaterialTheme.colorScheme.surface
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val useGlass = LocalLiquidGlassEnabled.current && isGlassSupported()
@@ -216,7 +222,7 @@ fun FloatingBottomBar(
     Box(
         modifier = modifier
             .windowInsetsPadding(floatingBarInsets)
-            .padding(horizontal = BAR_GUTTER)
+            .padding(horizontal = if(experience.navigationDesign==app.veyra.music.data.settings.NavigationDesign.DOCKED)0.dp else BAR_GUTTER)
             .padding(bottom = 2.dp)
             .fillMaxWidth()
             .clip(pillShape)
@@ -309,7 +315,7 @@ fun FloatingBottomBar(
             val adaptiveTint = if (pack != null) pack.muted else if (useGlass) glassTint else null
             tabs.forEachIndexed { index, tab ->
                 BottomBarItem(
-                    themeKey = listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
+                    themeKey = tab.themeKey ?: listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
                     tab = tab,
                     selected = index == selectedIndex,
                     glassSpec = glassSpec,
@@ -355,11 +361,13 @@ private fun BottomBarItem(
         label = "tabTint",
     )
 
+    val experience by AppSettings.experience.collectAsStateWithLifecycle()
+    val showLabel=experience.navigationLabels==app.veyra.music.data.settings.NavigationLabels.ALWAYS || (experience.navigationLabels==app.veyra.music.data.settings.NavigationLabels.SELECTED && selected)
     if (app.veyra.music.ui.themes.LocalThemeVisuals.current != null) {
         app.veyra.music.ui.themes.ThemeNavigationItem(tab.label, selected, tint, {
             if (!selected) haptics.play(Haptic.Select)
             onClick()
-        }, modifier) {
+        }, modifier, showLabel=showLabel) {
             app.veyra.music.ui.themes.ThemeIcon(tab.icon, null,
                 Modifier.size(24.dp).graphicsLayer { scaleX = scale; scaleY = scale }, tint, themeKey)
         }
@@ -384,7 +392,7 @@ private fun BottomBarItem(
         app.veyra.music.ui.themes.ThemeIcon(
             themeKey = themeKey,
             imageVector = tab.icon,
-            contentDescription = null,
+            contentDescription = tab.label,
             tint = tint,
             modifier = Modifier
                 .size(24.dp)
@@ -393,8 +401,8 @@ private fun BottomBarItem(
                     scaleY = scale
                 },
         )
-        Spacer(Modifier.height(TAB_ICON_LABEL_GAP))
-        Text(
+        if(showLabel)Spacer(Modifier.height(TAB_ICON_LABEL_GAP))
+        if(showLabel)Text(
             text = tab.label,
             style = MaterialTheme.typography.labelMedium,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,

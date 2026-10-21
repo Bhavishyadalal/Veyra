@@ -2,6 +2,18 @@
 
 **Preview Android source · version code 27 · based on stable 0.1.7**
 
+## Experience foundation — stage 1
+
+- Optional immersive player with song/theme/blended/minimal backgrounds, positioned synced lyrics and accessible controls.
+- Five new widgets: Sleeve, Vinyl, Studio Strip, Lyrics and Listening Studio, with cached artwork and event-driven updates.
+- Home Speed Dial, shortcut tiles, greeting and Quick Picks behavior; customizable navigation destinations/startup/labels.
+- Independent imported app/lyrics fonts, lyric sizing/centering, player/mini-player presets, seeking controls and Data Saver/preload choices.
+- Content-country override and a hash-checked backup preview with portable selected font assets.
+
+[Verification and limits](verification/EXPERIENCE-STAGE-1-0.1.8-beta1.md) · [Full roadmap and remaining work](docs/roadmap/BETA-0.1.8-EXPERIENCE.md)
+
+This checkpoint does **not** complete the entire roadmap. Larger offline, podcast, nearby-listening and library/sharing extensions remain tracked for later stages.
+
 ## Search lifecycle and rendering efficiency
 
 - Query edits, filter changes and source changes cancel obsolete pagination and speculative top-result work. Only one continuation can run for the current search.

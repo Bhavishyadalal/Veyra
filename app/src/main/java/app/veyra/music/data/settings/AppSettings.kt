@@ -150,6 +150,14 @@ enum class SongSort {
  */
 object AppSettings {
 
+    val experience = MutableStateFlow(ExperienceOptions())
+
+    fun setExperience(value: ExperienceOptions) {
+        val safe = value.normalized()
+        experience.value = safe
+        if (this::prefs.isInitialized) prefs.edit().putString("experience_options", safe.encode()).apply()
+    }
+
     private lateinit var prefs: SharedPreferences
 
     /** Only for the Discord, WebDAV and SMB secrets — everything else on here is plain prefs. */
@@ -817,6 +825,7 @@ object AppSettings {
     }
 
     private fun readAll() {
+        experience.value = ExperienceOptions.decode(prefs.getString("experience_options", null))
         migrateSingleQuality()
         audioQualityWifi.value = readQuality(KEY_QUALITY_WIFI)
         audioQualityCellular.value = readQuality(KEY_QUALITY_CELLULAR)
@@ -1242,6 +1251,7 @@ object AppSettings {
         prefs.edit().putString("app_style", value.name).apply()
     }
     fun setAppearanceFont(value: app.veyra.music.data.themes.AppearanceFont) {
+        if(experience.value.appFont.isNotBlank())setExperience(experience.value.copy(appFont=""))
         appearanceFont.value = value
         prefs.edit().putString("appearance_font", value.name).apply()
     }

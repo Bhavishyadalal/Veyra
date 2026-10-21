@@ -81,6 +81,8 @@ import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -343,6 +345,21 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val searchCache = LruCache<String, SearchCacheEntry>(SEARCH_CACHE_ENTRIES)
     private var searchSession: SearchSession? = null
     private val searchWork = SearchBackgroundWork(viewModelScope) { _searchLoadingMore.value = it }
+
+    init {
+        viewModelScope.launch {
+            combine(AppSettings.experience,AppSettings.meteredConnection) {options,metered->options.dataSaver && metered!=false}
+                .collect {if(it)searchWork.cancelPrefetch()}
+        }
+        viewModelScope.launch {
+            AppSettings.experience.map {it.contentCountry}.distinctUntilChanged().drop(1).collect {
+                searchCache.evictAll()
+                if(_searchSource.value==SearchSource.YOUTUBE && _query.value.isNotBlank() && searchSubmitted)runSearch()
+                refresh(Feed.HOME)
+                refresh(Feed.EXPLORE)
+            }
+        }
+    }
 
     /** Synced lyrics for whatever is playing; null while unknown or absent. */
     private val _lyrics = MutableStateFlow<List<LyricLine>?>(null)
@@ -2577,6 +2594,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * is canceled when the query, filter or source changes.
      */
     private fun prefetchTopResult(rows: List<SearchResult>) {
+        if (AppSettings.experience.value.dataSaver && AppSettings.meteredConnection.value != false) return
         val song = rows.firstNotNullOfOrNull {
             when (it) {
                 is SearchResult.TopTrack -> it.song

@@ -70,10 +70,18 @@ object Backup {
                     PrefValue.of(value)?.let { key to it }
                 }.toMap(),
                 listening = buckets,
+                assets = buildMap {
+                    val options=AppSettings.experience.value
+                    for((slot,hash) in listOf("font/app" to options.appFont,"font/lyrics" to options.lyricsFont)) {
+                        app.veyra.music.data.settings.ImportedFonts.file(context,hash)?.let {put(slot,android.util.Base64.encodeToString(it.readBytes(),android.util.Base64.NO_WRAP))}
+                    }
+                },
             )
             val text = json.encodeToString(BackupFile.serializer(), file)
+            val bytes=text.toByteArray()
+            require(bytes.size<=32*1024*1024) {"Backup exceeds 32 MB"}
             context.contentResolver.openOutputStream(target, "wt")
-                ?.use { it.write(text.toByteArray()) }
+                ?.use { it.write(bytes) }
                 ?: error("Couldn't open that file for writing")
             buckets.size
         }
@@ -87,20 +95,23 @@ object Backup {
      * import is worse than a refused one — it leaves settings from two devices
      * mixed together with nothing to say which came from where.
      */
-    suspend fun importFrom(context: Context, source: Uri): Result<Summary> = withContext(Dispatchers.IO) {
+    suspend fun importFrom(context: Context, source: Uri, expectedHash: String? = null): Result<Summary> = withContext(Dispatchers.IO) {
         runCatching {
-            val text = context.contentResolver.openInputStream(source)
-                ?.use { it.readBytes().decodeToString() }
-                ?: error("Couldn't open that file")
-            val file = runCatching { json.decodeFromString(BackupFile.serializer(), text) }
-                .getOrElse { error("That doesn't look like a Veyra backup") }
-            require(file.app == APP_TAG) { "That backup is from another app" }
-            require(file.version <= SCHEMA_VERSION) {
-                "That backup was written by a newer version of Veyra"
+            val text = readBounded(context,source)
+            require(expectedHash==null || digest(text)==expectedHash) {"The backup changed after its preview. Choose it again."}
+            val file = decode(text)
+            val restoredFonts=buildMap {
+                for((key,encoded) in file.assets) {
+                    require(key in setOf("font/app","font/lyrics")) {"Unsupported backup asset"}
+                    require(encoded.length<=6*1024*1024) {"Backup font is too large"}
+                    val hash=app.veyra.music.data.settings.ImportedFonts.store(context,android.util.Base64.decode(encoded,android.util.Base64.DEFAULT))
+                    put(key,hash)
+                }
             }
 
             ListeningStats.importAll(file.listening)
             AppSettings.importPrefs(file.settings.mapValues { it.value.decoded() })
+            AppSettings.setExperience(AppSettings.experience.value.copy(appFont=restoredFonts["font/app"].orEmpty(),lyricsFont=restoredFonts["font/lyrics"].orEmpty()))
             // Shares AppSettings' preference file, so it has already been
             // overwritten by the line above — it just doesn't know yet.
             SearchHistory.reload()
@@ -113,12 +124,39 @@ object Backup {
         }
     }
 
+    suspend fun inspect(context:Context,source:Uri):Result<Summary> = withContext(Dispatchers.IO) {
+        runCatching { val text=readBounded(context,source);val file=decode(text)
+            Summary(file.listening.size,file.settings.size,file.versionName,file.exportedAt,digest(text)) }
+    }
+
+    private fun digest(text:String)=java.security.MessageDigest.getInstance("SHA-256").digest(text.toByteArray()).joinToString("") {"%02x".format(it)}
+    internal fun decode(text:String):BackupFile {
+        val document=runCatching {json.parseToJsonElement(text) as? kotlinx.serialization.json.JsonObject}.getOrNull()
+        require(document!=null && (document["app"] as? kotlinx.serialization.json.JsonPrimitive)?.content==APP_TAG &&
+            listOf("version","settings","listening").all {it in document}) {"That does not look like a Veyra backup"}
+        val file=runCatching {json.decodeFromJsonElement(BackupFile.serializer(),document)}.getOrElse {error("That does not look like a Veyra backup")}
+        require(file.app==APP_TAG) {"That backup is from another app"}
+        require(file.version in 1..SCHEMA_VERSION) {"Unsupported backup version"}
+        require(file.assets.size<=2) {"Too many backup assets"}
+        require(file.assets.keys.all {it in setOf("font/app","font/lyrics")}) {"Unsupported backup asset"}
+        require(file.assets.values.all {it.length<=6*1024*1024}) {"Backup font is too large"}
+        return file
+    }
+    private fun readBounded(context:Context,source:Uri):String {
+        return context.contentResolver.openInputStream(source)?.use {input->
+            val out=java.io.ByteArrayOutputStream();val buffer=ByteArray(8192);var total=0
+            while(true){val n=input.read(buffer);if(n<0)break;total+=n;require(total<=32*1024*1024) {"Backup exceeds 32 MB"};out.write(buffer,0,n)}
+            out.toString(Charsets.UTF_8.name())
+        } ?: error("Cannot open this backup")
+    }
+
     /** What an import turned out to contain, for the line shown afterwards. */
     data class Summary(
         val months: Int,
         val settings: Int,
         val from: String,
         val at: String,
+        val hash: String = "",
     )
 
     private const val APP_TAG = "veyra"
@@ -128,7 +166,7 @@ object Backup {
      * from a *newer* schema is refused rather than partially read; one from an
      * older schema is read as-is, since every field has a default.
      */
-    private const val SCHEMA_VERSION = 1
+    private const val SCHEMA_VERSION = 2
 
     @Serializable
     data class BackupFile(
@@ -139,6 +177,7 @@ object Backup {
         val exportedAt: String = "",
         val settings: Map<String, PrefValue> = emptyMap(),
         val listening: List<StoredBucket> = emptyList(),
+        val assets: Map<String,String> = emptyMap(),
     )
 
     /** One preference, with the type it has to be restored as. */

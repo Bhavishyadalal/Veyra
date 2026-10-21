@@ -171,8 +171,11 @@ fun HomeScreen(
     onResetHomeSections: (() -> Unit)? = null,
     onOpenDownloads: (() -> Unit)? = null,
     onOpenLocalMusic: (() -> Unit)? = null,
+    onHomeShortcut: ((Int)->Unit)? = null,
 ) {
     val appStyle = LocalAppStyle.current
+    val experience by app.veyra.music.ui.player.PlayerPlatform.host.settings.experience.collectAsStateWithLifecycle()
+    val speedDial=remember(state,experience.homeSpeedDial) { if(!experience.homeSpeedDial)emptyList() else displayHomeShelves(state).flatMap {it.items}.distinctBy {it.videoId ?: it.browseId ?: it.title}.take(9) }
     PrefetchHomeArtwork(state, listState, enabled = !offline)
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
     val homeReducedMotion = rememberVeyraReducedMotion()
@@ -211,7 +214,7 @@ fun HomeScreen(
             ) {
                 if (title != null) {
                     item(key = "home:heading", contentType = "heading") {
-                        if(!appStyle.custom) HomeTitle(title) else {
+                        if(!appStyle.custom) HomeTitle(experience.homeGreeting.ifBlank {title}) else {
                             val featuredShelf=(displayState as? UiState.Success)?.data?.firstOrNull {it.items.isNotEmpty() && !it.title.equals(RECENTS_TITLE,true)}
                             val featured=featuredShelf?.items?.firstOrNull()?.let {item ->
                                 StyleMusicItem(item.videoId ?: item.browseId ?: item.title,item.title,item.subtitle,item.thumbnailUrl.artworkAt(HEADER_ART_PX),
@@ -222,6 +225,15 @@ fun HomeScreen(
                                 onCustomize=if(customizable)({editingHome=true}) else null,customizeLabel=stringResource(Res.string.home_customize))
                         }
                     }
+                }
+                if(experience.homeGreeting.isNotBlank() && appStyle.custom) item(key="home:personal-greeting") {
+                    Text(experience.homeGreeting,style=MaterialTheme.typography.headlineSmall,modifier=Modifier.padding(horizontal=PAGE_GUTTER,vertical=12.dp))
+                }
+                if(experience.homeShortcuts.isNotEmpty() && onHomeShortcut!=null) item(key="home:shortcuts") {
+                    PersonalizedHomeShortcuts(experience.homeShortcuts,onHomeShortcut)
+                }
+                if(experience.homeSpeedDial && speedDial.isNotEmpty()) item(key="home:speed-dial") {
+                    PersonalizedSpeedDial(speedDial,onItemClick,onItemLongPress)
                 }
                 if (themePack != null && !appStyle.custom) {
                     item(key = "home:theme-atmosphere", contentType = "theme-artwork") {
@@ -1109,3 +1121,5 @@ internal fun ShelfCard(
         )
     }
 }
+
+private fun displayHomeShelves(state:UiState<List<HomeShelf>>):List<HomeShelf> = (state as? UiState.Success)?.data.orEmpty().sortedBy {if(it.title.equals(RECENTS_TITLE,true))0 else 1}

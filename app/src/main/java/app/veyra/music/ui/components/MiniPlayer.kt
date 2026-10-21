@@ -41,6 +41,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import app.veyra.music.data.settings.MiniPlayerDesign
+import app.veyra.music.data.settings.MiniPlayerProgress
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerInputChange
@@ -360,14 +363,22 @@ fun MiniPlayer(
     /** Dragging the bar up into the player. */
     pull: MiniPlayerPull? = null,
     modifier: Modifier = Modifier,
+    position: app.veyra.music.playback.PlaybackPosition? = null,
+    durationMs: Long = 0L,
 ) {
+    val experience by AppSettings.experience.collectAsStateWithLifecycle()
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val haptics = rememberHaptics()
     // percent rather than a dp figure, so the corner stays exactly half the
     // height if the row's contents ever change it — which is what keeps a pill
     // a pill instead of a rounded rectangle. Same idiom as [FloatingBottomBar]
     // directly below it, so the two shapes are the same family.
-    val shape = RoundedCornerShape(percent = 50)
+    val shape = when(experience.miniPlayerDesign) {
+        MiniPlayerDesign.CARD -> RoundedCornerShape(20.dp)
+        MiniPlayerDesign.SLIM -> RoundedCornerShape(12.dp)
+        else -> RoundedCornerShape(percent = 50)
+    }
+    val progressTint=MaterialTheme.colorScheme.primary
     Box(
         modifier = modifier
             .padding(horizontal = BAR_GUTTER)
@@ -397,6 +408,12 @@ fun MiniPlayer(
                 },
             )
             .border(0.5.dp, Color.White.copy(alpha = 0.10f), shape)
+            .drawWithContent {
+                val fraction=if(durationMs>0 && position!=null)(position.positionMs.toDouble()/durationMs).toFloat().coerceIn(0f,1f) else 0f
+                if(experience.miniPlayerProgress==MiniPlayerProgress.FILL)drawRect(progressTint.copy(alpha=.12f),size=androidx.compose.ui.geometry.Size(size.width*fraction,size.height))
+                drawContent()
+                if(experience.miniPlayerProgress==MiniPlayerProgress.LINE)drawLine(progressTint,androidx.compose.ui.geometry.Offset(0f,size.height-2.dp.toPx()),androidx.compose.ui.geometry.Offset(size.width*fraction,size.height-2.dp.toPx()),2.dp.toPx())
+            }
             // Deliberately silent: the whole bar is the target, so it catches
             // stray taps meant for the page behind it, and the sheet rising is
             // its own confirmation. The glyphs on it still buzz.
@@ -407,7 +424,7 @@ fun MiniPlayer(
                 .fillMaxWidth()
                 .padding(
                     horizontal = ROW_PADDING_HORIZONTAL,
-                    vertical = ROW_PADDING_VERTICAL,
+                    vertical = if(experience.miniPlayerDesign==MiniPlayerDesign.SLIM) 2.dp else ROW_PADDING_VERTICAL,
                 ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -415,7 +432,7 @@ fun MiniPlayer(
                 model = rememberRemoteArtworkUrl(song)?.artworkAt(ROW_ART_PX),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(if(experience.miniPlayerDesign==MiniPlayerDesign.SLIM)32.dp else 40.dp)
                     .playerDockArt(dock, artworkCorner(ART_CORNER))
                     .clip(artworkShape(RoundedCornerShape(ART_CORNER)))
                     .thumbnailBorder(artworkShape(RoundedCornerShape(ART_CORNER)))
@@ -463,7 +480,7 @@ fun MiniPlayer(
             Spacer(Modifier.width(TRANSPORT_GAP))
             // Faded and inert rather than removed while the host holds the
             // controls, so the bar keeps its shape — see [controlsLocked].
-            IconButton(
+            if(experience.miniSkipButtons)IconButton(
                 onClick = {
                     haptics.play(Haptic.SkipNext)
                     onNext()

@@ -1,0 +1,45 @@
+<resources>
+  <string name="immersive_mode">Immersive mode</string>
+  <string name="immersive_exit">Return to player</string>
+  <string name="immersive_settings">Immersive settings</string>
+  <string name="immersive_no_lyrics">No lyrics available. Enjoy the artwork.</string>
+  <string name="immersive_previous">Previous song</string>
+  <string name="immersive_next">Next song</string>
+  <string name="immersive_pause">Pause</string>
+  <string name="immersive_play">Play</string>
+  <string name="immersive_background">Background</string>
+  <string name="immersive_cover">Artwork fit</string>
+  <string name="immersive_lyrics_position">Lyrics position</string>
+  <string name="immersive_lyrics_source">Lyrics source</string>
+  <string name="immersive_lyrics_timing">Lyrics timing</string>
+  <string name="immersive_song_options">Song options</string>
+  <string name="experience_title">Your listening experience</string>
+  <string name="experience_subtitle">Immersive artwork, gestures and data controls</string>
+  <string name="experience_data_saver">Data Saver</string>
+  <string name="experience_data_saver_hint">On metered networks, use smaller artwork and pause motion covers and speculative stream warming.</string>
+  <string name="experience_double_tap">Double-tap artwork to seek</string>
+  <string name="experience_hold_seek">Hold Previous or Next to seek</string>
+  <string name="experience_off">Off</string>
+  <string name="experience_seconds">%1$d seconds</string>
+  <string name="experience_track_length">Show total track duration</string>
+  <string name="experience_track_length_hint">Display total length instead of remaining time.</string>
+  <string name="home_speed_dial">Speed Dial</string>
+  <string name="home_personalize">Make Home yours</string>
+  <string name="home_personalize_hint">Your greeting, shortcut tiles and go-to music.</string>
+  <string name="home_greeting">Your greeting (optional)</string>
+  <string name="home_quick_radio">Quick Picks starts a radio</string>
+  <string name="home_shortcuts">Shortcut tiles (up to six)</string>
+  <string name="mini_player_design">Mini player design</string>
+  <string name="mini_player_progress">Mini player progress</string>
+  <string name="mini_player_skip">Show mini player skip button</string>
+  <string-array name="experience_shortcuts">
+    <item>Downloads</item>
+    <item>Local music</item>
+    <item>Library</item>
+    <item>Replay</item>
+    <item>Search</item>
+    <item>Equalizer</item>
+    <item>Listen Together</item>
+    <item>Liked songs</item>
+  </string-array>
+</resources>

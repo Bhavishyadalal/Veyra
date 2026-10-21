@@ -116,6 +116,7 @@ fun ThinSlider(
     onValueChangeCancelled: (() -> Unit)? = onValueChangeFinished,
     interactionKey: Any? = Unit,
     valueDescription: String? = null,
+    thumbVisible: Boolean = false,
 ) {
     val reduceAnimation by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -172,7 +173,7 @@ fun ThinSlider(
                 activeColor.copy(alpha = alpha)
             },
             inactiveColor = inactiveColor, markerColor = markerColor,
-            transitionWindow = transitionWindow, fillFactor = { fillFactor },
+            transitionWindow = transitionWindow, fillFactor = { fillFactor }, thumbVisible=thumbVisible,
         )
         // Composed only while switching or mixing. The infinite animation therefore costs no
         // frames during ordinary playback, and AnimatedVisibility lets it leave gracefully.

@@ -178,13 +178,16 @@ private fun alignsRight(text: String, alignEnd: Boolean, laneLocked: Boolean): B
     if (laneLocked) alignEnd else isRtl(text)
 
 /** Compute per-voice text style with absolute physical alignment based on the voice's own text direction. */
+val LocalLyricsCentered = androidx.compose.runtime.staticCompositionLocalOf {false}
+
+@Composable
 private fun voiceStyle(
     base: TextStyle,
     text: String,
     alignEnd: Boolean,
     laneLocked: Boolean,
 ): TextStyle = base.copy(
-    textAlign = if (alignsRight(text, alignEnd, laneLocked)) TextAlign.Right else TextAlign.Left,
+    textAlign = if(LocalLyricsCentered.current && !laneLocked)TextAlign.Center else if (alignsRight(text, alignEnd, laneLocked)) TextAlign.Right else TextAlign.Left,
     textDirection = if (isRtl(text)) androidx.compose.ui.text.style.TextDirection.Rtl else androidx.compose.ui.text.style.TextDirection.Ltr,
 )
 
@@ -1735,6 +1738,46 @@ internal fun rememberPlayerControlsOnScroll(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun LyricsPanel(
+    lines: List<LyricLine>,
+    /**
+     * Romanized or translated copies of [lines], index for index, drawn small
+     * under each original line. Null shows the originals alone.
+     */
+    subLines: List<LyricLine>? = null,
+    trackKey: String,
+    playhead: LyricPlayhead,
+    /** Whether a lookup for this track is still in flight. */
+    looking: Boolean,
+    isPlaying: Boolean,
+    /** False while the panel is retained offscreen solely as a warm layout. */
+    active: Boolean = true,
+    onSeekToLine: (Long) -> Unit,
+    controlsOpen: Boolean,
+    onRevealControls: () -> Unit,
+    onHideControls: () -> Unit,
+    translationProgress: State<Float>? = null,
+    /** Reports whether the lyric list is mid-scroll, so the player above it
+     * can stand down its own swipe gestures for as long as it is. */
+    onScrollingChange: (Boolean) -> Unit = {},
+    /** Whether this platform can turn picked lines into a card at all. */
+    canPick: Boolean = false,
+    /** Whether the reader is choosing lines to put on a share card. */
+    picking: Boolean = false,
+    /** Which lines are chosen, as indices into [lines]. */
+    picked: Set<Int> = emptySet(),
+    /** Long-press on a line: start picking, or fold that line into the pick. */
+    onPickLine: (Int) -> Unit = {},
+    /** Tap while picking: add or drop that line. */
+    onTogglePick: (Int) -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
+    PlayerPlatform.host.LyricsTypography {
+        LyricsPanelContent(lines=lines, subLines=subLines, trackKey=trackKey, playhead=playhead, looking=looking, isPlaying=isPlaying, active=active, onSeekToLine=onSeekToLine, controlsOpen=controlsOpen, onRevealControls=onRevealControls, onHideControls=onHideControls, translationProgress=translationProgress, onScrollingChange=onScrollingChange, canPick=canPick, picking=picking, picked=picked, onPickLine=onPickLine, onTogglePick=onTogglePick, modifier=modifier)
+    }
+}
+
+@Composable
+private fun LyricsPanelContent(
     lines: List<LyricLine>,
     /**
      * Romanized or translated copies of [lines], index for index, drawn small

@@ -31,6 +31,8 @@ import kotlinx.coroutines.flow.StateFlow
 interface PlayerHost {
     val settings: PlayerSettingsSource
 
+    @Composable fun LyricsTypography(content: @Composable () -> Unit) = content()
+
     /** A Canvas already settled for [song], without a lookup. */
     fun cachedCanvas(song: Song): CanvasArtwork?
 
@@ -159,7 +161,11 @@ object PlayerPlatform {
 }
 
 /** The settings the player reads, named and typed as the phone's AppSettings has them. */
+private val DefaultExperience = MutableStateFlow(app.veyra.music.data.settings.ExperienceOptions())
+
 interface PlayerSettingsSource {
+    val experience: StateFlow<app.veyra.music.data.settings.ExperienceOptions> get() = DefaultExperience
+    fun setExperience(value: app.veyra.music.data.settings.ExperienceOptions) = Unit
     val animatedCanvas: StateFlow<Boolean>
     val audioQualityCellular: StateFlow<AudioQuality>
     val audioQualityWifi: StateFlow<AudioQuality>

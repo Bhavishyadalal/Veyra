@@ -9,6 +9,9 @@
 
 package app.veyra.music.ui.components
 
+import app.veyra.music.data.settings.AppSettings
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
 import app.veyra.music.ui.themes.themeNavigationSurface
 import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 import androidx.compose.animation.core.snap
@@ -115,6 +118,7 @@ fun GlassNavBar(
     // Held for the same reason [tabs] is. The glass factory below closes over
     // this shape, and a fresh RoundedCornerShape each pass means a fresh factory
     // lambda, which the tab bar sees as a changed argument and recomposes on.
+    val experience by AppSettings.experience.collectAsStateWithLifecycle()
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val pillShape = remember(pack?.navCorner) { pack?.let { RoundedCornerShape(it.navCorner.dp) } ?: RoundedCornerShape(percent = 50) }
     val contentColor = pack?.text ?: glassContentColor()
@@ -242,7 +246,7 @@ fun GlassNavBar(
                             contentAlignment = Alignment.Center,
                         ) {
                             app.veyra.music.ui.themes.ThemeIcon(
-                                themeKey = listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
+                                themeKey = tab.themeKey ?: listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
                                 imageVector = tab.icon,
                                 contentDescription = tab.label,
                                 tint = tint,
@@ -257,7 +261,7 @@ fun GlassNavBar(
                     key = index,
                     icon = {
                         app.veyra.music.ui.themes.ThemeIcon(
-                            themeKey = listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
+                            themeKey = tab.themeKey ?: listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
                             imageVector = tab.icon,
                             contentDescription = tab.label,
                             tint = tint,
@@ -265,7 +269,7 @@ fun GlassNavBar(
                         )
                     },
                     title = {
-                        Text(
+                        if(experience.navigationLabels==app.veyra.music.data.settings.NavigationLabels.ALWAYS || (isSelected && experience.navigationLabels==app.veyra.music.data.settings.NavigationLabels.SELECTED))Text(
                             text = tab.label,
                             style = app.veyra.music.ui.styles.styleNavigationLabelStyle(),
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,

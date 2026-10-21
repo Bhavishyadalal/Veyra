@@ -294,6 +294,7 @@ fun SettingsScreen(
     // result reports itself under the word "Export".
     var exportStatus by remember { mutableStateOf<String?>(null) }
     var importStatus by remember { mutableStateOf<String?>(null) }
+    var importCandidate by remember {mutableStateOf<Pair<android.net.Uri,Backup.Summary>?>(null)}
     var exporting by remember { mutableStateOf(false) }
     var importing by remember { mutableStateOf(false) }
     var confirmImport by remember { mutableStateOf(false) }
@@ -356,14 +357,9 @@ fun SettingsScreen(
             importing = true
             importStatus = textResources.getString(R.string.settings_backup_working)
             try {
-                importStatus = Backup.importFrom(context, source).fold(
-                    onSuccess = {
-                        textResources.getString(R.string.import_succeeded, context.countOfMonths(it.months), it.from)
-                    },
-                    onFailure = {
-                        textResources.getString(R.string.import_failed, it.message ?: textResources.getString(R.string.unknown_error))
-                    },
-                )
+                Backup.inspect(context,source).fold(
+                    onSuccess={importCandidate=source to it;importStatus=null},
+                    onFailure={importStatus=textResources.getString(R.string.import_failed,it.message ?: textResources.getString(R.string.unknown_error))})
             } finally {
                 importing = false
             }
@@ -743,7 +739,11 @@ fun SettingsScreen(
             }
 
             SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.appearance)) {
+                row(stringResource(R.string.home_personalize), "greeting", "speed dial", "shortcuts", "quick picks") {HomePersonalizationSetting()}
+                row(stringResource(R.string.navigation_custom_title), "tabs", "startup", "labels", "local tab") {NavigationSetting()}
+                row(stringResource(R.string.experience_title), "immersive", "data saver", "gestures") { ExperienceSetting() }
                 row(stringResource(R.string.app_style), "home", "editorial", "listening room", "after dark") { AppStyleSetting() }
+                row(stringResource(R.string.font_import_title), "import", "ttf", "otf", "lyrics font") {ImportedFontSetting()}
                 row(stringResource(R.string.appearance_fonts), "font", "typography", "typeface") { FontSetting() }
                 row(stringResource(R.string.theme_packs), "themes", "halloween", "fonts", "icons") {
                     SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.theme_packs),
@@ -1500,6 +1500,23 @@ fun SettingsScreen(
     // Asked before the picker opens rather than after a file is chosen: the
     // thing being confirmed is that this device's own history is about to be
     // thrown away, and that is true whichever file gets picked.
+    importCandidate?.let {candidate ->
+        AlertDialog(onDismissRequest={importCandidate=null},title={Text(stringResource(R.string.backup_preview_title))},
+            text={Text(stringResource(R.string.backup_preview_details,candidate.second.from,candidate.second.months,candidate.second.settings,candidate.second.at))},
+            confirmButton={TextButton(enabled=!importing,onClick={
+                importCandidate=null
+                backupScope.launch {
+                    importing=true
+                    importStatus=textResources.getString(R.string.settings_backup_working)
+                    try {
+                        importStatus=Backup.importFrom(context,candidate.first,candidate.second.hash).fold(
+                            onSuccess={textResources.getString(R.string.import_succeeded,context.countOfMonths(it.months),it.from)},
+                            onFailure={textResources.getString(R.string.import_failed,it.message ?: textResources.getString(R.string.unknown_error))})
+                    } finally {importing=false}
+                }
+            }) {Text(stringResource(R.string.import_data))}},
+            dismissButton={TextButton(onClick={importCandidate=null}) {Text(stringResource(R.string.cancel))}})
+    }
     if (confirmImport) {
         AlertDialog(
             onDismissRequest = { confirmImport = false },

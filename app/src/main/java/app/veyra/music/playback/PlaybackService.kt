@@ -5897,7 +5897,8 @@ class PlaybackService : MediaLibraryService() {
     private fun prefetchAround(player: ExoPlayer) {
         val nextIndex = player.nextMediaItemIndex
         val upcomingSongs = if (nextIndex != C.INDEX_UNSET) {
-            val end = (nextIndex + AudioCache.QUEUE_DEPTH - 1).coerceAtMost(player.mediaItemCount - 1)
+            val depth=if(AppSettings.experience.value.preload==app.veyra.music.data.settings.PreloadPolicy.NEXT_THREE)maxOf(3,AudioCache.QUEUE_DEPTH) else AudioCache.QUEUE_DEPTH
+            val end = (nextIndex + depth - 1).coerceAtMost(player.mediaItemCount - 1)
             (nextIndex..end).map { index -> player.getMediaItemAt(index).toSong() }
         } else {
             emptyList()
@@ -6551,6 +6552,13 @@ class PlaybackService : MediaLibraryService() {
 
     private fun observeSettings() {
         scope.launch {
+            combine(AppSettings.experience,AppSettings.meteredConnection) {options,metered->Triple(options.preload,options.preloadCellular,options.dataSaver) to metered}
+                .distinctUntilChanged().drop(1).collect {
+                    cancelPrefetch()
+                    player?.takeIf {it.isPlaying}?.let(::prefetchAround)
+                }
+        }
+        scope.launch {
             AppSettings.skipSilence.collect { on -> eachPlayer { it.skipSilenceEnabled = on } }
         }
         scope.launch {
@@ -6588,7 +6596,7 @@ class PlaybackService : MediaLibraryService() {
                 AppSettings.lyricsSourceOrder,
                 AppSettings.prioritizeSyllableSync,
             ) { synced, sources, order, prio ->
-                synced to sources
+                listOf(synced,sources,order,prio)
             }.distinctUntilChanged().collect {
                 loadLyricsForCurrentTrack()
             }
@@ -7188,6 +7196,8 @@ class PlaybackService : MediaLibraryService() {
     }
 
     private fun loadLyricsForCurrentTrack() {
+        serviceLyricsJob?.cancel()
+        serviceLyrics = null
         val currentSong = player?.currentMediaItem?.toSong() ?: run {
             serviceLyrics = null
             stopLyricsTicker()
@@ -7223,10 +7233,9 @@ class PlaybackService : MediaLibraryService() {
                 lines = found?.lines
             }
             withContext(Dispatchers.Main) {
+                if (player?.currentMediaItem?.mediaId != currentSong.videoId) return@withContext
                 serviceLyrics = lines
-                if (player?.isPlaying == true) {
-                    updateLyricSubtitle()
-                }
+                updateLyricSubtitle()
             }
         }
     }
@@ -7266,6 +7275,7 @@ class PlaybackService : MediaLibraryService() {
 
         if (subtitleText != lastPublishedSubtitle) {
             lastPublishedSubtitle = subtitleText
+            app.veyra.music.widget.ExperienceWidgets.publishLyric(this,currentSong.videoId,subtitleText.takeIf {it.startsWith("♪ ")}?.removePrefix("♪ ").orEmpty())
             // buildUpon() off the metadata that's already playing, not a fresh
             // Builder() — a synced lyric line can advance every second or two,
             // and re-stating setArtworkUri() on every tick made media3 treat

@@ -22,6 +22,11 @@
   `verification/APP-STYLES-POLISH-0.1.8-beta1.md`. Custom styles suspend downloaded
   theme/font visuals without replacing their saved selections. Preserve the
   generated-resource font/license inputs under `design/app-styles/`.
+  Experience stage 1 adds the immersive player, five widgets, personalization,
+  imported fonts, network controls and backup preview; see
+  `verification/EXPERIENCE-STAGE-1-0.1.8-beta1.md`. The approved roadmap is
+  `docs/roadmap/BETA-0.1.8-EXPERIENCE.md`; preserve every pending item and never
+  report the whole roadmap complete based on this first checkpoint.
   Stable and this new preview include the theme brand-artwork bounds correction;
   see `verification/THEME-INSTALL-0.1.7.md` before changing theme validation.
   Promotion does not establish APK publication, device validation or clean lint: see

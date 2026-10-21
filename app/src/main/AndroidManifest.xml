@@ -548,6 +548,27 @@
                 android:resource="@xml/widget_media_pill" />
         </receiver>
 
+        <receiver android:name=".widget.MediaWidgetSleeve" android:exported="false" android:label="@string/widget_sleeve_label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_experience_sleeve" />
+        </receiver>
+        <receiver android:name=".widget.MediaWidgetVinyl" android:exported="false" android:label="@string/widget_vinyl_label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_experience_vinyl" />
+        </receiver>
+        <receiver android:name=".widget.MediaWidgetStrip" android:exported="false" android:label="@string/widget_strip_label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_experience_strip" />
+        </receiver>
+        <receiver android:name=".widget.MediaWidgetLyrics" android:exported="false" android:label="@string/widget_lyrics_label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_experience_lyrics" />
+        </receiver>
+        <receiver android:name=".widget.MediaWidgetStudio" android:exported="false" android:label="@string/widget_studio_label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_experience_studio" />
+        </receiver>
+
         <!-- The transport buttons. Reached only by this app's own PendingIntents. -->
         <receiver
             android:name=".widget.MediaWidgetActions"

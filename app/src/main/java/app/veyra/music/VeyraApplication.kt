@@ -41,6 +41,8 @@ import app.veyra.music.download.Downloads
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.combine
 import kotlin.concurrent.thread
 
 class VeyraApplication : Application(), SingletonImageLoader.Factory {
@@ -116,7 +118,12 @@ class VeyraApplication : Application(), SingletonImageLoader.Factory {
             CoroutineScope(Dispatchers.IO).launch { Innertube.ensureSessionScope() }
         }
         AppSettings.init(this, authStore)
+        Innertube.contentCountry = {AppSettings.experience.value.contentCountry.ifBlank {null}}
         app.veyra.music.data.themes.ThemeRepository.init(this)
+        CoroutineScope(SupervisorJob()+Dispatchers.Default).launch {
+            combine(AppSettings.appStyle, app.veyra.music.data.themes.ThemeRepository.active) {style,theme->style to theme}
+                .collect {app.veyra.music.widget.MediaWidget.refresh(this@VeyraApplication)}
+        }
         // Before anything resolves a track: an addon with `checkValidLossless`
         // is gated on this, and the gate reads "no" until it has looked.
         app.veyra.music.playback.audio.LosslessOutput.init(this)
@@ -205,6 +212,7 @@ class VeyraApplication : Application(), SingletonImageLoader.Factory {
             // Coil's own transport never sees Http.client's interceptor, so
             // the header is attached per request instead. See WebDavCoilAuth.
             .components {
+                add(app.veyra.music.ui.DataSaverImages())
                 add(WebDavCoilAuth())
                 // Covers filed on the SMB share; anything else falls
                 // through to Coil's own fetchers. See SmbCoverFetcher.

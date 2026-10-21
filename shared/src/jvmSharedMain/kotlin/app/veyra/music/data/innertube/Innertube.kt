@@ -75,8 +75,11 @@ object Innertube {
     val currentLanguage: String
         get() = app.veyra.music.data.LocaleTags.ytHl(currentLocaleTag)
 
+    @Volatile var contentCountry: () -> String? = { null }
+
     val currentRegion: String
-        get() = app.veyra.music.data.LocaleTags.ytGl(currentLocaleTag)
+        get() = contentCountry()?.uppercase(Locale.ROOT)?.takeIf {it in Locale.getISOCountries()}
+            ?: app.veyra.music.data.LocaleTags.ytGl(currentLocaleTag)
 
     private val acceptLanguageHeader: String
         get() = app.veyra.music.data.LocaleTags.acceptLanguage(currentLocaleTag)
