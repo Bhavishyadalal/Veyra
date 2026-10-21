@@ -732,9 +732,17 @@ internal fun SettingsPresetRow(
                                 if (!committing) {
                                     committing = true
                                     scope.launch {
-                                        sheetState.hide()
-                                        if (!selected) onSelect(index)
-                                        choosing = false
+                                        try {
+                                            sheetState.hide()
+                                            if (!sheetState.isVisible) {
+                                                if (!selected) onSelect(index)
+                                                choosing = false
+                                            }
+                                        } finally {
+                                            // A drag can interrupt hide(); allow retry
+                                            // rather than leaving the picker locked.
+                                            committing = false
+                                        }
                                     }
                                 }
                             })
