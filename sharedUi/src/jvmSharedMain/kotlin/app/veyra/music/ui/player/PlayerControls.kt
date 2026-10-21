@@ -806,28 +806,17 @@ private fun Pill(
     content: @Composable RowScope.() -> Unit,
 ) {
     val reduceMotion = LocalPlayerReducedMotion.current
-    Row(
-        modifier = modifier
-            .height(BOTTOM_ACTION_SIZE)
-            .clip(CircleShape)
-            .background(LocalPlayerTint.current.copy(alpha = 0.12f))
-            .animateContentSize(
-                animationSpec = tween(if (reduceMotion) 0 else 220, easing = FastOutSlowInEasing),
-            ),
-        verticalAlignment = Alignment.CenterVertically,
+    PlayerControlGroup(
+        tint = LocalPlayerTint.current,
+        modifier = modifier.height(BOTTOM_ACTION_SIZE).animateContentSize(
+            animationSpec = tween(if (reduceMotion) 0 else 220, easing = FastOutSlowInEasing),
+        ),
         content = content,
     )
 }
 
 @Composable
-private fun PillDivider() {
-    Box(
-        Modifier
-            .width(1.dp)
-            .fillMaxHeight()
-            .background(LocalPlayerTint.current.copy(alpha = 0.20f)),
-    )
-}
+private fun PillDivider() = PlayerControlGroupDivider(LocalPlayerTint.current)
 
 /**
  * The two ends of "where is this playing": the output capsule.
@@ -914,7 +903,7 @@ private fun PillSegment(
     val reduceMotion = LocalPlayerReducedMotion.current
     val lastTap = remember { mutableLongStateOf(-tapWindowMs) }
     PlayerControlSurface(description = contentDescription, modifier = Modifier.width(width).height(BOTTOM_ACTION_SIZE),
-        busy = loading, enabled = enabled, selected = selectionState,
+        busy = loading, enabled = enabled, selected = selectionState, grouped = true,
         reducedMotion = reduceMotion, tint = LocalPlayerTint.current,
         shape = RoundedCornerShape(16.dp), containerColor = if (highlighted) LocalPlayerTint.current.copy(alpha = 0.16f) else Color.Transparent,
         onClick = {

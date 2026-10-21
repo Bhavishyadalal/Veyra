@@ -118,6 +118,7 @@ fun PlayerDrawer(
     titleGap: Dp = 14.dp,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val reduceDynamicBlur by PlayerSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
 
     val reduceMotion = rememberVeyraReducedMotion()
@@ -224,7 +225,7 @@ fun PlayerDrawer(
             exit = slideOutVertically(tween(VeyraMotion.duration(reduceMotion, VeyraMotion.Exit))) { it } +
                 fadeOut(tween(VeyraMotion.duration(reduceMotion, VeyraMotion.Exit))),
         ) {
-        Column(
+        app.veyra.music.ui.themes.ThemeComponentSurface(
             modifier = Modifier
                 // Capped so a phone full of rows scrolls inside the drawer
                 // rather than growing one into a full-screen page.
@@ -239,8 +240,8 @@ fun PlayerDrawer(
                 .offset { IntOffset(0, (if (dragging) drag else offset.value).roundToInt()) }
                 .clip(DRAWER_SHAPE)
                 .then(
-                    if (reduceDynamicBlur) {
-                        Modifier.background(Color(0xFF121212))
+                    if (reduceDynamicBlur || pack != null) {
+                        Modifier.background(pack?.background ?: Color(0xFF121212))
                     } else {
                         Modifier
                             .optimizedHazeEffect(
@@ -268,7 +269,9 @@ fun PlayerDrawer(
                         drag = (drag + delta).coerceAtLeast(0f)
                     }
                 }
-                .navigationBarsPadding()
+        ) {
+        Column(
+            modifier = Modifier.navigationBarsPadding()
                 .padding(horizontal = 16.dp)
                 .padding(top = 10.dp, bottom = 20.dp)
                 .verticalScroll(rememberScrollState()),
@@ -281,7 +284,7 @@ fun PlayerDrawer(
                     .padding(bottom = 12.dp)
                     .size(width = 36.dp, height = 4.dp)
                     .clip(CircleShape)
-                    .background(Color.White.copy(alpha = 0.25f)),
+                    .background((pack?.text ?: Color.White).copy(alpha = 0.25f)),
             )
             Text(
                 text = title,
@@ -289,13 +292,14 @@ fun PlayerDrawer(
                     fontSize = 19.sp,
                     fontWeight = FontWeight.Bold,
                 ),
-                color = Color.White,
+                color = pack?.text ?: Color.White,
                 modifier = Modifier
                     .fillMaxWidth()
                     .semantics { heading() }
                     .padding(start = 4.dp, bottom = titleGap),
             )
             content()
+        }
         }
         }
     }

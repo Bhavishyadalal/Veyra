@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -53,20 +54,21 @@ internal fun PlayerControlSurface(
     shape: Shape = CircleShape,
     containerColor: Color = Color.Transparent,
     framed: Boolean = false,
+    grouped: Boolean = false,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val controlTint = pack?.accent ?: tint
-    val effectiveShape = pack?.let { if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp) else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp) } ?: shape
+    val effectiveShape = if (grouped) RectangleShape else pack?.let { if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp) else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp) } ?: shape
     val contrast = LocalVeyraContrastControls.current
-    val controlBackground = if (contrast && containerColor == Color.Transparent) controlTint.copy(alpha = 0.12f) else if (pack != null && containerColor == Color.Transparent) pack.raised.copy(alpha=0.7f) else containerColor
+    val controlBackground = if (grouped) containerColor else if (contrast && containerColor == Color.Transparent) controlTint.copy(alpha = 0.12f) else if (pack != null && containerColor == Color.Transparent) pack.raised.copy(alpha=0.7f) else containerColor
     val indicatorSize = if ((visualSize ?: 48.dp) >= 64.dp) 36.dp else 24.dp
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
     val available = enabled && !busy && LocalPlayerControlsInteractive.current
     val scale =
         animateFloatAsState(
-            if (pressed && available && !reducedMotion) (if (pack?.sceneStyle == "playful") 0.92f else 0.95f) else 1f,
+            if (pressed && available && !reducedMotion && !grouped) (if (pack?.sceneStyle == "playful") 0.92f else 0.95f) else 1f,
             if (pack?.sceneStyle == "playful" && !reducedMotion)
                 androidx.compose.animation.core.spring(dampingRatio = .8f, stiffness = 650f)
             else tween(playerMotionMillis(reducedMotion, VeyraMotion.Press), easing = VeyraMotion.Easing),
@@ -107,7 +109,7 @@ internal fun PlayerControlSurface(
                 .clip(effectiveShape)
                 .background(controlBackground)
                 .then(
-                    if (framed || contrast || pack != null)
+                    if (!grouped && (framed || contrast || pack != null))
                         Modifier.background(
                                 Brush.verticalGradient(
                                     listOf(controlTint.copy(alpha = 0.13f), Color.Transparent)
@@ -425,4 +427,30 @@ internal fun PlayerTimelineLabels(
                 )
         }
     }
+}
+
+/** One continuous frame for connected controls; the children paint only selection/press fills. */
+@Composable
+internal fun PlayerControlGroup(
+    tint: Color,
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit,
+) {
+    val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    val shape = pack?.let {
+        if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp)
+        else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp)
+    } ?: CircleShape
+    Row(modifier.clip(shape)
+        .background(pack?.raised?.copy(alpha = .70f) ?: tint.copy(alpha = .12f))
+        .then(if (pack != null || LocalVeyraContrastControls.current)
+            Modifier.background(Brush.verticalGradient(listOf(tint.copy(alpha=.13f),Color.Transparent)))
+                .border(1.dp,tint.copy(alpha=.20f),shape)
+            else Modifier), verticalAlignment=Alignment.CenterVertically,content=content)
+}
+
+@Composable
+internal fun PlayerControlGroupDivider(tint: Color) {
+    Box(Modifier.width(1.dp).fillMaxHeight().padding(vertical=12.dp)
+        .background(tint.copy(alpha=.20f)))
 }

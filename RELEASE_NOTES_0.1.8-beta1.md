@@ -2,6 +2,15 @@
 
 **Preview Android source · version code 27 · based on stable 0.1.7**
 
+## Deeper theme polish and connected controls
+
+- Artist photographs now fade into the theme scene instead of an opaque color strip. Photos and music covers remain real.
+- Theme artwork continues into the shared player drawers, song/browse action sheets and Theme Studio/icon/font sheets, with existing scrolling and dismissal behavior preserved.
+- Output/Listen Together and shuffle/repeat/autoplay groups now have one clean outline, edge-to-edge segment fills and inset dividers. Removed the mismatched individual rounded frames without changing actions or touch targets.
+- Themed drawers skip background blur hidden beneath their local artwork; no new animation loops or dependencies.
+
+[Focused verification and limits](verification/DEEP-THEME-POLISH-0.1.8-beta1.md)
+
 ## Background visibility correction
 
 - Fixed the opaque navigation layer that hid theme artwork on Home, Search and Library.

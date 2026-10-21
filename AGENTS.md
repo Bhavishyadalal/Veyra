@@ -12,7 +12,9 @@
   Preview also has independent fonts, the All icon filter and revised scene/preview
   rendering: see `verification/APPEARANCE-0.1.8-beta1.md`. The actual Android
   destination background-layer correction is recorded in `verification/BACKGROUNDS-0.1.8-beta1.md`;
-  use the real retained wrapper when checking scene visibility. Font resources and OFL
+  use the real retained wrapper when checking scene visibility. Deep sheets, artist-header
+  blending and single-frame connected controls are recorded in
+  `verification/DEEP-THEME-POLISH-0.1.8-beta1.md`. Font resources and OFL
   assets are generated from existing licensed theme sources; keep those sources
   in source ZIPs and avoid duplicating font binaries.
   Stable and this new preview include the theme brand-artwork bounds correction;

@@ -1,0 +1,8 @@
+round-output: 2 controls, >=48 dp targets, selection/disabled semantics, callbacks and inset seams passed.
+round-modes-rtl: 3 controls, >=48 dp targets, selection/disabled semantics, callbacks and inset seams passed.
+cut-modes: 3 controls, >=48 dp targets, selection/disabled semantics, callbacks and inset seams passed.
+default-output: 2 controls, >=48 dp targets, selection/disabled semantics, callbacks and inset seams passed.
+selected-modes: 3 controls, >=48 dp targets, selection/disabled semantics, callbacks and inset seams passed.
+disabled-output: 2 controls, >=48 dp targets, selection/disabled semantics, callbacks and inset seams passed.
+Artist mask: unchanged photo top, theme scene revealed at foot/below photo, no-pack photo unchanged.
+Wrap-content sheet backdrop rendered with actual shared scene; captures are native component studies, not Android screenshots.

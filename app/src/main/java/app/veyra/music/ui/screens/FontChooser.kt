@@ -53,6 +53,7 @@ internal fun FontSetting() {
     ModalBottomSheet(onDismissRequest={choosing=false},
         sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),
         containerColor=MaterialTheme.colorScheme.background) {
+        app.veyra.music.ui.themes.ThemeComponentSurface {
         Column(Modifier.fillMaxWidth().heightIn(max=LocalConfiguration.current.screenHeightDp.dp*.85f)
             .padding(horizontal=20.dp).padding(bottom=24.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
             Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically) {
@@ -70,6 +71,7 @@ internal fun FontSetting() {
             Button(onClick={AppSettings.setAppearanceFont(draft);choosing=false},modifier=Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.font_apply))
             }
+        }
         }
     }
 }

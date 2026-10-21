@@ -71,6 +71,7 @@ private fun AppIconChooser(onDismiss: () -> Unit, onChanged: (AppIcon) -> Unit) 
     val visible=options.filter { textResources.getString(it.labelRes).contains(query.trim(),ignoreCase=true) }
     ModalBottomSheet(onDismissRequest={if(!changing)onDismiss()},
         sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),containerColor=MaterialTheme.colorScheme.background) {
+        app.veyra.music.ui.themes.ThemeComponentSurface {
         Column(Modifier.fillMaxWidth().heightIn(max=LocalConfiguration.current.screenHeightDp.dp*.85f)
             .padding(horizontal=20.dp).padding(bottom=24.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             Row(Modifier.fillMaxWidth()) {
@@ -151,6 +152,7 @@ private fun AppIconChooser(onDismiss: () -> Unit, onChanged: (AppIcon) -> Unit) 
                     Text(stringResource(R.string.icon_chooser_hint),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
+        }
         }
     }
 }

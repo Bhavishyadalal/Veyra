@@ -65,6 +65,7 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
     BackHandler(enabled=detailId!=null && !applying) {detailId=null}
     ModalBottomSheet(onDismissRequest={if(!applying)onDismiss()},
         sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),containerColor=MaterialTheme.colorScheme.background) {
+        app.veyra.music.ui.themes.ThemeComponentSurface {
         Column(Modifier.fillMaxWidth().heightIn(max=androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp.dp*.88f)) {
             // Header stays reachable while either collection or details scrolls.
             Row(Modifier.fillMaxWidth().padding(horizontal=12.dp),verticalAlignment=Alignment.CenterVertically) {
@@ -165,6 +166,7 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
                     }
                 }
             }
+        }
         }
     }
     removing?.let {id->

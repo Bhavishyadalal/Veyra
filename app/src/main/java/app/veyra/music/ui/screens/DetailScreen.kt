@@ -1,5 +1,7 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.themes.themeArtistArtworkFade
+
 import app.veyra.music.ui.customization.artworkShape
 import android.os.Build
 import app.veyra.music.R
@@ -1376,13 +1378,15 @@ private fun PageBackground(
     val softenFoot = canvas == null && !reduceDynamicBlur &&
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val art = heroUrl ?: page.thumbnailUrl.artworkAt(HEADER_ART_PX)
+    val themed = app.veyra.music.ui.themes.LocalThemeVisuals.current != null
 
     Box(modifier.clipToBounds()) {
         Box(
             Modifier
                 .fillMaxWidth()
                 .height(artHeight)
-                .offset { IntOffset(0, listState.headerTop(artHeight.toPx()).roundToInt()) },
+                .offset { IntOffset(0, listState.headerTop(artHeight.toPx()).roundToInt()) }
+                .themeArtistArtworkFade(themed),
         ) {
             AsyncImage(
                 model = art,
@@ -1429,11 +1433,12 @@ private fun PageBackground(
                 )
             }
 
+            // Themed headers dissolve directly into the scene beneath them.
             // Ends on the page colour at full strength, so there is no edge
             // left where the artwork stops. Eased rather than run straight: a
             // gradient that changes slope at a stop shows a line at that stop,
             // however close the colours either side of it are.
-            Box(
+            if (!themed) Box(
                 Modifier
                     .matchParentSize()
                     .background(

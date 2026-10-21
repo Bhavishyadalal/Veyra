@@ -62,7 +62,7 @@ fun ArtworkBackdrop(
 ) {
     if (app.veyra.music.ui.themes.LocalThemeVisuals.current != null) {
         Box(modifier.background(palette.background)) {
-            app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize())
+            app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize(), prominent = true)
         }
         return
     }
