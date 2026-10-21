@@ -1,5 +1,7 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.styles.*
+
 import app.veyra.music.ui.customization.artworkShape
 import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 
@@ -157,6 +159,7 @@ fun HomeScreen(
     leadHero: Boolean = true,
     currentSong: Song? = null,
     isPlaying: Boolean = false,
+    onOpenPlayer: (() -> Unit)? = null,
     offline: Boolean = false,
     showingSaved: Boolean = false,
     updating: Boolean = false,
@@ -169,6 +172,7 @@ fun HomeScreen(
     onOpenDownloads: (() -> Unit)? = null,
     onOpenLocalMusic: (() -> Unit)? = null,
 ) {
+    val appStyle = LocalAppStyle.current
     PrefetchHomeArtwork(state, listState, enabled = !offline)
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
     val homeReducedMotion = rememberVeyraReducedMotion()
@@ -206,14 +210,25 @@ fun HomeScreen(
                 },
             ) {
                 if (title != null) {
-                    item(key = "home:heading", contentType = "heading") { HomeTitle(title) }
+                    item(key = "home:heading", contentType = "heading") {
+                        if(!appStyle.custom) HomeTitle(title) else {
+                            val featuredShelf=(displayState as? UiState.Success)?.data?.firstOrNull {it.items.isNotEmpty() && !it.title.equals(RECENTS_TITLE,true)}
+                            val featured=featuredShelf?.items?.firstOrNull()?.let {item ->
+                                StyleMusicItem(item.videoId ?: item.browseId ?: item.title,item.title,item.subtitle,item.thumbnailUrl.artworkAt(HEADER_ART_PX),
+                                    {onItemClick(item,featuredShelf.title)},onItemLongPress?.let {callback->{callback(item)}})
+                            }
+                            StyledHomeOpening(appStyle,featured,currentSong?.thumbnailUrl.artworkAt(HEADER_ART_PX),currentSong?.title,currentSong?.artist,
+                                onOpenPlayer,stringResource(Res.string.now_playing),brandPainter=painterResource(Res.drawable.veyra_brand_icon),
+                                onCustomize=if(customizable)({editingHome=true}) else null,customizeLabel=stringResource(Res.string.home_customize))
+                        }
+                    }
                 }
-                if (themePack != null) {
+                if (themePack != null && !appStyle.custom) {
                     item(key = "home:theme-atmosphere", contentType = "theme-artwork") {
                         app.veyra.music.ui.themes.ThemeAtmosphere("header", Modifier.padding(horizontal = PAGE_GUTTER, vertical = 8.dp))
                     }
                 }
-                if (customizable || offline || showingSaved || updating || homeNotice != null) {
+                if ((customizable && !appStyle.custom) || offline || showingSaved || updating || homeNotice != null) {
                     item(key = "home:experience", contentType = "home:experience") {
                         HomeExperienceHeader(offline, showingSaved, updating, homeNotice, homeSections,
                             if (customizable) ({ editingHome = true }) else null,
@@ -336,7 +351,22 @@ private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexedShelves(
         // Recent history can arrive after the feed. Its insertion must not recreate every shelf.
         item(key = shelfKeys[shelfIndex], contentType = "home:shelf") {
             val openItem: (ShelfItem) -> Unit = { item -> onItemClick(item, shelf.title) }
-            if (recent) {
+            val appStyle=LocalAppStyle.current
+            val currentItem=remember(shelf.items,currentSong) {shelf.items.playingItemMatcher(currentSong)}
+            if (appStyle.custom && !recent) {
+                StyledMusicShelf(appStyle,localizeShelfTitle(shelf.title),shelf.items.map {item ->
+                    StyleMusicItem(item.videoId ?: item.browseId ?: item.title,item.title,item.subtitle,item.thumbnailUrl.artworkAt(HEADER_ART_PX),
+                        {openItem(item)},onItemLongPress?.let {callback->{callback(item)}},current=currentItem(item),playing=currentItem(item) && isPlaying)
+                })
+            } else if (appStyle.custom && recent && recentsViewType==LibraryViewType.GRID) {
+                StyledMusicShelf(appStyle,localizeShelfTitle(shelf.title),shelf.items.map {item ->
+                    StyleMusicItem(item.videoId ?: item.browseId ?: item.title,item.title,item.subtitle,item.thumbnailUrl.artworkAt(CARD_ART_PX),
+                        {openItem(item)},onItemLongPress?.let {callback->{callback(item)}},current=currentItem(item),playing=currentItem(item) && isPlaying)
+                },compact=true,trailing={
+                    HomeActionButton(icon=VeyraIcons.ListView,description=stringResource(Res.string.switch_to_list_view),
+                        onClick=onRecentsViewTypeToggle,reducedMotion=true)
+                })
+            } else if (recent) {
                 RecentShelf(
                     shelf = shelf,
                     onItemClick = openItem,

@@ -17,7 +17,7 @@ The current stable ZIP also includes the [theme installation correction](../veri
 
 The [five Keepsake packs](../themes/KEEPSAKE.md) work on stable 0.1.7, including its original 256 px validator. New launcher icons and searchable Studio remain exclusive to beta 0.1.8. Source packages retain current catalog packs and the legacy test fixture; superseded theme ZIP copies remain in Git.
 
-Current beta sources also include the [navigation background-layer fix](../verification/BACKGROUNDS-0.1.8-beta1.md) and [deep sheet/artist-background and connected-control corrections](../verification/DEEP-THEME-POLISH-0.1.8-beta1.md). Rebuild/install a preview APK to receive app-code changes; theme downloads alone do not update the installed app.
+Current beta sources include [three optional app styles alongside Original](../verification/APP-STYLES-0.1.8-beta1.md), plus the [navigation background-layer fix](../verification/BACKGROUNDS-0.1.8-beta1.md) and [deep sheet/artist-background and connected-control corrections](../verification/DEEP-THEME-POLISH-0.1.8-beta1.md). Rebuild/install a preview APK to receive app-code changes; theme downloads alone do not update the installed app.
 
 Historical preview 0.1.5 source remains available on [its preview branch](https://github.com/Bhavishyadalal/Veyra/tree/preview/0.1.5-beta1/downloads).
 

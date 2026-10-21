@@ -36,6 +36,7 @@ import java.io.File
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun ThemeGallery(onDismiss: () -> Unit) {
+    val appStyle by app.veyra.music.data.settings.AppSettings.appStyle.collectAsStateWithLifecycle()
     val context=LocalContext.current
     val catalog by ThemeRepository.catalog.collectAsStateWithLifecycle()
     val installed by ThemeRepository.installed.collectAsStateWithLifecycle()
@@ -67,6 +68,7 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
         sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),containerColor=MaterialTheme.colorScheme.background) {
         app.veyra.music.ui.themes.ThemeComponentSurface {
         Column(Modifier.fillMaxWidth().heightIn(max=androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp.dp*.88f)) {
+            if(appStyle.custom) Text(stringResource(R.string.style_themes_suspended),Modifier.padding(horizontal=20.dp,vertical=8.dp),style=MaterialTheme.typography.bodyMedium)
             // Header stays reachable while either collection or details scrolls.
             Row(Modifier.fillMaxWidth().padding(horizontal=12.dp),verticalAlignment=Alignment.CenterVertically) {
                 if(detail!=null) IconButton(onClick={detailId=null},enabled=!applying,modifier=Modifier.size(48.dp)) {
@@ -95,7 +97,7 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
                     item(key="original") {
                         ThemeStudioRow(stringResource(R.string.theme_original),
                             stringResource(if(active==null)R.string.theme_active else R.string.theme_saved_appearance),null,active==null,
-                            onClick={if(active!=null)pending="@original"},enabled=active!=null && !applying)
+                            onClick={if(active!=null && !appStyle.custom)pending="@original"},enabled=active!=null && !applying && !appStyle.custom)
                     }
                     items(visible,key={it.id}) { listing->
                         val m=installed[listing.id]
@@ -159,7 +161,7 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
                             }
                         }
                         active?.id==detail.id && (active?.version ?: 0)>=detail.version->Text(stringResource(R.string.theme_active),color=MaterialTheme.colorScheme.primary)
-                        m!=null && m.version>=detail.version->Button(onClick={pending=detail.id},enabled=!applying,modifier=Modifier.fillMaxWidth()) {Text(stringResource(R.string.theme_apply))}
+                        m!=null && m.version>=detail.version->Button(onClick={pending=detail.id},enabled=!applying && !appStyle.custom,modifier=Modifier.fillMaxWidth()) {Text(stringResource(R.string.theme_apply))}
                         else->Button(onClick={ThemeRepository.download(detail)},enabled=transfer==null && detail.minAppCode<=BuildConfig.VERSION_CODE && !applying,modifier=Modifier.fillMaxWidth()) {
                             Text(stringResource(if(detail.minAppCode>BuildConfig.VERSION_CODE)R.string.theme_update_required else if(m!=null)R.string.theme_download_update else R.string.theme_download))
                         }
@@ -186,6 +188,7 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
             confirmButton={TextButton(enabled=!applying,onClick={
                 applying=true
                 scope.launch {
+                    if(app.veyra.music.data.settings.AppSettings.appStyle.value.custom) { applying=false;pending=null;return@launch }
                     val success=ThemeRepository.apply(selection.takeUnless {it=="@original"})
                     if(success && matchingIcon) {
                         val icon=app.veyra.music.AppIcon.forTheme(selection)

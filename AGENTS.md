@@ -17,6 +17,10 @@
   `verification/DEEP-THEME-POLISH-0.1.8-beta1.md`. Font resources and OFL
   assets are generated from existing licensed theme sources; keep those sources
   in source ZIPs and avoid duplicating font binaries.
+  Preview also has three optional app styles alongside Original; see
+  `verification/APP-STYLES-0.1.8-beta1.md`. Custom styles suspend downloaded
+  theme/font visuals without replacing their saved selections. Preserve the
+  generated-resource font/license inputs under `design/app-styles/`.
   Stable and this new preview include the theme brand-artwork bounds correction;
   see `verification/THEME-INSTALL-0.1.7.md` before changing theme validation.
   Promotion does not establish APK publication, device validation or clean lint: see

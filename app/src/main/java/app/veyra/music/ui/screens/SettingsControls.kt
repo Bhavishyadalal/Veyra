@@ -677,10 +677,11 @@ internal fun SettingsPresetRow(
     selectedIndex: Int,
     onSelect: (Int) -> Unit,
     swatches: List<Color>? = null,
+    enabled: Boolean = true,
 ) {
     var choosing by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
     val focus = androidx.compose.ui.platform.LocalFocusManager.current
-    SettingsRow(icon = icon, title = title, subtitle = subtitle.takeIf { it.isNotBlank() },
+    SettingsRow(icon = icon, title = title, enabled = enabled, subtitle = subtitle.takeIf { it.isNotBlank() },
         onClick = { focus.clearFocus(); choosing = true },
         trailing = {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -695,7 +696,7 @@ internal fun SettingsPresetRow(
                 Chevron()
             }
         })
-    if (choosing) {
+    if (choosing && enabled) {
         ModalBottomSheet(onDismissRequest = { choosing = false },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             containerColor = MaterialTheme.colorScheme.surface,

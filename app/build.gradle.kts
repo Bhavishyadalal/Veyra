@@ -494,6 +494,10 @@ val appearanceFontSources = mapOf(
 )
 val prepareAppearanceFonts = tasks.register<Copy>("prepareAppearanceFonts") {
     into(layout.buildDirectory.dir("generated/appearanceFonts"))
+    from(rootProject.file("design/app-styles/CormorantGaramond.ttf")) {
+        into("font")
+        rename { "app_style_serif.ttf" }
+    }
     appearanceFontSources.forEach { (name, path) ->
         from(rootProject.file("themes/$path")) {
             into("font")
@@ -503,6 +507,7 @@ val prepareAppearanceFonts = tasks.register<Copy>("prepareAppearanceFonts") {
 }
 val prepareAppearanceFontLicenses = tasks.register<Copy>("prepareAppearanceFontLicenses") {
     into(layout.buildDirectory.dir("generated/appearanceFontLicenses/font-licenses"))
+    from(rootProject.file("design/app-styles/CormorantGaramond-OFL.txt"))
     appearanceFontSources.values.forEach { path ->
         val theme = path.substringBefore('/')
         val name = path.substringAfterLast('/').removeSuffix(".ttf")

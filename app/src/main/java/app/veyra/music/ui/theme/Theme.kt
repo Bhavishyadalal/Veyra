@@ -1,6 +1,7 @@
 package app.veyra.music.ui.theme
 
 import app.veyra.music.ui.customization.*
+import app.veyra.music.ui.styles.*
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -131,6 +132,7 @@ fun VeyraTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
+    val appStyle by AppSettings.appStyle.collectAsStateWithLifecycle()
     val accent by AppSettings.accentPalette.collectAsStateWithLifecycle()
     val appearanceFont by AppSettings.appearanceFont.collectAsStateWithLifecycle()
     val corners by AppSettings.artworkCorners.collectAsStateWithLifecycle()
@@ -139,23 +141,42 @@ fun VeyraTheme(
     val strongerText by AppSettings.strongerText.collectAsStateWithLifecycle()
     val contrastControls by AppSettings.contrastPlayerControls.collectAsStateWithLifecycle()
     val packState by app.veyra.music.data.themes.ThemeRepository.active.collectAsStateWithLifecycle()
-    val pack = packState
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val styleAssets by androidx.compose.runtime.produceState<Map<String,String>>(emptyMap(),appStyle) {
+        value = if (appStyle != AppStyle.LISTENING_ROOM) emptyMap() else kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            runCatching {
+                val file=java.io.File(context.filesDir,"app-style-listening-room-v1.webp")
+                if(!file.exists()) {
+                    val staging=java.io.File(context.filesDir,"app-style-listening-room-v1.tmp")
+                    context.assets.open("app-styles/listening-room.webp").use {input->staging.outputStream().use {input.copyTo(it)}}
+                    check(staging.renameTo(file))
+                }
+                mapOf("header" to file.path)
+            }.getOrDefault(emptyMap())
+        }
+    }
+    val pack = remember(appStyle,packState,styleAssets) { effectiveStyleVisuals(appStyle,packState,styleAssets) }
     // Keep fonts and palette on the same activation snapshot during live updates.
-    val manifest = remember(pack) { pack?.let { app.veyra.music.data.themes.ThemeRepository.activeManifest() } }
-    val selectedTypography = remember(pack, strongerText, appearanceFont) {
+    val manifest = remember(pack,appStyle) { pack?.takeUnless {appStyle.custom}?.let { app.veyra.music.data.themes.ThemeRepository.activeManifest() } }
+    val selectedTypography = remember(pack, strongerText, appearanceFont, appStyle) {
         val base = if (strongerText) StrongerTypography else VeyraTypography
-        runCatching { appearanceTypography(base, appearanceFont, pack) }.getOrDefault(base)
+        if (appStyle.custom) {
+            val heading = if(appStyle==AppStyle.AFTER_DARK) FontFamily(Font(R.font.appearance_barlow_condensed,FontWeight.Bold))
+                else FontFamily(Font(R.font.app_style_serif,FontWeight.Bold))
+            appStyleTypography(base, heading, FontFamily(Font(R.font.appearance_manrope)))
+        } else runCatching { appearanceTypography(base, appearanceFont, pack) }.getOrDefault(base)
     }
     CompositionLocalProvider(
+        LocalAppStyle provides appStyle,
         app.veyra.music.ui.themes.LocalThemeVisuals provides pack,
-        LocalArtworkCorners provides corners,
+        LocalArtworkCorners provides (if(appStyle.custom) ArtworkCorners.DEFAULT else corners),
         LocalListSpacing provides spacing,
         LocalSubtleMotion provides subtle,
         LocalVeyraWordmarkFont provides (if (pack?.asset("brandIcon") != null) selectedTypography.headlineLarge.fontFamily else VeyraWordmarkFont),
         LocalVeyraContrastControls provides contrastControls,
     ) {
         MaterialTheme(
-            colorScheme = manifest?.let { packPalette(it.palette) } ?: paletteFor(accent, darkTheme),
+            colorScheme = if(appStyle.custom)appStyle.colorScheme() else manifest?.let { packPalette(it.palette) } ?: paletteFor(accent, darkTheme),
             typography = selectedTypography,
             shapes = if (pack == null) androidx.compose.material3.Shapes() else androidx.compose.material3.Shapes(
                 small = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),

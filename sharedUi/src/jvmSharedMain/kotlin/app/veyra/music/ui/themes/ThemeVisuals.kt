@@ -150,6 +150,10 @@ fun themeSceneScrimAlpha(theme: ThemeVisuals): Float {
 @Composable
 fun ThemeScene(modifier: Modifier = Modifier, prominent: Boolean = false) {
     val theme = LocalThemeVisuals.current ?: return
+    if (theme.sceneStyle.startsWith("app_")) {
+        app.veyra.music.ui.styles.StyleBackdrop(app.veyra.music.ui.styles.LocalAppStyle.current,theme.asset("header"),modifier)
+        return
+    }
     val scrim=remember(theme) {themeSceneScrimAlpha(theme)}
     Box(modifier.background(theme.background).clearAndSetSemantics {}) {
         theme.asset("header")?.let { path ->

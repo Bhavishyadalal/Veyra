@@ -1361,4 +1361,13 @@
     <string name="font_preview_body">Clear song titles. Comfortable reading.</string>
     <string name="font_selection_hint">Your font choice stays when you change themes. Follow theme restores each theme’s own typography. Font licenses are included with the app.</string>
     <string name="font_apply">Apply font</string>
+    <string name="app_style">App style</string>
+    <string name="app_style_hint">Choose a complete look for Home and the rest of Veyra. Your Original theme and font choices stay saved.</string>
+    <string name="style_original_hint">Your familiar Home. All downloadable themes and font choices.</string>
+    <string name="style_editorial_hint">Cream paper, burgundy accents and bold editorial covers.</string>
+    <string name="style_room_hint">Botanical greens, warm typography and record-sleeve collages.</string>
+    <string name="style_night_hint">Midnight blue, oversized type and your current song artwork.</string>
+    <string name="style_apply">Apply style</string>
+    <string name="style_original_only">Available in Original. Your selection stays saved.</string>
+    <string name="style_themes_suspended">This app style has its own palette and fonts. Switch to Original to apply downloadable themes.</string>
 </resources>

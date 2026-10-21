@@ -19,7 +19,7 @@ sourceSets.main {
     kotlin.srcDir(veyraRoot.resolve("sharedUi/src/jvmSharedMain/kotlin/app/veyra/music/ui"))
     kotlin.srcDir(veyraRoot.resolve("app/src/main/java/app/veyra/music/ui/screens"))
     kotlin.srcDir(veyraRoot.resolve("app/src/main/java/app/veyra/music/ui/components"))
-    kotlin.include("ProbeDeepTheme.kt", "ProbePageBackground.kt", "**/ThemePageSurface.kt", "RenderAppearance.kt", "ProbeThemeCache.kt", "**/ThemePreviewRequests.kt", "RenderKeepsake.kt", "RenderAtelier.kt", "RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt", "**/ThemeNavigation.kt", "**/ThemeStudioComponents.kt", "**/VeyraBrandContent.kt",
+    kotlin.include("RenderAppStyles.kt", "**/styles/*.kt", "ProbeDeepTheme.kt", "ProbePageBackground.kt", "**/ThemePageSurface.kt", "RenderAppearance.kt", "ProbeThemeCache.kt", "**/ThemePreviewRequests.kt", "RenderKeepsake.kt", "RenderAtelier.kt", "RenderThemes.kt", "PlayerSettingsAdapter.kt", "**/ThemeVisuals.kt", "**/ThemeNavigation.kt", "**/ThemeStudioComponents.kt", "**/VeyraBrandContent.kt",
         "**/PlayerControlPrimitives.kt", "**/PlayerInteractionPolicy.kt", "**/PlayerScrubState.kt",
         "**/ReadableLayout.kt", "**/Customization.kt", "**/VeyraSurfaces.kt", "**/VeyraMotion.kt", "**/VeyraIcons.kt", "**/SettingsIcons.kt",
         "SettingsControls.kt", "VeyraSwitchColors.kt", "**/HomeComponents.kt")
@@ -101,5 +101,11 @@ tasks.register<JavaExec>("probePageBackground") {
 tasks.register<JavaExec>("probeDeepTheme") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("app.veyra.music.ui.player.ProbeDeepThemeKt")
+    systemProperty("veyra.root", veyraRoot)
+}
+
+tasks.register<JavaExec>("renderAppStyles") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("app.veyra.music.ui.player.RenderAppStylesKt")
     systemProperty("veyra.root", veyraRoot)
 }

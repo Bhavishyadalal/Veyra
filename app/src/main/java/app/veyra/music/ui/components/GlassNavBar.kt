@@ -267,7 +267,7 @@ fun GlassNavBar(
                     title = {
                         Text(
                             text = tab.label,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = app.veyra.music.ui.styles.styleNavigationLabelStyle(),
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                             color = tint,
                             maxLines = if (pack != null) 2 else 1,

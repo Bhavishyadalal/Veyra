@@ -2,6 +2,25 @@
 
 **Preview Android source · version code 27 · based on stable 0.1.7**
 
+## Three optional app styles
+
+Choose **Settings → Appearance → App style**:
+
+| Style | Home and app-wide identity |
+| --- | --- |
+| **Original** | Existing Home, downloadable themes and independent fonts remain available. |
+| **Music Editorial** | Cream paper, burgundy feature panel, large serif typography and cover mosaics. |
+| **Listening Room** | Original generated botanical artwork, warm serif headings, compact recent sleeves and framed collages. |
+| **After Dark** | Midnight/cobalt palette, condensed poster lettering and a record-shaped image following the loaded song. |
+
+- Styles coordinate Search, Explore, Library, Settings, navigation and themed sheets through their own palette, typography and surfaces. Editorial's artwork-led player uses a matching dark burgundy/cream treatment for cover/video contrast.
+- Switching styles is live and does not request playback. Original's theme/font choices stay saved; applying downloadable themes is disabled while a custom style is selected. Each Home retains its own scroll state.
+- After Dark keeps the loaded song artwork while paused. No loaded song, missing art or a failed request shows a native abstract record; no bundled stock portrait is used.
+- Existing Home refresh, saved/offline content, retries, pagination, Google sign-in, customization, recent-list toggle and track actions remain. The new tune button in custom Home opens the existing section editor.
+- Layouts stack on narrow screens/large text. Decorative collage rotation is static; no animation engine or permanent effects loop was added.
+
+[App styles: actual verification and limits](verification/APP-STYLES-0.1.8-beta1.md)
+
 ## Deeper theme polish and connected controls
 
 - Artist photographs now fade into the theme scene instead of an opaque color strip. Photos and music covers remain real.

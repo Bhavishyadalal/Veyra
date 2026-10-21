@@ -743,6 +743,7 @@ fun SettingsScreen(
             }
 
             SearchableSettingsGroup(search, category = SettingsCategory.APPEARANCE, header = stringResource(R.string.appearance)) {
+                row(stringResource(R.string.app_style), "home", "editorial", "listening room", "after dark") { AppStyleSetting() }
                 row(stringResource(R.string.appearance_fonts), "font", "typography", "typeface") { FontSetting() }
                 row(stringResource(R.string.theme_packs), "themes", "halloween", "fonts", "icons") {
                     SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.theme_packs),
@@ -750,20 +751,20 @@ fun SettingsScreen(
                 }
                 val themeTitle = stringResource(R.string.theme)
                 row(themeTitle, "dark mode", "light mode") {
-                    SettingsPresetRow(icon = Icons.Rounded.Brightness4, title = themeTitle, subtitle = "",
+                    SettingsPresetRow(enabled = !app.veyra.music.ui.styles.LocalAppStyle.current.custom, icon = Icons.Rounded.Brightness4, title = themeTitle, subtitle = if(app.veyra.music.ui.styles.LocalAppStyle.current.custom)stringResource(R.string.style_original_only) else "",
                         options = ThemeMode.entries.map { it.localizedLabel() },
                         selectedIndex = ThemeMode.entries.indexOf(theme),
                         onSelect = { AppSettings.setThemeMode(ThemeMode.entries[it]) })
                 }
                 row(stringResource(R.string.custom_accent), "accent", "color", "palette") {
-                    SettingsPresetRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_accent),
+                    SettingsPresetRow(enabled = !app.veyra.music.ui.styles.LocalAppStyle.current.custom, icon = SettingsIcons.Appearance, title = stringResource(R.string.custom_accent),
                         subtitle = stringResource(R.string.custom_accent_hint),
                         options = androidx.compose.ui.res.stringArrayResource(R.array.custom_accent_options).toList(),
                         selectedIndex = AccentPalette.entries.indexOf(accentPalette), onSelect = { AppSettings.setAccentPalette(AccentPalette.entries[it]) },
                         swatches = listOf(Color(0xFFD9C4FF), Color(0xFF9BE1D5), Color(0xFFFFD58A), Color(0xFFFFB1C4)))
                 }
                 row(stringResource(R.string.custom_artwork_corners), "artwork", "corners", "covers") {
-                    SettingsPresetRow(icon = SettingsIcons.Icons, title = stringResource(R.string.custom_artwork_corners),
+                    SettingsPresetRow(enabled = !app.veyra.music.ui.styles.LocalAppStyle.current.custom, icon = SettingsIcons.Icons, title = stringResource(R.string.custom_artwork_corners),
                         subtitle = stringResource(R.string.custom_artwork_corners_hint),
                         options = androidx.compose.ui.res.stringArrayResource(R.array.custom_corner_options).toList(),
                         selectedIndex = ArtworkCorners.entries.indexOf(artworkCorners), onSelect = { AppSettings.setArtworkCorners(ArtworkCorners.entries[it]) })

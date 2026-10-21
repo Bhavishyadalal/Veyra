@@ -358,6 +358,7 @@ object AppSettings {
     /** Freezes the main player's mesh gradient instead of letting it drift/crossfade. */
     val reduceAnimation = MutableStateFlow(false)
     val accentPalette = MutableStateFlow(AccentPalette.DEFAULT)
+    val appStyle = MutableStateFlow(app.veyra.music.ui.styles.AppStyle.ORIGINAL)
     val appearanceFont = MutableStateFlow(app.veyra.music.data.themes.AppearanceFont.FOLLOW_THEME)
     val artworkCorners = MutableStateFlow(ArtworkCorners.DEFAULT)
     val listSpacing = MutableStateFlow(ListSpacing.COMFORTABLE)
@@ -865,6 +866,7 @@ object AppSettings {
         repeatMode.value = prefs.getInt(KEY_REPEAT_MODE, Player.REPEAT_MODE_OFF)
         showNerdStats.value = prefs.getBoolean(KEY_NERD_STATS, false)
         accentPalette.value = savedChoice(prefs.getString("accent_palette", null), AccentPalette.DEFAULT)
+        appStyle.value = app.veyra.music.ui.styles.AppStyle.fromStoredName(prefs.getString("app_style", null))
         appearanceFont.value = app.veyra.music.data.themes.AppearanceFont.fromStoredName(prefs.getString("appearance_font", null))
         artworkCorners.value = savedChoice(prefs.getString("artwork_corners", null), ArtworkCorners.DEFAULT)
         listSpacing.value = savedChoice(prefs.getString("list_spacing", null), ListSpacing.COMFORTABLE)
@@ -1235,6 +1237,10 @@ object AppSettings {
     }
 
     fun setAccentPalette(value: AccentPalette) { accentPalette.value = value; prefs.edit().putString("accent_palette", value.name).apply() }
+    fun setAppStyle(value: app.veyra.music.ui.styles.AppStyle) {
+        appStyle.value = value
+        prefs.edit().putString("app_style", value.name).apply()
+    }
     fun setAppearanceFont(value: app.veyra.music.data.themes.AppearanceFont) {
         appearanceFont.value = value
         prefs.edit().putString("appearance_font", value.name).apply()
@@ -1248,7 +1254,7 @@ object AppSettings {
         prefs.edit().putBoolean("subtle_motion", subtleMotion.value).apply()
     }
     fun resetAppearanceCustomization() {
-        prefs.edit().remove("accent_palette").remove("artwork_corners").remove("list_spacing").remove("appearance_font")
+        prefs.edit().remove("accent_palette").remove("artwork_corners").remove("list_spacing").remove("appearance_font").remove("app_style")
             .remove(KEY_STRONGER_TEXT).remove("subtle_motion").remove(KEY_REDUCE_ANIMATION).apply()
         readAll()
     }

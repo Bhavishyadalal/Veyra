@@ -37,11 +37,17 @@ private fun AppearanceFont.label(): String = stringResource(when(this) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FontSetting() {
+    val style by AppSettings.appStyle.collectAsStateWithLifecycle()
     val selected by AppSettings.appearanceFont.collectAsStateWithLifecycle()
     val stronger by AppSettings.strongerText.collectAsStateWithLifecycle()
     var choosing by rememberSaveable {mutableStateOf(false)}
     SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.appearance_fonts),
-        subtitle=selected.label(),onClick={choosing=true})
+        subtitle=if(style.custom)stringResource(R.string.style_original_only) else selected.label(),onClick={choosing=true})
+    if(style.custom) {
+        if(choosing) AlertDialog(onDismissRequest={choosing=false},text={Text(stringResource(R.string.style_themes_suspended))},
+            confirmButton={TextButton(onClick={choosing=false}) {Text(stringResource(android.R.string.ok))}})
+        return
+    }
     if(!choosing) return
     var draftName by rememberSaveable {mutableStateOf(selected.name)}
     val draft=AppearanceFont.fromStoredName(draftName)

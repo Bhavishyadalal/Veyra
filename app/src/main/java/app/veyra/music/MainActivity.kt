@@ -387,7 +387,8 @@ class MainActivity : AppCompatActivity() {
                 applyPerformanceMode(highPerformance, performanceRefreshRate, composeView)
             }
             val activePack by app.veyra.music.data.themes.ThemeRepository.active.collectAsStateWithLifecycle()
-            val darkTheme = if (activePack != null) true else when (theme) {
+            val appStyle by AppSettings.appStyle.collectAsStateWithLifecycle()
+            val darkTheme = if(appStyle.custom) appStyle.dark else if (activePack != null) true else when (theme) {
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
                 ThemeMode.LIGHT -> false
                 ThemeMode.DARK -> true
@@ -1103,7 +1104,7 @@ private fun VeyraApp(
     }
 
     val rootPageState = rememberSaveableStateHolder()
-    val homeListState = rememberLazyListState()
+    val homeListState = app.veyra.music.ui.styles.rememberStyleHomeListState()
     val exploreListState = rememberLazyListState()
     val moodGenreListState = rememberLazyListState()
     val libraryListState = rememberLazyListState()
@@ -2326,6 +2327,7 @@ private fun VeyraApp(
                         it.memberId == playback.startedBy
                     }?.displayName?.takeIf(String::isNotBlank)
             }
+        app.veyra.music.ui.styles.StylePlayerEnvironment {
         NowPlayingScreen(
             song = displayedSong,
             playedBy = playedBy,
@@ -2575,6 +2577,7 @@ private fun VeyraApp(
                 }
             },
         )
+        }
     }
 
     Box(
@@ -3123,6 +3126,7 @@ private fun VeyraApp(
                                 listState = homeListState,
                                 currentSong = player.song,
                                 isPlaying = player.isPlaying,
+                                onOpenPlayer = { showNowPlaying = true },
                                 title = stringResource(R.string.listen_now),
                                 signedIn = signedIn,
                                 onSignIn = { webSession = WebSessionMode.SIGN_IN },

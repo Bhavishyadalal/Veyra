@@ -64,7 +64,8 @@ fun ThemeNavigationItem(
         .padding(vertical = 9.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         icon()
         Spacer(Modifier.height(3.dp))
-        Text(label, style = MaterialTheme.typography.labelMedium,
+        Text(label, style = app.veyra.music.ui.styles.styleNavigationLabelStyle(),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.fillMaxWidth(),
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
             color = tint, maxLines = 2, overflow = TextOverflow.Ellipsis)
     }
