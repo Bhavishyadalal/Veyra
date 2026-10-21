@@ -98,7 +98,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import androidx.compose.runtime.saveable.SaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -2583,7 +2582,6 @@ private fun VeyraApp(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
-        app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize(), prominent = true)
         // A pushed album/artist/playlist page replaces the tab content but
         // leaves the tab bar and mini player in place.
         // Replay's three layers unwind in the order they were opened. Ahead of
@@ -2741,7 +2739,7 @@ private fun VeyraApp(
                     label = "content",
                 ) { destination ->
                     val key = destination.key
-                    RetainedRootPage(rootPageState, key) {
+                    app.veyra.music.ui.themes.RetainedRootPage(rootPageState, key) {
                         // Every branch below reads `key` rather than the state that
                         // produced it. The two are the same thing only for the page
                         // being entered: the one on its way out is still composed,
@@ -3200,7 +3198,7 @@ private fun VeyraApp(
                                 modifier = Modifier.fillMaxSize(),
                                 label = "exploreCategory",
                             ) { category ->
-                                Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+                                app.veyra.music.ui.themes.ThemePageSurface {
                                     if (category != null) {
                                         val heldShelves = remember(category.browseId) { mutableStateOf(moodGenreShelves) }
                                         if (selectedMoodGenre?.browseId == category.browseId) heldShelves.value = moodGenreShelves
@@ -3482,7 +3480,7 @@ private fun VeyraApp(
                 ) { (overlay, _) ->
                     when (overlay) {
                         "account_scrobbling" -> {
-                            Surface(
+                            app.veyra.music.ui.themes.ThemePageSurface(
                                 modifier = Modifier.fillMaxSize(),
                                 color = MaterialTheme.colorScheme.background,
                             ) {
@@ -3509,7 +3507,7 @@ private fun VeyraApp(
                             }
                         }
                         "sources" -> {
-                            Surface(
+                            app.veyra.music.ui.themes.ThemePageSurface(
                                 modifier = Modifier.fillMaxSize(),
                                 color = MaterialTheme.colorScheme.background,
                             ) {
@@ -3523,7 +3521,7 @@ private fun VeyraApp(
                             }
                         }
                         "listen_together" -> {
-                            Surface(
+                            app.veyra.music.ui.themes.ThemePageSurface(
                                 modifier = Modifier.fillMaxSize(),
                                 color = MaterialTheme.colorScheme.background,
                             ) {
@@ -3540,7 +3538,7 @@ private fun VeyraApp(
                             }
                         }
                         "equalizer" -> {
-                            Surface(
+                            app.veyra.music.ui.themes.ThemePageSurface(
                                 modifier = Modifier.fillMaxSize(),
                                 color = MaterialTheme.colorScheme.background,
                             ) {
@@ -3549,7 +3547,7 @@ private fun VeyraApp(
                         }
                         "replay" -> {
                             if (!showReplayShare) {
-                                Surface(
+                                app.veyra.music.ui.themes.ThemePageSurface(
                                     modifier = Modifier.fillMaxSize(),
                                     color = MaterialTheme.colorScheme.background,
                                 ) {
@@ -5826,13 +5824,3 @@ private const val TAB_SEARCH = 1
  * prefix has to be the one thing both the writing and the reading agree on.
  */
 private const val TAB_KEY = "tab:"
-
-/** Retain tab-local UI and Settings across pushes; transient details do not accumulate saved states. */
-@Composable
-private fun RetainedRootPage(holder: SaveableStateHolder, pageKey: String, content: @Composable () -> Unit) {
-    // An opaque slot prevents text overlap and mid-transition dimming between transparent pages.
-    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        if (pageKey.startsWith(TAB_KEY) || pageKey == "settings") holder.SaveableStateProvider(pageKey, content)
-        else content()
-    }
-}

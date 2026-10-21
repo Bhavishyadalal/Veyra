@@ -508,7 +508,8 @@ fun DetailScreen(
             // dissolve, so it takes the same [ArtworkPalette.background] the
             // bars at either end of the screen are already fading into.
             val pageColor = if (isArtist) palette.wash else palette.background
-            BoxWithConstraints(Modifier.fillMaxSize().background(pageColor)) {
+            app.veyra.music.ui.themes.ThemePageSurface(color = pageColor) {
+            BoxWithConstraints(Modifier.fillMaxSize()) {
                 // Measured rather than read off the window. The player runs
                 // full-screen at every window size, so this page's own width in
                 // landscape is the *whole* window. Straight off that width, the ratio hands back
@@ -849,6 +850,7 @@ fun DetailScreen(
                 }
 
     }
+            }
 } else {
     ArtistShelfGridPage(
         shelf = targetShelf,
@@ -2246,7 +2248,8 @@ private fun ArtistShelfGridPage(
     modifier: Modifier = Modifier,
 ) {
     val gridState = rememberLazyGridState()
-    BoxWithConstraints(modifier.fillMaxSize().background(palette.background)) {
+    app.veyra.music.ui.themes.ThemePageSurface(modifier, color = palette.background) {
+    BoxWithConstraints(Modifier.fillMaxSize()) {
         val grid = libraryGrid(maxWidth - PAGE_GUTTER * 2)
         LazyVerticalGrid(
             columns = GridCells.Fixed(grid.columns),
@@ -2271,6 +2274,7 @@ private fun ArtistShelfGridPage(
                 )
             }
         }
+    }
     }
 }
 

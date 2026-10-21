@@ -418,7 +418,6 @@ fun SettingsScreen(
     }
 
     Box(modifier.fillMaxSize()) {
-    app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize())
     Column(
         modifier = Modifier.fillMaxSize().padding(contentPadding),
     ) {

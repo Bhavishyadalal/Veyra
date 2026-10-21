@@ -2,6 +2,14 @@
 
 **Preview Android source · version code 27 · based on stable 0.1.7**
 
+## Background visibility correction
+
+- Fixed the opaque navigation layer that hid theme artwork on Home, Search and Library.
+- Applied the same readable scene to Explore/category pages, album/artist/playlist details and Settings subpages. Real artist photos and album covers remain intact.
+- Each transitioning page retains its own opaque base, preventing underlying page content from showing through. No background animation loop was added.
+
+[Background fix verification](verification/BACKGROUNDS-0.1.8-beta1.md)
+
 ## Theme polish and independent fonts
 
 - More visible themed backgrounds across Home, Search and Library, with a contrast-aware scrim and static artwork.

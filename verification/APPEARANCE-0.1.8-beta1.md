@@ -2,6 +2,8 @@
 
 **Preview only · 0.1.8-beta1 / code 27.** Stable Android, its source ZIP and published theme-pack bytes remain unchanged.
 
+> **Correction after device screenshots:** the previous native component studies did not exercise the opaque `RetainedRootPage` used by Android destinations. The background claim below was therefore incomplete for the actual main screens. See [the navigation-layer correction and targeted regression checks](BACKGROUNDS-0.1.8-beta1.md).
+
 ## Delivered changes
 
 - More visible static theme artwork on Home, Search and Library. A palette-aware scrim protects foreground and muted text against even white artwork. Real music covers and existing loading/navigation/playback behavior remain intact.

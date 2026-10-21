@@ -1,0 +1,9 @@
+tab:0: artwork visible at 27794/30000 sampled pixels; actual retained wrapper, RTL and 150% font scale.
+tab:1: artwork visible at 27794/30000 sampled pixels; actual retained wrapper, RTL and 150% font scale.
+tab:2: artwork visible at 27794/30000 sampled pixels; actual retained wrapper, RTL and 150% font scale.
+tab:3: artwork visible at 27794/30000 sampled pixels; actual retained wrapper, RTL and 150% font scale.
+settings: artwork visible at 27794/30000 sampled pixels; actual retained wrapper, RTL and 150% font scale.
+artist-detail: artwork visible at 27794/30000 sampled pixels; actual retained wrapper, RTL and 150% font scale.
+settings-overlay: artwork visible at 27794/30000 sampled pixels; actual retained wrapper, RTL and 150% font scale.
+Default/no-pack fallback remains opaque; old opaque-cover regression control hides the image.
+Native shared-wrapper checks; not full Android screenshots or device tests.
