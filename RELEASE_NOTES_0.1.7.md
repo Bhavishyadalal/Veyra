@@ -6,6 +6,15 @@
 
 ## A new atmosphere for your music
 
+### Theme installation correction · 21 October 2026
+
+- Fixed downloaded themes returning to “Download theme” without appearing under Downloaded: 36 published packs use 512×512 brand artwork, which the app previously rejected under its 256×256 control-icon limit.
+- Accept brand artwork up to 512×512 while preserving the 256×256 control-icon limit, 2048×2048 scene limit, checksums and archive validation.
+- Keep installation feedback beside the Download/Apply controls so failures remain visible without scrolling.
+- Existing theme packs and launcher icons are unchanged. This correction requires an updated APK built from the refreshed source; an already installed APK cannot receive this code fix through a theme download.
+
+[Theme installation verification](verification/THEME-INSTALL-0.1.7.md)
+
 - **Theme Studio:** 41 downloadable themes with original artwork, licensed fonts, readable palettes and themed player/navigation controls. Download once and use installed themes offline.
 - **69 launcher choices:** the original black-and-white Veyra waveform, matching theme icons and twelve separate Glass Atelier icons. Applying a theme offers an explicit, optional matching launcher selection.
 - Stable builds use the catalog on `main`; the historical beta retains its separate catalog. Existing theme-pack bytes, licenses, artwork and launcher identities are preserved.

@@ -6,6 +6,9 @@
   `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
   `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
   Keep future preview features out of stable until the owner explicitly promotes them.
+  `preview/0.1.8-beta1` starts from stable 0.1.7; version metadata is not bumped yet.
+  Stable and this new preview include the theme brand-artwork bounds correction;
+  see `verification/THEME-INSTALL-0.1.7.md` before changing theme validation.
   Promotion does not establish APK publication, device validation or clean lint: see
   `verification/STABLE-0.1.7-PROMOTION.md` and the preserved submission-review inventory.
 - For app/version/download changes, also update and push the separate website

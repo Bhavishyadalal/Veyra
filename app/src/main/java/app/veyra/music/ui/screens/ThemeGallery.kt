@@ -121,10 +121,12 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
                             Text(stringResource(R.string.theme_remove))
                         }
                     }
-                    message?.let {value->item {Text(value,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)}}
                 }
                 HorizontalDivider()
                 Column(Modifier.fillMaxWidth().padding(horizontal=20.dp).padding(top=12.dp,bottom=24.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                    // Installation failures must remain visible beside Retry/Apply, even
+                    // when the artwork and description have been scrolled out of view.
+                    message?.let {value->Text(value,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)}
                     when {
                         download!=null->{
                             val percent=(download.bytes.toFloat()/download.total).coerceIn(0f,1f)

@@ -20,6 +20,27 @@ class ThemePackTest {
         ZipOutputStream(file.outputStream()).use { z -> entries.forEach { (name,data) -> z.putNextEntry(ZipEntry(name));z.write(data);z.closeEntry() } }
     }
     private fun listing(file: File) = catalog().copy(bytes=file.length(),sha256=ThemePack.sha256(file.readBytes()))
+    // Inspect the actual published PNG/VP8 headers on the JVM; Android's decoder
+    // is not available in local unit tests. Both paths use the runtime size policy.
+    private fun validatePublishedImageBounds(m: ThemeManifest, dir: File) {
+        m.assets.filterKeys { !it.endsWith("Font") }.forEach { (key,path) ->
+            val bytes=File(dir,path).readBytes()
+            val (width,height)=if(path.endsWith(".png")) {
+                assertArrayEquals(byteArrayOf(0x89.toByte(),0x50,0x4e,0x47,13,10,26,10),bytes.copyOfRange(0,8))
+                assertEquals("IHDR",bytes.copyOfRange(12,16).decodeToString())
+                val header=java.nio.ByteBuffer.wrap(bytes)
+                header.getInt(16) to header.getInt(20)
+            } else {
+                assertEquals("RIFF",bytes.copyOfRange(0,4).decodeToString())
+                assertEquals("WEBPVP8 ",bytes.copyOfRange(8,16).decodeToString())
+                assertArrayEquals(byteArrayOf(0x9d.toByte(),0x01,0x2a),bytes.copyOfRange(23,26))
+                fun dimension(offset: Int)=((bytes[offset].toInt() and 255) or
+                    ((bytes[offset+1].toInt() and 255) shl 8)) and 0x3fff
+                dimension(26) to dimension(28)
+            }
+            ThemePack.validateImageBounds(key,width,height)
+        }
+    }
     @Test fun officialPackInstallsWithExactlyItsDeclaredAssetsAndNoExecutableContent() {
         val pack=File(project,"themes/packs/halloween-nocturne-v3.zip")
         val root=temp.newFolder()
@@ -28,6 +49,18 @@ class ThemePackTest {
         assertEquals(manifest(),m)
         assertEquals(m.files.keys+"theme.json",dir.walkTopDown().filter{it.isFile}.map{it.relativeTo(dir).invariantSeparatorsPath}.toSet())
         assertEquals(setOf(dir.name),root.list()!!.toSet())
+    }
+    @Test fun publishedBrandSizeIsAcceptedWithoutRelaxingControlOrSceneLimits() {
+        ThemePack.validateImageBounds("brandIcon",512,512)
+        ThemePack.validateImageBounds("play",256,256)
+        ThemePack.validateImageBounds("header",2048,2048)
+        rejects { ThemePack.validateImageBounds("brandIcon",513,512) }
+        rejects { ThemePack.validateImageBounds("brandIcon",512,513) }
+        rejects { ThemePack.validateImageBounds("play",512,512) }
+        rejects { ThemePack.validateImageBounds("nav_home",257,256) }
+        rejects { ThemePack.validateImageBounds("header",2049,2048) }
+        rejects { ThemePack.validateImageBounds("brandIcon",-1,-1) }
+        rejects { ThemePack.validateImageBounds("preview",0,100) }
     }
     @Test fun decoderFailurePreservesAnExistingWorkingInstallation() {
         val pack=File(project,"themes/packs/halloween-nocturne-v3.zip")
@@ -77,7 +110,7 @@ class ThemePackTest {
         assertEquals(setOf("halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream","stained-glass-sonata","firefly-railway","porcelain-moon","black-honey","sakura-arcade","cloud-post-office","copper-canyon-radio","midnight-aquarium","sunday-bakery","rose-circuit","clockwork-garden","snowglobe-village","indigo-atelier","prism-playground","silent-cinema","riverside-pause","pixel-stargazer","roaming-cosmos","blue-hour-sanctuary","celestial-current"),catalog.themes.map { it.id }.toSet())
         for (entry in catalog.themes) {
             val pack=File(project,"themes/packs/${entry.id}-v${entry.version}.zip")
-            val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,BuildConfig.VERSION_CODE)
+            val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,BuildConfig.VERSION_CODE,::validatePublishedImageBounds)
             assertEquals(if(entry.id in setOf("playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals","strawberry-daydream","cloud-post-office","sunday-bakery","snowglobe-village","prism-playground")) 3 else 2,m.schema)
             assertTrue(File(dir,m.assets.getValue("brandIcon")).isFile)
             rejects { ThemePack.validate(m,23) }

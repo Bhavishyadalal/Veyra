@@ -45,6 +45,18 @@ object ThemePack {
         "nav_home", "nav_search", "nav_explore", "nav_library", "play", "pause", "previous", "next",
         "queue", "lyrics", "settings", "back", "download", "brandIcon")
 
+    /** Brand artwork is published at 512 px; transport/navigation glyphs stay small. */
+    fun validateImageBounds(key: String, width: Int, height: Int) {
+        val max = when (key) {
+            "header", "player", "preview" -> 2048
+            "brandIcon" -> 512
+            else -> 256
+        }
+        require(width in 1..max && height in 1..max) {
+            "Invalid theme image ($key): expected dimensions within ${max}x$max."
+        }
+    }
+
     fun sha256(bytes: ByteArray): String = MessageDigest.getInstance("SHA-256")
         .digest(bytes).joinToString("") { "%02x".format(it) }
 

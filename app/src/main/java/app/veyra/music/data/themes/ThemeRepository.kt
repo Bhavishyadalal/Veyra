@@ -144,7 +144,7 @@ object ThemeRepository {
                 throw cancel
             } catch (e: Exception) {
                 ensureActive()
-                _message.value = "Theme was not applied. ${e.message?.take(140) ?: "Please try again."}"
+                _message.value = "Could not install theme. ${e.message?.take(140) ?: "Please try again."}"
             } finally { temp.delete(); downloadCall = null; _transfer.value = null }
         }
     }
@@ -189,8 +189,7 @@ object ThemeRepository {
             else {
                 val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
                 BitmapFactory.decodeFile(file.path, options)
-                val max = if (key in setOf("header","player","preview")) 2048 else 256
-                require(options.outWidth in 1..max && options.outHeight in 1..max) { "Invalid theme image." }
+                ThemePack.validateImageBounds(key, options.outWidth, options.outHeight)
             }
         }
     }

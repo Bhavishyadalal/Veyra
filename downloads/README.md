@@ -11,6 +11,8 @@ Current stable Android source and the newest three historical preview source ZIP
 
 Stable 0.1.7 is promoted from preview commit `466433e6e8f29666af1cfb012b14b4a8c77b7ad7`. It includes Theme Studio, 41 themes, 69 launcher choices and the listening/recovery/search fixes. The preview branch remains version 0.1.7-beta1; promotion does not turn its ZIP into a stable build.
 
+The current stable ZIP also includes the [theme installation correction](../verification/THEME-INSTALL-0.1.7.md): accept the published 512×512 brand artwork while retaining smaller control-icon limits. Rebuild and install an updated APK to receive this fix; published theme-pack bytes remain unchanged.
+
 [Stable release notes](https://github.com/Bhavishyadalal/Veyra/blob/main/RELEASE_NOTES_0.1.7.md) · [Promotion checks and known limits](https://github.com/Bhavishyadalal/Veyra/blob/main/verification/STABLE-0.1.7-PROMOTION.md) · [Theme collection](https://github.com/Bhavishyadalal/Veyra/blob/main/themes/README.md)
 
 ## Historical stable 0.1.6
