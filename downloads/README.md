@@ -57,3 +57,5 @@ The refreshed preview adds [Glass Atelier: twelve standalone glass launcher icon
 The latest preview adds five [Wayfarer themes](../themes/WAYFARER.md) and themed bottom navigation. Source ZIPs retain Android/backend source, theme packs/artwork/fonts and preview renderers; generated images under `themes/previews/` stay available in the GitHub gallery instead of being duplicated in every source download.
 
 The current preview also includes five [Dreamscape themes](../themes/DREAMSCAPE.md), matching optional launcher/Home icons and custom navigation/transport glyphs. [Verification](../verification/DREAMSCAPE-COLLECTION-0.1.7-beta1.md). Version remains 0.1.7-beta1 / code 25.
+
+The current preview adds twenty [Worlds themes](../themes/WORLDS.md), bringing the catalog to 41 themes and the picker to 69 icons. Rebuild the latest preview: older builds retain a 24-theme catalog cap and cannot add launcher aliases through packs. App remains 0.1.7-beta1 / code 25. [Verification](../verification/WORLDS-COLLECTION-0.1.7-beta1.md).
