@@ -18,7 +18,8 @@
   assets are generated from existing licensed theme sources; keep those sources
   in source ZIPs and avoid duplicating font binaries.
   Preview also has three optional app styles alongside Original; see
-  `verification/APP-STYLES-0.1.8-beta1.md`. Custom styles suspend downloaded
+  `verification/APP-STYLES-0.1.8-beta1.md` and its refinement
+  `verification/APP-STYLES-POLISH-0.1.8-beta1.md`. Custom styles suspend downloaded
   theme/font visuals without replacing their saved selections. Preserve the
   generated-resource font/license inputs under `design/app-styles/`.
   Stable and this new preview include the theme brand-artwork bounds correction;

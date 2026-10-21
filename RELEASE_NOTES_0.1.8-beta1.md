@@ -2,6 +2,15 @@
 
 **Preview Android source · version code 27 · based on stable 0.1.7**
 
+## App-style composition refinement
+
+- **Music Editorial:** alternating portrait/square cover pairs, aligned captions, burgundy section rules and a compact magazine masthead.
+- **Listening Room:** smaller cut-paper section tabs, lightly taped sleeve frames and an italic serif subtitle; botanical styling continues throughout.
+- **After Dark:** a wide featured cover with a legible image scrim followed by numbered tracks, inset record framing and an explicit player-entry arrow.
+- Preserved every shelf item, track/menu callback and current-track feedback. Large text uses the simpler ordered grid instead of the asymmetric layout.
+
+[Refinement verification and native previews](verification/APP-STYLES-POLISH-0.1.8-beta1.md)
+
 ## Three optional app styles
 
 Choose **Settings → Appearance → App style**:

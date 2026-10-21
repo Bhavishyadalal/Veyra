@@ -32,7 +32,7 @@ fun main() {
         val properties=java.util.Properties().apply {File(root,"themes/render-config/$id.properties").inputStream().use {load(it)}}
         File(root,"themes/$id/${properties.getProperty("asset.header")}")
     }
-    for(style in AppStyle.entries.filter {it.custom}) for(kind in listOf("home","secondary","large-rtl")) {
+    for(style in AppStyle.entries.filter {it.custom}) for(kind in listOf("home","secondary","large-rtl","shelves")) {
         val large=kind=="large-rtl"
         val theme=requireNotNull(style.visuals(mapOf("header" to File(root,"app/src/main/assets/app-styles/listening-room.webp").path)))
         val heading=FontFamily(Font(File(root,if(style==AppStyle.AFTER_DARK)"themes/web-slinger/fonts/BarlowCondensed.ttf" else "design/app-styles/CormorantGaramond.ttf"),FontWeight.Bold))
@@ -51,7 +51,9 @@ fun main() {
                         ThemePageSurface {
                             Column(Modifier.fillMaxSize()) {
                                 LazyColumn(Modifier.weight(1f)) {
-                                    if(kind!="secondary") {
+                                    if(kind=="shelves") {
+                                        item {StyledMusicShelf(style,"Quick picks",items)}
+                                    } else if(kind!="secondary") {
                                         item { StyledHomeOpening(style,items[0],liveCover.value,if(style==AppStyle.AFTER_DARK)liveTitle.value else null,
                                             if(style==AppStyle.AFTER_DARK && liveTitle.value!=null)"Native artwork fixture" else null,{callbacks++},"Open player") }
                                         item {StyledMusicShelf(style,"Continue listening",items,compact=true)}
@@ -99,10 +101,18 @@ fun main() {
             val tabs=nodes.filter {it.config.getOrNull(SemanticsProperties.Role)==Role.Tab}
             check(tabs.size==4)
             check(tabs.all {it.boundsInRoot.height>=96f})
+            var expectedCallbacks=0
+            if(kind=="shelves") {
+                val cards=nodes.filter {it.config.getOrNull(SemanticsActions.OnLongClick)!=null}
+                check(cards.size==4) {"$style must retain every card/menu: ${cards.size}"}
+                cards.forEach {check(it.config.getOrNull(SemanticsActions.OnClick)!!.action!!.invoke())}
+                check(cards.first().config.getOrNull(SemanticsActions.OnLongClick)!!.action!!.invoke())
+                expectedCallbacks=5
+            }
             val play=nodes.first {it.config.getOrNull(SemanticsProperties.ContentDescription)?.contains("Play")==true}
             check(play.boundsInRoot.width>=96f && play.boundsInRoot.height>=96f)
             check(play.config.getOrNull(SemanticsActions.OnClick)!!.action!!.invoke())
-            check(callbacks==1)
+            check(callbacks==expectedCallbacks+1)
             File(output,"${style.name.lowercase()}-$kind.webp").writeBytes(scene.render(1_100_000_000L).encodeToData(EncodedImageFormat.WEBP,90)!!.bytes)
         }
         if(style==AppStyle.AFTER_DARK && kind=="home") {

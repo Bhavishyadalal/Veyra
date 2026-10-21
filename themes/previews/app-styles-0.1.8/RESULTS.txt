@@ -1,11 +1,14 @@
 MUSIC_EDITORIAL/home: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
 MUSIC_EDITORIAL/secondary: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
 MUSIC_EDITORIAL/large-rtl: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
+MUSIC_EDITORIAL/shelves: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
 LISTENING_ROOM/home: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
 LISTENING_ROOM/secondary: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
 LISTENING_ROOM/large-rtl: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
-AFTER_DARK live artwork: changed 926 sampled pixels on song-cover replacement; identical idle/error abstract record; no automatic playback callbacks.
+LISTENING_ROOM/shelves: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
+AFTER_DARK live artwork: changed 893 sampled pixels on song-cover replacement; identical idle/error abstract record; no automatic playback callbacks.
 AFTER_DARK/home: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
 AFTER_DARK/secondary: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
 AFTER_DARK/large-rtl: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
+AFTER_DARK/shelves: native shared style/header/shelf/surface components; four navigation tabs, >=48 dp controls, no automatic actions; explicit Play callback once.
 These are native component studies with theme-art fixtures, not complete Android screenshots or real music-data/device tests.

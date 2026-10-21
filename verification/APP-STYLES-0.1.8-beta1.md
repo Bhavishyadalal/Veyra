@@ -2,6 +2,8 @@
 
 **Preview only · code 27 · 21 October 2026**
 
+> The sections below record the initial delivery. See [the subsequent composition refinement](APP-STYLES-POLISH-0.1.8-beta1.md) for current shelf layouts, refreshed native captures and checks.
+
 ## Delivered behavior
 
 Settings → Appearance → App style offers Original, Music Editorial, Listening Room and After Dark. Selection is persisted using the existing settings/backup mechanism with a safe Original fallback for unknown values. The picker stages a choice until Apply; cancel does not change the active style. Appearance reset also restores Original.

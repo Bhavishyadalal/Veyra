@@ -1,6 +1,7 @@
 @file:OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 package app.veyra.music.ui.styles
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
@@ -12,7 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,10 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.*
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -57,6 +60,10 @@ fun StyledHomeOpening(style:AppStyle,featured:StyleMusicItem?,currentArtwork:Any
             Box(Modifier.weight(1f)){StyleBrand(brandPainter=brandPainter)}
             onCustomize?.let {IconButton(it,Modifier.size(48.dp)) {Icon(Icons.Rounded.Tune,customizeLabel)}}
         }
+        if(style==AppStyle.MUSIC_EDITORIAL) {
+            Text("MUSIC  /  PEOPLE  /  PLACES",style=MaterialTheme.typography.labelSmall,
+                letterSpacing=2.sp,color=MaterialTheme.colorScheme.onSurfaceVariant,modifier=Modifier.clearAndSetSemantics {})
+        }
         val primary=MaterialTheme.colorScheme.primary
         BoxWithConstraints(Modifier.fillMaxWidth()) {
             val density=LocalDensity.current
@@ -77,7 +84,7 @@ fun StyledHomeOpening(style:AppStyle,featured:StyleMusicItem?,currentArtwork:Any
                         textDirection=androidx.compose.ui.text.style.TextDirection.Ltr,
                         textAlign=if(rtl)androidx.compose.ui.text.style.TextAlign.End else androidx.compose.ui.text.style.TextAlign.Start),
                     modifier=Modifier.fillMaxWidth().padding(bottom=6.dp).semantics {heading()})
-                if(style==AppStyle.LISTENING_ROOM) Text("A little evening escape",style=MaterialTheme.typography.titleMedium,
+                if(style==AppStyle.LISTENING_ROOM) Text("A little evening escape",style=MaterialTheme.typography.headlineSmall.copy(fontStyle=FontStyle.Italic),
                     color=MaterialTheme.colorScheme.primary)
             }
             if(style==AppStyle.AFTER_DARK && density.fontScale<=1.3f && wideHeader && !rtl) {
@@ -130,7 +137,8 @@ private fun NightFeature(artwork:Any?,title:String?,artist:String?,open:(()->Uni
     BoxWithConstraints {
         val narrow=maxWidth<300.dp || LocalDensity.current.fontScale>1.3f
         val record:@Composable ()->Unit = {
-            Box(Modifier.fillMaxWidth().aspectRatio(1f).clip(CircleShape).border(2.dp,Color(0xFF2F80ED),CircleShape)
+            Box(Modifier.fillMaxWidth().aspectRatio(1f).border(1.dp,Color(0xFF2F80ED).copy(alpha=.30f),CircleShape)
+                .padding(6.dp).clip(CircleShape).border(2.dp,Color(0xFF2F80ED),CircleShape)
                 .then(if(open!=null && title!=null)Modifier.combinedClickable(role=Role.Button,onClickLabel=description,onClick=open) else Modifier)) {
                 StyleArtwork(if(title!=null)artwork else null,Modifier.fillMaxSize())
             }
@@ -140,6 +148,9 @@ private fun NightFeature(artwork:Any?,title:String?,artist:String?,open:(()->Uni
                 Text(if(title!=null)description else "NIGHT RADIO",style=MaterialTheme.typography.labelSmall,letterSpacing=2.sp,color=MaterialTheme.colorScheme.primary)
                 Text(title ?: "Room for\nyour music.",style=MaterialTheme.typography.headlineSmall,maxLines=3,overflow=TextOverflow.Ellipsis)
                 if(artist!=null) Text(artist,style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant,maxLines=2,overflow=TextOverflow.Ellipsis)
+                if(open!=null && title!=null) IconButton(open,Modifier.size(48.dp).border(1.dp,MaterialTheme.colorScheme.outline,CircleShape)) {
+                    Icon(Icons.AutoMirrored.Rounded.ArrowForward,description,tint=MaterialTheme.colorScheme.primary)
+                }
             }
         }
         if(narrow) Column(verticalArrangement=Arrangement.spacedBy(16.dp)) {Box(Modifier.widthIn(max=250.dp)){record()};caption()}
@@ -159,11 +170,22 @@ private fun StyleArtwork(model:Any?,modifier:Modifier=Modifier) {
 @Composable
 fun StyledMusicShelf(style:AppStyle,title:String,items:List<StyleMusicItem>,modifier:Modifier=Modifier,compact:Boolean=false,trailing:(@Composable ()->Unit)?=null) {
     Column(modifier.fillMaxWidth().padding(vertical=12.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
-        Row(Modifier.fillMaxWidth().padding(horizontal=20.dp),verticalAlignment=Alignment.CenterVertically) {
-            Text(title,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold,
-                modifier=Modifier.weight(1f).then(if(style==AppStyle.LISTENING_ROOM)Modifier.background(Color(0xFFE4D0A5)).padding(horizontal=12.dp,vertical=6.dp) else Modifier),
-                color=if(style==AppStyle.LISTENING_ROOM)Color(0xFF261F18) else MaterialTheme.colorScheme.onBackground)
-            trailing?.invoke()
+        Column(Modifier.padding(horizontal=20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+            if(style==AppStyle.MUSIC_EDITORIAL) Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically) {
+                Box(Modifier.width(28.dp).height(3.dp).background(MaterialTheme.colorScheme.primary))
+                HorizontalDivider(Modifier.weight(1f),color=MaterialTheme.colorScheme.outlineVariant)
+            }
+            Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+                if(style==AppStyle.AFTER_DARK) Box(Modifier.width(3.dp).height(24.dp).background(Color(0xFF2F80ED)))
+                Box(Modifier.weight(1f)) {
+                    Text(title,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold,
+                        modifier=if(style==AppStyle.LISTENING_ROOM)Modifier
+                            .background(Color(0xFFE4D0A5),androidx.compose.foundation.shape.CutCornerShape(topEnd=8.dp,bottomStart=3.dp))
+                            .padding(horizontal=14.dp,vertical=6.dp) else Modifier,
+                        color=if(style==AppStyle.LISTENING_ROOM)Color(0xFF261F18) else MaterialTheme.colorScheme.onBackground)
+                }
+                trailing?.invoke()
+            }
         }
         if(compact) {
             LazyRow(contentPadding=PaddingValues(horizontal=20.dp),horizontalArrangement=Arrangement.spacedBy(12.dp)) {
@@ -172,17 +194,8 @@ fun StyledMusicShelf(style:AppStyle,title:String,items:List<StyleMusicItem>,modi
         } else BoxWithConstraints {
             val pageWidth=(maxWidth-40.dp).coerceAtMost(520.dp)
             LazyRow(contentPadding=PaddingValues(horizontal=20.dp),horizontalArrangement=Arrangement.spacedBy(20.dp)) {
-                itemsIndexed(items.chunked(4),key={index,_->index}) {_,page ->
-                    Column(Modifier.width(pageWidth),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                        page.chunked(2).forEachIndexed { rowIndex,row ->
-                            Row(horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-                                row.forEachIndexed {colIndex,item->
-                                    StyleCoverCard(style,item,rowIndex*2+colIndex,Modifier.weight(1f))
-                                }
-                                if(row.size==1)Spacer(Modifier.weight(1f))
-                            }
-                        }
-                    }
+                itemsIndexed(items.chunked(4),key={index,_->index}) {pageIndex,page ->
+                    StyleShelfPage(style,page,Modifier.width(pageWidth),startIndex=pageIndex*4)
                 }
             }
         }
@@ -190,18 +203,78 @@ fun StyledMusicShelf(style:AppStyle,title:String,items:List<StyleMusicItem>,modi
 }
 
 @Composable
-private fun StyleCoverCard(style:AppStyle,item:StyleMusicItem,index:Int,modifier:Modifier) {
+private fun StyleCoverCard(style:AppStyle,item:StyleMusicItem,index:Int,modifier:Modifier,aspect:Float=1f) {
     Column(modifier.combinedClickable(role=Role.Button,onClick=item.onClick,onLongClick=item.onLongPress)
         .semantics(mergeDescendants=true) {if(item.current) selected=true},verticalArrangement=Arrangement.spacedBy(5.dp)) {
         Box(Modifier.fillMaxWidth().padding(if(style==AppStyle.LISTENING_ROOM)5.dp else 0.dp)
             .graphicsLayer {rotationZ=if(style==AppStyle.LISTENING_ROOM)if(index%2==0)-2f else 2f else 0f}
             .then(if(style==AppStyle.LISTENING_ROOM)Modifier.border(5.dp,Color(0xFFDED1AA)) else Modifier)) {
-            StyleArtwork(item.artwork,Modifier.fillMaxWidth().aspectRatio(if(style==AppStyle.AFTER_DARK && index%2==0)1.1f else 1f))
+            StyleArtwork(item.artwork,Modifier.fillMaxWidth().aspectRatio(aspect))
+            if(style==AppStyle.LISTENING_ROOM) Canvas(Modifier.matchParentSize().clearAndSetSemantics {}) {
+                val tapeWidth=size.width*.30f
+                drawRect(Color(0xFFE8D8AF).copy(alpha=.78f),
+                    topLeft=androidx.compose.ui.geometry.Offset(size.width*.07f,0f),
+                    size=androidx.compose.ui.geometry.Size(tapeWidth,8.dp.toPx()))
+            }
             if(item.current) Icon(if(item.playing)Icons.Rounded.GraphicEq else Icons.Rounded.PlayArrow,null,
                 Modifier.align(Alignment.BottomEnd).padding(6.dp).size(28.dp).background(MaterialTheme.colorScheme.surface,CircleShape).padding(4.dp),
                 tint=MaterialTheme.colorScheme.primary)
         }
         Text(item.title,style=MaterialTheme.typography.titleSmall,maxLines=2,overflow=TextOverflow.Ellipsis)
         Text(item.artist,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant,maxLines=1,overflow=TextOverflow.Ellipsis)
+    }
+}
+
+
+/** Each style has its own composition; large text uses a simple ordered grid. */
+@Composable
+private fun StyleShelfPage(style:AppStyle,items:List<StyleMusicItem>,modifier:Modifier,startIndex:Int=0) {
+    val largeText=LocalDensity.current.fontScale>1.3f
+    if(style==AppStyle.AFTER_DARK && !largeText) {
+        Column(modifier,verticalArrangement=Arrangement.spacedBy(10.dp)) {
+            items.firstOrNull()?.let {item ->
+                Box(Modifier.fillMaxWidth().aspectRatio(1.65f).clip(RoundedCornerShape(8.dp))
+                    .combinedClickable(role=Role.Button,onClick=item.onClick,onLongClick=item.onLongPress)
+                    .semantics(mergeDescendants=true) {if(item.current)selected=true}) {
+                    StyleArtwork(item.artwork,Modifier.fillMaxSize())
+                    Box(Modifier.matchParentSize().background(Brush.verticalGradient(listOf(Color.Transparent,Color(0xFF030B17).copy(alpha=.92f)))))
+                    if(item.current) Icon(if(item.playing)Icons.Rounded.GraphicEq else Icons.Rounded.PlayArrow,null,
+                        Modifier.align(Alignment.TopEnd).padding(10.dp).size(28.dp).background(Color(0xFF091729),CircleShape).padding(4.dp),
+                        tint=Color(0xFF9BCDFF))
+                    Column(Modifier.align(Alignment.BottomStart).padding(14.dp)) {
+                        Text(item.title,style=MaterialTheme.typography.headlineSmall,color=Color(0xFFDDEFFF),maxLines=2,overflow=TextOverflow.Ellipsis)
+                        Text(item.artist,style=MaterialTheme.typography.bodySmall,color=Color(0xFFB7CDE7),maxLines=1,overflow=TextOverflow.Ellipsis)
+                    }
+                }
+            }
+            items.drop(1).forEachIndexed {index,item ->
+                Row(Modifier.fillMaxWidth().heightIn(min=64.dp)
+                    .combinedClickable(role=Role.Button,onClick=item.onClick,onLongClick=item.onLongPress)
+                    .semantics(mergeDescendants=true) {if(item.current)selected=true}
+                    .padding(vertical=6.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+                    Text((startIndex+index+2).toString().padStart(2,'0'),style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.primary,
+                        modifier=Modifier.clearAndSetSemantics {})
+                    Box(Modifier.size(48.dp).clip(RoundedCornerShape(4.dp))) {StyleArtwork(item.artwork,Modifier.fillMaxSize())}
+                    Column(Modifier.weight(1f)) {
+                        Text(item.title,style=MaterialTheme.typography.titleSmall,maxLines=2,overflow=TextOverflow.Ellipsis)
+                        Text(item.artist,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant,maxLines=1,overflow=TextOverflow.Ellipsis)
+                    }
+                    Icon(if(item.current && item.playing)Icons.Rounded.GraphicEq else if(item.current)Icons.Rounded.PlayArrow else Icons.AutoMirrored.Rounded.ArrowForward,null,
+                        Modifier.size(20.dp),tint=MaterialTheme.colorScheme.primary)
+                }
+                HorizontalDivider(color=MaterialTheme.colorScheme.outlineVariant)
+            }
+        }
+    } else Column(modifier,verticalArrangement=Arrangement.spacedBy(16.dp)) {
+        items.chunked(2).forEachIndexed {rowIndex,row ->
+            Row(horizontalArrangement=Arrangement.spacedBy(14.dp),verticalAlignment=Alignment.Bottom) {
+                row.forEachIndexed {colIndex,item ->
+                    val portrait=style==AppStyle.MUSIC_EDITORIAL && !largeText && (rowIndex+colIndex)%2==0
+                    StyleCoverCard(style,item,rowIndex*2+colIndex,Modifier.weight(if(portrait)1.15f else 1f),
+                        aspect=if(portrait).82f else 1f)
+                }
+                if(row.size==1)Spacer(Modifier.weight(1f))
+            }
+        }
     }
 }
