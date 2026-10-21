@@ -1,5 +1,6 @@
 package app.veyra.music.ui.replay
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -99,16 +100,25 @@ fun ReplayCreditCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val palette = rememberArtworkColors(artworkUrl)
+    val theme = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    val themed = theme != null
+    val ink = theme?.text ?: Color.White
+    val mutedInk = theme?.muted ?: Color.White.copy(alpha = .65f)
+    val polishedInk = if (themed) Brush.verticalGradient(listOf(ink, ink)) else PolishedInk
+    val palette = if (themed) null else rememberArtworkColors(artworkUrl)
     Box(
         modifier = modifier
             .aspectRatio(CARD_RATIO)
-            .shadow(16.dp, CardShape, clip = false)
+            .then(if (themed) Modifier.border(1.dp, theme!!.outline.copy(alpha = .55f), CardShape)
+                else Modifier.shadow(16.dp, CardShape, clip = false))
             .clip(CardShape)
             .clickable(onClick = onClick),
     ) {
-        MeshGradientBackground(
-            palette = palette,
+        if (theme != null) {
+            Box(Modifier.fillMaxSize().background(Brush.linearGradient(listOf(theme.raised, theme.surface))))
+            app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize(), prominent = false)
+        } else MeshGradientBackground(
+            palette = requireNotNull(palette),
             trackKey = artworkUrl ?: label,
             blurRadius = 34.dp,
             animated = false,
@@ -121,9 +131,9 @@ fun ReplayCreditCard(
                 .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
-                        0.0f to Color.Black.copy(alpha = 0.18f),
-                        0.55f to Color.Black.copy(alpha = 0.30f),
-                        1.0f to Color.Black.copy(alpha = 0.55f),
+                        0.0f to (theme?.surface?.copy(alpha = .45f) ?: Color.Black.copy(alpha = 0.18f)),
+                        0.55f to (theme?.surface?.copy(alpha = .70f) ?: Color.Black.copy(alpha = 0.30f)),
+                        1.0f to (theme?.surface?.copy(alpha = .94f) ?: Color.Black.copy(alpha = 0.55f)),
                     ),
                 ),
         )
@@ -141,14 +151,14 @@ fun ReplayCreditCard(
                     fontWeight = FontWeight.W700,
                     letterSpacing = 1.4.sp,
                     lineHeight = 13.sp,
-                    color = Color.White.copy(alpha = 0.72f),
+                    color = if (themed) mutedInk else Color.White.copy(alpha = 0.72f),
                     modifier = Modifier.weight(1f),
                 )
                 Spacer(Modifier.width(10.dp))
                 Icon(
                     painter = painterResource(Res.drawable.ic_logo),
                     contentDescription = null,
-                    tint = Color.White,
+                    tint = ink,
                     modifier = Modifier.size(width = 34.dp, height = 22.dp),
                 )
             }
@@ -161,8 +171,8 @@ fun ReplayCreditCard(
                     fontSize = 27.sp,
                     lineHeight = 30.sp,
                     fontWeight = FontWeight.W800,
-                    brush = PolishedInk,
-                    shadow = EmbossShadow,
+                    brush = polishedInk,
+                    shadow = if (themed) Shadow.None else EmbossShadow,
                 ),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -172,7 +182,7 @@ fun ReplayCreditCard(
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.W700,
                 letterSpacing = 1.8.sp,
-                color = Color.White.copy(alpha = 0.65f),
+                color = if (themed) mutedInk else Color.White.copy(alpha = 0.65f),
             )
 
             // Weighted either side rather than pinned to the foot, so the figure
@@ -185,12 +195,13 @@ fun ReplayCreditCard(
                         text = holder.ifBlank { stringResource(Res.string.default_replay_holder) }
                             .uppercase(Locale.getDefault()),
                         size = 13.sp,
+                        ink = if (themed) ink else null,
                     )
                     if (detail != null) {
                         Text(
                             text = detail,
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color.White.copy(alpha = 0.6f),
+                            color = if (themed) mutedInk else Color.White.copy(alpha = 0.6f),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -205,7 +216,7 @@ fun ReplayCreditCard(
                             fontSize = 7.sp,
                             lineHeight = 8.sp,
                             letterSpacing = 0.8.sp,
-                            color = Color.White.copy(alpha = 0.55f),
+                            color = if (themed) mutedInk else Color.White.copy(alpha = 0.55f),
                             // Both lines to the right edge, not just the block.
                             // Column alignment places the text *box*; inside it
                             // the two lines still set from the left, which left
@@ -214,7 +225,7 @@ fun ReplayCreditCard(
                             // catches the eye every time.
                             textAlign = TextAlign.End,
                         )
-                        Embossed(text = memberSince, size = 12.sp)
+                        Embossed(text = memberSince, size = 12.sp, ink = if (themed) ink else null)
                     }
                 }
             }
@@ -232,16 +243,16 @@ fun ReplayCreditCard(
  * above.
  */
 @Composable
-private fun Embossed(text: String, size: TextUnit) {
+private fun Embossed(text: String, size: TextUnit, ink: Color? = null) {
     Text(
         text = text,
         style = TextStyle(
-            fontFamily = FontFamily.Monospace,
+            fontFamily = if (ink != null) MaterialTheme.typography.labelLarge.fontFamily else FontFamily.Monospace,
             fontWeight = FontWeight.W600,
             fontSize = size,
             letterSpacing = 1.6.sp,
-            brush = PolishedInk,
-            shadow = EmbossShadow,
+            brush = ink?.let { Brush.verticalGradient(listOf(it, it)) } ?: PolishedInk,
+            shadow = if (ink != null) Shadow.None else EmbossShadow,
         ),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,

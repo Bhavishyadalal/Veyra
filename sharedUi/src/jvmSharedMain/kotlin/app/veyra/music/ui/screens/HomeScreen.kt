@@ -179,7 +179,6 @@ fun HomeScreen(
     PrefetchHomeArtwork(state, listState, enabled = !offline)
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
     val homeReducedMotion = rememberVeyraReducedMotion()
-    val themePack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     var editingHome by rememberSaveable { mutableStateOf(false) }
     val customizable = onMoveHomeSection != null && onHomeSectionVisible != null && onResetHomeSections != null
     val displayState = if (offline && state is UiState.Loading) UiState.Success(emptyList<HomeShelf>()) else state
@@ -191,19 +190,34 @@ fun HomeScreen(
         onDismiss = { editingHome = false },
     )
 
+    BoxWithConstraints(modifier.fillMaxSize()) {
+    // Preserve the exact Original heading. Very short windows keep a scrollable
+    // heading so large branding cannot consume the entire usable feed viewport.
+    val pinnedHeading = title != null && !appStyle.custom && maxHeight >= 420.dp
+    Column(Modifier.fillMaxSize()) {
+        if (pinnedHeading) {
+            HomeTitle(experience.homeGreeting.ifBlank { requireNotNull(title) },
+                Modifier.padding(top = (contentPadding.calculateTopPadding() - HOME_TITLE_LIFT).coerceAtLeast(0.dp)))
+            androidx.compose.material3.HorizontalDivider(
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = .45f),
+                modifier = Modifier.padding(horizontal = PAGE_GUTTER),
+            )
+        }
     FeedShimmerHost(enabled = !offline && (displayState is UiState.Loading || recentlyPlayedLoading || loadingMore)) {
         PullToRefresh(
             refreshing = refreshing,
             onRefresh = onRefresh,
             state = pullState,
-            modifier = modifier,
+            modifier = Modifier.weight(1f).fillMaxWidth(),
         ) {
             LazyColumn(
                 state = listState,
                 modifier = Modifier.fillMaxSize(),
                 // The heading sits higher than the other tabs' first row: pull the
                 // whole feed up by [HOME_TITLE_LIFT] with it.
-                contentPadding = if (title != null) {
+                contentPadding = if (pinnedHeading) {
+                    PaddingValues(bottom = contentPadding.calculateBottomPadding())
+                } else if (title != null) {
                     PaddingValues(
                         top = (contentPadding.calculateTopPadding() - HOME_TITLE_LIFT).coerceAtLeast(0.dp),
                         bottom = contentPadding.calculateBottomPadding(),
@@ -212,7 +226,7 @@ fun HomeScreen(
                     contentPadding
                 },
             ) {
-                if (title != null) {
+                if (title != null && !pinnedHeading) {
                     item(key = "home:heading", contentType = "heading") {
                         if(!appStyle.custom) HomeTitle(experience.homeGreeting.ifBlank {title}) else {
                             val featuredShelf=(displayState as? UiState.Success)?.data?.firstOrNull {it.items.isNotEmpty() && !it.title.equals(RECENTS_TITLE,true)}
@@ -234,11 +248,6 @@ fun HomeScreen(
                 }
                 if(experience.homeSpeedDial && speedDial.isNotEmpty()) item(key="home:speed-dial") {
                     PersonalizedSpeedDial(speedDial,onItemClick,onItemLongPress)
-                }
-                if (themePack != null && !appStyle.custom) {
-                    item(key = "home:theme-atmosphere", contentType = "theme-artwork") {
-                        app.veyra.music.ui.themes.ThemeAtmosphere("header", Modifier.padding(horizontal = PAGE_GUTTER, vertical = 8.dp))
-                    }
                 }
                 if ((customizable && !appStyle.custom) || offline || showingSaved || updating || homeNotice != null) {
                     item(key = "home:experience", contentType = "home:experience") {
@@ -318,6 +327,9 @@ fun HomeScreen(
                 }
             }
         }
+    }
+
+    }
     }
 
     if (!offline && onLoadMore != null && state is UiState.Success && state.data.isNotEmpty()) {
@@ -599,7 +611,7 @@ fun CompactTrackRow(
     }
 }
 
-/** One finite introduction per retained Home state; scrolling simply carries the header away. */
+/** One finite introduction per retained Home state; the Original heading can remain pinned. */
 @Composable
 private fun HomeTitle(title: String, modifier: Modifier = Modifier) {
     val colors = MaterialTheme.colorScheme

@@ -440,7 +440,6 @@ fun SettingsScreen(
                     translationX = if (reducedMotion) 0f else categoryDirection * (1f - categoryAlpha.value) * 28.dp.toPx()
                 },
         ) {
-            if (!searching) app.veyra.music.ui.themes.ThemeAtmosphere("header", Modifier.padding(horizontal=20.dp, vertical=8.dp), compact=true)
             if (category == null && !searching) {
                 SettingsOverview(onSelect = { category = it })
             }

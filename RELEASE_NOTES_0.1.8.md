@@ -4,6 +4,14 @@
 
 The completed 0.1.8 beta is now the stable Android source on `main` and `stable/0.1.8`.
 
+## Home and theme integration
+
+- Original Home now keeps its existing branding and greeting pinned above the feed, with a thin divider and continuous background artwork.
+- Removed the separate theme showcase cards from Home and Settings.
+- Library listening-stat cards now match theme artwork, colors and typography instead of a separate dark card treatment.
+
+[Verification and short-window behavior](verification/PINNED-HOME-0.1.8.md)
+
 ## Stable maintenance · 22 October 2026
 
 **Settings → Appearance → Scroll player animations** now controls the folding mini-player/navigation layout independently of Liquid Glass. It is enabled by default and works with solid themed surfaces when glass is off. Turn it off to restore stacked bars. Reduced-motion preferences remain respected.
