@@ -20,11 +20,19 @@ def main():
     excluded = {"downloads", "site", ".git", ".gradle", ".kotlin", "build", "bin",
                 "node_modules", "dist", ".idea", "__pycache__"}
     manifest = []
+    # Keep source downloads below GitHub's per-file limit without recompressing
+    # or changing published packs. Superseded ZIP copies stay in Git; the legacy
+    # v2 fixture remains available for the source project's compatibility test.
+    catalog = json.loads((root / "themes/catalog.json").read_text())
+    included_packs = {f'{entry["id"]}-v{entry["version"]}.zip' for entry in catalog["themes"]}
+    included_packs.add("halloween-nocturne-v2.zip")
     archive = root / "downloads" / args.name
     archive.parent.mkdir(exist_ok=True)
     with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for rel in sorted(filter(None, paths)):
             p = Path(rel)
+            if p.parts[:2] == ("themes", "packs") and p.name.removesuffix(".sha256") not in included_packs:
+                continue
             # Generated native study images remain in Git; ship their renderer, not
             # 36+ MB of screenshots in every Android Studio source download.
             if p.parts[:2] == ("themes", "previews") and p.suffix.lower() in {".png", ".webp"}:
@@ -54,6 +62,8 @@ def main():
                     "shared/src/jvmSharedMain/kotlin/app/veyra/music/data/backend/VeyraBackend.kt"):
             assert "Veyra/" + rel in z.namelist(), rel
     digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+    if archive.stat().st_size > 100 * 1024 * 1024:
+        raise SystemExit("Source ZIP exceeds GitHub's 100 MiB file limit; do not commit it")
     archive.with_suffix(".zip.sha256").write_text(f"{digest}  {args.name}\n")
     print(json.dumps({"archive": str(archive), "bytes": archive.stat().st_size,
                       "sourceFiles": len(manifest), "sha256": digest}))

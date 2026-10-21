@@ -1,15 +1,17 @@
+> **New: [five Keepsake themes](themes/KEEPSAKE.md)** work on stable 0.1.7. Their five new launcher icons and the searchable Studio/icon picker are exclusive to beta 0.1.8.
+
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
-> **Stable 0.1.7 / code 26:** promoted from the completed 0.1.7-beta1 source at the owner’s request. Theme Studio, 41 themes, 69 launcher choices and listening/recovery fixes. [Release notes](RELEASE_NOTES_0.1.7.md) · [Promotion checks and limits](verification/STABLE-0.1.7-PROMOTION.md). No APK is published by this source promotion.
+> **Stable 0.1.7 / code 26:** promoted from the completed 0.1.7-beta1 source at the owner’s request. Theme Studio, 46 themes, 69 stable launcher choices and listening/recovery fixes. [Release notes](RELEASE_NOTES_0.1.7.md) · [Promotion checks and limits](verification/STABLE-0.1.7-PROMOTION.md). No APK is published by this source promotion.
 
-> **Maintenance:** Current stable is on `main` and `stable/0.1.7`. The historical preview stays on `preview/0.1.7-beta1` (code 25); historical stable 0.1.6 stays on `stable/0.1.6`. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
+> **Maintenance:** Current stable is on `main` and `stable/0.1.7`. Current preview is `preview/0.1.8-beta1` (code 27), with 74 launcher choices and Studio polish; historical preview stays on `preview/0.1.7-beta1` (code 25); historical stable 0.1.6 stays on `stable/0.1.6`. [Current downloads](downloads/README.md) · [Backend source policy](docs/BACKEND_SYNC.md).
 
 
 > Android Studio import/build guide: [START_HERE.md](START_HERE.md). Historical beta3 build validation: [verification/ANDROID-STUDIO-BUILD.md](verification/ANDROID-STUDIO-BUILD.md).
 
 # Veyra
 
-> **Preview branch:** [0.1.7-beta1 Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.7-beta1/downloads/Veyra_Android_Source_0.1.7-beta1.zip). [Stable source](https://github.com/Bhavishyadalal/Veyra/tree/main) stays separate.
+> **Preview branch:** [0.1.8-beta1 Android Studio source ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.8-beta1/downloads/Veyra_Android_Source_0.1.8-beta1.zip). [Stable source](https://github.com/Bhavishyadalal/Veyra/tree/main) stays separate.
 
 A personal Android music player with Manrope typography, selectable launcher styles and a dark listening interface.
 

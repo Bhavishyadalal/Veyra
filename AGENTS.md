@@ -2,11 +2,13 @@
 
 - Current stable Android source: `main` and `stable/0.1.7`, version 0.1.7 / code 26.
   Promoted from preview commit `466433e6e8f29666af1cfb012b14b4a8c77b7ad7` at the owner's request.
-  Includes Theme Studio, forty-one published themes and sixty-nine optional launcher choices.
+  Includes Theme Studio, forty-six published themes and sixty-nine optional launcher choices.
   `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
   `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
   Keep future preview features out of stable until the owner explicitly promotes them.
-  `preview/0.1.8-beta1` starts from stable 0.1.7; version metadata is not bumped yet.
+  `preview/0.1.8-beta1` is 0.1.8-beta1 / code 27 with 74 launcher choices.
+  Five Keepsake packs remain compatible with stable code 26, including its original
+  256 px brand-icon validation. Their new launcher aliases and UI polish are preview-only.
   Stable and this new preview include the theme brand-artwork bounds correction;
   see `verification/THEME-INSTALL-0.1.7.md` before changing theme validation.
   Promotion does not establish APK publication, device validation or clean lint: see

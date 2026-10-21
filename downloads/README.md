@@ -1,19 +1,23 @@
 # Veyra source downloads
 
-Current stable Android source and the newest three historical preview source ZIPs are retained here. These are complete Android Studio projects, **not APKs**. Each ZIP includes licenses, the Veyra backend snapshot/provenance and a SHA-256 sidecar.
+Current stable Android source and the newest three preview source ZIPs are retained here. These are complete Android Studio projects, **not APKs**. Each ZIP includes licenses, the Veyra backend snapshot/provenance and a SHA-256 sidecar.
 
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
 | Current stable · `main`, `stable/0.1.7` | 0.1.7 / code 26 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.7_Stable.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.7_Stable.zip.sha256) |
+| Current preview · `preview/0.1.8-beta1` | 0.1.8-beta1 / code 27 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.8-beta1/downloads/Veyra_Android_Source_0.1.8-beta1.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.8-beta1/downloads/Veyra_Android_Source_0.1.8-beta1.zip.sha256) |
 | Historical preview | 0.1.7-beta1 / code 25 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.7-beta1/downloads/Veyra_Android_Source_0.1.7-beta1.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.7-beta1/downloads/Veyra_Android_Source_0.1.7-beta1.zip.sha256) |
 | Historical preview | 0.1.6-beta1 / code 21 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.6-beta1/downloads/Veyra_Android_Source_0.1.6-beta1.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.6-beta1/downloads/Veyra_Android_Source_0.1.6-beta1.zip.sha256) |
-| Historical preview | 0.1.5-beta1 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.5-beta1/downloads/Veyra_Android_Source_0.1.5-beta1.zip.sha256) |
 
-Stable 0.1.7 is promoted from preview commit `466433e6e8f29666af1cfb012b14b4a8c77b7ad7`. It includes Theme Studio, 41 themes, 69 launcher choices and the listening/recovery/search fixes. The preview branch remains version 0.1.7-beta1; promotion does not turn its ZIP into a stable build.
+Stable 0.1.7 is promoted from preview commit `466433e6e8f29666af1cfb012b14b4a8c77b7ad7`. It includes Theme Studio, now 46 themes, 69 launcher choices and the listening/recovery/search fixes. The preview branch remains version 0.1.7-beta1; promotion does not turn its ZIP into a stable build.
 
 The current stable ZIP also includes the [theme installation correction](../verification/THEME-INSTALL-0.1.7.md): accept the published 512×512 brand artwork while retaining smaller control-icon limits. Rebuild and install an updated APK to receive this fix; published theme-pack bytes remain unchanged.
 
 [Stable release notes](https://github.com/Bhavishyadalal/Veyra/blob/main/RELEASE_NOTES_0.1.7.md) · [Promotion checks and known limits](https://github.com/Bhavishyadalal/Veyra/blob/main/verification/STABLE-0.1.7-PROMOTION.md) · [Theme collection](https://github.com/Bhavishyadalal/Veyra/blob/main/themes/README.md)
+
+The [five Keepsake packs](../themes/KEEPSAKE.md) work on stable 0.1.7, including its original 256 px validator. New launcher icons and searchable Studio remain exclusive to beta 0.1.8. Source packages retain current catalog packs and the legacy test fixture; superseded theme ZIP copies remain in Git.
+
+Historical preview 0.1.5 source remains available on [its preview branch](https://github.com/Bhavishyadalal/Veyra/tree/preview/0.1.5-beta1/downloads).
 
 ## Historical stable 0.1.6
 

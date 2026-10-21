@@ -1,13 +1,13 @@
-> **Stable 0.1.7 / code 26:** this source includes all 41 themes and 69 launcher choices. Stable catalog and pack links use `main`; the historical beta remains on `preview/0.1.7-beta1`. Published pack bytes are preserved. [Stable promotion](../verification/STABLE-0.1.7-PROMOTION.md).
-
 # Veyra Theme Studio
 
-**Latest preview: 0.1.7-beta1 / code 25. Stable 0.1.6 stays separate.**
+**Stable: 0.1.7 / code 26 · Preview: 0.1.8-beta1 / code 27.**
+
+**New: [five Keepsake themes](KEEPSAKE.md), compatible with stable 0.1.7.** All 46 packs use the shared catalog. The five new launcher choices, searchable Studio and icon-picker refinements are exclusive to beta 0.1.8; stable retains its 69 existing launcher choices.
 Made by **Bhavishya Dalal**.
 
 **Latest: [twenty Worlds themes — all fifteen proposed directions and five Quiet Horizons image themes](WORLDS.md). Rebuild the latest preview for the expanded catalog and new launcher aliases.**
 
-**New: [five Wayfarer themes, creative Glass Noir icons and themed bottom navigation](WAYFARER.md).** Forty-one themes are now available.
+**New: [five Wayfarer themes, creative Glass Noir icons and themed bottom navigation](WAYFARER.md).** Forty-six themes are now available.
 
 **Latest: [five Dreamscape themes with more detailed Glass Noir icons and custom transport/navigation glyphs](DREAMSCAPE.md).**
 
@@ -23,7 +23,7 @@ Made by **Bhavishya Dalal**.
 
 ## Make it yours
 
-1. Build/install the **latest preview source**. Theme ZIPs are not APKs.
+1. Use **stable 0.1.7** for the new Keepsake theme packs, or build the **0.1.8 beta preview** for the new launcher icons and Studio improvements. Theme ZIPs are not APKs. Tap catalog Refresh to see newly published packs.
 2. Open **Settings → Appearance → Theme studio**. The compact collection shows
    Original, your themes and one App icon row. Filter All or Downloaded.
 3. Tap a theme row to open its detail page. Preview, description and palette stay
@@ -37,7 +37,7 @@ Made by **Bhavishya Dalal**.
 6. For the standard launcher icon choose **Veyra → Glass Noir · Default**.
    Choose **Original Veyra** in Studio to restore your saved appearance.
 
-All 49 earlier launcher choices are retained; Worlds adds twenty more for a total of 69. Only the visible icon group is composed.
+All 69 existing launcher choices are retained. Beta 0.1.8 adds five Keepsake choices for a total of 74; stable remains at 69. Only the visible icon group is composed.
 Headers stay reachable; grids, group filters and hints scroll within the chooser
 on smaller displays. Icon changes run off the UI thread and are serialized with
 selection reads so Activity recreation cannot read a half-finished icon switch.
@@ -62,7 +62,7 @@ files, preserving corruption checks. Installed themes and Original remain offlin
 | Player | Custom glyphs, button geometry, themed fill and web/ember playhead | Seek, RTL, elapsed/duration, busy/locked states, haptics and touch targets |
 | Menus / Settings | Theme palette and sculpted action icon housings | Existing actions, account/offline requirements and sleep-timer state |
 | Theme Studio | Compact lazy collection, separate detail page, saved swatches and fixed actions | Checksum validation, download/cancel, confirmation, offline use and removal rules |
-| Android launcher | 69 bundled choices, with adaptive icons and legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
+| Android launcher | Stable: 69 choices. Beta: 74 choices, with adaptive icons and legacy fallbacks | One enabled launcher alias; user choice remains separate from theme selection |
 
 Web details are drawn behind content without pointer handlers or continuous
 animation loops. Native press feedback and existing reduced-motion preferences
