@@ -1,6 +1,6 @@
 # Keepsake · Five little worlds to live in
 
-**Theme packs: stable 0.1.7 and beta 0.1.8. New launcher choices: beta 0.1.8 only.**
+**Theme packs: stable 0.1.7 and 0.1.8. Matching launcher choices: stable 0.1.8 and the completed beta.**
 
 | Theme | Atmosphere | Type & controls | Download |
 | :--- | :--- | :--- | :--- |
@@ -16,11 +16,11 @@ Every pack includes an original AI-generated scene, matching Veyra Home branding
 
 On stable 0.1.7, open **Settings → Appearance → Theme studio**, refresh the catalog, download a Keepsake theme, then choose **Apply theme**. The new packs target code 26, use only existing schema 2/3 capabilities and include **256×256 brand artwork**, within even the original stable validator's limit. They need no new launcher alias to install or apply.
 
-Stable keeps its current launcher choices. Applying a Keepsake theme there does not offer one of the new matching launcher icons. Home branding inside the app is part of the downloaded theme and remains available.
+Historical stable 0.1.7 keeps its existing launcher choices; stable 0.1.8 includes the matching Keepsake launcher icons. Home branding inside the app is part of the downloaded theme and remains available.
 
-## Beta-only additions
+## Launcher additions, now in stable 0.1.8
 
-Beta **0.1.8-beta1 / code 27** adds five matching Glass Noir launcher choices: gingham-and-strawberry enamel, moss glass and spirit charm, amber cassette glass, underground chrome, and matcha cat-ear glass. Each keeps the official connected three-lobed Veyra waveform. Matching launcher selection remains optional and unchecked by default.
+Stable **0.1.8 / code 28**, promoted from beta 0.1.8, includes five matching Glass Noir launcher choices: gingham-and-strawberry enamel, moss glass and spirit charm, amber cassette glass, underground chrome, and matcha cat-ear glass. Each keeps the official connected three-lobed Veyra waveform. Matching launcher selection remains optional and unchecked by default.
 
 The beta also adds searchable Theme Studio, larger landscape collection thumbnails, icon search within each group, a current-icon label, larger icon previews and a clearer selected state. Existing collection filters, download/cancel, Apply confirmation, removal and all older icon choices remain.
 

@@ -10,8 +10,8 @@ buildscript {
         classpath("com.android.tools:r8:9.1.56")
     }
 }
-/* Phone version. Keep beta markers until publishing a signed stable release. */
-extra["veyraVersionCode"] = 27
+/* Stable source version. APK signing/publication is a separate release step. */
+extra["veyraVersionCode"] = 28
 extra["veyraVersionName"] = "0.1.8"
 
 /*
@@ -30,7 +30,7 @@ extra["veyraVersionName"] = "0.1.8"
  * so it is the one place to get right.
  *
  */
-extra["veyraBetaSuffix"] = "beta1"
+extra["veyraBetaSuffix"] = ""
 
 plugins {
     id("com.android.application") version "8.10.1" apply false

@@ -1,10 +1,10 @@
-> **Beta 0.1.8:** Appearance → Fonts overrides theme typography independently; All opens first in the icon picker. Studio uses revision-aware cached previews, and main screens show stronger static theme artwork. [Verification](../verification/APPEARANCE-0.1.8-beta1.md). These app changes require the beta source; stable-compatible theme packs remain unchanged.
+> **Stable 0.1.8:** independent fonts, All icons, cached Studio previews and stronger screen artwork are now included in stable. [Release notes](../RELEASE_NOTES_0.1.8.md).
 
 # Veyra Theme Studio
 
-**Stable: 0.1.7 / code 26 · Preview: 0.1.8-beta1 / code 27.**
+**Stable: 0.1.8 / code 28 · Completed preview: 0.1.8-beta1 / code 27.**
 
-**New: [five Keepsake themes](KEEPSAKE.md), compatible with stable 0.1.7.** All 46 packs use the shared catalog. The five new launcher choices, searchable Studio and icon-picker refinements are exclusive to beta 0.1.8; stable retains its 69 existing launcher choices.
+**New: [five Keepsake themes](KEEPSAKE.md), compatible with stable 0.1.7.** All 46 packs use the shared catalog. Stable 0.1.8 includes the five new launcher choices, searchable Studio and icon-picker refinements, for 74 launcher choices. Historical stable 0.1.7 retains 69.
 Made by **Bhavishya Dalal**.
 
 **Latest: [twenty Worlds themes — all fifteen proposed directions and five Quiet Horizons image themes](WORLDS.md). Rebuild the latest preview for the expanded catalog and new launcher aliases.**
@@ -25,7 +25,7 @@ Made by **Bhavishya Dalal**.
 
 ## Make it yours
 
-1. Use **stable 0.1.7** for the new Keepsake theme packs, or build the **0.1.8 beta preview** for the new launcher icons and Studio improvements. Theme ZIPs are not APKs. Tap catalog Refresh to see newly published packs.
+1. Use **stable 0.1.8** for all current theme packs, launcher icons and Studio improvements. Theme packs also work on historical stable 0.1.7. Theme ZIPs are not APKs. Tap catalog Refresh to see newly published packs.
 2. Open **Settings → Appearance → Theme studio**. The compact collection shows
    Original, your themes and one App icon row. Filter All or Downloaded.
 3. Tap a theme row to open its detail page. Preview, description and palette stay
@@ -39,7 +39,7 @@ Made by **Bhavishya Dalal**.
 6. For the standard launcher icon choose **Veyra → Glass Noir · Default**.
    Choose **Original Veyra** in Studio to restore your saved appearance.
 
-All 69 existing launcher choices are retained. Beta 0.1.8 adds five Keepsake choices for a total of 74; stable remains at 69. Only the visible icon group is composed.
+All 69 earlier launcher choices are retained. Stable 0.1.8 includes five Keepsake choices for a total of 74. Only the visible icon group is composed.
 Headers stay reachable; grids, group filters and hints scroll within the chooser
 on smaller displays. Icon changes run off the UI thread and are serialized with
 selection reads so Activity recreation cannot read a half-finished icon switch.

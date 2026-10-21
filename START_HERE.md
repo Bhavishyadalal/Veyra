@@ -1,4 +1,4 @@
-> **Current stable source: 0.1.7, code 26.** Open this complete project in Android Studio. [Promotion verification and remaining limits](verification/STABLE-0.1.7-PROMOTION.md). The historical beta remains available separately. No APK included.
+> **Current stable source: 0.1.8, code 28.** Open this complete project in Android Studio. [Promotion verification and remaining limits](verification/STABLE-0.1.8-PROMOTION.md). The historical beta remains available separately. No APK included.
 
 ## Historical build notes
 

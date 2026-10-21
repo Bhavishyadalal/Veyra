@@ -1,15 +1,16 @@
 # Veyra maintenance rules
 
-- Current stable Android source: `main` and `stable/0.1.7`, version 0.1.7 / code 26.
-  Promoted from preview commit `466433e6e8f29666af1cfb012b14b4a8c77b7ad7` at the owner's request.
-  Includes Theme Studio, forty-six published themes and sixty-nine optional launcher choices.
+- Current stable Android source: `main` and `stable/0.1.8`, version 0.1.8 / code 28.
+  Promoted from preview commit `646e34b56295e1fbfaddcb3cbdc71fa5038eb196` at the owner's request.
+  See `verification/STABLE-0.1.8-PROMOTION.md`. Historical stable 0.1.7 remains code 26 on `stable/0.1.7`.
+  Includes Theme Studio, forty-six published themes and seventy-four optional launcher choices.
   `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
   `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
   Keep future preview features out of stable until the owner explicitly promotes them.
   `preview/0.1.8-beta1` is 0.1.8-beta1 / code 27 with 74 launcher choices.
   Five Keepsake packs remain compatible with stable code 26, including its original
-  256 px brand-icon validation. Their new launcher aliases and UI polish are preview-only.
-  Preview also has independent fonts, the All icon filter and revised scene/preview
+  256 px brand-icon validation. Their launcher aliases and UI polish are included in stable 0.1.8.
+  Stable 0.1.8 also has independent fonts, the All icon filter and revised scene/preview
   rendering: see `verification/APPEARANCE-0.1.8-beta1.md`. The actual Android
   destination background-layer correction is recorded in `verification/BACKGROUNDS-0.1.8-beta1.md`;
   use the real retained wrapper when checking scene visibility. Deep sheets, artist-header
@@ -17,7 +18,7 @@
   `verification/DEEP-THEME-POLISH-0.1.8-beta1.md`. Font resources and OFL
   assets are generated from existing licensed theme sources; keep those sources
   in source ZIPs and avoid duplicating font binaries.
-  Preview also has three optional app styles alongside Original; see
+  Stable 0.1.8 also has three optional app styles alongside Original; see
   `verification/APP-STYLES-0.1.8-beta1.md` and its refinement
   `verification/APP-STYLES-POLISH-0.1.8-beta1.md`. Custom styles suspend downloaded
   theme/font visuals without replacing their saved selections. Preserve the
@@ -27,7 +28,7 @@
   `verification/EXPERIENCE-STAGE-1-0.1.8-beta1.md`. The approved roadmap is
   `docs/roadmap/BETA-0.1.8-EXPERIENCE.md`; preserve every pending item and never
   report the whole roadmap complete based on this first checkpoint.
-  Stable and this new preview include the theme brand-artwork bounds correction;
+  Stable 0.1.8 and the completed preview include the theme brand-artwork bounds correction;
   see `verification/THEME-INSTALL-0.1.7.md` before changing theme validation.
   Promotion does not establish APK publication, device validation or clean lint: see
   `verification/STABLE-0.1.7-PROMOTION.md` and the preserved submission-review inventory.
