@@ -22,6 +22,7 @@ import java.io.IOException
  * connection that is kept looks exactly like a dead server on every retry
  * after the first.
  */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class SmbDataSource : BaseDataSource(/* isNetwork = */ true) {
 
     private var file: com.hierynomus.smbj.share.File? = null

@@ -72,7 +72,7 @@ internal fun rememberAndroidAudioOutputs(): List<AudioOutputDevice> {
 
     val pipelineActiveId by remember {
         AudioOutputStatus.current.map { it.activeDeviceId }.distinctUntilChanged()
-    }.collectAsStateWithLifecycle(initialValue = AudioOutputStatus.current.value.activeDeviceId)
+    }.collectAsStateWithLifecycle(initialValue = remember { AudioOutputStatus.current.value.activeDeviceId })
 
     DisposableEffect(manager, selectedId) {
         fun refresh() {

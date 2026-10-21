@@ -85,6 +85,7 @@ fun ReplayShareSheet(
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
     val scope = rememberCoroutineScope()
     var poster by remember { mutableStateOf<Bitmap?>(null) }
     var failed by remember { mutableStateOf(false) }
@@ -189,7 +190,7 @@ fun ReplayShareSheet(
                 scope.launch {
                     val uri = cacheForSharing(context, image) ?: return@launch
                     context.startActivity(
-                        Intent.createChooser(sendIntent(uri), context.getString(R.string.share_your_replay)),
+                        Intent.createChooser(sendIntent(uri), textResources.getString(R.string.share_your_replay)),
                     )
                     onDismiss()
                 }

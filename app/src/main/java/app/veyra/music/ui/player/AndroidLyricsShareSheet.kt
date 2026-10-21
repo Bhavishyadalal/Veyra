@@ -68,6 +68,7 @@ internal fun AndroidLyricsShareSheet(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
     val scope = rememberCoroutineScope()
     val haptics = rememberHaptics()
 
@@ -205,7 +206,7 @@ internal fun AndroidLyricsShareSheet(
                                     context.startActivity(
                                         Intent.createChooser(
                                             sendIntent(uri),
-                                            context.getString(R.string.share_your_lyrics),
+                                            textResources.getString(R.string.share_your_lyrics),
                                         ),
                                     )
                                 }

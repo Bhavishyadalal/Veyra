@@ -159,6 +159,7 @@ import kotlinx.coroutines.launch
 /** Searchable settings with category navigation and shared, accessible controls. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 fun SettingsScreen(
     /** The window's width, for the gates that depend on it. */
     windowWidth: Dp,
@@ -181,6 +182,7 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
 
     val wifiQuality by AppSettings.audioQualityWifi.collectAsStateWithLifecycle()
     val cellularQuality by AppSettings.audioQualityCellular.collectAsStateWithLifecycle()
@@ -227,7 +229,7 @@ fun SettingsScreen(
     val outputStatus by AudioOutputStatus.current.collectAsStateWithLifecycle()
     val playingDolbyAtmos by remember {
         NerdStats.current.map { it?.isDolbyAtmos == true }.distinctUntilChanged()
-    }.collectAsStateWithLifecycle(initialValue = NerdStats.current.value?.isDolbyAtmos == true)
+    }.collectAsStateWithLifecycle(initialValue = remember { NerdStats.current.value?.isDolbyAtmos == true })
     val cacheLimitBytes by AppSettings.audioCacheLimitBytes.collectAsStateWithLifecycle()
     val showCacheFolder by AppSettings.showCacheFolder.collectAsStateWithLifecycle()
     val downloadQuality by AppSettings.downloadQuality.collectAsStateWithLifecycle()
@@ -331,14 +333,14 @@ fun SettingsScreen(
         if (target == null) return@rememberLauncherForActivityResult
         backupScope.launch {
             exporting = true
-            exportStatus = context.getString(R.string.settings_backup_working)
+            exportStatus = textResources.getString(R.string.settings_backup_working)
             try {
                 exportStatus = Backup.exportTo(context, target).fold(
                     onSuccess = { months ->
-                        context.getString(R.string.export_succeeded, context.countOfMonths(months))
+                        textResources.getString(R.string.export_succeeded, context.countOfMonths(months))
                     },
                     onFailure = {
-                        context.getString(R.string.export_failed, it.message ?: context.getString(R.string.unknown_error))
+                        textResources.getString(R.string.export_failed, it.message ?: textResources.getString(R.string.unknown_error))
                     },
                 )
             } finally {
@@ -352,14 +354,14 @@ fun SettingsScreen(
         if (source == null) return@rememberLauncherForActivityResult
         backupScope.launch {
             importing = true
-            importStatus = context.getString(R.string.settings_backup_working)
+            importStatus = textResources.getString(R.string.settings_backup_working)
             try {
                 importStatus = Backup.importFrom(context, source).fold(
                     onSuccess = {
-                        context.getString(R.string.import_succeeded, context.countOfMonths(it.months), it.from)
+                        textResources.getString(R.string.import_succeeded, context.countOfMonths(it.months), it.from)
                     },
                     onFailure = {
-                        context.getString(R.string.import_failed, it.message ?: context.getString(R.string.unknown_error))
+                        textResources.getString(R.string.import_failed, it.message ?: textResources.getString(R.string.unknown_error))
                     },
                 )
             } finally {
@@ -1148,7 +1150,7 @@ fun SettingsScreen(
                             val loader = SingletonImageLoader.get(context)
                             loader.memoryCache?.clear()
                             loader.diskCache?.clear()
-                            Toast.makeText(context, context.getString(R.string.image_cache_cleared), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, textResources.getString(R.string.image_cache_cleared), Toast.LENGTH_SHORT).show()
                         },
                     )
                 }
@@ -1346,7 +1348,7 @@ fun SettingsScreen(
                                     runCatching {
                                         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                                     }.onFailure {
-                                        Toast.makeText(context, context.getString(R.string.creator_link_unavailable), Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, textResources.getString(R.string.creator_link_unavailable), Toast.LENGTH_SHORT).show()
                                     }
                                 },
                             )
@@ -1364,7 +1366,7 @@ fun SettingsScreen(
                                 runCatching {
                                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/bhavishya_dalal_/")))
                                 }.onFailure {
-                                    Toast.makeText(context, context.getString(R.string.creator_link_unavailable), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, textResources.getString(R.string.creator_link_unavailable), Toast.LENGTH_SHORT).show()
                                 }
                             },
                         )
@@ -1480,7 +1482,7 @@ fun SettingsScreen(
                 TextButton(onClick = {
                     confirmClearSongCache = false
                     AudioCache.clear {
-                        Toast.makeText(context, context.getString(R.string.song_cache_cleared), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, textResources.getString(R.string.song_cache_cleared), Toast.LENGTH_SHORT).show()
                     }
                 }) {
                     Text(stringResource(R.string.clear))
@@ -1659,10 +1661,10 @@ fun SettingsScreen(
                                         showLastfmLoginDialog = false
                                     }
                                     .onFailure { e ->
-                                        lastfmError = e.message ?: context.getString(R.string.login_failed)
+                                        lastfmError = e.message ?: textResources.getString(R.string.login_failed)
                                     }
                             } catch (e: Exception) {
-                                lastfmError = e.message ?: context.getString(R.string.login_failed)
+                                lastfmError = e.message ?: textResources.getString(R.string.login_failed)
                             } finally {
                                 lastfmLoading = false
                             }

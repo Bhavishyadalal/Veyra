@@ -12,9 +12,13 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import app.veyra.music.R
 import app.veyra.music.data.model.Song
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
@@ -116,8 +120,8 @@ class DownloadService : Service() {
     private suspend fun work() {
         var idleFor = 0L
         while (true) {
-            val song = Downloads.takeNext()
-            if (song == null) {
+            val claim = Downloads.takeNext()
+            if (claim == null) {
                 // Nothing to take, but something may still be arriving — or
                 // another worker may fail a track back into view. Only a queue
                 // that stays empty, with nothing else in flight, is finished.
@@ -127,15 +131,23 @@ class DownloadService : Service() {
                 continue
             }
             idleFor = 0L
+            val song = claim.item
             current = song
             postNotification()
 
             // Its own job, so one track can be cancelled out from under the
             // loop without taking the rest of the queue with it.
-            val job = scope.launch { Downloads.run(this@DownloadService, song) }
-            Downloads.onRunning(song.videoId, job)
-            job.join()
-            Downloads.onIdle(song.videoId)
+            val job = scope.launch(start = CoroutineStart.LAZY) { Downloads.run(this@DownloadService, claim) }
+            Downloads.onRunning(claim, job)
+            try {
+                job.start()
+                job.join()
+            } finally {
+                // Service destruction also waits for abort/close before a new
+                // service may claim a retry for the same destination.
+                withContext(NonCancellable) { job.cancelAndJoin() }
+                Downloads.onIdle(claim)
+            }
         }
     }
 

@@ -308,6 +308,9 @@ private fun DownloadManagerRow(
     onCancel: () -> Unit,
     onRetry: () -> Unit,
 ) {
+    val rowContext = LocalContext.current
+    val savedDestinations by Downloads.saved.collectAsStateWithLifecycle()
+
     val reduced = app.veyra.music.ui.motion.rememberVeyraReducedMotion()
     val progress = item.progress
     val failed = progress as? DownloadProgress.Failed
@@ -404,7 +407,13 @@ private fun DownloadManagerRow(
                         },
                     )
                 }
-                is DownloadProgress.Done -> RowStatus(stringResource(if (app.veyra.music.data.settings.AppSettings.exportDownloads.value) R.string.saved_to_veyra_folder else R.string.download_saved_private))
+                is DownloadProgress.Done -> RowStatus(stringResource(when (
+                    app.veyra.music.download.downloadLocation(savedDestinations[item.videoId], rowContext.filesDir.absolutePath)
+                ) {
+                    app.veyra.music.download.DownloadLocation.PRIVATE -> R.string.download_saved_private
+                    app.veyra.music.download.DownloadLocation.PUBLIC -> R.string.saved_to_veyra_folder
+                    app.veyra.music.download.DownloadLocation.UNKNOWN -> R.string.downloaded
+                }))
                 is DownloadProgress.Failed ->
                     RowStatus(progress.reason, MaterialTheme.colorScheme.error)
             }

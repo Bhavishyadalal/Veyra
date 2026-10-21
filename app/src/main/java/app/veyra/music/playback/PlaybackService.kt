@@ -777,6 +777,7 @@ class PlaybackService : MediaLibraryService() {
 
     /** Index in the live queue represented by entry zero of the persisted window. */
     private var persistedQueueStart = 0
+    private var persistedQueueCount = 0
 
     /**
      * What AutoPlay had queued when repeat-all was switched on, held so
@@ -5618,6 +5619,7 @@ class PlaybackService : MediaLibraryService() {
         val range = LastPlayed.window(player.mediaItemCount, player.currentMediaItemIndex)
         if (range.isEmpty()) return
         persistedQueueStart = range.first
+        persistedQueueCount = range.count()
         LastPlayed.saveQueue(
             songs = range.map { player.getMediaItemAt(it).toSong() },
             index = player.currentMediaItemIndex - range.first,
@@ -5637,6 +5639,7 @@ class PlaybackService : MediaLibraryService() {
         }
         val range = LastPlayed.window(player.mediaItemCount, player.currentMediaItemIndex)
         persistedQueueStart = range.first
+        persistedQueueCount = range.count()
         LastPlayed.saveQueueImmediately(
             songs = (0 until player.mediaItemCount).map { player.getMediaItemAt(it).toSong() },
             index = player.currentMediaItemIndex,
@@ -5690,12 +5693,18 @@ class PlaybackService : MediaLibraryService() {
 
     /** Persist index and position without touching or serializing queue contents. */
     private fun savePlaybackState(player: ExoPlayer) {
-        if (player.mediaItemCount == 0) return
+        if (ListenTogether.state.value.inParty || player.mediaItemCount == 0) return
         if (boundedContextWindow != null && !ListenTogether.state.value.inParty) {
             BoundedContextPersistence.savePlaybackState(
                 currentEntryId = player.currentMediaItem?.queueEntryId,
                 positionMs = player.currentPosition,
             )
+        }
+        // The serialized restart window can be exhausted without a timeline
+        // edit (for example, skipping far ahead in a long user queue).
+        if (player.currentMediaItemIndex - persistedQueueStart !in 0 until persistedQueueCount) {
+            saveQueueSnapshot(player)
+            return
         }
         LastPlayed.savePlaybackState(
             index = player.currentMediaItemIndex - persistedQueueStart,
@@ -5707,6 +5716,7 @@ class PlaybackService : MediaLibraryService() {
     private fun restoreLastQueue(player: ExoPlayer): Boolean {
         val last = LastPlayed.load() ?: return false
         persistedQueueStart = 0
+        persistedQueueCount = last.songs.size
         player.setMediaItems(last.songs.map { it.toMediaItem() }, last.index, last.positionMs)
         return true
     }

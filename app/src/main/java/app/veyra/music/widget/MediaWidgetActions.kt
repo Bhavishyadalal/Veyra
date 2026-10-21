@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * queue is restored before the controller connects, so widget playback works
  * after process death without serializing the full live queue on progress ticks.
  */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class MediaWidgetActions : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {

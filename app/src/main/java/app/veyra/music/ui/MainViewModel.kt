@@ -114,6 +114,7 @@ import java.util.concurrent.atomic.AtomicLong
 /** What the Search tab searches: YouTube Music, or the Local Music folder on this device. */
 enum class SearchSource { YOUTUBE, LIBRARY, ADDONS }
 
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val authStore = AuthStore(app)
@@ -2157,6 +2158,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         searchSubmitted = true
         _suggestions.value = emptyList()
         _typeaheadResults.value = emptyList()
+        if (_searchSource.value == SearchSource.ADDONS) {
+            runAddonSearch(term.trim())
+            return
+        }
+        if (_searchSource.value == SearchSource.LIBRARY) return
         // Picking a suggestion or history item is deliberate, but it must NOT
         // pollute the user's YTMusic server-side search history — only an
         // explicit keyboard submission should do that.  Use the anonymous
@@ -2169,6 +2175,14 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun clearSearchHistory() = SearchHistory.clear()
 
     fun onQueryChange(newValue: String) {
+        if (_query.value == newValue) return
+        // Invalidate both first-page and continuation replies even when clearing
+        // does not emit a replacement network request.
+        newestRequestId.incrementAndGet()
+        searchSession = null
+        _searchLoadingMore.value = false
+        addonSearchJob?.cancel()
+        _addonResults.value = null
         _query.value = newValue
         if (newValue.isBlank()) {
             searchSubmitted = false
@@ -2240,7 +2254,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 val longest = perAddon.maxOfOrNull { it.size } ?: 0
                 for (i in 0 until longest) perAddon.forEach { rows -> rows.getOrNull(i)?.let(::add) }
             }
-            _addonResults.value = UiState.Success(merged)
+            if (_query.value.trim() == q && _searchSource.value == SearchSource.ADDONS && searchSubmitted) {
+                _addonResults.value = UiState.Success(merged)
+            }
         }
     }
 
@@ -2253,6 +2269,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      */
     fun setSearchSource(source: SearchSource) {
         if (_searchSource.value == source) return
+        newestRequestId.incrementAndGet()
+        searchSession = null
+        _searchLoadingMore.value = false
+        addonSearchJob?.cancel()
         _searchSource.value = source
         _suggestions.value = emptyList()
         _typeaheadResults.value = emptyList()
@@ -2362,6 +2382,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private fun startSearchPipeline() = viewModelScope.launch {
         searchRequests
             .collectLatest { request ->
+                if (!searchResponseIsCurrent(request.requestId, newestRequestId.get(), _searchSource.value == SearchSource.YOUTUBE)) return@collectLatest
                 val key = cacheKey(request.query, request.filter)
                 // Something to look at immediately: the exact answer if this
                 // query has been run before, otherwise the closest earlier
@@ -2389,7 +2410,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 val result = YtMusicRepository.searchPage(request.query, request.filter, request.anonymous)
                 // A search that has been superseded shouldn't land on screen,
                 // whether it succeeded or failed.
-                if (request.requestId != newestRequestId.get()) return@collectLatest
+                if (!searchResponseIsCurrent(request.requestId, newestRequestId.get(), _searchSource.value == SearchSource.YOUTUBE)) return@collectLatest
                 _results.value = result.fold(
                     onSuccess = { page -> published(page, key, request.requestId) },
                     onFailure = { failure -> UiState.Error(failure.friendly()) },
@@ -2447,7 +2468,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         // moved on: typed further, or searched — which empties [_suggestions],
         // and a late answer writing to it would reopen the suggestions over
         // the results the user is by then reading.
-        fun stillWanted(input: String) = _query.value == input && !searchSubmitted
+        fun stillWanted(input: String) = typeaheadIsCurrent(input, _query.value, searchSubmitted, _searchSource.value == SearchSource.YOUTUBE)
 
         suggestRequests
             .debounce(SUGGEST_DEBOUNCE_MS)
@@ -2472,25 +2493,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         suggestRequests
             .debounce(TYPEAHEAD_MEDIA_DEBOUNCE_MS)
             .collectLatest { input ->
-                if (input.isBlank()) {
-                    _typeaheadResults.value = emptyList()
-                    return@collectLatest
-                }
-                // Only show media results while the user is still typing — not
-                // reading committed search results. The query-text check on its
-                // own isn't enough: a late suggestion callback can repopulate
-                // _suggestions after submission, and we must not re-open the
-                // typeahead dropdown under an already-committed search.
-                if (searchSubmitted) {
-                    _typeaheadResults.value = emptyList()
-                    return@collectLatest
-                }
+                if (!typeaheadIsCurrent(input, _query.value, searchSubmitted, _searchSource.value == SearchSource.YOUTUBE)) return@collectLatest
                 val result = YtMusicRepository.searchTypeahead(input).getOrNull()
-                // If the field moved on, drop the result silently.
-                if (_query.value != input) {
-                    _typeaheadResults.value = emptyList()
-                    return@collectLatest
-                }
+                // Recheck submission/source after suspension, not just query text.
+                if (!typeaheadIsCurrent(input, _query.value, searchSubmitted, _searchSource.value == SearchSource.YOUTUBE)) return@collectLatest
                 // Cap results so the dropdown doesn't grow unbounded.
                 _typeaheadResults.value = result?.rows.orEmpty().take(TYPEAHEAD_MAX_RESULTS)
             }

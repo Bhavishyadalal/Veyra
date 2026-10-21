@@ -63,6 +63,7 @@ import java.util.Locale
  * running a phone into an AVR sees the toggle greyed out; the cost of putting
  * it in is a capability that flickers with the audio route. Left out knowingly.
  */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 object DeviceCodecs {
 
     private const val TAG = "Veyra"

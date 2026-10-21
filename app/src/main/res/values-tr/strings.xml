@@ -869,7 +869,7 @@
     <string name="loudness_gain_db">%1$s dB</string>
     <string name="loudness_lufs">%1$s LUFS</string>
 
-    <string name="shelf_100_on_repeat">Sürekli tekrarda</string>
+    <string name="shelf_100_on_repeat" formatted="false">Sürekli tekrarda</string>
 
     <string name="shelf_artists_on_the_rise">Yükselen sanatçılar</string>
 

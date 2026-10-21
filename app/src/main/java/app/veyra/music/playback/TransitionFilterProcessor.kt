@@ -25,6 +25,7 @@ import kotlin.math.tan
  * second-order sections cascaded to a 24 dB/octave Butterworth response.
  */
 @UnstableApi
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class TransitionFilterProcessor : BaseAudioProcessor() {
 
     @Volatile
@@ -541,6 +542,7 @@ class TransitionFilterProcessor : BaseAudioProcessor() {
  * "incoming" and "outgoing" are two different ExoPlayers whose roles swap at the
  * lap.
  */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 interface TransitionFilters {
     /** The track fading up — the session player, once the lap has handed the queue over. */
     fun incoming(lowPassHz: Float, highPassHz: Float)

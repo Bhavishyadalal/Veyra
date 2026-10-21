@@ -904,7 +904,7 @@
 
     <string name="selected_account">चयनित खाता</string>
 
-    <string name="shelf_100_on_repeat">लगातार रिपीट</string>
+    <string name="shelf_100_on_repeat" formatted="false">लगातार रिपीट</string>
 
     <string name="shelf_artists_on_the_rise">उभरते कलाकार</string>
 

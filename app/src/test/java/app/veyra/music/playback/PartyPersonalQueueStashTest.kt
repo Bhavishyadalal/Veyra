@@ -138,6 +138,40 @@ class PartyPersonalQueueStashTest {
         assertFalse(restored.wasPlaying)
     }
 
+    @Test
+    fun `entering party keeps local tracks and the original current index`() {
+        val ids = listOf("file:///music/one.flac", "online-two", "content://media/audio/3", "online-four")
+        val player = fakePlayer(ids, 2)
+        assertTrue(PartyPersonalQueueStash.stashFromPlayer(player))
+        val restored = PartyPersonalQueueStash.load()!!
+        assertEquals(ids, restored.songs.map { it.videoId })
+        assertEquals("content://media/audio/3", restored.songs[restored.index].videoId)
+        assertEquals(12000L, restored.positionMs)
+        assertFalse(restored.wasPlaying)
+    }
+
+    @Test
+    fun `an entirely local personal queue is still restorable after a party`() {
+        val ids = listOf("file:///music/one.flac", "file:///music/two.flac")
+        assertTrue(PartyPersonalQueueStash.stashFromPlayer(fakePlayer(ids, 1)))
+        assertEquals(ids, PartyPersonalQueueStash.load()!!.songs.map { it.videoId })
+    }
+
+    private fun fakePlayer(ids: List<String>, index: Int): androidx.media3.common.Player {
+        val items = ids.map { androidx.media3.common.MediaItem.Builder().setMediaId(it).build() }
+        return java.lang.reflect.Proxy.newProxyInstance(
+            androidx.media3.common.Player::class.java.classLoader,
+            arrayOf(androidx.media3.common.Player::class.java),
+        ) { _, method, args -> when (method.name) {
+            "getMediaItemCount" -> items.size
+            "getMediaItemAt" -> items[args!![0] as Int]
+            "getCurrentMediaItemIndex" -> index
+            "getCurrentPosition" -> 12000L
+            "getPlayWhenReady" -> false
+            else -> null
+        } } as androidx.media3.common.Player
+    }
+
     private class FakeSharedPreferences : SharedPreferences {
         private val data = mutableMapOf<String, Any?>()
 

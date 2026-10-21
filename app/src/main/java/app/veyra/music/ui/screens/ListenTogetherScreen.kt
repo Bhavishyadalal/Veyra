@@ -143,6 +143,7 @@ fun ListenTogetherScreen(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
 
@@ -202,7 +203,7 @@ fun ListenTogetherScreen(
         state.code?.let { partyCode ->
             val message = inviteLinkFor(partyCode) +
                 System.lineSeparator() + System.lineSeparator() +
-                context.getString(R.string.listen_together_share_text, partyCode)
+                textResources.getString(R.string.listen_together_share_text, partyCode)
             context.startActivity(
                 Intent.createChooser(
                     Intent(Intent.ACTION_SEND).apply {
@@ -466,7 +467,7 @@ fun ListenTogetherScreen(
                             clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Veyra room code", state.code.orEmpty())))
                             Toast.makeText(
                                 context,
-                                context.getString(R.string.copy_code),
+                                textResources.getString(R.string.copy_code),
                                 Toast.LENGTH_SHORT,
                             ).show()
                         }

@@ -909,7 +909,7 @@
 
     <string name="selected_account">Conta selecionada</string>
 
-    <string name="shelf_100_on_repeat">100% no repeat</string>
+    <string name="shelf_100_on_repeat" formatted="false">100% no repeat</string>
 
     <string name="shelf_artists_on_the_rise">Artistas em ascensão</string>
 

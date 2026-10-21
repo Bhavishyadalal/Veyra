@@ -32,6 +32,7 @@ interface FloatAudioProcessor {
 }
 
 /** Adapts [app.veyra.music.playback.SpatialAudioProcessor] to [FloatAudioProcessor]. */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 fun app.veyra.music.playback.SpatialAudioProcessor.asFloatAudioProcessor(): FloatAudioProcessor =
     object : FloatAudioProcessor {
         override fun configure(sampleRate: Int, channelCount: Int) =
@@ -44,6 +45,7 @@ fun app.veyra.music.playback.SpatialAudioProcessor.asFloatAudioProcessor(): Floa
     }
 
 /** Adapts [app.veyra.music.playback.EqualizerProcessor] to [FloatAudioProcessor]. */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 fun app.veyra.music.playback.EqualizerProcessor.asFloatAudioProcessor(): FloatAudioProcessor =
     object : FloatAudioProcessor {
         override fun configure(sampleRate: Int, channelCount: Int) =
@@ -56,6 +58,7 @@ fun app.veyra.music.playback.EqualizerProcessor.asFloatAudioProcessor(): FloatAu
     }
 
 /** Adapts [app.veyra.music.playback.TransitionFilterProcessor] to [FloatAudioProcessor]. */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 fun app.veyra.music.playback.TransitionFilterProcessor.asFloatAudioProcessor(): FloatAudioProcessor =
     object : FloatAudioProcessor {
         override fun configure(sampleRate: Int, channelCount: Int) =

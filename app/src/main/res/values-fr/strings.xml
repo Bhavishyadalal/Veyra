@@ -905,7 +905,7 @@
 
     <string name="selected_account">Compte sélectionné</string>
 
-    <string name="shelf_100_on_repeat">En boucle</string>
+    <string name="shelf_100_on_repeat" formatted="false">En boucle</string>
 
     <string name="shelf_artists_on_the_rise">Artistes émergents</string>
 

@@ -883,7 +883,7 @@
 
     <string name="selected_account">Akun terpilih</string>
 
-    <string name="shelf_100_on_repeat">Diputar berulang kali</string>
+    <string name="shelf_100_on_repeat" formatted="false">Diputar berulang kali</string>
 
     <string name="shelf_artists_on_the_rise">Artis pendatang baru</string>
 

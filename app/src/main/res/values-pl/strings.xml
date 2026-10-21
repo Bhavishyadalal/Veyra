@@ -54,14 +54,20 @@
     <plurals name="song_count_plural">
         <item quantity="one">%1$d piosenka</item>
         <item quantity="other">%1$d piosenki</item>
+        <item quantity="few">%1$d piosenki</item>
+        <item quantity="many">%1$d piosenek</item>
     </plurals>
     <plurals name="artist_count">
         <item quantity="one">%1$d artysta</item>
         <item quantity="other">%1$d artystów</item>
+        <item quantity="few">%1$d artyści</item>
+        <item quantity="many">%1$d artystów</item>
     </plurals>
     <plurals name="album_count">
         <item quantity="one">%1$d album</item>
         <item quantity="other">%1$d albumów</item>
+        <item quantity="few">%1$d albumy</item>
+        <item quantity="many">%1$d albumów</item>
     </plurals>
     <string name="songs">Piosenki</string>
     <string name="artists">Artyści</string>
@@ -80,6 +86,8 @@
     <plurals name="downloading_song_count">
         <item quantity="one">Pobieranie %1$d piosenki</item>
         <item quantity="other">Pobieranie %1$d piosenek</item>
+        <item quantity="few">Pobieranie %1$d piosenek</item>
+        <item quantity="many">Pobieranie %1$d piosenek</item>
     </plurals>
     <string name="source">Źródła</string>
     <string name="lossless_audio">Bezstratna jakość dźwięku</string>
@@ -942,7 +950,7 @@
 
     <string name="selected_account">Wybrane konto</string>
 
-    <string name="shelf_100_on_repeat">Ciągłe powtarzanie</string>
+    <string name="shelf_100_on_repeat" formatted="false">Ciągłe powtarzanie</string>
 
     <string name="shelf_artists_on_the_rise">Wschodzący artyści</string>
 
@@ -1264,10 +1272,14 @@
     <plurals name="add_to_playlists_count">
         <item quantity="one">Dodaj do %1$d playlisty</item>
         <item quantity="other">Dodaj do %1$d playlist</item>
+        <item quantity="few">Dodaj do %1$d playlist</item>
+        <item quantity="many">Dodaj do %1$d playlist</item>
     </plurals>
     <plurals name="added_to_playlists_notice">
         <item quantity="one">Dodano do %1$d playlisty</item>
         <item quantity="other">Dodano do %1$d playlist</item>
+        <item quantity="few">Dodano do %1$d playlist</item>
+        <item quantity="many">Dodano do %1$d playlist</item>
     </plurals>
     <string name="party_queue_full">Kolejka jest pełna (maksymalnie %d utworów na imprezie)</string>
 

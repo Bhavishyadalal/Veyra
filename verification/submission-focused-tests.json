@@ -1,0 +1,67 @@
+{
+  "version": "0.1.7-beta1",
+  "code": 25,
+  "distinctTests": 68,
+  "suites": [
+    {
+      "name": "app.veyra.music.download.DownloadRecordConcurrencyTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0"
+    },
+    {
+      "name": "app.veyra.music.playback.BoundedContextPersistenceTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0"
+    },
+    {
+      "name": "app.veyra.music.download.DownloadLocationTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0"
+    },
+    {
+      "name": "app.veyra.music.SearchPublicationTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0"
+    },
+    {
+      "name": "app.veyra.music.download.DownloadWorkQueueTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0"
+    },
+    {
+      "name": "app.veyra.music.playback.PartyPersonalQueueStashTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0"
+    },
+    {
+      "name": "app.veyra.music.playback.audio.bluetooth.BluetoothAudioTrackerTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0"
+    },
+    {
+      "name": "app.veyra.music.DownloadSessionTest",
+      "tests": "19",
+      "failures": "0",
+      "errors": "0"
+    },
+    {
+      "name": "app.veyra.music.download.ProbePrefixTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0"
+    },
+    {
+      "name": "app.veyra.music.QueueHistoryTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0"
+    }
+  ]
+}

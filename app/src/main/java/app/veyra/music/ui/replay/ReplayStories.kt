@@ -551,6 +551,7 @@ private fun ColumnScope.Intro(summary: ReplaySummary, headline: List<HeadlineRun
 @Composable
 private fun ColumnScope.Minutes(summary: ReplaySummary, headline: List<HeadlineRun>) {
     val context = LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
     Headline(headline)
     Spacer(Modifier.weight(1f))
     ArtworkCollage(summary)
@@ -562,9 +563,9 @@ private fun ColumnScope.Minutes(summary: ReplaySummary, headline: List<HeadlineR
         // only figure worth restating.
         text = buildString {
             if (summary.hours >= 1) {
-                append(context.getString(R.string.replay_hours_across, grouped(summary.hours)))
+                append(textResources.getString(R.string.replay_hours_across, grouped(summary.hours)))
             } else {
-                append(context.getString(R.string.replay_across))
+                append(textResources.getString(R.string.replay_across))
                 append(" ")
             }
             // Add a comma+space separator between the hours and the track count

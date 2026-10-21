@@ -1,4 +1,19 @@
-# Veyra 0.1.7-beta1 · Listening continuity and eleven worlds
+# Veyra 0.1.7-beta1 · Worlds and listening reliability
+
+## Submission review — search, downloads and personal-queue fixes
+
+- Late YouTube first pages, continuations and typeahead no longer repopulate a cleared, edited, submitted or switched-source search. Suggestion/history taps respect the selected Addons or Library source. Editing cancels obsolete addon work and clears its old loading state.
+- Download retries wait for cancelled transfers to close/abort their destinations, including service shutdown. Claim ownership rejects obsolete progress/completion/failure updates and stale finalizers. Other tracks can continue while a cancelled same-track retry waits.
+- Saved-download snapshot creation and persistence share one lock, preventing concurrent completions from writing an older record last. Dismissing a failure cannot remove a newly running retry.
+- Personal Listen Together stashes preserve local-file tracks and their original current index. Party playback cannot overwrite the personal queue's restart position.
+- Moving beyond the serialized restart window refreshes its bounded snapshot, preventing long-queue resumes from restoring a different track.
+- Guard Bluetooth alias access and shader construction by supported Android API; replace API-33-only download header reads with a bounded Android-8-compatible implementation.
+- Completed-download location labels follow the actual saved URI, including private offline packages, independently of later export-setting changes.
+- Observe affected Compose state/resource reads, document intentional Media3 API opt-ins, fix the literal percent category title and missing Hebrew/Polish plural branches. Canonical icon/theme names remain unchanged.
+- No version bump, stable promotion, theme-pack rewrite, APK build or Actions dispatch.
+
+[Review results and remaining device checks](verification/SUBMISSION-REVIEW-0.1.7-beta1.md)
+
 
 ## Worlds collection — twenty new themes
 

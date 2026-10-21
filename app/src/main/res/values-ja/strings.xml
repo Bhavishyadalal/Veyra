@@ -860,7 +860,7 @@
 
     <string name="shelf_sad">哀愁</string>
 
-    <string name="shelf_100_on_repeat">リピート再生中</string>
+    <string name="shelf_100_on_repeat" formatted="false">リピート再生中</string>
 
     <string name="shelf_new_albums_singles">最新アルバム＆シングル</string>
 

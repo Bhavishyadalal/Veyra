@@ -1,0 +1,1603 @@
+{
+  "initial": {
+    "errors": 379,
+    "warnings": 716,
+    "hints": 5,
+    "byCategory": [
+      {
+        "severity": "Warning",
+        "id": "ApplySharedPref",
+        "count": 5
+      },
+      {
+        "severity": "Warning",
+        "id": "DefaultLocale",
+        "count": 3
+      },
+      {
+        "severity": "Warning",
+        "id": "InlinedApi",
+        "count": 3
+      },
+      {
+        "severity": "Warning",
+        "id": "LocaleFolder",
+        "count": 2
+      },
+      {
+        "severity": "Error",
+        "id": "NewApi",
+        "count": 4
+      },
+      {
+        "severity": "Warning",
+        "id": "OldTargetApi",
+        "count": 1
+      },
+      {
+        "severity": "Warning",
+        "id": "UnusedAttribute",
+        "count": 11
+      },
+      {
+        "severity": "Warning",
+        "id": "AppLinkWarning",
+        "count": 2
+      },
+      {
+        "severity": "Warning",
+        "id": "VectorRaster",
+        "count": 3
+      },
+      {
+        "severity": "Warning",
+        "id": "GradleDependency",
+        "count": 16
+      },
+      {
+        "severity": "Warning",
+        "id": "NewerVersionAvailable",
+        "count": 21
+      },
+      {
+        "severity": "Error",
+        "id": "UnsafeOptInUsageError",
+        "count": 88
+      },
+      {
+        "severity": "Warning",
+        "id": "ConfigurationScreenWidthHeight",
+        "count": 5
+      },
+      {
+        "severity": "Error",
+        "id": "LocalContextGetResourceValueCall",
+        "count": 79
+      },
+      {
+        "severity": "Warning",
+        "id": "LocalContextResourcesRead",
+        "count": 6
+      },
+      {
+        "severity": "Warning",
+        "id": "ModifierFactoryExtensionFunction",
+        "count": 1
+      },
+      {
+        "severity": "Warning",
+        "id": "ModifierParameter",
+        "count": 13
+      },
+      {
+        "severity": "Warning",
+        "id": "PrivateResource",
+        "count": 19
+      },
+      {
+        "severity": "Error",
+        "id": "StateFlowValueCalledInComposition",
+        "count": 12
+      },
+      {
+        "severity": "Warning",
+        "id": "SwitchIntDef",
+        "count": 2
+      },
+      {
+        "severity": "Error",
+        "id": "StringFormatInvalid",
+        "count": 1
+      },
+      {
+        "severity": "Error",
+        "id": "MissingQuantity",
+        "count": 28
+      },
+      {
+        "severity": "Warning",
+        "id": "MissingQuantity",
+        "count": 88
+      },
+      {
+        "severity": "Error",
+        "id": "MissingTranslation",
+        "count": 167
+      },
+      {
+        "severity": "Warning",
+        "id": "Typos",
+        "count": 3
+      },
+      {
+        "severity": "Warning",
+        "id": "PluralsCandidate",
+        "count": 14
+      },
+      {
+        "severity": "Warning",
+        "id": "StringFormatCount",
+        "count": 16
+      },
+      {
+        "severity": "Warning",
+        "id": "GetInstance",
+        "count": 1
+      },
+      {
+        "severity": "Warning",
+        "id": "ExportedService",
+        "count": 1
+      },
+      {
+        "severity": "Warning",
+        "id": "ObsoleteSdkInt",
+        "count": 4
+      },
+      {
+        "severity": "Warning",
+        "id": "StaticFieldLeak",
+        "count": 6
+      },
+      {
+        "severity": "Hint",
+        "id": "AutoboxingStateCreation",
+        "count": 5
+      },
+      {
+        "severity": "Warning",
+        "id": "UnusedResources",
+        "count": 160
+      },
+      {
+        "severity": "Warning",
+        "id": "NotShrinkingResources",
+        "count": 1
+      },
+      {
+        "severity": "Warning",
+        "id": "UselessLeaf",
+        "count": 8
+      },
+      {
+        "severity": "Warning",
+        "id": "UselessParent",
+        "count": 2
+      },
+      {
+        "severity": "Warning",
+        "id": "IconXmlAndPng",
+        "count": 5
+      },
+      {
+        "severity": "Warning",
+        "id": "IconLauncherShape",
+        "count": 40
+      },
+      {
+        "severity": "Warning",
+        "id": "IconDuplicates",
+        "count": 10
+      },
+      {
+        "severity": "Warning",
+        "id": "UseKtx",
+        "count": 230
+      },
+      {
+        "severity": "Warning",
+        "id": "RtlSymmetry",
+        "count": 2
+      },
+      {
+        "severity": "Warning",
+        "id": "RtlHardcoded",
+        "count": 12
+      }
+    ]
+  },
+  "final": {
+    "errors": 109,
+    "warnings": 700,
+    "hints": 5,
+    "byCategory": [
+      {
+        "severity": "Warning",
+        "id": "ApplySharedPref",
+        "count": 5
+      },
+      {
+        "severity": "Warning",
+        "id": "DefaultLocale",
+        "count": 3
+      },
+      {
+        "severity": "Warning",
+        "id": "InlinedApi",
+        "count": 3
+      },
+      {
+        "severity": "Warning",
+        "id": "LocaleFolder",
+        "count": 2
+      },
+      {
+        "severity": "Warning",
+        "id": "OldTargetApi",
+        "count": 1
+      },
+      {
+        "severity": "Warning",
+        "id": "UnusedAttribute",
+        "count": 11
+      },
+      {
+        "severity": "Warning",
+        "id": "AppLinkWarning",
+        "count": 2
+      },
+      {
+        "severity": "Warning",
+        "id": "VectorRaster",
+        "count": 3
+      },
+      {
+        "severity": "Warning",
+        "id": "GradleDependency",
+        "count": 16
+      },
+      {
+        "severity": "Warning",
+        "id": "NewerVersionAvailable",
+        "count": 21
+      },
+      {
+        "severity": "Warning",
+        "id": "ConfigurationScreenWidthHeight",
+        "count": 5
+      },
+      {
+        "severity": "Warning",
+        "id": "LocalContextResourcesRead",
+        "count": 6
+      },
+      {
+        "severity": "Warning",
+        "id": "ModifierFactoryExtensionFunction",
+        "count": 1
+      },
+      {
+        "severity": "Warning",
+        "id": "ModifierParameter",
+        "count": 13
+      },
+      {
+        "severity": "Warning",
+        "id": "PrivateResource",
+        "count": 19
+      },
+      {
+        "severity": "Warning",
+        "id": "SwitchIntDef",
+        "count": 2
+      },
+      {
+        "severity": "Warning",
+        "id": "MissingQuantity",
+        "count": 88
+      },
+      {
+        "severity": "Error",
+        "id": "MissingTranslation",
+        "count": 109
+      },
+      {
+        "severity": "Warning",
+        "id": "Typos",
+        "count": 3
+      },
+      {
+        "severity": "Warning",
+        "id": "PluralsCandidate",
+        "count": 14
+      },
+      {
+        "severity": "Warning",
+        "id": "GetInstance",
+        "count": 1
+      },
+      {
+        "severity": "Warning",
+        "id": "ExportedService",
+        "count": 1
+      },
+      {
+        "severity": "Warning",
+        "id": "ObsoleteSdkInt",
+        "count": 4
+      },
+      {
+        "severity": "Warning",
+        "id": "StaticFieldLeak",
+        "count": 6
+      },
+      {
+        "severity": "Hint",
+        "id": "AutoboxingStateCreation",
+        "count": 5
+      },
+      {
+        "severity": "Warning",
+        "id": "UnusedResources",
+        "count": 160
+      },
+      {
+        "severity": "Warning",
+        "id": "NotShrinkingResources",
+        "count": 1
+      },
+      {
+        "severity": "Warning",
+        "id": "UselessLeaf",
+        "count": 8
+      },
+      {
+        "severity": "Warning",
+        "id": "UselessParent",
+        "count": 2
+      },
+      {
+        "severity": "Warning",
+        "id": "IconXmlAndPng",
+        "count": 5
+      },
+      {
+        "severity": "Warning",
+        "id": "IconLauncherShape",
+        "count": 40
+      },
+      {
+        "severity": "Warning",
+        "id": "IconDuplicates",
+        "count": 10
+      },
+      {
+        "severity": "Warning",
+        "id": "UseKtx",
+        "count": 230
+      },
+      {
+        "severity": "Warning",
+        "id": "RtlSymmetry",
+        "count": 2
+      },
+      {
+        "severity": "Warning",
+        "id": "RtlHardcoded",
+        "count": 12
+      }
+    ]
+  },
+  "remainingErrors": [
+    {
+      "id": "MissingTranslation",
+      "message": "\"veyra_github_profile\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1175",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"veyra_github_source\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1177",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"veyra_website_source\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1179",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_space_title\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1181",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_space_body\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1182",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_lyrics_title\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1183",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_lyrics_body\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1184",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_together_title\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1185",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_together_body\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1186",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_music_chip\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1187",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_lyrics_chip\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1188",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_together_chip\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1189",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_get_started\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1190",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_next_preview\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1191",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"welcome_preview_position\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1192",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"onboarding_personalize_title\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1193",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"settings_backup_working\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1194",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"home_layout_save_failed\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1195",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"home_offline_track_unavailable\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1196",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"stronger_text\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1197",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"stronger_text_subtitle\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1198",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"contrast_player_controls\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1199",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"contrast_player_controls_subtitle\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1200",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_accent\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1201",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_accent_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1202",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_artwork_corners\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1204",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_artwork_corners_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1205",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_list_spacing\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1207",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_list_spacing_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1208",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_motion_level\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1210",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_motion_level_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1211",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_player_shortcut\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1213",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_player_shortcut_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1214",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_reset_appearance\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1216",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_reset_appearance_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1217",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_reset_player\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1218",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_reset_player_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1219",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"custom_reset_confirm\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1220",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_packs\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1221",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_packs_subtitle\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1222",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_packs_description\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1223",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_original\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1224",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_active\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1225",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_restore_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1226",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_apply\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1227",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_download\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1228",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_update_required\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1229",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_catalog_empty\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1230",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_refresh_catalog\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1231",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_safety_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1232",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_restart_title\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1233",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_restart_description\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1234",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_apply_restart\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1235",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_later\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1236",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_remove\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1237",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_remove_description\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1238",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_done\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1239",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_download_update\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1240",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_collection_title\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1243",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_collection_description\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1244",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_all\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1245",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_downloaded\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1246",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_discover\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1247",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_no_downloads\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1248",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_includes\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1249",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_launcher_title\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1250",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_launcher_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1251",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_use_launcher\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1252",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_restore_launcher\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1253",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_launcher_confirm\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1254",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_current_launcher\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1255",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"icon_collection_glass\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1257",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"icon_collection_themes\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1258",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"icon_family_liquid\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1259",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"icon_chooser_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1262",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_back_collection\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1263",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_details\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1264",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_downloading\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1265",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_verifying\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1266",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_applying\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1267",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_live_apply_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1268",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_optional_restart\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1269",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"icon_choose\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1270",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_saved_appearance\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1271",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"home_saved_at\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1274",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_matching_icon\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1275",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"theme_icon_failed\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1276",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"download_saved_private\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1277",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"download_interrupted\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1278",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"download_storage\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1279",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"download_storage_private\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1281",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"download_retry_all\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1282",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"listen_together_host_reconnecting\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1283",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"queue_removed\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1284",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"queue_undo_expired\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1285",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"undo\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1286",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"download_action_track\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1287",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"icon_collection_atelier\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/strings.xml",
+          "line": "1296",
+          "column": "13"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"app_icon_changed\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "544"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"app_icon_failed\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "642"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"app_icon_original\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "349"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"app_icon_picker_hint\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "405"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"app_icon_wave_default\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "173"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"app_icon_wave_frost\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "239"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"app_icon_wave_orbit\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "294"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"creator_instagram\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "741"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"creator_instagram_handle\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "799"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"creator_link_unavailable\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "877"
+        }
+      ]
+    },
+    {
+      "id": "MissingTranslation",
+      "message": "\"launch_tagline\" is not translated in \"de\" (German), \"hi\" (Hindi), \"ru\" (Russian), \"pt\" (Portuguese), \"it\" (Italian), \"fr\" (French), \"zh\" (Chinese), \"es\" (Spanish), \"vi\" (Vietnamese), \"th\" (Thai), \"ja\" (Japanese), \"id\" (Indonesian), \"pl\" (Polish), \"he\" (Hebrew), \"tr\" (Turkish)",
+      "locations": [
+        {
+          "file": "app/src/main/res/values/veyra_brand.xml",
+          "line": "1",
+          "column": "964"
+        }
+      ]
+    }
+  ],
+  "status": "failed: translation completeness remains; no lint baseline, disable or severity downgrade added"
+}

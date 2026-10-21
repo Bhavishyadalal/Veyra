@@ -743,7 +743,7 @@
     <string name="shelf_party">Tiệc tùng</string>
     <string name="shelf_romance">Lãng mạn</string>
     <string name="shelf_sad">Tâm trạng buồn</string>
-    <string name="shelf_100_on_repeat">Nghe đi nghe lại</string>
+    <string name="shelf_100_on_repeat" formatted="false">Nghe đi nghe lại</string>
     <string name="shelf_new_albums_singles">Album &amp; đĩa đơn mới</string>
     <string name="shelf_hits_today">Bản hit hôm nay</string>
     <string name="shelf_artists_on_the_rise">Nghệ sĩ đang lên</string>

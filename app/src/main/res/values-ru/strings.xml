@@ -932,7 +932,7 @@
 
     <string name="selected_account">Выбранный аккаунт</string>
 
-    <string name="shelf_100_on_repeat">На повторе</string>
+    <string name="shelf_100_on_repeat" formatted="false">На повторе</string>
 
     <string name="shelf_artists_on_the_rise">Набирающие популярность</string>
 

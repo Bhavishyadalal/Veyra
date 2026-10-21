@@ -44,6 +44,7 @@ internal fun AppIconSetting(initialCollection: IconCollection? = null) {
 @Composable
 private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> Unit, onChanged: (AppIcon) -> Unit) {
     val context=LocalContext.current
+    val textResources = androidx.compose.ui.platform.LocalResources.current
     val scope=rememberCoroutineScope()
     val reducedMotion=app.veyra.music.ui.motion.rememberVeyraReducedMotion()
     var selected by remember { mutableStateOf<AppIcon?>(null) }
@@ -118,7 +119,7 @@ private fun AppIconChooser(initialCollection: IconCollection?, onDismiss: () -> 
                                 changing=false
                                 if(success) {
                                     selected=option;onChanged(option)
-                                    android.widget.Toast.makeText(context,context.getString(R.string.app_icon_changed),android.widget.Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(context,textResources.getString(R.string.app_icon_changed),android.widget.Toast.LENGTH_SHORT).show()
                                 } else error=true
                             }
                         }}) {
