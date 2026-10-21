@@ -1,3 +1,5 @@
+> **Historical branch:** Android source/version here is preserved. Current stable is [Veyra 0.1.7 / code 26](https://github.com/Bhavishyadalal/Veyra/tree/main). [Current source downloads](https://github.com/Bhavishyadalal/Veyra/blob/main/downloads/README.md). Status text below describes this branch before promotion.
+
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
 > **Preview source maintenance:** compiler-warning cleanup and Media3/clipboard API updates. [Review, checks and build limits](verification/BUILD-WARNINGS-0.1.6-beta1.md). Version remains 0.1.6-beta1; stable Android code is unchanged.
