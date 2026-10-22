@@ -2,6 +2,61 @@
   "schema": 1,
   "themes": [
     {
+      "id": "switchback-radio",
+      "name": "Switchback Radio",
+      "description": "Pixel-cut controls, stepped glyphs, lane-marker seek and a brisk lateral page reveal beneath an amber mountain night.",
+      "version": 1,
+      "minAppCode": 31,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/switchback-radio-v1.zip",
+      "sha256": "800997b17ec21d8ec18f5f31d7c79048ba5d4ba9faa188ce625f2bddf4a2b745",
+      "bytes": 478248,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/switchback-radio/artwork/preview.webp"
+    },
+    {
+      "id": "komorebi-hour",
+      "name": "Komorebi Hour",
+      "description": "Botanical linework, alternating soft corners, a leaf-vine progress track and a gentle upward page reveal in golden-hour foliage.",
+      "version": 1,
+      "minAppCode": 31,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/komorebi-hour-v1.zip",
+      "sha256": "70f504c953c2cf186356895a8ec0b27c533c715b3ae35c4fc0dd9c34ff4df54f",
+      "bytes": 920116,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/komorebi-hour/artwork/preview.webp"
+    },
+    {
+      "id": "rooftop-reverie",
+      "name": "Rooftop Reverie",
+      "description": "Art Deco cut frames, architectural double-line glyphs, skyline progress and a restrained depth reveal above a coral-cloud metropolis.",
+      "version": 1,
+      "minAppCode": 31,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/rooftop-reverie-v1.zip",
+      "sha256": "dce36498b8ec824e36d3acddc13485d47a2c26f478293ee50c1bce735f312bc1",
+      "bytes": 491355,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/rooftop-reverie/artwork/preview.webp"
+    },
+    {
+      "id": "apex-telemetry",
+      "name": "Apex Telemetry",
+      "description": "Asymmetric instrument panels, precision race glyphs, sector-tick progress and fast lateral page motion. Original unbranded endurance artwork.",
+      "version": 1,
+      "minAppCode": 31,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/apex-telemetry-v1.zip",
+      "sha256": "6c9a37075a4b226724d9195d7408f98c9337ff7d4a3b95657ef37d98cf935e69",
+      "bytes": 597473,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/apex-telemetry/artwork/preview.webp"
+    },
+    {
+      "id": "cinder-kata",
+      "name": "Cinder Kata",
+      "description": "Flame-leaf corners, tapered brush glyphs, ember-ribbon progress and a short depth reveal. An original sword and flame composition.",
+      "version": 1,
+      "minAppCode": 31,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/cinder-kata-v1.zip",
+      "sha256": "3f7cc67bdd431555d77df954a80de36c8a16684b8c3ab7deaaf17dbacd3a75e7",
+      "bytes": 591030,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/cinder-kata/artwork/preview.webp"
+    },
+    {
       "id": "lantern-letters",
       "name": "Lantern Letters",
       "description": "Ink-and-watercolor koi postal village, apricot lanterns and folded letters. Patrick Hand headings, lantern/letter glyphs, uneven paper frames and short sketch transitions.",

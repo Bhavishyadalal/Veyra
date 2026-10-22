@@ -32,7 +32,7 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.ManageAccounts
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.Icon
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text

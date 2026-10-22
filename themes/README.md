@@ -1,12 +1,14 @@
-> **Five new beta illustration worlds:** [Lantern Letters, Velvet Orbit, Moss & Mechanism, Sugar Static and Tidal Origami](ILLUSTRATED_WORLDS.md). [Collection overview](previews/illustrated-worlds/collection.png). Beta has 52 packs; build-30 users can refresh/download them without another engine rebuild.
+> **Latest beta build 31:** [Five Advanced Worlds](ADVANCED_WORLDS.md) bring 119 asset roles per theme, expanded Home/Player/Settings controls, native geometry, progress tracks and motion. [Compare all five](previews/advanced-worlds/collection.png). Beta now has **57 packs**; these five require the updated build-31 beta APK.
 
-> **New in beta 0.1.9 / code 30: [Margin Notes](MARGIN_NOTES.md)** — the first special sketch preset, with a [complete asset sheet](previews/margin-notes/all-assets.png), hand-drawn controls and short native sketch motion. Beta has 52 packs; stable 0.1.8 keeps its existing 46. A refreshed beta APK is required for the new preset.
+> **Five new beta illustration worlds:** [Lantern Letters, Velvet Orbit, Moss & Mechanism, Sugar Static and Tidal Origami](ILLUSTRATED_WORLDS.md). [Collection overview](previews/illustrated-worlds/collection.png). At that checkpoint beta had 52 packs; build-30 users can refresh/download them without another engine rebuild.
+
+> **New in beta 0.1.9 / code 30: [Margin Notes](MARGIN_NOTES.md)** — the first special sketch preset, with a [complete asset sheet](previews/margin-notes/all-assets.png), hand-drawn controls and short native sketch motion. At that checkpoint beta had 52 packs; stable 0.1.8 keeps its existing 46. A refreshed beta APK is required for the new preset.
 
 > **Stable 0.1.8:** independent fonts, All icons, cached Studio previews and stronger screen artwork are now included in stable. [Release notes](../RELEASE_NOTES_0.1.8.md).
 
 # Veyra Theme Studio
 
-**Stable: 0.1.8 / code 28 · Development preview: 0.1.9-beta1 / code 29.**
+**Stable: 0.1.8 / code 28 · Development preview: 0.1.9-beta1 / code 31.**
 
 **New: [five Keepsake themes](KEEPSAKE.md), compatible with stable 0.1.7.** All 46 packs use the shared catalog. Stable 0.1.8 includes the five new launcher choices, searchable Studio and icon-picker refinements, for 74 launcher choices. Historical stable 0.1.7 retains 69.
 Made by **Bhavishya Dalal**.
@@ -29,7 +31,7 @@ Made by **Bhavishya Dalal**.
 
 ## Make it yours
 
-1. Use **stable 0.1.8** for all current theme packs, launcher icons and Studio improvements. Theme packs also work on historical stable 0.1.7. Theme ZIPs are not APKs. Tap catalog Refresh to see newly published packs.
+1. Use **stable 0.1.8** for its 46 stable-compatible packs and 74 launcher choices. Those packs also work on historical stable 0.1.7. Margin Notes/Illustrated Worlds need beta build 30 or newer; Advanced Worlds needs build 31. Theme ZIPs are not APKs. Tap catalog Refresh to see newly published packs.
 2. Open **Settings → Appearance → Theme studio**. The compact collection shows
    Original, your themes and one App icon row. Filter All or Downloaded.
 3. Tap a theme row to open its detail page. Preview, description and palette stay

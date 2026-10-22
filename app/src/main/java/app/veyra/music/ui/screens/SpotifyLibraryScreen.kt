@@ -20,7 +20,7 @@ import org.jetbrains.compose.resources.painterResource
 import app.veyra.music.sharedui.resources.spotify_logo
 import app.veyra.music.sharedui.resources.Res
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton

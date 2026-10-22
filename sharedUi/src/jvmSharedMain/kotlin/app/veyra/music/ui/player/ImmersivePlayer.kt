@@ -1,5 +1,6 @@
 package app.veyra.music.ui.player
 
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures

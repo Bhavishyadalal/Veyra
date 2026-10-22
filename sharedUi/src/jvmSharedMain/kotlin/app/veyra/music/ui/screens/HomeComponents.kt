@@ -1,5 +1,6 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -45,7 +46,7 @@ internal fun HomeAccountPrompt(
     val colors = MaterialTheme.colorScheme
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
-    val shape = RoundedCornerShape(24.dp)
+    val shape = app.veyra.music.ui.themes.LocalThemeVisuals.current?.takeIf {it.materialStyle != "classic"}?.let {app.veyra.music.ui.themes.themeControlShape(it,24)} ?: RoundedCornerShape(24.dp)
     Row(
         modifier
             .fillMaxWidth()
@@ -141,7 +142,7 @@ internal fun HomeActionButton(
         )
     Box(
         Modifier.size(48.dp)
-            .clip(CircleShape)
+            .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.takeIf {it.materialStyle != "classic"}?.let {app.veyra.music.ui.themes.themeControlShape(it)} ?: CircleShape)
             .background(
                 if (selected == true || pressed) colors.onSurface.copy(alpha = .12f)
                 else colors.surfaceVariant.copy(alpha = .55f)
@@ -332,7 +333,7 @@ internal fun HomeArtworkFrame(
                 modifier =
                     Modifier.align(Alignment.TopStart)
                         .padding(16.dp)
-                        .clip(CircleShape)
+                        .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.takeIf {it.materialStyle != "classic"}?.let {app.veyra.music.ui.themes.themeControlShape(it)} ?: CircleShape)
                         .background(Color.Black.copy(alpha = .65f))
                         .padding(horizontal = 10.dp, vertical = 6.dp),
             )
@@ -345,7 +346,7 @@ internal fun HomeArtworkFrame(
             if (!compact) {
                 Box(
                     Modifier.size(40.dp)
-                        .clip(CircleShape)
+                        .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.takeIf {it.materialStyle != "classic"}?.let {app.veyra.music.ui.themes.themeControlShape(it)} ?: CircleShape)
                         .background(theme?.accent?.copy(alpha = .25f) ?: Color.White.copy(alpha = .18f)),
                     contentAlignment = Alignment.Center,
                 ) {

@@ -22,6 +22,7 @@ data class ThemeManifest(
     val rowCorner: Int, val buttonCorner: Int, val navCorner: Int,
     val assets: Map<String, String>, val files: Map<String, String>,
     val seekStyle: String = "plain", val seekHeight: Int = 7,
+    val materialStyle: String = "classic",
     val sceneStyle: String = "mist", val tagline: String = "A different kind of night.",
 )
 @Serializable
@@ -41,9 +42,11 @@ object ThemePack {
     const val MAX_FILE = 8L * 1024 * 1024
     private val pathPattern = Regex("[a-zA-Z0-9_-]+(?:/[a-zA-Z0-9_.-]+)+")
     private val hashPattern = Regex("[a-f0-9]{64}")
-    val assetKeys = setOf("header", "player", "preview", "headingFont", "bodyFont",
+    private val legacyAssetKeys = setOf("header", "player", "preview", "headingFont", "bodyFont",
         "nav_home", "nav_search", "nav_explore", "nav_library", "play", "pause", "previous", "next",
         "queue", "lyrics", "settings", "back", "download", "brandIcon")
+
+    val assetKeys = legacyAssetKeys + app.veyra.music.ui.themes.ThemeGlyphs.advancedKeys
 
     /** Brand artwork is published at 512 px; transport/navigation glyphs stay small. */
     fun validateImageBounds(key: String, width: Int, height: Int) {
@@ -77,16 +80,20 @@ object ThemePack {
         path.substringAfterLast('.').lowercase() in setOf("webp", "png", "ttf", "txt")
 
     fun validate(manifest: ThemeManifest, appCode: Int) {
-        require(manifest.schema in 1..3) { "This theme needs an unsupported theme engine." }
+        require(manifest.schema in 1..4) { "This theme needs an unsupported theme engine." }
         require(manifest.id.matches(Regex("[a-z0-9][a-z0-9-]{0,47}"))) { "Invalid theme ID." }
         require(manifest.name.length in 1..60 && manifest.author.length in 1..80)
         require(manifest.version in 1..10000 && manifest.minAppCode in 23..appCode) { "Update Veyra before installing this theme." }
         require(manifest.rowCorner in 8..28 && manifest.buttonCorner in 12..36 && manifest.navCorner in 18..48)
-        require(manifest.files.size in 1..48 && manifest.files.all { safePath(it.key) && hashPattern.matches(it.value) })
-        require(manifest.assets.keys.all { it in assetKeys })
+        require(manifest.files.size in 1..(if (manifest.schema >= 4) 128 else 48) && manifest.files.all { safePath(it.key) && hashPattern.matches(it.value) })
+        require(manifest.assets.keys.all { it in (if (manifest.schema >= 4) assetKeys else legacyAssetKeys) })
+        require(manifest.materialStyle in setOf("classic", "pixel", "botanical", "deco", "telemetry", "flame"))
+        val advancedSeek = manifest.seekStyle in setOf("road", "vine", "skyline", "telemetry", "flame")
+        if (manifest.schema == 4) require(manifest.minAppCode >= 31) { "Update Veyra for advanced themes." }
+        if (manifest.materialStyle != "classic" || advancedSeek) require(manifest.schema == 4 && manifest.minAppCode >= 31)
         require(manifest.sceneStyle in setOf("mist", "web", "playful", "sketch"))
         if (manifest.sceneStyle == "sketch" || manifest.seekStyle == "sketch") {
-            require(manifest.schema == 3 && manifest.minAppCode >= 30) { "Update Veyra for sketch themes." }
+            require(manifest.schema >= 3 && manifest.minAppCode >= 30) { "Update Veyra for sketch themes." }
         }
         require(manifest.tagline.length in 1..80 && manifest.tagline.none { it.isISOControl() })
         if (manifest.schema == 1) {
@@ -99,7 +106,7 @@ object ThemePack {
         for ((key, path) in manifest.assets) {
             require(if (key.endsWith("Font")) path.endsWith(".ttf") else path.endsWith(".png") || path.endsWith(".webp"))
         }
-        require(manifest.seekStyle in setOf("plain", "ember", "web", "bubbles", "sketch") && manifest.seekHeight in 6..12)
+        require(manifest.seekStyle in setOf("plain", "ember", "web", "bubbles", "sketch", "road", "vine", "skyline", "telemetry", "flame") && manifest.seekHeight in 6..12)
         val p = manifest.palette
         listOf(p.background,p.surface,p.raised,p.accent,p.accentContainer,p.text,p.muted,p.outline,p.secondary)
             .forEach { require(it.matches(Regex("#[0-9A-Fa-f]{6}"))) { "Invalid theme color." } }
@@ -131,8 +138,8 @@ object ThemePack {
         val staging = File(root, ".staging-${UUID.randomUUID()}").apply { mkdirs() }
         try {
             val manifest = ZipFile(zip).use { archive ->
-                val entries = archive.entries().asSequence().take(50).toList()
-                require(entries.size in 1..49 && entries.none { it.isDirectory }) { "Invalid theme archive." }
+                val entries = archive.entries().asSequence().take(130).toList()
+                require(entries.size in 1..129 && entries.none { it.isDirectory }) { "Invalid theme archive." }
                 val names = entries.map { it.name }
                 require(names.size == names.toSet().size && names.all { it == "theme.json" || safePath(it) })
                 val entry = archive.getEntry("theme.json") ?: error("Missing theme manifest.")

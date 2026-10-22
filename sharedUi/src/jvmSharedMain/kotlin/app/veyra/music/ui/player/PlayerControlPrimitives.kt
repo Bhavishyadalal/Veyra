@@ -63,7 +63,7 @@ internal fun PlayerControlSurface(
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val controlTint = pack?.accent ?: tint
-    val effectiveShape = if (grouped) RectangleShape else pack?.let { if (it.sceneStyle == "sketch") app.veyra.music.ui.themes.SketchShape else if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp) else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp) } ?: shape
+    val effectiveShape = if (grouped) RectangleShape else pack?.let { app.veyra.music.ui.themes.themeControlShape(it) } ?: shape
     val contrast = LocalVeyraContrastControls.current
     val controlBackground = if (grouped) containerColor else if (contrast && containerColor == Color.Transparent) controlTint.copy(alpha = 0.12f) else if (pack != null && containerColor == Color.Transparent) pack.raised.copy(alpha=.70f * app.veyra.music.ui.themes.LocalThemeArtworkOptions.current.controlOpacity) else containerColor
     val decoratedBackground = when(decoration) {
@@ -95,7 +95,7 @@ internal fun PlayerControlSurface(
             label = "playerControlPress",
         )
     val sketchTilt = animateFloatAsState(
-        if (pack?.sceneStyle == "sketch" && pressed && available && !reducedMotion && !grouped) -2.5f else 0f,
+        if ((pack?.sceneStyle == "sketch" || pack?.materialStyle == "flame") && pressed && available && !reducedMotion && !grouped) -2.5f else 0f,
         tween(playerMotionMillis(reducedMotion, 140), easing = VeyraMotion.Easing), label = "sketchPencilPress")
     val opacity =
         animateFloatAsState(
@@ -406,6 +406,9 @@ internal fun PlayerProgressTrack(
             drawCircle(Color(0xFFFFF1D4), radius = size.height * .22f,
                 center = Offset(filled.coerceIn(0f,size.width), size.height/2))
         }
+        if (pack != null && factor > .95f) {
+            app.veyra.music.ui.themes.drawAdvancedTrackDetails(this, pack, playerFraction(fraction()), true)
+        }
         if(thumbVisible) {
             val radius=6.dp.toPx()
             drawCircle(pack?.accent ?: activeColor(),radius,Offset(filled.coerceIn(minOf(radius,size.width/2),maxOf(size.width-radius,size.width/2)),size.height/2))
@@ -478,9 +481,7 @@ internal fun PlayerControlGroup(
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val shape = pack?.let {
-        if (it.sceneStyle == "sketch") app.veyra.music.ui.themes.SketchShape
-        else if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp)
-        else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp)
+        app.veyra.music.ui.themes.themeControlShape(it)
     } ?: CircleShape
     Row(modifier.clip(shape)
         .background(pack?.raised?.copy(alpha = .70f * app.veyra.music.ui.themes.LocalThemeArtworkOptions.current.controlOpacity) ?: tint.copy(alpha = .12f))

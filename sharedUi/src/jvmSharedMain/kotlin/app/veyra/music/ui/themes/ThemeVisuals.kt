@@ -39,6 +39,7 @@ data class ThemeVisuals(
     val text: Color = Color(0xFFFFF4E6), val muted: Color = Color(0xFFCFBDAA),
     val secondary: Color = accent, val sceneStyle: String = "mist",
     val tagline: String = "A different kind of night.",
+    val materialStyle: String = "classic",
 ) {
     fun asset(key: String): String? = assets[key]
 }
@@ -53,26 +54,7 @@ fun ThemeIcon(
     tint: Color = androidx.compose.material3.LocalContentColor.current,
     themeKey: String = imageVector.name,
 ) {
-    val key = when (themeKey) {
-        "veyra_appearance" -> "settings"
-        "bc_queue" -> "queue"
-        "bc_lyrics_quote" -> "lyrics"
-        else -> when (themeKey.substringAfterLast('.')) {
-            "ArrowBack" -> "back"
-            "PlayArrow" -> "play"
-            "Pause" -> "pause"
-            "SkipPrevious" -> "previous"
-            "SkipNext" -> "next"
-            "Home" -> "nav_home"
-            "Search" -> "nav_search"
-            "Explore" -> "nav_explore"
-            "LibraryMusic" -> "nav_library"
-            "Settings" -> "settings"
-            "Download", "DownloadForOffline", "FileDownload" -> "download"
-            "QueueMusic" -> "queue"
-            else -> themeKey
-        }
-    }
+    val key = ThemeGlyphs.key(themeKey)
     val path = LocalThemeVisuals.current?.asset(key)
     if (path == null) Icon(imageVector, contentDescription, modifier, tint)
     else {
@@ -80,7 +62,7 @@ fun ThemeIcon(
         val rtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
         // Match Material Icon's default 24 dp footprint; pack bitmaps have much
         // larger intrinsic sizes. Explicit caller sizing still takes precedence.
-        Image(painter, contentDescription, modifier.size(24.dp).graphicsLayer { if (key == "back" && rtl) scaleX = -1f },
+        Image(painter, contentDescription, modifier.size(24.dp).graphicsLayer { if ((key == "back" || imageVector.autoMirror) && rtl) scaleX = -1f },
             colorFilter = if (tint == Color.Unspecified) null else ColorFilter.tint(tint))
     }
 }
@@ -126,7 +108,13 @@ fun ThemeIcon(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     tint: Color = androidx.compose.material3.LocalContentColor.current,
-) { Icon(painter,contentDescription,modifier,tint) }
+    themeKey: String? = null,
+) {
+    val path = themeKey?.let { LocalThemeVisuals.current?.asset(ThemeGlyphs.key(it)) }
+    if (path == null) Icon(painter, contentDescription, modifier, tint)
+    else Image(rememberAsyncImagePainter(File(path), placeholder=painter, error=painter),
+        contentDescription, modifier.size(24.dp), colorFilter=if(tint==Color.Unspecified) null else ColorFilter.tint(tint))
+}
 
 
 /** Static local artwork and cached ornaments: no timers, shaders or touch interception. */
@@ -212,7 +200,8 @@ fun ThemeScene(modifier: Modifier = Modifier, prominent: Boolean = false) {
                 }
             }
             // A restrained constellation continues beyond the hero, even deep in a feed.
-            repeat(24) { i ->
+            if(theme.materialStyle != "classic") drawAdvancedSceneDetails(this,theme)
+            else repeat(24) { i ->
                 val x = size.width * ((i * 37 % 101) / 100f)
                 val y = size.height * ((i * 61 % 103) / 102f)
                 drawCircle(theme.accent.copy(alpha = if (i % 3 == 0) .26f else .12f),

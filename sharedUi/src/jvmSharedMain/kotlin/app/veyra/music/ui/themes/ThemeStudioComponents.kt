@@ -102,8 +102,8 @@ fun ThemeStudioRow(name: String, subtitle: String, model: Any?, active: Boolean,
             Text(name,style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold,color=c.onSurface)
             Text(subtitle,style=MaterialTheme.typography.bodySmall,color=c.onSurfaceVariant)
         }
-        if(active) androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.Rounded.Check,null,tint=c.primary,modifier=Modifier.size(20.dp))
-        else androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.AutoMirrored.Rounded.ArrowForward,null,tint=c.onSurfaceVariant,modifier=Modifier.size(20.dp))
+        if(active) ThemeIcon(androidx.compose.material.icons.Icons.Rounded.Check,null,tint=c.primary,modifier=Modifier.size(20.dp))
+        else ThemeIcon(androidx.compose.material.icons.Icons.AutoMirrored.Rounded.ArrowForward,null,tint=c.onSurfaceVariant,modifier=Modifier.size(20.dp))
     }
 }
 
@@ -121,7 +121,7 @@ fun ThemeIconChoice(label: String, selected: Boolean, enabled: Boolean, onClick:
         verticalArrangement=Arrangement.spacedBy(8.dp)) {
         Box(Modifier.fillMaxWidth(),contentAlignment=Alignment.Center) {
             Box(Modifier.size(64.dp),contentAlignment=Alignment.Center) { icon() }
-            if(selected) androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.Rounded.Check,null,
+            if(selected) ThemeIcon(androidx.compose.material.icons.Icons.Rounded.Check,null,
                 tint=c.primary,modifier=Modifier.align(Alignment.TopEnd).size(16.dp))
         }
         Text(label,style=MaterialTheme.typography.labelLarge,color=if(selected)c.onPrimaryContainer else c.onSurface,

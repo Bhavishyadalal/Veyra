@@ -57,7 +57,7 @@ for name in sorted(expected):
                 assert pack.testzip() is None
                 theme = json.loads(pack.read("theme.json"))
                 assert set(pack.namelist()) == set(theme["files"]) | {"theme.json"}
-                assert len(pack.namelist()) <= 49
+                assert len(pack.namelist()) <= (129 if theme["schema"] == 4 else 49)
                 for asset, digest in theme["files"].items():
                     assert not asset.startswith("/") and ".." not in asset.split("/")
                     assert asset.endswith((".webp", ".png", ".ttf", ".txt"))

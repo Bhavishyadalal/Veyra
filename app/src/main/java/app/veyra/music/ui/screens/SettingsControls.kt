@@ -1,5 +1,6 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import kotlinx.coroutines.launch
 
 import app.veyra.music.ui.layout.stackForReadability
@@ -50,7 +51,8 @@ import app.veyra.music.ui.components.veyraSwitchColors
 import app.veyra.music.ui.icons.SettingsIcons
 
 // Shared by every settings destination. No blur, image decode or permanent animation.
-internal val GroupShape = RoundedCornerShape(24.dp)
+internal val GroupShape: androidx.compose.ui.graphics.Shape
+    @Composable get() = app.veyra.music.ui.themes.LocalThemeVisuals.current?.takeIf {it.materialStyle != "classic"}?.let {app.veyra.music.ui.themes.themeControlShape(it,24)} ?: RoundedCornerShape(24.dp)
 internal val GROUP_INSET = 16.dp
 internal val ROW_INSET = 12.dp
 internal val ICON_SIZE = 22.dp
@@ -140,10 +142,7 @@ internal fun SettingsRow(
                                 Modifier.semantics { contentDescription = title }
                             else Modifier,
                         colors = veyraSwitchColors(),
-                        thumbContent =
-                            if (checked) {
-                                { Icon(Icons.Rounded.Check, null, Modifier.size(14.dp)) }
-                            } else null,
+                        thumbContent = if(theme?.materialStyle != null && theme.materialStyle != "classic") { { Icon(Icons.Rounded.Check, null, Modifier.size(14.dp), themeKey=if(checked) "switch_on" else "switch_off") } } else if(checked) { { Icon(Icons.Rounded.Check,null,Modifier.size(14.dp)) } } else null,
                     )
                 trailing != null -> trailing()
                 onClick != null -> Chevron()
@@ -151,7 +150,7 @@ internal fun SettingsRow(
         }
         Row(
             Modifier.fillMaxWidth()
-                .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { RoundedCornerShape(it.rowCorner.dp) } ?: VeyraSurfaces.Row)
+                .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { app.veyra.music.ui.themes.themeControlShape(it, it.rowCorner) } ?: VeyraSurfaces.Row)
                 .veyraPressFeedback(interaction, tint, enabled)
                 .then(action)
                 .semantics(mergeDescendants = true) {}
@@ -161,9 +160,9 @@ internal fun SettingsRow(
         ) {
             Box(
                 Modifier.size(ICON_SLOT)
-                    .clip(if (theme != null) RoundedCornerShape(12.dp) else CircleShape)
+                    .clip(if (theme != null) app.veyra.music.ui.themes.themeControlShape(theme,12) else CircleShape)
                     .background(if (theme != null) theme.raised else if (emphasized) tint.copy(alpha = 0.10f) else Color.Transparent)
-                    .then(if (theme != null) Modifier.border(.75.dp,theme.outline.copy(alpha=.65f),RoundedCornerShape(12.dp)) else Modifier),
+                    .then(if (theme != null) Modifier.border(.75.dp,theme.outline.copy(alpha=.65f),app.veyra.music.ui.themes.themeControlShape(theme,12)) else Modifier),
                 contentAlignment = Alignment.Center,
             ) {
                 if (iconPainter != null)
@@ -259,11 +258,11 @@ internal fun SettingsSubRow(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = 3.dp),
                     )
-                if (stacked) Switch(checked, onCheckedChange = null, colors = veyraSwitchColors())
+                if (stacked) Switch(checked, onCheckedChange = null, colors = veyraSwitchColors(), thumbContent = if(app.veyra.music.ui.themes.LocalThemeVisuals.current?.asset("switch_on") != null) { { Icon(Icons.Rounded.Check, null, Modifier.size(14.dp), themeKey=if(checked) "switch_on" else "switch_off") } } else null)
             }
             if (!stacked) {
                 Spacer(Modifier.width(12.dp))
-                Switch(checked, onCheckedChange = null, colors = veyraSwitchColors())
+                Switch(checked, onCheckedChange = null, colors = veyraSwitchColors(), thumbContent = if(app.veyra.music.ui.themes.LocalThemeVisuals.current?.asset("switch_on") != null) { { Icon(Icons.Rounded.Check, null, Modifier.size(14.dp), themeKey=if(checked) "switch_on" else "switch_off") } } else null)
             }
         }
     }
@@ -342,13 +341,25 @@ internal fun SliderRow(
             valueRange = valueRange,
             steps = steps,
             colors = colors,
+            thumb = {
+                val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
+                if (pack?.asset("seek_thumb") != null) {
+                    Icon(Icons.Rounded.Check, null, Modifier.size(20.dp), tint=MaterialTheme.colorScheme.primary, themeKey="seek_thumb")
+                } else SliderDefaults.Thumb(interactionSource=remember {MutableInteractionSource()}, colors=colors)
+            },
             track = { state ->
-                SliderDefaults.Track(
-                    sliderState = state,
-                    colors = colors,
-                    drawStopIndicator = null,
-                    drawTick = { _, _ -> },
-                )
+                val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
+                if (pack != null && pack.materialStyle != "classic") {
+                    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+                    androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(8.dp).graphicsLayer { scaleX = if(rtl) -1f else 1f }) {
+                        val v = if(formatValue != null) draft else sliderValue
+                        val span = valueRange.endInclusive - valueRange.start
+                        val f = if(span > 0f) ((v-valueRange.start)/span).coerceIn(0f,1f) else 0f
+                        drawRoundRect(pack.outline, cornerRadius=androidx.compose.ui.geometry.CornerRadius(size.height/2))
+                        if(f>0f)drawRoundRect(pack.accent, size=androidx.compose.ui.geometry.Size(size.width*f,size.height), cornerRadius=androidx.compose.ui.geometry.CornerRadius(size.height/2))
+                        app.veyra.music.ui.themes.drawAdvancedTrackDetails(this,pack,f,true)
+                    }
+                } else SliderDefaults.Track(sliderState=state, colors=colors, drawStopIndicator=null, drawTick={_,_->})
             },
             modifier =
                 Modifier.padding(start = TEXT_INSET, end = ROW_INSET, bottom = 8.dp).semantics {
@@ -394,7 +405,7 @@ internal fun SegmentedControl(
             val chosen = index == selectedIndex
             Row(
                 modifier
-                    .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { RoundedCornerShape(it.rowCorner.dp) } ?: VeyraSurfaces.Row)
+                    .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { app.veyra.music.ui.themes.themeControlShape(it, it.rowCorner) } ?: VeyraSurfaces.Row)
                     .background(
                         if (chosen) MaterialTheme.colorScheme.primaryContainer
                         else Color.Transparent
@@ -543,7 +554,7 @@ internal fun SettingsIconChoice(
 ) {
     Column(
         modifier
-            .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { RoundedCornerShape(it.rowCorner.dp) } ?: VeyraSurfaces.Row)
+            .clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { app.veyra.music.ui.themes.themeControlShape(it, it.rowCorner) } ?: VeyraSurfaces.Row)
             .selectable(selected = selected, role = Role.RadioButton, onClick = onSelect)
             .padding(horizontal = 8.dp, vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -724,7 +735,7 @@ internal fun SettingsPresetRow(
                     val label = options[index]
                     val selected = index == selectedIndex
                     val interaction = remember { MutableInteractionSource() }
-                    Row(Modifier.fillMaxWidth().clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { RoundedCornerShape(it.rowCorner.dp) } ?: VeyraSurfaces.Row)
+                    Row(Modifier.fillMaxWidth().clip(app.veyra.music.ui.themes.LocalThemeVisuals.current?.let { app.veyra.music.ui.themes.themeControlShape(it, it.rowCorner) } ?: VeyraSurfaces.Row)
                         .veyraPressFeedback(interaction, MaterialTheme.colorScheme.primary)
                         .selectable(selected = selected, role = Role.RadioButton,
                             interactionSource = interaction, indication = null,

@@ -1,5 +1,7 @@
 package app.veyra.music.ui
 
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.snap
 import app.veyra.music.ui.motion.VeyraMotion
@@ -14,11 +16,21 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 
 /** Opaque destination surfaces stay present under the entering page, avoiding a dark flash. */
-fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: Boolean, subtleMotion: Boolean = false, sketch: Boolean = false): ContentTransform {
+fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: Boolean, subtleMotion: Boolean = false, sketch: Boolean = false, materialStyle: String = "classic"): ContentTransform {
     val direction = if (rtl) -1 else 1
     val transition = when {
         reduceMotion || motion == NavigationMotion.None -> EnterTransition.None togetherWith ExitTransition.None
         subtleMotion -> (fadeIn(tween(VeyraMotion.Feedback)) togetherWith fadeOut(tween(VeyraMotion.Press))).apply { targetContentZIndex = 1f }
+        materialStyle != "classic" -> {
+            val back = motion == NavigationMotion.Back
+            val duration = when(materialStyle) { "telemetry" -> 170; "botanical" -> 280; "flame" -> 210; else -> 230 }
+            val enter = when(materialStyle) {
+                "botanical" -> slideInVertically(tween(duration, easing=VeyraMotion.Easing)) { it/35 }
+                "deco", "flame" -> scaleIn(tween(duration,easing=VeyraMotion.Easing),initialScale=if(back)1.015f else .975f)
+                else -> slideInHorizontally(tween(duration,easing=VeyraMotion.Easing)) { direction*it/(if(back)-18 else 18) }
+            }
+            ((enter+fadeIn(tween(duration))) togetherWith fadeOut(tween(120))).apply {targetContentZIndex=1f}
+        }
         sketch -> {
             val back = motion == NavigationMotion.Back
             ((slideInHorizontally(tween(240, easing = VeyraMotion.Easing)) { direction * it / (if (back) -22 else 14) } +

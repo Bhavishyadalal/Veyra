@@ -1,5 +1,6 @@
 package app.veyra.music.ui.screens
 
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid

@@ -29,7 +29,7 @@ import androidx.compose.material.icons.rounded.Speaker
 import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.material.icons.rounded.Usb
 import androidx.compose.material.icons.rounded.Watch
-import androidx.compose.material3.Icon
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

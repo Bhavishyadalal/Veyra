@@ -30,7 +30,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ViewCarousel
-import androidx.compose.material3.Icon
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -243,7 +243,7 @@ private fun HomeArtCard(
         },
         action = {
             if (isCurrent && isPlaying) SearchPlayingBars(Modifier.size(20.dp))
-            else if (item.videoId != null) Icon(painterResource(Res.drawable.ic_player_play), null,
+            else if (item.videoId != null) Icon(painterResource(Res.drawable.ic_player_play), null, themeKey="play",
                 tint = Color.White, modifier = Modifier.size(32.dp))
             else Icon(VeyraIcons.ChevronRight, null, tint = Color.White,
                 modifier = Modifier.size(18.dp).graphicsLayer { scaleX = if (rtl) -1f else 1f })

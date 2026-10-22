@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Modifier.themeNavigationSurface(shape: Shape): Modifier {
     val theme = LocalThemeVisuals.current ?: return this
-    val frame = if (theme.sceneStyle == "sketch") SketchShape else shape
+    val frame = if (theme.materialStyle != "classic") themeControlShape(theme) else if (theme.sceneStyle == "sketch") SketchShape else shape
     val opacity = LocalThemeArtworkOptions.current.controlOpacity
     return clip(frame)
         .background(Brush.verticalGradient(listOf(theme.raised.copy(alpha = opacity), theme.surface.copy(alpha = opacity))))

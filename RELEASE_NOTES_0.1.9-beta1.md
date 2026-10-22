@@ -1,5 +1,15 @@
 # Veyra 0.1.9-beta1
 
+## Advanced Worlds · five complete control themes · build 31
+
+- Switchback Radio, Komorebi Hour, Rooftop Reverie, Apex Telemetry and Cinder Kata: original AI artwork, **119 asset roles per pack**, 113 functional glyphs, themed in-app brands and licensed fonts.
+- Expanded semantic icon coverage across Home, Player, Settings, immersive playback, deep sheets and dialogs. Native control geometry, Settings switch/thumb glyphs, slider decorations, world-specific progress tracks and finite page-motion presets accompany each pack.
+- Theme schema 4 requires **Android build 31**; install the rebuilt beta APK once. Older schemas keep their original bounds and immutable packs. Theme Studio now lists 57 packs on the current beta.
+- Custom Home-style isolation, independent fonts, artwork overrides, accessible controls, real song artwork and service identities remain supported. Launcher aliases are unchanged. Browser previews are design studies, not device screenshots or FPS measurements.
+
+[All five themes, screen studies, every asset and compatibility](themes/ADVANCED_WORLDS.md)
+
+
 **Preview Android source · version code 30 · based on completed stable 0.1.8 / code 28**
 
 ## Five new illustrated worlds

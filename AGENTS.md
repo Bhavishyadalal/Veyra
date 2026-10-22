@@ -7,9 +7,13 @@
   `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
   `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
   Keep future preview features out of stable until the owner explicitly promotes them.
-  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 30,
+  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 31,
   based on completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`.
   Keep 0.1.9 changes out of main/stable until explicit promotion.
+  Build code 31 adds five Advanced Worlds packs (57 beta packs, 119 roles each),
+  bounded native material/seek/motion presets and expanded semantic icon routing.
+  See `themes/ADVANCED_WORLDS.md`; schema 4 requires minAppCode 31 and keeps
+  immutable old packs, old-schema file limits and all byte/path/contrast checks.
   Build code 30 adds Margin Notes and the bounded sketch preset (52 beta packs,
   launcher aliases unchanged). Five data-only illustration worlds are documented in
   `themes/ILLUSTRATED_WORLDS.md`; preserve supported preset limits and immutable packs.

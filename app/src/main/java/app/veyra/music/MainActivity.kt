@@ -972,6 +972,7 @@ private fun VeyraApp(
             viewModel.reloadLocalDetail(app.veyra.music.data.smb.SmbConfig.BROWSE_ID)
         }
     }
+    val themeMaterialMotion = app.veyra.music.ui.themes.LocalThemeVisuals.current?.materialStyle ?: "classic"
     val sketchThemeMotion = app.veyra.music.ui.themes.LocalThemeVisuals.current?.sceneStyle == "sketch"
     val controller = rememberMediaController()
     val liveQueueController = androidx.compose.runtime.rememberUpdatedState(controller)
@@ -2759,7 +2760,7 @@ private fun VeyraApp(
                     targetState = NavigationDestination(destinationKey, destinationDepth),
                     contentKey = { it.key },
                     transitionSpec = {
-                        navigationTransition(NavigationMotionPolicy.between(initialState, targetState), reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion)
+                        navigationTransition(NavigationMotionPolicy.between(initialState, targetState), reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion)
                     },
                     modifier = Modifier
                         .hazeSource(hazeState)
@@ -3235,7 +3236,7 @@ private fun VeyraApp(
                                 contentKey = { it?.browseId ?: "explore" },
                                 transitionSpec = {
                                     navigationTransition(if (targetState == null) NavigationMotion.Back else NavigationMotion.Forward,
-                                        reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion)
+                                        reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion)
                                 },
                                 modifier = Modifier.fillMaxSize(),
                                 label = "exploreCategory",
@@ -3518,7 +3519,7 @@ private fun VeyraApp(
                         // The main page already owns transitions to/from Discord or Spotify.
                         val motion = if (initialState.second != targetState.second) NavigationMotion.None
                             else if (targetState.first == null) NavigationMotion.Back else NavigationMotion.Forward
-                        navigationTransition(motion, reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion)
+                        navigationTransition(motion, reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion)
                     },
                     modifier = Modifier.fillMaxSize(),
                     label = "settingsSubScreen",
