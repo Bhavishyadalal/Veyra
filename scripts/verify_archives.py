@@ -11,7 +11,7 @@ expected = {
     "Veyra_Android_Source_0.1.8_Stable.zip",
     "Veyra_Android_Source_0.1.7-beta1.zip",
     "Veyra_Android_Source_0.1.8-beta1.zip",
-    "Veyra_Android_Source_0.1.6-beta1.zip",
+    "Veyra_Android_Source_0.1.9-beta1.zip",
 }
 actual = {p.name for p in (root / "downloads").glob("*.zip")}
 if actual != expected:

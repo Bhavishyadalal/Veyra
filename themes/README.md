@@ -2,7 +2,7 @@
 
 # Veyra Theme Studio
 
-**Stable: 0.1.8 / code 28 · Completed preview: 0.1.8-beta1 / code 27.**
+**Stable: 0.1.8 / code 28 · Development preview: 0.1.9-beta1 / code 29.**
 
 **New: [five Keepsake themes](KEEPSAKE.md), compatible with stable 0.1.7.** All 46 packs use the shared catalog. Stable 0.1.8 includes the five new launcher choices, searchable Studio and icon-picker refinements, for 74 launcher choices. Historical stable 0.1.7 retains 69.
 Made by **Bhavishya Dalal**.

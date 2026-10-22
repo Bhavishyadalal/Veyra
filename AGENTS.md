@@ -7,7 +7,10 @@
   `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
   `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
   Keep future preview features out of stable until the owner explicitly promotes them.
-  `preview/0.1.8-beta1` is 0.1.8-beta1 / code 27 with 74 launcher choices.
+  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 29,
+  based on completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`.
+  Keep 0.1.9 changes out of main/stable until explicit promotion.
+  `preview/0.1.8-beta1` remains historical, code 27, with 74 launcher choices.
   Five Keepsake packs remain compatible with stable code 26, including its original
   256 px brand-icon validation. Their launcher aliases and UI polish are included in stable 0.1.8.
   Stable 0.1.8 also has independent fonts, the All icon filter and revised scene/preview

@@ -5,13 +5,17 @@ Current stable and the three newest preview archives are retained here. Each is 
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
 | Current stable · `main`, `stable/0.1.8` | 0.1.8 / code 28 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.8_Stable.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.8_Stable.zip.sha256) |
+| Current preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 29 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 | Completed preview · `preview/0.1.8-beta1` | 0.1.8-beta1 / code 27 | [Download](Veyra_Android_Source_0.1.8-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.8-beta1.zip.sha256) |
 | Historical preview | 0.1.7-beta1 / code 25 | [Download](Veyra_Android_Source_0.1.7-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.7-beta1.zip.sha256) |
-| Historical preview | 0.1.6-beta1 / code 21 | [Download](Veyra_Android_Source_0.1.6-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.6-beta1.zip.sha256) |
 
 Stable 0.1.8 is promoted from completed preview commit `646e34b56295e1fbfaddcb3cbdc71fa5038eb196`. It includes all shipped beta features and the final Settings/transition refinements, 46 published themes and 74 launcher choices. Theme packs still support stable 0.1.7; rebuilding is necessary for new app features and launcher aliases.
 
 [Release notes](../RELEASE_NOTES_0.1.8.md) · [Promotion verification and limits](../verification/STABLE-0.1.8-PROMOTION.md) · [Theme collection](../themes/README.md)
+
+The 0.1.9-beta1 preview starts from completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`; no new app features are introduced in this initialization. [Preview notes](../RELEASE_NOTES_0.1.9-beta1.md).
+
+The rotated 0.1.6-beta1 archive remains available through [its original retained snapshot](https://github.com/Bhavishyadalal/Veyra/tree/6e37aa4615bad01b895dc547454f79218d94175e/downloads). Stable 0.1.8 and the two retained historical preview ZIPs preserve their exact bytes.
 
 ## Historical stable sources
 

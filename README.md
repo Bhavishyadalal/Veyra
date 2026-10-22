@@ -1,3 +1,5 @@
+> **Current development: 0.1.9-beta1 / code 29** on `preview/0.1.9-beta1`, based on completed stable v0.1.8. This initial checkpoint changes version metadata and source packaging only. [Preview notes](RELEASE_NOTES_0.1.9-beta1.md) · [Verification](verification/PREVIEW-START-0.1.9-beta1.md).
+
 > **Stable 0.1.8 / code 28:** three optional app styles, immersive player, five additional widgets, independent fonts, Home/navigation customization and Settings/motion refinements. [Release notes](RELEASE_NOTES_0.1.8.md) · [Promotion checks and limits](verification/STABLE-0.1.8-PROMOTION.md).
 
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
