@@ -752,6 +752,7 @@ fun SettingsScreen(
                     SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.theme_packs),
                         subtitle = stringResource(R.string.theme_packs_subtitle), onClick = { showThemeGallery = true })
                 }
+                row(stringResource(R.string.theme_artwork_controls), "artwork", "background", "visibility", "dim", "blur", "transparency") { ThemeArtworkSetting() }
                 val themeTitle = stringResource(R.string.theme)
                 row(themeTitle, "dark mode", "light mode") {
                     SettingsPresetRow(enabled = !app.veyra.music.ui.styles.LocalAppStyle.current.custom, icon = Icons.Rounded.Brightness4, title = themeTitle, subtitle = if(app.veyra.music.ui.styles.LocalAppStyle.current.custom)stringResource(R.string.style_original_only) else "",

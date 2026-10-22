@@ -1,0 +1,11 @@
+<resources>
+    <string name="queue_clear_added">Clear added songs</string>
+    <string name="queue_clear_added_hint">Remove only songs you added to Next in queue. Keep the current song, playlist and AutoPlay. You can undo the removal before the queue changes.</string>
+    <string name="queue_upcoming_summary">%1$d upcoming · %2$s min</string>
+    <string name="queue_move_up">Move up in queue</string>
+    <string name="queue_move_down">Move down in queue</string>
+    <string name="search_no_matches">No matches for “%1$s”. Try another spelling or a different category.</string>
+    <string name="search_all_categories">Search all categories</string>
+    <string name="queue_upcoming_count">%1$d upcoming</string>
+    <string name="search_songs_heading">Songs</string>
+</resources>

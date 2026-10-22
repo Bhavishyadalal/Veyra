@@ -27,6 +27,7 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,6 +35,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material.icons.rounded.GraphicEq
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
+import app.veyra.music.data.model.durationMillis
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -47,6 +56,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.snapshotFlow
@@ -79,7 +90,6 @@ import app.veyra.music.ui.icons.VeyraIcons
 import app.veyra.music.data.model.QueueTier
 import app.veyra.music.data.model.Song
 import app.veyra.music.playback.autoplaySectionStart
-import kotlin.math.abs
 import kotlin.math.roundToInt
 
 /**
@@ -216,6 +226,7 @@ private fun LazyItemScope.queueMotion(): Modifier =
         placementSpec = if (LocalPlayerReducedMotion.current) null else QUEUE_ROW_MOTION)
 
 /** The live queue, in the player itself. */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun InlineQueue(
     queue: List<Song>,
@@ -240,6 +251,7 @@ internal fun InlineQueue(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
     val reducedMotion = app.veyra.music.ui.motion.rememberVeyraReducedMotion()
     LaunchedEffect(listState) {
         snapshotFlow { listState.isScrollInProgress }.collect(onScrollingChange)
@@ -253,6 +265,20 @@ internal fun InlineQueue(
     val showHistory by PlayerSettings.showQueueHistory.collectAsStateWithLifecycle()
     val tracks = remember(queue, currentIndex, showHistory) { splitQueue(queue, currentIndex, showHistory) }
     val drag = rememberQueueDrag(listState, tracks, onMove, onDragActiveChange)
+    var clearing by remember { mutableStateOf(false) }
+    val upcoming = remember(queue, currentIndex) { if (currentIndex in queue.indices) queue.drop(currentIndex + 1) else emptyList() }
+    val knownDuration = remember(upcoming) { upcoming.sumOf { it.durationMillis() / 1000L } }
+    val hasUnknownDuration = remember(upcoming) { upcoming.any { it.durationMillis() <= 0L } }
+    if (clearing) {
+        AlertDialog(onDismissRequest = { clearing = false },
+            title = { Text(stringResource(Res.string.queue_clear_added)) },
+            text = { Text(stringResource(Res.string.queue_clear_added_hint)) },
+            confirmButton = { TextButton(enabled = !controlsLocked, onClick = {
+                clearing = false
+                onClear()
+            }) { Text(stringResource(Res.string.clear)) } },
+            dismissButton = { TextButton(onClick = { clearing = false }) { Text(stringResource(Res.string.cancel)) } })
+    }
     val nowPlaying = tracks.nowPlaying
     val contextSong = tracks.context.firstOrNull()?.song
     val contextTitle = contextSong?.playbackSource?.takeIf { it.isNotBlank() }
@@ -260,13 +286,16 @@ internal fun InlineQueue(
         ?: nowPlaying?.song?.playbackSource?.takeIf { it.isNotBlank() }
         ?: nowPlaying?.song?.albumName?.takeIf { it.isNotBlank() }
 
-    // Keep Now playing in view; history is available by scrolling upwards.
+    // Follow playback only near the current row; preserve deliberate browsing.
     // Include the entry key because trimming history can leave the index unchanged.
     var hasScrolledOnce by remember { mutableStateOf(false) }
+    var previousNowRow by remember { mutableIntStateOf(0) }
     LaunchedEffect(currentIndex, nowPlaying?.key, showHistory) {
         val nowPlayingRow = if (tracks.history.isEmpty()) 0 else tracks.history.size + 1
         val scrolledAway = listState.firstVisibleItemIndex != nowPlayingRow || listState.firstVisibleItemScrollOffset != 0
-        if (drag.held == null && nowPlaying != null && scrolledAway) {
+        val followingCurrent = abs(listState.firstVisibleItemIndex - previousNowRow) <= 1
+        previousNowRow = nowPlayingRow
+        if (drag.held == null && nowPlaying != null && scrolledAway && (!hasScrolledOnce || followingCurrent)) {
             if (hasScrolledOnce && !reducedMotion) {
                 listState.animateScrollToItem(nowPlayingRow)
             } else {
@@ -274,6 +303,7 @@ internal fun InlineQueue(
                 hasScrolledOnce = true
             }
         }
+        if (nowPlaying != null) hasScrolledOnce = true
     }
 
     Column(modifier.fillMaxWidth()) {
@@ -288,8 +318,23 @@ internal fun InlineQueue(
                 color = Color.White,
                 modifier = Modifier.weight(1f),
             )
-            if (tracks.user.isNotEmpty()) {
-                QueueClearButton(MaterialTheme.typography.titleMedium, controlsLocked, onClear)
+            if (nowPlaying != null) TextButton(onClick = {
+                scope.launch {
+                    val row = if (tracks.history.isEmpty()) 0 else tracks.history.size + 1
+                    if (reducedMotion) listState.scrollToItem(row) else listState.animateScrollToItem(row)
+                }
+            }) { Text(stringResource(Res.string.now_playing)) }
+        }
+        if (upcoming.isNotEmpty()) {
+            if (knownDuration > 0) Text(stringResource(Res.string.queue_upcoming_summary, upcoming.size,
+                "${((knownDuration + 59) / 60).coerceAtLeast(1)}" + if (hasUnknownDuration) "+" else ""),
+                style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = .65f))
+            else Text(stringResource(Res.string.queue_upcoming_count, upcoming.size),
+                style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = .65f))
+            FlowRow {
+                if (tracks.user.isNotEmpty()) TextButton(enabled = !controlsLocked, onClick = { clearing = true }) {
+                    Text(stringResource(Res.string.queue_clear_added))
+                }
             }
         }
         Spacer(Modifier.height(4.dp))
@@ -351,10 +396,10 @@ internal fun InlineQueue(
                             title = stringResource(Res.string.next_in_queue),
                             modifier = Modifier.padding(top = 16.dp, bottom = 6.dp).then(queueMotion()),
                         ) {
-                            QueueClearButton(MaterialTheme.typography.labelLarge, controlsLocked, onClear)
+                            QueueClearButton(MaterialTheme.typography.labelLarge, controlsLocked) { clearing = true }
                         }
                     }
-                    queueSection(tracks.user, QueueSection.USER, drag, controlsLocked, onJumpTo, onRemove)
+                    queueSection(tracks.user, QueueSection.USER, drag, controlsLocked, onJumpTo, onRemove, onMove)
                 }
                 if (tracks.context.isNotEmpty()) {
                     item(key = "header-context") {
@@ -367,13 +412,13 @@ internal fun InlineQueue(
                             modifier = Modifier.padding(top = 16.dp, bottom = 6.dp).then(queueMotion()),
                         )
                     }
-                    queueSection(tracks.context, QueueSection.CONTEXT, drag, controlsLocked, onJumpTo, onRemove)
+                    queueSection(tracks.context, QueueSection.CONTEXT, drag, controlsLocked, onJumpTo, onRemove, onMove)
                 }
                 if (autoplayEnabled || tracks.autoplay.isNotEmpty()) {
                     item(key = "autoplay-heading") {
                         AutoplayHeading(hasTracks = tracks.autoplay.isNotEmpty(), modifier = queueMotion())
                     }
-                    queueSection(tracks.autoplay, QueueSection.AUTOPLAY, drag, controlsLocked, onJumpTo, onRemove)
+                    queueSection(tracks.autoplay, QueueSection.AUTOPLAY, drag, controlsLocked, onJumpTo, onRemove, onMove)
                 }
             }
             // The held row, drawn over the list where the finger is. Positioned
@@ -409,8 +454,11 @@ private fun LazyListScope.queueSection(
     locked: Boolean,
     onJumpTo: (Int) -> Unit,
     onRemove: (Int) -> Unit,
+    onMove: (Int, Int) -> Unit,
 ) {
-    items(rows, key = { it.key }) { track ->
+    itemsIndexed(rows, key = { _, track -> track.key }) { position, track ->
+        val up = stringResource(Res.string.queue_move_up)
+        val down = stringResource(Res.string.queue_move_down)
         val held = drag.held?.key == track.key
         if (held) {
             // Scrolled far enough to be disposed, the row takes its gesture
@@ -427,7 +475,16 @@ private fun LazyListScope.queueSection(
             onDragStart = { drag.start(track.key, section) },
             onDrag = drag::drag,
             onDragEnd = { drag.end(track.key) },
-            modifier = if (held) Modifier.alpha(0f) else queueMotion(),
+            modifier = (if (held) Modifier.alpha(0f) else queueMotion()).semantics {
+                if (!locked && !held) customActions = buildList {
+                    if (position > 0) add(CustomAccessibilityAction(up) {
+                        onMove(track.timelineIndex, rows[position - 1].timelineIndex); true
+                    })
+                    if (position < rows.lastIndex) add(CustomAccessibilityAction(down) {
+                        onMove(track.timelineIndex, rows[position + 1].timelineIndex); true
+                    })
+                }
+            },
         )
     }
 }

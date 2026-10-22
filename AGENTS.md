@@ -10,6 +10,9 @@
   Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 29,
   based on completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`.
   Keep 0.1.9 changes out of main/stable until explicit promotion.
+  Preview UX additions are recorded in `verification/UX-0.1.9-beta1.md`: theme artwork
+  overrides preserve pack files and custom-style isolation; pagination errors require
+  explicit retry, and delayed playback recovery must still own the failed item/error.
   `preview/0.1.8-beta1` remains historical, code 27, with 74 launcher choices.
   Five Keepsake packs remain compatible with stable code 26, including its original
   256 px brand-icon validation. Their launcher aliases and UI polish are included in stable 0.1.8.

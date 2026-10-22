@@ -367,6 +367,7 @@ object AppSettings {
     val reduceAnimation = MutableStateFlow(false)
     val accentPalette = MutableStateFlow(AccentPalette.DEFAULT)
     val appStyle = MutableStateFlow(app.veyra.music.ui.styles.AppStyle.ORIGINAL)
+    val themeArtwork = MutableStateFlow(app.veyra.music.ui.themes.ThemeArtworkOptions())
     val appearanceFont = MutableStateFlow(app.veyra.music.data.themes.AppearanceFont.FOLLOW_THEME)
     val artworkCorners = MutableStateFlow(ArtworkCorners.DEFAULT)
     val listSpacing = MutableStateFlow(ListSpacing.COMFORTABLE)
@@ -878,6 +879,10 @@ object AppSettings {
         accentPalette.value = savedChoice(prefs.getString("accent_palette", null), AccentPalette.DEFAULT)
         appStyle.value = app.veyra.music.ui.styles.AppStyle.fromStoredName(prefs.getString("app_style", null))
         appearanceFont.value = app.veyra.music.data.themes.AppearanceFont.fromStoredName(prefs.getString("appearance_font", null))
+        themeArtwork.value = app.veyra.music.ui.themes.ThemeArtworkOptions(
+            prefs.getFloat("theme_art_visibility", 1f), prefs.getFloat("theme_art_dim", 0f),
+            prefs.getFloat("theme_art_blur", 0f), prefs.getFloat("theme_control_opacity", 1f),
+        ).normalized()
         artworkCorners.value = savedChoice(prefs.getString("artwork_corners", null), ArtworkCorners.DEFAULT)
         listSpacing.value = savedChoice(prefs.getString("list_spacing", null), ListSpacing.COMFORTABLE)
         playerShortcut.value = savedChoice(prefs.getString("player_shortcut", null), PlayerShortcut.NONE)
@@ -1257,6 +1262,12 @@ object AppSettings {
         appearanceFont.value = value
         prefs.edit().putString("appearance_font", value.name).apply()
     }
+    fun setThemeArtwork(value: app.veyra.music.ui.themes.ThemeArtworkOptions) {
+        val safe = value.normalized()
+        themeArtwork.value = safe
+        prefs.edit().putFloat("theme_art_visibility", safe.visibility).putFloat("theme_art_dim", safe.dim)
+            .putFloat("theme_art_blur", safe.blur).putFloat("theme_control_opacity", safe.controlOpacity).apply()
+    }
     fun setArtworkCorners(value: ArtworkCorners) { artworkCorners.value = value; prefs.edit().putString("artwork_corners", value.name).apply() }
     fun setListSpacing(value: ListSpacing) { listSpacing.value = value; prefs.edit().putString("list_spacing", value.name).apply() }
     fun setPlayerShortcut(value: PlayerShortcut) { playerShortcut.value = value; prefs.edit().putString("player_shortcut", value.name).apply() }
@@ -1266,6 +1277,7 @@ object AppSettings {
         prefs.edit().putBoolean("subtle_motion", subtleMotion.value).apply()
     }
     fun resetAppearanceCustomization() {
+        setThemeArtwork(app.veyra.music.ui.themes.ThemeArtworkOptions())
         prefs.edit().remove("accent_palette").remove("artwork_corners").remove("list_spacing").remove("appearance_font").remove("app_style")
             .remove(KEY_STRONGER_TEXT).remove("subtle_motion").remove(KEY_REDUCE_ANIMATION).apply()
         readAll()

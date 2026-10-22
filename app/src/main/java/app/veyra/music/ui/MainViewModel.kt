@@ -212,6 +212,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val _filter = MutableStateFlow(SearchFilter.ALL)
     val filter: StateFlow<SearchFilter> = _filter.asStateFlow()
 
+    private val _searchMoreError = MutableStateFlow<String?>(null)
+    val searchMoreError = _searchMoreError.asStateFlow()
     private val _searchLoadingMore = MutableStateFlow(false)
     val searchLoadingMore: StateFlow<Boolean> = _searchLoadingMore.asStateFlow()
 
@@ -2200,6 +2202,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         newestRequestId.incrementAndGet()
         searchSession = null
         searchWork.cancel()
+        _searchMoreError.value = null
         addonSearchJob?.cancel()
         _addonResults.value = null
         _query.value = newValue
@@ -2291,6 +2294,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         newestRequestId.incrementAndGet()
         searchSession = null
         searchWork.cancel()
+        _searchMoreError.value = null
         addonSearchJob?.cancel()
         _searchSource.value = source
         _suggestions.value = emptyList()
@@ -2369,6 +2373,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             newestRequestId.incrementAndGet()
             searchSession = null
             searchWork.cancel()
+            _searchMoreError.value = null
             _results.value = null
             return
         }
@@ -2376,6 +2381,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         _searchScrollReset.value += 1
         searchSession = null
         searchWork.cancel()
+        _searchMoreError.value = null
         searchRequests.tryEmit(SearchRequest(query, _filter.value, id, anonymous))
     }
 
@@ -2439,7 +2445,28 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * deliberately separate from the first-page request: waiting for every
      * continuation was the reason a search sat on a spinner for seconds.
      */
+    fun retrySearch() {
+        when (_searchSource.value) {
+            SearchSource.LIBRARY -> loadLibrarySongs()
+            SearchSource.ADDONS -> submitSearch()
+            SearchSource.YOUTUBE -> {
+                searchCache.remove(cacheKey(_query.value, _filter.value))
+                _suggestions.value = emptyList()
+                _typeaheadResults.value = emptyList()
+                searchSubmitted = true
+                runSearch()
+            }
+        }
+    }
+
+    fun retryMoreSearchResults() {
+        if (_searchMoreError.value == null) return
+        _searchMoreError.value = null
+        loadMoreSearchResults()
+    }
+
     fun loadMoreSearchResults() {
+        if (_searchMoreError.value != null) return
         val session = searchSession ?: return
         val token = session.continuation ?: return
         searchWork.continueSearch {
@@ -2450,9 +2477,15 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 next.onSuccess { page ->
                     val current = (_results.value as? UiState.Success)?.data.orEmpty()
                     val merged = (current + page.rows).distinctBy(::searchResultKey)
+                    if (!searchPageMadeProgress(current.size, merged.size, token, page.continuation)) {
+                        _searchMoreError.value = text(R.string.search_more_stalled)
+                        return@onSuccess
+                    }
                     searchCache.put(session.key, SearchCacheEntry(merged, page.continuation))
                     searchSession = session.copy(continuation = page.continuation)
                     _results.value = UiState.Success(merged)
+                }.onFailure { failure ->
+                    _searchMoreError.value = failure.friendly()
                 }
             }
         }

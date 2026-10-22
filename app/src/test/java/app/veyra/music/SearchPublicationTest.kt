@@ -1,11 +1,18 @@
 package app.veyra.music
 
+import app.veyra.music.ui.searchPageMadeProgress
 import app.veyra.music.ui.searchResponseIsCurrent
 import app.veyra.music.ui.typeaheadIsCurrent
 import org.junit.Assert.*
 import org.junit.Test
 
 class SearchPublicationTest {
+    @Test fun `repeated continuation without new rows stops automatic paging but terminal and advanced pages are accepted`() {
+        assertFalse(searchPageMadeProgress(20, 20, "page-a", "page-a"))
+        assertTrue(searchPageMadeProgress(20, 21, "page-a", "page-a"))
+        assertTrue(searchPageMadeProgress(20, 20, "page-a", "page-b"))
+        assertTrue(searchPageMadeProgress(20, 20, "page-a", null))
+    }
     @Test fun `cleared query invalidates first pages and continuations without a replacement call`() {
         assertTrue(searchResponseIsCurrent(4, 4, true))
         assertFalse(searchResponseIsCurrent(4, 5, true))

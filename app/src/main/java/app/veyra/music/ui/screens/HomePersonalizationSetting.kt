@@ -29,6 +29,11 @@ import app.veyra.music.ui.icons.SettingsIcons
             SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.pin_home_header),subtitle=stringResource(R.string.pin_home_header_hint),checked=options.pinHomeHeader,onClick={val latest=AppSettings.experience.value;AppSettings.setExperience(latest.copy(pinHomeHeader=!latest.pinHomeHeader))})
             OutlinedTextField(value=options.homeGreeting,onValueChange={AppSettings.setExperience(options.copy(homeGreeting=it.take(100)))},label={Text(stringResource(R.string.home_greeting))},singleLine=true,modifier=Modifier.fillMaxWidth())
             SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.home_speed_dial),checked=options.homeSpeedDial,onClick={AppSettings.setExperience(options.copy(homeSpeedDial=!options.homeSpeedDial))})
+            SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.home_featured_cards),subtitle=stringResource(R.string.home_featured_cards_hint),checked=options.homeFeaturedCards,onClick={val latest=AppSettings.experience.value;AppSettings.setExperience(latest.copy(homeFeaturedCards=!latest.homeFeaturedCards))})
+            SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.home_sign_in_prompt),subtitle=stringResource(R.string.home_sign_in_prompt_hint),checked=options.homeSignInPrompt,onClick={val latest=AppSettings.experience.value;AppSettings.setExperience(latest.copy(homeSignInPrompt=!latest.homeSignInPrompt))})
+            if (options.homeSpeedDial) SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.home_speed_dial_count),subtitle="",
+                options=listOf("3", "6", "9", "12"),selectedIndex=listOf(3,6,9,12).indexOf(options.homeSpeedDialCount).coerceAtLeast(0),
+                onSelect={AppSettings.setExperience(AppSettings.experience.value.copy(homeSpeedDialCount=listOf(3,6,9,12)[it]))})
             SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.home_quick_radio),checked=options.quickPicksRadio,onClick={AppSettings.setExperience(options.copy(quickPicksRadio=!options.quickPicksRadio))})
             }
             ExperienceSection(stringResource(R.string.home_shortcuts)) {

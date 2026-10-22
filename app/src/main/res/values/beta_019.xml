@@ -1,0 +1,20 @@
+<resources>
+    <string name="theme_artwork_controls">Theme artwork controls</string>
+    <string name="theme_artwork_controls_hint">Make the artwork and controls feel right for you. Changes appear throughout the app.</string>
+    <string name="theme_artwork_choose_pack">Apply a downloaded theme to customize its artwork.</string>
+    <string name="theme_artwork_scene">Background artwork</string>
+    <string name="theme_artwork_visibility">Artwork visibility</string>
+    <string name="theme_artwork_dim">Extra dimming</string>
+    <string name="theme_artwork_blur">Background softness</string>
+    <string name="theme_artwork_surfaces">Navigation and player controls</string>
+    <string name="theme_artwork_opacity">Control opacity</string>
+    <string name="theme_artwork_readability">Text contrast stays protected. These preferences apply to downloaded themes in Original style; custom app styles keep their own appearance.</string>
+    <string name="theme_artwork_reset">Restore defaults</string>
+    <string name="theme_artwork_done">Done</string>
+    <string name="home_featured_cards">Featured Home cards</string>
+    <string name="home_featured_cards_hint">Turn off for a compact feed with smaller shelves.</string>
+    <string name="home_sign_in_prompt">Show sign-in card</string>
+    <string name="home_sign_in_prompt_hint">You can still sign in from the account button when this is off.</string>
+    <string name="home_speed_dial_count">Speed dial items</string>
+    <string name="search_more_stalled">No new results arrived. Tap Retry to try this page again.</string>
+</resources>

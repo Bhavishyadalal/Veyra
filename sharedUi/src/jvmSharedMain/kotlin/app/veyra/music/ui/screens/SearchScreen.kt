@@ -4,6 +4,7 @@ import app.veyra.music.ui.customization.artworkShape
 import app.veyra.music.ui.components.contextClick
 import androidx.compose.ui.unit.Dp
 import app.veyra.music.sharedui.resources.*
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -157,11 +158,13 @@ fun SearchScreen(
     /** Files on the device are a running order to play through, not a station seed. */
     onLibrarySongClick: (List<Song>, Int) -> Unit = onSongClick,
     /**
-     * The YouTube / Library switcher, full width at the head of the page. Up
-     * only while the field is empty: once something is typed the page is
-     * about the results, and the switcher would just push them down.
+     * Source switcher stays reachable while typing so the same query can be
+     * compared across YouTube, Library and Addons without clearing the field.
      */
     sourceSwitcher: (@Composable () -> Unit)? = null,
+    loadMoreError: String? = null,
+    onRetry: () -> Unit = onSubmit,
+    onRetryLoadMore: () -> Unit = onLoadMore,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -191,13 +194,13 @@ fun SearchScreen(
     // appear as a dropdown beneath the text completions rather than floating
     // after the search has committed.
     val showTypeahead = typeaheadResults.isNotEmpty() && suggesting
-    LaunchedEffect(listState, results, loadingMore, searchingLibrary, searchingAddons) {
+    LaunchedEffect(listState, results, loadingMore, loadMoreError, searchingLibrary, searchingAddons) {
         if (results !is UiState.Success || searchingLibrary || searchingAddons) return@LaunchedEffect
         snapshotFlow {
             val layout = listState.layoutInfo
             (layout.visibleItemsInfo.lastOrNull()?.index ?: -1) to layout.totalItemsCount
         }.collect { (lastVisible, total) ->
-            if (!loadingMore && total > 0 && lastVisible >= total - 4) onLoadMore()
+            if (!loadingMore && loadMoreError == null && total > 0 && lastVisible >= total - 4) onLoadMore()
         }
     }
     Column(modifier = modifier.fillMaxSize()) {
@@ -225,14 +228,8 @@ fun SearchScreen(
                 )
             }
             if (sourceSwitcher != null) {
-                AnimatedVisibility(
-                    visible = query.isEmpty(),
-                    enter = fadeIn() + expandVertically(),
-                    exit = fadeOut() + shrinkVertically(),
-                ) {
-                    Box(Modifier.padding(start = PAGE_GUTTER, end = PAGE_GUTTER, bottom = 4.dp)) {
-                        sourceSwitcher()
-                    }
+                Box(Modifier.padding(start = PAGE_GUTTER, end = PAGE_GUTTER, bottom = 4.dp)) {
+                    sourceSwitcher()
                 }
             }
             // The filters only mean something once there is a result set to narrow;
@@ -252,6 +249,7 @@ fun SearchScreen(
             when {
                 searchingLibrary || searchingAddons -> librarySearchResults(
                     query = query.trim(),
+                    onRetry = onRetry,
                     results = if (searchingAddons) addonResults else libraryResults,
                     addons = searchingAddons,
                     addonHistory = addonHistory,
@@ -301,8 +299,15 @@ fun SearchScreen(
                     )
                 }
                 results is UiState.Loading -> songListSkeleton(circular = filter == SearchFilter.ARTISTS)
-                results is UiState.Error -> item { MessageState(results.message) }
+                results is UiState.Error -> item {
+                    MessageState(results.message, actionLabel = stringResource(Res.string.retry), onAction = onRetry)
+                }
                 results is UiState.Success -> {
+                    if (results.data.isEmpty()) item(key = "search:no-results") {
+                        MessageState(stringResource(Res.string.search_no_matches, query.trim()),
+                            actionLabel = stringResource(if (filter == SearchFilter.ALL) Res.string.clear_search else Res.string.search_all_categories),
+                            onAction = { if (filter == SearchFilter.ALL) onQueryChange("") else onFilterChange(SearchFilter.ALL) })
+                    }
                     val tracks = results.data
                         .mapNotNull { row -> when (row) {
                             is SearchResult.TopTrack -> row.song
@@ -326,7 +331,7 @@ fun SearchScreen(
                         section.title?.let { title ->
                             item(key = "search-section:$title") {
                                 Text(
-                                    text = title,
+                                    text = stringResource(title),
                                     modifier = Modifier.padding(
                                         start = PAGE_GUTTER,
                                         end = PAGE_GUTTER,
@@ -377,6 +382,9 @@ fun SearchScreen(
                             }
                         }
                     }
+                    if (loadMoreError != null) item(key = "search:more-error") {
+                        MessageState(loadMoreError, actionLabel = stringResource(Res.string.retry), onAction = onRetryLoadMore)
+                    }
                     if (loadingMore) {
                         songListSkeleton(
                             count = 3,
@@ -390,17 +398,17 @@ fun SearchScreen(
     }
 }
 
-private data class SearchSection(val title: String?, val rows: List<SearchResult>)
+private data class SearchSection(val title: StringResource?, val rows: List<SearchResult>)
 
 /** The unfiltered page is useful only when its mixed result types are readable at a glance. */
 private fun searchSections(rows: List<SearchResult>, filter: SearchFilter): List<SearchSection> {
     if (filter != SearchFilter.ALL) return listOf(SearchSection(null, rows))
     return listOf(
-        SearchSection("Songs", rows.filterIsInstance<SearchResult.Track>()),
-        SearchSection("Artists", rows.filterIsInstance<SearchResult.Browse>().filter { it.item.type == BrowseType.ARTIST }),
-        SearchSection("Albums", rows.filterIsInstance<SearchResult.Browse>().filter { it.item.type == BrowseType.ALBUM }),
-        SearchSection("Playlists", rows.filterIsInstance<SearchResult.Browse>().filter { it.item.type == BrowseType.PLAYLIST }),
-        SearchSection("More", rows.filterIsInstance<SearchResult.Browse>().filter { it.item.type == BrowseType.OTHER }),
+        SearchSection(Res.string.search_songs_heading, rows.filterIsInstance<SearchResult.Track>()),
+        SearchSection(Res.string.artists, rows.filterIsInstance<SearchResult.Browse>().filter { it.item.type == BrowseType.ARTIST }),
+        SearchSection(Res.string.albums, rows.filterIsInstance<SearchResult.Browse>().filter { it.item.type == BrowseType.ALBUM }),
+        SearchSection(Res.string.playlists, rows.filterIsInstance<SearchResult.Browse>().filter { it.item.type == BrowseType.PLAYLIST }),
+        SearchSection(Res.string.more, rows.filterIsInstance<SearchResult.Browse>().filter { it.item.type == BrowseType.OTHER }),
     ).filter { it.rows.isNotEmpty() }
 }
 
@@ -410,6 +418,7 @@ private fun searchSections(rows: List<SearchResult>, filter: SearchFilter): List
  * track under that name matches too, so they are already here.
  */
 private fun LazyListScope.librarySearchResults(
+    onRetry: () -> Unit,
     query: String,
     results: UiState<List<Song>>?,
     addons: Boolean,
@@ -432,7 +441,7 @@ private fun LazyListScope.librarySearchResults(
             )
         }
         UiState.Loading -> songListSkeleton(keyPrefix = "skeleton:search:library")
-        is UiState.Error -> item(key = "library:error") { MessageState(results.message) }
+        is UiState.Error -> item(key = "library:error") { MessageState(results.message, actionLabel = stringResource(Res.string.retry), onAction = onRetry) }
         is UiState.Success -> if (results.data.isEmpty()) {
             item(key = "library:no-match") {
                 MessageState(

@@ -834,6 +834,7 @@ private fun VeyraApp(
     val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
     val searchSuggestions by viewModel.suggestions.collectAsStateWithLifecycle()
     val searchLoadingMore by viewModel.searchLoadingMore.collectAsStateWithLifecycle()
+    val searchMoreError by viewModel.searchMoreError.collectAsStateWithLifecycle()
     val searchScrollReset by viewModel.searchScrollReset.collectAsStateWithLifecycle()
     val detailStack by viewModel.detailStack.collectAsStateWithLifecycle()
     val releaseLibrary by viewModel.releaseLibrary.collectAsStateWithLifecycle()
@@ -3290,6 +3291,9 @@ private fun VeyraApp(
                                 onFilterChange = viewModel::onFilterChange,
                                 results = results,
                                 loadingMore = searchLoadingMore,
+                                loadMoreError = searchMoreError,
+                                onRetry = viewModel::retrySearch,
+                                onRetryLoadMore = viewModel::retryMoreSearchResults,
                                 onLoadMore = viewModel::loadMoreSearchResults,
                                 listState = searchListState,
                                 scrollResetTrigger = searchScrollReset,

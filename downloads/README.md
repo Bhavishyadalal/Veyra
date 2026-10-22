@@ -13,7 +13,7 @@ Stable 0.1.8 is promoted from completed preview commit `646e34b56295e1fbfaddcb3c
 
 [Release notes](../RELEASE_NOTES_0.1.8.md) · [Promotion verification and limits](../verification/STABLE-0.1.8-PROMOTION.md) · [Theme collection](../themes/README.md)
 
-The 0.1.9-beta1 preview starts from completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`; no new app features are introduced in this initialization. [Preview notes](../RELEASE_NOTES_0.1.9-beta1.md).
+The 0.1.9-beta1 preview starts from completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`; the current preview includes the [listening and personalization update](../verification/UX-0.1.9-beta1.md). [Preview notes](../RELEASE_NOTES_0.1.9-beta1.md).
 
 The rotated 0.1.6-beta1 archive remains available through [its original retained snapshot](https://github.com/Bhavishyadalal/Veyra/tree/6e37aa4615bad01b895dc547454f79218d94175e/downloads). Stable 0.1.8 and the two retained historical preview ZIPs preserve their exact bytes.
 

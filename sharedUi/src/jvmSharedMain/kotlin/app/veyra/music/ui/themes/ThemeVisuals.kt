@@ -18,6 +18,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -154,18 +155,21 @@ fun ThemeScene(modifier: Modifier = Modifier, prominent: Boolean = false) {
         app.veyra.music.ui.styles.StyleBackdrop(app.veyra.music.ui.styles.LocalAppStyle.current,theme.asset("header"),modifier)
         return
     }
+    val options = LocalThemeArtworkOptions.current
     val scrim=remember(theme) {themeSceneScrimAlpha(theme)}
+    val visibility = options.visibility
     Box(modifier.background(theme.background).clearAndSetSemantics {}) {
         theme.asset("header")?.let { path ->
-            AsyncImage(File(path), null, Modifier.matchParentSize(),
+            AsyncImage(File(path), null, Modifier.matchParentSize().blur(options.blur.dp),
                 contentScale = ContentScale.Crop, alignment = androidx.compose.ui.Alignment.CenterEnd,
-                alpha = if(prominent) .70f else if(theme.sceneStyle == "playful") .22f else .34f)
+                alpha = visibility * (if(prominent) .70f else if(theme.sceneStyle == "playful") .22f else .34f))
         }
         Box(Modifier.matchParentSize().background(Brush.verticalGradient(listOf(
             theme.background.copy(alpha = if(prominent) scrim else .35f),
             theme.background.copy(alpha = if(prominent) maxOf(scrim,.72f) else .50f),
             theme.background.copy(alpha = if(prominent) maxOf(scrim,.65f) else .35f)))))
-        androidx.compose.foundation.Canvas(Modifier.matchParentSize()) {
+        Box(Modifier.matchParentSize().background(theme.background.copy(alpha = options.dim)))
+        androidx.compose.foundation.Canvas(Modifier.matchParentSize().graphicsLayer { alpha = visibility * (1f - options.dim) }) {
             if (theme.sceneStyle == "web") {
                 val origin = androidx.compose.ui.geometry.Offset(size.width * 1.04f, -size.height * .04f)
                 val reach = maxOf(size.width,size.height) * 1.4f

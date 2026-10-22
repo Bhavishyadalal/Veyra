@@ -65,7 +65,7 @@ internal fun PlayerControlSurface(
     val controlTint = pack?.accent ?: tint
     val effectiveShape = if (grouped) RectangleShape else pack?.let { if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp) else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp) } ?: shape
     val contrast = LocalVeyraContrastControls.current
-    val controlBackground = if (grouped) containerColor else if (contrast && containerColor == Color.Transparent) controlTint.copy(alpha = 0.12f) else if (pack != null && containerColor == Color.Transparent) pack.raised.copy(alpha=0.7f) else containerColor
+    val controlBackground = if (grouped) containerColor else if (contrast && containerColor == Color.Transparent) controlTint.copy(alpha = 0.12f) else if (pack != null && containerColor == Color.Transparent) pack.raised.copy(alpha=.70f * app.veyra.music.ui.themes.LocalThemeArtworkOptions.current.controlOpacity) else containerColor
     val decoratedBackground = when(decoration) {
         ControlDecoration.GLYPHS,ControlDecoration.RINGS -> Color.Transparent
         ControlDecoration.FILLED -> controlTint.copy(alpha=.2f)
@@ -471,7 +471,7 @@ internal fun PlayerControlGroup(
         else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp)
     } ?: CircleShape
     Row(modifier.clip(shape)
-        .background(pack?.raised?.copy(alpha = .70f) ?: tint.copy(alpha = .12f))
+        .background(pack?.raised?.copy(alpha = .70f * app.veyra.music.ui.themes.LocalThemeArtworkOptions.current.controlOpacity) ?: tint.copy(alpha = .12f))
         .then(if (pack != null || LocalVeyraContrastControls.current)
             Modifier.background(Brush.verticalGradient(listOf(tint.copy(alpha=.13f),Color.Transparent)))
                 .border(1.dp,tint.copy(alpha=.20f),shape)

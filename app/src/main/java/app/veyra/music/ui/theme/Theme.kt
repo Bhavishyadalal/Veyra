@@ -140,6 +140,7 @@ fun VeyraTheme(
     val importedFont = app.veyra.music.data.settings.rememberImportedFont(if(appStyle.custom) "" else importedHash)
     val accent by AppSettings.accentPalette.collectAsStateWithLifecycle()
     val appearanceFont by AppSettings.appearanceFont.collectAsStateWithLifecycle()
+    val themeArtwork by AppSettings.themeArtwork.collectAsStateWithLifecycle()
     val corners by AppSettings.artworkCorners.collectAsStateWithLifecycle()
     val spacing by AppSettings.listSpacing.collectAsStateWithLifecycle()
     val subtle by AppSettings.subtleMotion.collectAsStateWithLifecycle()
@@ -183,6 +184,8 @@ fun VeyraTheme(
             extraLarge = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.navCorner.toFloat())))
     }
     CompositionLocalProvider(
+        app.veyra.music.ui.themes.LocalThemeArtworkOptions provides
+            (if (appStyle.custom) app.veyra.music.ui.themes.ThemeArtworkOptions() else themeArtwork),
         LocalAppStyle provides appStyle,
         app.veyra.music.ui.themes.LocalThemeVisuals provides pack,
         LocalArtworkCorners provides (if(appStyle.custom) ArtworkCorners.DEFAULT else corners),

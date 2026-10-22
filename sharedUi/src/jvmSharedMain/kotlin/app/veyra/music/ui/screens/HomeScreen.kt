@@ -175,7 +175,7 @@ fun HomeScreen(
 ) {
     val appStyle = LocalAppStyle.current
     val experience by app.veyra.music.ui.player.PlayerPlatform.host.settings.experience.collectAsStateWithLifecycle()
-    val speedDial=remember(state,experience.homeSpeedDial) { if(!experience.homeSpeedDial)emptyList() else displayHomeShelves(state).flatMap {it.items}.distinctBy {it.videoId ?: it.browseId ?: it.title}.take(9) }
+    val speedDial=remember(state,experience.homeSpeedDial,experience.homeSpeedDialCount) { if(!experience.homeSpeedDial)emptyList() else displayHomeShelves(state).asSequence().flatMap {it.items.asSequence()}.distinctBy {it.videoId ?: it.browseId ?: it.title}.take(experience.homeSpeedDialCount).toList() }
     PrefetchHomeArtwork(state, listState, enabled = !offline)
     val recentsViewType by AppUi.host.homeRecentsViewType.collectAsStateWithLifecycle()
     val homeReducedMotion = rememberVeyraReducedMotion()
@@ -256,7 +256,7 @@ fun HomeScreen(
                             onOpenDownloads, onOpenLocalMusic, reducedMotion = homeReducedMotion, savedContentLabel = savedContentLabel)
                     }
                 }
-                if (!signedIn && onSignIn != null) {
+                if (!signedIn && onSignIn != null && experience.homeSignInPrompt) {
                     item(key = "home:account", contentType = "account") {
                         HomeAccountPrompt(
                             title = stringResource(Res.string.sign_in_youtube_music),
@@ -299,7 +299,7 @@ fun HomeScreen(
                             onItemLongPress = onItemLongPress,
                             currentSong = currentSong,
                             isPlaying = isPlaying,
-                            firstIsHero = leadHero,
+                            firstIsHero = leadHero && experience.homeFeaturedCards,
                             recentsViewType = recentsViewType,
                             onRecentsViewTypeToggle = {
                                 AppUi.host.setHomeRecentsViewType(
@@ -1134,4 +1134,4 @@ internal fun ShelfCard(
     }
 }
 
-private fun displayHomeShelves(state:UiState<List<HomeShelf>>):List<HomeShelf> = (state as? UiState.Success)?.data.orEmpty().sortedBy {if(it.title.equals(RECENTS_TITLE,true))0 else 1}
+private fun displayHomeShelves(state:UiState<List<HomeShelf>>):List<HomeShelf> = (state as? UiState.Success)?.data.orEmpty()

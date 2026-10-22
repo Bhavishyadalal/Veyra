@@ -40,6 +40,9 @@ data class ExperienceOptions(
     val homeGreeting: String = "",
     val pinHomeHeader: Boolean = true,
     val homeSpeedDial: Boolean = false,
+    val homeSpeedDialCount: Int = 9,
+    val homeFeaturedCards: Boolean = true,
+    val homeSignInPrompt: Boolean = true,
     val homeShortcuts: List<Int> = emptyList(),
     val quickPicksRadio: Boolean = true,
     val preload: PreloadPolicy = PreloadPolicy.NEXT_SONG,
@@ -52,6 +55,7 @@ data class ExperienceOptions(
 ) {
     fun normalized() = copy(doubleTapSeekSeconds = doubleTapSeekSeconds.coerceIn(0, 30), holdSeekSeconds = holdSeekSeconds.coerceIn(0, 20),
         contentCountry=contentCountry.uppercase(java.util.Locale.ROOT).takeIf {it in java.util.Locale.getISOCountries()}.orEmpty(),
+        homeSpeedDialCount=((homeSpeedDialCount.coerceIn(3, 12) + 1) / 3) * 3,
         homeGreeting=homeGreeting.take(100),homeShortcuts=homeShortcuts.filter {it in 0..7}.distinct().take(6),
         navigation=normalizedNavigation(navigation),startupTab=startupTab.takeIf {it in 0..6} ?: 0,
         appFont=appFont.takeIf {it.matches(Regex("[a-f0-9]{64}"))}.orEmpty(), lyricsFont=lyricsFont.takeIf {it.matches(Regex("[a-f0-9]{64}"))}.orEmpty(),

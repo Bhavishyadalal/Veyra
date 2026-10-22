@@ -3791,6 +3791,12 @@ class PlaybackService : MediaLibraryService() {
             // Long enough for the released source to let go of the cache keys
             // about to be removed, short enough to read as a stutter.
             delay(RECOVERY_DELAY_MS)
+            // A manual retry, rendition swap or another copy of the same song
+            // may already be playing. An old recovery must not discard its
+            // bytes, seek it backwards or skip it merely because IDs match.
+            fun stillFailed(): Boolean = this@PlaybackService.player === player &&
+                player.currentMediaItem == item && player.playerError === error
+            if (!withContext(Dispatchers.Main) { stillFailed() }) return@launch
             uri?.let { withContext(Dispatchers.IO) { AudioCache.discard(it) } }
             // The bytes go even when nothing is going to be prepared after
             // them. A half-filled entry whose owner has just been forgotten is
@@ -3807,13 +3813,12 @@ class PlaybackService : MediaLibraryService() {
                 // is what the report describes and what "it was stuck on my
                 // phone too" means. Moving on is the only honest answer.
                 skipReason(verdict, error, neverStarted, attempts)?.let { reason ->
-                    withContext(Dispatchers.Main) { skipPastUnplayable(mediaId, reason) }
+                    withContext(Dispatchers.Main) { if (stillFailed()) skipPastUnplayable(mediaId, reason) }
                 }
                 return@launch
             }
             withContext(Dispatchers.Main) {
-                val player = this@PlaybackService.player ?: return@withContext
-                if (player.currentMediaItem?.mediaId != mediaId) return@withContext
+                if (!stillFailed()) return@withContext
                 TrackLog.d("Veyra", "retrying $mediaId from ${position}ms")
                 // Claimed before the seek, so the transition it may fire is
                 // recognised as this retry rather than read as a fresh start and

@@ -29,8 +29,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Modifier.themeNavigationSurface(shape: Shape): Modifier {
     val theme = LocalThemeVisuals.current ?: return this
+    val opacity = LocalThemeArtworkOptions.current.controlOpacity
     return clip(shape)
-        .background(Brush.verticalGradient(listOf(theme.raised, theme.surface)))
+        .background(Brush.verticalGradient(listOf(theme.raised.copy(alpha = opacity), theme.surface.copy(alpha = opacity))))
         .drawWithCache {
             val line = 1.dp.toPx()
             onDrawBehind {

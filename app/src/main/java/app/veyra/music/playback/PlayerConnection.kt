@@ -306,7 +306,11 @@ fun rememberPlayerState(controller: MediaController?): PlayerState {
     var state by remember { mutableStateOf(PlayerState(position = position)) }
 
     DisposableEffect(controller) {
-        val player = controller ?: return@DisposableEffect onDispose {}
+        val player = controller ?: run {
+            position.report(0L)
+            state = PlayerState(position = position)
+            return@DisposableEffect onDispose {}
+        }
 
         // A MediaController reads each item across the session boundary. Keep
         // the converted queue until its timeline actually changes; playback,
@@ -327,7 +331,7 @@ fun rememberPlayerState(controller: MediaController?): PlayerState {
         var queueChanged = false
 
         fun sync(
-            error: String? = null,
+            error: String? = player.playerError?.let { "Playback failed: ${it.errorCodeName}" },
             rebuildQueue: Boolean = false,
             refreshCurrentQueueItem: Boolean = false,
         ) {
@@ -397,7 +401,7 @@ fun rememberPlayerState(controller: MediaController?): PlayerState {
                 position.seeks++
             }
             override fun onEvents(p: Player, events: Player.Events) = sync(
-                error = state.error,
+                error = p.playerError?.let { "Playback failed: ${it.errorCodeName}" },
                 rebuildQueue = queueChanged.also { queueChanged = false },
                 refreshCurrentQueueItem = events.contains(Player.EVENT_MEDIA_METADATA_CHANGED),
             )
