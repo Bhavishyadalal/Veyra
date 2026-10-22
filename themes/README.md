@@ -1,4 +1,6 @@
-> **New in beta 0.1.9 / code 30: [Margin Notes](MARGIN_NOTES.md)** — the first special sketch preset, with a [complete asset sheet](previews/margin-notes/all-assets.png), hand-drawn controls and short native sketch motion. Beta has 47 packs; stable 0.1.8 keeps its existing 46. A refreshed beta APK is required for the new preset.
+> **Five new beta illustration worlds:** [Lantern Letters, Velvet Orbit, Moss & Mechanism, Sugar Static and Tidal Origami](ILLUSTRATED_WORLDS.md). [Collection overview](previews/illustrated-worlds/collection.png). Beta has 52 packs; build-30 users can refresh/download them without another engine rebuild.
+
+> **New in beta 0.1.9 / code 30: [Margin Notes](MARGIN_NOTES.md)** — the first special sketch preset, with a [complete asset sheet](previews/margin-notes/all-assets.png), hand-drawn controls and short native sketch motion. Beta has 52 packs; stable 0.1.8 keeps its existing 46. A refreshed beta APK is required for the new preset.
 
 > **Stable 0.1.8:** independent fonts, All icons, cached Studio previews and stronger screen artwork are now included in stable. [Release notes](../RELEASE_NOTES_0.1.8.md).
 

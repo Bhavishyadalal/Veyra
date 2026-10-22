@@ -40,3 +40,5 @@ Rooms, invites and presence use **https://veyra-listen-together.onrender.com**. 
 Website source is maintained separately in [Veyra-website](https://github.com/Bhavishyadalal/Veyra-website). Source promotion does not build, sign, publish or deploy an APK.
 
 Current beta source includes the [Margin Notes sketch engine/theme](../themes/MARGIN_NOTES.md), build code 30. Duplicate runtime images are stored once in included theme packs; restore optional editable images with `python3 scripts/restore_theme_sources.py`. App build inputs and theme data remain included.
+
+The latest beta source also includes [five Illustrated Worlds packs](../themes/ILLUSTRATED_WORLDS.md) and their generation/gallery sources. Existing build-30 APKs can download the packs through Studio Refresh.

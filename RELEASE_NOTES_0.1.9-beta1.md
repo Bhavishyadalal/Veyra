@@ -2,6 +2,14 @@
 
 **Preview Android source · version code 30 · based on completed stable 0.1.8 / code 28**
 
+## Five new illustrated worlds
+
+- Lantern Letters, Velvet Orbit, Moss & Mechanism, Sugar Static and Tidal Origami each add original illustration, thirteen themed glyphs, an in-app brand badge and a distinctive heading font.
+- Five complete nineteen-role asset galleries, an overview and browser component studies are included. Native sketch/playful presets are reused; no new engine rebuild is needed when build 30 is already installed.
+- Beta Theme Studio grows to 52 packs. Stable catalogs, earlier immutable packs and launcher choices are unchanged.
+
+[Previews, downloads and compatibility](themes/ILLUSTRATED_WORLDS.md)
+
 ## Margin Notes · first special sketch theme
 
 - Original AI pencil backgrounds, 13 transparent hand-drawn glyphs, an in-app Veyra brand mark, Patrick Hand headings and Manrope body text: 19 mapped asset roles.

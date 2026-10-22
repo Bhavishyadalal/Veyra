@@ -2,6 +2,61 @@
   "schema": 1,
   "themes": [
     {
+      "id": "lantern-letters",
+      "name": "Lantern Letters",
+      "description": "Ink-and-watercolor koi postal village, apricot lanterns and folded letters. Patrick Hand headings, lantern/letter glyphs, uneven paper frames and short sketch transitions.",
+      "version": 1,
+      "minAppCode": 30,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/lantern-letters-v1.zip",
+      "sha256": "85a8e7d6b8ca9b8234b4087d63bfaaefa84725a33e58e51cf9793efaf0eeb021",
+      "bytes": 387087,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/lantern-letters/artwork/preview.webp"
+    },
+    {
+      "id": "velvet-orbit",
+      "name": "Velvet Orbit",
+      "description": "Tactile risograph planets, vinyl rings and an orbital record-shop tram. Space Grotesk headings, planetary glyphs, rounded controls and supported playful spring feedback.",
+      "version": 1,
+      "minAppCode": 30,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/velvet-orbit-v1.zip",
+      "sha256": "5aedef2d9048014c08cabf5a473126a96af7b76969ed442df0ab53fac6efc63e",
+      "bytes": 394664,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/velvet-orbit/artwork/preview.webp"
+    },
+    {
+      "id": "moss-mechanism",
+      "name": "Moss & Mechanism",
+      "description": "Botanical engraving of a moss-filled pocket-watch observatory, brass gears and delicate moths. Cormorant headings, leaf/gear glyphs and native sketch presentation.",
+      "version": 1,
+      "minAppCode": 30,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/moss-mechanism-v1.zip",
+      "sha256": "cbaf4a234957bad550c49b38ecac8a9cd563dde3f5791930db7432d04b461b96",
+      "bytes": 624613,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/moss-mechanism/artwork/preview.webp"
+    },
+    {
+      "id": "sugar-static",
+      "name": "Sugar Static",
+      "description": "Gouache strawberry record shops, cassette bakeries and waffle bridges on berry paper. Fredoka headings, confectionery glyphs, rounded controls and supported playful press feedback.",
+      "version": 1,
+      "minAppCode": 30,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/sugar-static-v1.zip",
+      "sha256": "1755c0a49a6c7ede21099a81ac46c1ceb4822a9f6ac757093e68e8a905fc5b62",
+      "bytes": 308851,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/sugar-static/artwork/preview.webp"
+    },
+    {
+      "id": "tidal-origami",
+      "name": "Tidal Origami",
+      "description": "Layered indigo paper waves, a folded whale harbor and copper-gold fish. Rajdhani headings, angular crease glyphs, uneven paper frames and native paper-slide transitions.",
+      "version": 1,
+      "minAppCode": 30,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/tidal-origami-v1.zip",
+      "sha256": "ca563d068f4d4204b45963ed97b6ab0ada3035a1908c0f442d5e9123cad1392c",
+      "bytes": 407413,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/tidal-origami/artwork/preview.webp"
+    },
+    {
       "id": "margin-notes",
       "name": "Margin Notes",
       "description": "An ivory-pencil music sketchbook: graphite paper, crooked doodle glyphs, Patrick Hand headings, uneven control frames, pencil-hatched timeline, press wobble and paper-slide transitions. Beta 0.1.9 engine required.",

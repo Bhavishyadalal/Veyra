@@ -10,8 +10,10 @@
   Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 30,
   based on completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`.
   Keep 0.1.9 changes out of main/stable until explicit promotion.
-  Build code 30 adds Margin Notes and the bounded sketch preset (47 beta packs,
-  launcher aliases unchanged). See `themes/MARGIN_NOTES.md`. Beta catalogs use their
+  Build code 30 adds Margin Notes and the bounded sketch preset (52 beta packs,
+  launcher aliases unchanged). Five data-only illustration worlds are documented in
+  `themes/ILLUSTRATED_WORLDS.md`; preserve supported preset limits and immutable packs.
+  See `themes/MARGIN_NOTES.md`. Beta catalogs use their
   own preview branch; strict pack/preview URL allowlisting remains in force.
   Source ZIP manifests may map identical runtime images to included theme packs.
   `scripts/restore_theme_sources.py` restores them without overwriting user edits;

@@ -1,3 +1,5 @@
+> **Five new illustrated themes:** [Illustrated Worlds](themes/ILLUSTRATED_WORLDS.md) · [Preview collection](themes/previews/illustrated-worlds/collection.png). Compatible with the existing beta engine build 30.
+
 > **Current development: 0.1.9-beta1 / code 30** on `preview/0.1.9-beta1`, based on completed stable v0.1.8. Includes [Margin Notes and the sketch engine](themes/MARGIN_NOTES.md), plus the [listening and personalization update](verification/UX-0.1.9-beta1.md): safer recovery, theme artwork controls, clearer queue actions, more Home choices and search retry handling. [Preview notes](RELEASE_NOTES_0.1.9-beta1.md) · [Verification](verification/PREVIEW-START-0.1.9-beta1.md).
 
 > **Stable 0.1.8 / code 28:** three optional app styles, immersive player, five additional widgets, independent fonts, Home/navigation customization and Settings/motion refinements. [Release notes](RELEASE_NOTES_0.1.8.md) · [Promotion checks and limits](verification/STABLE-0.1.8-PROMOTION.md).
