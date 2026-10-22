@@ -5,7 +5,7 @@ Current stable and the three newest preview archives are retained here. Each is 
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
 | Current stable · `main`, `stable/0.1.8` | 0.1.8 / code 28 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.8_Stable.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.8_Stable.zip.sha256) |
-| Current preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 29 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
+| Current preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 30 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 | Completed preview · `preview/0.1.8-beta1` | 0.1.8-beta1 / code 27 | [Download](Veyra_Android_Source_0.1.8-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.8-beta1.zip.sha256) |
 | Historical preview | 0.1.7-beta1 / code 25 | [Download](Veyra_Android_Source_0.1.7-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.7-beta1.zip.sha256) |
 
@@ -38,3 +38,5 @@ python3 scripts/verify_archives.py
 Rooms, invites and presence use **https://veyra-listen-together.onrender.com**. Intentional custom servers remain supported. [Backend provenance](../docs/BACKEND_SYNC.md) · [External cron setup](../backend/CRON_SETUP.md).
 
 Website source is maintained separately in [Veyra-website](https://github.com/Bhavishyadalal/Veyra-website). Source promotion does not build, sign, publish or deploy an APK.
+
+Current beta source includes the [Margin Notes sketch engine/theme](../themes/MARGIN_NOTES.md), build code 30. Duplicate runtime images are stored once in included theme packs; restore optional editable images with `python3 scripts/restore_theme_sources.py`. App build inputs and theme data remain included.

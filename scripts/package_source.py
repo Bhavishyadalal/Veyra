@@ -26,6 +26,20 @@ def main():
     catalog = json.loads((root / "themes/catalog.json").read_text())
     included_packs = {f'{entry["id"]}-v{entry["version"]}.zip' for entry in catalog["themes"]}
     included_packs.add("halloween-nocturne-v2.zip")
+    # Runtime images already live byte-for-byte inside the included data packs.
+    # Retain font/license build inputs; record reversible image deduplication.
+    packed_images = {}
+    for entry in catalog["themes"]:
+        pack_rel = f'themes/packs/{entry["id"]}-v{entry["version"]}.zip'
+        with zipfile.ZipFile(root / pack_rel) as source_pack:
+            definition = json.loads(source_pack.read("theme.json"))
+            for member, digest in definition["files"].items():
+                if Path(member).suffix.lower() in {".png", ".webp"}:
+                    data = source_pack.read(member)
+                    if hashlib.sha256(data).hexdigest() == digest:
+                        packed_images[f'themes/{entry["id"]}/{member}'] = {
+                            "pack": pack_rel, "entry": member, "sha256": digest}
+    omitted = []
     archive = root / "downloads" / args.name
     archive.parent.mkdir(exist_ok=True)
     with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
@@ -50,9 +64,13 @@ def main():
             if not path.is_file():
                 continue
             data = path.read_bytes()
+            duplicate = packed_images.get(rel)
+            if duplicate and hashlib.sha256(data).hexdigest() == duplicate["sha256"]:
+                omitted.append({"path": rel, **duplicate})
+                continue
             z.write(path, "Veyra/" + rel)
             manifest.append({"path": rel, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
-        z.writestr("Veyra/SOURCE_MANIFEST.json", json.dumps({"package": args.name, "files": manifest}, indent=2) + "\n")
+        z.writestr("Veyra/SOURCE_MANIFEST.json", json.dumps({"package": args.name, "files": manifest, "themeAssetsInPacks": omitted}, indent=2) + "\n")
     with zipfile.ZipFile(archive) as z:
         assert z.testzip() is None
         for entry in manifest:
@@ -66,7 +84,7 @@ def main():
         raise SystemExit("Source ZIP exceeds GitHub's 100 MiB file limit; do not commit it")
     archive.with_suffix(".zip.sha256").write_text(f"{digest}  {args.name}\n")
     print(json.dumps({"archive": str(archive), "bytes": archive.stat().st_size,
-                      "sourceFiles": len(manifest), "sha256": digest}))
+                      "sourceFiles": len(manifest), "deduplicatedThemeImages": len(omitted), "sha256": digest}))
 
 
 if __name__ == "__main__":

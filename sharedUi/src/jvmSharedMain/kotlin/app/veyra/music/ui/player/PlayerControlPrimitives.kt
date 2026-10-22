@@ -63,7 +63,7 @@ internal fun PlayerControlSurface(
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val controlTint = pack?.accent ?: tint
-    val effectiveShape = if (grouped) RectangleShape else pack?.let { if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp) else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp) } ?: shape
+    val effectiveShape = if (grouped) RectangleShape else pack?.let { if (it.sceneStyle == "sketch") app.veyra.music.ui.themes.SketchShape else if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp) else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp) } ?: shape
     val contrast = LocalVeyraContrastControls.current
     val controlBackground = if (grouped) containerColor else if (contrast && containerColor == Color.Transparent) controlTint.copy(alpha = 0.12f) else if (pack != null && containerColor == Color.Transparent) pack.raised.copy(alpha=.70f * app.veyra.music.ui.themes.LocalThemeArtworkOptions.current.controlOpacity) else containerColor
     val decoratedBackground = when(decoration) {
@@ -94,6 +94,9 @@ internal fun PlayerControlSurface(
             else tween(playerMotionMillis(reducedMotion, VeyraMotion.Press), easing = VeyraMotion.Easing),
             label = "playerControlPress",
         )
+    val sketchTilt = animateFloatAsState(
+        if (pack?.sceneStyle == "sketch" && pressed && available && !reducedMotion && !grouped) -2.5f else 0f,
+        tween(playerMotionMillis(reducedMotion, 140), easing = VeyraMotion.Easing), label = "sketchPencilPress")
     val opacity =
         animateFloatAsState(
             if (enabled || busy) 1f else 0.35f,
@@ -122,6 +125,7 @@ internal fun PlayerControlSurface(
         Box(
             (if (visualSize != null) Modifier.size(visualSize) else Modifier.fillMaxSize())
                 .graphicsLayer {
+                    rotationZ = sketchTilt.value
                     scaleX = scale.value
                     scaleY = scale.value
                     alpha = opacity.value
@@ -351,6 +355,13 @@ internal fun PlayerProgressTrack(
             }
         val factor = playerFraction(fillFactor())
         val filled = size.width * playerFraction(fraction()) * factor
+        if (pack?.seekStyle == "sketch") {
+            val count = (size.width / 10.dp.toPx()).toInt().coerceIn(1, 100)
+            repeat(count) { i ->
+                val x = size.width * i / count
+                drawLine(pack.secondary.copy(alpha=.5f), Offset(x, size.height), Offset(x+3.dp.toPx(), 0f), .65.dp.toPx())
+            }
+        }
         if (filled > 0f)
             drawRoundRect(
                 pack?.accent ?: activeColor(),
@@ -467,7 +478,8 @@ internal fun PlayerControlGroup(
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val shape = pack?.let {
-        if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp)
+        if (it.sceneStyle == "sketch") app.veyra.music.ui.themes.SketchShape
+        else if (it.sceneStyle == "web") androidx.compose.foundation.shape.CutCornerShape(it.buttonCorner.dp)
         else androidx.compose.foundation.shape.RoundedCornerShape(it.buttonCorner.dp)
     } ?: CircleShape
     Row(modifier.clip(shape)

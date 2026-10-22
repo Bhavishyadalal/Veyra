@@ -122,11 +122,11 @@ class ThemePackTest {
     }
     @Test fun allPublishedThemesInstallWithCorrectBrandingAndMinimumVersion() {
         val catalog=ThemePack.json.decodeFromString<ThemeCatalog>(File(project,"themes/catalog.json").readText())
-        assertEquals(setOf("patchwork-picnic","clover-requiem","sunroom-mixtape","concrete-afterhours","matcha-mischief","halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream","stained-glass-sonata","firefly-railway","porcelain-moon","black-honey","sakura-arcade","cloud-post-office","copper-canyon-radio","midnight-aquarium","sunday-bakery","rose-circuit","clockwork-garden","snowglobe-village","indigo-atelier","prism-playground","silent-cinema","riverside-pause","pixel-stargazer","roaming-cosmos","blue-hour-sanctuary","celestial-current"),catalog.themes.map { it.id }.toSet())
+        assertEquals(setOf("margin-notes","patchwork-picnic","clover-requiem","sunroom-mixtape","concrete-afterhours","matcha-mischief","halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream","stained-glass-sonata","firefly-railway","porcelain-moon","black-honey","sakura-arcade","cloud-post-office","copper-canyon-radio","midnight-aquarium","sunday-bakery","rose-circuit","clockwork-garden","snowglobe-village","indigo-atelier","prism-playground","silent-cinema","riverside-pause","pixel-stargazer","roaming-cosmos","blue-hour-sanctuary","celestial-current"),catalog.themes.map { it.id }.toSet())
         for (entry in catalog.themes) {
             val pack=File(project,"themes/packs/${entry.id}-v${entry.version}.zip")
             val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,BuildConfig.VERSION_CODE,::validatePublishedImageBounds)
-            assertEquals(if(entry.id in setOf("patchwork-picnic","matcha-mischief","playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals","strawberry-daydream","cloud-post-office","sunday-bakery","snowglobe-village","prism-playground")) 3 else 2,m.schema)
+            assertEquals(if(entry.id in setOf("margin-notes","patchwork-picnic","matcha-mischief","playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals","strawberry-daydream","cloud-post-office","sunday-bakery","snowglobe-village","prism-playground")) 3 else 2,m.schema)
             assertTrue(File(dir,m.assets.getValue("brandIcon")).isFile)
             rejects { ThemePack.validate(m,23) }
             if (entry.id == "midnight-express") {
@@ -154,14 +154,23 @@ class ThemePackTest {
         val bundled=File(project,"app/src/main/assets/theme-catalog.json").readBytes()
         assertArrayEquals(published,bundled)
         val entries=ThemeRepository.parseCatalog(published)
-        assertEquals(46,entries.size)
+        assertEquals(47,entries.size)
         entries.forEach { entry ->
-            assertTrue(File(project,"themes/${entry.id}/artwork/preview.webp").isFile)
+            java.util.zip.ZipFile(File(project,"themes/packs/${entry.id}-v${entry.version}.zip")).use { z ->
+                assertNotNull(z.getEntry("artwork/preview.webp"))
+            }
         }
         val invalid=ThemePack.json.decodeFromString<ThemeCatalog>(published.decodeToString()).let { c ->
             c.copy(themes=listOf(c.themes.first().copy(preview="https://example.com/art.webp")))
         }
         rejects { ThemeRepository.parseCatalog(ThemePack.json.encodeToString(ThemeCatalog.serializer(),invalid).encodeToByteArray()) }
+    }
+    @Test fun sketchPresentationRequiresTheBetaEngineAndNeverAcceptsExecutablePresets() {
+        val m=ThemePack.json.decodeFromString<ThemeManifest>(File(project,"themes/margin-notes/theme.json").readText())
+        ThemePack.validate(m,30)
+        rejects { ThemePack.validate(m,29) }
+        rejects { ThemePack.validate(m.copy(minAppCode=29),30) }
+        rejects { ThemePack.validate(m.copy(sceneStyle="script:custom"),30) }
     }
     @Test fun legacyPacksStillValidateWithoutNewFields() {
         val zip=java.util.zip.ZipFile(File(project,"themes/packs/halloween-nocturne-v2.zip"))

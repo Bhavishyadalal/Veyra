@@ -29,8 +29,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Modifier.themeNavigationSurface(shape: Shape): Modifier {
     val theme = LocalThemeVisuals.current ?: return this
+    val frame = if (theme.sceneStyle == "sketch") SketchShape else shape
     val opacity = LocalThemeArtworkOptions.current.controlOpacity
-    return clip(shape)
+    return clip(frame)
         .background(Brush.verticalGradient(listOf(theme.raised.copy(alpha = opacity), theme.surface.copy(alpha = opacity))))
         .drawWithCache {
             val line = 1.dp.toPx()
@@ -53,7 +54,7 @@ fun Modifier.themeNavigationSurface(shape: Shape): Modifier {
                 }
             }
         }
-        .border(1.dp, theme.outline.copy(alpha = .75f), shape)
+        .border(if (theme.sceneStyle == "sketch") 1.5.dp else 1.dp, theme.outline.copy(alpha = .75f), frame)
 }
 
 /** Shared with the actual floating bar: one spoken/selectable tab and a wrapping label. */

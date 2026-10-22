@@ -176,8 +176,11 @@ fun VeyraTheme(
     val colorScheme = remember(appStyle, manifest, accent, darkTheme) {
         if (appStyle.custom) appStyle.colorScheme() else manifest?.let { packPalette(it.palette) } ?: paletteFor(accent, darkTheme)
     }
-    val shapes = remember(pack?.buttonCorner, pack?.rowCorner, pack?.navCorner) {
-        if (pack == null) androidx.compose.material3.Shapes() else androidx.compose.material3.Shapes(
+    val shapes = remember(pack?.sceneStyle, pack?.buttonCorner, pack?.rowCorner, pack?.navCorner) {
+        if (pack == null) androidx.compose.material3.Shapes()
+        else if (pack.sceneStyle == "sketch") app.veyra.music.ui.themes.SketchShape.let {
+            androidx.compose.material3.Shapes(extraSmall=it, small=it, medium=it, large=it, extraLarge=it)
+        } else androidx.compose.material3.Shapes(
             small = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),
             medium = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.rowCorner.toFloat())),
             large = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),

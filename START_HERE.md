@@ -1,4 +1,6 @@
-> **This checkout: 0.1.9-beta1 / code 29.** Stable 0.1.8 / code 28 remains separate on `main` and `stable/0.1.8`. [Preview update](verification/UX-0.1.9-beta1.md) · [Initialization](verification/PREVIEW-START-0.1.9-beta1.md).
+> **Sketch theme assets:** [Margin Notes](themes/MARGIN_NOTES.md) · [Every asset preview](themes/previews/margin-notes/all-assets.png). In compact source ZIPs, `python3 scripts/restore_theme_sources.py` restores optional duplicate image folders from included packs; regular app builds keep their required inputs expanded.
+
+> **This checkout: 0.1.9-beta1 / code 30.** Stable 0.1.8 / code 28 remains separate on `main` and `stable/0.1.8`. [Preview update](verification/UX-0.1.9-beta1.md) · [Initialization](verification/PREVIEW-START-0.1.9-beta1.md).
 
 > **Separate stable source: 0.1.8, code 28.** Open this complete project in Android Studio. [Promotion verification and remaining limits](verification/STABLE-0.1.8-PROMOTION.md). The historical beta remains available separately. No APK included.
 

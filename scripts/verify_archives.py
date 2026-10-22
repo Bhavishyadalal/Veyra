@@ -39,6 +39,12 @@ for name in sorted(expected):
         assert z.read("Veyra/backend/SOURCE_MANIFEST.json") == (root / "backend/SOURCE_MANIFEST.json").read_bytes(), name
         for entry in backend["files"]:
             assert z.read("Veyra/backend/" + entry["path"]) == (root / "backend" / entry["path"]).read_bytes(), (name, entry["path"])
+        for image in manifest.get("themeAssetsInPacks", []):
+            assert image["path"].startswith("themes/") and ".." not in image["path"].split("/")
+            assert image["path"] not in paths
+            assert image["pack"] in paths and image["pack"].startswith("themes/packs/")
+            with zipfile.ZipFile(io.BytesIO(z.read("Veyra/" + image["pack"]))) as pack:
+                assert hashlib.sha256(pack.read(image["entry"])).hexdigest() == image["sha256"]
         assert "Veyra/gradle/wrapper/gradle-wrapper.jar" in z.namelist(), name
         assert "Veyra/settings.gradle.kts" in z.namelist(), name
         assert not any(p.endswith((".apk", ".aab", ".jks", ".keystore")) for p in paths), name

@@ -7,9 +7,15 @@
   `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
   `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
   Keep future preview features out of stable until the owner explicitly promotes them.
-  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 29,
+  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 30,
   based on completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`.
   Keep 0.1.9 changes out of main/stable until explicit promotion.
+  Build code 30 adds Margin Notes and the bounded sketch preset (47 beta packs,
+  launcher aliases unchanged). See `themes/MARGIN_NOTES.md`. Beta catalogs use their
+  own preview branch; strict pack/preview URL allowlisting remains in force.
+  Source ZIP manifests may map identical runtime images to included theme packs.
+  `scripts/restore_theme_sources.py` restores them without overwriting user edits;
+  preserve expanded font/license inputs needed by Gradle and retain full Git assets.
   Preview UX additions are recorded in `verification/UX-0.1.9-beta1.md`: theme artwork
   overrides preserve pack files and custom-style isolation; pagination errors require
   explicit retry, and delayed playback recovery must still own the failed item/error.

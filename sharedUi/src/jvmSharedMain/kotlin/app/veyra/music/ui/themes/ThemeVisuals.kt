@@ -170,6 +170,16 @@ fun ThemeScene(modifier: Modifier = Modifier, prominent: Boolean = false) {
             theme.background.copy(alpha = if(prominent) maxOf(scrim,.65f) else .35f)))))
         Box(Modifier.matchParentSize().background(theme.background.copy(alpha = options.dim)))
         androidx.compose.foundation.Canvas(Modifier.matchParentSize().graphicsLayer { alpha = visibility * (1f - options.dim) }) {
+            if (theme.sceneStyle == "sketch") {
+                val x = 12.dp.toPx()
+                drawLine(theme.outline.copy(alpha=.15f), androidx.compose.ui.geometry.Offset(x,0f),
+                    androidx.compose.ui.geometry.Offset(x+3.dp.toPx(),size.height), .6.dp.toPx())
+                repeat(12) { i ->
+                    val y = size.height * (i+.5f)/12
+                    drawLine(theme.outline.copy(alpha=.09f), androidx.compose.ui.geometry.Offset(0f,y),
+                        androidx.compose.ui.geometry.Offset(size.width,y-2.dp.toPx()), .5.dp.toPx())
+                }
+            }
             if (theme.sceneStyle == "web") {
                 val origin = androidx.compose.ui.geometry.Offset(size.width * 1.04f, -size.height * .04f)
                 val reach = maxOf(size.width,size.height) * 1.4f

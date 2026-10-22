@@ -14,11 +14,17 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 
 /** Opaque destination surfaces stay present under the entering page, avoiding a dark flash. */
-fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: Boolean, subtleMotion: Boolean = false): ContentTransform {
+fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: Boolean, subtleMotion: Boolean = false, sketch: Boolean = false): ContentTransform {
     val direction = if (rtl) -1 else 1
     val transition = when {
         reduceMotion || motion == NavigationMotion.None -> EnterTransition.None togetherWith ExitTransition.None
         subtleMotion -> (fadeIn(tween(VeyraMotion.Feedback)) togetherWith fadeOut(tween(VeyraMotion.Press))).apply { targetContentZIndex = 1f }
+        sketch -> {
+            val back = motion == NavigationMotion.Back
+            ((slideInHorizontally(tween(240, easing = VeyraMotion.Easing)) { direction * it / (if (back) -22 else 14) } +
+                fadeIn(tween(180))) togetherWith fadeOut(tween(160)))
+                .apply { targetContentZIndex = 1f }
+        }
         // Keep the parent stationary: moving two artwork/blur-backed pages at
         // once adds rendering work and makes text appear to swim on slow frames.
         motion == NavigationMotion.Tab ->

@@ -1,6 +1,15 @@
 # Veyra 0.1.9-beta1
 
-**Preview Android source · version code 29 · based on completed stable 0.1.8 / code 28**
+**Preview Android source · version code 30 · based on completed stable 0.1.8 / code 28**
+
+## Margin Notes · first special sketch theme
+
+- Original AI pencil backgrounds, 13 transparent hand-drawn glyphs, an in-app Veyra brand mark, Patrick Hand headings and Manrope body text: 19 mapped asset roles.
+- Sketch-specific uneven Material/control shapes, pencil-hatched timeline, finite player-button tilt and paper-slide page transitions. Animation-off and subtle-motion settings keep their supported fallbacks.
+- Requires refreshed beta **build code 30**. Code 29 and stable 0.1.8 cannot install this new preset; all previous packs retain their existing minimum versions. Launcher aliases are unchanged.
+- Source ZIPs store duplicate runtime images once inside their included theme ZIPs, with checksummed restoration metadata. Fonts/licenses needed for app builds stay expanded. `python3 scripts/restore_theme_sources.py` restores optional editable images without overwriting existing files.
+
+[Every asset and motion study](themes/previews/margin-notes/index.html) · [Theme notes](themes/MARGIN_NOTES.md)
 
 ## Listening and personalization update
 

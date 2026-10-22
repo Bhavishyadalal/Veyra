@@ -17,7 +17,9 @@ import java.util.concurrent.TimeUnit
 
 /** Process-lifetime downloads survive configuration changes; playback is never restarted. */
 object ThemeRepository {
-    const val ROOT_URL = "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/"
+    val ROOT_URL = "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/" +
+        (if (app.veyra.music.BuildConfig.VERSION_NAME.contains("-beta"))
+            "preview/${app.veyra.music.BuildConfig.VERSION_NAME}" else "main") + "/themes/"
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val client by lazy { OkHttpClient.Builder().connectTimeout(20,TimeUnit.SECONDS)
         .readTimeout(30,TimeUnit.SECONDS).callTimeout(120,TimeUnit.SECONDS)

@@ -84,7 +84,10 @@ object ThemePack {
         require(manifest.rowCorner in 8..28 && manifest.buttonCorner in 12..36 && manifest.navCorner in 18..48)
         require(manifest.files.size in 1..48 && manifest.files.all { safePath(it.key) && hashPattern.matches(it.value) })
         require(manifest.assets.keys.all { it in assetKeys })
-        require(manifest.sceneStyle in setOf("mist", "web", "playful"))
+        require(manifest.sceneStyle in setOf("mist", "web", "playful", "sketch"))
+        if (manifest.sceneStyle == "sketch" || manifest.seekStyle == "sketch") {
+            require(manifest.schema == 3 && manifest.minAppCode >= 30) { "Update Veyra for sketch themes." }
+        }
         require(manifest.tagline.length in 1..80 && manifest.tagline.none { it.isISOControl() })
         if (manifest.schema == 1) {
             require("brandIcon" !in manifest.assets && manifest.sceneStyle == "mist" && manifest.seekStyle != "web")
@@ -96,7 +99,7 @@ object ThemePack {
         for ((key, path) in manifest.assets) {
             require(if (key.endsWith("Font")) path.endsWith(".ttf") else path.endsWith(".png") || path.endsWith(".webp"))
         }
-        require(manifest.seekStyle in setOf("plain", "ember", "web", "bubbles") && manifest.seekHeight in 6..12)
+        require(manifest.seekStyle in setOf("plain", "ember", "web", "bubbles", "sketch") && manifest.seekHeight in 6..12)
         val p = manifest.palette
         listOf(p.background,p.surface,p.raised,p.accent,p.accentContainer,p.text,p.muted,p.outline,p.secondary)
             .forEach { require(it.matches(Regex("#[0-9A-Fa-f]{6}"))) { "Invalid theme color." } }
