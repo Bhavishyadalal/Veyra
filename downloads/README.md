@@ -1,12 +1,12 @@
-> **Latest: build 38** · [Playback/Home fixes, immersive menu and Night Vault](../verification/PATCH-0.1.9-BUILD-38.md). Rebuild/install this source for the new launcher icons and fixes.
+> **Latest: build 39** · [Ten redesigned Night Vault glass icons](../verification/GLASS-ICONS-0.1.9-BUILD-39.md). Rebuild/install this source for the glass launcher artwork and earlier fixes.
 
 # Veyra source downloads
 
-**Stable 0.1.9 · code 38** adds [six immersive presentations](../verification/IMMERSIVE-WORLDS-0.1.9.md) with direct player access. It includes 62 themes, 15 independent asset packs and 105 launcher choices. These complete Android Studio projects include licenses and backend provenance. **Source ZIPs are not APKs.**
+**Stable 0.1.9 · code 39** adds [six immersive presentations](../verification/IMMERSIVE-WORLDS-0.1.9.md) with direct player access. It includes 62 themes, 15 independent asset packs and 105 launcher choices. These complete Android Studio projects include licenses and backend provenance. **Source ZIPs are not APKs.**
 
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
-| Current stable · `main`, `stable/0.1.9` | 0.1.9 / code 38 | [Download](Veyra_Android_Source_0.1.9_Stable.zip) | [SHA-256](Veyra_Android_Source_0.1.9_Stable.zip.sha256) |
+| Current stable · `main`, `stable/0.1.9` | 0.1.9 / code 39 | [Download](Veyra_Android_Source_0.1.9_Stable.zip) | [SHA-256](Veyra_Android_Source_0.1.9_Stable.zip.sha256) |
 | Completed preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 35 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 | Historical preview · `preview/0.1.8-beta1` | 0.1.8-beta1 / code 27 | [Download](Veyra_Android_Source_0.1.8-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.8-beta1.zip.sha256) |
 | Historical preview · `preview/0.1.7-beta1` | 0.1.7-beta1 / code 25 | [Download](Veyra_Android_Source_0.1.7-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.7-beta1.zip.sha256) |

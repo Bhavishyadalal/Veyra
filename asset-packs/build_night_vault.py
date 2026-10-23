@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Ten original gothic/punk overlays. Keep published packs immutable; use only bounded native presets."""
 from pathlib import Path
-import json,sys,math,io,xml.etree.ElementTree as ET
+import json,sys,math
 import build_collection as engine
 from PIL import Image,ImageDraw,ImageFont
 import cairosvg
@@ -55,24 +55,17 @@ def svg(c,key,path,i,pressed=False):
  return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 28 28">{content}</svg>'
 
 def launcher(c):
- root=ROOT.parent;art=root/'design/launcher/night-vault';art.mkdir(parents=True,exist_ok=True)
- wave=ET.parse(root/'app/src/main/res/drawable/ic_wave_monochrome.xml').getroot()[0].attrib['{http://schemas.android.com/apk/res/android}pathData']
- col=c['colors'][0];second=c['colors'][1]
- defs=f'<linearGradient id="b" x2="1" y2="1"><stop stop-color="#30334A"/><stop offset="1" stop-color="#08090F"/></linearGradient><linearGradient id="wave" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#FFFFFF"/><stop offset=".45" stop-color="{col}"/><stop offset="1" stop-color="{second}"/></linearGradient>'
- s=f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108"><defs>{defs}</defs><rect width="108" height="108" rx="24" fill="url(#b)"/><g transform="translate(3 3) scale(3.92)">{frame(c,col)}</g><path d="{wave}" transform="translate(0 2)" fill="#000000" stroke="#000000" stroke-width="3" opacity=".8"/><path d="{wave}" fill="url(#wave)" stroke="#FFFFFF" stroke-opacity=".4" stroke-width=".3"/><path d="M26 38Q54 17 82 38" fill="none" stroke="{col}" stroke-width=".5" opacity=".7"/></svg>'
- (art/(c['id']+'.svg')).write_text(s)
- png=cairosvg.svg2png(bytestring=s.encode(),output_width=512,output_height=512)
- full=Image.open(io.BytesIO(png)).convert('RGB');full.save(art/(c['id']+'.webp'),quality=94,method=6)
- res=root/'app/src/main/res';key='collection_'+c['id'].replace('-','_')
- for density,scale in [('mdpi',1),('hdpi',1.5),('xhdpi',2),('xxhdpi',3),('xxxhdpi',4)]:
-  for suffix,dp in [('',48),('_foreground',108)]:
-   side=int(dp*scale);full.resize((side,side),Image.Resampling.LANCZOS).save(res/f'mipmap-{density}/ic_{key}{suffix}.webp',quality=92,method=6)
- (res/f'mipmap-anydpi-v26/ic_{key}.xml').write_text(f'<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"><background android:drawable="@color/wave_glass_background"/><foreground android:drawable="@mipmap/ic_{key}_foreground"/><monochrome android:drawable="@drawable/ic_wave_monochrome"/></adaptive-icon>\n')
- return dict(id=c['id'],name=c['name'],kind='asset',style=c['description'],source='night-vault/'+c['id']+'.webp')
+ # The flat SVGs are retained as historical studies only. Export the reviewed
+ # AI glass master instead; a pack rebuild must never restore the old artwork.
+ sys.path.insert(0,str(ROOT.parent/'scripts'))
+ from build_night_vault_icons import compile_icon
+ entry=dict(id=c['id'],name=c['name'],kind='asset',style=c['description'],source='night-vault/'+c['id']+'.webp')
+ compile_icon(entry)
+ return entry
 
 def galleries():
  out=ROOT/'previews/night-vault';out.mkdir(parents=True,exist_ok=True)
- html='<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Veyra Night Vault · actual assets</title><style>body{background:#0d1019;color:#eee;font:16px system-ui;margin:24px}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px}article{padding:18px;background:#191e2a;border-radius:24px}img{max-width:100%;border-radius:16px}a{color:#c9dcff}</style><h1>VEYRA / NIGHT VAULT</h1><p>Ten independent overlays · real glyphs, fonts and matching waveform icons · app build 38 adds launcher choices</p><main>'
+ html='<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Veyra Night Vault · actual assets</title><style>body{background:#0d1019;color:#eee;font:16px system-ui;margin:24px}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px}article{padding:18px;background:#191e2a;border-radius:24px}img{max-width:100%;border-radius:16px}a{color:#c9dcff}</style><h1>VEYRA / NIGHT VAULT</h1><p>Ten independent overlays · real glyphs, fonts and matching waveform icons · app build 39 supplies the redesigned glass launcher icons</p><main>'
  for c in SPECS:
   html+=f'<article><h2>{c["name"]}</h2><img src="../{c["id"]}/specimen.png" alt="{c["name"]} actual assets"><p>{c["description"]}</p><p><a href="../{c["id"]}/all-assets.png">All 119 runtime roles</a> · <a href="../../packs/{c["id"]}-v1.zip">Pack ZIP</a></p><img src="../../../design/launcher/night-vault/{c["id"]}.webp" width="128" alt="Matching Veyra waveform icon"></article>'
  (out/'index.html').write_text(html+'</main>')

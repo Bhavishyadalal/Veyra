@@ -1,6 +1,14 @@
 # Veyra 0.1.9
 
-**Stable · Android version code 38 · includes the completed 0.1.9-beta1**
+**Stable · Android version code 39 · includes the completed 0.1.9-beta1**
+
+## Night Vault glass editions · build 39
+
+The ten Night Vault launcher icons now match Veyra's earlier glass editions: raised translucent waveforms, deep reflections and sculpted frames. Each uses distinct pack materials, from sapphire/ruby and amethyst to pink jelly glass, gold, acid green and midnight-blue crystal.
+
+[See all ten actual icons](design/launcher/night-vault/previews/glass-editions.webp) · [Implementation and checks](verification/GLASS-ICONS-0.1.9-BUILD-39.md).
+
+The matching-icon actions, App icon picker and selected Home icon use these replacements. All existing themes, asset ZIPs and other launcher choices are preserved. Rebuild and install **code 39** for this bundled artwork; this source update does not publish an APK.
 
 ## Reliability + Night Vault · build 38
 

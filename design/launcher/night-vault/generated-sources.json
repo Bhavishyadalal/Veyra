@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "created": "2026-10-23",
+  "generator": "OpenAI image_gen",
+  "references": [
+    "design/launcher/collections/chrome-venom.webp",
+    "design/launcher/collections/riot-candy.webp"
+  ],
+  "method": "Ten independently generated glass icons, visually reviewed for the connected three-bar Veyra identity. Only resizing and WebP production encoding after generation; no contact-sheet crops. Original generated PNG paths are provenance, not build inputs. Bundled 512px WebP masters are self-contained rebuild inputs. The earlier flat SVGs are historical studies and are not used by the exporter.",
+  "images": [
+    {
+      "id": "cathedral-static",
+      "path": "/workspace/generated_images/exec-411a6a0f-a2e5-4b25-b817-b45fa37ddc9f.png",
+      "generatedSize": [
+        1254,
+        1254
+      ],
+      "generatedSha256": "86417667f52c47662804a0d8b43ddcc35f2317ce13087283a78a95f99bd5f656",
+      "masterSha256": "0cf2f3ee6772cae57f9af95978d9312b08922969da0c68367903d3d7849e8858",
+      "master": "cathedral-static.webp"
+    },
+    {
+      "id": "velvet-hex",
+      "path": "/workspace/generated_images/exec-55e7452a-cddd-4d15-857d-c3a4f5d2b388.png",
+      "generatedSize": [
+        1254,
+        1254
+      ],
+      "generatedSha256": "ca85634e71d9e06856ba51d2e27f7ff9a1e7a63260692a24b00e944cc1576d1d",
+      "masterSha256": "a2e450d2b4d1360d5bd8afb7187d8b97bf1812f124b9f4168c0330e6a7697895",
+      "master": "velvet-hex.webp"
+    },
+    {
+      "id": "razor-bloom",
+      "path": "/workspace/generated_images/exec-534e39bd-ecfd-4949-aa0a-1c443085e611.png",
+      "generatedSize": [
+        1254,
+        1254
+      ],
+      "generatedSha256": "e12091a4bce6a2d1ca2de8f4a981b3df74d09e7aa328ca054a224d61fc364e01",
+      "masterSha256": "883d47ad7837862fab015f4a861cb56927cbab34dbe60a5cb665429e616e9d51",
+      "master": "razor-bloom.webp"
+    },
+    {
+      "id": "neon-seance",
+      "path": "/workspace/generated_images/exec-a39da315-a955-4661-a748-52eb125c0f26.png",
+      "generatedSize": [
+        1254,
+        1254
+      ],
+      "generatedSha256": "b79b861d85eda47e151de69ba1a0b2b72876bffd3415e79400c1a9a314a196b0",
+      "masterSha256": "68728b619d5388ca54828c3a3d359e5a2aa671f77d67a9d31aafcbad8d2ae1e1",
+      "master": "neon-seance.webp"
+    },
+    {
+      "id": "blackout-zine",
+      "path": "/workspace/generated_images/exec-ab1fc863-2212-4866-9ab1-18d1f7739d7e.png",
+      "generatedSize": [
+        1254,
+        1254
+      ],
+      "generatedSha256": "f148e44959eed232bf71d386227117dea279f89d88c2225e891e051116169926",
+      "masterSha256": "da5f0bdec5595ef609abcc000bbc09e40bd7a5c6a4e3ab58d0d2c00055f0fe03",
+      "master": "blackout-zine.webp"
+    },
+    {
+      "id": "chrome-fang",
+      "path": "/workspace/generated_images/exec-aceda346-0a2f-40a5-9909-789fe4fb9b32.png",
+      "generatedSize": [
+        1254,
+        1254
+      ],
+      "generatedSha256": "7011ac470d352d7fc7349dcc54d3e9edc304d68ed5a8cc3d2898078c8bd1c03f",
+      "masterSha256": "f166b57ed31f1982937d1d761a3d532e6a8b0d9730e9d505e9cc7b81e1011e90",
+      "master": "chrome-fang.webp"
+    },
+    {
+      "id": "candy-crypt",
+      "path": "/workspace/generated_images/exec-0bdbbadc-7df7-4f47-823c-59efe5378608.png",
+      "generatedSize": [
+        1254,
+        1254
+      ],
+      "generatedSha256": "44c99ed92d22f0f3095ecaaa6d31d5cc67afcd1b2f6132ec2fd269793ca1b612",
+      "masterSha256": "e77922dfe0c79e3c908f88830382d2b47f1f05cd03675d31af7daead14da508b",
+      "master": "candy-crypt.webp"
+    },
+    {
+      "id": "royal-ruin",
+      "path": "/workspace/generated_images/exec-71c40188-82c0-4a94-a8fc-793ea8bf41c1.png",
+      "generatedSize": [
+        1254,
+        1254
+      ],
+      "generatedSha256": "2b338dae6703dc222a89405266699f3cccd47ce8a3a7a1d67e3928b3811b17b3",
+      "masterSha256": "5dd01351d0d918334b22191bae4b979e7343e5c617479e1d4430299130204295",
+      "master": "royal-ruin.webp"
+    },
+    {
+      "id": "acid-gargoyle",
+      "path": "/workspace/generated_images/exec-5600464b-6246-442d-a82c-c76273a230e0.png",
+      "generatedSize": [
+        1254,
+        1254
+      ],
+      "generatedSha256": "225e08341be6862d097ae7dce6fa17285339b754cb175ad9e1768267fd4db937",
+      "masterSha256": "ddae559fec46e25bb399c8635d256fc95e34a3dbe20f82d43393be342842829a",
+      "master": "acid-gargoyle.webp"
+    },
+    {
+      "id": "midnight-stitch",
+      "path": "/workspace/generated_images/exec-e9e07f1f-2734-4c13-a70e-cf9d17570269.png",
+      "generatedSize": [
+        1254,
+        1254
+      ],
+      "generatedSha256": "be008975bce25f35173f5faaa34faaff1bbfe1168505e5f2df581f6025f12cc2",
+      "masterSha256": "e5bdc42317b1e42e6054b17dfe1e6cb752aa0f9c0a69bd881769a8ab726b1882",
+      "master": "midnight-stitch.webp"
+    }
+  ]
+}

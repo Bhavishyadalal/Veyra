@@ -49,7 +49,7 @@ These sheets use the real supplied PNGs and fonts. Each image links to all 119 r
 
 ## Matching launcher icons
 
-All ten use the existing canonical connected three-bar Veyra waveform, with distinct pack frames and shared Android monochrome branding. The masters are original SVG illustrations with 512px WebP previews and five native density exports. [Masters and catalog](../design/launcher/night-vault/catalog.json).
+All ten use the existing canonical connected three-bar Veyra waveform, with distinct pack frames and shared Android monochrome branding. Build 39 replaces the earlier flat launcher illustrations with ten individually AI-generated glass designs: raised translucent waveforms, sculpted rims, reflections and distinct pack materials. The reviewed 512px WebP masters supply five native density exports; the earlier SVGs remain historical studies only. See [generation provenance](../design/launcher/night-vault/generated-sources.json) and the [actual glass icon gallery](../design/launcher/night-vault/previews/index.html). [Masters and catalog](../design/launcher/night-vault/catalog.json).
 
 | Cathedral | Velvet | Razor | Neon | Blackout |
 | --- | --- | --- | --- | --- |
@@ -63,7 +63,7 @@ All ten use the existing canonical connected three-bar Veyra waveform, with dist
 
 Settings → Appearance → Asset packs → Refresh → download a Night Vault pack → **Apply assets**. Use the matching-icon action or App icon → Asset packs to choose its launcher edition. Home follows the actual selected launcher.
 
-The pack format and native material/seek/motion presets remain compatible with **app code 33+**. The ten new bundled launcher aliases, playback/Home fixes and revised immersive menu require a rebuilt **stable 0.1.9 / code 38** APK. Data packs and source ZIPs are not APKs. No old theme/asset pack is removed or repacked.
+The pack format and native material/seek/motion presets remain compatible with **app code 33+**. The ten new bundled launcher aliases, playback/Home fixes and revised immersive menu require a rebuilt **stable 0.1.9 / code 38** APK; the redesigned glass launcher artwork requires **code 39**. Data packs and source ZIPs are not APKs. No old theme/asset pack is removed or repacked.
 
 Original SVGs remain in `vectors/<pack>/`. Flat-color runtime exports use bounded 128px indexed PNGs, with 256px player transports. Pack activation keeps the existing small glyph warmup, off-main font cache and independent layer controls. Materials and page/press feedback use finite supported native presets; physical fabric/metal simulations are not installed.
 
@@ -71,4 +71,4 @@ Original SVGs remain in `vectors/<pack>/`. Flat-color runtime exports use bounde
 
 ![Night Vault creative direction board](previews/night-vault/art-direction.png)
 
-This original AI image is **concept art**. Its illustrated materials and lettering are separate from the real runtime specimens above. It is not an app screenshot. The actual launcher masters preserve Veyra's canonical waveform; runtime controls are individually authored functional SVG exports, not crops of this board.
+This original AI image is **concept art**. Its illustrated materials and lettering are separate from the real runtime specimens above. It is not an app screenshot. The actual launcher masters are separate AI-generated glass icons based on Veyra's existing connected-wave identity; runtime controls are individually authored functional SVG exports, not crops of this board.
