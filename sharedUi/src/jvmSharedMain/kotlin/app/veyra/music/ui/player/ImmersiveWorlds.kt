@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -45,7 +47,7 @@ import kotlin.math.min
     ImmersiveStyle.MINIMAL_NIGHT -> Res.string.immersive_night
     ImmersiveStyle.LANDSCAPE_STAGE -> Res.string.immersive_stage
 })
-@Composable private fun ImmersiveStyle.description(): String = stringResource(when(this) {
+@Composable internal fun ImmersiveStyle.description(): String = stringResource(when(this) {
     ImmersiveStyle.CLASSIC -> Res.string.immersive_classic_hint
     ImmersiveStyle.ARTWORK_CINEMA -> Res.string.immersive_cinema_hint
     ImmersiveStyle.THEME_WORLD -> Res.string.immersive_theme_hint
@@ -170,17 +172,34 @@ internal fun ImmersiveStyle.ink(themeAccent: Color): Color = when(this) {
     }
 }
 
-@Composable internal fun ImmersiveModeCard(style: ImmersiveStyle,selected: Boolean,artwork:String?=null,onClick: () -> Unit) {
+/** One selectable poster, with a bounded static miniature instead of a live player. */
+@Composable internal fun ImmersiveModeCard(style: ImmersiveStyle,selected: Boolean,artwork:String?=null,modifier:Modifier=Modifier,onClick: () -> Unit) {
     val ink=style.ink(MaterialTheme.colorScheme.primary)
-    Surface(onClick=onClick,shape=RoundedCornerShape(24.dp),color=if(selected)MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainer,
-        border=androidx.compose.foundation.BorderStroke(if(selected)2.dp else 1.dp,if(selected)MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant),modifier=Modifier.fillMaxWidth()) {
-        Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {
-            ImmersiveMiniature(style,artwork,ink)
-            Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
-                Text(style.title(),style=MaterialTheme.typography.titleMedium)
-                Text(style.description(),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+    val shape=RoundedCornerShape(24.dp)
+    Surface(onClick=onClick,shape=shape,
+        color=if(selected)MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+        border=androidx.compose.foundation.BorderStroke(if(selected)2.dp else 1.dp,
+            if(selected)MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant.copy(.45f)),
+        modifier=modifier.fillMaxWidth().semantics {
+            this.selected=selected
+            role=androidx.compose.ui.semantics.Role.RadioButton
+        }) {
+        Column {
+            Box(Modifier.fillMaxWidth().height(128.dp).padding(6.dp).clip(RoundedCornerShape(19.dp))) {
+                ImmersiveMiniature(style,artwork,ink,Modifier.fillMaxSize())
+                Surface(Modifier.align(Alignment.TopStart).padding(8.dp),shape=CircleShape,color=Color.Black.copy(.55f),contentColor=Color.White) {
+                    Text((style.ordinal+1).toString().padStart(2,'0'),Modifier.padding(horizontal=8.dp,vertical=4.dp),style=MaterialTheme.typography.labelSmall)
+                }
+                if(selected) Surface(Modifier.align(Alignment.TopEnd).padding(8.dp),shape=CircleShape,
+                    color=MaterialTheme.colorScheme.primary,contentColor=MaterialTheme.colorScheme.onPrimary) {
+                    Icon(Icons.Rounded.Check,null,Modifier.padding(5.dp).size(16.dp))
+                }
             }
-            RadioButton(selected=selected,onClick=null,modifier=Modifier.size(24.dp))
+            Column(Modifier.fillMaxWidth().padding(start=14.dp,end=14.dp,top=6.dp,bottom=16.dp),verticalArrangement=Arrangement.spacedBy(6.dp)) {
+                Text(style.title(),style=MaterialTheme.typography.titleMedium)
+                Text(style.description(),style=MaterialTheme.typography.bodySmall,
+                    color=if(selected)MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
     }
 }
@@ -221,38 +240,64 @@ private fun immersiveTime(ms: Long):String {
         else "$minutes:${(seconds%60).toString().padStart(2,'0')}"
 }
 
-/** A static mode-specific composition at a bounded 96px request size. */
-@Composable private fun ImmersiveMiniature(style:ImmersiveStyle,artwork:String?,ink:Color) {
+/** Bounded, static compositions: no extra decoder, ticker, blur or playback collector. */
+@Composable private fun ImmersiveMiniature(style:ImmersiveStyle,artwork:String?,ink:Color,modifier:Modifier) {
     val context=coil3.compose.LocalPlatformContext.current
     val theme=LocalThemeVisuals.current
     val art=if(style==ImmersiveStyle.THEME_WORLD) theme?.asset("header")?.let {java.io.File(it)} else artwork
-    val request=remember(art,context) {coil3.request.ImageRequest.Builder(context).data(art).size(96).build()}
-    Box(Modifier.size(width=78.dp,height=104.dp).clip(RoundedCornerShape(14.dp)).background(Brush.verticalGradient(listOf(Color(0xFF25213D),Color(0xFF080B11))))) {
+    val request=remember(art,context) {coil3.request.ImageRequest.Builder(context).data(art).size(192).build()}
+    Box(modifier.background(Brush.linearGradient(listOf(ink.copy(.25f),Color(0xFF090C16),ink.copy(.08f))))) {
+        // A designed light field keeps every preview useful offline or without artwork.
+        Canvas(Modifier.fillMaxSize()) {
+            drawCircle(ink.copy(.08f),size.width*.46f,Offset(size.width*.88f,size.height*.05f))
+            drawCircle(ink.copy(.07f),size.width*.32f,Offset(size.width*.15f,size.height*.85f))
+        }
         when(style) {
-            ImmersiveStyle.ARTWORK_CINEMA,ImmersiveStyle.THEME_WORLD,ImmersiveStyle.CLASSIC -> {
-                ThemeIcon(style.symbol(),null,Modifier.size(28.dp).align(Alignment.Center),ink.copy(.7f))
-                AsyncImage(request,null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop,alpha=if(style==ImmersiveStyle.THEME_WORLD).6f else .85f)
-                Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent,Color.Black.copy(.8f)))))
+            ImmersiveStyle.ARTWORK_CINEMA,ImmersiveStyle.THEME_WORLD -> {
+                Icon(style.symbol(),null,Modifier.size(36.dp).align(Alignment.Center),tint=ink.copy(.65f))
+                AsyncImage(request,null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop,
+                    alpha=if(style==ImmersiveStyle.THEME_WORLD).75f else .9f)
+                Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent,Color.Black.copy(.82f)))))
+                Column(Modifier.align(Alignment.BottomStart).padding(start=16.dp,end=42.dp,bottom=16.dp),verticalArrangement=Arrangement.spacedBy(6.dp)) {
+                    Box(Modifier.fillMaxWidth(.8f).height(5.dp).background(Color.White.copy(.8f),CircleShape))
+                    Box(Modifier.fillMaxWidth(.55f).height(3.dp).background(ink.copy(.5f),CircleShape))
+                }
             }
-            ImmersiveStyle.MINIMAL_NIGHT -> Box(Modifier.size(48.dp).align(Alignment.Center).border(1.dp,ink.copy(.5f),CircleShape).padding(6.dp).clip(CircleShape)) {
+            ImmersiveStyle.CLASSIC -> Column(Modifier.align(Alignment.Center).padding(top=12.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(7.dp)) {
+                Box(Modifier.size(52.dp).clip(RoundedCornerShape(12.dp)).background(ink.copy(.15f)),contentAlignment=Alignment.Center) {
+                    Icon(Icons.Rounded.MusicNote,null,Modifier.size(24.dp),tint=ink)
+                    AsyncImage(request,null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
+                }
+                Box(Modifier.width(48.dp).height(3.dp).background(ink.copy(.65f),CircleShape))
+                Row(horizontalArrangement=Arrangement.spacedBy(8.dp),verticalAlignment=Alignment.CenterVertically) {
+                    Icon(Icons.Rounded.SkipPrevious,null,Modifier.size(10.dp),tint=ink)
+                    Icon(Icons.Rounded.PlayCircle,null,Modifier.size(20.dp),tint=ink)
+                    Icon(Icons.Rounded.SkipNext,null,Modifier.size(10.dp),tint=ink)
+                }
+            }
+            ImmersiveStyle.MINIMAL_NIGHT -> Box(Modifier.size(72.dp).align(Alignment.Center)
+                .border(1.dp,ink.copy(.5f),CircleShape).padding(8.dp).clip(CircleShape)
+                .background(Color(0xFF070B12)),contentAlignment=Alignment.Center) {
+                Icon(Icons.Rounded.GraphicEq,null,Modifier.size(24.dp),tint=ink)
                 AsyncImage(request,null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
             }
-            ImmersiveStyle.LANDSCAPE_STAGE -> Row(Modifier.align(Alignment.Center).padding(8.dp),horizontalArrangement=Arrangement.spacedBy(5.dp)) {
-                AsyncImage(request,null,Modifier.size(28.dp,40.dp).clip(RoundedCornerShape(5.dp)),contentScale=ContentScale.Crop)
-                Column(verticalArrangement=Arrangement.spacedBy(5.dp)) {repeat(3){Box(Modifier.size(20.dp,3.dp).background(ink.copy(alpha=1f-it*.25f),CircleShape))}}
+            ImmersiveStyle.LANDSCAPE_STAGE -> Row(Modifier.align(Alignment.Center).padding(horizontal=16.dp),
+                horizontalArrangement=Arrangement.spacedBy(10.dp),verticalAlignment=Alignment.CenterVertically) {
+                Box(Modifier.size(48.dp,62.dp).clip(RoundedCornerShape(9.dp)).background(ink.copy(.12f)),contentAlignment=Alignment.Center) {
+                    Icon(Icons.Rounded.MusicNote,null,Modifier.size(22.dp),tint=ink)
+                    AsyncImage(request,null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
+                }
+                Column(Modifier.width(46.dp),verticalArrangement=Arrangement.spacedBy(7.dp)) {
+                    repeat(3){Box(Modifier.fillMaxWidth(if(it==1)1f else .75f).height(if(it==1)5.dp else 3.dp).background(ink.copy(alpha=if(it==1)1f else .35f),CircleShape))}
+                }
             }
-            ImmersiveStyle.LYRICS_FOCUS -> Column(Modifier.align(Alignment.Center).padding(12.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                repeat(3){Box(Modifier.fillMaxWidth().height(if(it==1)5.dp else 3.dp).background(ink.copy(if(it==1)1f else .3f),CircleShape))}
+            ImmersiveStyle.LYRICS_FOCUS -> Column(Modifier.align(Alignment.Center).fillMaxWidth(.65f),verticalArrangement=Arrangement.spacedBy(10.dp)) {
+                repeat(4){Box(Modifier.fillMaxWidth(if(it%2==0)1f else .7f).height(if(it==1)7.dp else 4.dp).background(ink.copy(if(it==1)1f else .25f),CircleShape))}
             }
         }
-        Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(8.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(5.dp)) {
-            Box(Modifier.fillMaxWidth().height(2.dp).background(ink.copy(.6f),CircleShape))
-            Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                ThemeIcon(Icons.Rounded.SkipPrevious,null,Modifier.size(8.dp),ink)
-                Box(Modifier.size(14.dp).background(ink,CircleShape),contentAlignment=Alignment.Center) {
-                    ThemeIcon(Icons.Rounded.PlayArrow,null,Modifier.size(9.dp),Color.Black)
-                }
-                ThemeIcon(Icons.Rounded.SkipNext,null,Modifier.size(8.dp),ink)
+        if(style==ImmersiveStyle.THEME_WORLD || style==ImmersiveStyle.ARTWORK_CINEMA) {
+            Box(Modifier.align(Alignment.BottomEnd).padding(12.dp).size(26.dp).background(ink,CircleShape),contentAlignment=Alignment.Center) {
+                Icon(Icons.Rounded.PlayArrow,null,Modifier.size(16.dp),tint=Color(0xFF0A0C14))
             }
         }
     }

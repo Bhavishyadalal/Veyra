@@ -191,10 +191,11 @@ internal fun ImmersivePlayer(
                         Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {transport()}
                     }
                 }
-                if(settings) MaterialTheme(colorScheme=base) { ModalBottomSheet(onDismissRequest={settings=false},sheetMaxWidth=900.dp) {
+                if(settings) MaterialTheme(colorScheme=base) { ModalBottomSheet(onDismissRequest={settings=false},sheetMaxWidth=900.dp,sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),
+                    containerColor=base.surface,shape=androidx.compose.foundation.shape.RoundedCornerShape(topStart=32.dp,topEnd=32.dp)) {
                     ImmersiveMenuContent(options,artwork,onOptions,
                         onSelectStyle={onOptions(options.copy(immersiveStyle=it));settings=false;controls=true},
-                        onSource={settings=false;onSource()},onTiming={settings=false;onTiming()},onSongOptions={settings=false;onSongOptions()})
+                        onSource={settings=false;onSource()},onTiming={settings=false;onTiming()},onSongOptions={settings=false;onSongOptions()},onDismiss={settings=false})
                 } }
             }
         }

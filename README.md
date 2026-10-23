@@ -1,3 +1,5 @@
+> **Build 40:** redesigned [immersive-mode gallery](verification/IMMERSIVE-GALLERY-0.1.9-BUILD-40.md) with visual mode posters, pinned heading/close, clear selection and expandable controls.
+
 > **Build 39:** ten redesigned [Night Vault glass launcher icons](design/launcher/night-vault/previews/glass-editions.webp), with raised translucent waveforms and distinct sculpted materials. [Changes and checks](verification/GLASS-ICONS-0.1.9-BUILD-39.md).
 
 > **Build 38:** playback-button and Home recovery fixes, a visual immersive picker, covered-page suspension and [ten Night Vault packs with matching icons](asset-packs/NIGHT_VAULT.md). [Checks and limits](verification/PATCH-0.1.9-BUILD-38.md).
@@ -6,7 +8,7 @@
 
 > **Five new illustrated themes:** [Illustrated Worlds](themes/ILLUSTRATED_WORLDS.md) · [Preview collection](themes/previews/illustrated-worlds/collection.png). Compatible with the existing beta engine build 30.
 
-> **Stable 0.1.9 / code 39:** 62 themes, 15 independent asset overlays, 105 matching launcher choices, live Home icon updates, theme artwork controls, queue/Home/search improvements and lighter asset rendering. [Release notes](RELEASE_NOTES_0.1.9.md) · [Promotion checks and limits](verification/STABLE-0.1.9-PROMOTION.md) · [Source downloads](downloads/README.md).
+> **Stable 0.1.9 / code 40:** 62 themes, 15 independent asset overlays, 105 matching launcher choices, live Home icon updates, theme artwork controls, queue/Home/search improvements and lighter asset rendering. [Release notes](RELEASE_NOTES_0.1.9.md) · [Promotion checks and limits](verification/STABLE-0.1.9-PROMOTION.md) · [Source downloads](downloads/README.md).
 
 > Completed preview **0.1.9-beta1 / code 35** remains on `preview/0.1.9-beta1` with its original source ZIP. Stable 0.1.8 / code 28 remains available on `stable/0.1.8`.
 

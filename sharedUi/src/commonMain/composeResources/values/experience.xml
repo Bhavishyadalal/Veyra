@@ -72,4 +72,9 @@
     <item>Listen Together</item>
     <item>Liked songs</item>
   </string-array>
+    <string name="immersive_now_showing">Now showing · %1$s</string>
+    <string name="immersive_customize_classic">Customize Classic</string>
+    <string name="immersive_expand">Expand</string>
+    <string name="immersive_collapse">Collapse</string>
+    <string name="immersive_close_menu">Close immersive menu</string>
 </resources>

@@ -212,15 +212,27 @@ class ExperienceRenderTest {
         PlayerPlatform.install(RenderPlayerHost())
         val root=generateSequence(File(System.getProperty("user.dir"))) {it.parentFile}.first {File(it,"themes/matcha-mischief").isDirectory}
         val output=File(root,"themes/previews/immersive-worlds").apply {mkdirs()}
-        for(large in listOf(false,true)) {
+        val artwork=File(root,"themes/matcha-mischief/artwork/preview.webp")
+        val theme=ThemeVisuals("fixture","Matcha",Color(0xFFD6E9A3),Color(0xFF1C3829),Color(0xFF34513C),Color(0xFF718764),16,18,24,mapOf("header" to artwork.path))
+        for(data in listOf(artwork,artwork.toURI().toString())) {
+            val result=kotlinx.coroutines.runBlocking {coil3.SingletonImageLoader.get(coil3.PlatformContext.INSTANCE).execute(
+                coil3.request.ImageRequest.Builder(coil3.PlatformContext.INSTANCE).data(data).size(192).build())}
+            assertTrue(result is coil3.request.SuccessResult)
+        }
+        for((name,width,fontScale) in listOf(Triple("phone",390,1f),Triple("wide",900,1f),Triple("large-rtl",360,1.8f))) {
             var scene:ImageComposeScene?=null
+            var options by mutableStateOf(ExperienceOptions(immersive=true,immersiveStyle=ImmersiveStyle.THEME_WORLD))
+            val selections=mutableListOf<ImmersiveStyle>()
+            var dismissed=0
             try {
                 SwingUtilities.invokeAndWait {
-                    scene=ImageComposeScene(if(large)360 else 900,844,density=Density(1f,if(large)1.8f else 1f)) {
-                        CompositionLocalProvider(LocalLayoutDirection provides if(large)LayoutDirection.Rtl else LayoutDirection.Ltr) {
+                    scene=ImageComposeScene(width,844,density=Density(1f,fontScale)) {
+                        CompositionLocalProvider(LocalThemeVisuals provides if(fontScale>1f)null else theme,
+                            LocalLayoutDirection provides if(fontScale>1f)LayoutDirection.Rtl else LayoutDirection.Ltr) {
                             MaterialTheme(colorScheme=darkColorScheme()) {
                                 Surface {
-                                    ImmersiveMenuContent(ExperienceOptions(immersive=true,immersiveStyle=ImmersiveStyle.THEME_WORLD),null,{}, {}, {}, {}, {})
+                                    ImmersiveMenuContent(options,if(fontScale>1f)null else artwork.toURI().toString(),{options=it},
+                                        {selections+=it;options=options.copy(immersiveStyle=it)}, {}, {}, {}, {dismissed++})
                                 }
                             }
                         }
@@ -231,9 +243,16 @@ class ExperienceRenderTest {
                     fun SemanticsNode.all():List<SemanticsNode> = listOf(this)+children.flatMap {it.all()}
                     val nodes=scene!!.semanticsOwners.flatMap {it.rootSemanticsNode.all()}
                     assertTrue(nodes.any {it.config.getOrNull(SemanticsProperties.Text)?.any {text->text.text.contains("Immersive worlds")}==true})
-                    assertTrue(nodes.count {it.config.getOrNull(SemanticsActions.OnClick)!=null}>=6)
+                    val modes=nodes.filter {it.config.getOrNull(SemanticsProperties.Role)==Role.RadioButton}
+                    assertEquals(6,modes.size)
+                    assertEquals(1,modes.count {it.config.getOrNull(SemanticsProperties.Selected)==true})
                     val image=scene!!.render(1_000_000_000L)
-                    try {File(output,"menu-${if(large)"large-rtl" else "wide"}.webp").writeBytes(image.encodeToData(EncodedImageFormat.WEBP,85)!!.bytes)} finally {image.close()}
+                    try {File(output,"menu-$name.webp").writeBytes(image.encodeToData(EncodedImageFormat.WEBP,85)!!.bytes)} finally {image.close()}
+                    modes.forEach {assertTrue(it.config[SemanticsActions.OnClick].action!!.invoke())}
+                    assertEquals(ImmersiveStyle.entries.toSet(),selections.toSet())
+                    val close=nodes.first {it.config.getOrNull(SemanticsProperties.ContentDescription)?.contains("Close immersive menu")==true && it.config.getOrNull(SemanticsActions.OnClick)!=null}
+                    close.config[SemanticsActions.OnClick].action!!.invoke()
+                    assertEquals(1,dismissed)
                 }
             } finally {SwingUtilities.invokeAndWait {scene?.close()}}
         }

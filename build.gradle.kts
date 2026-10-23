@@ -11,7 +11,7 @@ buildscript {
     }
 }
 /* Stable 0.1.9; completed preview retains code 35 on its own branch. */
-extra["veyraVersionCode"] = 39
+extra["veyraVersionCode"] = 40
 extra["veyraVersionName"] = "0.1.9"
 
 /*

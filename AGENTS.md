@@ -1,6 +1,6 @@
 # Veyra maintenance rules
 
-- Current stable Android source: `main` and `stable/0.1.9`, version 0.1.9 / code 39.
+- Current stable Android source: `main` and `stable/0.1.9`, version 0.1.9 / code 40.
   Promoted from completed preview `cc1da14c0ebb14af31335bd1f5c657855037b19d` at the owner's request.
   Initial promotion was code 36; build 37 adds six immersive styles (Classic preserved),
   direct portrait/landscape entry and a seekable dock. See verification/IMMERSIVE-WORLDS-0.1.9.md.
@@ -11,6 +11,9 @@
   See verification/PATCH-0.1.9-BUILD-38.md and asset-packs/NIGHT_VAULT.md.
   Build 39 replaces the ten flat Night Vault launcher illustrations with reviewed AI glass
   masters and 100 native exports; see verification/GLASS-ICONS-0.1.9-BUILD-39.md.
+  Build 40 redesigns the immersive picker as a responsive poster gallery with pinned
+  heading/close, selected-state semantics and expandable Classic/song controls.
+  See verification/IMMERSIVE-GALLERY-0.1.9-BUILD-40.md. Preserve bounded static previews.
   Use scripts/build_night_vault_icons.py; do not overwrite masters from the historical SVGs.
   New launcher aliases require code 38; new data packs remain compatible with code 33+.
   Preserve all original published pack bytes and preview branches. Generated verification

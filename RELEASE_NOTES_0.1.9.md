@@ -1,6 +1,16 @@
 # Veyra 0.1.9
 
-**Stable · Android version code 39 · includes the completed 0.1.9-beta1**
+**Stable · Android version code 40 · includes the completed 0.1.9-beta1**
+
+## Immersive gallery · build 40
+
+- Replace the settings-list picker with six visual mode posters and clear selection badges.
+- Keep the heading, active mode and Close button visible while the gallery scrolls.
+- Use two columns on phones, three on wide layouts and one for large text/narrow windows.
+- Group Classic's artwork, cover fit and lyric position in **Customize Classic**. Group lyric source/timing and song options in **More controls**.
+- Open the sheet fully; previews remain bounded static compositions with cached 192px artwork requests.
+
+[Design and verification](verification/IMMERSIVE-GALLERY-0.1.9-BUILD-40.md). Rebuild/install **code 40** for the new picker; source publication does not publish an APK.
 
 ## Night Vault glass editions · build 39
 
