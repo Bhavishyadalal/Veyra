@@ -13,7 +13,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.veyra.music.R
 import app.veyra.music.BuildConfig
 import app.veyra.music.data.themes.*
-import app.veyra.music.ui.themes.ThemeStudioArtwork
+import androidx.compose.foundation.background
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
 
 /** Independent picker: removing an override never changes the selected theme. */
@@ -72,7 +76,13 @@ internal fun AssetGallery(onDismiss:()->Unit) {
                     app.veyra.music.ui.themes.themePreviewRequest(context,"asset-${entry.id}",local?.version ?: entry.version,if(local!=null && directory!=null) java.io.File(directory,"previews/specimen.webp") else entry.preview,detail=true)}
                 OutlinedCard(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                        ThemeStudioArtwork(entry.name,request,"ASSETS · v${entry.version}")
+                        Box(Modifier.fillMaxWidth().aspectRatio(1080f/780f).clip(RoundedCornerShape(16.dp))
+                            .background(androidx.compose.ui.graphics.Color(0xFF17151E)),contentAlignment=androidx.compose.ui.Alignment.Center) {
+                            Text(entry.name,color=androidx.compose.ui.graphics.Color.White,style=MaterialTheme.typography.bodyMedium)
+                            // Asset sheets need their whole canvas, without a wallpaper crop or title scrim.
+                            AsyncImage(request,entry.name,Modifier.matchParentSize(),contentScale=ContentScale.Fit)
+                        }
+                        Text("${stringResource(R.string.asset_packs)} · v${entry.version}",style=MaterialTheme.typography.labelSmall)
                         Text(entry.name,style=MaterialTheme.typography.titleLarge)
                         Text(entry.description,style=MaterialTheme.typography.bodyMedium)
                         if(downloading!=null) {
