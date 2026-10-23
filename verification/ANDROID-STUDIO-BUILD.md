@@ -1,3 +1,5 @@
+> Current stable source: **0.1.9 / code 36**, `main` and `stable/0.1.9`. [Release checks](STABLE-0.1.9-PROMOTION.md).
+
 > Historical beta3 build result supplied in the uploaded archive. See [BETA4-RESULTS.md](BETA4-RESULTS.md) for current revision status.
 
 # Beta3 Android build verification — 2026-10-17

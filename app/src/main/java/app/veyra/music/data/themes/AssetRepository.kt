@@ -2,7 +2,6 @@ package app.veyra.music.data.themes
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.graphics.Typeface
 import app.veyra.music.BuildConfig
 import app.veyra.music.ui.themes.AssetVisuals
 import app.veyra.music.ui.themes.AssetOptions
@@ -13,7 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.sync.withLock
 
@@ -134,7 +132,7 @@ object AssetRepository {
                 downloadCall = call
                 call.execute().use { response ->
                     require(response.isSuccessful) { "Asset pack download unavailable. Try again later." }
-                    val body = response.body ?: error("Empty theme download.")
+                    val body = response.body
                     require(body.contentLength() <= AssetPack.MAX_ZIP)
                     body.byteStream().use { input ->
                         temp.outputStream().use { output ->
@@ -152,11 +150,13 @@ object AssetRepository {
                     }
                 }
                 ensureActive()
-                val (m, folder) = mutations.withLock { AssetPack.install(temp,root,listing,BuildConfig.VERSION_CODE, ::validateDecodedAssets) }
-                // Install already checked hashes and decoded assets before its atomic publish.
-                synchronized(lock) { installedDirectories[m.id] = folder }
-                _installed.value = _installed.value + (m.id to m)
-                _message.value = "${m.name} is installed. Select Apply when you are ready."
+                mutations.withLock {
+                    ensureActive()
+                    val (m, folder) = AssetPack.install(temp,root,listing,BuildConfig.VERSION_CODE, ::validateDecodedAssets)
+                    synchronized(lock) { installedDirectories[m.id] = folder }
+                    _installed.value = _installed.value + (m.id to m)
+                    _message.value = "${m.name} is installed. Select Apply when you are ready."
+                }
             } catch (cancel: CancellationException) {
                 throw cancel
             } catch (e: Exception) {

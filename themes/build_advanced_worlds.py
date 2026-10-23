@@ -4,7 +4,7 @@ Run with CairoSVG installed; regenerate artwork separately with the recorded art
 from pathlib import Path
 import io,json,hashlib,shutil,zipfile,xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parent
-URL='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/'
+URL='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/'
 COLLECTION=[
  dict(id='switchback-radio',name='Switchback Radio',medium='Pixel nocturne',material='pixel',seek='road',font='Rajdhani',fontSource='midnight-express',tagline='Take the long way home.',colors=['071626','11283C','213C51','FFD18A','4C3B27','FFF7E6','D7E1E7','89A5B7','A5D3E8'],description='Pixel-cut controls, stepped glyphs, lane-marker seek and a brisk lateral page reveal beneath an amber mountain night.'),
  dict(id='komorebi-hour',name='Komorebi Hour',medium='Botanical cinema',material='botanical',seek='vine',font='CormorantGaramond',fontSource='design',tagline='Stay where the light falls.',colors=['17231B','26382A','3A4938','EED6A0','4D422A','FFF8E5','E0E3C9','A3AD85','C5D5A2'],description='Botanical linework, alternating soft corners, a leaf-vine progress track and a gentle upward page reveal in golden-hour foliage.'),

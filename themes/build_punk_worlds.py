@@ -4,7 +4,7 @@ AI art-direction boards are previews only; runtime glyphs come from original SVG
 from pathlib import Path
 import hashlib,io,json,shutil,zipfile,xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parent
-URL='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/'
+URL='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/'
 COLLECTION=[
  dict(id='riot-candy',name='Riot Candy',font='RubikWetPaint',material='punk_gel',seek='gel',medium='Gel, chrome & torn zine',tagline='Loud little world.',colors=['0E0D12','1D1A26','302B3F','D7FF3B','334512','FFF5DE','D9CFDE','9B8BAA','FFA6DB'],inks=['D7FF3B','FF55B5','B78BFF','FFF5DE'],description='Acid-lime and pink gel controls, chrome glints, wet-paint lettering, star-head seek and elastic press feedback.'),
  dict(id='chrome-venom',name='Chrome Venom',font='RubikGlitch',material='punk_rivet',seek='cable',medium='Riveted biotech metal',tagline='Bite the silence.',colors=['0B1411','15251E','2B3A30','C2FF83','28442B','F1F9EE','CDDCCD','829E88','D5E4EA'],inks=['BAFF84','D5E4EA','FFD379','91E6B2'],description='Toxic mint, dark titanium, riveted cut frames, glitch display type, braided-cable progress and a quick mechanical reveal.'),

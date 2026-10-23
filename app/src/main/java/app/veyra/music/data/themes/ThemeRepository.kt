@@ -2,17 +2,16 @@ package app.veyra.music.data.themes
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.graphics.Typeface
 import app.veyra.music.BuildConfig
 import app.veyra.music.ui.themes.ThemeVisuals
 import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 /** Process-lifetime downloads survive configuration changes; playback is never restarted. */
@@ -44,10 +43,11 @@ object ThemeRepository {
     private var downloadCall: okhttp3.Call? = null
     private val installedDirectories = mutableMapOf<String,File>()
     private val lock = Any()
+    private val mutations = kotlinx.coroutines.sync.Mutex()
 
     fun init(app: Context) {
         context = app.applicationContext
-        scope.launch {
+        scope.launch { mutations.withLock {
             // Validate local data before it can influence theme construction.
             val selected = prefs.getString("active", null)
             root.listFiles()?.filter { it.name.startsWith(".staging-") || it.name.startsWith(".old-") }
@@ -73,7 +73,7 @@ object ThemeRepository {
             runCatching {
                 context.assets.open("theme-catalog.json").use { parseCatalog(ThemePack.readBounded(it,65536)) }
             }.onSuccess { _catalog.value = it }
-        }
+        }}
     }
 
     fun clearMessage() { _message.value = null }
@@ -121,7 +121,7 @@ object ThemeRepository {
                 downloadCall = call
                 call.execute().use { response ->
                     require(response.isSuccessful) { "Theme download unavailable. Try again later." }
-                    val body = response.body ?: error("Empty theme download.")
+                    val body = response.body
                     require(body.contentLength() <= ThemePack.MAX_ZIP)
                     body.byteStream().use { input ->
                         temp.outputStream().use { output ->
@@ -139,11 +139,14 @@ object ThemeRepository {
                     }
                 }
                 ensureActive()
-                val (m, folder) = ThemePack.install(temp,root,listing,BuildConfig.VERSION_CODE, ::validateDecodedAssets)
-                // Install already checked hashes and decoded assets before its atomic publish.
-                synchronized(lock) { installedDirectories[m.id] = folder }
-                _installed.value = _installed.value + (m.id to m)
-                _message.value = "${m.name} is installed. Select Apply when you are ready."
+                mutations.withLock {
+                    ensureActive()
+                    val (m, folder) = ThemePack.install(temp,root,listing,BuildConfig.VERSION_CODE, ::validateDecodedAssets)
+                    // Publish the index under the same lock as the validated installation.
+                    synchronized(lock) { installedDirectories[m.id] = folder }
+                    _installed.value = _installed.value + (m.id to m)
+                    _message.value = "${m.name} is installed. Select Apply when you are ready."
+                }
             } catch (cancel: CancellationException) {
                 throw cancel
             } catch (e: Exception) {
@@ -154,7 +157,7 @@ object ThemeRepository {
     }
 
     /** Caller asks for confirmation before this. No process exit or playback-service stop. */
-    suspend fun apply(id: String?): Boolean = withContext(Dispatchers.IO) {
+    suspend fun apply(id: String?): Boolean = withContext(Dispatchers.IO) { mutations.withLock {
         runCatching {
             if (id == null) {
                 check(prefs.edit().remove("active").commit())
@@ -170,10 +173,10 @@ object ThemeRepository {
                 _active.value = visuals(m,dir)
             }
         }.onFailure { if (it is CancellationException) throw it; _message.value = "Could not apply theme. Original appearance is still available." }.isSuccess
-    }
+    }}
 
     private fun loadInstalled(folder: File): ThemeManifest {
-        val m = ThemePack.json.decodeFromString<ThemeManifest>(File(folder,"theme.json").readText())
+        val m = ThemePack.json.decodeFromString<ThemeManifest>(File(folder,"theme.json").inputStream().use { ThemePack.readBounded(it,65536).decodeToString() })
         ThemePack.validate(m,BuildConfig.VERSION_CODE)
         require(folder.name == "${m.id}-v${m.version}")
         for ((path, hash) in m.files) {
@@ -200,7 +203,7 @@ object ThemeRepository {
         }
     }
 
-    suspend fun remove(id: String): Boolean = withContext(Dispatchers.IO) {
+    suspend fun remove(id: String): Boolean = withContext(Dispatchers.IO) { mutations.withLock {
         if (_active.value?.id == id || _transfer.value != null) return@withContext false
         if (synchronized(lock) { installedDirectories[id] } == null) return@withContext true
         val versions = root.listFiles()?.filter { it.isDirectory && it.name.matches(Regex("${Regex.escape(id)}-v[0-9]+")) }.orEmpty()
@@ -208,7 +211,7 @@ object ThemeRepository {
         synchronized(lock) { installedDirectories.remove(id) }
         _installed.value = _installed.value - id
         true
-    }
+    }}
 
     fun manifest(id: String): ThemeManifest? = _installed.value[id]
     fun directory(id: String): File? = synchronized(lock) { installedDirectories[id] }

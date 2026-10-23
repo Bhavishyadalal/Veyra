@@ -237,7 +237,7 @@ object ArtistFacts {
         val body = Http.client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) return
             response.body.string()
-        } ?: return
+        }
 
         val tags = runCatching {
             Json.parseToJsonElement(body).jsonObject["toptags"]

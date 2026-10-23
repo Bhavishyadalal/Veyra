@@ -8,7 +8,7 @@ import zipfile
 
 root = Path(__file__).resolve().parents[1]
 expected = {
-    "Veyra_Android_Source_0.1.8_Stable.zip",
+    "Veyra_Android_Source_0.1.9_Stable.zip",
     "Veyra_Android_Source_0.1.7-beta1.zip",
     "Veyra_Android_Source_0.1.8-beta1.zip",
     "Veyra_Android_Source_0.1.9-beta1.zip",

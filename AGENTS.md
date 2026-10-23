@@ -1,15 +1,13 @@
 # Veyra maintenance rules
 
-- Current stable Android source: `main` and `stable/0.1.8`, version 0.1.8 / code 28.
-  Promoted from preview commit `646e34b56295e1fbfaddcb3cbdc71fa5038eb196` at the owner's request.
-  See `verification/STABLE-0.1.8-PROMOTION.md`. Historical stable 0.1.7 remains code 26 on `stable/0.1.7`.
-  Includes Theme Studio, forty-six published themes and seventy-four optional launcher choices.
-  `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
-  `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
+- Current stable Android source: `main` and `stable/0.1.9`, version 0.1.9 / code 36.
+  Promoted from completed preview `cc1da14c0ebb14af31335bd1f5c657855037b19d` at the owner's request.
+  See `verification/STABLE-0.1.9-PROMOTION.md`. Includes 62 themes, five independent
+  asset packs and 95 optional launcher choices. Stable catalogs target main.
+  Completed preview `preview/0.1.9-beta1` remains 0.1.9-beta1 / code 35.
+  Historical stable 0.1.8 remains code 28 on `stable/0.1.8`, stable 0.1.7 code 26
+  on `stable/0.1.7`, and stable 0.1.6 code 22 on `stable/0.1.6`.
   Keep future preview features out of stable until the owner explicitly promotes them.
-  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 35,
-  based on completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`.
-  Keep 0.1.9 changes out of main/stable until explicit promotion.
   Build code 32 adds five Punk Worlds full themes (62 beta packs, 123 roles each),
   original-color icon rendering, four pressed transport skins, colored display
   headings and bounded punk materials/seeks/motion. See `themes/PUNK_WORLDS.md`.
@@ -39,7 +37,7 @@
   launcher aliases unchanged). Five data-only illustration worlds are documented in
   `themes/ILLUSTRATED_WORLDS.md`; preserve supported preset limits and immutable packs.
   See `themes/MARGIN_NOTES.md`. Beta catalogs use their
-  own preview branch; strict pack/preview URL allowlisting remains in force.
+  own preview branch in the retained preview; stable catalogs use main. Strict pack/preview URL allowlisting remains in force.
   Source ZIP manifests may map identical runtime images to included theme packs.
   `scripts/restore_theme_sources.py` restores them without overwriting user edits;
   preserve expanded font/license inputs needed by Gradle and retain full Git assets.

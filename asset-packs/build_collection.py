@@ -7,7 +7,7 @@ sys.path.insert(0,str(ROOT.parent/'themes'))
 from build_punk_worlds import glyph_paths
 from PIL import Image,ImageDraw,ImageFont
 import cairosvg
-URL='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/'
+URL='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/'
 SPECS=[
  dict(id='spray-parade',name='Spray Parade',font='Bangers',material='punk_torn',seek='tape',motion='punk_torn',ink='#D7FF3B',colors=['#D7FF3B','#FF4BAC','#F3E9CB'],description='Graffiti marker glyphs, paint-stamp transports, torn frames and a short paper slide.'),
  dict(id='paper-pop',name='Paper Pop',font='LilitaOne',material='punk_sticker',seek='beads',motion='punk_sticker',ink='#FFD783',colors=['#D7B8FF','#FFACAB','#FFD783'],description='Scalloped cut-paper controls, offset collage shadows, playful rounded lettering and a buoyant reveal.'),

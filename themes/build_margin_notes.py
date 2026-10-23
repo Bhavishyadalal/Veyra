@@ -54,7 +54,7 @@ def build():
         raise RuntimeError('Published packs are immutable; bump the version before rebuilding.')
     output.write_bytes(payload)
     digest=sha(output.read_bytes());output.with_suffix('.zip.sha256').write_text(f'{digest}  {output.name}\n')
-    url='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/'
+    url='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/'
     entry=dict(id=m['id'],name=m['name'],description='An ivory-pencil music sketchbook: graphite paper, crooked doodle glyphs, Patrick Hand headings, uneven control frames, pencil-hatched timeline, press wobble and paper-slide transitions. Beta 0.1.9 engine required.',version=1,minAppCode=30,url=url+'packs/'+output.name,sha256=digest,bytes=output.stat().st_size,preview=url+'margin-notes/artwork/preview.webp')
     catalog=json.loads((ROOT/'catalog.json').read_text());catalog['themes']=[entry]+[e for e in catalog['themes'] if e['id']!=m['id']]
     # A beta catalog is self-contained; stable's main catalog remains unchanged.

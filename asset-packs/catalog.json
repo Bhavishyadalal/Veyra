@@ -7,10 +7,10 @@
       "description": "Graffiti marker glyphs, paint-stamp transports, torn frames and a short paper slide.",
       "version": 1,
       "minAppCode": 33,
-      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/packs/spray-parade-v1.zip",
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/packs/spray-parade-v1.zip",
       "sha256": "0f90bd2050dfb124ed788f2ad6a09c623cc7372cb2beb3cee040829d1a23f170",
       "bytes": 705018,
-      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/spray-parade/preview.webp"
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/spray-parade/preview.webp"
     },
     {
       "id": "paper-pop",
@@ -18,10 +18,10 @@
       "description": "Scalloped cut-paper controls, offset collage shadows, playful rounded lettering and a buoyant reveal.",
       "version": 1,
       "minAppCode": 33,
-      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/packs/paper-pop-v1.zip",
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/packs/paper-pop-v1.zip",
       "sha256": "38d6f1be8f1ce16d1aaa626662befb8de796f863ee75945f3111bfd3a17e89f4",
       "bytes": 728430,
-      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/paper-pop/preview.webp"
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/paper-pop/preview.webp"
     },
     {
       "id": "ink-rebel",
@@ -29,10 +29,10 @@
       "description": "Dry-brush ink symbols, washi stamp frames, handwritten display lettering and a quiet depth reveal.",
       "version": 1,
       "minAppCode": 33,
-      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/packs/ink-rebel-v1.zip",
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/packs/ink-rebel-v1.zip",
       "sha256": "ce414f89ea8d2454aaebf239584f3e7bc2484a819b22128664248bbc776dcb88",
       "bytes": 755141,
-      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/ink-rebel/preview.webp"
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/ink-rebel/preview.webp"
     },
     {
       "id": "laser-club",
@@ -40,10 +40,10 @@
       "description": "Beveled arcade keys, neon outline glyphs, futuristic display type and plasma-style progress.",
       "version": 1,
       "minAppCode": 33,
-      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/packs/laser-club-v1.zip",
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/packs/laser-club-v1.zip",
       "sha256": "c7268ab9b91bb10f31f51a1dfedfd99a2520d07ec14c8c70c408c2949aba220c",
       "bytes": 692141,
-      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/laser-club/preview.webp"
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/laser-club/preview.webp"
     },
     {
       "id": "thread-riot",
@@ -51,10 +51,10 @@
       "description": "Stitched patch glyphs, denim transports, varsity lettering, woven-line progress and a soft upward reveal.",
       "version": 1,
       "minAppCode": 33,
-      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/packs/thread-riot-v1.zip",
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/packs/thread-riot-v1.zip",
       "sha256": "3f65df7abb0337deeca4475acff6ccd13249d24dcb791e6d1be563fc4f192aac",
       "bytes": 1130979,
-      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/asset-packs/thread-riot/preview.webp"
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/asset-packs/thread-riot/preview.webp"
     }
   ]
 }

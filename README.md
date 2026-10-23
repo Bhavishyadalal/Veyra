@@ -1,12 +1,12 @@
 > **Five new illustrated themes:** [Illustrated Worlds](themes/ILLUSTRATED_WORLDS.md) · [Preview collection](themes/previews/illustrated-worlds/collection.png). Compatible with the existing beta engine build 30.
 
-> **Current development: 0.1.9-beta1 / code 30** on `preview/0.1.9-beta1`, based on completed stable v0.1.8. Includes [Margin Notes and the sketch engine](themes/MARGIN_NOTES.md), plus the [listening and personalization update](verification/UX-0.1.9-beta1.md): safer recovery, theme artwork controls, clearer queue actions, more Home choices and search retry handling. [Preview notes](RELEASE_NOTES_0.1.9-beta1.md) · [Verification](verification/PREVIEW-START-0.1.9-beta1.md).
+> **Stable 0.1.9 / code 36:** 62 themes, five independent Layer Lab asset overlays, 95 matching launcher choices, live Home icon updates, theme artwork controls, queue/Home/search improvements and lighter asset rendering. [Release notes](RELEASE_NOTES_0.1.9.md) · [Promotion checks and limits](verification/STABLE-0.1.9-PROMOTION.md) · [Source downloads](downloads/README.md).
 
-> **Stable 0.1.8 / code 28:** three optional app styles, immersive player, five additional widgets, independent fonts, Home/navigation customization and Settings/motion refinements. [Release notes](RELEASE_NOTES_0.1.8.md) · [Promotion checks and limits](verification/STABLE-0.1.8-PROMOTION.md).
+> Completed preview **0.1.9-beta1 / code 35** remains on `preview/0.1.9-beta1` with its original source ZIP. Stable 0.1.8 / code 28 remains available on `stable/0.1.8`.
 
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
-> **Source tracks:** current stable is on `main` and `stable/0.1.8`. Historical stable 0.1.7 remains on `stable/0.1.7`; the completed `preview/0.1.8-beta1` remains code 27. All 46 themes and 74 launcher choices are included in stable 0.1.8. [Downloads](downloads/README.md) · [Backend policy](docs/BACKEND_SYNC.md).
+> **Source tracks:** current stable is on `main` and `stable/0.1.9`. Historical stable 0.1.7 remains on `stable/0.1.7`; the completed `preview/0.1.8-beta1` remains code 27. Stable 0.1.9 includes all 62 themes, five asset packs and 95 launcher choices. [Downloads](downloads/README.md) · [Backend policy](docs/BACKEND_SYNC.md).
 
 > Open the complete project using [START_HERE.md](START_HERE.md). Source ZIPs are Android Studio projects, not APKs; promotion does not publish an installable APK.
 

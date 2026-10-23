@@ -4,7 +4,7 @@ Reviewed AI artwork is encoded separately; functional glyphs are original vector
 from pathlib import Path
 import hashlib, io, json, shutil, zipfile, xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parent
-URL='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/'
+URL='https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/main/themes/'
 COLLECTION=[
  dict(id='lantern-letters',name='Lantern Letters',medium='Ink & watercolor',tagline='Every song, a letter home.',scene='sketch',seek='sketch',font='PatrickHand',fontSource='margin-notes',
   colors=['10282B','1B3537','30484A','FFD69D','53462F','FFF7E9','E1DED0','A1957C','BBDDC8'],
