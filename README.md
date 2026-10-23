@@ -1,3 +1,5 @@
+> **Active development: 0.2.0-beta1 / build 41** on `preview/0.2.0-beta1`. Based on completed stable 0.1.9 build 40. [Preview baseline and checks](verification/UX-0.2.0-beta1.md) · [Preview notes](RELEASE_NOTES_0.2.0-beta1.md). Stable branches remain unchanged.
+
 > **Build 40:** redesigned [immersive-mode gallery](verification/IMMERSIVE-GALLERY-0.1.9-BUILD-40.md) with visual mode posters, pinned heading/close, clear selection and expandable controls.
 
 > **Build 39:** ten redesigned [Night Vault glass launcher icons](design/launcher/night-vault/previews/glass-editions.webp), with raised translucent waveforms and distinct sculpted materials. [Changes and checks](verification/GLASS-ICONS-0.1.9-BUILD-39.md).

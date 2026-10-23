@@ -1,5 +1,14 @@
 # Veyra maintenance rules
 
+- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 41**.
+  Starts from completed stable 0.1.9 build 40 (`a82d7228ac7cd2c3652ba384447b7691972c01a3`).
+  Keep `main` and `stable/0.1.9` frozen at that stable commit until explicit promotion.
+  Both catalogs and bundled fallbacks target this preview branch. After generating
+  theme/asset catalogs, run `python3 scripts/route_catalogs.py` to restore track URLs.
+  Preserve all pack ZIP bytes and strict runtime URL validation. See
+  verification/UX-0.2.0-beta1.md. Retain stable plus newest three preview archives:
+  0.2.0-beta1, 0.1.9-beta1 and 0.1.8-beta1; older archives remain in branch/history.
+
 - Current stable Android source: `main` and `stable/0.1.9`, version 0.1.9 / code 40.
   Promoted from completed preview `cc1da14c0ebb14af31335bd1f5c657855037b19d` at the owner's request.
   Initial promotion was code 36; build 37 adds six immersive styles (Classic preserved),
