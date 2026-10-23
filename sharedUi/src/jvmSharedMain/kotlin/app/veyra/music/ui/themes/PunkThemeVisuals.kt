@@ -31,7 +31,7 @@ fun ThemePainterGlyph(painter: Painter, description: String?, modifier: Modifier
 }
 
 @Composable
-fun themeHeadingColor(fallback: Color): Color = LocalThemeVisuals.current?.takeIf {it.typeStyle == "punk"}?.accent ?: fallback
+fun themeHeadingColor(fallback: Color): Color = LocalThemeVisuals.current?.let {it.headingColor ?: if(it.typeStyle == "punk") it.accent else null} ?: fallback
 
 /** Cached native finish; no blur, shader, ticker or downloaded executable material. */
 fun punkControlFinish(modifier: Modifier, theme: ThemeVisuals): Modifier = modifier.drawWithCache {

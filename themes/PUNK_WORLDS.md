@@ -55,3 +55,6 @@ Schema 4 adds opt-in `iconStyle` (`tinted`/`original`) and `typeStyle` (`plain`/
 - Compact Android source ZIPs retain all Gradle font-resource inputs and notices. Optional non-build font copies for advanced/punk authoring, including the new punk font library, may be mapped by checksum to their included theme ZIPs alongside editable images. Run `python3 scripts/restore_theme_sources.py` to restore authoring images/fonts; it validates paths/hashes and never overwrites existing files. App builds do not require this restoration.
 
 [Focused verification and device follow-up](../verification/PUNK-WORLDS-0.1.9-beta1.md)
+
+
+Independent overlays now ship separately in build 33; see [Layer Lab](../asset-packs/README.md). These five published Punk Worlds ZIPs remain full themes and are unchanged.

@@ -11,7 +11,7 @@ import java.io.File
 
 /** The picker previews exactly the same heading/body pair used by the app. */
 internal fun appearanceTypography(base: Typography, choice: AppearanceFont, pack: ThemeVisuals?): Typography {
-    val resolved = choice.resolved(pack != null)
+    val resolved = choice.resolved(pack?.asset("headingFont") != null && pack.asset("bodyFont") != null)
     if (resolved == AppearanceFont.VEYRA_DEFAULT) return base
     val (heading, body) = if (resolved == AppearanceFont.FOLLOW_THEME) {
         val theme = requireNotNull(pack)

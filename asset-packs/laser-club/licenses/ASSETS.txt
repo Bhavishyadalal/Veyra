@@ -1,0 +1,1 @@
+Original Veyra semantic SVG glyphs and five new material treatments. Runtime assets are authored vector designs, not crops from AI concept art. Heading/body font license notices included unmodified. No remote code, layout files, brand replacements or backgrounds.

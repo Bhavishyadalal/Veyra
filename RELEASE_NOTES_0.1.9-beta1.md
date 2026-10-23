@@ -1,3 +1,14 @@
+# Beta 0.1.9 · build 33 / independent asset packs
+
+- Five Layer Lab overlays: Spray Parade, Paper Pop, Ink Rebel, Laser Club, Thread Riot.
+- Apply fonts, icons, pressed skins, native controls/progress and motion over any
+  selected theme or custom app style. Individual layer switches and one-step reset.
+- Theme selection, wallpaper and palette remain intact; all 62 existing themes preserved.
+- Licensed display fonts, readable Manrope body text and adaptive heading ink.
+- Independent GitHub catalog, bounded checksum-verified atomic installs and offline selections.
+- Requires rebuilt beta APK build 33; source ZIP and asset ZIPs are not APKs.
+- Focused production compilation/install/layer verification; device/FPS checks pending.
+
 # Veyra 0.1.9-beta1
 
 ## Punk Worlds · five full-color themes · build 32

@@ -1381,4 +1381,21 @@
     <string name="scroll_player_animations_hint">Fold the mini player into navigation while scrolling, with or without Liquid Glass. Respects reduced motion.</string>
     <string name="pin_home_header">Pin Home header</string>
     <string name="pin_home_header_hint">Keep Original Home branding and greeting above the scrolling feed. Short windows keep the header scrollable.</string>
+    <string name="asset_packs">Asset packs</string>
+    <string name="asset_packs_subtitle">Layer fonts, icons and controls over any theme</string>
+    <string name="asset_packs_explanation">Keep your theme. Change its details. Asset packs also work with Original and custom app styles.</string>
+    <string name="asset_theme_defaults">Using theme assets</string>
+    <string name="asset_layers">Choose which parts the pack overrides.</string>
+    <string name="asset_restore">Restore theme assets</string>
+    <string name="asset_icons">Icons and pressed skins</string>
+    <string name="asset_controls">Button shapes and progress bars</string>
+    <string name="asset_motion">Pack page transitions</string>
+    <string name="asset_colors">Adaptive heading ink</string>
+    <string name="asset_font_priority">Your chosen or imported font takes priority. Choose Follow theme in Fonts to use pack lettering. Unavailable assets keep their native controls.</string>
+    <string name="asset_cancel">Cancel download</string>
+    <string name="asset_download">Download assets</string>
+    <string name="asset_update_required">Update Veyra first</string>
+    <string name="asset_remove">Remove download</string>
+    <string name="asset_empty">No packs loaded. Refresh to try again.</string>
+    <string name="asset_apply">Apply assets</string>
 </resources>

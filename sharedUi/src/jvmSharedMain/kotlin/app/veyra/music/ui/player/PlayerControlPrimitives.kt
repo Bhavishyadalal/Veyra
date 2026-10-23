@@ -132,7 +132,7 @@ internal fun PlayerControlSurface(
                 }
                 .clip(effectiveShape)
                 .background(decoratedBackground)
-                .then(if(!grouped && pack?.materialStyle?.startsWith("punk_") == true) app.veyra.music.ui.themes.punkControlFinish(Modifier,pack) else Modifier)
+                .then(if(!grouped && decoration != ControlDecoration.GLYPHS && decoration != ControlDecoration.RINGS && pack?.materialStyle?.startsWith("punk_") == true) app.veyra.music.ui.themes.punkControlFinish(Modifier,pack) else Modifier)
                 .then(
                     if (!grouped && decoration!=ControlDecoration.GLYPHS && (decoration==ControlDecoration.RINGS || framed || contrast || pack != null))
                         Modifier.background(

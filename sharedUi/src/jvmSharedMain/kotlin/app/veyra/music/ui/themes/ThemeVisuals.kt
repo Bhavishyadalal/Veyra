@@ -41,6 +41,7 @@ data class ThemeVisuals(
     val tagline: String = "A different kind of night.",
     val materialStyle: String = "classic",
     val iconStyle: String = "tinted", val typeStyle: String = "plain",
+    val headingColor: Color? = null, val motionStyle: String? = null,
 ) {
     fun asset(key: String): String? = assets[key]
 }
@@ -128,7 +129,7 @@ fun themeSceneScrimAlpha(theme: ThemeVisuals): Float {
             theme.background.red*(1f-artwork)+artwork,
             theme.background.green*(1f-artwork)+artwork,
             theme.background.blue*(1f-artwork)+artwork).luminance()
-        val foregrounds = if(theme.typeStyle == "punk") listOf(theme.text,theme.muted,theme.accent,theme.secondary) else listOf(theme.text,theme.muted)
+        val foregrounds = (if(theme.typeStyle == "punk") listOf(theme.text,theme.muted,theme.accent,theme.secondary) else listOf(theme.text,theme.muted)) + listOfNotNull(theme.headingColor)
         return foregrounds.all { color ->
             val foreground=color.luminance()
             (maxOf(foreground,background)+.05f)/(minOf(foreground,background)+.05f)>=4.5f

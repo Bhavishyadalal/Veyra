@@ -972,7 +972,7 @@ private fun VeyraApp(
             viewModel.reloadLocalDetail(app.veyra.music.data.smb.SmbConfig.BROWSE_ID)
         }
     }
-    val themeMaterialMotion = app.veyra.music.ui.themes.LocalThemeVisuals.current?.materialStyle ?: "classic"
+    val themeMaterialMotion = app.veyra.music.ui.themes.LocalThemeVisuals.current?.let {it.motionStyle ?: it.materialStyle} ?: "classic"
     val sketchThemeMotion = app.veyra.music.ui.themes.LocalThemeVisuals.current?.sceneStyle == "sketch"
     val controller = rememberMediaController()
     val liveQueueController = androidx.compose.runtime.rememberUpdatedState(controller)

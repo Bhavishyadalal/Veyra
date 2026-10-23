@@ -1,3 +1,7 @@
+> Latest beta source: **0.1.9-beta1 / code 33** adds five independent Layer Lab
+> asset overlays and preserves all 62 themes. Theme, asset and source ZIPs are
+> different downloads; none is an APK. See [Layer Lab](../asset-packs/README.md).
+
 # Veyra source downloads
 
 Current stable and the three newest preview archives are retained here. Each is a complete Android Studio project with licenses, backend provenance and a matching SHA-256 sidecar. These are **not APKs**.

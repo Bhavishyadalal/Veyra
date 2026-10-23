@@ -42,24 +42,25 @@ for name in sorted(expected):
         for image in manifest.get("themeAssetsInPacks", []):
             mapped = Path(image["path"])
             assert not mapped.is_absolute() and ".." not in mapped.parts
-            assert mapped.parts[0]=="themes" or (mapped.parts[:2]==("design","punk-fonts") and len(mapped.parts)==3 and mapped.suffix==".ttf")
+            assert mapped.parts[0] in ("themes","asset-packs") or (mapped.parts[:2] in (("design","punk-fonts"),("design","asset-fonts")) and len(mapped.parts)==3 and mapped.suffix==".ttf")
             assert image["path"] not in paths
-            assert image["pack"] in paths and image["pack"].startswith("themes/packs/")
+            assert image["pack"] in paths and image["pack"].startswith(("themes/packs/","asset-packs/packs/"))
             with zipfile.ZipFile(io.BytesIO(z.read("Veyra/" + image["pack"]))) as pack:
                 assert hashlib.sha256(pack.read(image["entry"])).hexdigest() == image["sha256"]
         assert "Veyra/gradle/wrapper/gradle-wrapper.jar" in z.namelist(), name
         assert "Veyra/settings.gradle.kts" in z.namelist(), name
         assert not any(p.endswith((".apk", ".aab", ".jks", ".keystore")) for p in paths), name
         for rel in (p for p in paths if p.endswith(".zip")):
-            assert rel.startswith("themes/packs/"), (name, rel)
+            assert rel.startswith(("themes/packs/","asset-packs/packs/")), (name, rel)
             data = z.read("Veyra/" + rel)
             expected_hash = z.read("Veyra/" + rel + ".sha256").decode().split()[0]
             assert hashlib.sha256(data).hexdigest() == expected_hash
             with zipfile.ZipFile(io.BytesIO(data)) as pack:
                 assert pack.testzip() is None
-                theme = json.loads(pack.read("theme.json"))
-                assert set(pack.namelist()) == set(theme["files"]) | {"theme.json"}
-                assert len(pack.namelist()) <= (129 if theme["schema"] == 4 else 49)
+                manifest_name = "assets.json" if rel.startswith("asset-packs/") else "theme.json"
+                theme = json.loads(pack.read(manifest_name))
+                assert set(pack.namelist()) == set(theme["files"]) | {manifest_name}
+                assert len(pack.namelist()) <= (129 if manifest_name=="assets.json" or theme["schema"] == 4 else 49)
                 for asset, digest in theme["files"].items():
                     assert not asset.startswith("/") and ".." not in asset.split("/")
                     assert asset.endswith((".webp", ".png", ".ttf", ".txt"))

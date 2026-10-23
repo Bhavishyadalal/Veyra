@@ -120,6 +120,7 @@ class VeyraApplication : Application(), SingletonImageLoader.Factory {
         AppSettings.init(this, authStore)
         Innertube.contentCountry = {AppSettings.experience.value.contentCountry.ifBlank {null}}
         app.veyra.music.data.themes.ThemeRepository.init(this)
+        app.veyra.music.data.themes.AssetRepository.init(this)
         CoroutineScope(SupervisorJob()+Dispatchers.Default).launch {
             combine(AppSettings.appStyle, app.veyra.music.data.themes.ThemeRepository.active) {style,theme->style to theme}
                 .collect {app.veyra.music.widget.MediaWidget.refresh(this@VeyraApplication)}

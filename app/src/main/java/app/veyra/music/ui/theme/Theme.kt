@@ -1,5 +1,6 @@
 package app.veyra.music.ui.theme
 
+import app.veyra.music.ui.themes.over
 import app.veyra.music.ui.customization.*
 import app.veyra.music.ui.styles.*
 import android.app.Activity
@@ -137,7 +138,9 @@ fun VeyraTheme(
     val appStyle by AppSettings.appStyle.collectAsStateWithLifecycle()
     val fontSelection = remember {AppSettings.experience.map {it.appFont}.distinctUntilChanged()}
     val importedHash by fontSelection.collectAsStateWithLifecycle(initialValue=AppSettings.experience.value.appFont)
-    val importedFont = app.veyra.music.data.settings.rememberImportedFont(if(appStyle.custom) "" else importedHash)
+    val assetPack by app.veyra.music.data.themes.AssetRepository.active.collectAsStateWithLifecycle()
+    val assetOptions by app.veyra.music.data.themes.AssetRepository.options.collectAsStateWithLifecycle()
+    val importedFont = app.veyra.music.data.settings.rememberImportedFont(if(appStyle.custom && (assetPack == null || !assetOptions.fonts)) "" else importedHash)
     val accent by AppSettings.accentPalette.collectAsStateWithLifecycle()
     val appearanceFont by AppSettings.appearanceFont.collectAsStateWithLifecycle()
     val themeArtwork by AppSettings.themeArtwork.collectAsStateWithLifecycle()
@@ -161,12 +164,21 @@ fun VeyraTheme(
             }.getOrDefault(emptyMap())
         }
     }
-    val pack = remember(appStyle,packState,styleAssets) { effectiveStyleVisuals(appStyle,packState,styleAssets) }
+    val basePack = remember(appStyle,packState,styleAssets) { effectiveStyleVisuals(appStyle,packState,styleAssets) }
+    val fallbackPalette = remember(appStyle,accent,darkTheme) {if(appStyle.custom) appStyle.colorScheme() else paletteFor(accent,darkTheme)}
+    val pack = remember(basePack,assetPack,assetOptions,fallbackPalette) {
+        if(assetPack == null) basePack else assetPack!!.over(basePack ?: app.veyra.music.ui.themes.ThemeVisuals(
+            "@original","Original",fallbackPalette.primary,fallbackPalette.surface,fallbackPalette.surfaceContainerHigh,
+            fallbackPalette.outline,20,24,32,emptyMap(),background=fallbackPalette.background,
+            text=fallbackPalette.onSurface,muted=fallbackPalette.onSurfaceVariant,secondary=fallbackPalette.secondary),assetOptions)
+    }
     // Keep fonts and palette on the same activation snapshot during live updates.
-    val manifest = remember(pack,appStyle) { pack?.takeUnless {appStyle.custom}?.let { app.veyra.music.data.themes.ThemeRepository.activeManifest() } }
-    val selectedTypography = remember(pack, strongerText, appearanceFont, appStyle, importedFont) {
+    val manifest = remember(packState,appStyle) { pack?.takeUnless {appStyle.custom}?.let { app.veyra.music.data.themes.ThemeRepository.activeManifest() } }
+    val selectedTypography = remember(pack, strongerText, appearanceFont, appStyle, importedFont, assetPack, assetOptions) {
         val base = if (strongerText) StrongerTypography else VeyraTypography
-        if (appStyle.custom) {
+        if (assetPack != null && importedFont != null) base.withFamily(importedFont)
+        else if (assetPack != null && assetOptions.fonts) runCatching {appearanceTypography(base,appearanceFont,pack)}.getOrDefault(base)
+        else if (appStyle.custom) {
             val heading = if(appStyle==AppStyle.AFTER_DARK) FontFamily(Font(R.font.appearance_barlow_condensed,FontWeight.Bold))
                 else FontFamily(Font(R.font.app_style_serif,FontWeight.Bold))
             appStyleTypography(base, heading, FontFamily(Font(R.font.appearance_manrope)))
@@ -202,13 +214,13 @@ fun VeyraTheme(
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = if(pack?.typeStyle == "punk") selectedTypography.copy(
-                displayLarge=selectedTypography.displayLarge.copy(color=pack.accent),
-                displayMedium=selectedTypography.displayMedium.copy(color=pack.secondary),
-                displaySmall=selectedTypography.displaySmall.copy(color=pack.accent),
-                headlineLarge=selectedTypography.headlineLarge.copy(color=pack.accent),
-                headlineMedium=selectedTypography.headlineMedium.copy(color=pack.secondary),
-                headlineSmall=selectedTypography.headlineSmall.copy(color=pack.accent)) else selectedTypography,
+            typography = if(pack?.headingColor != null || pack?.typeStyle == "punk") selectedTypography.copy(
+                displayLarge=selectedTypography.displayLarge.copy(color=pack.headingColor ?: pack.accent),
+                displayMedium=selectedTypography.displayMedium.copy(color=pack.headingColor ?: pack.secondary),
+                displaySmall=selectedTypography.displaySmall.copy(color=pack.headingColor ?: pack.accent),
+                headlineLarge=selectedTypography.headlineLarge.copy(color=pack.headingColor ?: pack.accent),
+                headlineMedium=selectedTypography.headlineMedium.copy(color=pack.headingColor ?: pack.secondary),
+                headlineSmall=selectedTypography.headlineSmall.copy(color=pack.headingColor ?: pack.accent)) else selectedTypography,
             shapes = shapes,
             content = content,
         )

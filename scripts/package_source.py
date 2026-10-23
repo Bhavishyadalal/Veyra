@@ -47,6 +47,19 @@ def main():
                         packed_images[f'themes/{entry["id"]}/{member}'] = {
                             "pack": pack_rel, "entry": member, "sha256": digest}
                         if optional_font: packed_fonts[digest] = {"pack": pack_rel, "entry": member, "sha256": digest}
+    asset_catalog=json.loads((root/"asset-packs/catalog.json").read_text())
+    for item in asset_catalog["packs"]:
+        pack_rel=f'asset-packs/packs/{item["id"]}-v{item["version"]}.zip'
+        with zipfile.ZipFile(root/pack_rel) as source_pack:
+            definition=json.loads(source_pack.read("assets.json"))
+            for member,digest in definition["files"].items():
+                if Path(member).suffix.lower() in {".png",".ttf"}:
+                    assert hashlib.sha256(source_pack.read(member)).hexdigest()==digest
+                    packed_images[f'asset-packs/{item["id"]}/{member}']={"pack":pack_rel,"entry":member,"sha256":digest}
+                    if member.endswith(".ttf"):packed_fonts[digest]={"pack":pack_rel,"entry":member,"sha256":digest}
+    for source in (root/"design/asset-fonts").glob("*.ttf"):
+        digest=hashlib.sha256(source.read_bytes()).hexdigest()
+        if digest in packed_fonts:packed_images[source.relative_to(root).as_posix()]=packed_fonts[digest]
     # The new font library is an authoring source, not a Gradle font-resource input.
     for source in (root/"design/punk-fonts").glob("*.ttf"):
         digest = hashlib.sha256(source.read_bytes()).hexdigest()
@@ -61,13 +74,14 @@ def main():
                 continue
             # Generated native study images remain in Git; ship their renderer, not
             # 36+ MB of screenshots in every Android Studio source download.
-            if p.parts[:2] == ("themes", "previews") and p.suffix.lower() in {".png", ".webp"}:
+            if (p.parts[:2] in {("themes","previews"),("asset-packs","previews"),
+                    ("design","home-preview"),("design","settings-preview")} and p.suffix.lower() in {".png",".webp"}):
                 continue
             if any(part in excluded for part in p.parts):
                 continue
             if p.name in {"local.properties", "key.properties", ".DS_Store", "banner.jpg", "upi_support.jpg"}:
                 continue
-            is_theme_pack = p.parts[:2] == ("themes", "packs") and p.suffix.lower() == ".zip"
+            is_theme_pack = p.parts[:2] in {("themes", "packs"),("asset-packs", "packs")} and p.suffix.lower() == ".zip"
             if p.suffix.lower() in {".zip", ".apk", ".aab", ".jks", ".keystore", ".log"} and not is_theme_pack:
                 continue
             if p.name.startswith(".env") and p.name != ".env.example":

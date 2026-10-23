@@ -7,13 +7,18 @@
   `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
   `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
   Keep future preview features out of stable until the owner explicitly promotes them.
-  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 32,
+  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 33,
   based on completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`.
   Keep 0.1.9 changes out of main/stable until explicit promotion.
   Build code 32 adds five Punk Worlds full themes (62 beta packs, 123 roles each),
   original-color icon rendering, four pressed transport skins, colored display
   headings and bounded punk materials/seeks/motion. See `themes/PUNK_WORLDS.md`.
-  Independent asset-pack layering remains planned, not implemented by these themes.
+  Build code 33 adds independent asset-pack overlays, separate GitHub catalog/storage,
+  category switches and five Layer Lab packs (119 roles each). See asset-packs/README.md.
+  Existing 62 theme packs are unchanged; asset overrides apply after custom-style
+  isolation and preserve theme artwork/palette/selection. Keep catalogs distinct.
+  Source packages omit reproducible Home/Settings preview studies as well as theme/
+  asset gallery renders; optional asset font/image sources restore from their packs.
   Optional non-build theme/punk-library fonts may be deduplicated into included
   packs by source ZIP metadata; all Gradle font-resource inputs stay expanded.
   Preserve checksum/path validation and user-edit protection in the restorer.

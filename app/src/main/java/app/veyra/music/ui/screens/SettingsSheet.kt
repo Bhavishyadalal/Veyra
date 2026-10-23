@@ -284,6 +284,8 @@ fun SettingsScreen(
     // Search spans all categories; an empty query shows the selected category,
     // exactly as if the field weren't there.
     var searchQuery by navigationState::query
+    var showAssetGallery by rememberSaveable { mutableStateOf(false) }
+    if (showAssetGallery) AssetGallery(onDismiss = { showAssetGallery = false })
     var showThemeGallery by rememberSaveable { mutableStateOf(false) }
     if (showThemeGallery) ThemeGallery(onDismiss = { showThemeGallery = false })
     var picking by remember { mutableStateOf<QualityTarget?>(null) }
@@ -751,6 +753,10 @@ fun SettingsScreen(
                 row(stringResource(R.string.theme_packs), "themes", "halloween", "fonts", "icons") {
                     SettingsRow(icon = SettingsIcons.Appearance, title = stringResource(R.string.theme_packs),
                         subtitle = stringResource(R.string.theme_packs_subtitle), onClick = { showThemeGallery = true })
+                }
+                row(stringResource(R.string.asset_packs), "assets", "skins", "overlays", "buttons", "motion") {
+                    SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.asset_packs),
+                        subtitle=stringResource(R.string.asset_packs_subtitle),onClick={showAssetGallery=true})
                 }
                 row(stringResource(R.string.theme_artwork_controls), "artwork", "background", "visibility", "dim", "blur", "transparency") { ThemeArtworkSetting() }
                 val themeTitle = stringResource(R.string.theme)
