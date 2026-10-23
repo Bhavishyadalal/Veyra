@@ -7,9 +7,16 @@
   `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
   `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
   Keep future preview features out of stable until the owner explicitly promotes them.
-  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 31,
+  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 32,
   based on completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`.
   Keep 0.1.9 changes out of main/stable until explicit promotion.
+  Build code 32 adds five Punk Worlds full themes (62 beta packs, 123 roles each),
+  original-color icon rendering, four pressed transport skins, colored display
+  headings and bounded punk materials/seeks/motion. See `themes/PUNK_WORLDS.md`.
+  Independent asset-pack layering remains planned, not implemented by these themes.
+  Optional non-build theme/punk-library fonts may be deduplicated into included
+  packs by source ZIP metadata; all Gradle font-resource inputs stay expanded.
+  Preserve checksum/path validation and user-edit protection in the restorer.
   Build code 31 adds five Advanced Worlds packs (57 beta packs, 119 roles each),
   bounded native material/seek/motion presets and expanded semantic icon routing.
   See `themes/ADVANCED_WORLDS.md`; schema 4 requires minAppCode 31 and keeps

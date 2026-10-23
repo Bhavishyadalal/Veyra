@@ -40,7 +40,9 @@ for name in sorted(expected):
         for entry in backend["files"]:
             assert z.read("Veyra/backend/" + entry["path"]) == (root / "backend" / entry["path"]).read_bytes(), (name, entry["path"])
         for image in manifest.get("themeAssetsInPacks", []):
-            assert image["path"].startswith("themes/") and ".." not in image["path"].split("/")
+            mapped = Path(image["path"])
+            assert not mapped.is_absolute() and ".." not in mapped.parts
+            assert mapped.parts[0]=="themes" or (mapped.parts[:2]==("design","punk-fonts") and len(mapped.parts)==3 and mapped.suffix==".ttf")
             assert image["path"] not in paths
             assert image["pack"] in paths and image["pack"].startswith("themes/packs/")
             with zipfile.ZipFile(io.BytesIO(z.read("Veyra/" + image["pack"]))) as pack:

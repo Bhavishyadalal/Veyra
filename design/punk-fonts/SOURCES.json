@@ -1,0 +1,27 @@
+[
+  {
+    "font": "RubikWetPaint",
+    "source": "https://github.com/google/fonts/tree/main/ofl/rubikwetpaint",
+    "license": "SIL Open Font License 1.1"
+  },
+  {
+    "font": "RubikGlitch",
+    "source": "https://github.com/google/fonts/tree/main/ofl/rubikglitch",
+    "license": "SIL Open Font License 1.1"
+  },
+  {
+    "font": "RubikBubbles",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/rubikbubbles/",
+    "license": "SIL Open Font License 1.1"
+  },
+  {
+    "font": "Lacquer",
+    "source": "https://github.com/google/fonts/tree/main/ofl/lacquer",
+    "license": "SIL Open Font License 1.1"
+  },
+  {
+    "font": "BungeeShade",
+    "source": "https://github.com/google/fonts/tree/main/ofl/bungeeshade",
+    "license": "SIL Open Font License 1.1"
+  }
+]

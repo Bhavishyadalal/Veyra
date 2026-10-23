@@ -500,7 +500,7 @@ internal fun SettingsPageHeader(title: String, icon: ImageVector) {
             title,
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.ExtraBold,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = app.veyra.music.ui.themes.themeHeadingColor(MaterialTheme.colorScheme.onBackground),
             modifier = Modifier.weight(1f).semantics { heading() },
         )
         Spacer(Modifier.width(16.dp))
@@ -531,7 +531,7 @@ internal fun SettingsPickerHeader(title: String, detail: String, icon: ImageVect
             title,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = app.veyra.music.ui.themes.themeHeadingColor(MaterialTheme.colorScheme.onSurface),
             modifier = Modifier.semantics { heading() },
         )
         Text(

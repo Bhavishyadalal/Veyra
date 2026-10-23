@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Restore optional editable theme images from a source ZIP's included data packs.
+"""Restore optional editable theme images and non-build font sources from a source ZIP's included data packs.
 Never overwrites an existing file. App builds do not require this step.
 """
 import hashlib
@@ -15,10 +15,11 @@ def restore(root):
     restored=0
     for item in manifest.get('themeAssetsInPacks',[]):
         path=Path(item['path']); pack=Path(item['pack']); member=Path(item['entry'])
+        theme_source = len(path.parts)>=4 and path.parts[0]=='themes' and path.parts[2:]==member.parts and path.suffix in ('.png','.webp','.ttf')
+        punk_font = len(path.parts)==3 and path.parts[:2]==('design','punk-fonts') and path.suffix=='.ttf' and member.parts==('fonts',path.name)
         if (path.is_absolute() or pack.is_absolute() or member.is_absolute() or
             any('..' in p.parts for p in (path,pack,member)) or
-            len(path.parts)<4 or path.parts[0]!='themes' or pack.parts[:2]!=('themes','packs') or
-            path.suffix not in ('.png','.webp') or path.parts[2:]!=member.parts):
+            pack.parts[:2]!=('themes','packs') or not (theme_source or punk_font)):
             raise ValueError('Invalid theme source mapping')
         target=(root/path).resolve()
         if not target.is_relative_to(root) or not (root/pack).resolve().is_relative_to(root):
@@ -36,4 +37,4 @@ def restore(root):
 
 
 if __name__=='__main__':
-    print(f'Restored {restore(Path(__file__).resolve().parents[1])} theme images; existing files preserved.')
+    print(f'Restored {restore(Path(__file__).resolve().parents[1])} theme assets; existing files preserved.')

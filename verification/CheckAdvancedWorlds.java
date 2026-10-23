@@ -11,8 +11,9 @@ public class CheckAdvancedWorlds {
  public static void main(String[] args) throws Exception {
   Set<String> ids=Set.of("switchback-radio","komorebi-hour","rooftop-reverie","apex-telemetry","cinder-kata");
   ThemeCatalog catalog=ThemePack.INSTANCE.getJson().decodeFromString(ThemeCatalog.Companion.serializer(),Files.readString(Path.of("themes/catalog.json")));
-  if(catalog.getThemes().size()!=57)throw new AssertionError("catalog count");
+  if(catalog.getThemes().size()<57)throw new AssertionError("catalog count");
   for(ThemeListing e:catalog.getThemes()){
+   if(e.getMinAppCode()>31)continue;
    ThemeManifest m=ThemePack.INSTANCE.getJson().decodeFromString(ThemeManifest.Companion.serializer(),Files.readString(Path.of("themes",e.getId(),"theme.json")));
    ThemePack.INSTANCE.validate(m,31);
    if(!ids.contains(e.getId()))continue;

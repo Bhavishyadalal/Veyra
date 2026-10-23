@@ -211,6 +211,6 @@ object ThemeRepository {
     private fun visuals(m: ThemeManifest, dir: File) = ThemeVisuals(m.id,m.name,
         color(m.palette.accent),color(m.palette.surface),color(m.palette.raised),color(m.palette.outline),
         m.rowCorner,m.buttonCorner,m.navCorner,m.assets.mapValues { File(dir,it.value).absolutePath },m.seekStyle,m.seekHeight,m.version, color(m.palette.background),color(m.palette.text),color(m.palette.muted),
-        color(m.palette.secondary),m.sceneStyle,m.tagline,m.materialStyle)
+        color(m.palette.secondary),m.sceneStyle,m.tagline,m.materialStyle,m.iconStyle,m.typeStyle)
     fun color(value: String) = Color(0xFF000000L or value.removePrefix("#").toLong(16))
 }

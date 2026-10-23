@@ -1,4 +1,6 @@
-> **Latest beta build 31:** [Five Advanced Worlds](ADVANCED_WORLDS.md) bring 119 asset roles per theme, expanded Home/Player/Settings controls, native geometry, progress tracks and motion. [Compare all five](previews/advanced-worlds/collection.png). Beta now has **57 packs**; these five require the updated build-31 beta APK.
+> **Latest beta build 32:** [Five Punk Worlds](PUNK_WORLDS.md) add full-color glyphs, pressed player skins, licensed punk fonts, colored headings and matching native controls/motion. [Actual asset overview](previews/punk-worlds/collection.png). Beta now has **62 packs**. These five require build 32; independent asset-pack layering remains planned.
+
+> **Latest beta build 31:** [Five Advanced Worlds](ADVANCED_WORLDS.md) bring 119 asset roles per theme, expanded Home/Player/Settings controls, native geometry, progress tracks and motion. [Compare all five](previews/advanced-worlds/collection.png). At that checkpoint beta had **57 packs**; these five require the updated build-31 beta APK.
 
 > **Five new beta illustration worlds:** [Lantern Letters, Velvet Orbit, Moss & Mechanism, Sugar Static and Tidal Origami](ILLUSTRATED_WORLDS.md). [Collection overview](previews/illustrated-worlds/collection.png). At that checkpoint beta had 52 packs; build-30 users can refresh/download them without another engine rebuild.
 
@@ -8,7 +10,7 @@
 
 # Veyra Theme Studio
 
-**Stable: 0.1.8 / code 28 · Development preview: 0.1.9-beta1 / code 31.**
+**Stable: 0.1.8 / code 28 · Development preview: 0.1.9-beta1 / code 32.**
 
 **New: [five Keepsake themes](KEEPSAKE.md), compatible with stable 0.1.7.** All 46 packs use the shared catalog. Stable 0.1.8 includes the five new launcher choices, searchable Studio and icon-picker refinements, for 74 launcher choices. Historical stable 0.1.7 retains 69.
 Made by **Bhavishya Dalal**.

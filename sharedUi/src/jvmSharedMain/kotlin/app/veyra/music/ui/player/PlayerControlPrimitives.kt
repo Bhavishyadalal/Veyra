@@ -88,14 +88,14 @@ internal fun PlayerControlSurface(
     }
     val scale =
         animateFloatAsState(
-            if (pressed && available && !reducedMotion && !grouped) (if (pack?.sceneStyle == "playful") 0.92f else 0.95f) else 1f,
-            if (pack?.sceneStyle == "playful" && !reducedMotion)
+            if (pressed && available && !reducedMotion && !grouped) (if (pack?.sceneStyle == "playful" || pack?.materialStyle in setOf("punk_gel","punk_sticker")) 0.90f else if(pack?.materialStyle == "punk_torn") .97f else 0.95f) else 1f,
+            if ((pack?.sceneStyle == "playful" || pack?.materialStyle in setOf("punk_gel","punk_sticker")) && !reducedMotion)
                 androidx.compose.animation.core.spring(dampingRatio = .8f, stiffness = 650f)
             else tween(playerMotionMillis(reducedMotion, VeyraMotion.Press), easing = VeyraMotion.Easing),
             label = "playerControlPress",
         )
     val sketchTilt = animateFloatAsState(
-        if ((pack?.sceneStyle == "sketch" || pack?.materialStyle == "flame") && pressed && available && !reducedMotion && !grouped) -2.5f else 0f,
+        if ((pack?.sceneStyle == "sketch" || pack?.materialStyle in setOf("flame","punk_torn","punk_chrome")) && pressed && available && !reducedMotion && !grouped) -2.5f else 0f,
         tween(playerMotionMillis(reducedMotion, 140), easing = VeyraMotion.Easing), label = "sketchPencilPress")
     val opacity =
         animateFloatAsState(
@@ -132,6 +132,7 @@ internal fun PlayerControlSurface(
                 }
                 .clip(effectiveShape)
                 .background(decoratedBackground)
+                .then(if(!grouped && pack?.materialStyle?.startsWith("punk_") == true) app.veyra.music.ui.themes.punkControlFinish(Modifier,pack) else Modifier)
                 .then(
                     if (!grouped && decoration!=ControlDecoration.GLYPHS && (decoration==ControlDecoration.RINGS || framed || contrast || pack != null))
                         Modifier.background(
@@ -172,7 +173,8 @@ internal fun PlayerControlSurface(
                                 color = controlTint,
                                 strokeWidth = 2.dp,
                             )
-                    } else content()
+                    } else androidx.compose.runtime.CompositionLocalProvider(
+                        app.veyra.music.ui.themes.LocalThemeControlPressed provides (pressed && available)) { content() }
                 }
             }
         }
@@ -289,8 +291,6 @@ internal fun PlayerTransportControl(
     decoration: ControlDecoration = ControlDecoration.DEFAULT,
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
-    val path = themeKey?.let { pack?.asset(it) }
-    val themedPainter = if (path == null) painter else coil3.compose.rememberAsyncImagePainter(java.io.File(path), placeholder=painter, error=painter)
     PlayerControlSurface(
         description,
         onClick,
@@ -308,17 +308,22 @@ internal fun PlayerTransportControl(
         framed = emphasized,
         containerColor = if (emphasized) Color.Black.copy(alpha = 0.32f) else containerColor,
     ) {
+        val path = themeKey?.let { pack?.asset(it) }
+        val normalPainter = if(path==null) painter else coil3.compose.rememberAsyncImagePainter(java.io.File(path),placeholder=painter,error=painter)
+        val pressedPath = themeKey?.let {pack?.asset("${it}_pressed")}
+        // Decode the small pressed state alongside the normal glyph; never flash a blank
+        // or native placeholder if a user taps before the pressed file is ready.
+        val pressedPainter = if(pressedPath==null) null else coil3.compose.rememberAsyncImagePainter(java.io.File(pressedPath),placeholder=normalPainter,error=normalPainter)
+        val pressedReady = pressedPainter?.state?.collectAsState()?.value is coil3.compose.AsyncImagePainter.State.Success
+        val themedPainter = if(app.veyra.music.ui.themes.LocalThemeControlPressed.current && pressedReady) pressedPainter else normalPainter
         Crossfade(
             themedPainter,
             animationSpec = tween(playerMotionMillis(reducedMotion, 150)),
             label = "playerTransportGlyph",
         ) { current ->
-            androidx.compose.material3.Icon(
-                current,
-                null,
-                tint = pack?.accent ?: tint,
-                modifier = Modifier.size(iconSize).graphicsLayer { scaleY = heightScale },
-            )
+            app.veyra.music.ui.themes.ThemePainterGlyph(
+                current, null, Modifier.size(if(pack?.iconStyle == "original" && path != null) (touchSize-16.dp).coerceAtLeast(24.dp) else iconSize).graphicsLayer { scaleY = heightScale },
+                pack?.accent ?: tint, preserveColors = path != null && pack?.iconStyle == "original")
         }
     }
 }

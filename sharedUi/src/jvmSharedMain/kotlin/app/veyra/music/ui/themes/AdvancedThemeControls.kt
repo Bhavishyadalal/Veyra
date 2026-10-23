@@ -16,6 +16,11 @@ import androidx.compose.ui.unit.dp
 
 /** Native, bounded control geometry; downloaded packs never contain executable drawing code. */
 fun themeControlShape(theme: ThemeVisuals, corner: Int = theme.buttonCorner): CornerBasedShape = when(theme.materialStyle) {
+    "punk_gel" -> RoundedCornerShape(corner.dp)
+    "punk_rivet" -> CutCornerShape(12.dp)
+    "punk_sticker" -> RoundedCornerShape(topStart=18.dp,topEnd=28.dp,bottomEnd=20.dp,bottomStart=12.dp)
+    "punk_torn" -> SketchShape
+    "punk_chrome" -> RoundedCornerShape(topStart=26.dp,topEnd=6.dp,bottomEnd=26.dp,bottomStart=6.dp)
     "pixel" -> PixelControlShape
     "botanical" -> RoundedCornerShape((corner+8).coerceAtMost(44).dp, (corner/2).dp, (corner+8).coerceAtMost(44).dp, (corner/2).dp)
     "deco" -> CutCornerShape((corner/3).dp)
@@ -47,6 +52,23 @@ fun drawAdvancedTrackDetails(scope: DrawScope, theme: ThemeVisuals, fraction: Fl
     if(w<=0f || h<=0f)return@clipRect
     val x=w*f;val cy=h/2f
     when(theme.seekStyle) {
+        "gel", "plasma" -> repeat(18) {i ->
+            val p=w*(i+.5f)/18f
+            val r=h*(if(i%3==0).33f else .17f)
+            drawCircle(if(p<x)theme.secondary else theme.text.copy(alpha=.32f),r,Offset(p,cy))
+        }
+        "cable" -> repeat(24) {i ->
+            val p=w*i/24f
+            drawLine(if(p<x)theme.background.copy(alpha=.75f) else theme.secondary.copy(alpha=.6f),Offset(p,0f),Offset(p+h,h),1.dp.toPx())
+        }
+        "beads" -> repeat(20) {i ->
+            val p=w*(i+.5f)/20f
+            drawCircle(if(p<x)theme.secondary else theme.text.copy(alpha=.5f),h*.37f,Offset(p,cy))
+        }
+        "tape" -> repeat(24) {i ->
+            val p=w*i/24f
+            drawRect(if(p<x)theme.background.copy(alpha=.7f) else theme.text.copy(alpha=.45f),Offset(p,cy-h*.15f),Size(w/48f,h*.3f))
+        }
         "road" -> repeat(20) { i ->
             val p=w*(i+.25f)/20f
             drawRect(if(p<x)theme.background.copy(alpha=.65f) else theme.text.copy(alpha=.6f),Offset(p,cy-h*.10f),Size(minOf(w/40f,w-p),h*.20f))
@@ -74,7 +96,18 @@ fun drawAdvancedTrackDetails(scope: DrawScope, theme: ThemeVisuals, fraction: Fl
         val r=minOf(h*.45f,w/2f);val cx=x.coerceIn(r,w-r)
         if(theme.materialStyle=="pixel" || theme.materialStyle=="telemetry")
             drawRect(theme.text,Offset(cx-r,cy-r),Size(r*2,r*2))
-        else drawCircle(theme.text,r,Offset(cx,cy))
+        else if(theme.materialStyle.startsWith("punk_") && theme.seekStyle != "tape") {
+            val star=Path().apply {
+                repeat(10) { i ->
+                    val a=(i*36-90)*kotlin.math.PI/180
+                    val radius=if(i%2==0)r else r*.45f
+                    val px=cx+kotlin.math.cos(a).toFloat()*radius
+                    val py=cy+kotlin.math.sin(a).toFloat()*radius
+                    if(i==0)moveTo(px,py) else lineTo(px,py)
+                };close()
+            }
+            drawPath(star,theme.text)
+        } else drawCircle(theme.text,r,Offset(cx,cy))
     }
     }
 }

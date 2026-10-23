@@ -106,6 +106,16 @@ class ThemePackTest {
         entries["icons/play.png"]=byteArrayOf(1,2,3)
         val f=zip(entries);val root=temp.newFolder();rejects{ThemePack.install(f,root,listing(f),24)};assertTrue(root.list()!!.isEmpty())
     }
+    @Test fun punkColorsTypeAndPressedAssetsRequireBuild32() {
+        val m=ThemePack.json.decodeFromString<ThemeManifest>(File(project,"themes/riot-candy/theme.json").readText())
+        ThemePack.validate(m,32)
+        rejects {ThemePack.validate(m,31)}
+        rejects {ThemePack.validate(m.copy(minAppCode=31),32)}
+        rejects {ThemePack.validate(m.copy(iconStyle="script"),32)}
+        rejects {ThemePack.validate(m.copy(typeStyle="execute"),32)}
+        assertEquals(123,m.assets.size)
+        assertTrue(m.assets.keys.containsAll(ThemePack.pressedKeys))
+    }
     @Test fun advancedRolesAndNativePresetsRequireBuild31() {
         val m=ThemePack.json.decodeFromString<ThemeManifest>(File(project,"themes/switchback-radio/theme.json").readText())
         ThemePack.validate(m,31)
@@ -133,11 +143,11 @@ class ThemePackTest {
     }
     @Test fun allPublishedThemesInstallWithCorrectBrandingAndMinimumVersion() {
         val catalog=ThemePack.json.decodeFromString<ThemeCatalog>(File(project,"themes/catalog.json").readText())
-        assertEquals(setOf("switchback-radio","komorebi-hour","rooftop-reverie","apex-telemetry","cinder-kata","lantern-letters","velvet-orbit","moss-mechanism","sugar-static","tidal-origami","margin-notes","patchwork-picnic","clover-requiem","sunroom-mixtape","concrete-afterhours","matcha-mischief","halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream","stained-glass-sonata","firefly-railway","porcelain-moon","black-honey","sakura-arcade","cloud-post-office","copper-canyon-radio","midnight-aquarium","sunday-bakery","rose-circuit","clockwork-garden","snowglobe-village","indigo-atelier","prism-playground","silent-cinema","riverside-pause","pixel-stargazer","roaming-cosmos","blue-hour-sanctuary","celestial-current"),catalog.themes.map { it.id }.toSet())
+        assertEquals(setOf("riot-candy","chrome-venom","bubble-riot","xerox-afterparty","cosmic-vandal","switchback-radio","komorebi-hour","rooftop-reverie","apex-telemetry","cinder-kata","lantern-letters","velvet-orbit","moss-mechanism","sugar-static","tidal-origami","margin-notes","patchwork-picnic","clover-requiem","sunroom-mixtape","concrete-afterhours","matcha-mischief","halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream","stained-glass-sonata","firefly-railway","porcelain-moon","black-honey","sakura-arcade","cloud-post-office","copper-canyon-radio","midnight-aquarium","sunday-bakery","rose-circuit","clockwork-garden","snowglobe-village","indigo-atelier","prism-playground","silent-cinema","riverside-pause","pixel-stargazer","roaming-cosmos","blue-hour-sanctuary","celestial-current"),catalog.themes.map { it.id }.toSet())
         for (entry in catalog.themes) {
             val pack=File(project,"themes/packs/${entry.id}-v${entry.version}.zip")
             val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,BuildConfig.VERSION_CODE,::validatePublishedImageBounds)
-            assertEquals(if(entry.minAppCode==31) 4 else if(entry.id in setOf("lantern-letters","velvet-orbit","moss-mechanism","sugar-static","tidal-origami","margin-notes","patchwork-picnic","matcha-mischief","playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals","strawberry-daydream","cloud-post-office","sunday-bakery","snowglobe-village","prism-playground")) 3 else 2,m.schema)
+            assertEquals(if(entry.minAppCode>=31) 4 else if(entry.id in setOf("lantern-letters","velvet-orbit","moss-mechanism","sugar-static","tidal-origami","margin-notes","patchwork-picnic","matcha-mischief","playtime-club","pumpkin-purr","petal-promise","lilypond-parade","starfall-pals","strawberry-daydream","cloud-post-office","sunday-bakery","snowglobe-village","prism-playground")) 3 else 2,m.schema)
             assertTrue(File(dir,m.assets.getValue("brandIcon")).isFile)
             rejects { ThemePack.validate(m,23) }
             if (entry.id == "midnight-express") {
@@ -165,7 +175,7 @@ class ThemePackTest {
         val bundled=File(project,"app/src/main/assets/theme-catalog.json").readBytes()
         assertArrayEquals(published,bundled)
         val entries=ThemeRepository.parseCatalog(published)
-        assertEquals(57,entries.size)
+        assertEquals(62,entries.size)
         entries.forEach { entry ->
             java.util.zip.ZipFile(File(project,"themes/packs/${entry.id}-v${entry.version}.zip")).use { z ->
                 assertNotNull(z.getEntry("artwork/preview.webp"))

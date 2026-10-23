@@ -23,6 +23,7 @@ data class ThemeManifest(
     val assets: Map<String, String>, val files: Map<String, String>,
     val seekStyle: String = "plain", val seekHeight: Int = 7,
     val materialStyle: String = "classic",
+    val iconStyle: String = "tinted", val typeStyle: String = "plain",
     val sceneStyle: String = "mist", val tagline: String = "A different kind of night.",
 )
 @Serializable
@@ -46,7 +47,8 @@ object ThemePack {
         "nav_home", "nav_search", "nav_explore", "nav_library", "play", "pause", "previous", "next",
         "queue", "lyrics", "settings", "back", "download", "brandIcon")
 
-    val assetKeys = legacyAssetKeys + app.veyra.music.ui.themes.ThemeGlyphs.advancedKeys
+    val pressedKeys = setOf("play_pressed", "pause_pressed", "previous_pressed", "next_pressed")
+    val assetKeys = legacyAssetKeys + app.veyra.music.ui.themes.ThemeGlyphs.advancedKeys + pressedKeys
 
     /** Brand artwork is published at 512 px; transport/navigation glyphs stay small. */
     fun validateImageBounds(key: String, width: Int, height: Int) {
@@ -87,7 +89,10 @@ object ThemePack {
         require(manifest.rowCorner in 8..28 && manifest.buttonCorner in 12..36 && manifest.navCorner in 18..48)
         require(manifest.files.size in 1..(if (manifest.schema >= 4) 128 else 48) && manifest.files.all { safePath(it.key) && hashPattern.matches(it.value) })
         require(manifest.assets.keys.all { it in (if (manifest.schema >= 4) assetKeys else legacyAssetKeys) })
-        require(manifest.materialStyle in setOf("classic", "pixel", "botanical", "deco", "telemetry", "flame"))
+        require(manifest.materialStyle in setOf("classic", "pixel", "botanical", "deco", "telemetry", "flame", "punk_gel", "punk_rivet", "punk_sticker", "punk_torn", "punk_chrome"))
+        require(manifest.iconStyle in setOf("tinted", "original") && manifest.typeStyle in setOf("plain", "punk"))
+        val punk = manifest.assets.keys.any {it in pressedKeys} || manifest.materialStyle.startsWith("punk_") || manifest.iconStyle != "tinted" || manifest.typeStyle != "plain" || manifest.seekStyle in setOf("gel", "cable", "beads", "tape", "plasma")
+        if(punk) require(manifest.schema == 4 && manifest.minAppCode >= 32) { "Update Veyra for punk color and material themes." }
         val advancedSeek = manifest.seekStyle in setOf("road", "vine", "skyline", "telemetry", "flame")
         if (manifest.schema == 4) require(manifest.minAppCode >= 31) { "Update Veyra for advanced themes." }
         if (manifest.materialStyle != "classic" || advancedSeek) require(manifest.schema == 4 && manifest.minAppCode >= 31)
@@ -106,10 +111,14 @@ object ThemePack {
         for ((key, path) in manifest.assets) {
             require(if (key.endsWith("Font")) path.endsWith(".ttf") else path.endsWith(".png") || path.endsWith(".webp"))
         }
-        require(manifest.seekStyle in setOf("plain", "ember", "web", "bubbles", "sketch", "road", "vine", "skyline", "telemetry", "flame") && manifest.seekHeight in 6..12)
+        require(manifest.seekStyle in setOf("plain", "ember", "web", "bubbles", "sketch", "road", "vine", "skyline", "telemetry", "flame", "gel", "cable", "beads", "tape", "plasma") && manifest.seekHeight in 6..12)
         val p = manifest.palette
         listOf(p.background,p.surface,p.raised,p.accent,p.accentContainer,p.text,p.muted,p.outline,p.secondary)
             .forEach { require(it.matches(Regex("#[0-9A-Fa-f]{6}"))) { "Invalid theme color." } }
+        if(manifest.typeStyle == "punk") {
+            require(contrast(p.accent,p.surface)>=4.5 && contrast(p.secondary,p.surface)>=4.5)
+            require(contrast(p.accent,p.raised)>=4.5 && contrast(p.secondary,p.raised)>=4.5)
+        }
         require(contrast(p.text, p.background) >= 7 && contrast(p.text, p.surface) >= 7)
         require(contrast(p.muted, p.surface) >= 4.5 && contrast(p.muted, p.raised) >= 4.5)
         require(contrast(p.accent, "#101010") >= 4.5 && contrast(p.text, p.accentContainer) >= 4.5)

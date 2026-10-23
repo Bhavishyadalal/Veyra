@@ -23,10 +23,10 @@ fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: B
         subtleMotion -> (fadeIn(tween(VeyraMotion.Feedback)) togetherWith fadeOut(tween(VeyraMotion.Press))).apply { targetContentZIndex = 1f }
         materialStyle != "classic" -> {
             val back = motion == NavigationMotion.Back
-            val duration = when(materialStyle) { "telemetry" -> 170; "botanical" -> 280; "flame" -> 210; else -> 230 }
+            val duration = when(materialStyle) { "telemetry" -> 170; "botanical" -> 280; "flame" -> 210; "punk_rivet" -> 180; "punk_gel", "punk_sticker" -> 280; "punk_torn" -> 200; "punk_chrome" -> 240; else -> 230 }
             val enter = when(materialStyle) {
-                "botanical" -> slideInVertically(tween(duration, easing=VeyraMotion.Easing)) { it/35 }
-                "deco", "flame" -> scaleIn(tween(duration,easing=VeyraMotion.Easing),initialScale=if(back)1.015f else .975f)
+                "botanical", "punk_sticker" -> slideInVertically(tween(duration, easing=VeyraMotion.Easing)) { it/35 }
+                "deco", "flame", "punk_gel", "punk_chrome" -> scaleIn(tween(duration,easing=VeyraMotion.Easing),initialScale=if(back)1.015f else .975f)
                 else -> slideInHorizontally(tween(duration,easing=VeyraMotion.Easing)) { direction*it/(if(back)-18 else 18) }
             }
             ((enter+fadeIn(tween(duration))) togetherWith fadeOut(tween(120))).apply {targetContentZIndex=1f}

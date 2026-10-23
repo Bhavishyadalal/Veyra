@@ -202,7 +202,13 @@ fun VeyraTheme(
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = selectedTypography,
+            typography = if(pack?.typeStyle == "punk") selectedTypography.copy(
+                displayLarge=selectedTypography.displayLarge.copy(color=pack.accent),
+                displayMedium=selectedTypography.displayMedium.copy(color=pack.secondary),
+                displaySmall=selectedTypography.displaySmall.copy(color=pack.accent),
+                headlineLarge=selectedTypography.headlineLarge.copy(color=pack.accent),
+                headlineMedium=selectedTypography.headlineMedium.copy(color=pack.secondary),
+                headlineSmall=selectedTypography.headlineSmall.copy(color=pack.accent)) else selectedTypography,
             shapes = shapes,
             content = content,
         )

@@ -1,5 +1,16 @@
 # Veyra 0.1.9-beta1
 
+## Punk Worlds · five full-color themes · build 32
+
+- Riot Candy, Chrome Venom, Bubble Riot, Xerox Afterparty and Cosmic Vandal: original material-collage wallpapers, 113 colored functional glyphs, four player pressed-state variants, themed in-app branding and licensed display/body fonts. Each full theme has **123 asset roles**.
+- Original-color glyph rendering preserves disabled alpha, error tint and visible native fallbacks. Player normal/pressed states preload together. Bright display headings, gel/riveted/sticker/paper/chrome frames, real-fraction progress treatments and finite page/press motion match each world.
+- Requires a rebuilt **build-32 beta APK**. Theme Studio now lists 62 packs on the current beta; earlier immutable packs, stable branches and launcher aliases stay unchanged.
+- Five AI direction boards are separate from the actual runtime asset/font sheets. Native transitions implement bounded scale/slide/fade; illustrated physical effects on concept boards are not claimed as running simulations. Independent asset-pack layering remains planned.
+- Source ZIPs can restore optional non-build authoring fonts from checksummed included packs while preserving all Gradle font inputs and existing user edits.
+
+[All five themes, actual assets, AI direction and compatibility](themes/PUNK_WORLDS.md)
+
+
 ## Advanced Worlds · five complete control themes · build 31
 
 - Switchback Radio, Komorebi Hour, Rooftop Reverie, Apex Telemetry and Cinder Kata: original AI artwork, **119 asset roles per pack**, 113 functional glyphs, themed in-app brands and licensed fonts.

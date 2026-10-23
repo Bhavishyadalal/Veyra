@@ -109,7 +109,7 @@ internal fun HomeHeading(
                 Modifier.semantics { heading() },
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.ExtraBold,
-                color = colors.onBackground,
+                color = app.veyra.music.ui.themes.themeHeadingColor(colors.onBackground),
             )
             Text(
                 subtitle,

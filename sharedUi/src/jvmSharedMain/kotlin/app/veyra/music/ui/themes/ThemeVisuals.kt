@@ -40,6 +40,7 @@ data class ThemeVisuals(
     val secondary: Color = accent, val sceneStyle: String = "mist",
     val tagline: String = "A different kind of night.",
     val materialStyle: String = "classic",
+    val iconStyle: String = "tinted", val typeStyle: String = "plain",
 ) {
     fun asset(key: String): String? = assets[key]
 }
@@ -62,8 +63,9 @@ fun ThemeIcon(
         val rtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
         // Match Material Icon's default 24 dp footprint; pack bitmaps have much
         // larger intrinsic sizes. Explicit caller sizing still takes precedence.
-        Image(painter, contentDescription, modifier.size(24.dp).graphicsLayer { if ((key == "back" || imageVector.autoMirror) && rtl) scaleX = -1f },
-            colorFilter = if (tint == Color.Unspecified) null else ColorFilter.tint(tint))
+        ThemePainterGlyph(painter, contentDescription,
+            modifier.size(24.dp).graphicsLayer { if ((key == "back" || imageVector.autoMirror) && rtl) scaleX = -1f }, tint,
+            preserveColors = LocalThemeVisuals.current?.iconStyle == "original")
     }
 }
 
@@ -112,8 +114,8 @@ fun ThemeIcon(
 ) {
     val path = themeKey?.let { LocalThemeVisuals.current?.asset(ThemeGlyphs.key(it)) }
     if (path == null) Icon(painter, contentDescription, modifier, tint)
-    else Image(rememberAsyncImagePainter(File(path), placeholder=painter, error=painter),
-        contentDescription, modifier.size(24.dp), colorFilter=if(tint==Color.Unspecified) null else ColorFilter.tint(tint))
+    else ThemePainterGlyph(rememberAsyncImagePainter(File(path), placeholder=painter, error=painter),
+        contentDescription, modifier.size(24.dp), tint, preserveColors=LocalThemeVisuals.current?.iconStyle == "original")
 }
 
 
@@ -126,7 +128,8 @@ fun themeSceneScrimAlpha(theme: ThemeVisuals): Float {
             theme.background.red*(1f-artwork)+artwork,
             theme.background.green*(1f-artwork)+artwork,
             theme.background.blue*(1f-artwork)+artwork).luminance()
-        return listOf(theme.text,theme.muted).all { color ->
+        val foregrounds = if(theme.typeStyle == "punk") listOf(theme.text,theme.muted,theme.accent,theme.secondary) else listOf(theme.text,theme.muted)
+        return foregrounds.all { color ->
             val foreground=color.luminance()
             (maxOf(foreground,background)+.05f)/(minOf(foreground,background)+.05f)>=4.5f
         }

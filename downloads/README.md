@@ -5,7 +5,7 @@ Current stable and the three newest preview archives are retained here. Each is 
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
 | Current stable · `main`, `stable/0.1.8` | 0.1.8 / code 28 | [Download](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.8_Stable.zip) | [SHA-256](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/main/downloads/Veyra_Android_Source_0.1.8_Stable.zip.sha256) |
-| Current preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 31 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
+| Current preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 32 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 | Completed preview · `preview/0.1.8-beta1` | 0.1.8-beta1 / code 27 | [Download](Veyra_Android_Source_0.1.8-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.8-beta1.zip.sha256) |
 | Historical preview | 0.1.7-beta1 / code 25 | [Download](Veyra_Android_Source_0.1.7-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.7-beta1.zip.sha256) |
 
@@ -26,7 +26,7 @@ Only branch-tip archive retention changes; no Git history, tags or release asset
 
 ## Open and verify
 
-Extract the entire `Veyra` folder, then open it in Android Studio. Verify the sidecar and the ZIP's `SOURCE_MANIFEST.json`. Source packages omit credentials, local configuration, signing keys, APKs and generated study images; renderer sources and theme assets remain included.
+Extract the entire `Veyra` folder, then open it in Android Studio. Verify the sidecar and the ZIP's `SOURCE_MANIFEST.json`. Source packages omit credentials, local configuration, signing keys, APKs and generated study images; renderer sources and theme assets remain included. Optional non-build authoring fonts can also be restored from checksummed pack mappings; all Gradle font-resource inputs stay expanded.
 
 Stage source before packaging:
 

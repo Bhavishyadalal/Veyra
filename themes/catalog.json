@@ -2,6 +2,61 @@
   "schema": 1,
   "themes": [
     {
+      "id": "riot-candy",
+      "name": "Riot Candy",
+      "description": "Acid-lime and pink gel controls, chrome glints, wet-paint lettering, star-head seek and elastic press feedback.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/riot-candy-v1.zip",
+      "sha256": "6639e393f20754c5c28704cccddfdc7f52e5070f203078e36711b7b46675c713",
+      "bytes": 1305081,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/riot-candy/artwork/preview.webp"
+    },
+    {
+      "id": "chrome-venom",
+      "name": "Chrome Venom",
+      "description": "Toxic mint, dark titanium, riveted cut frames, glitch display type, braided-cable progress and a quick mechanical reveal.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/chrome-venom-v1.zip",
+      "sha256": "3efb311080cccea6ac9020b21fd27189c0140e6ffaaef34d00726e03fbdb67ae",
+      "bytes": 1047529,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/chrome-venom/artwork/preview.webp"
+    },
+    {
+      "id": "bubble-riot",
+      "name": "Bubble Riot",
+      "description": "Sky-blue and pink jelly, puffy sticker glyphs, bubble lettering, bead progress and a buoyant upward page reveal.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/bubble-riot-v1.zip",
+      "sha256": "538c89ed5c9c0d99d651c72dda15d1946875e84b0dfb2fc1a6b1fb8b47dbb459",
+      "bytes": 1282140,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/bubble-riot/artwork/preview.webp"
+    },
+    {
+      "id": "xerox-afterparty",
+      "name": "Xerox Afterparty",
+      "description": "Cream, charcoal and signal-red print accents, rough marker lettering, ink-stamp controls, cassette-tape progress and a short paper slide.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/xerox-afterparty-v1.zip",
+      "sha256": "65dfb057cd930331a4065021833560e37463f52cae29f0aafa3dd0873c620b1d",
+      "bytes": 1176624,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/xerox-afterparty/artwork/preview.webp"
+    },
+    {
+      "id": "cosmic-vandal",
+      "name": "Cosmic Vandal",
+      "description": "Prismatic cyan/pink chrome, striped poster type, orbital glyphs, plasma progress and a restrained depth reveal.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/packs/cosmic-vandal-v1.zip",
+      "sha256": "18a92c508a128b5cc8bf2ae88dfd7d57cfcf8b364662330086a98d32330a0dfd",
+      "bytes": 1524858,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.1.9-beta1/themes/cosmic-vandal/artwork/preview.webp"
+    },
+    {
       "id": "switchback-radio",
       "name": "Switchback Radio",
       "description": "Pixel-cut controls, stepped glyphs, lane-marker seek and a brisk lateral page reveal beneath an amber mountain night.",

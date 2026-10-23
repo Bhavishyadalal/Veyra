@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 import subprocess
 import zipfile
@@ -29,16 +30,27 @@ def main():
     # Runtime images already live byte-for-byte inside the included data packs.
     # Retain font/license build inputs; record reversible image deduplication.
     packed_images = {}
+    packed_fonts = {}
+    # Only optional authoring copies may be deduplicated. Every Gradle-generated
+    # font input stays expanded; new punk authoring fonts can be restored from packs.
+    gradle_fonts = {"themes/"+v for v in re.findall(r'"([a-z0-9-]+/fonts/[^"/]+\.ttf)"', (root/"app/build.gradle.kts").read_text())}
     for entry in catalog["themes"]:
         pack_rel = f'themes/packs/{entry["id"]}-v{entry["version"]}.zip'
         with zipfile.ZipFile(root / pack_rel) as source_pack:
             definition = json.loads(source_pack.read("theme.json"))
             for member, digest in definition["files"].items():
-                if Path(member).suffix.lower() in {".png", ".webp"}:
+                optional_font = (definition["minAppCode"] >= 31 and Path(member).suffix.lower() == ".ttf"
+                    and f'themes/{entry["id"]}/{member}' not in gradle_fonts)
+                if Path(member).suffix.lower() in {".png", ".webp"} or optional_font:
                     data = source_pack.read(member)
                     if hashlib.sha256(data).hexdigest() == digest:
                         packed_images[f'themes/{entry["id"]}/{member}'] = {
                             "pack": pack_rel, "entry": member, "sha256": digest}
+                        if optional_font: packed_fonts[digest] = {"pack": pack_rel, "entry": member, "sha256": digest}
+    # The new font library is an authoring source, not a Gradle font-resource input.
+    for source in (root/"design/punk-fonts").glob("*.ttf"):
+        digest = hashlib.sha256(source.read_bytes()).hexdigest()
+        if digest in packed_fonts: packed_images[source.relative_to(root).as_posix()] = packed_fonts[digest]
     omitted = []
     archive = root / "downloads" / args.name
     archive.parent.mkdir(exist_ok=True)
@@ -84,7 +96,7 @@ def main():
         raise SystemExit("Source ZIP exceeds GitHub's 100 MiB file limit; do not commit it")
     archive.with_suffix(".zip.sha256").write_text(f"{digest}  {args.name}\n")
     print(json.dumps({"archive": str(archive), "bytes": archive.stat().st_size,
-                      "sourceFiles": len(manifest), "deduplicatedThemeImages": len(omitted), "sha256": digest}))
+                      "sourceFiles": len(manifest), "deduplicatedThemeImages": sum(Path(e["path"]).suffix != ".ttf" for e in omitted), "deduplicatedOptionalFonts": sum(Path(e["path"]).suffix == ".ttf" for e in omitted), "sha256": digest}))
 
 
 if __name__ == "__main__":
