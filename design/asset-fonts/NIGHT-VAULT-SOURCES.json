@@ -1,0 +1,72 @@
+[
+  {
+    "name": "UnifrakturCook",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/unifrakturcook/UnifrakturCook-Bold.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/unifrakturcook/OFL.txt",
+    "sha256": "ea002fa9c65f1a612af100e00d87ab65f16381f450020ec3d021f3dbf79a6dcd",
+    "bytes": 42688
+  },
+  {
+    "name": "GrenzeGotisch",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/grenzegotisch/GrenzeGotisch%5Bwght%5D.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/grenzegotisch/OFL.txt",
+    "sha256": "701b299d8dc002a2b4bea2ff0f1272c0e4081a2835914354804565c410d0c637",
+    "bytes": 193492
+  },
+  {
+    "name": "NewRocker",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/newrocker/NewRocker-Regular.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/newrocker/OFL.txt",
+    "sha256": "28a499ce5b8bcf0652f8b2e25135183eaddf0c3c8c3e251259b075c71d1ef14c",
+    "bytes": 173224
+  },
+  {
+    "name": "MetalMania",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/metalmania/MetalMania-Regular.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/metalmania/OFL.txt",
+    "sha256": "4b95f0e55b291990c26a7b68818b20c1b728a8be05a34982b7bb4736c46c19ea",
+    "bytes": 254568
+  },
+  {
+    "name": "PirataOne",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/pirataone/PirataOne-Regular.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/pirataone/OFL.txt",
+    "sha256": "5347a2e155589ecf667d4b766613c8ee003edde9f83717fd24c09599a4b1ecc0",
+    "bytes": 56316
+  },
+  {
+    "name": "UnifrakturMaguntia",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/unifrakturmaguntia/UnifrakturMaguntia-Book.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/unifrakturmaguntia/OFL.txt",
+    "sha256": "d64afc0547059dd2e4a78da48bda0aba0a9901be58c7f8c201a8b2b6b4492cc8",
+    "bytes": 88508
+  },
+  {
+    "name": "Creepster",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/creepster/Creepster-Regular.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/creepster/OFL.txt",
+    "sha256": "402aeb734586c74aecd3dbdc454589b1fb12e2e1c71f782fd019ae68066d9f44",
+    "bytes": 62724
+  },
+  {
+    "name": "MedievalSharp",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/medievalsharp/MedievalSharp.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/medievalsharp/OFL.txt",
+    "sha256": "74cb2e6738bd7703adf120802f68fba0c9ddb9147a08e6847f1005b1e55df5a5",
+    "bytes": 148712
+  },
+  {
+    "name": "Nosifer",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/nosifer/Nosifer-Regular.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/nosifer/OFL.txt",
+    "sha256": "09c5ac35e34dc7a397d5f698b703c5640b59cf93d4d343ebae4f16f3859d09b8",
+    "bytes": 43272
+  },
+  {
+    "name": "Rye",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/rye/Rye-Regular.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/rye/OFL.txt",
+    "sha256": "b7edee5e615ae1b6b07e9d030c1309152bf3672a0e8a2a46293e273730f5adba",
+    "bytes": 183244
+  }
+]

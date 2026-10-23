@@ -1421,4 +1421,14 @@
     <string name="app_icon_collection_thread_riot">Thread Riot</string>
     <string name="icon_collection_assets">Asset packs</string>
     <string name="asset_matching_app_icon">Matching app icon</string>
+    <string name="app_icon_collection_cathedral_static">Cathedral Static</string>
+    <string name="app_icon_collection_velvet_hex">Velvet Hex</string>
+    <string name="app_icon_collection_razor_bloom">Razor Bloom</string>
+    <string name="app_icon_collection_neon_seance">Neon Séance</string>
+    <string name="app_icon_collection_blackout_zine">Blackout Zine</string>
+    <string name="app_icon_collection_chrome_fang">Chrome Fang</string>
+    <string name="app_icon_collection_candy_crypt">Candy Crypt</string>
+    <string name="app_icon_collection_royal_ruin">Royal Ruin</string>
+    <string name="app_icon_collection_acid_gargoyle">Acid Gargoyle</string>
+    <string name="app_icon_collection_midnight_stitch">Midnight Stitch</string>
 </resources>

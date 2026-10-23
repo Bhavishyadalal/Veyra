@@ -53,10 +53,13 @@ def main():
         with zipfile.ZipFile(root/pack_rel) as source_pack:
             definition=json.loads(source_pack.read("assets.json"))
             for member,digest in definition["files"].items():
-                if Path(member).suffix.lower() in {".png",".ttf"}:
+                if Path(member).suffix.lower() in {".png",".ttf",".webp"}:
                     assert hashlib.sha256(source_pack.read(member)).hexdigest()==digest
                     packed_images[f'asset-packs/{item["id"]}/{member}']={"pack":pack_rel,"entry":member,"sha256":digest}
                     if member.endswith(".ttf"):packed_fonts[digest]={"pack":pack_rel,"entry":member,"sha256":digest}
+            # Studio's public preview is the same byte image as the offline pack specimen.
+            preview_member="previews/specimen.webp"
+            packed_images[f'asset-packs/{item["id"]}/preview.webp']={"pack":pack_rel,"entry":preview_member,"sha256":definition["files"][preview_member]}
     for source in (root/"design/asset-fonts").glob("*.ttf"):
         digest=hashlib.sha256(source.read_bytes()).hexdigest()
         if digest in packed_fonts:packed_images[source.relative_to(root).as_posix()]=packed_fonts[digest]
@@ -76,6 +79,9 @@ def main():
             # 36+ MB of screenshots in every Android Studio source download.
             if (p.parts[:2] in {("themes","previews"),("asset-packs","previews"),
                     ("design","home-preview"),("design","settings-preview")} and p.suffix.lower() in {".png",".webp"}):
+                continue
+            # Generated verification captures are documentation, not test fixtures or build inputs.
+            if p.parts[:2] in {("verification","atelier-preview"),("verification","performance-preview"),("verification","reliability-preview")} and p.suffix.lower() in {".png",".webp"}:
                 continue
             # Promotional media is available in Git; Android builds need the expanded
             # native resources, not duplicate website/media-kit campaign exports.

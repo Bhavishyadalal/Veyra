@@ -7,7 +7,7 @@ import java.util.*;
 public class CheckStableCatalogs {
     public static void main(String[] args) throws Exception {
         check(ThemeRepository.INSTANCE, "themes/catalog.json", "app/src/main/assets/theme-catalog.json", 62);
-        check(AssetRepository.INSTANCE, "asset-packs/catalog.json", "app/src/main/assets/asset-catalog.json", 5);
+        check(AssetRepository.INSTANCE, "asset-packs/catalog.json", "app/src/main/assets/asset-catalog.json", 15);
     }
     private static void check(Object repository, String remote, String bundled, int expected) throws Exception {
         byte[] bytes = Files.readAllBytes(Path.of(remote));

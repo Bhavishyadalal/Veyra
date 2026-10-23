@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "icons": [
+    {
+      "id": "cathedral-static",
+      "name": "Cathedral Static",
+      "kind": "asset",
+      "style": "Pointed stained-glass frames, cobalt and crimson tracery, silver blackletter and skyline progress.",
+      "source": "night-vault/cathedral-static.webp"
+    },
+    {
+      "id": "velvet-hex",
+      "name": "Velvet Hex",
+      "kind": "asset",
+      "style": "Plum velvet medallions, silver crescent filigree, gothic lettering and a delicate vine timeline.",
+      "source": "night-vault/velvet-hex.webp"
+    },
+    {
+      "id": "razor-bloom",
+      "name": "Razor Bloom",
+      "kind": "asset",
+      "style": "Rose-cut crimson seals, thorn corners, sharp rocker headings and an ember-ribbon seek treatment.",
+      "source": "night-vault/razor-bloom.webp"
+    },
+    {
+      "id": "neon-seance",
+      "name": "Neon S\u00e9ance",
+      "kind": "asset",
+      "style": "Spectral cyan geometry, violet double outlines, metal display lettering and plasma progress.",
+      "source": "night-vault/neon-seance.webp"
+    },
+    {
+      "id": "blackout-zine",
+      "name": "Blackout Zine",
+      "kind": "asset",
+      "style": "Torn charcoal and cream print blocks, red poster marks, pirate-gothic lettering and spliced tape progress.",
+      "source": "night-vault/blackout-zine.webp"
+    },
+    {
+      "id": "chrome-fang",
+      "name": "Chrome Fang",
+      "kind": "asset",
+      "style": "Fanged gunmetal panels, mint metal edges, traditional blackletter and a braided-cable timeline.",
+      "source": "night-vault/chrome-fang.webp"
+    },
+    {
+      "id": "candy-crypt",
+      "name": "Candy Crypt",
+      "kind": "asset",
+      "style": "Pink batwing stickers, cream candy seals, playful horror lettering and a beaded progress track.",
+      "source": "night-vault/candy-crypt.webp"
+    },
+    {
+      "id": "royal-ruin",
+      "name": "Royal Ruin",
+      "kind": "asset",
+      "style": "Antique-gold crowns, sapphire heraldic frames, medieval headings and instrument-like sector progress.",
+      "source": "night-vault/royal-ruin.webp"
+    },
+    {
+      "id": "acid-gargoyle",
+      "name": "Acid Gargoyle",
+      "kind": "asset",
+      "style": "Horned stone cutouts, acid-green ink, dripping display letters and gel-dot seek markers.",
+      "source": "night-vault/acid-gargoyle.webp"
+    },
+    {
+      "id": "midnight-stitch",
+      "name": "Midnight Stitch",
+      "kind": "asset",
+      "style": "Dark denim patches, silver embroidery, western varsity lettering and a stitched pencil timeline.",
+      "source": "night-vault/midnight-stitch.webp"
+    }
+  ]
+}

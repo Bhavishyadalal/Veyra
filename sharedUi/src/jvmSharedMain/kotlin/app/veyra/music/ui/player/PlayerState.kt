@@ -47,7 +47,7 @@ internal fun rememberCanvasArtwork(song: Song): CanvasArtwork? {
     // over cellular" case — see [PlayerSettings.canvasOverCellular] for why a
     // clip's own loop makes that worth guarding separately from a still image.
     val experience by PlayerSettings.experience.collectAsStateWithLifecycle()
-    val canvasAllowedNow = canvasEnabled && !(experience.dataSaver && meteredConnection != false) && (meteredConnection != true || canvasOverCellular)
+    val canvasAllowedNow = canvasEnabled && (!experience.immersive || experience.immersiveStyle == app.veyra.music.data.settings.ImmersiveStyle.CLASSIC) && !(experience.dataSaver && meteredConnection != false) && (meteredConnection != true || canvasOverCellular)
     // Keyed on the song's identity rather than its videoId: a version switch
     // swaps the videoId for another cut of the *same* song, and a canvas is
     // searched for by title and artist — resetting here threw the clip out

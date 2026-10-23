@@ -8,6 +8,16 @@ enum class GlassFamily { LIQUID, SAMSUNG, PIXEL }
 /** Every existing icon belongs to one small, browsable collection. */
 object IconPickerPolicy {
     fun collection(icon: AppIcon): IconCollection = when {
+        icon == AppIcon.CollectionCathedralStatic -> IconCollection.ASSETS
+        icon == AppIcon.CollectionVelvetHex -> IconCollection.ASSETS
+        icon == AppIcon.CollectionRazorBloom -> IconCollection.ASSETS
+        icon == AppIcon.CollectionNeonSeance -> IconCollection.ASSETS
+        icon == AppIcon.CollectionBlackoutZine -> IconCollection.ASSETS
+        icon == AppIcon.CollectionChromeFang -> IconCollection.ASSETS
+        icon == AppIcon.CollectionCandyCrypt -> IconCollection.ASSETS
+        icon == AppIcon.CollectionRoyalRuin -> IconCollection.ASSETS
+        icon == AppIcon.CollectionAcidGargoyle -> IconCollection.ASSETS
+        icon == AppIcon.CollectionMidnightStitch -> IconCollection.ASSETS
         icon == AppIcon.CollectionRiotCandy -> IconCollection.THEMES
         icon == AppIcon.CollectionChromeVenom -> IconCollection.THEMES
         icon == AppIcon.CollectionBubbleRiot -> IconCollection.THEMES

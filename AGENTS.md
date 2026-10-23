@@ -1,11 +1,17 @@
 # Veyra maintenance rules
 
-- Current stable Android source: `main` and `stable/0.1.9`, version 0.1.9 / code 37.
+- Current stable Android source: `main` and `stable/0.1.9`, version 0.1.9 / code 38.
   Promoted from completed preview `cc1da14c0ebb14af31335bd1f5c657855037b19d` at the owner's request.
   Initial promotion was code 36; build 37 adds six immersive styles (Classic preserved),
   direct portrait/landscape entry and a seekable dock. See verification/IMMERSIVE-WORLDS-0.1.9.md.
-  See `verification/STABLE-0.1.9-PROMOTION.md`. Includes 62 themes, five independent
-  asset packs and 95 optional launcher choices. Stable catalogs target main.
+  See `verification/STABLE-0.1.9-PROMOTION.md`. Includes 62 themes, 15 independent
+  asset packs and 105 optional launcher choices. Stable catalogs target main.
+  Build 38 fixes buffering transport intent and Home recovery/artwork, suspends covered
+  app pages, polishes the immersive picker and adds ten Night Vault overlays/icons.
+  See verification/PATCH-0.1.9-BUILD-38.md and asset-packs/NIGHT_VAULT.md.
+  New launcher aliases require code 38; new data packs remain compatible with code 33+.
+  Preserve all original published pack bytes and preview branches. Generated verification
+  preview captures may be omitted from source ZIPs; retain renderer/test/build inputs.
   Completed preview `preview/0.1.9-beta1` remains 0.1.9-beta1 / code 35.
   Historical stable 0.1.8 remains code 28 on `stable/0.1.8`, stable 0.1.7 code 26
   on `stable/0.1.7`, and stable 0.1.6 code 22 on `stable/0.1.6`.

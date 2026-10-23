@@ -1,6 +1,17 @@
 # Veyra 0.1.9
 
-**Stable · Android version code 37 · includes the completed 0.1.9-beta1**
+**Stable · Android version code 38 · includes the completed 0.1.9-beta1**
+
+## Reliability + Night Vault · build 38
+
+- Fix Play/Pause presentation and commands during buffering; keep the toggle actionable and separate playback intent from the real audio clock.
+- Recover empty Home feeds, bound core refresh, preserve useful content and show artwork fallbacks with explicit refresh/retry behavior.
+- Add native preview cards, selected-mode summary, adaptive columns and grouped More controls to the immersive menu.
+- Suspend covered app pages and their effects while immersive mode is open, retaining saved UI/scroll state and essential playback services.
+- Add **ten Night Vault asset packs** and **ten matching Veyra waveform icons**. Veyra now offers **62 themes, 15 independent asset packs and 105 launcher choices**.
+- Preserve existing theme/asset packs and the completed beta. Rebuild/install code 38 for the app fixes and new launcher choices; these source changes do not publish an APK.
+
+[Actual assets and icon previews](asset-packs/NIGHT_VAULT.md) · [Verification and limits](verification/PATCH-0.1.9-BUILD-38.md).
 
 ## Immersive Worlds · build 37
 
@@ -18,7 +29,7 @@ The original stable promotion was build 36, from completed beta build 35.
 
 - **62 themes**, including Margin Notes, five Illustrated Worlds, five Advanced Worlds and five Punk Worlds added since stable 0.1.8.
 - **Five independent Layer Lab asset packs:** Spray Parade, Paper Pop, Ink Rebel, Laser Club and Thread Riot. Layer their icons, fonts, controls and motion over your chosen theme or custom app style; category switches preserve your wallpaper and palette.
-- **95 launcher choices.** All 62 themes and five asset packs have matching connected-wave editions. Home shows the icon you actually selected.
+- **105 launcher choices.** All 62 themes and 15 asset packs have matching connected-wave editions. Home shows the icon you actually selected.
 - Background visibility, dimming, supported softness and control-opacity adjustments, with a separate reset for these overrides.
 
 ## Listening feels clearer

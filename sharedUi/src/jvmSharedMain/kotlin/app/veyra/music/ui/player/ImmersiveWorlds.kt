@@ -170,19 +170,17 @@ internal fun ImmersiveStyle.ink(themeAccent: Color): Color = when(this) {
     }
 }
 
-@Composable internal fun ImmersiveModeCard(style: ImmersiveStyle,selected: Boolean,onClick: () -> Unit) {
+@Composable internal fun ImmersiveModeCard(style: ImmersiveStyle,selected: Boolean,artwork:String?=null,onClick: () -> Unit) {
     val ink=style.ink(MaterialTheme.colorScheme.primary)
     Surface(onClick=onClick,shape=RoundedCornerShape(24.dp),color=if(selected)MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainer,
         border=androidx.compose.foundation.BorderStroke(if(selected)2.dp else 1.dp,if(selected)MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant),modifier=Modifier.fillMaxWidth()) {
         Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {
-            Box(Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)).background(Brush.linearGradient(listOf(Color(0xFF132030),Color(0xFF382344)))),contentAlignment=Alignment.Center) {
-                ThemeIcon(style.symbol(),null,Modifier.size(28.dp),ink)
-            }
+            ImmersiveMiniature(style,artwork,ink)
             Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                 Text(style.title(),style=MaterialTheme.typography.titleMedium)
                 Text(style.description(),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            RadioButton(selected=selected,onClick=null)
+            RadioButton(selected=selected,onClick=null,modifier=Modifier.size(24.dp))
         }
     }
 }
@@ -221,4 +219,41 @@ private fun immersiveTime(ms: Long):String {
     val minutes=seconds/60
     return if(minutes>=60)"${minutes/60}:${(minutes%60).toString().padStart(2,'0')}:${(seconds%60).toString().padStart(2,'0')}"
         else "$minutes:${(seconds%60).toString().padStart(2,'0')}"
+}
+
+/** A static mode-specific composition at a bounded 96px request size. */
+@Composable private fun ImmersiveMiniature(style:ImmersiveStyle,artwork:String?,ink:Color) {
+    val context=coil3.compose.LocalPlatformContext.current
+    val theme=LocalThemeVisuals.current
+    val art=if(style==ImmersiveStyle.THEME_WORLD) theme?.asset("header")?.let {java.io.File(it)} else artwork
+    val request=remember(art,context) {coil3.request.ImageRequest.Builder(context).data(art).size(96).build()}
+    Box(Modifier.size(width=78.dp,height=104.dp).clip(RoundedCornerShape(14.dp)).background(Brush.verticalGradient(listOf(Color(0xFF25213D),Color(0xFF080B11))))) {
+        when(style) {
+            ImmersiveStyle.ARTWORK_CINEMA,ImmersiveStyle.THEME_WORLD,ImmersiveStyle.CLASSIC -> {
+                ThemeIcon(style.symbol(),null,Modifier.size(28.dp).align(Alignment.Center),ink.copy(.7f))
+                AsyncImage(request,null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop,alpha=if(style==ImmersiveStyle.THEME_WORLD).6f else .85f)
+                Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent,Color.Black.copy(.8f)))))
+            }
+            ImmersiveStyle.MINIMAL_NIGHT -> Box(Modifier.size(48.dp).align(Alignment.Center).border(1.dp,ink.copy(.5f),CircleShape).padding(6.dp).clip(CircleShape)) {
+                AsyncImage(request,null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
+            }
+            ImmersiveStyle.LANDSCAPE_STAGE -> Row(Modifier.align(Alignment.Center).padding(8.dp),horizontalArrangement=Arrangement.spacedBy(5.dp)) {
+                AsyncImage(request,null,Modifier.size(28.dp,40.dp).clip(RoundedCornerShape(5.dp)),contentScale=ContentScale.Crop)
+                Column(verticalArrangement=Arrangement.spacedBy(5.dp)) {repeat(3){Box(Modifier.size(20.dp,3.dp).background(ink.copy(alpha=1f-it*.25f),CircleShape))}}
+            }
+            ImmersiveStyle.LYRICS_FOCUS -> Column(Modifier.align(Alignment.Center).padding(12.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                repeat(3){Box(Modifier.fillMaxWidth().height(if(it==1)5.dp else 3.dp).background(ink.copy(if(it==1)1f else .3f),CircleShape))}
+            }
+        }
+        Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(8.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(5.dp)) {
+            Box(Modifier.fillMaxWidth().height(2.dp).background(ink.copy(.6f),CircleShape))
+            Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                ThemeIcon(Icons.Rounded.SkipPrevious,null,Modifier.size(8.dp),ink)
+                Box(Modifier.size(14.dp).background(ink,CircleShape),contentAlignment=Alignment.Center) {
+                    ThemeIcon(Icons.Rounded.PlayArrow,null,Modifier.size(9.dp),Color.Black)
+                }
+                ThemeIcon(Icons.Rounded.SkipNext,null,Modifier.size(8.dp),ink)
+            }
+        }
+    }
 }

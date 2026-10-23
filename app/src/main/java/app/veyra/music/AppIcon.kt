@@ -16,6 +16,16 @@ import kotlinx.coroutines.flow.asStateFlow
  * names so a choice made before the update stays enabled.
  */
 enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val previewRes: Int? = null) {
+    CollectionCathedralStatic("LauncherCollectionCathedralStatic", R.mipmap.ic_collection_cathedral_static, R.string.app_icon_collection_cathedral_static, R.mipmap.ic_collection_cathedral_static_foreground),
+    CollectionVelvetHex("LauncherCollectionVelvetHex", R.mipmap.ic_collection_velvet_hex, R.string.app_icon_collection_velvet_hex, R.mipmap.ic_collection_velvet_hex_foreground),
+    CollectionRazorBloom("LauncherCollectionRazorBloom", R.mipmap.ic_collection_razor_bloom, R.string.app_icon_collection_razor_bloom, R.mipmap.ic_collection_razor_bloom_foreground),
+    CollectionNeonSeance("LauncherCollectionNeonSeance", R.mipmap.ic_collection_neon_seance, R.string.app_icon_collection_neon_seance, R.mipmap.ic_collection_neon_seance_foreground),
+    CollectionBlackoutZine("LauncherCollectionBlackoutZine", R.mipmap.ic_collection_blackout_zine, R.string.app_icon_collection_blackout_zine, R.mipmap.ic_collection_blackout_zine_foreground),
+    CollectionChromeFang("LauncherCollectionChromeFang", R.mipmap.ic_collection_chrome_fang, R.string.app_icon_collection_chrome_fang, R.mipmap.ic_collection_chrome_fang_foreground),
+    CollectionCandyCrypt("LauncherCollectionCandyCrypt", R.mipmap.ic_collection_candy_crypt, R.string.app_icon_collection_candy_crypt, R.mipmap.ic_collection_candy_crypt_foreground),
+    CollectionRoyalRuin("LauncherCollectionRoyalRuin", R.mipmap.ic_collection_royal_ruin, R.string.app_icon_collection_royal_ruin, R.mipmap.ic_collection_royal_ruin_foreground),
+    CollectionAcidGargoyle("LauncherCollectionAcidGargoyle", R.mipmap.ic_collection_acid_gargoyle, R.string.app_icon_collection_acid_gargoyle, R.mipmap.ic_collection_acid_gargoyle_foreground),
+    CollectionMidnightStitch("LauncherCollectionMidnightStitch", R.mipmap.ic_collection_midnight_stitch, R.string.app_icon_collection_midnight_stitch, R.mipmap.ic_collection_midnight_stitch_foreground),
     CollectionRiotCandy("LauncherCollectionRiotCandy", R.mipmap.ic_collection_riot_candy, R.string.app_icon_collection_riot_candy, R.mipmap.ic_collection_riot_candy_foreground),
     CollectionChromeVenom("LauncherCollectionChromeVenom", R.mipmap.ic_collection_chrome_venom, R.string.app_icon_collection_chrome_venom, R.mipmap.ic_collection_chrome_venom_foreground),
     CollectionBubbleRiot("LauncherCollectionBubbleRiot", R.mipmap.ic_collection_bubble_riot, R.string.app_icon_collection_bubble_riot, R.mipmap.ic_collection_bubble_riot_foreground),
@@ -189,6 +199,16 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
 
         /** Asset packs cannot name arbitrary components. Only these bundled choices are eligible. */
         fun forAssetPack(id:String?):AppIcon? = when(id) {
+            "cathedral-static" -> CollectionCathedralStatic
+            "velvet-hex" -> CollectionVelvetHex
+            "razor-bloom" -> CollectionRazorBloom
+            "neon-seance" -> CollectionNeonSeance
+            "blackout-zine" -> CollectionBlackoutZine
+            "chrome-fang" -> CollectionChromeFang
+            "candy-crypt" -> CollectionCandyCrypt
+            "royal-ruin" -> CollectionRoyalRuin
+            "acid-gargoyle" -> CollectionAcidGargoyle
+            "midnight-stitch" -> CollectionMidnightStitch
             "spray-parade" -> CollectionSprayParade
             "paper-pop" -> CollectionPaperPop
             "ink-rebel" -> CollectionInkRebel

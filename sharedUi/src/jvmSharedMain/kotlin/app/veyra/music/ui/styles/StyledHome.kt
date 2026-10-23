@@ -163,8 +163,10 @@ private fun NightFeature(artwork:Any?,title:String?,artist:String?,open:(()->Uni
 @Composable
 private fun StyleArtwork(model:Any?,modifier:Modifier=Modifier) {
     // An absent, failed or loading cover shows the designed abstract record, never a stock portrait.
+    androidx.compose.runtime.key(model,app.veyra.music.ui.components.LocalHomeArtworkRevision.current) {
     SubcomposeAsyncImage(model,contentDescription=null,modifier=modifier,contentScale=ContentScale.Crop,
         loading={NightRecordFallback(Modifier.fillMaxSize())},error={NightRecordFallback(Modifier.fillMaxSize())})
+    }
 }
 
 @Composable

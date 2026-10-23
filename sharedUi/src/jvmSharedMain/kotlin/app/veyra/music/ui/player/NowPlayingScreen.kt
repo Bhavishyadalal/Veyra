@@ -655,6 +655,7 @@ fun NowPlayingScreen(
     /** Who selected this track in the active Listen Together session. */
     playedBy: String? = null,
     isPlaying: Boolean,
+    playPauseActive: Boolean = isPlaying,
     isLoading: Boolean,
     /**
      * The playhead, read only where it is drawn — never here. Passed as the
@@ -768,12 +769,12 @@ fun NowPlayingScreen(
     // This is produced by the palette's existing 128 px decode and cache. It
     // samples the upper band rather than the whole sleeve because that is what
     // lies beneath the status bar when the player expands to full bleed.
-    val artTopLuminance = rememberArtworkTopBandLuminance(remoteArt, ART_PX)
+    val artTopLuminance = rememberArtworkTopBandLuminance(if(experience.immersive)null else remoteArt, ART_PX)
     val artworkStatusScrimAlpha = topBandScrimAlpha(artTopLuminance)
     // The sleeve's own colour, lifted pale, read off the decode the scrim above
     // already made. Plain white until it is known, and for a sleeve with no
     // colour to give.
-    val artworkTint = rememberPlayerTint(remoteArt, ART_PX) ?: Color.White
+    val artworkTint = rememberPlayerTint(if(experience.immersive)null else remoteArt, ART_PX) ?: Color.White
 
     // Media-player convention: the player always owns light status icons. The
     // top treatment below, rather than a window-flag flip per cover, provides
@@ -1260,7 +1261,7 @@ fun NowPlayingScreen(
     // had and never re-emits, so the `onState` that is the sole writer here
     // never fires again. Keyed on the cover there is nothing to reset: the
     // bitmap really is still loaded, so the state stays true.
-    val art = rememberPlayerArtwork(remoteArt)
+    val art = rememberPlayerArtwork(if(experience.immersive)null else remoteArt)
     // Sticky, unlike [PlayerArtwork.loaded]: the banner is the shape of the player rather
     // than a property of the track in it. Waiting on each new cover would
     // collapse the banner into a card and blow it back out on every skip —
@@ -1616,7 +1617,7 @@ fun NowPlayingScreen(
     }
 
     if (experience.immersive) {
-        ImmersivePlayer(song=song, artwork=remoteArt, canvas=canvas, isPlaying=isPlaying,
+        ImmersivePlayer(song=song, artwork=remoteArt, canvas=canvas, isPlaying=isPlaying, playPauseActive=playPauseActive,
             position=position,durationMs=durationMs,lines=lyricsTranslation.displayedLyrics,
             looking=lyrics==null && !lyricsUnavailable,options=experience,onOptions=PlayerSettings::setExperience,
             onExit={PlayerSettings.setExperience(experience.copy(immersive=false))},onPlayPause=onPlayPause,
@@ -1987,7 +1988,7 @@ fun NowPlayingScreen(
                             },
                             transport = {
                                 TransportRow(
-                                    isPlaying = isPlaying,
+                                    isPlaying = playPauseActive,
                                     isLoading = isLoading || audioVersionSwitching,
                                     previousEnabled = !controlsLocked &&
                                         (hasPrevious || pastRestartPoint),
@@ -3687,7 +3688,7 @@ fun NowPlayingScreen(
                     Spacer(Modifier.height(8.dp + controlSpread / 2))
 
                     TransportRow(
-                        isPlaying = isPlaying,
+                        isPlaying = playPauseActive,
                         isLoading = isLoading || audioVersionSwitching,
                         previousEnabled = !controlsLocked &&
                             (hasPrevious || pastRestartPoint),

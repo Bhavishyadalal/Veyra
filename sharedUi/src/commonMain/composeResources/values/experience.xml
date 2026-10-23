@@ -1,4 +1,5 @@
 <resources>
+  <string name="immersive_more_controls">More controls</string>
   <string name="immersive_worlds">Immersive worlds</string>
   <string name="immersive_worlds_hint">Choose a world. Your music keeps playing.</string>
   <string name="immersive_classic">Classic</string>

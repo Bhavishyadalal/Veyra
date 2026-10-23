@@ -111,6 +111,9 @@ def build(c):
  pack.write_bytes(payload);pack.with_suffix('.zip.sha256').write_text(f'{sha(payload)}  {pack.name}\n')
  return dict(id=c['id'],name=c['name'],description=c['description'],version=1,minAppCode=33,url=URL+'packs/'+pack.name,sha256=sha(payload),bytes=len(payload),preview=URL+c['id']+'/preview.webp')
 if __name__=='__main__':
- entries=[build(c) for c in SPECS];text=json.dumps(dict(schema=1,packs=entries),indent=2)+'\n'
+ entries=[build(c) for c in SPECS]
+ existing=json.loads((ROOT/'catalog.json').read_text())['packs']
+ ids={c['id'] for c in SPECS}
+ text=json.dumps(dict(schema=1,packs=entries+[e for e in existing if e['id'] not in ids]),indent=2)+'\n'
  (ROOT/'catalog.json').write_text(text);(ROOT.parent/'app/src/main/assets/asset-catalog.json').write_text(text)
  print(json.dumps(entries,indent=2))

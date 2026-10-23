@@ -81,7 +81,7 @@ class ThemeLauncherTest {
         val choices=app.veyra.music.data.themes.IconPickerPolicy.options(
             app.veyra.music.data.themes.IconCollection.ATELIER,app.veyra.music.data.themes.GlassFamily.LIQUID)
         assertEquals(12,choices.size)
-        assertEquals(95,AppIcon.entries.size)
+        assertEquals(105,AppIcon.entries.size)
         val expected=catalog.map { row ->
             val id=((row as kotlinx.serialization.json.JsonObject).getValue("id") as kotlinx.serialization.json.JsonPrimitive).content
             assertNull(AppIcon.forTheme(id))
@@ -95,7 +95,7 @@ class ThemeLauncherTest {
         app.veyra.music.data.themes.GlassFamily.entries.forEach { family ->
             val all=p.options(app.veyra.music.data.themes.IconCollection.ALL,family)
             assertEquals(AppIcon.entries.toList(),all)
-            assertEquals(95,all.distinct().size)
+            assertEquals(105,all.distinct().size)
         }
     }
     @Test fun groupedPickerRetainsEveryExistingIconExactlyOnce() {

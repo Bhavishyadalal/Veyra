@@ -437,15 +437,7 @@ private fun GlassNowPlaying(
                     )
                 }
             }
-            if (isLoading) {
-                Box(Modifier.size(glyphSlot), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(
-                        color = contentColor,
-                        strokeWidth = 2.dp,
-                        modifier = Modifier.size(if (isInline) 18.dp else 22.dp),
-                    )
-                }
-            } else {
+
                 IconButton(
                     onClick = {
                         haptics.play(if (isPlaying) Haptic.Pause else Haptic.Resume)
@@ -460,7 +452,7 @@ private fun GlassNowPlaying(
                         modifier = Modifier.size(glyphSize),
                     )
                 }
-            }
+
             // Dropped inline: the collapsed row is sharing its width with the
             // tab pill and the Search circle, and the title is what has to
             // survive that, not a second transport button.

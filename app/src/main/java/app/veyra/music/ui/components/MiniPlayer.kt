@@ -453,15 +453,7 @@ fun MiniPlayer(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            if (isLoading) {
-                Box(Modifier.size(GLYPH_SLOT), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.onBackground,
-                        strokeWidth = 2.dp,
-                        modifier = Modifier.size(SPINNER_SIZE),
-                    )
-                }
-            } else {
+
                 IconButton(
                     onClick = {
                         haptics.play(if (isPlaying) Haptic.Pause else Haptic.Resume)
@@ -476,7 +468,7 @@ fun MiniPlayer(
                         modifier = Modifier.size(GLYPH_SIZE),
                     )
                 }
-            }
+
             Spacer(Modifier.width(TRANSPORT_GAP))
             // Faded and inert rather than removed while the host holds the
             // controls, so the bar keeps its shape — see [controlsLocked].

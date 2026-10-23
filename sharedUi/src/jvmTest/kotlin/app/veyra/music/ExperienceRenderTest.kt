@@ -6,6 +6,7 @@ import androidx.compose.foundation.verticalScroll
 import app.veyra.music.data.model.ShelfItem
 import app.veyra.music.ui.screens.PersonalizedHomeShortcuts
 import app.veyra.music.ui.screens.PersonalizedSpeedDial
+import androidx.compose.material3.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.*
@@ -135,6 +136,109 @@ class ExperienceRenderTest {
             } finally {SwingUtilities.invokeAndWait {scene?.close()}}
         }
     }
+    @Test fun bufferingTransportAndImmersiveIntentToggleWithoutWaitingForAudio() {
+        PlayerPlatform.install(RenderPlayerHost())
+        val owner=object:LifecycleOwner {override val lifecycle=LifecycleRegistry.createUnsafe(this).apply {currentState=Lifecycle.State.RESUMED}}
+        for(immersive in listOf(false,true)) {
+            var wantsPlay by mutableStateOf(true)
+            var taps=0
+            var scene:ImageComposeScene?=null
+            try {
+                SwingUtilities.invokeAndWait {
+                    scene=ImageComposeScene(390,844) {
+                        CompositionLocalProvider(LocalLifecycleOwner provides owner,LocalPlayerReducedMotion provides true) {
+                            MaterialTheme(colorScheme=darkColorScheme()) {
+                                if(immersive) ImmersivePlayer(song=Song("fixture","Buffering song","Veyra",null),artwork=null,canvas=null,isPlaying=false,
+                                    position=remember {PlaybackPosition()},durationMs=180000,lines=emptyList(),looking=false,
+                                    options=ExperienceOptions(immersive=true,immersiveStyle=ImmersiveStyle.MINIMAL_NIGHT),onOptions={},onExit={},
+                                    onPlayPause={wantsPlay=!wantsPlay;taps++},onPrevious={},onNext={},hasPrevious=false,hasNext=false,
+                                    locked=false,onBlocked={},onSeek={},onSource={},onTiming={},onSongOptions={},windowed=false,playPauseActive=wantsPlay)
+                                else TransportRow(isPlaying=wantsPlay,isLoading=true,previousEnabled=false,nextEnabled=false,
+                                    onPrevious={},onPlayPause={wantsPlay=!wantsPlay;taps++},onNext={})
+                            }
+                        }
+                    }
+                }
+                for(label in listOf("Pause","Play","Pause")) {
+                    repeat(3) {i->SwingUtilities.invokeAndWait {scene!!.render((taps*10+i)*50_000_000L).close()}}
+                    SwingUtilities.invokeAndWait {
+                        fun SemanticsNode.all():List<SemanticsNode> = listOf(this)+children.flatMap {it.all()}
+                        val node=scene!!.semanticsOwners.flatMap {it.rootSemanticsNode.all()}.firstOrNull {
+                            it.config.getOrNull(SemanticsProperties.ContentDescription)?.any {name->name.equals(label,true)}==true && it.config.getOrNull(SemanticsActions.OnClick)!=null
+                        }
+                        assertNotNull("$label must remain actionable while audio is buffering, immersive=$immersive",node)
+                        assertFalse(node!!.config.contains(SemanticsProperties.Disabled))
+                        assertEquals(true,node.config[SemanticsActions.OnClick].action?.invoke())
+                    }
+                }
+                assertEquals(3,taps)
+            } finally {SwingUtilities.invokeAndWait {scene?.close()}}
+        }
+    }
+
+    @Test fun coveredPagesDisposeEffectsAndRestoreSavedUi() {
+        var covered by mutableStateOf(false)
+        var active=0
+        var value=-1
+        var change:()->Unit={}
+        var scene:ImageComposeScene?=null
+        try {
+            SwingUtilities.invokeAndWait {
+                scene=ImageComposeScene(390,844) {
+                    app.veyra.music.ui.motion.CoveredAppPages(covered) {
+                        var saved by androidx.compose.runtime.saveable.rememberSaveable {mutableIntStateOf(0)}
+                        value=saved;change={saved=7}
+                        DisposableEffect(Unit) {active++;onDispose {active--}}
+                        androidx.compose.material3.Text("Saved $saved")
+                    }
+                }
+                scene!!.render(0).close();assertEquals(1,active)
+                change();scene!!.render(50_000_000L).close();assertEquals(7,value)
+                covered=true;scene!!.render(100_000_000L).close();assertEquals(0,active)
+                covered=false;scene!!.render(150_000_000L).close();assertEquals(1,active);assertEquals(7,value)
+            }
+        } finally {SwingUtilities.invokeAndWait {scene?.close()}}
+    }
+
+    @Test fun emptyHomeSnapshotsDoNotCountAsUsefulAndBlankTilesAreRemoved() {
+        val placeholder=app.veyra.music.data.model.HomeShelf("Empty",listOf(ShelfItem(" ","",null,null,null)))
+        val useful=app.veyra.music.data.model.HomeShelf("Music",listOf(ShelfItem("Song","Artist",null,"id",null)))
+        assertFalse(app.veyra.music.data.home.hasUsableHomeContent(listOf(placeholder)))
+        assertTrue(app.veyra.music.data.home.hasUsableHomeContent(listOf(placeholder,useful)))
+        assertEquals(listOf(useful),app.veyra.music.data.home.usableHomeShelves(listOf(placeholder,useful)))
+    }
+
+    @Test fun immersiveMenuHasModePreviewsAndAdaptsToWideAndLargeText() {
+        PlayerPlatform.install(RenderPlayerHost())
+        val root=generateSequence(File(System.getProperty("user.dir"))) {it.parentFile}.first {File(it,"themes/matcha-mischief").isDirectory}
+        val output=File(root,"themes/previews/immersive-worlds").apply {mkdirs()}
+        for(large in listOf(false,true)) {
+            var scene:ImageComposeScene?=null
+            try {
+                SwingUtilities.invokeAndWait {
+                    scene=ImageComposeScene(if(large)360 else 900,844,density=Density(1f,if(large)1.8f else 1f)) {
+                        CompositionLocalProvider(LocalLayoutDirection provides if(large)LayoutDirection.Rtl else LayoutDirection.Ltr) {
+                            MaterialTheme(colorScheme=darkColorScheme()) {
+                                Surface {
+                                    ImmersiveMenuContent(ExperienceOptions(immersive=true,immersiveStyle=ImmersiveStyle.THEME_WORLD),null,{}, {}, {}, {}, {})
+                                }
+                            }
+                        }
+                    }
+                }
+                repeat(10){i->SwingUtilities.invokeAndWait {scene!!.render(i*50_000_000L).close()}}
+                SwingUtilities.invokeAndWait {
+                    fun SemanticsNode.all():List<SemanticsNode> = listOf(this)+children.flatMap {it.all()}
+                    val nodes=scene!!.semanticsOwners.flatMap {it.rootSemanticsNode.all()}
+                    assertTrue(nodes.any {it.config.getOrNull(SemanticsProperties.Text)?.any {text->text.text.contains("Immersive worlds")}==true})
+                    assertTrue(nodes.count {it.config.getOrNull(SemanticsActions.OnClick)!=null}>=6)
+                    val image=scene!!.render(1_000_000_000L)
+                    try {File(output,"menu-${if(large)"large-rtl" else "wide"}.webp").writeBytes(image.encodeToData(EncodedImageFormat.WEBP,85)!!.bytes)} finally {image.close()}
+                }
+            } finally {SwingUtilities.invokeAndWait {scene?.close()}}
+        }
+    }
+
 }
 
 private class RenderPlayerHost:PlayerHost {

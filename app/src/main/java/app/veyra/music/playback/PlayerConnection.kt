@@ -46,6 +46,8 @@ import java.util.Locale
 data class PlayerState(
     val song: Song? = null,
     val isPlaying: Boolean = false,
+    /** Transport intent stays true while buffering; isPlaying remains the actual audio clock. */
+    val playWhenReady: Boolean = false,
     /**
      * The playhead. A field rather than a value: its identity never changes, so
      * carrying it here costs no invalidation — see [PlaybackPosition].
@@ -351,6 +353,7 @@ fun rememberPlayerState(controller: MediaController?): PlayerState {
             state = state.copy(
                 song = item?.toSong(),
                 isPlaying = player.isPlaying,
+                playWhenReady = player.playWhenReady && player.playbackState != Player.STATE_ENDED,
                 durationMs = player.duration.coerceAtLeast(0L),
                 error = error,
                 isLoading = player.playbackState == Player.STATE_BUFFERING,

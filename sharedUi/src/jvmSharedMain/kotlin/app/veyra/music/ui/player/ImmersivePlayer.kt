@@ -60,6 +60,7 @@ internal fun ImmersivePlayer(
     hasPrevious: Boolean, hasNext: Boolean, locked: Boolean, onBlocked: () -> Unit,
     onSeek: (Long) -> Unit, onSource: () -> Unit, onTiming: () -> Unit, onSongOptions: () -> Unit,
     windowed: Boolean = true,
+    playPauseActive: Boolean = isPlaying,
 ) {
     var controls by rememberSaveable { mutableStateOf(true) }
     var settings by rememberSaveable { mutableStateOf(false) }
@@ -167,7 +168,7 @@ internal fun ImmersivePlayer(
                     }
                     FilledIconButton(onClick=onPlayPause,modifier=Modifier.size(64.dp),shape=androidx.compose.foundation.shape.CircleShape,
                         colors=IconButtonDefaults.filledIconButtonColors(containerColor=ink,contentColor=Color(0xFF10151E))) {
-                        ThemeIcon(if(isPlaying)Icons.Rounded.Pause else Icons.Rounded.PlayArrow,stringResource(if(isPlaying)Res.string.immersive_pause else Res.string.immersive_play),Modifier.size(32.dp),Color(0xFF10151E),if(isPlaying)"pause" else "play")
+                        ThemeIcon(if(playPauseActive)Icons.Rounded.Pause else Icons.Rounded.PlayArrow,stringResource(if(playPauseActive)Res.string.immersive_pause else Res.string.immersive_play),Modifier.size(32.dp),Color(0xFF10151E),if(playPauseActive)"pause" else "play")
                     }
                     IconButton(onClick=onNext,enabled=hasNext && !locked,modifier=Modifier.size(48.dp)) {
                         ThemeIcon(Icons.Rounded.SkipNext,stringResource(Res.string.immersive_next),Modifier.size(28.dp),if(hasNext && !locked)Color.White else Color.White.copy(.3f),"next")
@@ -190,43 +191,10 @@ internal fun ImmersivePlayer(
                         Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {transport()}
                     }
                 }
-                if(settings) MaterialTheme(colorScheme=base) { ModalBottomSheet(onDismissRequest={settings=false}) {
-                    Column(Modifier.fillMaxWidth().heightIn(max=600.dp).verticalScroll(rememberScrollState()).padding(horizontal=24.dp).padding(bottom=32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                        Text(stringResource(Res.string.immersive_worlds),style=MaterialTheme.typography.headlineSmall)
-                        Text(stringResource(Res.string.immersive_worlds_hint),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
-                        ImmersiveStyle.entries.forEach { style ->
-                            ImmersiveModeCard(style,options.immersiveStyle==style) {
-                                onOptions(options.copy(immersiveStyle=style));settings=false;controls=true
-                            }
-                        }
-                        if(options.immersiveStyle==ImmersiveStyle.CLASSIC) {
-                            HorizontalDivider()
-                            ImmersiveChoices(stringResource(Res.string.immersive_background),ImmersiveBackground.entries,options.immersiveBackground,
-                                { value -> stringResource(when(value) {
-                                    ImmersiveBackground.SONG -> Res.string.immersive_song_background
-                                    ImmersiveBackground.THEME -> Res.string.immersive_theme_background
-                                    ImmersiveBackground.BLEND -> Res.string.immersive_blend_background
-                                    ImmersiveBackground.MINIMAL -> Res.string.immersive_minimal_background
-                                }) }) {onOptions(options.copy(immersiveBackground=it))}
-                            ImmersiveChoices(stringResource(Res.string.immersive_cover),ImmersiveCover.entries,options.immersiveCover,
-                                { value -> stringResource(when(value) {
-                                    ImmersiveCover.FILL -> Res.string.immersive_fill
-                                    ImmersiveCover.FIT -> Res.string.immersive_fit
-                                    ImmersiveCover.ZOOMED -> Res.string.immersive_zoomed
-                                }) }) {onOptions(options.copy(immersiveCover=it))}
-                            ImmersiveChoices(stringResource(Res.string.immersive_lyrics_position),ImmersiveLyricsPosition.entries,options.immersiveLyrics,
-                                { value -> stringResource(when(value) {
-                                    ImmersiveLyricsPosition.TOP -> Res.string.immersive_top
-                                    ImmersiveLyricsPosition.CENTER -> Res.string.immersive_center
-                                    ImmersiveLyricsPosition.BOTTOM -> Res.string.immersive_bottom
-                                    ImmersiveLyricsPosition.FULL -> Res.string.immersive_full
-                                }) }) {onOptions(options.copy(immersiveLyrics=it))}
-                        }
-                        HorizontalDivider()
-                        TextButton(onClick={settings=false;onSource()}) { Text(stringResource(Res.string.immersive_lyrics_source)) }
-                        TextButton(onClick={settings=false;onTiming()}) { Text(stringResource(Res.string.immersive_lyrics_timing)) }
-                        TextButton(onClick={settings=false;onSongOptions()}) { Text(stringResource(Res.string.immersive_song_options)) }
-                    }
+                if(settings) MaterialTheme(colorScheme=base) { ModalBottomSheet(onDismissRequest={settings=false},sheetMaxWidth=900.dp) {
+                    ImmersiveMenuContent(options,artwork,onOptions,
+                        onSelectStyle={onOptions(options.copy(immersiveStyle=it));settings=false;controls=true},
+                        onSource={settings=false;onSource()},onTiming={settings=false;onTiming()},onSongOptions={settings=false;onSongOptions()})
                 } }
             }
         }
@@ -235,7 +203,7 @@ internal fun ImmersivePlayer(
 }
 
 @OptIn(ExperimentalLayoutApi::class)
-@Composable private fun <T> ImmersiveChoices(label:String,values:List<T>,selected:T,title:@Composable (T)->String,onSelect:(T)->Unit) {
+@Composable internal fun <T> ImmersiveChoices(label:String,values:List<T>,selected:T,title:@Composable (T)->String,onSelect:(T)->Unit) {
     Column(verticalArrangement=Arrangement.spacedBy(4.dp)) {
         Text(label,style=MaterialTheme.typography.titleSmall)
         FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {

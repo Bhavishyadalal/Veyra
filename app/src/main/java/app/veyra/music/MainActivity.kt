@@ -1063,11 +1063,12 @@ private fun VeyraApp(
     val togglePlayPause: () -> Unit = {
         controller?.let { c ->
             val party = ListenTogether.state.value
-            if (party.controlsLocked && !party.playback.isPlaying && !c.isPlaying) {
+            if (party.controlsLocked && !party.playback.isPlaying && !c.playWhenReady) {
                 showHostOnlyNotice()
-            } else if (c.isPlaying) {
+            } else if (c.playWhenReady && c.playbackState != Player.STATE_ENDED) {
                 c.pause()
             } else {
+                if (c.playbackState == Player.STATE_ENDED) c.seekToDefaultPosition()
                 c.play()
             }
         }
@@ -2381,6 +2382,7 @@ private fun VeyraApp(
             windowWidth = windowWidth,
             windowHeight = windowHeight,
             isPlaying = player.isPlaying,
+            playPauseActive = player.playWhenReady,
             isLoading = playPauseBusy,
             position = player.position,
             durationMs = player.durationMs,
@@ -2715,6 +2717,9 @@ private fun VeyraApp(
         // the feed, the frosted bars, the tab row — becomes the left half of
         // a row, and the player is the right. Off a tablet the row has the
         // one child it always had and changes nothing.
+        // Dispose covered pages/effects, retaining their saveable UI and root-owned scroll states.
+        val immersiveCovered = showNowPlaying && playerSong != null && experience.immersive
+        app.veyra.music.ui.motion.CoveredAppPages(covered=immersiveCovered) {
         Row(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f).fillMaxHeight()
                 .then(if (foldingNavigation) Modifier.nestedScroll(navBarScroll) else Modifier)) {
@@ -4101,7 +4106,7 @@ private fun VeyraApp(
                         onTabSelected = onTabSelected,
                         scrollConnection = navBarScroll,
                         song = player.song,
-                        isPlaying = player.isPlaying,
+                        isPlaying = player.playWhenReady,
                         isLoading = playPauseBusy,
                         onPlayPause = {
                             togglePlayPause()
@@ -4138,7 +4143,7 @@ private fun VeyraApp(
                         MiniPlayer(
                             song = song,
                             position = player.position, durationMs = player.durationMs,
-                            isPlaying = player.isPlaying,
+                            isPlaying = player.playWhenReady,
                             isLoading = playPauseBusy,
                             hazeState = hazeState,
                             onPlayPause = {
@@ -4169,6 +4174,8 @@ private fun VeyraApp(
             }
 
         }
+
+        } // covered app-pages
 
         val playerRaised = showNowPlaying && playerSong != null
 

@@ -472,7 +472,7 @@ internal fun TransportRow(
         )
         TransportGlyph(
             icon = if (isPlaying) Res.drawable.ic_player_pause else Res.drawable.ic_player_play,
-            contentDescription = stringResource(if (isLoading) Res.string.player_buffering else if (isPlaying) Res.string.pause else Res.string.play),
+            contentDescription = stringResource(if (isPlaying) Res.string.pause else Res.string.play),
             size = playSize, touchSize = playTouch, onClick = onPlayPause,
             busy = isLoading, emphasized = true,
             haptic = if (isPlaying) Haptic.Pause else Haptic.Resume,

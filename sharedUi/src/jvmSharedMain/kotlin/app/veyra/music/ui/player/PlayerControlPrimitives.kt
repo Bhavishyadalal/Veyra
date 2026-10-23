@@ -50,6 +50,7 @@ internal fun PlayerControlSurface(
     enabled: Boolean = true,
     selected: Boolean? = null,
     busy: Boolean = false,
+    keepContentWhileBusy: Boolean = false,
     reducedMotion: Boolean = false,
     tint: Color = Color.White,
     visualSize: Dp? = null,
@@ -76,7 +77,7 @@ internal fun PlayerControlSurface(
     val indicatorSize = if ((visualSize ?: 48.dp) >= 64.dp) 36.dp else 24.dp
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
-    val available = enabled && !busy && LocalPlayerControlsInteractive.current
+    val available = enabled && (!busy || keepContentWhileBusy) && LocalPlayerControlsInteractive.current
     var held by remember {mutableStateOf(false)}
     val currentHold by rememberUpdatedState(onHold)
     val holdTimeout=androidx.compose.ui.platform.LocalViewConfiguration.current.longPressTimeoutMillis
@@ -151,7 +152,15 @@ internal fun PlayerControlSurface(
                 .clearAndSetSemantics {},
             contentAlignment = Alignment.Center,
         ) {
-            Crossfade(
+            if (keepContentWhileBusy) {
+                androidx.compose.runtime.CompositionLocalProvider(
+                    app.veyra.music.ui.themes.LocalThemeControlPressed provides (pressed && available)) { content() }
+                if (busy) {
+                    val badge=Modifier.align(Alignment.BottomEnd).padding(6.dp).size(14.dp)
+                    if(reducedMotion) Canvas(badge) {drawArc(controlTint,-90f,260f,false,style=Stroke(1.5.dp.toPx(),cap=StrokeCap.Round))}
+                    else CircularProgressIndicator(badge,color=controlTint,strokeWidth=1.5.dp)
+                }
+            } else Crossfade(
                 busy,
                 modifier = Modifier.fillMaxSize(),
                 animationSpec = tween(playerMotionMillis(reducedMotion, VeyraMotion.Feedback)),
@@ -299,6 +308,7 @@ internal fun PlayerTransportControl(
         Modifier.size(touchSize),
         enabled = enabled,
         busy = busy,
+        keepContentWhileBusy = emphasized,
         onHold = onHold,
         decoration = decoration,
         reducedMotion = reducedMotion,
@@ -311,11 +321,11 @@ internal fun PlayerTransportControl(
         containerColor = if (emphasized) Color.Black.copy(alpha = 0.32f) else containerColor,
     ) {
         val path = themeKey?.let { pack?.asset(it) }
-        val normalPainter = if(path==null) painter else app.veyra.music.ui.themes.rememberThemeGlyphPainter(path,painter,256)
+        val normalPainter = if(path==null) painter else androidx.compose.runtime.key(path) {app.veyra.music.ui.themes.rememberThemeGlyphPainter(path,painter,256)}
         val pressedPath = themeKey?.let {pack?.asset("${it}_pressed")}
         // Decode the small pressed state alongside the normal glyph; never flash a blank
         // or native placeholder if a user taps before the pressed file is ready.
-        val pressedPainter = if(pressedPath==null) null else app.veyra.music.ui.themes.rememberThemeGlyphPainter(pressedPath,normalPainter,256)
+        val pressedPainter = if(pressedPath==null) null else androidx.compose.runtime.key(pressedPath) {app.veyra.music.ui.themes.rememberThemeGlyphPainter(pressedPath,normalPainter,256)}
         val pressedReady = pressedPainter?.state?.collectAsState()?.value is coil3.compose.AsyncImagePainter.State.Success
         val themedPainter = if(app.veyra.music.ui.themes.LocalThemeControlPressed.current && pressedReady) pressedPainter else normalPainter
         // A pressed skin is feedback, not a new media item. Draw it directly instead of

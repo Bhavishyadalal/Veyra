@@ -1565,6 +1565,12 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     /** Call when the home tab becomes visible. */
     fun onHomeShown() {
+        val useful = app.veyra.music.data.home.hasUsableHomeContent((_home.value as? UiState.Success)?.data.orEmpty())
+        if (!useful && homeLoadJob?.isActive != true && homeNetwork.online.value) {
+            homeStale=false
+            loadHome()
+            return
+        }
         if (!homeStale) return
         homeStale = false
         // A first load already in flight will pick the new play up by itself.
@@ -1838,13 +1844,15 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     if (_home.value is UiState.Loading) publishHomeState(UiState.Success(emptyList()))
                     return@launch
                 }
-                homeHoldForCore = _home.value is UiState.Success
+                homeHoldForCore = app.veyra.music.data.home.hasUsableHomeContent((_home.value as? UiState.Success)?.data.orEmpty())
                 _homeUpdating.value = true
                 _homeRecentlyPlayedLoading.value = _signedIn.value && !homeHoldForCore
                 _homePendingShelves.value = 1 + YtMusicRepository.HOME_SUPPLEMENT_BROWSE_IDS.size
                 val coreRequest = launch {
                     try {
-                        YtMusicRepository.home().onSuccess { feed ->
+                        val response = withTimeoutOrNull(20_000L) { YtMusicRepository.home() }
+                            ?: Result.failure(java.io.IOException("Home refresh timed out. Pull to refresh to try again."))
+                        response.onSuccess { feed ->
                             if (!isCurrentHomeLoad(identity, generation)) return@onSuccess
                             homeContinuation = feed.continuation
                             homeCoreReady = true
@@ -1952,13 +1960,14 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         identity == listenerKey() && generation == homeLoadGeneration.get()
 
     private fun publishHomeShelves(shelves: List<HomeShelf>, prepend: Boolean = false) {
+        val usableShelves = app.veyra.music.data.home.usableHomeShelves(shelves)
         val existing = homeNetworkShelves
         homeNetworkShelves = if (prepend) {
-            val replacing = shelves.map { it.title.lowercase(Locale.ROOT) }.toSet()
+            val replacing = usableShelves.map { it.title.lowercase(Locale.ROOT) }.toSet()
             homeSeenTitles.addAll(replacing)
-            shelves + existing.filterNot { it.title.lowercase(Locale.ROOT) in replacing }
+            usableShelves + existing.filterNot { it.title.lowercase(Locale.ROOT) in replacing }
         } else {
-            existing + shelves.withoutRepeatsOf(existing)
+            existing + usableShelves.withoutRepeatsOf(existing)
                 .filter { homeSeenTitles.add(it.title.lowercase(Locale.ROOT)) }
         }
         // Keep a useful previous feed until the new core succeeds. Supplements cannot wipe it.

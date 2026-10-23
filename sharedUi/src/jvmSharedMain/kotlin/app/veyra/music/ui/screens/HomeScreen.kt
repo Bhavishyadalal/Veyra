@@ -79,7 +79,9 @@ import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Storage
 import app.veyra.music.ui.icons.VeyraIcons
-import coil3.compose.AsyncImage
+import app.veyra.music.ui.components.HomeArtwork
+import app.veyra.music.ui.components.LocalHomeArtworkRevision
+import androidx.compose.runtime.CompositionLocalProvider
 import app.veyra.music.data.model.CARD_ART_PX
 import app.veyra.music.data.model.HEADER_ART_PX
 import app.veyra.music.data.home.HomeSectionOption
@@ -173,6 +175,9 @@ fun HomeScreen(
     onOpenLocalMusic: (() -> Unit)? = null,
     onHomeShortcut: ((Int)->Unit)? = null,
 ) {
+    var artworkRevision by rememberSaveable {mutableStateOf(0)}
+    val retryArtwork: () -> Unit = {artworkRevision++;onRefresh()}
+    val retryFeed: () -> Unit = {artworkRevision++;onRetry()}
     val appStyle = LocalAppStyle.current
     val experience by app.veyra.music.ui.player.PlayerPlatform.host.settings.experience.collectAsStateWithLifecycle()
     val speedDial=remember(state,experience.homeSpeedDial,experience.homeSpeedDialCount) { if(!experience.homeSpeedDial)emptyList() else displayHomeShelves(state).asSequence().flatMap {it.items.asSequence()}.distinctBy {it.videoId ?: it.browseId ?: it.title}.take(experience.homeSpeedDialCount).toList() }
@@ -203,10 +208,11 @@ fun HomeScreen(
                 modifier = Modifier.padding(horizontal = PAGE_GUTTER),
             )
         }
+    CompositionLocalProvider(LocalHomeArtworkRevision provides artworkRevision) {
     FeedShimmerHost(enabled = !offline && (displayState is UiState.Loading || recentlyPlayedLoading || loadingMore)) {
         PullToRefresh(
             refreshing = refreshing,
-            onRefresh = onRefresh,
+            onRefresh = retryArtwork,
             state = pullState,
             modifier = Modifier.weight(1f).fillMaxWidth(),
         ) {
@@ -276,7 +282,7 @@ fun HomeScreen(
                         }
                     }
                     is UiState.Error -> item {
-                        MessageState(state.message, actionLabel = stringResource(Res.string.retry), onAction = onRetry)
+                        MessageState(state.message, actionLabel = stringResource(Res.string.retry), onAction = retryFeed)
                     }
                     is UiState.Success -> {
                         if (recentlyPlayedLoading && !offline) {
@@ -290,7 +296,7 @@ fun HomeScreen(
                             item(key = "home:empty", contentType = "message") {
                                 HomeEmptyContent(stringResource(Res.string.home_empty_title),
                                     stringResource(Res.string.home_empty_subtitle), stringResource(Res.string.home_refresh),
-                                    refreshing, onRefresh, Modifier.padding(horizontal = PAGE_GUTTER))
+                                    refreshing, retryArtwork, Modifier.padding(horizontal = PAGE_GUTTER))
                             }
                         }
                         itemsIndexedShelves(
@@ -331,6 +337,8 @@ fun HomeScreen(
 
     }
     }
+
+    } // artwork retry scope
 
     if (!offline && onLoadMore != null && state is UiState.Success && state.data.isNotEmpty()) {
         val loadMore by rememberUpdatedState(onLoadMore)
@@ -574,7 +582,7 @@ fun CompactTrackRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(Modifier.size(48.dp)) {
-            AsyncImage(
+            HomeArtwork(
                 model = thumbnailUrl.artworkAt(ROW_ART_PX),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
@@ -877,7 +885,7 @@ private fun HeroCard(
             .longPressMenuClickable(onClick = onClick, onLongClick = onLongPress)
             .contextClick(onLongPress),
     ) {
-        AsyncImage(
+        HomeArtwork(
             model = item.thumbnailUrl.artworkAt(HEADER_ART_PX),
             contentDescription = null,
             contentScale = ContentScale.Crop,
@@ -1089,7 +1097,7 @@ internal fun ShelfCard(
                         .thumbnailBorder(artworkShape(RoundedCornerShape(12.dp)))
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                 ) {
-                    AsyncImage(
+                    HomeArtwork(
                         model = item.thumbnailUrl.artworkAt(CARD_ART_PX),
                         contentDescription = null,
                         contentScale = androidx.compose.ui.layout.ContentScale.Crop,
