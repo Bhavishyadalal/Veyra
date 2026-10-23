@@ -5,6 +5,15 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class ExperiencePolicyTest {
+    @Test fun immersiveWorldPreferencesPreserveClassicAndRoundTripAllModes() {
+        assertEquals(ImmersiveStyle.CLASSIC,ExperienceOptions.decode("""{"immersive":true}""").immersiveStyle)
+        assertEquals(ImmersiveStyle.CLASSIC,ExperienceOptions.decode("""{"immersiveStyle":"FUTURE_WORLD"}""").immersiveStyle)
+        for(style in ImmersiveStyle.entries) {
+            val options=ExperienceOptions(immersive=true,immersiveStyle=style,immersiveBackground=ImmersiveBackground.BLEND)
+            assertEquals(options,ExperienceOptions.decode(options.encode()))
+        }
+    }
+
     @Test fun defaultsPreserveExistingPlayerAndNetworkPolicy() {
         val options=ExperienceOptions.decode(null)
         assertFalse(options.immersive)

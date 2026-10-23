@@ -70,6 +70,7 @@ import androidx.compose.material.icons.rounded.FastForward
 import androidx.compose.material.icons.rounded.FastRewind
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.IosShare
+import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.MoreHoriz
 import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.material3.MaterialTheme
@@ -1940,6 +1941,7 @@ fun NowPlayingScreen(
                                     showRevertCue = showRevertCue,
                                     onToggleLike = onToggleLike,
                                     onOpenMenu = onOpenMenu,
+                                    onImmersive = {PlayerSettings.setExperience(experience.copy(immersive=true))},
                                     onOpenAlbum = onOpenAlbum,
                                     onOpenArtist = onOpenArtist,
                                 )
@@ -3345,6 +3347,10 @@ fun NowPlayingScreen(
                                 )
                                 Spacer(Modifier.width(8.dp))
                             }
+                            CircleGlyph(icon=Icons.Rounded.Fullscreen,
+                                contentDescription=stringResource(Res.string.immersive_mode),
+                                onClick={PlayerSettings.setExperience(experience.copy(immersive=true))})
+                            Spacer(Modifier.width(8.dp))
                             // While the lyrics are up the menu glyph becomes the share
                             // entry: the same pick mode a long-press on a line opens,
                             // only on phones where a card can actually be made. While

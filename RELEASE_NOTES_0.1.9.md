@@ -1,6 +1,18 @@
 # Veyra 0.1.9
 
-**Stable · Android version code 36 · promoted from 0.1.9-beta1 build 35**
+**Stable · Android version code 37 · includes the completed 0.1.9-beta1**
+
+## Immersive Worlds · build 37
+
+- Direct Immersive button beside the player menu in portrait and landscape.
+- Keep **Classic**, and choose **Artwork Cinema**, **Theme World**, **Lyrics Focus**, **Minimal Night** or **Landscape Stage**.
+- A six-mode picker with descriptions and selected state replaces cycling through unlabeled presets. Classic keeps its independent background, artwork-fit and lyric-placement choices.
+- Redesigned playback dock with real seeking, elapsed/total time and larger playback controls. It adapts to wide windows; exit and mode selection stay accessible when the dock auto-hides.
+- Real current song artwork and shared synced lyrics, themed scenery, missing-art/lyrics fallbacks and saved mode preferences. No second audio player or forced orientation change.
+
+[Implementation, checks and limits](verification/IMMERSIVE-WORLDS-0.1.9.md).
+
+The original stable promotion was build 36, from completed beta build 35.
 
 ## Make it yours
 

@@ -1,10 +1,10 @@
 # Veyra source downloads
 
-**Stable 0.1.9 · code 36** includes 62 themes, five independent asset packs and 95 launcher choices. These complete Android Studio projects include licenses and backend provenance. **Source ZIPs are not APKs.**
+**Stable 0.1.9 · code 37** adds [six immersive presentations](../verification/IMMERSIVE-WORLDS-0.1.9.md) with direct player access. It includes 62 themes, five independent asset packs and 95 launcher choices. These complete Android Studio projects include licenses and backend provenance. **Source ZIPs are not APKs.**
 
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
-| Current stable · `main`, `stable/0.1.9` | 0.1.9 / code 36 | [Download](Veyra_Android_Source_0.1.9_Stable.zip) | [SHA-256](Veyra_Android_Source_0.1.9_Stable.zip.sha256) |
+| Current stable · `main`, `stable/0.1.9` | 0.1.9 / code 37 | [Download](Veyra_Android_Source_0.1.9_Stable.zip) | [SHA-256](Veyra_Android_Source_0.1.9_Stable.zip.sha256) |
 | Completed preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 35 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 | Historical preview · `preview/0.1.8-beta1` | 0.1.8-beta1 / code 27 | [Download](Veyra_Android_Source_0.1.8-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.8-beta1.zip.sha256) |
 | Historical preview · `preview/0.1.7-beta1` | 0.1.7-beta1 / code 25 | [Download](Veyra_Android_Source_0.1.7-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.7-beta1.zip.sha256) |

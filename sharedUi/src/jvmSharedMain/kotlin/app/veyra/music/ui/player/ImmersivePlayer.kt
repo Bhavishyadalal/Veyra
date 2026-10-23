@@ -63,12 +63,13 @@ internal fun ImmersivePlayer(
 ) {
     var controls by rememberSaveable { mutableStateOf(true) }
     var settings by rememberSaveable { mutableStateOf(false) }
+    var scrubbing by remember { mutableStateOf(false) }
     val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
     val active = lifecycle.isAtLeast(Lifecycle.State.RESUMED)
     val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     val playhead = rememberLyricPlayhead(position)
     val density=LocalDensity.current
-    var footerHeight by remember {mutableStateOf(104.dp)}
+    var footerHeight by remember {mutableStateOf(210.dp)}
     val threshold = with(density) { 72.dp.toPx() }
     val latestPrevious by rememberUpdatedState(onPrevious)
     val latestNext by rememberUpdatedState(onNext)
@@ -78,15 +79,15 @@ internal fun ImmersivePlayer(
     val latestHasNext by rememberUpdatedState(hasNext)
     val accessibility = LocalAccessibilityManager.current
     val timeout = accessibility?.calculateRecommendedTimeoutMillis(5500, containsIcons=true, containsText=true, containsControls=true) ?: 5500
-    LaunchedEffect(controls, settings, isPlaying, active, timeout) {
-        if (controls && !settings && isPlaying && active) { delay(timeout); controls = false }
+    LaunchedEffect(controls, settings, scrubbing, isPlaying, active, timeout) {
+        if (controls && !settings && !scrubbing && isPlaying && active) { delay(timeout); controls = false }
     }
     val content: @Composable () -> Unit = {
         // White lyric ink always has a dark local backdrop, even with a light downloaded theme.
         val base = MaterialTheme.colorScheme
         MaterialTheme(colorScheme = base.copy(onSurface = Color.White, onBackground = Color.White,
             onSurfaceVariant = Color.White.copy(alpha = .76f))) {
-            Box(Modifier.fillMaxSize().background(Color(0xFF080C12)).pointerInput(Unit) {
+            BoxWithConstraints(Modifier.fillMaxSize().background(Color(0xFF080C12)).pointerInput(Unit) {
                 detectTapGestures(onTap = { controls = !controls })
             }.pointerInput(threshold) {
                 var drag = 0f
@@ -100,6 +101,12 @@ internal fun ImmersivePlayer(
                         drag = 0f
                     }) { change, amount -> change.consume(); drag += amount }
             }) {
+                val wide = maxWidth >= 600.dp && maxWidth > maxHeight
+                val ink = options.immersiveStyle.ink(base.primary)
+                if (options.immersiveStyle != ImmersiveStyle.CLASSIC) {
+                    ImmersiveWorld(options.immersiveStyle,song,artwork,position,durationMs,lines,looking,isPlaying && active,
+                        controls,locked,onBlocked,onSeek,{controls=true},{controls=false},footerHeight)
+                } else {
                 val themeArt = options.immersiveBackground == ImmersiveBackground.THEME || options.immersiveBackground == ImmersiveBackground.BLEND
                 val songArt = options.immersiveBackground == ImmersiveBackground.SONG || options.immersiveBackground == ImmersiveBackground.BLEND
                 if (themeArt) ThemeScene(Modifier.fillMaxSize(), prominent = true)
@@ -115,7 +122,7 @@ internal fun ImmersivePlayer(
                         onDrawWithContent {drawContent();drawRect(mask,blendMode=BlendMode.DstIn)}
                     } else Modifier)) {
                         AsyncImage(artwork, null, Modifier.fillMaxSize(), contentScale = if (options.immersiveCover == ImmersiveCover.FIT) ContentScale.Fit else ContentScale.Crop)
-                        if (canvas != null && !reduceMotion) CanvasArtworkPlayer(canvas, isPlaying && active,
+                        if (canvas != null && !reduceMotion && !options.dataSaver) CanvasArtworkPlayer(canvas, isPlaying && active,
                             Modifier.fillMaxSize(), contentMode = if (options.immersiveCover == ImmersiveCover.FIT) CanvasContentMode.FIT_PORTRAIT else CanvasContentMode.CROP)
                     }
                 }
@@ -143,39 +150,79 @@ internal fun ImmersivePlayer(
                         controlsOpen=controls, onRevealControls={controls=true}, onHideControls={controls=false},
                         modifier=Modifier.align(placement).fillMaxWidth().fillMaxHeight(if(options.immersiveLyrics==ImmersiveLyricsPosition.FULL)1f else .58f))
                 }
+                }
                 // Exit is always available, including when the other controls auto-hide.
                 IconButton(onClick=onExit, modifier=Modifier.align(Alignment.TopStart).safeDrawingPadding().padding(12.dp).background(Color.Black.copy(alpha=.45f),androidx.compose.foundation.shape.CircleShape)) {
                     ThemeIcon(Icons.AutoMirrored.Rounded.ArrowBack,stringResource(Res.string.immersive_exit),Modifier.size(24.dp),Color.White,"back")
                 }
-                IconButton(onClick={settings=true;controls=true},modifier=Modifier.align(Alignment.TopEnd).safeDrawingPadding().padding(12.dp).background(Color.Black.copy(alpha=.45f),androidx.compose.foundation.shape.CircleShape)) {
-                    ThemeIcon(Icons.Rounded.Tune,stringResource(Res.string.immersive_settings),Modifier.size(24.dp),Color.White,"settings")
+                FilledTonalButton(onClick={settings=true;controls=true},modifier=Modifier.align(Alignment.TopEnd).safeDrawingPadding().padding(12.dp).widthIn(max=240.dp),
+                    colors=ButtonDefaults.filledTonalButtonColors(containerColor=Color.Black.copy(.65f),contentColor=Color.White)) {
+                    ThemeIcon(options.immersiveStyle.symbol(),null,Modifier.size(20.dp),ink)
+                    Spacer(Modifier.width(8.dp))
+                    Text(options.immersiveStyle.title(),maxLines=1,overflow=TextOverflow.Ellipsis)
                 }
                 val transport: @Composable () -> Unit = {
-                    IconButton(onClick=onPrevious,enabled=hasPrevious && !locked) {ThemeIcon(Icons.Rounded.SkipPrevious,stringResource(Res.string.immersive_previous),Modifier.size(24.dp),Color.White,"previous")}
-                    FilledIconButton(onClick=onPlayPause) {ThemeIcon(if(isPlaying)Icons.Rounded.Pause else Icons.Rounded.PlayArrow,stringResource(if(isPlaying)Res.string.immersive_pause else Res.string.immersive_play),Modifier.size(24.dp),MaterialTheme.colorScheme.onPrimary,if(isPlaying)"pause" else "play")}
-                    IconButton(onClick=onNext,enabled=hasNext && !locked) {ThemeIcon(Icons.Rounded.SkipNext,stringResource(Res.string.immersive_next),Modifier.size(24.dp),Color.White,"next")}
+                    IconButton(onClick=onPrevious,enabled=hasPrevious && !locked,modifier=Modifier.size(48.dp)) {
+                        ThemeIcon(Icons.Rounded.SkipPrevious,stringResource(Res.string.immersive_previous),Modifier.size(28.dp),if(hasPrevious && !locked)Color.White else Color.White.copy(.3f),"previous")
+                    }
+                    FilledIconButton(onClick=onPlayPause,modifier=Modifier.size(64.dp),shape=androidx.compose.foundation.shape.CircleShape,
+                        colors=IconButtonDefaults.filledIconButtonColors(containerColor=ink,contentColor=Color(0xFF10151E))) {
+                        ThemeIcon(if(isPlaying)Icons.Rounded.Pause else Icons.Rounded.PlayArrow,stringResource(if(isPlaying)Res.string.immersive_pause else Res.string.immersive_play),Modifier.size(32.dp),Color(0xFF10151E),if(isPlaying)"pause" else "play")
+                    }
+                    IconButton(onClick=onNext,enabled=hasNext && !locked,modifier=Modifier.size(48.dp)) {
+                        ThemeIcon(Icons.Rounded.SkipNext,stringResource(Res.string.immersive_next),Modifier.size(28.dp),if(hasNext && !locked)Color.White else Color.White.copy(.3f),"next")
+                    }
                 }
-                if(controls) Surface(Modifier.align(Alignment.BottomCenter).safeDrawingPadding().padding(16.dp).widthIn(max=480.dp)
-                    .onSizeChanged {footerHeight=maxOf(104.dp,with(density){it.height.toDp()}+36.dp)},
-                    shape=MaterialTheme.shapes.extraLarge,color=Color.Black.copy(alpha=.7f),contentColor=Color.White) {
-                    if(density.fontScale>1.35f) Column(Modifier.fillMaxWidth().padding(12.dp),horizontalAlignment=Alignment.CenterHorizontally) {
-                        Text(song.title,maxLines=1,overflow=TextOverflow.Ellipsis,style=MaterialTheme.typography.titleMedium)
-                        Text(song.artist,maxLines=1,overflow=TextOverflow.Ellipsis,style=MaterialTheme.typography.bodySmall)
-                        Row(horizontalArrangement=Arrangement.spacedBy(16.dp),verticalAlignment=Alignment.CenterVertically) {transport()}
-                    } else Row(Modifier.padding(horizontal=12.dp,vertical=8.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                        Column(Modifier.weight(1f).padding(start=8.dp)) {
+                if(controls) Surface(Modifier.align(Alignment.BottomCenter).safeDrawingPadding().padding(horizontal=16.dp,vertical=12.dp).widthIn(max=if(wide)840.dp else 480.dp).fillMaxWidth()
+                    .onSizeChanged {footerHeight=with(density){it.height.toDp()}+28.dp},
+                    shape=androidx.compose.foundation.shape.RoundedCornerShape(28.dp),color=Color(0xFF0B1019).copy(alpha=.92f),contentColor=Color.White,
+                    border=androidx.compose.foundation.BorderStroke(1.dp,ink.copy(.25f))) {
+                    if(wide && density.fontScale<=1.35f) Row(Modifier.padding(horizontal=20.dp,vertical=12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(24.dp)) {
+                        Column(Modifier.weight(1f)) {
                             Text(song.title,maxLines=1,overflow=TextOverflow.Ellipsis,style=MaterialTheme.typography.titleMedium)
-                            Text(song.artist,maxLines=1,overflow=TextOverflow.Ellipsis,style=MaterialTheme.typography.bodySmall)
+                            ImmersiveTimeline(song.videoId,position,durationMs,locked,ink,onSeek,{scrubbing=it;controls=true})
                         }
-                        transport()
+                        Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {transport()}
+                    } else Column(Modifier.padding(horizontal=20.dp,vertical=12.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                        Text(song.title,maxLines=1,overflow=TextOverflow.Ellipsis,style=MaterialTheme.typography.titleMedium)
+                        Text(song.artist,maxLines=1,overflow=TextOverflow.Ellipsis,style=MaterialTheme.typography.bodySmall,color=Color.White.copy(.65f))
+                        ImmersiveTimeline(song.videoId,position,durationMs,locked,ink,onSeek,{scrubbing=it;controls=true})
+                        Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {transport()}
                     }
                 }
                 if(settings) MaterialTheme(colorScheme=base) { ModalBottomSheet(onDismissRequest={settings=false}) {
                     Column(Modifier.fillMaxWidth().heightIn(max=600.dp).verticalScroll(rememberScrollState()).padding(horizontal=24.dp).padding(bottom=32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                        Text(stringResource(Res.string.immersive_settings),style=MaterialTheme.typography.headlineSmall)
-                        ImmersiveChoice(stringResource(Res.string.immersive_background),options.immersiveBackground.name) {onOptions(options.copy(immersiveBackground=ImmersiveBackground.entries[(options.immersiveBackground.ordinal+1)%ImmersiveBackground.entries.size]))}
-                        ImmersiveChoice(stringResource(Res.string.immersive_cover),options.immersiveCover.name) {onOptions(options.copy(immersiveCover=ImmersiveCover.entries[(options.immersiveCover.ordinal+1)%ImmersiveCover.entries.size]))}
-                        ImmersiveChoice(stringResource(Res.string.immersive_lyrics_position),options.immersiveLyrics.name) {onOptions(options.copy(immersiveLyrics=ImmersiveLyricsPosition.entries[(options.immersiveLyrics.ordinal+1)%ImmersiveLyricsPosition.entries.size]))}
+                        Text(stringResource(Res.string.immersive_worlds),style=MaterialTheme.typography.headlineSmall)
+                        Text(stringResource(Res.string.immersive_worlds_hint),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                        ImmersiveStyle.entries.forEach { style ->
+                            ImmersiveModeCard(style,options.immersiveStyle==style) {
+                                onOptions(options.copy(immersiveStyle=style));settings=false;controls=true
+                            }
+                        }
+                        if(options.immersiveStyle==ImmersiveStyle.CLASSIC) {
+                            HorizontalDivider()
+                            ImmersiveChoices(stringResource(Res.string.immersive_background),ImmersiveBackground.entries,options.immersiveBackground,
+                                { value -> stringResource(when(value) {
+                                    ImmersiveBackground.SONG -> Res.string.immersive_song_background
+                                    ImmersiveBackground.THEME -> Res.string.immersive_theme_background
+                                    ImmersiveBackground.BLEND -> Res.string.immersive_blend_background
+                                    ImmersiveBackground.MINIMAL -> Res.string.immersive_minimal_background
+                                }) }) {onOptions(options.copy(immersiveBackground=it))}
+                            ImmersiveChoices(stringResource(Res.string.immersive_cover),ImmersiveCover.entries,options.immersiveCover,
+                                { value -> stringResource(when(value) {
+                                    ImmersiveCover.FILL -> Res.string.immersive_fill
+                                    ImmersiveCover.FIT -> Res.string.immersive_fit
+                                    ImmersiveCover.ZOOMED -> Res.string.immersive_zoomed
+                                }) }) {onOptions(options.copy(immersiveCover=it))}
+                            ImmersiveChoices(stringResource(Res.string.immersive_lyrics_position),ImmersiveLyricsPosition.entries,options.immersiveLyrics,
+                                { value -> stringResource(when(value) {
+                                    ImmersiveLyricsPosition.TOP -> Res.string.immersive_top
+                                    ImmersiveLyricsPosition.CENTER -> Res.string.immersive_center
+                                    ImmersiveLyricsPosition.BOTTOM -> Res.string.immersive_bottom
+                                    ImmersiveLyricsPosition.FULL -> Res.string.immersive_full
+                                }) }) {onOptions(options.copy(immersiveLyrics=it))}
+                        }
+                        HorizontalDivider()
                         TextButton(onClick={settings=false;onSource()}) { Text(stringResource(Res.string.immersive_lyrics_source)) }
                         TextButton(onClick={settings=false;onTiming()}) { Text(stringResource(Res.string.immersive_lyrics_timing)) }
                         TextButton(onClick={settings=false;onSongOptions()}) { Text(stringResource(Res.string.immersive_song_options)) }
@@ -187,8 +234,12 @@ internal fun ImmersivePlayer(
     if(windowed)ImmersiveWindow(onExit,content) else content()
 }
 
-@Composable private fun ImmersiveChoice(label:String,value:String,onClick:()->Unit) {
-    OutlinedButton(onClick=onClick,modifier=Modifier.fillMaxWidth()) {
-        Text(label,Modifier.weight(1f)); Text(value.lowercase().replace('_',' '))
+@OptIn(ExperimentalLayoutApi::class)
+@Composable private fun <T> ImmersiveChoices(label:String,values:List<T>,selected:T,title:@Composable (T)->String,onSelect:(T)->Unit) {
+    Column(verticalArrangement=Arrangement.spacedBy(4.dp)) {
+        Text(label,style=MaterialTheme.typography.titleSmall)
+        FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+            values.forEach { value -> FilterChip(selected=value==selected,onClick={onSelect(value)},label={Text(title(value))}) }
+        }
     }
 }

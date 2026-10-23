@@ -84,7 +84,7 @@ class ExperienceRenderTest {
     @Test fun immersiveBackgroundsAndLargeRtlKeepTransportAndExitReachable() {
         org.junit.Assume.assumeTrue(System.getProperty("os.name").contains("Linux") && System.getProperty("os.arch") in listOf("amd64","x86_64"))
         val root=generateSequence(File(System.getProperty("user.dir"))) {it.parentFile}.first {File(it,"themes/matcha-mischief").isDirectory}
-        val output=File(root,"themes/previews/experience-0.1.8").apply {mkdirs()}
+        val output=File(root,"themes/previews/immersive-worlds").apply {mkdirs()}
         val artwork=File(root,"themes/matcha-mischief/artwork/preview.webp")
         val decoded=kotlinx.coroutines.runBlocking {
             coil3.SingletonImageLoader.get(coil3.PlatformContext.INSTANCE).execute(coil3.request.ImageRequest.Builder(coil3.PlatformContext.INSTANCE).data(artwork).size(600).build())
@@ -96,18 +96,23 @@ class ExperienceRenderTest {
         val theme=ThemeVisuals("fixture","Matcha",Color(0xFFD6E9A3),Color(0xFF1C3829),Color(0xFF34513C),Color(0xFF718764),16,18,24,
             mapOf("header" to artwork.path),background=Color(0xFF10241A))
         val lines=listOf(LyricLine(0,"A quiet place to begin"),LyricLine(10000,"Let the evening find you"),LyricLine(30000,"Music makes this space your own"))
-        for((background,large) in ImmersiveBackground.entries.map {it to false} + (ImmersiveBackground.THEME to true)) {
+        val cases=ImmersiveStyle.entries.map {Triple(it,false,false)} + listOf(
+            Triple(ImmersiveStyle.LYRICS_FOCUS,true,false),Triple(ImmersiveStyle.LANDSCAPE_STAGE,false,true))
+        for((style,large,wide) in cases) {
+            val background=ImmersiveBackground.THEME
+            val width=if(wide)900 else if(large)360 else 390
+            val height=if(wide)440 else 844
             var actions=0
             var scene:ImageComposeScene?=null
             try {
                 SwingUtilities.invokeAndWait {
-                    scene=ImageComposeScene(if(large)360 else 390,844,density=Density(1f,if(large)1.8f else 1f)) {
+                    scene=ImageComposeScene(width,height,density=Density(1f,if(large)1.8f else 1f)) {
                         CompositionLocalProvider(LocalLifecycleOwner provides owner,LocalThemeVisuals provides theme,
                             LocalLayoutDirection provides if(large)LayoutDirection.Rtl else LayoutDirection.Ltr) {
                             MaterialTheme(colorScheme=darkColorScheme()) {
                                 ImmersivePlayer(song=Song("fixture","Evening listening","Veyra",artwork.toURI().toString()),artwork=artwork.toURI().toString(),canvas=null,isPlaying=false,
                                     position=remember {PlaybackPosition().apply {report(12000)}},durationMs=180000,lines=lines,looking=false,
-                                    options=ExperienceOptions(immersive=true,immersiveBackground=background),onOptions={},onExit={actions++},onPlayPause={actions++},onPrevious={},onNext={actions++},
+                                    options=ExperienceOptions(immersive=true,immersiveBackground=background,immersiveStyle=style),onOptions={},onExit={actions++},onPlayPause={actions++},onPrevious={},onNext={actions++},
                                     hasPrevious=true,hasNext=true,locked=false,onBlocked={},onSeek={},onSource={},onTiming={},onSongOptions={},windowed=false)
                             }
                         }
@@ -120,12 +125,12 @@ class ExperienceRenderTest {
                     for(label in listOf("Return to player","Play","Next song")) {
                         val node=nodes.firstOrNull {it.config.getOrNull(SemanticsProperties.ContentDescription)?.contains(label)==true && it.config.getOrNull(SemanticsActions.OnClick)!=null}
                         assertNotNull("$background: $label is accessible",node)
-                        assertTrue("$label remains on screen",node!!.boundsInRoot.top>=0 && node.boundsInRoot.bottom<=844)
+                        assertTrue("$label remains on screen",node!!.boundsInRoot.top>=0 && node.boundsInRoot.bottom<=height)
                         assertEquals(true,node.config[SemanticsActions.OnClick].action?.invoke())
                     }
                     assertEquals(3,actions)
                     val image=scene!!.render(1_000_000_000L)
-                    try {File(output,"immersive-${background.name.lowercase()}${if(large)"-large-rtl" else ""}.webp").writeBytes(image.encodeToData(EncodedImageFormat.WEBP,85)!!.bytes)} finally {image.close()}
+                    try {File(output,"immersive-${style.name.lowercase()}${if(large)"-large-rtl" else if(wide)"-wide" else ""}.webp").writeBytes(image.encodeToData(EncodedImageFormat.WEBP,85)!!.bytes)} finally {image.close()}
                 }
             } finally {SwingUtilities.invokeAndWait {scene?.close()}}
         }

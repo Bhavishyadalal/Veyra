@@ -1,7 +1,9 @@
 # Veyra maintenance rules
 
-- Current stable Android source: `main` and `stable/0.1.9`, version 0.1.9 / code 36.
+- Current stable Android source: `main` and `stable/0.1.9`, version 0.1.9 / code 37.
   Promoted from completed preview `cc1da14c0ebb14af31335bd1f5c657855037b19d` at the owner's request.
+  Initial promotion was code 36; build 37 adds six immersive styles (Classic preserved),
+  direct portrait/landscape entry and a seekable dock. See verification/IMMERSIVE-WORLDS-0.1.9.md.
   See `verification/STABLE-0.1.9-PROMOTION.md`. Includes 62 themes, five independent
   asset packs and 95 optional launcher choices. Stable catalogs target main.
   Completed preview `preview/0.1.9-beta1` remains 0.1.9-beta1 / code 35.

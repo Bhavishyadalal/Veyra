@@ -1,6 +1,8 @@
+> **Immersive Worlds · build 37:** Classic plus Artwork Cinema, Theme World, Lyrics Focus, Minimal Night and Landscape Stage. Direct player access, a six-mode picker and seekable playback dock. [Details](verification/IMMERSIVE-WORLDS-0.1.9.md).
+
 > **Five new illustrated themes:** [Illustrated Worlds](themes/ILLUSTRATED_WORLDS.md) · [Preview collection](themes/previews/illustrated-worlds/collection.png). Compatible with the existing beta engine build 30.
 
-> **Stable 0.1.9 / code 36:** 62 themes, five independent Layer Lab asset overlays, 95 matching launcher choices, live Home icon updates, theme artwork controls, queue/Home/search improvements and lighter asset rendering. [Release notes](RELEASE_NOTES_0.1.9.md) · [Promotion checks and limits](verification/STABLE-0.1.9-PROMOTION.md) · [Source downloads](downloads/README.md).
+> **Stable 0.1.9 / code 37:** 62 themes, five independent Layer Lab asset overlays, 95 matching launcher choices, live Home icon updates, theme artwork controls, queue/Home/search improvements and lighter asset rendering. [Release notes](RELEASE_NOTES_0.1.9.md) · [Promotion checks and limits](verification/STABLE-0.1.9-PROMOTION.md) · [Source downloads](downloads/README.md).
 
 > Completed preview **0.1.9-beta1 / code 35** remains on `preview/0.1.9-beta1` with its original source ZIP. Stable 0.1.8 / code 28 remains available on `stable/0.1.8`.
 

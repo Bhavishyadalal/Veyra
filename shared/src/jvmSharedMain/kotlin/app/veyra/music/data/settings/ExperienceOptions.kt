@@ -10,6 +10,7 @@ import kotlinx.serialization.json.Json
 @Serializable enum class MiniPlayerProgress { NONE, LINE, FILL }
 @Serializable enum class NavigationLabels { ALWAYS, SELECTED, HIDDEN }
 @Serializable enum class NavigationDesign { FLOATING, DOCKED, MINIMAL }
+@Serializable enum class ImmersiveStyle { CLASSIC, ARTWORK_CINEMA, THEME_WORLD, LYRICS_FOCUS, MINIMAL_NIGHT, LANDSCAPE_STAGE }
 @Serializable enum class ImmersiveBackground { SONG, THEME, BLEND, MINIMAL }
 @Serializable enum class ImmersiveCover { FILL, FIT, ZOOMED }
 @Serializable enum class ImmersiveLyricsPosition { TOP, CENTER, BOTTOM, FULL }
@@ -18,6 +19,7 @@ import kotlinx.serialization.json.Json
 @Serializable
 data class ExperienceOptions(
     val immersive: Boolean = false,
+    val immersiveStyle: ImmersiveStyle = ImmersiveStyle.CLASSIC,
     val immersiveBackground: ImmersiveBackground = ImmersiveBackground.SONG,
     val immersiveCover: ImmersiveCover = ImmersiveCover.ZOOMED,
     val immersiveLyrics: ImmersiveLyricsPosition = ImmersiveLyricsPosition.BOTTOM,
