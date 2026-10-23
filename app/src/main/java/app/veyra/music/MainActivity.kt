@@ -1063,9 +1063,10 @@ private fun VeyraApp(
     val togglePlayPause: () -> Unit = {
         controller?.let { c ->
             val party = ListenTogether.state.value
-            if (party.controlsLocked && !party.playback.isPlaying && !c.playWhenReady) {
+            val wantsPlay = c.playWhenReady && c.playbackState != Player.STATE_ENDED
+            if (party.controlsLocked && !party.playback.isPlaying && !wantsPlay) {
                 showHostOnlyNotice()
-            } else if (c.playWhenReady && c.playbackState != Player.STATE_ENDED) {
+            } else if (wantsPlay) {
                 c.pause()
             } else {
                 if (c.playbackState == Player.STATE_ENDED) c.seekToDefaultPosition()
