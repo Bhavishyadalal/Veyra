@@ -1,3 +1,12 @@
+# Beta 0.1.9 · build 34 / asset performance
+
+- Move downloaded font construction off the UI thread and reuse bounded cached families.
+- Warm common pack glyphs before activation with small shared requests and bounded workers.
+- Reduce expensive large-container clipping, repeated shape allocation and pressed-skin crossfades.
+- Keep pack page style while avoiding two simultaneous page fades and scaling on tab changes.
+- Preserve all themes, asset packs, artwork and independent layer choices.
+- Requires rebuilt build-34 beta APK; real-device frame-rate validation remains pending.
+
 # Beta 0.1.9 · build 33 / independent asset packs
 
 - Five Layer Lab overlays: Spray Parade, Paper Pop, Ink Rebel, Laser Club, Thread Riot.

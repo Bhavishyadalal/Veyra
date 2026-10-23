@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import coil3.compose.AsyncImage
-import coil3.compose.rememberAsyncImagePainter
 import java.io.File
 
 @Immutable
@@ -60,7 +59,7 @@ fun ThemeIcon(
     val path = LocalThemeVisuals.current?.asset(key)
     if (path == null) Icon(imageVector, contentDescription, modifier, tint)
     else {
-        val painter = rememberAsyncImagePainter(File(path), placeholder = androidx.compose.ui.graphics.vector.rememberVectorPainter(imageVector), error = androidx.compose.ui.graphics.vector.rememberVectorPainter(imageVector))
+        val painter = rememberThemeGlyphPainter(path, fallback = androidx.compose.ui.graphics.vector.rememberVectorPainter(imageVector))
         val rtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
         // Match Material Icon's default 24 dp footprint; pack bitmaps have much
         // larger intrinsic sizes. Explicit caller sizing still takes precedence.
@@ -115,7 +114,7 @@ fun ThemeIcon(
 ) {
     val path = themeKey?.let { LocalThemeVisuals.current?.asset(ThemeGlyphs.key(it)) }
     if (path == null) Icon(painter, contentDescription, modifier, tint)
-    else ThemePainterGlyph(rememberAsyncImagePainter(File(path), placeholder=painter, error=painter),
+    else ThemePainterGlyph(rememberThemeGlyphPainter(path, fallback=painter),
         contentDescription, modifier.size(24.dp), tint, preserveColors=LocalThemeVisuals.current?.iconStyle == "original")
 }
 

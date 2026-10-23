@@ -7,16 +7,14 @@ import androidx.compose.ui.text.font.FontWeight
 import app.veyra.music.R
 import app.veyra.music.data.themes.AppearanceFont
 import app.veyra.music.ui.themes.ThemeVisuals
-import java.io.File
+import app.veyra.music.data.themes.PackFontCache
 
 /** The picker previews exactly the same heading/body pair used by the app. */
-internal fun appearanceTypography(base: Typography, choice: AppearanceFont, pack: ThemeVisuals?): Typography {
+internal fun appearanceTypography(base: Typography, choice: AppearanceFont, pack: ThemeVisuals?, packFonts: Pair<FontFamily,FontFamily>? = PackFontCache.peekPair(pack)): Typography {
     val resolved = choice.resolved(pack?.asset("headingFont") != null && pack.asset("bodyFont") != null)
     if (resolved == AppearanceFont.VEYRA_DEFAULT) return base
     val (heading, body) = if (resolved == AppearanceFont.FOLLOW_THEME) {
-        val theme = requireNotNull(pack)
-        FontFamily(Font(File(theme.assets.getValue("headingFont")), FontWeight.Bold)) to
-            FontFamily(Font(File(theme.assets.getValue("bodyFont"))))
+        packFonts ?: return base
     } else {
         val (resource, weight) = when (resolved) {
             AppearanceFont.FREDOKA -> R.font.appearance_fredoka to FontWeight(650)

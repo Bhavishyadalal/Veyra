@@ -63,7 +63,9 @@ internal fun PlayerControlSurface(
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val controlTint = pack?.accent ?: tint
-    val effectiveShape = if (grouped) RectangleShape else pack?.let { app.veyra.music.ui.themes.themeControlShape(it) } ?: shape
+    val effectiveShape = remember(grouped,pack?.materialStyle,pack?.buttonCorner,shape) {
+        if (grouped) RectangleShape else pack?.let { app.veyra.music.ui.themes.themeControlShape(it) } ?: shape
+    }
     val contrast = LocalVeyraContrastControls.current
     val controlBackground = if (grouped) containerColor else if (contrast && containerColor == Color.Transparent) controlTint.copy(alpha = 0.12f) else if (pack != null && containerColor == Color.Transparent) pack.raised.copy(alpha=.70f * app.veyra.music.ui.themes.LocalThemeArtworkOptions.current.controlOpacity) else containerColor
     val decoratedBackground = when(decoration) {
@@ -309,22 +311,20 @@ internal fun PlayerTransportControl(
         containerColor = if (emphasized) Color.Black.copy(alpha = 0.32f) else containerColor,
     ) {
         val path = themeKey?.let { pack?.asset(it) }
-        val normalPainter = if(path==null) painter else coil3.compose.rememberAsyncImagePainter(java.io.File(path),placeholder=painter,error=painter)
+        val normalPainter = if(path==null) painter else app.veyra.music.ui.themes.rememberThemeGlyphPainter(path,painter,256)
         val pressedPath = themeKey?.let {pack?.asset("${it}_pressed")}
         // Decode the small pressed state alongside the normal glyph; never flash a blank
         // or native placeholder if a user taps before the pressed file is ready.
-        val pressedPainter = if(pressedPath==null) null else coil3.compose.rememberAsyncImagePainter(java.io.File(pressedPath),placeholder=normalPainter,error=normalPainter)
+        val pressedPainter = if(pressedPath==null) null else app.veyra.music.ui.themes.rememberThemeGlyphPainter(pressedPath,normalPainter,256)
         val pressedReady = pressedPainter?.state?.collectAsState()?.value is coil3.compose.AsyncImagePainter.State.Success
         val themedPainter = if(app.veyra.music.ui.themes.LocalThemeControlPressed.current && pressedReady) pressedPainter else normalPainter
-        Crossfade(
-            themedPainter,
-            animationSpec = tween(playerMotionMillis(reducedMotion, 150)),
-            label = "playerTransportGlyph",
-        ) { current ->
-            app.veyra.music.ui.themes.ThemePainterGlyph(
-                current, null, Modifier.size(if(pack?.iconStyle == "original" && path != null) (touchSize-16.dp).coerceAtLeast(24.dp) else iconSize).graphicsLayer { scaleY = heightScale },
-                pack?.accent ?: tint, preserveColors = path != null && pack?.iconStyle == "original")
-        }
+        // A pressed skin is feedback, not a new media item. Draw it directly instead of
+        // retaining two bitmap layers for 150 ms on every press and release.
+        app.veyra.music.ui.themes.ThemePainterGlyph(
+            themedPainter, null,
+            Modifier.size(if(pack?.iconStyle == "original" && path != null) (touchSize-16.dp).coerceAtLeast(24.dp) else iconSize)
+                .graphicsLayer {scaleY=heightScale},
+            pack?.accent ?: tint,preserveColors=path != null && pack?.iconStyle == "original")
     }
 }
 
@@ -485,9 +485,9 @@ internal fun PlayerControlGroup(
     content: @Composable RowScope.() -> Unit,
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
-    val shape = pack?.let {
+    val shape = remember(pack?.materialStyle,pack?.buttonCorner) {pack?.let {
         app.veyra.music.ui.themes.themeControlShape(it)
-    } ?: CircleShape
+    } ?: CircleShape}
     Row(modifier.clip(shape)
         .background(pack?.raised?.copy(alpha = .70f * app.veyra.music.ui.themes.LocalThemeArtworkOptions.current.controlOpacity) ?: tint.copy(alpha = .12f))
         .then(if (pack != null || LocalVeyraContrastControls.current)

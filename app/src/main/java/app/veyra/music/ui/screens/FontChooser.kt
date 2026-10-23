@@ -53,9 +53,10 @@ internal fun FontSetting() {
     var draftName by rememberSaveable {mutableStateOf(selected.name)}
     val draft=AppearanceFont.fromStoredName(draftName)
     val pack=LocalThemeVisuals.current
-    val preview=remember(draft,pack,stronger) {
+    val packFonts=app.veyra.music.data.themes.rememberPackFonts(pack)
+    val preview=remember(draft,pack,stronger,packFonts) {
         val base=defaultAppearanceTypography(stronger)
-        runCatching {appearanceTypography(base,draft,pack)}.getOrDefault(base)
+        runCatching {appearanceTypography(base,draft,pack,packFonts)}.getOrDefault(base)
     }
     ModalBottomSheet(onDismissRequest={choosing=false},
         sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),

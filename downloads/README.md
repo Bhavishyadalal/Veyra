@@ -1,4 +1,6 @@
-> Latest beta source: **0.1.9-beta1 / code 33** adds five independent Layer Lab
+> Build 34 adds asset font/glyph caching and lighter rendering; see [performance notes](../verification/ASSET-PERFORMANCE-0.1.9-beta1.md).
+
+> Latest beta source: **0.1.9-beta1 / code 34** adds five independent Layer Lab
 > asset overlays and preserves all 62 themes. Theme, asset and source ZIPs are
 > different downloads; none is an APK. See [Layer Lab](../asset-packs/README.md).
 

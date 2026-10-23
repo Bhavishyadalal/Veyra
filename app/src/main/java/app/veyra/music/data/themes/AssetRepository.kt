@@ -73,10 +73,12 @@ object AssetRepository {
                         _installed.value = _installed.value + (m.id to m)
                     }
                     if (folder.name == selected) {
+                        if (_options.value.icons) warmPackGlyphs(context,m.assets.mapValues { File(folder,it.value).absolutePath })
                         activeDefinition = m
                         _active.value = visuals(m,folder)
                     }
                 }.onFailure {
+                    if (it is CancellationException) throw it
                     if (folder.name == selected) prefs.edit().remove("active").apply()
                     folder.deleteRecursively()
                 }
@@ -174,11 +176,13 @@ object AssetRepository {
             } else {
                 val dir = synchronized(lock) { installedDirectories[id] } ?: error("Download this asset pack first.")
                 val m = loadInstalled(dir)
+                if (_options.value.icons) warmPackGlyphs(context,m.assets.mapValues {File(dir,it.value).absolutePath})
+                ensureActive()
                 check(prefs.edit().putString("active",dir.name).commit())
                 activeDefinition = m
                 _active.value = visuals(m,dir)
             }
-        }.onFailure { _message.value = "Could not apply asset pack. Your theme is unchanged." }.isSuccess
+        }.onFailure { if (it is CancellationException) throw it; _message.value = "Could not apply asset pack. Your theme is unchanged." }.isSuccess
     }}
 
     private fun loadInstalled(folder: File): AssetManifest {
@@ -199,7 +203,7 @@ object AssetRepository {
             if (key.endsWith("Font")) {
                 val header = file.inputStream().use { input -> ByteArray(4).also { check(input.read(it) == 4) } }
                 require(header.contentEquals(byteArrayOf(0,1,0,0)) || header.decodeToString() in setOf("OTTO","true")) { "Invalid asset-pack font." }
-                Typeface.createFromFile(file)
+                PackFontCache.load(file.absolutePath)
             }
             else {
                 val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }

@@ -174,28 +174,26 @@ fun VeyraTheme(
     }
     // Keep fonts and palette on the same activation snapshot during live updates.
     val manifest = remember(packState,appStyle) { pack?.takeUnless {appStyle.custom}?.let { app.veyra.music.data.themes.ThemeRepository.activeManifest() } }
-    val selectedTypography = remember(pack, strongerText, appearanceFont, appStyle, importedFont, assetPack, assetOptions) {
+    val packFonts=app.veyra.music.data.themes.rememberPackFonts(pack)
+    val selectedTypography = remember(pack, strongerText, appearanceFont, appStyle, importedFont, assetPack, assetOptions, packFonts) {
         val base = if (strongerText) StrongerTypography else VeyraTypography
         if (assetPack != null && importedFont != null) base.withFamily(importedFont)
-        else if (assetPack != null && assetOptions.fonts) runCatching {appearanceTypography(base,appearanceFont,pack)}.getOrDefault(base)
+        else if (assetPack != null && assetOptions.fonts) runCatching {appearanceTypography(base,appearanceFont,pack,packFonts)}.getOrDefault(base)
         else if (appStyle.custom) {
             val heading = if(appStyle==AppStyle.AFTER_DARK) FontFamily(Font(R.font.appearance_barlow_condensed,FontWeight.Bold))
                 else FontFamily(Font(R.font.app_style_serif,FontWeight.Bold))
             appStyleTypography(base, heading, FontFamily(Font(R.font.appearance_manrope)))
         } else if (importedFont != null) base.withFamily(importedFont)
-        else runCatching { appearanceTypography(base, appearanceFont, pack) }.getOrDefault(base)
+        else runCatching { appearanceTypography(base, appearanceFont, pack, packFonts) }.getOrDefault(base)
     }
     val colorScheme = remember(appStyle, manifest, accent, darkTheme) {
         if (appStyle.custom) appStyle.colorScheme() else manifest?.let { packPalette(it.palette) } ?: paletteFor(accent, darkTheme)
     }
     val shapes = remember(pack?.materialStyle, pack?.sceneStyle, pack?.buttonCorner, pack?.rowCorner, pack?.navCorner) {
         if (pack == null) androidx.compose.material3.Shapes()
-        else if (pack.materialStyle != "classic") app.veyra.music.ui.themes.themeControlShape(pack).let {
-            androidx.compose.material3.Shapes(extraSmall=it, small=it, medium=it, large=it, extraLarge=it)
-        }
-        else if (pack.sceneStyle == "sketch") app.veyra.music.ui.themes.SketchShape.let {
-            androidx.compose.material3.Shapes(extraSmall=it, small=it, medium=it, large=it, extraLarge=it)
-        } else androidx.compose.material3.Shapes(
+        // Keep large lists/cards on native rounded outlines. The pack-specific
+        // cut/sketch outline belongs to actual controls, not every container.
+        else androidx.compose.material3.Shapes(
             small = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),
             medium = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.rowCorner.toFloat())),
             large = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.buttonCorner.toFloat())),

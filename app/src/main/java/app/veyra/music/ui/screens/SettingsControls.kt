@@ -52,7 +52,7 @@ import app.veyra.music.ui.icons.SettingsIcons
 
 // Shared by every settings destination. No blur, image decode or permanent animation.
 internal val GroupShape: androidx.compose.ui.graphics.Shape
-    @Composable get() = app.veyra.music.ui.themes.LocalThemeVisuals.current?.takeIf {it.materialStyle != "classic"}?.let {app.veyra.music.ui.themes.themeControlShape(it,24)} ?: RoundedCornerShape(24.dp)
+    @Composable get() = androidx.compose.runtime.remember {RoundedCornerShape(24.dp)}
 internal val GROUP_INSET = 16.dp
 internal val ROW_INSET = 12.dp
 internal val ICON_SIZE = 22.dp

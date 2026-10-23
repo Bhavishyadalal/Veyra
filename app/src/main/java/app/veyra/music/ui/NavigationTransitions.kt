@@ -20,8 +20,8 @@ fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: B
     val direction = if (rtl) -1 else 1
     val transition = when {
         reduceMotion || motion == NavigationMotion.None -> EnterTransition.None togetherWith ExitTransition.None
-        subtleMotion -> (fadeIn(tween(VeyraMotion.Feedback)) togetherWith fadeOut(tween(VeyraMotion.Press))).apply { targetContentZIndex = 1f }
-        materialStyle != "classic" -> {
+        subtleMotion -> (fadeIn(tween(VeyraMotion.Feedback)) togetherWith fadeOut(tween(1,delayMillis=VeyraMotion.Feedback))).apply { targetContentZIndex = 1f }
+        materialStyle != "classic" && motion != NavigationMotion.Tab -> {
             val back = motion == NavigationMotion.Back
             val duration = when(materialStyle) { "telemetry" -> 170; "botanical" -> 280; "flame" -> 210; "punk_rivet" -> 180; "punk_gel", "punk_sticker" -> 280; "punk_torn" -> 200; "punk_chrome" -> 240; else -> 230 }
             val enter = when(materialStyle) {
@@ -29,12 +29,12 @@ fun navigationTransition(motion: NavigationMotion, reduceMotion: Boolean, rtl: B
                 "deco", "flame", "punk_gel", "punk_chrome" -> scaleIn(tween(duration,easing=VeyraMotion.Easing),initialScale=if(back)1.015f else .975f)
                 else -> slideInHorizontally(tween(duration,easing=VeyraMotion.Easing)) { direction*it/(if(back)-18 else 18) }
             }
-            ((enter+fadeIn(tween(duration))) togetherWith fadeOut(tween(120))).apply {targetContentZIndex=1f}
+            ((enter+fadeIn(tween(duration))) togetherWith fadeOut(tween(1,delayMillis=duration))).apply {targetContentZIndex=1f}
         }
         sketch -> {
             val back = motion == NavigationMotion.Back
             ((slideInHorizontally(tween(240, easing = VeyraMotion.Easing)) { direction * it / (if (back) -22 else 14) } +
-                fadeIn(tween(180))) togetherWith fadeOut(tween(160)))
+                fadeIn(tween(180))) togetherWith fadeOut(tween(1,delayMillis=240)))
                 .apply { targetContentZIndex = 1f }
         }
         // Keep the parent stationary: moving two artwork/blur-backed pages at

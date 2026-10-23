@@ -76,3 +76,5 @@ requires Python Pillow and CairoSVG. On a downloaded source ZIP, run
 `python3 scripts/restore_theme_sources.py` first to restore optional authoring
 images/fonts. Existing editable files are never overwritten. Published ZIP bytes
 are immutable; change a pack version before altering any shipped asset.
+
+Build 34 optimizes runtime glyph/font caching, container outlines and transitions without modifying these ZIPs. See [performance notes](../verification/ASSET-PERFORMANCE-0.1.9-beta1.md).

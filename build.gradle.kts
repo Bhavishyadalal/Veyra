@@ -11,7 +11,7 @@ buildscript {
     }
 }
 /* Preview version. Stable 0.1.8 remains code 28 on main and stable/0.1.8. */
-extra["veyraVersionCode"] = 33
+extra["veyraVersionCode"] = 34
 extra["veyraVersionName"] = "0.1.9"
 
 /*
