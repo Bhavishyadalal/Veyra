@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.painter.Painter
 
+val LocalVeyraSelectedIcon = androidx.compose.runtime.compositionLocalOf<Painter?> {null}
+
 val LocalVeyraWordmarkFont = staticCompositionLocalOf<FontFamily?> { null }
 
 /** The real brand layout, with the host's original icon supplied as a fallback. */
@@ -41,6 +43,8 @@ fun VeyraBrandContent(
     reveal: () -> Float = { 1f },
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
+    val selectedIcon=LocalVeyraSelectedIcon.current
+    val framedIcon=selectedIcon != null || pack?.asset("brandIcon") != null
     val density = LocalDensity.current
     val direction = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
     BoxWithConstraints(modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = "Veyra" }) {
@@ -52,11 +56,11 @@ fun VeyraBrandContent(
             ((maxWidth - iconSize - gap).value / 3.4f).coerceAtLeast(1f)) / density.fontScale).sp
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(gap)) {
             val nativeIcon = fallbackIcon
-            val brandPainter = pack?.asset("brandIcon")?.let {
-                coil3.compose.rememberAsyncImagePainter(java.io.File(it),placeholder=nativeIcon,error=nativeIcon)
+            val brandPainter = selectedIcon ?: pack?.asset("brandIcon")?.let {
+                app.veyra.music.ui.themes.rememberThemeGlyphPainter(it,nativeIcon,256)
             } ?: nativeIcon
             Image(brandPainter, null,
-                Modifier.size(iconSize).then(if(pack?.asset("brandIcon") != null) Modifier.clip(androidx.compose.foundation.shape.RoundedCornerShape(18.dp)) else Modifier).graphicsLayer {
+                Modifier.size(iconSize).then(if(framedIcon) Modifier.clip(androidx.compose.foundation.shape.RoundedCornerShape(18.dp)) else Modifier).graphicsLayer {
                     val progress = reveal().coerceIn(0f, 1f)
                     alpha = progress
                     scaleX = 0.92f + 0.08f * progress

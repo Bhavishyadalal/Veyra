@@ -2,12 +2,34 @@ package app.veyra.music.data.themes
 
 import app.veyra.music.AppIcon
 
-enum class IconCollection { ALL, VEYRA, GLASS, THEMES, ATELIER }
+enum class IconCollection { ALL, VEYRA, GLASS, THEMES, ATELIER, ASSETS }
 enum class GlassFamily { LIQUID, SAMSUNG, PIXEL }
 
 /** Every existing icon belongs to one small, browsable collection. */
 object IconPickerPolicy {
     fun collection(icon: AppIcon): IconCollection = when {
+        icon == AppIcon.CollectionRiotCandy -> IconCollection.THEMES
+        icon == AppIcon.CollectionChromeVenom -> IconCollection.THEMES
+        icon == AppIcon.CollectionBubbleRiot -> IconCollection.THEMES
+        icon == AppIcon.CollectionXeroxAfterparty -> IconCollection.THEMES
+        icon == AppIcon.CollectionCosmicVandal -> IconCollection.THEMES
+        icon == AppIcon.CollectionSwitchbackRadio -> IconCollection.THEMES
+        icon == AppIcon.CollectionKomorebiHour -> IconCollection.THEMES
+        icon == AppIcon.CollectionRooftopReverie -> IconCollection.THEMES
+        icon == AppIcon.CollectionApexTelemetry -> IconCollection.THEMES
+        icon == AppIcon.CollectionCinderKata -> IconCollection.THEMES
+        icon == AppIcon.CollectionLanternLetters -> IconCollection.THEMES
+        icon == AppIcon.CollectionVelvetOrbit -> IconCollection.THEMES
+        icon == AppIcon.CollectionMossMechanism -> IconCollection.THEMES
+        icon == AppIcon.CollectionSugarStatic -> IconCollection.THEMES
+        icon == AppIcon.CollectionTidalOrigami -> IconCollection.THEMES
+        icon == AppIcon.CollectionMarginNotes -> IconCollection.THEMES
+        icon == AppIcon.CollectionSprayParade -> IconCollection.ASSETS
+        icon == AppIcon.CollectionPaperPop -> IconCollection.ASSETS
+        icon == AppIcon.CollectionInkRebel -> IconCollection.ASSETS
+        icon == AppIcon.CollectionLaserClub -> IconCollection.ASSETS
+        icon == AppIcon.CollectionThreadRiot -> IconCollection.ASSETS
+
         icon.name.startsWith("Atelier") -> IconCollection.ATELIER
         icon in setOf(AppIcon.PatchworkPicnic, AppIcon.CloverRequiem, AppIcon.SunroomMixtape,
             AppIcon.ConcreteAfterhours, AppIcon.MatchaMischief) -> IconCollection.THEMES

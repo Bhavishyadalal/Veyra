@@ -19,7 +19,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.veyra.music.AppIcon
 import app.veyra.music.R
 import app.veyra.music.data.themes.*
@@ -34,14 +36,14 @@ import kotlinx.coroutines.withContext
 internal fun AppIconSetting() {
     val context=LocalContext.current
     var choosing by rememberSaveable { mutableStateOf(false) }
-    var current by remember { mutableStateOf<AppIcon?>(null) }
+    val current by AppIcon.selected.collectAsStateWithLifecycle()
     LaunchedEffect(choosing) {
-        if(!choosing) current=withContext(Dispatchers.IO) { AppIcon.current(context) }
+        if(!choosing) withContext(Dispatchers.IO) { AppIcon.current(context) }
     }
     SettingsRow(icon=SettingsIcons.Icons,title=stringResource(R.string.app_icon),
         subtitle=current?.let { stringResource(it.labelRes) } ?: stringResource(R.string.icon_choose),
         onClick={choosing=true})
-    if(choosing) AppIconChooser(onDismiss={choosing=false},onChanged={current=it})
+    if(choosing) AppIconChooser(onDismiss={choosing=false},onChanged={})
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -111,6 +113,7 @@ private fun AppIconChooser(onDismiss: () -> Unit, onChanged: (AppIcon) -> Unit) 
                                     IconCollection.GLASS->R.string.icon_collection_glass
                                     IconCollection.THEMES->R.string.icon_collection_themes
                                     IconCollection.ATELIER->R.string.icon_collection_atelier
+                                    IconCollection.ASSETS->R.string.icon_collection_assets
                                 }))})
                         }
                     }
@@ -143,7 +146,7 @@ private fun AppIconChooser(onDismiss: () -> Unit, onChanged: (AppIcon) -> Unit) 
                                 } else error=true
                             }
                         }}) {
-                        AndroidView(factory={android.widget.ImageView(it)},update={it.setImageResource(option.previewRes ?: option.iconRes)},modifier=Modifier.fillMaxSize())
+                        Image(app.veyra.music.ui.theme.rememberLauncherIconPainter(option),null,Modifier.fillMaxSize(),contentScale=ContentScale.Fit)
                     }
                 }
                 if(error) item(key="error",span={GridItemSpan(maxLineSpan)}) {

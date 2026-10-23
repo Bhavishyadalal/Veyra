@@ -3,6 +3,7 @@ package app.veyra.music
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
+import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * The home-screen icon choices. Each is an `<activity-alias>` in the manifest
@@ -15,6 +16,27 @@ import android.content.pm.PackageManager
  * names so a choice made before the update stays enabled.
  */
 enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val previewRes: Int? = null) {
+    CollectionRiotCandy("LauncherCollectionRiotCandy", R.mipmap.ic_collection_riot_candy, R.string.app_icon_collection_riot_candy, R.mipmap.ic_collection_riot_candy_foreground),
+    CollectionChromeVenom("LauncherCollectionChromeVenom", R.mipmap.ic_collection_chrome_venom, R.string.app_icon_collection_chrome_venom, R.mipmap.ic_collection_chrome_venom_foreground),
+    CollectionBubbleRiot("LauncherCollectionBubbleRiot", R.mipmap.ic_collection_bubble_riot, R.string.app_icon_collection_bubble_riot, R.mipmap.ic_collection_bubble_riot_foreground),
+    CollectionXeroxAfterparty("LauncherCollectionXeroxAfterparty", R.mipmap.ic_collection_xerox_afterparty, R.string.app_icon_collection_xerox_afterparty, R.mipmap.ic_collection_xerox_afterparty_foreground),
+    CollectionCosmicVandal("LauncherCollectionCosmicVandal", R.mipmap.ic_collection_cosmic_vandal, R.string.app_icon_collection_cosmic_vandal, R.mipmap.ic_collection_cosmic_vandal_foreground),
+    CollectionSwitchbackRadio("LauncherCollectionSwitchbackRadio", R.mipmap.ic_collection_switchback_radio, R.string.app_icon_collection_switchback_radio, R.mipmap.ic_collection_switchback_radio_foreground),
+    CollectionKomorebiHour("LauncherCollectionKomorebiHour", R.mipmap.ic_collection_komorebi_hour, R.string.app_icon_collection_komorebi_hour, R.mipmap.ic_collection_komorebi_hour_foreground),
+    CollectionRooftopReverie("LauncherCollectionRooftopReverie", R.mipmap.ic_collection_rooftop_reverie, R.string.app_icon_collection_rooftop_reverie, R.mipmap.ic_collection_rooftop_reverie_foreground),
+    CollectionApexTelemetry("LauncherCollectionApexTelemetry", R.mipmap.ic_collection_apex_telemetry, R.string.app_icon_collection_apex_telemetry, R.mipmap.ic_collection_apex_telemetry_foreground),
+    CollectionCinderKata("LauncherCollectionCinderKata", R.mipmap.ic_collection_cinder_kata, R.string.app_icon_collection_cinder_kata, R.mipmap.ic_collection_cinder_kata_foreground),
+    CollectionLanternLetters("LauncherCollectionLanternLetters", R.mipmap.ic_collection_lantern_letters, R.string.app_icon_collection_lantern_letters, R.mipmap.ic_collection_lantern_letters_foreground),
+    CollectionVelvetOrbit("LauncherCollectionVelvetOrbit", R.mipmap.ic_collection_velvet_orbit, R.string.app_icon_collection_velvet_orbit, R.mipmap.ic_collection_velvet_orbit_foreground),
+    CollectionMossMechanism("LauncherCollectionMossMechanism", R.mipmap.ic_collection_moss_mechanism, R.string.app_icon_collection_moss_mechanism, R.mipmap.ic_collection_moss_mechanism_foreground),
+    CollectionSugarStatic("LauncherCollectionSugarStatic", R.mipmap.ic_collection_sugar_static, R.string.app_icon_collection_sugar_static, R.mipmap.ic_collection_sugar_static_foreground),
+    CollectionTidalOrigami("LauncherCollectionTidalOrigami", R.mipmap.ic_collection_tidal_origami, R.string.app_icon_collection_tidal_origami, R.mipmap.ic_collection_tidal_origami_foreground),
+    CollectionMarginNotes("LauncherCollectionMarginNotes", R.mipmap.ic_collection_margin_notes, R.string.app_icon_collection_margin_notes, R.mipmap.ic_collection_margin_notes_foreground),
+    CollectionSprayParade("LauncherCollectionSprayParade", R.mipmap.ic_collection_spray_parade, R.string.app_icon_collection_spray_parade, R.mipmap.ic_collection_spray_parade_foreground),
+    CollectionPaperPop("LauncherCollectionPaperPop", R.mipmap.ic_collection_paper_pop, R.string.app_icon_collection_paper_pop, R.mipmap.ic_collection_paper_pop_foreground),
+    CollectionInkRebel("LauncherCollectionInkRebel", R.mipmap.ic_collection_ink_rebel, R.string.app_icon_collection_ink_rebel, R.mipmap.ic_collection_ink_rebel_foreground),
+    CollectionLaserClub("LauncherCollectionLaserClub", R.mipmap.ic_collection_laser_club, R.string.app_icon_collection_laser_club, R.mipmap.ic_collection_laser_club_foreground),
+    CollectionThreadRiot("LauncherCollectionThreadRiot", R.mipmap.ic_collection_thread_riot, R.string.app_icon_collection_thread_riot, R.mipmap.ic_collection_thread_riot_foreground),
     PatchworkPicnic("LauncherPatchworkPicnic", R.mipmap.ic_theme_patchworkpicnic, R.string.app_icon_patchworkpicnic, R.mipmap.ic_theme_patchworkpicnic_foreground),
     CloverRequiem("LauncherCloverRequiem", R.mipmap.ic_theme_cloverrequiem, R.string.app_icon_cloverrequiem, R.mipmap.ic_theme_cloverrequiem_foreground),
     SunroomMixtape("LauncherSunroomMixtape", R.mipmap.ic_theme_sunroommixtape, R.string.app_icon_sunroommixtape, R.mipmap.ic_theme_sunroommixtape_foreground),
@@ -94,8 +116,28 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
         ComponentName(context.packageName, "app.veyra.music.$alias")
 
     companion object {
+        private val _selected=kotlinx.coroutines.flow.MutableStateFlow<AppIcon?>(null)
+        val selected=_selected.asStateFlow()
+
         /** A data-only theme cannot supply a component name or an arbitrary launcher alias. */
         fun forTheme(id: String?): AppIcon? = when (id) {
+            "riot-candy" -> CollectionRiotCandy
+            "chrome-venom" -> CollectionChromeVenom
+            "bubble-riot" -> CollectionBubbleRiot
+            "xerox-afterparty" -> CollectionXeroxAfterparty
+            "cosmic-vandal" -> CollectionCosmicVandal
+            "switchback-radio" -> CollectionSwitchbackRadio
+            "komorebi-hour" -> CollectionKomorebiHour
+            "rooftop-reverie" -> CollectionRooftopReverie
+            "apex-telemetry" -> CollectionApexTelemetry
+            "cinder-kata" -> CollectionCinderKata
+            "lantern-letters" -> CollectionLanternLetters
+            "velvet-orbit" -> CollectionVelvetOrbit
+            "moss-mechanism" -> CollectionMossMechanism
+            "sugar-static" -> CollectionSugarStatic
+            "tidal-origami" -> CollectionTidalOrigami
+            "margin-notes" -> CollectionMarginNotes
+
             "patchwork-picnic" -> PatchworkPicnic
             "clover-requiem" -> CloverRequiem
             "sunroom-mixtape" -> SunroomMixtape
@@ -145,6 +187,16 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
             else -> null
         }
 
+        /** Asset packs cannot name arbitrary components. Only these bundled choices are eligible. */
+        fun forAssetPack(id:String?):AppIcon? = when(id) {
+            "spray-parade" -> CollectionSprayParade
+            "paper-pop" -> CollectionPaperPop
+            "ink-rebel" -> CollectionInkRebel
+            "laser-club" -> CollectionLaserClub
+            "thread-riot" -> CollectionThreadRiot
+            else -> null
+        }
+
         @Synchronized
         fun current(context: Context): AppIcon {
             val pm = context.packageManager
@@ -152,7 +204,7 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
                 val state = pm.getComponentEnabledSetting(it.component(context))
                 state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED ||
                     (state == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT && it == Default)
-            } ?: Default
+            }?.also {_selected.value=it} ?: Default.also {_selected.value=it}
         }
 
         /** Atomic on Android 13+, and enable-first on older Android versions. */
@@ -182,6 +234,7 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
                     throw error
                 }
             }
+            _selected.value=icon
         }
     }
 }

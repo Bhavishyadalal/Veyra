@@ -1,3 +1,12 @@
+# Beta 0.1.9 · build 35 / complete matching icons
+
+- 21 new connected-wave editions: the 16 remaining themes and all five asset packs.
+- 95 launcher choices, with All, Themes and the new Asset packs filter.
+- Home displays your actual selected app icon and updates after a successful switch.
+- Explicit matching-icon action for downloaded asset packs; all themes gain matching choices.
+- All existing themes, asset packs, icons, fonts and performance fixes are preserved.
+- New bundled launchers require a rebuilt build-35 beta APK; source ZIPs are not APKs.
+
 # Beta 0.1.9 · build 34 / asset performance
 
 - Move downloaded font construction off the UI thread and reuse bounded cached families.

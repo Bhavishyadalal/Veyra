@@ -77,6 +77,12 @@ def main():
             if (p.parts[:2] in {("themes","previews"),("asset-packs","previews"),
                     ("design","home-preview"),("design","settings-preview")} and p.suffix.lower() in {".png",".webp"}):
                 continue
+            # Promotional media is available in Git; Android builds need the expanded
+            # native resources, not duplicate website/media-kit campaign exports.
+            if p.parts[0] == "media-kit" and p.suffix.lower() in {".png",".webp",".jpg",".jpeg"}:
+                continue
+            if p.parts[:3] == ("design","launcher","collections") and "previews" in p.parts and p.suffix.lower() in {".png",".webp"}:
+                continue
             if any(part in excluded for part in p.parts):
                 continue
             if p.name in {"local.properties", "key.properties", ".DS_Store", "banner.jpg", "upi_support.jpg"}:

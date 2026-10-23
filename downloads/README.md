@@ -1,6 +1,10 @@
+> Build 35 adds the 21 remaining matching launcher icons and live Home icon updates.
+> Native sources/resources are included; duplicate promotional media-kit images remain in Git.
+> See [icon completion](../design/launcher/collections/README.md).
+
 > Build 34 adds asset font/glyph caching and lighter rendering; see [performance notes](../verification/ASSET-PERFORMANCE-0.1.9-beta1.md).
 
-> Latest beta source: **0.1.9-beta1 / code 34** adds five independent Layer Lab
+> Latest beta source: **0.1.9-beta1 / code 35** adds five independent Layer Lab
 > asset overlays and preserves all 62 themes. Theme, asset and source ZIPs are
 > different downloads; none is an APK. See [Layer Lab](../asset-packs/README.md).
 

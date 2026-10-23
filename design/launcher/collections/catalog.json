@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "icons": [
+    {
+      "id": "riot-candy",
+      "name": "Riot Candy",
+      "kind": "theme",
+      "style": "acid lime gel, hot-pink lacquer splashes and violet chrome, gleaming thick collectible toy finish"
+    },
+    {
+      "id": "chrome-venom",
+      "name": "Chrome Venom",
+      "kind": "theme",
+      "style": "dark titanium biomechanical armor, pale toxic mint glass, four inset gunmetal rivets, restrained industrial luxury"
+    },
+    {
+      "id": "bubble-riot",
+      "name": "Bubble Riot",
+      "kind": "theme",
+      "style": "puffy pink and sky-blue jelly, pearlescent cream squircle, playful bubble sculpture and tiny sticker stars"
+    },
+    {
+      "id": "xerox-afterparty",
+      "name": "Xerox Afterparty",
+      "kind": "theme",
+      "style": "layered cream and charcoal concert-zine paper, irregular ink-stamped edges, red and warm yellow print accents, tactile handmade"
+    },
+    {
+      "id": "cosmic-vandal",
+      "name": "Cosmic Vandal",
+      "kind": "theme",
+      "style": "prismatic cyan and pink holographic metal, deep violet cosmic glass, thin orbital highlights"
+    },
+    {
+      "id": "switchback-radio",
+      "name": "Switchback Radio",
+      "kind": "theme",
+      "style": "midnight blue pixel-art roadway material, warm amber luminous wave, subtle pixel stars and road-line trim, geometric chunky voxel craftsmanship"
+    },
+    {
+      "id": "komorebi-hour",
+      "name": "Komorebi Hour",
+      "kind": "theme",
+      "style": "warm honey glass and moss-green ceramic, tiny delicate leaf inlay at one corner, Japanese golden-hour quiet luxury"
+    },
+    {
+      "id": "rooftop-reverie",
+      "name": "Rooftop Reverie",
+      "kind": "theme",
+      "style": "inky midnight skyscraper glass, sunset coral and periwinkle enamel wave, subtle miniature skyline etched along base"
+    },
+    {
+      "id": "apex-telemetry",
+      "name": "Apex Telemetry",
+      "kind": "theme",
+      "style": "carbon-fiber black race instrument casing, signal-red and luminous ivory wave, fine speed-gauge ticks around rim, no vehicle logos"
+    },
+    {
+      "id": "cinder-kata",
+      "name": "Cinder Kata",
+      "kind": "theme",
+      "style": "obsidian ceramic and glowing ember-red glass, warm golden wave sculpture, delicate flame-shaped rim highlights, no characters"
+    },
+    {
+      "id": "lantern-letters",
+      "name": "Lantern Letters",
+      "kind": "theme",
+      "style": "cream washi paper and amber lantern glow, vermilion and warm gold sculptural wave, fine dark walnut trim"
+    },
+    {
+      "id": "velvet-orbit",
+      "name": "Velvet Orbit",
+      "kind": "theme",
+      "style": "midnight purple velvet and brushed antique gold, lilac crystal wave, small orbital ring etching"
+    },
+    {
+      "id": "moss-mechanism",
+      "name": "Moss & Mechanism",
+      "kind": "theme",
+      "style": "aged brass and soft forest moss around rim, mint ivory ceramic wave, subtle precise clockwork edge details"
+    },
+    {
+      "id": "sugar-static",
+      "name": "Sugar Static",
+      "kind": "theme",
+      "style": "pastel candy pink lilac and sherbet yellow resin, soft analog noise enamel details, pearl cream wave, playful polished candy sculpture"
+    },
+    {
+      "id": "tidal-origami",
+      "name": "Tidal Origami",
+      "kind": "theme",
+      "style": "folded indigo and pale aqua paper sculpture, cream and silver wave, ocean-blue layered origami rim with precise creases"
+    },
+    {
+      "id": "margin-notes",
+      "name": "Margin Notes",
+      "kind": "theme",
+      "style": "ivory sketchbook paper, expressive graphite and cobalt pencil strokes shaping the connected wave, hand-cut notebook frame and restrained small amber paper tape"
+    },
+    {
+      "id": "spray-parade",
+      "name": "Spray Parade",
+      "kind": "assets",
+      "style": "neon lime and pink graffiti marker, thick irregular black contours, paint splashes confined to squircle, bold collectible street-art sticker material"
+    },
+    {
+      "id": "paper-pop",
+      "name": "Paper Pop",
+      "kind": "assets",
+      "style": "lilac coral and butter-yellow cut-paper layers, thick scalloped paper frame, layered wave sculpture with gentle paper shadows"
+    },
+    {
+      "id": "ink-rebel",
+      "name": "Ink Rebel",
+      "kind": "assets",
+      "style": "ivory washi and vermilion dry-brush ink, bold graphite connected wave sculpture, restrained Japanese brushwork with torn-paper edges"
+    },
+    {
+      "id": "laser-club",
+      "name": "Laser Club",
+      "kind": "assets",
+      "style": "electric cyan ultraviolet and peach chrome, sharply beveled 1980s arcade cabinet key, luminous connected wave with glossy neon edges"
+    },
+    {
+      "id": "thread-riot",
+      "name": "Thread Riot",
+      "kind": "assets",
+      "style": "denim-blue felt patch, terracotta mint and cream embroidered wave sculpture, beautifully sewn stitched rim, tactile varsity patch"
+    }
+  ]
+}

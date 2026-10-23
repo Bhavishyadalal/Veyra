@@ -7,12 +7,17 @@
   `preview/0.1.7-beta1` remains 0.1.7-beta1 / code 25 as a historical preview.
   `stable/0.1.6` remains historical 0.1.6 / code 22; older branches retain their Android code and versions.
   Keep future preview features out of stable until the owner explicitly promotes them.
-  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 34,
+  Current development: `preview/0.1.9-beta1`, version 0.1.9-beta1 / code 35,
   based on completed stable commit `6e37aa4615bad01b895dc547454f79218d94175e`.
   Keep 0.1.9 changes out of main/stable until explicit promotion.
   Build code 32 adds five Punk Worlds full themes (62 beta packs, 123 roles each),
   original-color icon rendering, four pressed transport skins, colored display
   headings and bounded punk materials/seeks/motion. See `themes/PUNK_WORLDS.md`.
+  Build code 35 completes missing theme/asset launcher editions (95 choices),
+  all 62 theme bindings plus five asset bindings, an Asset packs filter and Home's
+  live selected-icon display. See verification/LAUNCHER-COMPLETION-0.1.9-beta1.md.
+  Existing theme/asset ZIPs stay immutable; Android aliases remain bundled.
+  Source ZIPs keep native resources/masters and omit duplicate promotional media-kit images.
   Build code 34 reduces asset rendering overhead: shared bounded glyph requests,
   small two-worker warmup, off-main cached font families, native container outlines,
   remembered control geometry and single-page transitions. See

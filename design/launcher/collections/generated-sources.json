@@ -1,0 +1,89 @@
+{
+  "reference": "design/launcher/wave_glass.png",
+  "images": [
+    {
+      "id": "riot-candy",
+      "path": "/workspace/generated_images/exec-e7dcbfb2-b91f-4e40-9650-5255b1021115.png"
+    },
+    {
+      "id": "chrome-venom",
+      "path": "/workspace/generated_images/exec-0f0b81ae-1d7d-4e26-905e-7553b01d2948.png"
+    },
+    {
+      "id": "bubble-riot",
+      "path": "/workspace/generated_images/exec-8ddc1c6f-7916-4103-a369-a18f9d33e202.png"
+    },
+    {
+      "id": "cosmic-vandal",
+      "path": "/workspace/generated_images/exec-6c1aaed0-de2a-4def-9eb6-6a43bbc82bb4.png"
+    },
+    {
+      "id": "xerox-afterparty",
+      "path": "/workspace/generated_images/exec-84681d1d-d454-4922-b275-46c5a62484df.png"
+    },
+    {
+      "id": "switchback-radio",
+      "path": "/workspace/generated_images/exec-2b965f49-00be-470b-bdc7-1230db302865.png"
+    },
+    {
+      "id": "rooftop-reverie",
+      "path": "/workspace/generated_images/exec-8c089ba1-28b3-4a8a-89ee-1af84bc31e72.png"
+    },
+    {
+      "id": "komorebi-hour",
+      "path": "/workspace/generated_images/exec-889499df-25ad-421e-bfeb-65d4c2ef84c8.png"
+    },
+    {
+      "id": "apex-telemetry",
+      "path": "/workspace/generated_images/exec-325b4804-1a7e-4e75-a191-bee323cc051e.png"
+    },
+    {
+      "id": "cinder-kata",
+      "path": "/workspace/generated_images/exec-d730aade-6426-4f09-9d2f-79528f89e1dd.png"
+    },
+    {
+      "id": "lantern-letters",
+      "path": "/workspace/generated_images/exec-5c92ab49-812a-41b6-9258-e62cc49402e7.png"
+    },
+    {
+      "id": "velvet-orbit",
+      "path": "/workspace/generated_images/exec-7ac88999-12af-4890-b070-5c4edac54559.png"
+    },
+    {
+      "id": "sugar-static",
+      "path": "/workspace/generated_images/exec-b829d048-c9f1-49f1-956d-009dbc46de9b.png"
+    },
+    {
+      "id": "tidal-origami",
+      "path": "/workspace/generated_images/exec-f26bd7b2-6e81-4629-a89c-9b6cc3f4ef31.png"
+    },
+    {
+      "id": "moss-mechanism",
+      "path": "/workspace/generated_images/exec-49336cb2-94d7-4338-a3cb-4ac701186305.png"
+    },
+    {
+      "id": "margin-notes",
+      "path": "/workspace/generated_images/exec-32712dbf-3b63-46ca-acbb-f8bc0746799e.png"
+    },
+    {
+      "id": "spray-parade",
+      "path": "/workspace/generated_images/exec-84730008-3161-4a76-8cd4-6e5c836d5c85.png"
+    },
+    {
+      "id": "paper-pop",
+      "path": "/workspace/generated_images/exec-107e8bbd-db90-4e0d-b2d5-a30b462827ed.png"
+    },
+    {
+      "id": "laser-club",
+      "path": "/workspace/generated_images/exec-47c70761-1483-415b-a448-c6c8ecfbd0bc.png"
+    },
+    {
+      "id": "ink-rebel",
+      "path": "/workspace/generated_images/exec-e0e33cf7-f84a-4376-82e8-36495c29e288.png"
+    },
+    {
+      "id": "thread-riot",
+      "path": "/workspace/generated_images/exec-5ccea356-d373-42f8-8761-ad3e76bb44f3.png"
+    }
+  ]
+}

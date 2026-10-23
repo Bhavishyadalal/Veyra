@@ -4,6 +4,7 @@ import app.veyra.music.ui.themes.over
 import app.veyra.music.ui.customization.*
 import app.veyra.music.ui.styles.*
 import android.app.Activity
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -135,6 +136,13 @@ fun VeyraTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
+    val selectedIcon by app.veyra.music.AppIcon.selected.collectAsStateWithLifecycle()
+    val selectedIconPainter=rememberLauncherIconPainter(selectedIcon ?: app.veyra.music.AppIcon.Default)
+    val iconContext=androidx.compose.ui.platform.LocalContext.current.applicationContext
+    val iconScope=androidx.compose.runtime.rememberCoroutineScope()
+    androidx.lifecycle.compose.LifecycleEventEffect(androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
+        iconScope.launch(kotlinx.coroutines.Dispatchers.IO) {runCatching {app.veyra.music.AppIcon.current(iconContext)}}
+    }
     val appStyle by AppSettings.appStyle.collectAsStateWithLifecycle()
     val fontSelection = remember {AppSettings.experience.map {it.appFont}.distinctUntilChanged()}
     val importedHash by fontSelection.collectAsStateWithLifecycle(initialValue=AppSettings.experience.value.appFont)
@@ -200,6 +208,7 @@ fun VeyraTheme(
             extraLarge = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.navCorner.toFloat())))
     }
     CompositionLocalProvider(
+        app.veyra.music.ui.components.LocalVeyraSelectedIcon provides selectedIconPainter,
         app.veyra.music.ui.themes.LocalThemeArtworkOptions provides
             (if (appStyle.custom) app.veyra.music.ui.themes.ThemeArtworkOptions() else themeArtwork),
         LocalAppStyle provides appStyle,

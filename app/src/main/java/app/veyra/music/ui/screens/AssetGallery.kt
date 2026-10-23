@@ -28,6 +28,7 @@ internal fun AssetGallery(onDismiss:()->Unit) {
     val installed by AssetRepository.installed.collectAsStateWithLifecycle()
     val active by AssetRepository.active.collectAsStateWithLifecycle()
     val options by AssetRepository.options.collectAsStateWithLifecycle()
+    val currentIcon by app.veyra.music.AppIcon.selected.collectAsStateWithLifecycle()
     val transfer by AssetRepository.transfer.collectAsStateWithLifecycle()
     val message by AssetRepository.message.collectAsStateWithLifecycle()
     var busy by remember {mutableStateOf(false)}
@@ -97,6 +98,20 @@ internal fun AssetGallery(onDismiss:()->Unit) {
                                 TextButton(enabled=active?.id!=entry.id && !busy && transfer==null,onClick={scope.launch {busy=true;try {AssetRepository.remove(entry.id)}finally {busy=false}}}) {
                                     Text(stringResource(R.string.asset_remove))}
                             }
+                        }
+                        val matchingIcon=app.veyra.music.AppIcon.forAssetPack(entry.id)
+                        if(local!=null && matchingIcon!=null) OutlinedButton(
+                            enabled=!busy && currentIcon!=matchingIcon,
+                            onClick={scope.launch {
+                                busy=true
+                                try {
+                                    val changed=kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                                        runCatching {app.veyra.music.AppIcon.apply(context,matchingIcon)}.isSuccess
+                                    }
+                                    if(!changed) android.widget.Toast.makeText(context,R.string.theme_icon_failed,android.widget.Toast.LENGTH_LONG).show()
+                                } finally {busy=false}
+                            }}) {
+                            Text(stringResource(if(currentIcon==matchingIcon)R.string.theme_active else R.string.asset_matching_app_icon))
                         }
                     }
                 }
