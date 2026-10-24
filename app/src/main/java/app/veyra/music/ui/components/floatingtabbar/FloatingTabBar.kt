@@ -203,6 +203,7 @@ fun FloatingTabBar(
 fun FloatingTabBar(
     selectedTabKey: Any?,
     scrollConnection: FloatingTabBarScrollConnection,
+    motion: app.veyra.music.data.settings.ScrollPlayerMotion = app.veyra.music.data.settings.ScrollPlayerMotion.FLOW,
     modifier: Modifier = Modifier,
     tabBarContentModifier: @Composable () -> Modifier = DefaultTabBarContentModifier,
     inlineAccessory: (@Composable SharedTransitionScope.(Modifier, AnimatedVisibilityScope) -> Unit)? = null,
@@ -218,10 +219,12 @@ fun FloatingTabBar(
 
     val isAccessoryShared = inlineAccessory != null && expandedAccessory != null
 
+    val rtl=LocalLayoutDirection.current==LayoutDirection.Rtl
+    CompositionLocalProvider(LocalScrollPlayerMotion provides motion) {
     SharedTransitionLayout(modifier = modifier) {
         AnimatedContent(
             targetState = scrollConnection.isInline,
-            transitionSpec = { fadeIn() togetherWith fadeOut() },
+            transitionSpec = { scrollPlayerTransition(motion,targetState,rtl) },
             contentAlignment = Alignment.BottomCenter
         ) { isInline ->
             if (isInline) {
@@ -254,6 +257,7 @@ fun FloatingTabBar(
             }
         }
     }
+}
 }
 
 /**
@@ -491,11 +495,12 @@ private fun SharedTransitionScope.InlineTab(
 ) {
     Box(
         modifier = modifier
-            .sharedElement(
+            .then(if (LocalScrollPlayerMotion.current==app.veyra.music.data.settings.ScrollPlayerMotion.SOFT_FADE) Modifier else Modifier.sharedElement(
+                boundsTransform = rememberScrollBoundsTransform(),
                 sharedContentState = rememberSharedContentState("tabGroup"),
                 animatedVisibilityScope = animatedVisibilityScope,
                 zIndexInOverlay = 1f
-            )
+            ))
             .shadow(
                 shape = shapes.tabBarShape,
                 elevation = elevations.inlineElevation
@@ -519,11 +524,12 @@ private fun SharedTransitionScope.InlineTab(
         Tab(
             icon = {
                 Box(
-                    Modifier.sharedElement(
+                    Modifier.then(if (LocalScrollPlayerMotion.current==app.veyra.music.data.settings.ScrollPlayerMotion.SOFT_FADE) Modifier else Modifier.sharedElement(
+                boundsTransform = rememberScrollBoundsTransform(),
                         sharedContentState = rememberSharedContentState("tab#${inlineTab.key}-icon"),
                         animatedVisibilityScope = animatedVisibilityScope,
                         zIndexInOverlay = 1f
-                    )
+                    ))
                 ) {
                     inlineTab.icon()
                 }
@@ -550,11 +556,12 @@ private fun SharedTransitionScope.InlineStandaloneTab(
         isInline = true,
         isStandalone = true,
         modifier = modifier
-            .sharedElement(
+            .then(if (LocalScrollPlayerMotion.current==app.veyra.music.data.settings.ScrollPlayerMotion.SOFT_FADE) Modifier else Modifier.sharedElement(
+                boundsTransform = rememberScrollBoundsTransform(),
                 sharedContentState = rememberSharedContentState("standaloneTab"),
                 animatedVisibilityScope = animatedVisibilityScope,
                 zIndexInOverlay = 1f
-            )
+            ))
             .shadow(
                 shape = shapes.standaloneTabShape,
                 elevation = elevations.inlineElevation
@@ -588,10 +595,11 @@ private fun SharedTransitionScope.InlineAccessory(
             modifier = modifier
                 .then(
                     if (isAccessoryShared) {
-                        Modifier.sharedElement(
+                        Modifier.then(if (LocalScrollPlayerMotion.current==app.veyra.music.data.settings.ScrollPlayerMotion.SOFT_FADE) Modifier else Modifier.sharedElement(
+                boundsTransform = rememberScrollBoundsTransform(),
                             sharedContentState = rememberSharedContentState("accessory"),
                             animatedVisibilityScope = animatedVisibilityScope
-                        )
+                        ))
                     } else {
                         Modifier.animateEnterExitAccessory(
                             sharedTransitionScope = this,
@@ -707,10 +715,11 @@ private fun SharedTransitionScope.ExpandedAccessory(
         modifier = modifier
             .then(
                 if (isAccessoryShared) {
-                    Modifier.sharedElement(
+                    Modifier.then(if (LocalScrollPlayerMotion.current==app.veyra.music.data.settings.ScrollPlayerMotion.SOFT_FADE) Modifier else Modifier.sharedElement(
+                boundsTransform = rememberScrollBoundsTransform(),
                         sharedContentState = rememberSharedContentState("accessory"),
                         animatedVisibilityScope = animatedVisibilityScope
-                    )
+                    ))
                 } else {
                     Modifier.animateEnterExitAccessory(
                         sharedTransitionScope = this,
@@ -757,10 +766,10 @@ private fun SharedTransitionScope.ExpandedTabs(
 
     val coroutineScope = rememberCoroutineScope()
     val pill = remember { GlassPillMotion(coroutineScope, selectedTabIndex.coerceAtLeast(0)) }
-    pill.reduceMotion = reduceAnimation
+    pill.reduceMotion = reduceAnimation || colors.indicatorColor.alpha==0f
     // The lens samples the recorded page, and "reduce dynamic blur" stops that
     // recording. There the flat pill carries the whole motion on its own.
-    val glassPill = app.veyra.music.ui.components.LocalLiquidGlassEnabled.current && isGlassSupported() && !reduceDynamicBlur
+    val glassPill = app.veyra.music.ui.components.LocalLiquidGlassEnabled.current && isGlassSupported() && !reduceDynamicBlur && colors.indicatorColor.alpha>0f
     val barGlass = rememberLayerBackdrop()
     val tabRow = rememberLayerBackdrop()
 
@@ -804,7 +813,7 @@ private fun SharedTransitionScope.ExpandedTabs(
         val x = position * tabStepPx + tabWidthPx / 2f
         Offset(if (isRtl) rowSize.width - x else x, rowHeightPx / 2f)
     }
-    val showPill = selectedTabIndex >= 0 && tabWidthPx > 0f
+    val showPill = selectedTabIndex >= 0 && tabWidthPx > 0f && colors.indicatorColor.alpha>0f
 
     LaunchedEffect(selectedTabIndex) {
         if (selectedTabIndex >= 0) {
@@ -823,11 +832,12 @@ private fun SharedTransitionScope.ExpandedTabs(
     // here, over the bar, rather than inside the bar's clip.
     Box(
         modifier = modifier
-            .sharedElement(
+            .then(if (LocalScrollPlayerMotion.current==app.veyra.music.data.settings.ScrollPlayerMotion.SOFT_FADE) Modifier else Modifier.sharedElement(
+                boundsTransform = rememberScrollBoundsTransform(),
                 sharedContentState = rememberSharedContentState("tabGroup"),
                 animatedVisibilityScope = animatedVisibilityScope,
                 zIndexInOverlay = 1f
-            )
+            ))
     ) {
         // The bar's glass is exported for the lens to refract.
         CompositionLocalProvider(LocalGlassExport provides barGlass) {
@@ -919,11 +929,12 @@ private fun SharedTransitionScope.ExpandedTabs(
                             icon = {
                                 Box(
                                     modifier = (if (tab.key == inlineTab?.key) {
-                                        Modifier.sharedElement(
+                                        Modifier.then(if (LocalScrollPlayerMotion.current==app.veyra.music.data.settings.ScrollPlayerMotion.SOFT_FADE) Modifier else Modifier.sharedElement(
+                boundsTransform = rememberScrollBoundsTransform(),
                                             sharedContentState = rememberSharedContentState("tab#${tab.key}-icon"),
                                             animatedVisibilityScope = animatedVisibilityScope,
                                             zIndexInOverlay = 1f
-                                        )
+                                        ))
                                     } else {
                                         Modifier.animateEnterExitTab(
                                             sharedTransitionScope = this@ExpandedTabs,
@@ -1000,11 +1011,12 @@ private fun SharedTransitionScope.ExpandedStandaloneTab(
         isInline = false,
         isStandalone = true,
         modifier = modifier
-            .sharedElement(
+            .then(if (LocalScrollPlayerMotion.current==app.veyra.music.data.settings.ScrollPlayerMotion.SOFT_FADE) Modifier else Modifier.sharedElement(
+                boundsTransform = rememberScrollBoundsTransform(),
                 sharedContentState = rememberSharedContentState("standaloneTab"),
                 animatedVisibilityScope = animatedVisibilityScope,
                 zIndexInOverlay = 1f
-            )
+            ))
             .shadow(
                 shape = shapes.standaloneTabShape,
                 elevation = elevations.expandedElevation

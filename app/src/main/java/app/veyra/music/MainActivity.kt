@@ -525,7 +525,9 @@ private fun VeyraApp(
     val scrollPlayerAnimations by AppSettings.scrollPlayerAnimations.collectAsStateWithLifecycle()
     val foldingNavigation = scrollPlayerAnimations && !rememberVeyraReducedMotion()
     val navBarScroll = rememberFloatingTabBarScrollConnection()
-    LaunchedEffect(foldingNavigation) { navBarScroll.expand() }
+    val navigationPresentationFlow = remember { AppSettings.experience.map { it.navigationDesign to it.scrollPlayerMotion }.distinctUntilChanged() }
+    val navigationPresentation by navigationPresentationFlow.collectAsStateWithLifecycle(initialValue=AppSettings.experience.value.let {it.navigationDesign to it.scrollPlayerMotion})
+    LaunchedEffect(foldingNavigation, navigationPresentation) { navBarScroll.expand() }
     val rootExperience = remember {AppSettings.experience.map {it.forAppRoot()}.distinctUntilChanged()}
     val experience by rootExperience.collectAsStateWithLifecycle(initialValue=AppSettings.experience.value.forAppRoot())
     var selectedTab by rememberSaveable { mutableIntStateOf(AppSettings.experience.value.startupTab.takeIf {it in 0..3} ?: 0) }

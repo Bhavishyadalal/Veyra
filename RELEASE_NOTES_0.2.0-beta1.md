@@ -1,8 +1,18 @@
 # Veyra 0.2.0-beta1
 
-**Preview development · Android version code 42**
+**Preview development · Android version code 43**
 
 This development cycle starts from the user-tested **stable 0.1.9 build 40**.
+
+## Navigation studio · build 43
+
+- Choose **Floating, Docked, Minimal, Capsule, Ribbon or Orbit**. The folding bar now honors the chosen design, fixing shape selections that previously only affected the separate navigation layout.
+- Choose **Flow, Glide, Lift, Soft Fade or Elastic** for scroll-player transitions. The existing master switch still works without Liquid Glass, and reduced motion keeps the static navigation/mini-player layout.
+- Preview navigation shapes and themed glyphs in Settings → Appearance → Navigation. Scroll transition choices are also next to the existing Scroll player animations switch.
+- Preserve theme colors, asset-pack icons and fonts, custom destinations/labels and Liquid Glass. Explicit bar designs retain their geometry even with decorative asset materials.
+- Save choices across restarts, expand navigation when presentation changes and keep old/future settings safe through existing JSON fallback behavior.
+
+[Design, previews and checks](verification/NAVIGATION-STUDIO-0.2.0-beta1.md). Rebuild/install **code 43**; no signed APK is published by this source update.
 
 ## Liquid Glass + themes · build 42
 

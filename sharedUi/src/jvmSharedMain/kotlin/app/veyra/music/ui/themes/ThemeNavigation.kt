@@ -27,10 +27,10 @@ import androidx.compose.ui.unit.dp
  * No backdrop sampling, image decoding, timers or extra input/semantics nodes.
  */
 @Composable
-fun Modifier.themeNavigationSurface(shape: Shape, glass: Boolean = false): Modifier {
+fun Modifier.themeNavigationSurface(shape: Shape, glass: Boolean = false, preserveShape: Boolean = false): Modifier {
     val theme = LocalThemeVisuals.current ?: return this
     // Keep the decoration clip identical to the refractive renderer shape.
-    val frame = if (glass) shape else if (theme.materialStyle != "classic") themeControlShape(theme) else if (theme.sceneStyle == "sketch") SketchShape else shape
+    val frame = if (glass || preserveShape) shape else if (theme.materialStyle != "classic") themeControlShape(theme) else if (theme.sceneStyle == "sketch") SketchShape else shape
     val opacity = LocalThemeArtworkOptions.current.controlOpacity
     return clip(frame)
         // A theme may decorate glass, but must not paint over it with an opaque fill.

@@ -1,10 +1,14 @@
 # Veyra maintenance rules
 
-- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 42**.
+- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 43**.
   Starts from completed stable 0.1.9 build 40 (`a82d7228ac7cd2c3652ba384447b7691972c01a3`).
   Keep `main` and `stable/0.1.9` frozen at that stable commit until explicit promotion.
   Both catalogs and bundled fallbacks target this preview branch. After generating
   theme/asset catalogs, run `python3 scripts/route_catalogs.py` to restore track URLs.
+  Build 43 adds six navigation designs and five finite scroll-player transitions,
+  persisted in ExperienceOptions; both navigation paths honor design selection.
+  See verification/NAVIGATION-STUDIO-0.2.0-beta1.md. Preserve reduced motion,
+  safe JSON defaults, theme/asset glyphs and decoration-only Liquid Glass overlays.
   Build 42 composes Liquid Glass with theme/asset navigation decorations and enables
   it on the separate mini-player. See verification/LIQUID-GLASS-0.2.0-beta1.md.
   Preserve Android support/blur gates and decoration-only glass overlays.

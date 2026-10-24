@@ -11,7 +11,7 @@ buildscript {
     }
 }
 /* Active preview 0.2.0-beta1; completed stable 0.1.9 remains code 40. */
-extra["veyraVersionCode"] = 42
+extra["veyraVersionCode"] = 43
 extra["veyraVersionName"] = "0.2.0"
 
 /*

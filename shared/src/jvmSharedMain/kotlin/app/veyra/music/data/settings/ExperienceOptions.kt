@@ -9,7 +9,8 @@ import kotlinx.serialization.json.Json
 @Serializable enum class MiniPlayerDesign { PILL, CARD, SLIM }
 @Serializable enum class MiniPlayerProgress { NONE, LINE, FILL }
 @Serializable enum class NavigationLabels { ALWAYS, SELECTED, HIDDEN }
-@Serializable enum class NavigationDesign { FLOATING, DOCKED, MINIMAL }
+@Serializable enum class NavigationDesign { FLOATING, DOCKED, MINIMAL, CAPSULE, RIBBON, ORBIT }
+@Serializable enum class ScrollPlayerMotion { FLOW, GLIDE, LIFT, SOFT_FADE, ELASTIC }
 @Serializable enum class ImmersiveStyle { CLASSIC, ARTWORK_CINEMA, THEME_WORLD, LYRICS_FOCUS, MINIMAL_NIGHT, LANDSCAPE_STAGE }
 @Serializable enum class ImmersiveBackground { SONG, THEME, BLEND, MINIMAL }
 @Serializable enum class ImmersiveCover { FILL, FIT, ZOOMED }
@@ -35,6 +36,7 @@ data class ExperienceOptions(
     val startupTab: Int = 0,
     val navigationLabels: NavigationLabels = NavigationLabels.ALWAYS,
     val navigationDesign: NavigationDesign = NavigationDesign.FLOATING,
+    val scrollPlayerMotion: ScrollPlayerMotion = ScrollPlayerMotion.FLOW,
     val searchKeyboard: Boolean = true,
     val miniPlayerDesign: MiniPlayerDesign = MiniPlayerDesign.PILL,
     val miniPlayerProgress: MiniPlayerProgress = MiniPlayerProgress.NONE,

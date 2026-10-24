@@ -21,12 +21,29 @@ import app.veyra.music.ui.icons.SettingsIcons
     SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.navigation_custom_title),subtitle=stringResource(R.string.navigation_custom_hint),onClick={open=true})
     if(!open)return
     val options by AppSettings.experience.collectAsStateWithLifecycle()
+    val scrollAnimations by AppSettings.scrollPlayerAnimations.collectAsStateWithLifecycle()
     val labels=listOf(R.string.home,R.string.search,R.string.explore,R.string.library,R.string.local_music,R.string.replay,R.string.settings).map {stringResource(it)}
     ModalBottomSheet(onDismissRequest={open=false},sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true)) {
         app.veyra.music.ui.themes.ThemeComponentSurface {
         Column(Modifier.fillMaxWidth().heightIn(max=680.dp).verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.navigation_custom_title),style=MaterialTheme.typography.headlineSmall)
-            Text(stringResource(R.string.navigation_custom_hint),style=MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.navigation_studio_hint),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+            val designChoices=listOf(R.string.navigation_floating,R.string.navigation_docked,R.string.navigation_minimal,R.string.navigation_capsule,R.string.navigation_ribbon,R.string.navigation_orbit).map {stringResource(it)}
+            BoxWithConstraints {
+                val columns=if(maxWidth>=340.dp && androidx.compose.ui.platform.LocalDensity.current.fontScale<1.4f)2 else 1
+                Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
+                    NavigationDesign.entries.chunked(columns).forEach {row->
+                        Row(horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+                            row.forEach {design->app.veyra.music.ui.themes.NavigationStylePreview(design,designChoices[design.ordinal],options.navigationDesign==design,
+                                {AppSettings.setExperience(options.copy(navigationDesign=design))},Modifier.weight(1f))}
+                        }
+                    }
+                }
+            }
+            ExperienceSection(stringResource(R.string.scroll_player_animations)) {
+                SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.scroll_player_animations),subtitle=stringResource(R.string.scroll_player_animations_hint),checked=scrollAnimations,onClick={AppSettings.setScrollPlayerAnimations(!scrollAnimations)})
+                ScrollPlayerMotionSetting()
+            }
             ExperienceSection(stringResource(R.string.experience_nav_destinations)) {
             options.navigation.forEachIndexed {index,target->
                 Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically) {
@@ -43,12 +60,18 @@ import app.veyra.music.ui.icons.SettingsIcons
             SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.navigation_start),subtitle=labels[options.startupTab],options=labels,selectedIndex=options.startupTab,onSelect={AppSettings.setExperience(options.copy(startupTab=it))})
             val labelChoices=listOf(R.string.navigation_labels_always,R.string.navigation_labels_selected,R.string.navigation_labels_hidden).map {stringResource(it)}
             SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.navigation_labels),subtitle=labelChoices[options.navigationLabels.ordinal],options=labelChoices,selectedIndex=options.navigationLabels.ordinal,onSelect={AppSettings.setExperience(options.copy(navigationLabels=NavigationLabels.entries[it]))})
-            val designChoices=listOf(R.string.navigation_floating,R.string.navigation_docked,R.string.navigation_minimal).map {stringResource(it)}
-            SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.navigation_design),subtitle=designChoices[options.navigationDesign.ordinal],options=designChoices,selectedIndex=options.navigationDesign.ordinal,onSelect={AppSettings.setExperience(options.copy(navigationDesign=NavigationDesign.entries[it]))})
             SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.navigation_search_keyboard),checked=options.searchKeyboard,onClick={AppSettings.setExperience(options.copy(searchKeyboard=!options.searchKeyboard))})
             }
-            TextButton(onClick={AppSettings.setExperience(options.copy(navigation=listOf(0,1,2,3),startupTab=0,navigationLabels=NavigationLabels.ALWAYS,navigationDesign=NavigationDesign.FLOATING))}) {Text(stringResource(R.string.navigation_reset))}
+            TextButton(onClick={AppSettings.setExperience(options.copy(navigation=listOf(0,1,2,3),startupTab=0,navigationLabels=NavigationLabels.ALWAYS,navigationDesign=NavigationDesign.FLOATING,scrollPlayerMotion=ScrollPlayerMotion.FLOW))}) {Text(stringResource(R.string.navigation_reset))}
         }
         }
     }
+}
+
+/** Also offered beside the original master switch, so the new choices are easy to find. */
+@Composable internal fun ScrollPlayerMotionSetting() {
+    val options by AppSettings.experience.collectAsStateWithLifecycle()
+    val names=listOf(R.string.scroll_motion_flow,R.string.scroll_motion_glide,R.string.scroll_motion_lift,R.string.scroll_motion_fade,R.string.scroll_motion_elastic).map {stringResource(it)}
+    SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.scroll_player_motion),subtitle=names[options.scrollPlayerMotion.ordinal],
+        options=names,selectedIndex=options.scrollPlayerMotion.ordinal,onSelect={AppSettings.setExperience(options.copy(scrollPlayerMotion=ScrollPlayerMotion.entries[it]))})
 }

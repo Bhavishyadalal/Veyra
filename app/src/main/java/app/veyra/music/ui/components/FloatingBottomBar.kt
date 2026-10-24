@@ -1,6 +1,9 @@
 package app.veyra.music.ui.components
 
 import app.veyra.music.ui.themes.themeNavigationSurface
+import app.veyra.music.ui.themes.navigationShape
+import app.veyra.music.ui.themes.hasSelectionPill
+import app.veyra.music.ui.themes.NavigationGlyphFrame
 import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationSpec
@@ -159,11 +162,7 @@ fun FloatingBottomBar(
     if (tabs.isEmpty()) return
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val experience by AppSettings.experience.collectAsStateWithLifecycle()
-    val pillShape = when(experience.navigationDesign) {
-        app.veyra.music.data.settings.NavigationDesign.DOCKED -> RoundedCornerShape(topStart=20.dp,topEnd=20.dp)
-        app.veyra.music.data.settings.NavigationDesign.MINIMAL -> RoundedCornerShape(12.dp)
-        else -> RoundedCornerShape((pack?.navCorner ?: 28).dp)
-    }
+    val pillShape = experience.navigationDesign.navigationShape(pack?.navCorner ?: 28)
     val container = MaterialTheme.colorScheme.surface
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val useGlass = LocalLiquidGlassEnabled.current && isGlassSupported()
@@ -230,7 +229,7 @@ fun FloatingBottomBar(
                 if (useGlass) {
                     Modifier.liquidGlass(shape = pillShape).themeNavigationSurface(pillShape, glass = true)
                 } else if (pack != null) {
-                    Modifier.themeNavigationSurface(pillShape)
+                    Modifier.themeNavigationSurface(pillShape, preserveShape=experience.navigationDesign!=app.veyra.music.data.settings.NavigationDesign.FLOATING)
                 } else if (reduceDynamicBlur) {
                     Modifier.background(container)
                 } else {
@@ -243,7 +242,7 @@ fun FloatingBottomBar(
             .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.20f), pillShape)
             .padding(horizontal = PILL_INSET, vertical = PILL_INSET),
     ) {
-        if (tabWidthPx > 0f) {
+        if (experience.navigationDesign.hasSelectionPill() && tabWidthPx > 0f) {
             Box(
                 modifier = Modifier
                     .align(AbsoluteAlignment.TopLeft)
@@ -368,8 +367,8 @@ private fun BottomBarItem(
             if (!selected) haptics.play(Haptic.Select)
             onClick()
         }, modifier, showLabel=showLabel) {
-            app.veyra.music.ui.themes.ThemeIcon(tab.icon, null,
-                Modifier.size(24.dp).graphicsLayer { scaleX = scale; scaleY = scale }, tint, themeKey)
+            NavigationGlyphFrame(experience.navigationDesign,selected) { app.veyra.music.ui.themes.ThemeIcon(tab.icon, null,
+                Modifier.size(24.dp).graphicsLayer { scaleX = scale; scaleY = scale }, tint, themeKey) }
         }
         return
     }
@@ -389,6 +388,7 @@ private fun BottomBarItem(
             }
             .padding(vertical = TAB_VERTICAL_PADDING),
     ) {
+        NavigationGlyphFrame(experience.navigationDesign,selected) {
         app.veyra.music.ui.themes.ThemeIcon(
             themeKey = themeKey,
             imageVector = tab.icon,
@@ -401,6 +401,7 @@ private fun BottomBarItem(
                     scaleY = scale
                 },
         )
+        }
         if(showLabel)Spacer(Modifier.height(TAB_ICON_LABEL_GAP))
         if(showLabel)Text(
             text = tab.label,

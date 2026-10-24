@@ -13,6 +13,10 @@ import app.veyra.music.data.settings.AppSettings
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 import app.veyra.music.ui.themes.themeNavigationSurface
+import app.veyra.music.ui.themes.navigationShape
+import app.veyra.music.ui.themes.hasSelectionPill
+import app.veyra.music.ui.themes.NavigationGlyphFrame
+import app.veyra.music.data.settings.NavigationDesign
 import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -120,7 +124,8 @@ fun GlassNavBar(
     // lambda, which the tab bar sees as a changed argument and recomposes on.
     val experience by AppSettings.experience.collectAsStateWithLifecycle()
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
-    val pillShape = remember(pack?.navCorner) { pack?.let { RoundedCornerShape(it.navCorner.dp) } ?: RoundedCornerShape(percent = 50) }
+    val design=experience.navigationDesign
+    val pillShape=remember(design,pack?.navCorner) {design.navigationShape(pack?.navCorner ?: -1)}
     val glassEnabled = LocalLiquidGlassEnabled.current && isGlassSupported()
     val contentColor = pack?.text ?: if (glassEnabled) glassContentColor() else MaterialTheme.colorScheme.onSurface
     val selectedColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -135,17 +140,15 @@ fun GlassNavBar(
     // handler out of the key.
     val currentOnTabSelected by rememberUpdatedState(onTabSelected)
 
-    // Search is the odd one out in the iOS 26 layout: a circle of its own beside
-    // the pill rather than a quarter of it. It is the last tab in Veyra's
-    // order, which is where the shape wants it anyway.
-    val standaloneIndex = tabs.lastIndex
+    // Floating preserves the detached last destination; other designs keep all tabs together.
+    val standaloneIndex = if(design==NavigationDesign.FLOATING)tabs.lastIndex else -1
 
     // A factory, not a value — see the note in FloatingTabBar's header. Each of
     // the three surfaces gets its own glass modifier and so its own shape cache.
     val glassSurface: @Composable () -> Modifier = {
         when {
             glassEnabled -> Modifier.liquidGlass(shape = pillShape).themeNavigationSurface(pillShape, glass = true)
-            pack != null -> Modifier.themeNavigationSurface(pillShape)
+            pack != null -> Modifier.themeNavigationSurface(pillShape, preserveShape=experience.navigationDesign!=app.veyra.music.data.settings.NavigationDesign.FLOATING)
             else -> Modifier.clip(pillShape)
                 .background(MaterialTheme.colorScheme.surfaceContainer, pillShape)
                 .border(1.dp, MaterialTheme.colorScheme.outlineVariant, pillShape)
@@ -155,9 +158,10 @@ fun GlassNavBar(
     FloatingTabBar(
         selectedTabKey = selectedIndex,
         scrollConnection = scrollConnection,
+        motion = experience.scrollPlayerMotion,
         modifier = modifier
             .windowInsetsPadding(floatingBarInsets)
-            .padding(horizontal = BAR_GUTTER)
+            .padding(horizontal = if(design==NavigationDesign.DOCKED)0.dp else BAR_GUTTER)
             .padding(bottom = 2.dp)
             .fillMaxWidth(),
         tabBarContentModifier = glassSurface,
@@ -206,13 +210,14 @@ fun GlassNavBar(
         colors = FloatingTabBarDefaults.colors(
             backgroundColor = Color.Transparent,
             accessoryBackgroundColor = Color.Transparent,
-            indicatorColor = selectedBackground,
+            indicatorColor = if(design.hasSelectionPill())selectedBackground else Color.Transparent,
         ),
         // Flat, because the glass is not. Every surface here already draws its
         // own [Shadow.Default] as part of the backdrop pass, and the library's
         // Modifier.shadow on top of that is a second offscreen layer and a
         // second shadow render for each of them — three at rest, six mid-fold,
         // paying twice for a shadow you can only see once.
+        shapes = FloatingTabBarDefaults.shapes(tabBarShape=pillShape,accessoryShape=pillShape),
         elevations = FloatingTabBarDefaults.elevations(
             inlineElevation = 0.dp,
             expandedElevation = 0.dp,
@@ -230,8 +235,8 @@ fun GlassNavBar(
         ),
         // Held too: this is declared `Any?`, so a fresh list every pass is a
         // changed argument by identity and defeats skipping on its own.
-        contentKey = remember(selectedIndex, tabs, contentColor, selectedColor, selectedBackground, pack, glassEnabled) {
-            listOf(selectedIndex, tabs, contentColor, selectedColor, selectedBackground, pack, glassEnabled)
+        contentKey = remember(selectedIndex, tabs, contentColor, selectedColor, selectedBackground, pack, glassEnabled, design, experience.navigationLabels) {
+            listOf(selectedIndex, tabs, contentColor, selectedColor, selectedBackground, pack, glassEnabled, design, experience.navigationLabels)
         },
     ) {
         tabs.forEachIndexed { index, tab ->
@@ -266,13 +271,13 @@ fun GlassNavBar(
                 tab(
                     key = index,
                     icon = {
-                        app.veyra.music.ui.themes.ThemeIcon(
+                        NavigationGlyphFrame(design,isSelected) { app.veyra.music.ui.themes.ThemeIcon(
                             themeKey = tab.themeKey ?: listOf("nav_home","nav_search","nav_explore","nav_library").getOrElse(index) { tab.icon.name },
                             imageVector = tab.icon,
                             contentDescription = tab.label,
                             tint = tint,
                             modifier = Modifier.size(24.dp).semantics { selected = isSelected; role = Role.Tab },
-                        )
+                        ) }
                     },
                     title = {
                         if(experience.navigationLabels==app.veyra.music.data.settings.NavigationLabels.ALWAYS || (isSelected && experience.navigationLabels==app.veyra.music.data.settings.NavigationLabels.SELECTED))Text(

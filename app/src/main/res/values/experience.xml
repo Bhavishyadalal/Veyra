@@ -94,4 +94,14 @@ Your current preferences and listening history will be replaced. Account secrets
   <string name="output_device_visibility">Show output device caption</string>
   <string name="artwork_pause_shrink">Shrink artwork when paused</string>
   <string name="font_import_active">Imported app font</string>
+  <string name="navigation_capsule">Capsule</string>
+  <string name="navigation_ribbon">Ribbon</string>
+  <string name="navigation_orbit">Orbit</string>
+  <string name="scroll_player_motion">Scroll transition style</string>
+  <string name="scroll_motion_flow">Flow</string>
+  <string name="scroll_motion_glide">Glide</string>
+  <string name="scroll_motion_lift">Lift</string>
+  <string name="scroll_motion_fade">Soft Fade</string>
+  <string name="scroll_motion_elastic">Elastic</string>
+  <string name="navigation_studio_hint">Choose a shape and scroll transition. Your theme, icons and Liquid Glass stay with you.</string>
 </resources>

@@ -1,3 +1,5 @@
+> Current preview: **build 43** adds [Navigation studio](NAVIGATION-STUDIO-0.2.0-beta1.md). Earlier build notes follow.
+
 > Current preview: **build 42** adds the [Liquid Glass/theme fix](LIQUID-GLASS-0.2.0-beta1.md). The initial build 41 baseline is recorded below.
 
 # Preview 0.2.0-beta1 · baseline build 41

@@ -845,6 +845,7 @@ fun SettingsScreen(
                         checked = scrollPlayerAnimations,
                         onClick = { AppSettings.setScrollPlayerAnimations(!scrollPlayerAnimations) },
                     )
+                    ScrollPlayerMotionSetting()
                 }
                 // Left out where the player won't honour it: a window too wide for
                 // the player to fill and too narrow to stand a page beside it keeps
