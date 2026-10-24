@@ -840,7 +840,7 @@ private fun SharedTransitionScope.ExpandedTabs(
             ))
     ) {
         // The bar's glass is exported for the lens to refract.
-        CompositionLocalProvider(LocalGlassExport provides barGlass) {
+        CompositionLocalProvider(LocalGlassExport provides if(glassPill)barGlass else null) {
             Box(
                 modifier = Modifier
                     .shadow(
@@ -874,7 +874,7 @@ private fun SharedTransitionScope.ExpandedTabs(
                         .fillMaxWidth()
                         .onSizeChanged { rowSize = it }
                         .then(if (glassPill) Modifier.layerBackdrop(tabRow) else Modifier)
-                        .pointerInput(Unit) {
+                        .pointerInput(tabCount, tabStepPx, isRtl) {
                             if (currentSelectedTabIndex < 0 || tabStepPx <= 0f) return@pointerInput
 
                             // In tab order, whichever way the row runs.

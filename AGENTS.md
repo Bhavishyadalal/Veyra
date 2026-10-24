@@ -1,10 +1,12 @@
 # Veyra maintenance rules
 
-- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 43**.
+- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 44**.
   Starts from completed stable 0.1.9 build 40 (`a82d7228ac7cd2c3652ba384447b7691972c01a3`).
   Keep `main` and `stable/0.1.9` frozen at that stable commit until explicit promotion.
   Both catalogs and bundled fallbacks target this preview branch. After generating
   theme/asset catalogs, run `python3 scripts/route_catalogs.py` to restore track URLs.
+  Build 44 fixes Library request/account ownership, atomic ratings, stale control
+  geometry and unnecessary glass exports; see verification/RELIABILITY-REVIEW-0.2.0-beta1.md.
   Build 43 adds six navigation designs and five finite scroll-player transitions,
   persisted in ExperienceOptions; both navigation paths honor design selection.
   See verification/NAVIGATION-STUDIO-0.2.0-beta1.md. Preserve reduced motion,

@@ -7,6 +7,8 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.snap
+import app.veyra.music.ui.motion.rememberVeyraReducedMotion
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -375,6 +377,7 @@ private fun ArtworkPageActions(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
+    val reduceMotion=rememberVeyraReducedMotion()
     Row(
         modifier = modifier
             .then(artworkPageSurface(shape = CircleShape, hazeState = hazeState))
@@ -382,7 +385,7 @@ private fun ArtworkPageActions(
             // left. The surface itself therefore grows instead of jumping to
             // its new width in a single frame.
             .animateContentSize(
-                animationSpec = spring(
+                animationSpec = if(reduceMotion)snap() else spring(
                     dampingRatio = Spring.DampingRatioNoBouncy,
                     stiffness = Spring.StiffnessMediumLow,
                 ),

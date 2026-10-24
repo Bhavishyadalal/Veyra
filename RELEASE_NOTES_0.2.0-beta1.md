@@ -1,8 +1,18 @@
 # Veyra 0.2.0-beta1
 
-**Preview development · Android version code 43**
+**Preview development · Android version code 44**
 
 This development cycle starts from the user-tested **stable 0.1.9 build 40**.
+
+## Reliability review · build 44
+
+- Prevent older Library requests from overwriting a newer result; retain loaded content during reloads.
+- Reject cancelled/account-stale Library results before seeding likes or starting continuation sync. Account changes cancel refresh ownership and clear stale loading indicators.
+- Update ratings atomically so background sync cannot lose a user's concurrent Like/Dislike changes.
+- Refresh player button geometry when a theme's scene style changes; update navigation drag geometry after resizing or switching layout direction.
+- Skip unused glass exports when the selection lens is disabled and honor reduced motion in artwork-header expansion.
+
+[Review and focused checks](verification/RELIABILITY-REVIEW-0.2.0-beta1.md). Rebuild/install **code 44** for these changes.
 
 ## Navigation studio · build 43
 

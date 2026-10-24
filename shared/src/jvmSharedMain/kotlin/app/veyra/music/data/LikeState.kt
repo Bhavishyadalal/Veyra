@@ -4,6 +4,7 @@ import app.veyra.music.data.model.LikeStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 /**
  * Ratings changed during this app session, shared by the UI and playback service.
@@ -17,7 +18,7 @@ object LikeState {
     val overrides: StateFlow<Map<String, LikeStatus>> = _overrides.asStateFlow()
 
     fun set(videoId: String, status: LikeStatus) {
-        _overrides.value += (videoId to status)
+        _overrides.update {it + (videoId to status)}
     }
 
     /**
@@ -28,17 +29,19 @@ object LikeState {
      * override already made this session always wins.
      */
     fun rememberStated(videoId: String, stated: LikeStatus?) {
-        if (stated != null && stated != LikeStatus.INDIFFERENT && videoId !in _overrides.value) {
-            set(videoId, stated)
+        if (stated != null && stated != LikeStatus.INDIFFERENT) {
+            _overrides.update {current -> if(videoId in current)current else current + (videoId to stated)}
         }
     }
 
     /** Seeds only ratings not already changed explicitly during this session. */
     fun seedLiked(videoIds: Set<String>) {
         if (videoIds.isEmpty()) return
-        val next = _overrides.value.toMutableMap()
-        videoIds.forEach { next.putIfAbsent(it, LikeStatus.LIKE) }
-        if (next != _overrides.value) _overrides.value = next
+        _overrides.update {current ->
+            val next=current.toMutableMap()
+            videoIds.forEach { next.putIfAbsent(it, LikeStatus.LIKE) }
+            if(next==current)current else next
+        }
     }
 
     fun clear() {

@@ -70,6 +70,8 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.CancellationException
+import app.veyra.music.data.LatestRequestGate
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import app.veyra.music.util.loadOrderedBatches
 import kotlinx.coroutines.async
@@ -152,6 +154,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private var homeSnapshotJob: Job? = null
     private val homeSnapshotMutex = Mutex()
     private val homeLayoutMutex = Mutex()
+
+    private val _refreshing = MutableStateFlow(emptySet<Feed>())
+    val refreshing: StateFlow<Set<Feed>> = _refreshing.asStateFlow()
+
+    private val libraryRequests=LatestRequestGate()
+    private var libraryLoadJob: Job? = null
+    private val refreshJobs=mutableMapOf<Feed,Job>()
 
     /**
      * Token for the next page of Home shelves; null once there's nothing
@@ -1615,8 +1624,6 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      */
     enum class Feed { HOME, EXPLORE, LIBRARY }
 
-    private val _refreshing = MutableStateFlow(emptySet<Feed>())
-    val refreshing: StateFlow<Set<Feed>> = _refreshing.asStateFlow()
 
     /**
      * Re-fetches [feed] in place. Unlike the `load*` entry points this leaves
@@ -1629,7 +1636,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         if (feed == Feed.LIBRARY && !_signedIn.value) return
         val identity = listenerKey()
         _refreshing.value = _refreshing.value + feed
-        viewModelScope.launch {
+        val request=viewModelScope.launch(start=CoroutineStart.LAZY) {
             try {
                 when (feed) {
                     Feed.HOME -> refreshHome(identity)
@@ -1637,9 +1644,14 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     Feed.LIBRARY -> fetchLibrary(identity)
                 }
             } finally {
-                _refreshing.value = _refreshing.value - feed
+                if(refreshJobs[feed]===currentCoroutineContext()[Job]) {
+                    refreshJobs.remove(feed)
+                    _refreshing.value = _refreshing.value - feed
+                }
             }
         }
+        refreshJobs[feed]=request
+        request.start()
     }
 
     fun onExploreShown() {
@@ -2027,24 +2039,36 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun loadLibrary() {
         if (!_signedIn.value) return
         val identity = listenerKey()
-        _library.value = UiState.Loading
-        viewModelScope.launch { fetchLibrary(identity) }
+        libraryLoadJob?.cancel()
+        if(_library.value !is UiState.Success)_library.value = UiState.Loading
+        libraryLoadJob=viewModelScope.launch { fetchLibrary(identity) }
     }
 
     private suspend fun fetchLibrary(identity: String?) {
-        val next = YtMusicRepository.library().fold(
-            onSuccess = { page ->
-                // Liked Music is published with just its first page on the tab;
-                // the rest of the collection is synced into LikeState here, in
-                // this ViewModel's scope, so it is cancelled with the screen and
-                // a liked track past the first page still reads as liked.
-                page.likedContinuation?.let { token -> syncLikedMusic(identity, token) }
-                if (page.isEmpty) UiState.Error(text(R.string.library_empty))
-                else UiState.Success(page.copy(likedContinuation = null))
-            },
-            onFailure = { UiState.Error(it.friendly()) },
-        )
-        if (identity == listenerKey()) _library.value = next
+        libraryRequests.load(fetch={YtMusicRepository.library()}) {result ->
+            if(identity!=listenerKey() || !_signedIn.value)return@load
+            val next=result.fold(
+                onSuccess={page->
+                    // Ratings and continuation jobs belong to this accepted account/result only.
+                    LikeState.seedLiked(page.likedSongs.mapTo(HashSet()) {it.videoId})
+                    page.likedContinuation?.let {syncLikedMusic(identity,it)}
+                    if(page.isEmpty)UiState.Error(text(R.string.library_empty))
+                    else UiState.Success(page.copy(likedContinuation=null))
+                },
+                onFailure={UiState.Error(it.friendly())},
+            )
+            _library.value=next
+        }
+    }
+
+    private fun cancelListenerRequests() {
+        libraryRequests.invalidate()
+        libraryLoadJob?.cancel()
+        libraryLoadJob=null
+        val old=refreshJobs.values.toList()
+        refreshJobs.clear()
+        _refreshing.value=emptySet()
+        old.forEach {it.cancel()}
     }
 
     /**
@@ -2064,7 +2088,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         likedSyncJob?.cancel()
         likedSyncJob = viewModelScope.launch {
             YtMusicRepository.syncLikedMusic(token) { next ->
-                if (identity != listenerKey()) null else YtMusicRepository.moreSongs(next).getOrNull()
+                if(identity!=listenerKey())null else {
+                    val page=YtMusicRepository.moreSongs(next).getOrNull()
+                    currentCoroutineContext().ensureActive()
+                    page.takeIf {identity==listenerKey()}
+                }
             }
         }
     }
@@ -3638,6 +3666,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private fun clearListenerState(restoreCached: Boolean = false) {
+        cancelListenerRequests()
         prepareHomeOwner(listenerKey(), restoreNow = true)
         _account.value = null
         likedSyncJob?.cancel()
@@ -3687,6 +3716,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             removeAccount(current)
             return
         }
+        cancelListenerRequests()
         authStore.signOut()
         Innertube.cookie = null
         // The mirror image: verdicts reached with a session in hand say nothing

@@ -64,7 +64,7 @@ internal fun PlayerControlSurface(
 ) {
     val pack = app.veyra.music.ui.themes.LocalThemeVisuals.current
     val controlTint = pack?.accent ?: tint
-    val effectiveShape = remember(grouped,pack?.materialStyle,pack?.buttonCorner,shape) {
+    val effectiveShape = remember(grouped,pack?.materialStyle,pack?.sceneStyle,pack?.buttonCorner,shape) {
         if (grouped) RectangleShape else pack?.let { app.veyra.music.ui.themes.themeControlShape(it) } ?: shape
     }
     val contrast = LocalVeyraContrastControls.current

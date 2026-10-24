@@ -25,6 +25,8 @@ import app.veyra.music.data.model.SongMenu
 import app.veyra.music.data.model.UserPlaylist
 import app.veyra.music.data.sources.TrackMatcher
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -499,7 +501,7 @@ object YtMusicRepository {
             val likedPage = liked.await()
             val likedSongs = likedPage?.songs.orEmpty()
             val likedIds = likedSongs.mapTo(HashSet()) { it.videoId }
-            LikeState.seedLiked(likedIds)
+            // The owner validates account/request identity before publishing ratings.
             LibraryPage(
                 likedSongs = likedSongs,
                 // Thumbs-up'd tracks are also in the library feed; only what
@@ -542,6 +544,7 @@ object YtMusicRepository {
         var next: String? = firstToken
         while (next != null && seen.add(next)) {
             val page = loadNext(next) ?: return
+            currentCoroutineContext().ensureActive()
             LikeState.seedLiked(page.songs.mapTo(HashSet()) { it.videoId })
             next = page.continuation
         }
