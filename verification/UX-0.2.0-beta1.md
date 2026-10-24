@@ -1,3 +1,5 @@
+> Current preview: **build 42** adds the [Liquid Glass/theme fix](LIQUID-GLASS-0.2.0-beta1.md). The initial build 41 baseline is recorded below.
+
 # Preview 0.2.0-beta1 · baseline build 41
 
 Starts from completed stable 0.1.9 build 40 at `a82d7228ac7cd2c3652ba384447b7691972c01a3`. Future work belongs on `preview/0.2.0-beta1` until the owner explicitly requests stable promotion.

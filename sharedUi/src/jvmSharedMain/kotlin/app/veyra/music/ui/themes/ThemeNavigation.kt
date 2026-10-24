@@ -23,16 +23,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
-/** A legible, static theme material for both navigation implementations.
+/** A static theme material, or decoration-only overlay for a glass navigation surface.
  * No backdrop sampling, image decoding, timers or extra input/semantics nodes.
  */
 @Composable
-fun Modifier.themeNavigationSurface(shape: Shape): Modifier {
+fun Modifier.themeNavigationSurface(shape: Shape, glass: Boolean = false): Modifier {
     val theme = LocalThemeVisuals.current ?: return this
-    val frame = if (theme.materialStyle != "classic") themeControlShape(theme) else if (theme.sceneStyle == "sketch") SketchShape else shape
+    // Keep the decoration clip identical to the refractive renderer shape.
+    val frame = if (glass) shape else if (theme.materialStyle != "classic") themeControlShape(theme) else if (theme.sceneStyle == "sketch") SketchShape else shape
     val opacity = LocalThemeArtworkOptions.current.controlOpacity
     return clip(frame)
-        .background(Brush.verticalGradient(listOf(theme.raised.copy(alpha = opacity), theme.surface.copy(alpha = opacity))))
+        // A theme may decorate glass, but must not paint over it with an opaque fill.
+        .then(if (glass) Modifier else Modifier.background(Brush.verticalGradient(listOf(
+            theme.raised.copy(alpha = opacity), theme.surface.copy(alpha = opacity)))))
         .drawWithCache {
             val line = 1.dp.toPx()
             onDrawBehind {

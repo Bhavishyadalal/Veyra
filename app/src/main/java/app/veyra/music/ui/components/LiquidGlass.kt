@@ -26,6 +26,8 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalDensity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.veyra.music.data.settings.AppSettings
+import app.veyra.music.ui.themes.LocalThemeVisuals
+import app.veyra.music.ui.themes.LocalThemeArtworkOptions
 import app.veyra.music.ui.components.backdrop.Backdrop
 import app.veyra.music.ui.components.backdrop.backdrops.LayerBackdrop
 import app.veyra.music.ui.components.backdrop.drawBackdrop
@@ -127,7 +129,7 @@ fun Modifier.lightweightLiquidGlass(
     fallbackColor: Color,
 ): Modifier {
     val useGlass = LocalLiquidGlassEnabled.current && isGlassSupported()
-    val glassTint = if (MaterialTheme.colorScheme.surface.luminance() > 0.5f) {
+    val glassTint = LocalThemeVisuals.current?.surface ?: if (MaterialTheme.colorScheme.surface.luminance() > 0.5f) {
         Color(0xFFFAFAFA)
     } else {
         Color(0xFF121212)
@@ -203,7 +205,9 @@ fun Modifier.liquidGlass(shape: CornerBasedShape): Modifier {
     val blurPx = with(density) { BLUR_RADIUS_DP.dp.toPx() } * GLASS_RESOLUTION_SCALE
     val lensHeightPx = with(density) { (LENS_HEIGHT * LENS_MAX_DP).dp.toPx() } * GLASS_RESOLUTION_SCALE
     val lensAmountPx = with(density) { (LENS_AMOUNT * LENS_MAX_DP).dp.toPx() } * GLASS_RESOLUTION_SCALE
-    val surfaceTintColor = if (MaterialTheme.colorScheme.surface.luminance() > 0.5f) {
+    val pack = LocalThemeVisuals.current
+    val surfaceOpacity = SURFACE_OPACITY * if (pack != null) LocalThemeArtworkOptions.current.controlOpacity else 1f
+    val surfaceTintColor = pack?.surface ?: if (MaterialTheme.colorScheme.surface.luminance() > 0.5f) {
         Color(0xFFFAFAFA)
     } else {
         Color(0xFF121212)
@@ -227,7 +231,7 @@ fun Modifier.liquidGlass(shape: CornerBasedShape): Modifier {
         highlight = { Highlight.Default },
         shadow = { Shadow.Default },
         onDrawSurface = {
-            drawRect(color = surfaceTintColor.copy(alpha = SURFACE_OPACITY), size = size)
+            drawRect(color = surfaceTintColor.copy(alpha = surfaceOpacity), size = size)
         },
         exportedBackdrop = exportedBackdrop,
         backdropScale = GLASS_RESOLUTION_SCALE,

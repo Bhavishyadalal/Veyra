@@ -1,4 +1,6 @@
-> **Active development: 0.2.0-beta1 / build 41** on `preview/0.2.0-beta1`. Based on completed stable 0.1.9 build 40. [Preview baseline and checks](verification/UX-0.2.0-beta1.md) · [Preview notes](RELEASE_NOTES_0.2.0-beta1.md). Stable branches remain unchanged.
+> **Beta build 42:** Liquid Glass now works with theme and asset-pack navigation surfaces and the separate mini-player. [Fix and checks](verification/LIQUID-GLASS-0.2.0-beta1.md).
+
+> **Active development: 0.2.0-beta1 / build 42** on `preview/0.2.0-beta1`. Based on completed stable 0.1.9 build 40. [Preview baseline and checks](verification/UX-0.2.0-beta1.md) · [Preview notes](RELEASE_NOTES_0.2.0-beta1.md). Stable branches remain unchanged.
 
 > **Build 40:** redesigned [immersive-mode gallery](verification/IMMERSIVE-GALLERY-0.1.9-BUILD-40.md) with visual mode posters, pinned heading/close, clear selection and expandable controls.
 

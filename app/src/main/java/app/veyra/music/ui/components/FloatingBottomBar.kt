@@ -227,12 +227,12 @@ fun FloatingBottomBar(
             .fillMaxWidth()
             .clip(pillShape)
             .then(
-                if (pack != null) {
+                if (useGlass) {
+                    Modifier.liquidGlass(shape = pillShape).themeNavigationSurface(pillShape, glass = true)
+                } else if (pack != null) {
                     Modifier.themeNavigationSurface(pillShape)
                 } else if (reduceDynamicBlur) {
                     Modifier.background(container)
-                } else if (useGlass) {
-                    Modifier.liquidGlass(shape = pillShape)
                 } else {
                     Modifier.optimizedHazeEffect(
                         state = hazeState,

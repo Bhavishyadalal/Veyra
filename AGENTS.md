@@ -1,10 +1,13 @@
 # Veyra maintenance rules
 
-- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 41**.
+- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 42**.
   Starts from completed stable 0.1.9 build 40 (`a82d7228ac7cd2c3652ba384447b7691972c01a3`).
   Keep `main` and `stable/0.1.9` frozen at that stable commit until explicit promotion.
   Both catalogs and bundled fallbacks target this preview branch. After generating
   theme/asset catalogs, run `python3 scripts/route_catalogs.py` to restore track URLs.
+  Build 42 composes Liquid Glass with theme/asset navigation decorations and enables
+  it on the separate mini-player. See verification/LIQUID-GLASS-0.2.0-beta1.md.
+  Preserve Android support/blur gates and decoration-only glass overlays.
   Preserve all pack ZIP bytes and strict runtime URL validation. See
   verification/UX-0.2.0-beta1.md. Retain stable plus newest three preview archives:
   0.2.0-beta1, 0.1.9-beta1 and 0.1.8-beta1; older archives remain in branch/history.

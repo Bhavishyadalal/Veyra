@@ -144,8 +144,8 @@ fun GlassNavBar(
     // the three surfaces gets its own glass modifier and so its own shape cache.
     val glassSurface: @Composable () -> Modifier = {
         when {
+            glassEnabled -> Modifier.liquidGlass(shape = pillShape).themeNavigationSurface(pillShape, glass = true)
             pack != null -> Modifier.themeNavigationSurface(pillShape)
-            glassEnabled -> Modifier.liquidGlass(shape = pillShape)
             else -> Modifier.clip(pillShape)
                 .background(MaterialTheme.colorScheme.surfaceContainer, pillShape)
                 .border(1.dp, MaterialTheme.colorScheme.outlineVariant, pillShape)
