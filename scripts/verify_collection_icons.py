@@ -16,4 +16,4 @@ for e in items:
 for family,field in [('themes','themes'),('asset-packs','packs')]:
  for e in json.loads((ROOT/f'{family}/catalog.json').read_text())[field]:
   assert hashlib.sha256((ROOT/f'{family}/packs/{e["id"]}-v{e["version"]}.zip').read_bytes()).hexdigest()==e['sha256']
-print('21 masters, 210 correctly sized density exports, 21 shared-wave adaptive/monochrome references and all 67 immutable pack checksums passed.')
+print('21 collection masters / 210 density exports / shared-wave adaptive resources and every current catalog pack checksum passed.')

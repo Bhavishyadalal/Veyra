@@ -1,17 +1,15 @@
-> **Active preview: 0.2.0-beta1 / build 46** · [Baseline notes](../RELEASE_NOTES_0.2.0-beta1.md). Stable remains 0.1.9 build 40 on its existing branches.
-
 # Veyra source downloads
 
-**Stable 0.1.9 · code 40** adds [six immersive presentations](../verification/IMMERSIVE-WORLDS-0.1.9.md) with direct player access. It includes 62 themes, 15 independent asset packs and 105 launcher choices. These complete Android Studio projects include licenses and backend provenance. **Source ZIPs are not APKs.**
+**Stable 0.2.0 · code 47** promotes the completed 0.2.0-beta1 code 46. Includes 72 themes, 32 independent overlays, 132 launcher choices, Motion studio and the control/Studio fixes. These are complete Android Studio projects with licenses and backend provenance. **Source ZIPs are not APKs.**
 
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
-| Current stable · `main`, `stable/0.1.9` | 0.1.9 / code 40 | [Download](Veyra_Android_Source_0.1.9_Stable.zip) | [SHA-256](Veyra_Android_Source_0.1.9_Stable.zip.sha256) |
-| Active preview · `preview/0.2.0-beta1` | 0.2.0-beta1 / code 46 | [Download](Veyra_Android_Source_0.2.0-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.0-beta1.zip.sha256) |
+| Current stable · `main`, `stable/0.2.0` | 0.2.0 / code 47 | [Download](Veyra_Android_Source_0.2.0_Stable.zip) | [SHA-256](Veyra_Android_Source_0.2.0_Stable.zip.sha256) |
+| Completed preview · `preview/0.2.0-beta1` | 0.2.0-beta1 / code 46 | [Download](Veyra_Android_Source_0.2.0-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.0-beta1.zip.sha256) |
 | Completed preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 35 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 | Historical preview · `preview/0.1.8-beta1` | 0.1.8-beta1 / code 27 | [Download](Veyra_Android_Source_0.1.8-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.8-beta1.zip.sha256) |
 
-[Stable release notes](../RELEASE_NOTES_0.1.9.md) · [Promotion checks and limits](../verification/STABLE-0.1.9-PROMOTION.md) · [Completed beta notes](../RELEASE_NOTES_0.1.9-beta1.md)
+[Release notes](../RELEASE_NOTES_0.2.0.md) · [Promotion checks](../verification/STABLE-0.2.0-PROMOTION.md) · [Completed beta notes](../RELEASE_NOTES_0.2.0-beta1.md). Historical stable 0.1.9 source remains on [its frozen branch](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/stable/0.1.9/downloads/Veyra_Android_Source_0.1.9_Stable.zip).
 
 ## Open and verify
 

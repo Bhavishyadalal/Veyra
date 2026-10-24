@@ -1,35 +1,30 @@
 # Veyra maintenance rules
 
-- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 46**.
-  Starts from completed stable 0.1.9 build 40 (`a82d7228ac7cd2c3652ba384447b7691972c01a3`).
-  Keep `main` and `stable/0.1.9` frozen at that stable commit until explicit promotion.
-  Both catalogs and bundled fallbacks target this preview branch. After generating
-  theme/asset catalogs, run `python3 scripts/route_catalogs.py` to restore track URLs.
-  Build 46 completes 72 theme / 32 asset launcher bindings (132 choices), adds
-  ten Pocket Riot overlays and 14 semantic aliases, fixes cancelled hold state,
-  guards Studio dismissal during Apply and adds asset search/downloaded filtering.
-  See verification/POCKET-RIOT-0.2.0.md. Original pack bytes stay immutable.
-  Build 45 adds Chaos Studio (72 themes / 22 asset packs), ten app motion
-  profiles, ten additional scroll-player motions and ten additional navigation designs.
-  See verification/CHAOS-STUDIO-0.2.0-beta1.md. Motion is finite and reduced motion
-  takes precedence. All previously published packs stay immutable.
-  Source ZIPs store immutable runtime ZIPs losslessly in SOURCE_DATA_PACKS.tar.xz
-  to stay below GitHub’s file limit; scripts/restore_source_packs.py restores them
-  offline without overwriting edits. Native build inputs/masters stay expanded.
-  Build 44 fixes Library request/account ownership, atomic ratings, stale control
-  geometry and unnecessary glass exports; see verification/RELIABILITY-REVIEW-0.2.0-beta1.md.
-  Build 43 adds six navigation designs and five finite scroll-player transitions,
-  persisted in ExperienceOptions; both navigation paths honor design selection.
-  See verification/NAVIGATION-STUDIO-0.2.0-beta1.md. Preserve reduced motion,
-  safe JSON defaults, theme/asset glyphs and decoration-only Liquid Glass overlays.
-  Build 42 composes Liquid Glass with theme/asset navigation decorations and enables
-  it on the separate mini-player. See verification/LIQUID-GLASS-0.2.0-beta1.md.
-  Preserve Android support/blur gates and decoration-only glass overlays.
-  Preserve all pack ZIP bytes and strict runtime URL validation. See
-  verification/UX-0.2.0-beta1.md. Retain stable plus newest three preview archives:
-  0.2.0-beta1, 0.1.9-beta1 and 0.1.8-beta1; older archives remain in branch/history.
+- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 47**.
+  Explicitly promoted at the owner's request from completed `preview/0.2.0-beta1`
+  code 46. Keep the completed preview's suffix/catalog URLs intact on its branch.
+  Stable catalogs and bundled fallbacks target `main`; run scripts/route_catalogs.py
+  after catalog generation. Do not mix preview and stable URLs.
+  Current collection: 72 themes, 32 independent overlays and 132 launcher choices.
+  Every theme/overlay has an explicit bundled icon. See verification/POCKET-RIOT-0.2.0.md
+  and verification/STABLE-0.2.0-PROMOTION.md. All previously published packs remain
+  byte-identical; keep data-only validation, canonical URLs and bounded rendering.
+  Build 46 adds Pocket Riot, completes semantic/icon bindings, fixes player hold
+  cancellation and Studio dismissal, and adds asset search/download filtering.
+  Build 45 adds Chaos Studio and Motion studio; builds 42–44 fix Liquid Glass,
+  navigation design, request ownership and ratings. Preserve reduced motion,
+  safe JSON defaults and decoration-only glass overlays.
+  Current source archives: stable 0.2.0 plus completed previews 0.2.0-beta1,
+  0.1.9-beta1 and 0.1.8-beta1. Older stable 0.1.9 stays on its frozen branch/history.
+  Source ZIPs retain native inputs and masters; runtime ZIPs are losslessly stored
+  in SOURCE_DATA_PACKS.tar.xz. Restore offline with scripts/restore_source_packs.py
+  or scripts/restore_theme_sources.py. Preserve strict paths/checksums, font pool
+  namespaces, preview aliases and user edits. Keep ZIPs below GitHub's 100 MiB cap.
+  Eleven legacy foreground mipmap aliases remove only byte-identical exports;
+  canonical pixels, all family masks and all launcher names remain. Use
+  scripts/dedupe_legacy_glass.py and retain branding/legacy-glass-aliases.json.
 
-- Current stable Android source: `main` and `stable/0.1.9`, version 0.1.9 / code 40.
+- Historical stable Android source: `stable/0.1.9`, version 0.1.9 / code 40.
   Promoted from completed preview `cc1da14c0ebb14af31335bd1f5c657855037b19d` at the owner's request.
   Initial promotion was code 36; build 37 adds six immersive styles (Classic preserved),
   direct portrait/landscape entry and a seekable dock. See verification/IMMERSIVE-WORLDS-0.1.9.md.

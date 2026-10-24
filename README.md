@@ -1,32 +1,12 @@
-> **Beta build 46:** [Pocket Riot](verification/POCKET-RIOT-0.2.0.md) · ten cute/bold overlays, 27 matching AI glass icons, complete 72-theme/32-overlay icon bindings and control/Studio fixes.
-
-> **Beta build 45:** [Chaos Studio](verification/CHAOS-STUDIO-0.2.0-beta1.md) · ten themes, seven overlays, ten new navigation designs and ten new app/scroll-player motion styles.
-
-> **Beta build 44:** [Reliability review](verification/RELIABILITY-REVIEW-0.2.0-beta1.md): account-safe Library loading, atomic likes and theme/navigation rendering fixes.
-
-> **Beta build 43:** [Navigation studio](verification/NAVIGATION-STUDIO-0.2.0-beta1.md): six bottom-bar designs, five scroll-player transitions, theme-aware previews and live selection with Liquid Glass compatibility.
-
-> **Beta build 42:** Liquid Glass now works with theme and asset-pack navigation surfaces and the separate mini-player. [Fix and checks](verification/LIQUID-GLASS-0.2.0-beta1.md).
-
-> **Active development: 0.2.0-beta1 / build 46** on `preview/0.2.0-beta1`. Based on completed stable 0.1.9 build 40. [Preview baseline and checks](verification/UX-0.2.0-beta1.md) · [Preview notes](RELEASE_NOTES_0.2.0-beta1.md). Stable branches remain unchanged.
-
-> **Build 40:** redesigned [immersive-mode gallery](verification/IMMERSIVE-GALLERY-0.1.9-BUILD-40.md) with visual mode posters, pinned heading/close, clear selection and expandable controls.
-
-> **Build 39:** ten redesigned [Night Vault glass launcher icons](design/launcher/night-vault/previews/glass-editions.webp), with raised translucent waveforms and distinct sculpted materials. [Changes and checks](verification/GLASS-ICONS-0.1.9-BUILD-39.md).
-
-> **Build 38:** playback-button and Home recovery fixes, a visual immersive picker, covered-page suspension and [ten Night Vault packs with matching icons](asset-packs/NIGHT_VAULT.md). [Checks and limits](verification/PATCH-0.1.9-BUILD-38.md).
-
-> **Immersive Worlds · build 37:** Classic plus Artwork Cinema, Theme World, Lyrics Focus, Minimal Night and Landscape Stage. Direct player access, a six-mode picker and seekable playback dock. [Details](verification/IMMERSIVE-WORLDS-0.1.9.md).
-
-> **Five new illustrated themes:** [Illustrated Worlds](themes/ILLUSTRATED_WORLDS.md) · [Preview collection](themes/previews/illustrated-worlds/collection.png). Compatible with the existing beta engine build 30.
-
-> **Stable 0.1.9 / code 40:** 62 themes, 15 independent asset overlays, 105 matching launcher choices, live Home icon updates, theme artwork controls, queue/Home/search improvements and lighter asset rendering. [Release notes](RELEASE_NOTES_0.1.9.md) · [Promotion checks and limits](verification/STABLE-0.1.9-PROMOTION.md) · [Source downloads](downloads/README.md).
-
-> Completed preview **0.1.9-beta1 / code 35** remains on `preview/0.1.9-beta1` with its original source ZIP. Stable 0.1.8 / code 28 remains available on `stable/0.1.8`.
+> **Stable 0.2.0 / code 47** · 72 themes, 32 independent overlays and 132 launcher choices. Theme-aware Liquid Glass, Motion studio, 16 navigation designs, 15 scroll-player transitions and complete matching glass icons.
+>
+> [Release notes](RELEASE_NOTES_0.2.0.md) · [Pocket Riot assets](asset-packs/POCKET_RIOT.md) · [Glass icons](design/launcher/pocket-riot/previews/glass-editions.webp) · [Source downloads](downloads/README.md) · [Promotion checks](verification/STABLE-0.2.0-PROMOTION.md).
+>
+> Completed preview **0.2.0-beta1 / code 46** remains on `preview/0.2.0-beta1`. Historical stable **0.1.9 / code 40** remains on `stable/0.1.9`. Install a code-47 build for the new native controls and launcher aliases; this source push does not publish a signed APK.
 
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 
-> **Source tracks:** current stable is on `main` and `stable/0.1.9`. Historical stable 0.1.7 remains on `stable/0.1.7`; the completed `preview/0.1.8-beta1` remains code 27. Stable 0.1.9 includes all 62 themes, 15 asset packs and 105 launcher choices. [Downloads](downloads/README.md) · [Backend policy](docs/BACKEND_SYNC.md).
+> **Source tracks:** current stable is on `main` and `stable/0.2.0`. Historical stable 0.1.7 remains on `stable/0.1.7`; the completed `preview/0.1.8-beta1` remains code 27. Stable 0.2.0 includes 72 themes, 32 asset packs and 132 launcher choices. [Downloads](downloads/README.md) · [Backend policy](docs/BACKEND_SYNC.md).
 
 > Open the complete project using [START_HERE.md](START_HERE.md). Source ZIPs are Android Studio projects, not APKs; promotion does not publish an installable APK.
 

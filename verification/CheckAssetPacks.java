@@ -9,7 +9,7 @@ import kotlin.Unit;
 public class CheckAssetPacks {
  public static void main(String[] args) throws Exception {
   AssetCatalog c=AssetPack.INSTANCE.getJson().decodeFromString(AssetCatalog.Companion.serializer(),Files.readString(Path.of("asset-packs/catalog.json")));
-  if(c.getPacks().size()!=22)throw new AssertionError("pack count");
+  if(c.getPacks().size()!=32)throw new AssertionError("pack count");
   for(AssetListing e:c.getPacks()) {
    String raw=Files.readString(Path.of("asset-packs",e.getId(),"assets.json"));
    AssetManifest m=AssetPack.INSTANCE.getJson().decodeFromString(AssetManifest.Companion.serializer(),raw);

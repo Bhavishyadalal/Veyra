@@ -10,8 +10,8 @@ buildscript {
         classpath("com.android.tools:r8:9.1.56")
     }
 }
-/* Active preview 0.2.0-beta1; completed stable 0.1.9 remains code 40. */
-extra["veyraVersionCode"] = 46
+/* Stable 0.2.0; completed preview remains code 46 on its own branch. */
+extra["veyraVersionCode"] = 47
 extra["veyraVersionName"] = "0.2.0"
 
 /*
@@ -30,7 +30,7 @@ extra["veyraVersionName"] = "0.2.0"
  * so it is the one place to get right.
  *
  */
-extra["veyraBetaSuffix"] = "beta1"
+extra["veyraBetaSuffix"] = ""
 
 plugins {
     id("com.android.application") version "8.10.1" apply false

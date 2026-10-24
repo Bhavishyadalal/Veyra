@@ -9,7 +9,7 @@ from source_pack_library import LIBRARY,decode
 
 root = Path(__file__).resolve().parents[1]
 expected = {
-    "Veyra_Android_Source_0.1.9_Stable.zip",
+    "Veyra_Android_Source_0.2.0_Stable.zip",
     "Veyra_Android_Source_0.2.0-beta1.zip",
     "Veyra_Android_Source_0.1.8-beta1.zip",
     "Veyra_Android_Source_0.1.9-beta1.zip",
