@@ -1,0 +1,16 @@
+{
+  "generator": "OpenAI image generation",
+  "usage": "Original Veyra Chaos Studio portrait wallpaper masters; lossless originals retained in the authoring workspace. Runtime WebP exports live within each theme.",
+  "sources": {
+    "soda-sabotage": "/workspace/generated_images/exec-b984b022-ea8b-4cb2-a4b3-82b696fa1189.png",
+    "velvet-vandal": "/workspace/generated_images/exec-c86ed943-4ecb-4d60-a275-fc0d96d37322.png",
+    "acid-daydream": "/workspace/generated_images/exec-aa5dfe5e-bdcd-4666-ac6a-5376c2b4d488.png",
+    "peach-panic": "/workspace/generated_images/exec-8ea654df-a6b1-4137-a119-55962e043e50.png",
+    "ink-and-ivory": "/workspace/generated_images/exec-27dc5a25-e616-418f-ab3f-124f5e5111b5.png",
+    "holo-havoc": "/workspace/generated_images/exec-44c205e4-f254-4440-a696-e9f824771866.png",
+    "denim-disorder": "/workspace/generated_images/exec-90357ef0-b600-4113-a916-a1312fea8321.png",
+    "cherry-voltage": "/workspace/generated_images/exec-f7725618-01ad-4af5-aa34-cc87b7bb7bae.png",
+    "mint-mutiny": "/workspace/generated_images/exec-a5b1f960-73a4-4e6b-9197-f353cc6d17a0.png",
+    "lunar-lollipop": "/workspace/generated_images/exec-6d2ffccd-11fa-4d82-8675-cbabd7d2f623.png"
+  }
+}

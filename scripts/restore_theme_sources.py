@@ -12,6 +12,8 @@ import zipfile
 def restore(root):
     root=Path(root).resolve()
     manifest=json.loads((root/'SOURCE_MANIFEST.json').read_text())
+    from restore_source_packs import restore as restore_packs
+    restore_packs(root)
     restored=0
     for item in manifest.get('themeAssetsInPacks',[]):
         path=Path(item['path']); pack=Path(item['pack']); member=Path(item['entry'])

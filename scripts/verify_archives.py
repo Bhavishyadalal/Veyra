@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import zipfile
+from source_pack_library import LIBRARY,decode
 
 root = Path(__file__).resolve().parents[1]
 expected = {
@@ -28,6 +29,8 @@ for name in sorted(expected):
     with zipfile.ZipFile(path) as z:
         assert z.testzip() is None, name
         manifest = json.loads(z.read("Veyra/SOURCE_MANIFEST.json"))
+        packed = decode(z.read("Veyra/" + LIBRARY), manifest["packedArchives"]) if manifest.get("packedArchives") else {}
+        def read_source(path): return packed[path] if path in packed else z.read("Veyra/" + path)
         entries = manifest["files"]
         paths = [e["path"] for e in entries]
         assert len(paths) == len(set(paths)), name
@@ -44,15 +47,15 @@ for name in sorted(expected):
             assert not mapped.is_absolute() and ".." not in mapped.parts
             assert mapped.parts[0] in ("themes","asset-packs") or (mapped.parts[:2] in (("design","punk-fonts"),("design","asset-fonts")) and len(mapped.parts)==3 and mapped.suffix==".ttf")
             assert image["path"] not in paths
-            assert image["pack"] in paths and image["pack"].startswith(("themes/packs/","asset-packs/packs/"))
-            with zipfile.ZipFile(io.BytesIO(z.read("Veyra/" + image["pack"]))) as pack:
+            assert (image["pack"] in paths or image["pack"] in packed) and image["pack"].startswith(("themes/packs/","asset-packs/packs/"))
+            with zipfile.ZipFile(io.BytesIO(read_source(image["pack"]))) as pack:
                 assert hashlib.sha256(pack.read(image["entry"])).hexdigest() == image["sha256"]
         assert "Veyra/gradle/wrapper/gradle-wrapper.jar" in z.namelist(), name
         assert "Veyra/settings.gradle.kts" in z.namelist(), name
         assert not any(p.endswith((".apk", ".aab", ".jks", ".keystore")) for p in paths), name
-        for rel in (p for p in paths if p.endswith(".zip")):
+        for rel in (p for p in paths + list(packed) if p.endswith(".zip")):
             assert rel.startswith(("themes/packs/","asset-packs/packs/")), (name, rel)
-            data = z.read("Veyra/" + rel)
+            data = read_source(rel)
             expected_hash = z.read("Veyra/" + rel + ".sha256").decode().split()[0]
             assert hashlib.sha256(data).hexdigest() == expected_hash
             with zipfile.ZipFile(io.BytesIO(data)) as pack:

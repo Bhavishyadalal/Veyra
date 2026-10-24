@@ -1,0 +1,1 @@
+Unmodified heading and body fonts; original upstream SIL Open Font License notices included. AI-board lettering is art direction, not the installed font.

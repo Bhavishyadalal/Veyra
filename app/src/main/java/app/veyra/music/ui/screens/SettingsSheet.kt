@@ -404,6 +404,7 @@ fun SettingsScreen(
     }
 
     val reducedMotion = rememberVeyraReducedMotion()
+    val appMotion=app.veyra.music.ui.motion.rememberAppMotionPreferences()
     var categoryIntroduced by remember { mutableStateOf(false) }
     val categoryAlpha = remember { Animatable(1f) }
     var categoryDirection by remember { mutableStateOf(1f) }
@@ -414,7 +415,7 @@ fun SettingsScreen(
         } else {
             categoryDirection = (if (category == null) -1f else 1f) * (if (categoryRtl) -1f else 1f)
             categoryAlpha.snapTo(0f)
-            categoryAlpha.animateTo(1f, tween(VeyraMotion.Section, easing = VeyraMotion.Easing))
+            categoryAlpha.animateTo(1f, tween(app.veyra.music.ui.motion.appMotionDuration(appMotion.first,appMotion.second,VeyraMotion.Section), easing = VeyraMotion.Easing))
         }
         categoryIntroduced = true
     }
@@ -846,6 +847,7 @@ fun SettingsScreen(
                         onClick = { AppSettings.setScrollPlayerAnimations(!scrollPlayerAnimations) },
                     )
                     ScrollPlayerMotionSetting()
+                    AppMotionSetting()
                 }
                 // Left out where the player won't honour it: a window too wide for
                 // the player to fill and too narrow to stand a page beside it keeps

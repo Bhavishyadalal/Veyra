@@ -2,6 +2,116 @@
   "schema": 1,
   "themes": [
     {
+      "id": "soda-sabotage",
+      "name": "Soda Sabotage",
+      "description": "Glass fizz. Loud feelings. punk gel controls, original AI wallpaper, colored display lettering and gel progress.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/packs/soda-sabotage-v1.zip",
+      "sha256": "2ca5b6e03777823922ab6cb1a9dcc881915ece550095834094d73beb1b82d160",
+      "bytes": 702165,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/soda-sabotage/artwork/preview.webp"
+    },
+    {
+      "id": "velvet-vandal",
+      "name": "Velvet Vandal",
+      "description": "A soft kind of rebellion. deco controls, original AI wallpaper, colored display lettering and skyline progress.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/packs/velvet-vandal-v1.zip",
+      "sha256": "af3e50db1e2628af5c5bce106ce9740917989e87be614a2db87fa9894372f8e6",
+      "bytes": 710109,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/velvet-vandal/artwork/preview.webp"
+    },
+    {
+      "id": "acid-daydream",
+      "name": "Acid Daydream",
+      "description": "Dream in high voltage. telemetry controls, original AI wallpaper, colored display lettering and telemetry progress.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/packs/acid-daydream-v1.zip",
+      "sha256": "6b0d8ca174d17886edf29ba471560e3eb6d45ab534caf62dcf4d63a8c8831f1c",
+      "bytes": 700296,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/acid-daydream/artwork/preview.webp"
+    },
+    {
+      "id": "peach-panic",
+      "name": "Peach Panic",
+      "description": "Sweetness with a pulse. punk sticker controls, original AI wallpaper, colored display lettering and beads progress.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/packs/peach-panic-v1.zip",
+      "sha256": "a7c39c52b9143cd96a85104f7427226dc7abb876826fac48181d3402d0349e2e",
+      "bytes": 608604,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/peach-panic/artwork/preview.webp"
+    },
+    {
+      "id": "ink-and-ivory",
+      "name": "Ink and Ivory",
+      "description": "Turn the page. Turn it up. punk torn controls, original AI wallpaper, colored display lettering and tape progress.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/packs/ink-and-ivory-v1.zip",
+      "sha256": "adef25e9eaa08a947c9a930cdb58208ea6d6d55a81dec83973af817bad9bfdcb",
+      "bytes": 776649,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/ink-and-ivory/artwork/preview.webp"
+    },
+    {
+      "id": "holo-havoc",
+      "name": "Holo Havoc",
+      "description": "Prisms after midnight. punk chrome controls, original AI wallpaper, colored display lettering and plasma progress.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/packs/holo-havoc-v1.zip",
+      "sha256": "14dc0820b9800512e0f2b9409e15e402e916c7488a6f585c4f58d155952c73eb",
+      "bytes": 729118,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/holo-havoc/artwork/preview.webp"
+    },
+    {
+      "id": "denim-disorder",
+      "name": "Denim Disorder",
+      "description": "A mixtape stitched by hand. botanical controls, original AI wallpaper, colored display lettering and sketch progress.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/packs/denim-disorder-v1.zip",
+      "sha256": "38879c54bb2c0081acdb7a6658e0f26e32b0310befd97df62a462aff15d707fb",
+      "bytes": 733244,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/denim-disorder/artwork/preview.webp"
+    },
+    {
+      "id": "cherry-voltage",
+      "name": "Cherry Voltage",
+      "description": "Redline your favorite song. punk rivet controls, original AI wallpaper, colored display lettering and cable progress.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/packs/cherry-voltage-v1.zip",
+      "sha256": "f67afa1e4061ddac37ef30364c98f9ecf58d6843e0316a5f11c0fa27507ce2a5",
+      "bytes": 750551,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/cherry-voltage/artwork/preview.webp"
+    },
+    {
+      "id": "mint-mutiny",
+      "name": "Mint Mutiny",
+      "description": "Wild little listening garden. botanical controls, original AI wallpaper, colored display lettering and vine progress.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/packs/mint-mutiny-v1.zip",
+      "sha256": "7b7722d13951a885d54f5f7e766c733ea698027e2f4ab9e7a9403505859f8fd3",
+      "bytes": 785902,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/mint-mutiny/artwork/preview.webp"
+    },
+    {
+      "id": "lunar-lollipop",
+      "name": "Lunar Lollipop",
+      "description": "Sugar on the dark side. punk gel controls, original AI wallpaper, colored display lettering and bubbles progress.",
+      "version": 1,
+      "minAppCode": 32,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/packs/lunar-lollipop-v1.zip",
+      "sha256": "89c291b2a24c38687d6d130a90a5c79b05d32b3b7f0a7474ec697a5d9535c2c1",
+      "bytes": 645583,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/themes/lunar-lollipop/artwork/preview.webp"
+    },
+    {
       "id": "riot-candy",
       "name": "Riot Candy",
       "description": "Acid-lime and pink gel controls, chrome glints, wet-paint lettering, star-head seek and elastic press feedback.",

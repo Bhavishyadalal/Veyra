@@ -27,10 +27,12 @@ class NavigationStudioTest {
         assertEquals(ScrollPlayerMotion.FLOW,legacy.scrollPlayerMotion)
         assertEquals(NavigationDesign.DOCKED,legacy.navigationDesign)
         for(design in NavigationDesign.entries)for(motion in ScrollPlayerMotion.entries) {
-            val value=legacy.copy(navigationDesign=design,scrollPlayerMotion=motion)
+            val value=legacy.copy(navigationDesign=design,scrollPlayerMotion=motion,appMotionStyle=AppMotionStyle.SHUTTER,motionTempo=MotionTempo.QUICK)
             assertEquals(value,ExperienceOptions.decode(value.encode()))
         }
         val future=ExperienceOptions.decode("{\"navigationDesign\":\"FUTURE\",\"scrollPlayerMotion\":\"FUTURE\"}")
+        assertEquals(AppMotionStyle.DEFAULT,ExperienceOptions.decode("{\"appMotionStyle\":\"FUTURE\",\"motionTempo\":\"FUTURE\"}").appMotionStyle)
+        assertEquals(MotionTempo.BALANCED,ExperienceOptions.decode(null).motionTempo)
         assertEquals(NavigationDesign.FLOATING,future.navigationDesign)
         assertEquals(ScrollPlayerMotion.FLOW,future.scrollPlayerMotion)
     }
@@ -67,7 +69,7 @@ class NavigationStudioTest {
                     try {File(output,"styles-$case.webp").writeBytes(frame.encodeToData(EncodedImageFormat.WEBP,90)!!.bytes)} finally {frame.close()}
                     fun SemanticsNode.all():List<SemanticsNode> = listOf(this)+children.flatMap {it.all()}
                     val nodes=scene!!.semanticsOwners.flatMap {it.rootSemanticsNode.all()}.filter {it.config.getOrNull(SemanticsProperties.Role)==Role.RadioButton}
-                    assertEquals(6,nodes.size)
+                    assertEquals(NavigationDesign.entries.size,nodes.size)
                     assertEquals(1,nodes.count {it.config.getOrNull(SemanticsProperties.Selected)==true})
                     nodes.forEach {assertTrue(it.config[SemanticsActions.OnClick].action!!.invoke())}
                     assertEquals(NavigationDesign.entries.toSet(),choices)

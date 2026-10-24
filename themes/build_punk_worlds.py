@@ -67,6 +67,13 @@ def build(c):
  bg,surface,raised,accent,container,text,muted,outline,secondary=['#'+v for v in c['colors']]
  brand=f'<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 128 128"><defs><linearGradient id="b"><stop stop-color="{accent}"/><stop offset=".5" stop-color="{secondary}"/><stop offset="1" stop-color="{text}"/></linearGradient></defs><rect x="5" y="5" width="118" height="118" rx="26" fill="{bg}" stroke="url(#b)" stroke-width="3"/><path d="M14 111H115 M18 15H87" stroke="{secondary}" stroke-width="2"/><g transform="translate(10 7)"><path d="{wave}" fill="url(#b)" stroke="{text}" stroke-width=".6"/></g></svg>'
  (source/'brand.svg').write_text(brand);cairosvg.svg2png(bytestring=brand.encode(),write_to=str(base/'artwork/brand.png'))
+ if c.get('brandSource'):
+  # Reuse a reviewed official-wave glass edition; no new launcher alias is implied.
+  from PIL import Image
+  master=ROOT.parent/'design/launcher/collections'/f'{c["brandSource"]}.webp'
+  if not master.exists():master=ROOT.parent/'design/launcher/night-vault'/f'{c["brandSource"]}.webp'
+  with Image.open(master) as image:image.convert('RGB').resize((256,256),Image.Resampling.LANCZOS).save(base/'artwork/brand.png',optimize=True)
+
  for font in ['Manrope',c['font']]:
   origin=ROOT/'midnight-express/fonts/Manrope.ttf' if font=='Manrope' else ROOT.parent/'design/punk-fonts'/f'{font}.ttf'
   notice=ROOT/'midnight-express/licenses/Manrope-OFL.txt' if font=='Manrope' else ROOT.parent/'design/punk-fonts'/f'{font}-OFL.txt'

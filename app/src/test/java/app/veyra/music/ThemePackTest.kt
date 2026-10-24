@@ -143,7 +143,7 @@ class ThemePackTest {
     }
     @Test fun allPublishedThemesInstallWithCorrectBrandingAndMinimumVersion() {
         val catalog=ThemePack.json.decodeFromString<ThemeCatalog>(File(project,"themes/catalog.json").readText())
-        assertEquals(setOf("riot-candy","chrome-venom","bubble-riot","xerox-afterparty","cosmic-vandal","switchback-radio","komorebi-hour","rooftop-reverie","apex-telemetry","cinder-kata","lantern-letters","velvet-orbit","moss-mechanism","sugar-static","tidal-origami","margin-notes","patchwork-picnic","clover-requiem","sunroom-mixtape","concrete-afterhours","matcha-mischief","halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream","stained-glass-sonata","firefly-railway","porcelain-moon","black-honey","sakura-arcade","cloud-post-office","copper-canyon-radio","midnight-aquarium","sunday-bakery","rose-circuit","clockwork-garden","snowglobe-village","indigo-atelier","prism-playground","silent-cinema","riverside-pause","pixel-stargazer","roaming-cosmos","blue-hour-sanctuary","celestial-current"),catalog.themes.map { it.id }.toSet())
+        assertEquals(setOf("riot-candy","chrome-venom","bubble-riot","xerox-afterparty","cosmic-vandal","switchback-radio","komorebi-hour","rooftop-reverie","apex-telemetry","cinder-kata","lantern-letters","velvet-orbit","moss-mechanism","sugar-static","tidal-origami","margin-notes","patchwork-picnic","clover-requiem","sunroom-mixtape","concrete-afterhours","matcha-mischief","halloween-nocturne","web-slinger","playtime-club","astral-tide","midnight-express","pumpkin-purr","sunset-crew","starry-spirits","analog-reverie","petal-promise","moonlit-herbarium","golden-afterglow","lilypond-parade","dustbyte-outpost","alpine-ember","starfall-pals","chrome-vesper","window-wish","cassette-corner","azure-bloom","strawberry-daydream","stained-glass-sonata","firefly-railway","porcelain-moon","black-honey","sakura-arcade","cloud-post-office","copper-canyon-radio","midnight-aquarium","sunday-bakery","rose-circuit","clockwork-garden","snowglobe-village","indigo-atelier","prism-playground","silent-cinema","riverside-pause","pixel-stargazer","roaming-cosmos","blue-hour-sanctuary","celestial-current","soda-sabotage","velvet-vandal","acid-daydream","peach-panic","ink-and-ivory","holo-havoc","denim-disorder","cherry-voltage","mint-mutiny","lunar-lollipop"),catalog.themes.map { it.id }.toSet())
         for (entry in catalog.themes) {
             val pack=File(project,"themes/packs/${entry.id}-v${entry.version}.zip")
             val (m,dir)=ThemePack.install(pack,temp.newFolder(),entry,BuildConfig.VERSION_CODE,::validatePublishedImageBounds)
@@ -175,7 +175,7 @@ class ThemePackTest {
         val bundled=File(project,"app/src/main/assets/theme-catalog.json").readBytes()
         assertArrayEquals(published,bundled)
         val entries=ThemeRepository.parseCatalog(published)
-        assertEquals(62,entries.size)
+        assertEquals(72,entries.size)
         entries.forEach { entry ->
             java.util.zip.ZipFile(File(project,"themes/packs/${entry.id}-v${entry.version}.zip")).use { z ->
                 assertNotNull(z.getEntry("artwork/preview.webp"))
@@ -213,12 +213,12 @@ class ThemePackTest {
     @Test fun expandedCatalogStillHasAFiniteThemeLimit() {
         val entry=catalog()
         val prefix=entry.url.substringBefore("packs/")
-        val entries=(0 until 65).map { i ->
+        val entries=(0 until 97).map { i ->
             val id="bounded-$i"
             entry.copy(id=id,url=prefix+"packs/$id-v${entry.version}.zip",preview=prefix+"$id/artwork/preview.webp")
         }
         fun encoded(items: List<ThemeListing>)=ThemePack.json.encodeToString(ThemeCatalog.serializer(),ThemeCatalog(1,items)).encodeToByteArray()
-        assertEquals(64,ThemeRepository.parseCatalog(encoded(entries.take(64))).size)
+        assertEquals(96,ThemeRepository.parseCatalog(encoded(entries.take(96))).size)
         rejects { ThemeRepository.parseCatalog(encoded(entries)) }
     }
 

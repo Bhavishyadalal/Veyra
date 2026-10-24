@@ -2,6 +2,83 @@
   "schema": 1,
   "packs": [
     {
+      "id": "gummy-signal",
+      "name": "Gummy Signal",
+      "description": "Inflated gel frames and star-cut highlights.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/gummy-signal-v1.zip",
+      "sha256": "07ffe88fb28fa8e3648e64301959391a886fdb98c5c901e9cc1ff13eca7793cc",
+      "bytes": 367930,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/gummy-signal/preview.webp"
+    },
+    {
+      "id": "razor-petal",
+      "name": "Razor Petal",
+      "description": "Petal-edged rock seals and sharp poster lettering.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/razor-petal-v1.zip",
+      "sha256": "5adc2980547bb56e28dc63f61ef8e1c619c9fd3ded231c2e5714e3457c7cc2ff",
+      "bytes": 436210,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/razor-petal/preview.webp"
+    },
+    {
+      "id": "disco-chrome",
+      "name": "Disco Chrome",
+      "description": "Faceted chrome keys and orbital light traces.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/disco-chrome-v1.zip",
+      "sha256": "fcb8b2a73640cc08ef615ac040b1c0db7dedbb6dd5af4c198cef2b8bf71d0284",
+      "bytes": 343145,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/disco-chrome/preview.webp"
+    },
+    {
+      "id": "paper-revolt",
+      "name": "Paper Revolt",
+      "description": "Torn double-print stamps and bold concert lettering.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/paper-revolt-v1.zip",
+      "sha256": "be9591418410d94768d4b376ce3c3a6019e9eca646d5779739b40a76af5dab7c",
+      "bytes": 346417,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/paper-revolt/preview.webp"
+    },
+    {
+      "id": "velvet-sigil",
+      "name": "Velvet Sigil",
+      "description": "Gothic arches, crescent seals and fine silver ornament.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/velvet-sigil-v1.zip",
+      "sha256": "e558479f059511644dccff867a97a893678cf2ed509e4616632e59f95daeab99",
+      "bytes": 432532,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/velvet-sigil/preview.webp"
+    },
+    {
+      "id": "patch-party",
+      "name": "Patch Party",
+      "description": "Stitched denim patches and varsity headline details.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/patch-party-v1.zip",
+      "sha256": "5072e53aa878e660fa14e463ca1cda7fef5aa7895b1d154a58eb106889a0f5bf",
+      "bytes": 420054,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/patch-party/preview.webp"
+    },
+    {
+      "id": "pixel-fizz",
+      "name": "Pixel Fizz",
+      "description": "Stepped arcade frames and candy instrument marks.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/pixel-fizz-v1.zip",
+      "sha256": "6a8cd2efda6d68e20703ba18864a6c63f1dd336430befeb888bac0e21d14e028",
+      "bytes": 357909,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/pixel-fizz/preview.webp"
+    },
+    {
       "id": "spray-parade",
       "name": "Spray Parade",
       "description": "Graffiti marker glyphs, paint-stamp transports, torn frames and a short paper slide.",

@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 import subprocess
 import zipfile
+from source_pack_library import LIBRARY,encode
 
 
 def main():
@@ -68,6 +69,8 @@ def main():
         digest = hashlib.sha256(source.read_bytes()).hexdigest()
         if digest in packed_fonts: packed_images[source.relative_to(root).as_posix()] = packed_fonts[digest]
     omitted = []
+    packed_archives = []
+    pack_data = {}
     archive = root / "downloads" / args.name
     archive.parent.mkdir(exist_ok=True)
     with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
@@ -102,13 +105,20 @@ def main():
             if not path.is_file():
                 continue
             data = path.read_bytes()
+            if is_theme_pack:
+                pack_data[rel] = data
+                packed_archives.append({"path": rel, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
+                continue
             duplicate = packed_images.get(rel)
             if duplicate and hashlib.sha256(data).hexdigest() == duplicate["sha256"]:
                 omitted.append({"path": rel, **duplicate})
                 continue
             z.write(path, "Veyra/" + rel)
             manifest.append({"path": rel, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
-        z.writestr("Veyra/SOURCE_MANIFEST.json", json.dumps({"package": args.name, "files": manifest, "themeAssetsInPacks": omitted}, indent=2) + "\n")
+        library = encode(pack_data)
+        z.writestr("Veyra/" + LIBRARY, library, compress_type=zipfile.ZIP_STORED)
+        manifest.append({"path": LIBRARY, "bytes": len(library), "sha256": hashlib.sha256(library).hexdigest()})
+        z.writestr("Veyra/SOURCE_MANIFEST.json", json.dumps({"package": args.name, "files": manifest, "themeAssetsInPacks": omitted, "packedArchives": packed_archives}, indent=2) + "\n")
     with zipfile.ZipFile(archive) as z:
         assert z.testzip() is None
         for entry in manifest:

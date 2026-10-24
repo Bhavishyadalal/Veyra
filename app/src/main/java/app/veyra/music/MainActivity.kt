@@ -525,6 +525,8 @@ private fun VeyraApp(
     val scrollPlayerAnimations by AppSettings.scrollPlayerAnimations.collectAsStateWithLifecycle()
     val foldingNavigation = scrollPlayerAnimations && !rememberVeyraReducedMotion()
     val navBarScroll = rememberFloatingTabBarScrollConnection()
+    val appMotionFlow = remember { AppSettings.experience.map { it.appMotionStyle to it.motionTempo }.distinctUntilChanged() }
+    val appMotion by appMotionFlow.collectAsStateWithLifecycle(initialValue=AppSettings.experience.value.let {it.appMotionStyle to it.motionTempo})
     val navigationPresentationFlow = remember { AppSettings.experience.map { it.navigationDesign to it.scrollPlayerMotion }.distinctUntilChanged() }
     val navigationPresentation by navigationPresentationFlow.collectAsStateWithLifecycle(initialValue=AppSettings.experience.value.let {it.navigationDesign to it.scrollPlayerMotion})
     LaunchedEffect(foldingNavigation, navigationPresentation) { navBarScroll.expand() }
@@ -2768,7 +2770,7 @@ private fun VeyraApp(
                     targetState = NavigationDestination(destinationKey, destinationDepth),
                     contentKey = { it.key },
                     transitionSpec = {
-                        navigationTransition(NavigationMotionPolicy.between(initialState, targetState), reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion)
+                        navigationTransition(NavigationMotionPolicy.between(initialState, targetState), reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion, style = appMotion.first, tempo = appMotion.second)
                     },
                     modifier = Modifier
                         .hazeSource(hazeState)
@@ -3244,7 +3246,7 @@ private fun VeyraApp(
                                 contentKey = { it?.browseId ?: "explore" },
                                 transitionSpec = {
                                     navigationTransition(if (targetState == null) NavigationMotion.Back else NavigationMotion.Forward,
-                                        reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion)
+                                        reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion, style = appMotion.first, tempo = appMotion.second)
                                 },
                                 modifier = Modifier.fillMaxSize(),
                                 label = "exploreCategory",
@@ -3527,7 +3529,7 @@ private fun VeyraApp(
                         // The main page already owns transitions to/from Discord or Spotify.
                         val motion = if (initialState.second != targetState.second) NavigationMotion.None
                             else if (targetState.first == null) NavigationMotion.Back else NavigationMotion.Forward
-                        navigationTransition(motion, reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion)
+                        navigationTransition(motion, reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion, style = appMotion.first, tempo = appMotion.second)
                     },
                     modifier = Modifier.fillMaxSize(),
                     label = "settingsSubScreen",

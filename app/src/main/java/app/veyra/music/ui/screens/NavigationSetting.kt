@@ -28,7 +28,7 @@ import app.veyra.music.ui.icons.SettingsIcons
         Column(Modifier.fillMaxWidth().heightIn(max=680.dp).verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.navigation_custom_title),style=MaterialTheme.typography.headlineSmall)
             Text(stringResource(R.string.navigation_studio_hint),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
-            val designChoices=listOf(R.string.navigation_floating,R.string.navigation_docked,R.string.navigation_minimal,R.string.navigation_capsule,R.string.navigation_ribbon,R.string.navigation_orbit).map {stringResource(it)}
+            val designChoices=listOf(R.string.navigation_floating,R.string.navigation_docked,R.string.navigation_minimal,R.string.navigation_capsule,R.string.navigation_ribbon,R.string.navigation_orbit,R.string.navigation_monorail,R.string.navigation_harbor,R.string.navigation_ticket,R.string.navigation_pebble,R.string.navigation_prism,R.string.navigation_bracket,R.string.navigation_halo,R.string.navigation_stitch,R.string.navigation_pixel,R.string.navigation_lozenge).map {stringResource(it)}
             BoxWithConstraints {
                 val columns=if(maxWidth>=340.dp && androidx.compose.ui.platform.LocalDensity.current.fontScale<1.4f)2 else 1
                 Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
@@ -40,6 +40,7 @@ import app.veyra.music.ui.icons.SettingsIcons
                     }
                 }
             }
+            AppMotionSetting()
             ExperienceSection(stringResource(R.string.scroll_player_animations)) {
                 SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.scroll_player_animations),subtitle=stringResource(R.string.scroll_player_animations_hint),checked=scrollAnimations,onClick={AppSettings.setScrollPlayerAnimations(!scrollAnimations)})
                 ScrollPlayerMotionSetting()
@@ -71,7 +72,20 @@ import app.veyra.music.ui.icons.SettingsIcons
 /** Also offered beside the original master switch, so the new choices are easy to find. */
 @Composable internal fun ScrollPlayerMotionSetting() {
     val options by AppSettings.experience.collectAsStateWithLifecycle()
-    val names=listOf(R.string.scroll_motion_flow,R.string.scroll_motion_glide,R.string.scroll_motion_lift,R.string.scroll_motion_fade,R.string.scroll_motion_elastic).map {stringResource(it)}
+    val names=listOf(R.string.scroll_motion_flow,R.string.scroll_motion_glide,R.string.scroll_motion_lift,R.string.scroll_motion_fade,R.string.scroll_motion_elastic,R.string.scroll_motion_zephyr,R.string.scroll_motion_cascade,R.string.scroll_motion_focus,R.string.scroll_motion_snap,R.string.scroll_motion_bloom,R.string.scroll_motion_sweep,R.string.scroll_motion_float,R.string.scroll_motion_compress,R.string.scroll_motion_unfold,R.string.scroll_motion_settle).map {stringResource(it)}
     SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.scroll_player_motion),subtitle=names[options.scrollPlayerMotion.ordinal],
         options=names,selectedIndex=options.scrollPlayerMotion.ordinal,onSelect={AppSettings.setExperience(options.copy(scrollPlayerMotion=ScrollPlayerMotion.entries[it]))})
+}
+
+/** Independent app-wide choice. Theme motion remains available through Theme default. */
+@Composable internal fun AppMotionSetting() {
+    val options by AppSettings.experience.collectAsStateWithLifecycle()
+    val names=listOf(R.string.app_motion_default,R.string.app_motion_silk,R.string.app_motion_soft_zoom,R.string.app_motion_rise,R.string.app_motion_drift,R.string.app_motion_reveal,R.string.app_motion_quick_cut,R.string.app_motion_velvet,R.string.app_motion_spring,R.string.app_motion_diagonal,R.string.app_motion_shutter).map {stringResource(it)}
+    val tempos=listOf(R.string.motion_tempo_relaxed,R.string.motion_tempo_balanced,R.string.motion_tempo_quick).map {stringResource(it)}
+    ExperienceSection(stringResource(R.string.app_motion_title)) {
+        Text(stringResource(R.string.app_motion_hint),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+        SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.app_motion_style),subtitle=names[options.appMotionStyle.ordinal],options=names,selectedIndex=options.appMotionStyle.ordinal,onSelect={AppSettings.setExperience(options.copy(appMotionStyle=AppMotionStyle.entries[it]))})
+        SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.motion_tempo_title),subtitle=tempos[options.motionTempo.ordinal],options=tempos,selectedIndex=options.motionTempo.ordinal,onSelect={AppSettings.setExperience(options.copy(motionTempo=MotionTempo.entries[it]))})
+        app.veyra.music.ui.motion.MotionStylePreview(options.appMotionStyle,options.motionTempo,app.veyra.music.ui.motion.rememberVeyraReducedMotion(),stringResource(R.string.motion_preview))
+    }
 }

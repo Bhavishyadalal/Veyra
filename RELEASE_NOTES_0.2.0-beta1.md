@@ -1,8 +1,23 @@
 # Veyra 0.2.0-beta1
 
-**Preview development · Android version code 44**
+**Preview development · Android version code 45**
 
 This development cycle starts from the user-tested **stable 0.1.9 build 40**.
+
+## Chaos Studio · build 45
+
+- **10 app transition styles:** Silk, Soft Zoom, Rise, Drift, Reveal, Quick Cut, Velvet, Spring, Diagonal and Shutter. Theme default remains available; choose Relaxed, Balanced or Quick pace and tap a live preview.
+- **10 scroll-player transitions:** Zephyr, Cascade, Focus, Snap, Bloom, Sweep, Float, Compress, Unfold and Settle. Five earlier styles remain.
+- **10 bottom-bar designs:** Monorail, Harbor, Ticket, Pebble, Prism, Bracket, Halo, Stitch, Pixel and Lozenge. Six earlier designs remain. Both navigation implementations support them with themed glyphs and Liquid Glass.
+- **10 full themes:** Soda Sabotage, Velvet Vandal, Acid Daydream, Peach Panic, Ink and Ivory, Holo Havoc, Denim Disorder, Cherry Voltage, Mint Mutiny and Lunar Lollipop. Each includes original AI wallpaper, licensed fonts and 123 asset roles including pressed controls.
+- **7 independent overlays:** Gummy Signal, Razor Petal, Disco Chrome, Paper Revolt, Velvet Sigil, Patch Party and Pixel Fizz. Each has 119 roles and can replace enabled asset categories over any supported theme while retaining its artwork and palette.
+- Total **72 themes / 22 overlays**. Existing packs and 105 launcher choices remain; no new launcher aliases are added. Theme brand artwork reuses reviewed glass waveform editions.
+- All new transitions are finite; reduced motion and the scroll-animation master switch retain priority. Page lists keep immediate viewport sizing.
+- Source downloads include a lossless offline runtime-pack library with a checksum-checked restore script; Android build inputs remain expanded.
+
+Settings → Appearance → Navigation includes the new designs and Motion studio. Motion choices also appear beside Scroll player animations. Refresh Theme studio / Asset packs to see the collection.
+
+[Actual asset gallery](themes/previews/chaos-studio/index.html) · [Implementation and checks](verification/CHAOS-STUDIO-0.2.0-beta1.md). Build/install **code 45** for the new settings. Source publication does not publish a signed APK.
 
 ## Reliability review · build 44
 

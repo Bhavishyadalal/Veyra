@@ -1,10 +1,17 @@
 # Veyra maintenance rules
 
-- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 44**.
+- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 45**.
   Starts from completed stable 0.1.9 build 40 (`a82d7228ac7cd2c3652ba384447b7691972c01a3`).
   Keep `main` and `stable/0.1.9` frozen at that stable commit until explicit promotion.
   Both catalogs and bundled fallbacks target this preview branch. After generating
   theme/asset catalogs, run `python3 scripts/route_catalogs.py` to restore track URLs.
+  Build 45 adds Chaos Studio (72 themes / 22 asset packs), ten app motion
+  profiles, ten additional scroll-player motions and ten additional navigation designs.
+  See verification/CHAOS-STUDIO-0.2.0-beta1.md. Motion is finite and reduced motion
+  takes precedence. All previously published packs stay immutable.
+  Source ZIPs store immutable runtime ZIPs losslessly in SOURCE_DATA_PACKS.tar.xz
+  to stay below GitHub’s file limit; scripts/restore_source_packs.py restores them
+  offline without overwriting edits. Native build inputs/masters stay expanded.
   Build 44 fixes Library request/account ownership, atomic ratings, stale control
   geometry and unnecessary glass exports; see verification/RELIABILITY-REVIEW-0.2.0-beta1.md.
   Build 43 adds six navigation designs and five finite scroll-player transitions,

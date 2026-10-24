@@ -96,8 +96,9 @@ object ThemeRepository {
     }
 
     internal fun parseCatalog(bytes: ByteArray): List<ThemeListing> {
+        require(bytes.size <= 65536) { "Theme catalog exceeds its size limit." }
         val c = ThemePack.json.decodeFromString<ThemeCatalog>(bytes.decodeToString())
-        require(c.schema == 1 && c.themes.size <= 64 && c.themes.map { it.id }.distinct().size == c.themes.size)
+        require(c.schema == 1 && c.themes.size <= 96 && c.themes.map { it.id }.distinct().size == c.themes.size)
         c.themes.forEach { e ->
             require(e.id.matches(Regex("[a-z0-9][a-z0-9-]{0,47}")) && e.name.length in 1..60 && e.description.length <= 300)
             require(e.url == ROOT_URL+"packs/${e.id}-v${e.version}.zip")

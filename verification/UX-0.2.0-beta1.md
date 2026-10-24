@@ -1,4 +1,6 @@
-> Current preview: **build 44** adds [reliability fixes](RELIABILITY-REVIEW-0.2.0-beta1.md).
+> Current preview: **build 45** adds [Chaos Studio](CHAOS-STUDIO-0.2.0-beta1.md).
+
+> Build 44 adds [reliability fixes](RELIABILITY-REVIEW-0.2.0-beta1.md).
 
 > Build 43 adds [Navigation studio](NAVIGATION-STUDIO-0.2.0-beta1.md). Earlier build notes follow.
 

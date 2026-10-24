@@ -77,6 +77,9 @@ fun AccountProfileSelector(
     modifier: Modifier = Modifier,
 ) {
     val reducedMotion = rememberVeyraReducedMotion()
+    val motion=app.veyra.music.ui.motion.rememberAppMotionPreferences()
+    val custom=motion.first!=app.veyra.music.data.settings.AppMotionStyle.DEFAULT
+    val rtl=androidx.compose.ui.platform.LocalLayoutDirection.current==androidx.compose.ui.unit.LayoutDirection.Rtl
     val visibility = remember { MutableTransitionState(false) }
     var afterClose by remember { mutableStateOf<(() -> Unit)?>(null) }
     // Retain the panel until its exit finishes. Back, scrim and actions share
@@ -93,8 +96,8 @@ fun AccountProfileSelector(
     }
     BackHandler { close(onDismiss) }
     val origin = TransformOrigin(if (androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl) 0f else 1f, 0f)
-    val enter = VeyraMotion.duration(reducedMotion, VeyraMotion.Enter)
-    val exit = VeyraMotion.duration(reducedMotion, VeyraMotion.Exit)
+    val enter = VeyraMotion.duration(reducedMotion, app.veyra.music.ui.motion.appMotionDuration(motion.first,motion.second,VeyraMotion.Enter))
+    val exit = VeyraMotion.duration(reducedMotion, app.veyra.music.ui.motion.appMotionDuration(motion.first,motion.second,VeyraMotion.Exit))
     var managing by remember { mutableStateOf(false) }
     val shape = MaterialTheme.shapes.extraLarge
     AnimatedVisibility(
@@ -114,10 +117,10 @@ fun AccountProfileSelector(
                 shape = shape,
                 modifier = Modifier
                     .animateEnterExit(
-                        enter = slideInVertically(tween(enter, easing = VeyraMotion.Easing)) { if (reducedMotion) 0 else -it / 12 } +
+                        enter = if(custom && !reducedMotion)app.veyra.music.ui.motion.appMotionTransition(motion.first,motion.second,false,rtl).targetContentEnter else slideInVertically(tween(enter, easing = VeyraMotion.Easing)) { if (reducedMotion) 0 else -it / 12 } +
                             scaleIn(tween(enter, easing = VeyraMotion.Easing), initialScale = if (reducedMotion) 1f else .94f,
                                 transformOrigin = origin),
-                        exit = slideOutVertically(tween(exit, easing = VeyraMotion.Easing)) { if (reducedMotion) 0 else -it / 16 } +
+                        exit = if(custom && !reducedMotion)app.veyra.music.ui.motion.appMotionPanelExit(motion.first,motion.second,rtl) else slideOutVertically(tween(exit, easing = VeyraMotion.Easing)) { if (reducedMotion) 0 else -it / 16 } +
                             scaleOut(tween(exit, easing = VeyraMotion.Easing), targetScale = if (reducedMotion) 1f else .97f,
                                 transformOrigin = origin),
                     )

@@ -292,13 +292,29 @@ class PlayerSheetMotion(
 
     private suspend fun slide(from: Float, to: Float, velocity: Float = 0f) {
         val travel = travel()
+        if (app.veyra.music.data.settings.AppSettings.reduceAnimation.value) { held = to.coerceIn(0f, travel); return }
+        val options=app.veyra.music.data.settings.AppSettings.experience.value
+        val style=options.appMotionStyle
+        val base=when(style) {
+            app.veyra.music.data.settings.AppMotionStyle.QUICK_CUT -> 700f
+            app.veyra.music.data.settings.AppMotionStyle.VELVET -> 130f
+            app.veyra.music.data.settings.AppMotionStyle.SPRING -> 250f
+            app.veyra.music.data.settings.AppMotionStyle.RISE -> 300f
+            app.veyra.music.data.settings.AppMotionStyle.DRIFT -> 160f
+            else -> SLIDE_STIFFNESS
+        }
+        val pace=when(options.motionTempo) {
+            app.veyra.music.data.settings.MotionTempo.QUICK -> 1.5f
+            app.veyra.music.data.settings.MotionTempo.RELAXED -> .7f
+            else -> 1f
+        }
         animate(
             initialValue = from,
             targetValue = to,
             initialVelocity = velocity,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioNoBouncy,
-                stiffness = SLIDE_STIFFNESS,
+                stiffness = base * pace,
                 visibilityThreshold = SLIDE_SETTLED_PX,
             ),
         ) { value, _ ->
