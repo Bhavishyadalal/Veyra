@@ -5,6 +5,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Close
+import app.veyra.music.ui.themes.ThemeIcon as Icon
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -32,12 +37,18 @@ internal fun AssetGallery(onDismiss:()->Unit) {
     val transfer by AssetRepository.transfer.collectAsStateWithLifecycle()
     val message by AssetRepository.message.collectAsStateWithLifecycle()
     var busy by remember {mutableStateOf(false)}
+    var query by rememberSaveable {mutableStateOf("")}
+    var downloadedOnly by rememberSaveable {mutableStateOf(false)}
+    val canDismiss by rememberUpdatedState(!busy)
     val scope=rememberCoroutineScope()
     val context=LocalContext.current
     LaunchedEffect(Unit) {AssetRepository.clearMessage();AssetRepository.refreshCatalog()}
     val entries=remember(catalog,installed) {catalog+installed.values.filter {m->catalog.none {it.id==m.id}}.map {
         AssetListing(it.id,it.name,"",it.version,it.minAppCode,"","",0,"")}}
-    ModalBottomSheet(onDismissRequest=onDismiss,sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),
+    val visible=remember(entries,installed,query,downloadedOnly) {entries.filter {
+        (!downloadedOnly || it.id in installed) && (query.isBlank() || it.name.contains(query.trim(),true) || it.description.contains(query.trim(),true))
+    }}
+    ModalBottomSheet(onDismissRequest={if(canDismiss)onDismiss()},sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true,confirmValueChange={it!=SheetValue.Hidden || canDismiss}),
         containerColor=MaterialTheme.colorScheme.background) {
         app.veyra.music.ui.themes.ThemeComponentSurface {
         LazyColumn(Modifier.fillMaxWidth().heightIn(max=androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp.dp*.88f),
@@ -45,7 +56,7 @@ internal fun AssetGallery(onDismiss:()->Unit) {
             item {
                 Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) {
                     Text(stringResource(R.string.asset_packs),style=MaterialTheme.typography.headlineSmall)
-                    TextButton(onClick=onDismiss) {Text(stringResource(R.string.theme_done))}
+                    TextButton(onClick=onDismiss,enabled=!busy) {Text(stringResource(R.string.theme_done))}
                 }
                 Text(stringResource(R.string.asset_packs_explanation),style=MaterialTheme.typography.bodyMedium)
                 TextButton(onClick={AssetRepository.refreshCatalog(true)}) {Text(stringResource(R.string.theme_refresh_catalog))}
@@ -67,8 +78,18 @@ internal fun AssetGallery(onDismiss:()->Unit) {
                     }
                 }
             }
+            item {
+                OutlinedTextField(value=query,onValueChange={query=it},modifier=Modifier.fillMaxWidth(),singleLine=true,
+                    label={Text(stringResource(R.string.asset_search))},leadingIcon={Icon(Icons.Rounded.Search,null)},
+                    trailingIcon={if(query.isNotEmpty())IconButton(onClick={query=""}) {Icon(Icons.Rounded.Close,stringResource(R.string.clear_search))}})
+                Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                    FilterChip(selected=!downloadedOnly,onClick={downloadedOnly=false},label={Text(stringResource(R.string.asset_all))})
+                    FilterChip(selected=downloadedOnly,onClick={downloadedOnly=true},label={Text(stringResource(R.string.theme_downloaded))})
+                }
+            }
+            if(visible.isEmpty() && entries.isNotEmpty())item {Text(stringResource(R.string.asset_no_matches),style=MaterialTheme.typography.bodyMedium)}
             message?.let {text->item {Text(text,style=MaterialTheme.typography.bodySmall)}}
-            items(entries,key={it.id}) {entry->
+            items(visible,key={it.id}) {entry->
                 val local=installed[entry.id]
                 val downloading=transfer?.takeIf {it.id==entry.id}
                 val selected=active?.id==entry.id && AssetRepository.activeManifest()?.version==local?.version

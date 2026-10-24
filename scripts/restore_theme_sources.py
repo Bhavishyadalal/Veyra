@@ -18,12 +18,13 @@ def restore(root):
     for item in manifest.get('themeAssetsInPacks',[]):
         path=Path(item['path']); pack=Path(item['pack']); member=Path(item['entry'])
         theme_source = len(path.parts)>=4 and path.parts[0] in ('themes','asset-packs') and path.parts[2:]==member.parts and path.suffix in ('.png','.webp','.ttf')
+        asset_preview = len(path.parts)==3 and path.parts[0]=="asset-packs" and path.name=="preview.webp" and member.parts==("previews","specimen.webp")
         punk_font = len(path.parts)==3 and path.parts[:2] in (('design','punk-fonts'),('design','asset-fonts')) and path.suffix=='.ttf' and member.parts==('fonts',path.name)
         if (path.is_absolute() or pack.is_absolute() or member.is_absolute() or
             any('..' in p.parts for p in (path,pack,member)) or
-            pack.parts[:2] not in (('themes','packs'),('asset-packs','packs')) or not (theme_source or punk_font)):
+            pack.parts[:2] not in (('themes','packs'),('asset-packs','packs')) or not (theme_source or asset_preview or punk_font)):
             raise ValueError('Invalid theme source mapping')
-        if theme_source and path.parts[0]!=pack.parts[0]:raise ValueError('Mismatched source/pack namespace')
+        if (theme_source or asset_preview) and path.parts[0]!=pack.parts[0]:raise ValueError('Mismatched source/pack namespace')
         if punk_font and pack.parts[0] != ('asset-packs' if path.parts[1]=='asset-fonts' else 'themes'):raise ValueError('Mismatched font/pack namespace')
         target=(root/path).resolve()
         if not target.is_relative_to(root) or not (root/pack).resolve().is_relative_to(root):

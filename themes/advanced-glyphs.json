@@ -164,7 +164,8 @@
       "Person",
       "AccountCircle",
       "veyra_account",
-      "ManageAccounts"
+      "ManageAccounts",
+      "SwitchAccount"
     ],
     "sound": [
       "Tune",
@@ -278,10 +279,13 @@
       "bc_frame_rate"
     ],
     "arrow_up": [
-      "ArrowUpward"
+      "ArrowUpward",
+      "ExpandLess",
+      "Upgrade"
     ],
     "arrow_down": [
-      "ArrowDownward"
+      "ArrowDownward",
+      "ExpandMore"
     ],
     "upload": [
       "FileUpload"
@@ -315,13 +319,15 @@
       "Cast"
     ],
     "phone": [
-      "PhoneAndroid"
+      "PhoneAndroid",
+      "PhoneIphone"
     ],
     "speaker": [
       "Speaker"
     ],
     "groups": [
-      "Groups"
+      "Groups",
+      "Lan"
     ],
     "fullscreen": [
       "Fullscreen"
@@ -354,7 +360,8 @@
     ],
     "delete": [
       "Delete",
-      "DeleteSweep"
+      "DeleteSweep",
+      "DeleteForever"
     ],
     "fast_forward": [
       "FastForward"
@@ -363,7 +370,8 @@
       "FastRewind"
     ],
     "drag": [
-      "DragHandle"
+      "DragHandle",
+      "SwapVert"
     ],
     "sparkle": [
       "AutoAwesome"
@@ -399,7 +407,8 @@
       "MotionPhotosOff"
     ],
     "notes": [
-      "Notes"
+      "Notes",
+      "Edit"
     ],
     "playlist": [
       "PlaylistPlay",
@@ -413,7 +422,8 @@
       "DownloadDone"
     ],
     "album": [
-      "Album"
+      "Album",
+      "Panorama"
     ],
     "error": [
       "ErrorOutline",
@@ -426,7 +436,9 @@
       "Link"
     ],
     "sleep": [
-      "Bedtime"
+      "Bedtime",
+      "DarkMode",
+      "Timer"
     ],
     "star": [
       "StarBorder"
@@ -459,7 +471,8 @@
       "HighQuality"
     ],
     "video": [
-      "Videocam"
+      "Videocam",
+      "Movie"
     ],
     "dislike": [
       "ThumbDown",
@@ -484,7 +497,8 @@
       "Logout"
     ],
     "gradient": [
-      "Gradient"
+      "Gradient",
+      "Palette"
     ],
     "cast_connected": [
       "CastConnected"

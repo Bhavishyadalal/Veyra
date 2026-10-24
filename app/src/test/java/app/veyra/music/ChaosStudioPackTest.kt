@@ -37,7 +37,7 @@ class ChaosStudioPackTest {
     @Test fun allNewOverlaysInstallWithoutReplacingThemeArtworkOrPalette() {
         val ids=setOf("gummy-signal","razor-petal","disco-chrome","paper-revolt","velvet-sigil","patch-party","pixel-fizz")
         val catalog=ThemePack.json.decodeFromString(AssetCatalog.serializer(),File(root,"asset-packs/catalog.json").readText())
-        assertEquals(22,AssetRepository.parseCatalog(File(root,"asset-packs/catalog.json").readBytes()).size)
+        assertEquals(32,AssetRepository.parseCatalog(File(root,"asset-packs/catalog.json").readBytes()).size)
         val entries=catalog.packs.filter {it.id in ids};assertEquals(7,entries.size)
         entries.forEach {entry->
             val (m,dir)=AssetPack.install(File(root,"asset-packs/packs/${entry.id}-v1.zip"),temp.newFolder(),entry,45)

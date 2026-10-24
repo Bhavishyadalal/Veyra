@@ -1,0 +1,13 @@
+<resources>
+    <item name="ic_liquid_glass_clear_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+    <item name="ic_liquid_glass_dark_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+    <item name="ic_liquid_glass_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+    <item name="ic_pixel_glass_clear_dark_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+    <item name="ic_pixel_glass_clear_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+    <item name="ic_pixel_glass_dark_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+    <item name="ic_pixel_glass_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+    <item name="ic_samsung_glass_clear_dark_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+    <item name="ic_samsung_glass_clear_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+    <item name="ic_samsung_glass_dark_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+    <item name="ic_samsung_glass_foreground" type="mipmap">@mipmap/ic_liquid_glass_clear_dark_foreground</item>
+</resources>

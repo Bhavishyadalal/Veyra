@@ -107,6 +107,7 @@ object AssetRepository {
     }
 
     internal fun parseCatalog(bytes: ByteArray): List<AssetListing> {
+        require(bytes.size <= 65536) { "Asset catalog exceeds its size limit." }
         val c = AssetPack.json.decodeFromString<AssetCatalog>(bytes.decodeToString())
         require(c.schema == 1 && c.packs.size <= 32 && c.packs.map { it.id }.distinct().size == c.packs.size)
         c.packs.forEach { e ->

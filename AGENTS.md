@@ -1,10 +1,14 @@
 # Veyra maintenance rules
 
-- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 45**.
+- Active development: `preview/0.2.0-beta1`, version **0.2.0-beta1 / code 46**.
   Starts from completed stable 0.1.9 build 40 (`a82d7228ac7cd2c3652ba384447b7691972c01a3`).
   Keep `main` and `stable/0.1.9` frozen at that stable commit until explicit promotion.
   Both catalogs and bundled fallbacks target this preview branch. After generating
   theme/asset catalogs, run `python3 scripts/route_catalogs.py` to restore track URLs.
+  Build 46 completes 72 theme / 32 asset launcher bindings (132 choices), adds
+  ten Pocket Riot overlays and 14 semantic aliases, fixes cancelled hold state,
+  guards Studio dismissal during Apply and adds asset search/downloaded filtering.
+  See verification/POCKET-RIOT-0.2.0.md. Original pack bytes stay immutable.
   Build 45 adds Chaos Studio (72 themes / 22 asset packs), ten app motion
   profiles, ten additional scroll-player motions and ten additional navigation designs.
   See verification/CHAOS-STUDIO-0.2.0-beta1.md. Motion is finite and reduced motion

@@ -1,0 +1,140 @@
+{
+  "reference": "design/launcher/collections/riot-candy.webp",
+  "images": [
+    {
+      "id": "soda-sabotage",
+      "source": "/workspace/generated_images/exec-fb547bf4-0fe2-4a69-8aff-038f03efb8b6.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "velvet-vandal",
+      "source": "/workspace/generated_images/exec-1b8b3d17-4ceb-4dca-8129-2231890f60cc.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "acid-daydream",
+      "source": "/workspace/generated_images/exec-eb2e2b53-0093-46cb-ad8e-6c362f794437.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "peach-panic",
+      "source": "/workspace/generated_images/exec-51cf63a4-2e98-4e85-8db8-659e9414fc68.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "ink-and-ivory",
+      "source": "/workspace/generated_images/exec-f0d2c359-8dad-4217-ab69-57b17595b34a.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "holo-havoc",
+      "source": "/workspace/generated_images/exec-fded945b-3109-4eb5-bac0-503764633528.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "denim-disorder",
+      "source": "/workspace/generated_images/exec-fc78a007-04ed-4265-bf88-0877dfaa0e53.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "cherry-voltage",
+      "source": "/workspace/generated_images/exec-b1badb78-b694-4266-94bd-9e21c1a38c4e.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "mint-mutiny",
+      "source": "/workspace/generated_images/exec-cae83e6b-697b-4bf1-be96-a6145de4e92a.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "lunar-lollipop",
+      "source": "/workspace/generated_images/exec-2a4b10a6-6bf1-4d54-bf51-015ebccc6236.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "gummy-signal",
+      "source": "/workspace/generated_images/exec-fccb1e30-1793-45a3-b706-8f77abd648da.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "razor-petal",
+      "source": "/workspace/generated_images/exec-0d577b96-5283-4a08-a354-9b6f2fd534c1.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "disco-chrome",
+      "source": "/workspace/generated_images/exec-98d8a2eb-5423-4627-8e53-60c18c09d82a.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "paper-revolt",
+      "source": "/workspace/generated_images/exec-f00fc7dc-add1-4add-8a6d-a640a9a73119.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "velvet-sigil",
+      "source": "/workspace/generated_images/exec-5dc273a5-b451-48a5-af4a-015197bf6b8f.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "patch-party",
+      "source": "/workspace/generated_images/exec-e425ad07-3a3a-4017-a4b2-e9840922d8dd.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "pixel-fizz",
+      "source": "/workspace/generated_images/exec-26c6f535-0984-463d-9011-5165d4ff50c5.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "kitty-mayhem",
+      "source": "/workspace/generated_images/exec-4141bce9-ee9a-4aa9-9764-33be3a1781c6.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "mochi-moshpit",
+      "source": "/workspace/generated_images/exec-bed7eeff-af59-4fa1-8281-a5c73da7bf49.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "peach-bruiser",
+      "source": "/workspace/generated_images/exec-5fac140e-2d1b-41ae-a7ba-c6a215c01666.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "bunny-voltage",
+      "source": "/workspace/generated_images/exec-32ad1cef-1b54-4ec4-9c85-a83e48c0cea1.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "cherry-bombshell",
+      "source": "/workspace/generated_images/exec-95ec28c4-7c7e-4b40-a61e-597125a149c5.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "teddy-tantrum",
+      "source": "/workspace/generated_images/exec-942cc0fd-b832-4a9d-b2c8-8fd15492cf80.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "bubble-fang",
+      "source": "/workspace/generated_images/exec-90e020ea-21ef-4303-ab07-a987530289b9.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "sugar-goblin",
+      "source": "/workspace/generated_images/exec-2d20c892-07ef-449b-9319-221813fa92b6.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "cosmic-pudding",
+      "source": "/workspace/generated_images/exec-00ccd191-8a5f-4527-8c85-dcd7a97fd132.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    },
+    {
+      "id": "sticker-syndicate",
+      "source": "/workspace/generated_images/exec-3b2cf50d-27dd-4c99-975c-36e4d7e8fd82.png",
+      "generator": "OpenAI image generation; edit of reviewed Riot Candy waveform glass reference"
+    }
+  ]
+}

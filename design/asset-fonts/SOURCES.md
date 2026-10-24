@@ -6,3 +6,5 @@ Unmodified Google Fonts sources: Bangers, Lilita One, Audiowide and Bungee from
 Each binary has its original license notice beside it and inside its pack.
 Manrope body type is the existing licensed theme source. Display faces are used
 only for headings; song titles, body text and small labels remain Manrope.
+
+Pocket Riot reuses the unmodified Rubik Bubbles and Rubik Wet Paint authoring fonts from `design/punk-fonts/`; their original upstream OFL notices are copied alongside the files. No new font downloads or modifications.

@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "aliases": [
+    {
+      "name": "ic_liquid_glass_clear_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    },
+    {
+      "name": "ic_liquid_glass_dark_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    },
+    {
+      "name": "ic_liquid_glass_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    },
+    {
+      "name": "ic_pixel_glass_clear_dark_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    },
+    {
+      "name": "ic_pixel_glass_clear_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    },
+    {
+      "name": "ic_pixel_glass_dark_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    },
+    {
+      "name": "ic_pixel_glass_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    },
+    {
+      "name": "ic_samsung_glass_clear_dark_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    },
+    {
+      "name": "ic_samsung_glass_clear_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    },
+    {
+      "name": "ic_samsung_glass_dark_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    },
+    {
+      "name": "ic_samsung_glass_foreground",
+      "target": "ic_liquid_glass_clear_dark_foreground",
+      "densitySha256": {
+        "mdpi": "b648293f291a4510bbfcca0d995b3d5d2aa82113eceb7fcb3f44bf6d876fd14b",
+        "hdpi": "c5a34e3f54baf221d9c7becf3a801f201648c9fdd1afbd7dd65de30e9fe4effb",
+        "xhdpi": "7d00b0d08d35c86f15f5dc562f2c8535e90030357a8a6cdca43fe992cb741efe",
+        "xxhdpi": "24087fb5780a663cbc8a8590821f2a9f85a6c203fa562051d843b9f69aa68cd1",
+        "xxxhdpi": "34a0de45c4ed90cb499b0fbf51cdd0862c64048ce6d629e73adb36e3b75a2805"
+      }
+    }
+  ]
+}

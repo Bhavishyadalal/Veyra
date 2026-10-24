@@ -2,6 +2,116 @@
   "schema": 1,
   "packs": [
     {
+      "id": "kitty-mayhem",
+      "name": "Kitty Mayhem",
+      "description": "Pink enamel cat-ear frames, bold candy lettering and glossy jelly details.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/kitty-mayhem-v1.zip",
+      "sha256": "7b58b864136497e9d8f772b0f10e9f6bc26ac8a669a09d2821a6af6ee83f1a50",
+      "bytes": 380091,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/kitty-mayhem/preview.webp"
+    },
+    {
+      "id": "mochi-moshpit",
+      "name": "Mochi Moshpit",
+      "description": "Puffy ivory mochi scallops, strawberry glass and rounded bubble lettering.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/mochi-moshpit-v1.zip",
+      "sha256": "9a5f923af83836ce73bcb9d4ca9a0ca28fa78da775a8dfd65aa9cd0c3fa5a135",
+      "bytes": 499631,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/mochi-moshpit/preview.webp"
+    },
+    {
+      "id": "peach-bruiser",
+      "name": "Peach Bruiser",
+      "description": "Peach armor facets, lavender bolts and oversized comic-poster lettering.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/peach-bruiser-v1.zip",
+      "sha256": "72935640cbe1297dbcd6ad421ac3f07434d76763494e3c470b58e4e93f745ada",
+      "bytes": 363149,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/peach-bruiser/preview.webp"
+    },
+    {
+      "id": "bunny-voltage",
+      "name": "Bunny Voltage",
+      "description": "Violet rabbit-ear keycaps, icy chrome rims and playful electric typography.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/bunny-voltage-v1.zip",
+      "sha256": "425d36a80331b57372940e010c71701f23c6a13ab0a76dfc21471655a45c494b",
+      "bytes": 459147,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/bunny-voltage/preview.webp"
+    },
+    {
+      "id": "cherry-bombshell",
+      "name": "Cherry Bombshell",
+      "description": "Cherry-red heart-cut seals, cream rock lettering and ember-ribbon progress.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/cherry-bombshell-v1.zip",
+      "sha256": "0198492254c334e1993cad790b8ebbd3a0a3b6d4a6e42a791da24a85ac4248a5",
+      "bytes": 446517,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/cherry-bombshell/preview.webp"
+    },
+    {
+      "id": "teddy-tantrum",
+      "name": "Teddy Tantrum",
+      "description": "Caramel teddy-ear patches, visible stitching and bold toy-box lettering.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/teddy-tantrum-v1.zip",
+      "sha256": "2c5b24d246a6183eaa6bf16274899be7cd19f8ca78f4d6d22e24a5e9680fceb0",
+      "bytes": 478943,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/teddy-tantrum/preview.webp"
+    },
+    {
+      "id": "bubble-fang",
+      "name": "Bubble Fang",
+      "description": "Mint glass fangs, pink bubble inlays and strong playful-metal headings.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/bubble-fang-v1.zip",
+      "sha256": "8c2d28b4787fd3dc8c9e5d8fecbe4756047b2b4a9d7b74ab88102177a4040c47",
+      "bytes": 477154,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/bubble-fang/preview.webp"
+    },
+    {
+      "id": "sugar-goblin",
+      "name": "Sugar Goblin",
+      "description": "Acid-lime horned arcade tiles, lavender candy rivets and mischievous lettering.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/sugar-goblin-v1.zip",
+      "sha256": "e3efe0383cbeb6d0e8d35e139616eec4f198d944a131720096ee8e8ce37bf7b5",
+      "bytes": 400021,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/sugar-goblin/preview.webp"
+    },
+    {
+      "id": "cosmic-pudding",
+      "name": "Cosmic Pudding",
+      "description": "Orbital pudding medallions, pearl-star highlights and spacious cosmic type.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/cosmic-pudding-v1.zip",
+      "sha256": "ef299eb4eea48f87271fd1aea3567f927504bd657a30ddfd5da4eccf834a7301",
+      "bytes": 448661,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/cosmic-pudding/preview.webp"
+    },
+    {
+      "id": "sticker-syndicate",
+      "name": "Sticker Syndicate",
+      "description": "Orange-and-blue torn enamel stamps, offset print corners and wet-paint headings.",
+      "version": 1,
+      "minAppCode": 33,
+      "url": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/packs/sticker-syndicate-v1.zip",
+      "sha256": "cb010d975554c0141d773c178da3a8034d6c57575f4a6aa686a53153b77b6ba1",
+      "bytes": 557160,
+      "preview": "https://raw.githubusercontent.com/Bhavishyadalal/Veyra/refs/heads/preview/0.2.0-beta1/asset-packs/sticker-syndicate/preview.webp"
+    },
+    {
       "id": "gummy-signal",
       "name": "Gummy Signal",
       "description": "Inflated gel frames and star-cut highlights.",

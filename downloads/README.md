@@ -1,4 +1,4 @@
-> **Active preview: 0.2.0-beta1 / build 45** · [Baseline notes](../RELEASE_NOTES_0.2.0-beta1.md). Stable remains 0.1.9 build 40 on its existing branches.
+> **Active preview: 0.2.0-beta1 / build 46** · [Baseline notes](../RELEASE_NOTES_0.2.0-beta1.md). Stable remains 0.1.9 build 40 on its existing branches.
 
 # Veyra source downloads
 
@@ -7,7 +7,7 @@
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
 | Current stable · `main`, `stable/0.1.9` | 0.1.9 / code 40 | [Download](Veyra_Android_Source_0.1.9_Stable.zip) | [SHA-256](Veyra_Android_Source_0.1.9_Stable.zip.sha256) |
-| Active preview · `preview/0.2.0-beta1` | 0.2.0-beta1 / code 45 | [Download](Veyra_Android_Source_0.2.0-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.0-beta1.zip.sha256) |
+| Active preview · `preview/0.2.0-beta1` | 0.2.0-beta1 / code 46 | [Download](Veyra_Android_Source_0.2.0-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.0-beta1.zip.sha256) |
 | Completed preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 35 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 | Historical preview · `preview/0.1.8-beta1` | 0.1.8-beta1 / code 27 | [Download](Veyra_Android_Source_0.1.8-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.8-beta1.zip.sha256) |
 

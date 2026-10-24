@@ -82,8 +82,10 @@ internal fun PlayerControlSurface(
     val currentHold by rememberUpdatedState(onHold)
     val holdTimeout=androidx.compose.ui.platform.LocalViewConfiguration.current.longPressTimeoutMillis
     LaunchedEffect(pressed,available,onHold!=null) {
+        // A cancelled/disabled hold must not leave the next tap suppressed.
+        // Release's click is dispatched before this effect restarts.
+        held=false
         if(pressed && available && onHold!=null) {
-            held=false
             kotlinx.coroutines.delay(holdTimeout)
             held=true
             while(true) {currentHold?.invoke();kotlinx.coroutines.delay(400)}

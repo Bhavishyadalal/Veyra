@@ -16,6 +16,33 @@ import kotlinx.coroutines.flow.asStateFlow
  * names so a choice made before the update stays enabled.
  */
 enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val previewRes: Int? = null) {
+    PocketThemeSodaSabotage("LauncherPocketThemeSodaSabotage", R.mipmap.ic_pocket_soda_sabotage, R.string.app_icon_pocket_soda_sabotage, R.mipmap.ic_pocket_soda_sabotage_foreground),
+    PocketThemeVelvetVandal("LauncherPocketThemeVelvetVandal", R.mipmap.ic_pocket_velvet_vandal, R.string.app_icon_pocket_velvet_vandal, R.mipmap.ic_pocket_velvet_vandal_foreground),
+    PocketThemeAcidDaydream("LauncherPocketThemeAcidDaydream", R.mipmap.ic_pocket_acid_daydream, R.string.app_icon_pocket_acid_daydream, R.mipmap.ic_pocket_acid_daydream_foreground),
+    PocketThemePeachPanic("LauncherPocketThemePeachPanic", R.mipmap.ic_pocket_peach_panic, R.string.app_icon_pocket_peach_panic, R.mipmap.ic_pocket_peach_panic_foreground),
+    PocketThemeInkAndIvory("LauncherPocketThemeInkAndIvory", R.mipmap.ic_pocket_ink_and_ivory, R.string.app_icon_pocket_ink_and_ivory, R.mipmap.ic_pocket_ink_and_ivory_foreground),
+    PocketThemeHoloHavoc("LauncherPocketThemeHoloHavoc", R.mipmap.ic_pocket_holo_havoc, R.string.app_icon_pocket_holo_havoc, R.mipmap.ic_pocket_holo_havoc_foreground),
+    PocketThemeDenimDisorder("LauncherPocketThemeDenimDisorder", R.mipmap.ic_pocket_denim_disorder, R.string.app_icon_pocket_denim_disorder, R.mipmap.ic_pocket_denim_disorder_foreground),
+    PocketThemeCherryVoltage("LauncherPocketThemeCherryVoltage", R.mipmap.ic_pocket_cherry_voltage, R.string.app_icon_pocket_cherry_voltage, R.mipmap.ic_pocket_cherry_voltage_foreground),
+    PocketThemeMintMutiny("LauncherPocketThemeMintMutiny", R.mipmap.ic_pocket_mint_mutiny, R.string.app_icon_pocket_mint_mutiny, R.mipmap.ic_pocket_mint_mutiny_foreground),
+    PocketThemeLunarLollipop("LauncherPocketThemeLunarLollipop", R.mipmap.ic_pocket_lunar_lollipop, R.string.app_icon_pocket_lunar_lollipop, R.mipmap.ic_pocket_lunar_lollipop_foreground),
+    PocketAssetGummySignal("LauncherPocketAssetGummySignal", R.mipmap.ic_pocket_gummy_signal, R.string.app_icon_pocket_gummy_signal, R.mipmap.ic_pocket_gummy_signal_foreground),
+    PocketAssetRazorPetal("LauncherPocketAssetRazorPetal", R.mipmap.ic_pocket_razor_petal, R.string.app_icon_pocket_razor_petal, R.mipmap.ic_pocket_razor_petal_foreground),
+    PocketAssetDiscoChrome("LauncherPocketAssetDiscoChrome", R.mipmap.ic_pocket_disco_chrome, R.string.app_icon_pocket_disco_chrome, R.mipmap.ic_pocket_disco_chrome_foreground),
+    PocketAssetPaperRevolt("LauncherPocketAssetPaperRevolt", R.mipmap.ic_pocket_paper_revolt, R.string.app_icon_pocket_paper_revolt, R.mipmap.ic_pocket_paper_revolt_foreground),
+    PocketAssetVelvetSigil("LauncherPocketAssetVelvetSigil", R.mipmap.ic_pocket_velvet_sigil, R.string.app_icon_pocket_velvet_sigil, R.mipmap.ic_pocket_velvet_sigil_foreground),
+    PocketAssetPatchParty("LauncherPocketAssetPatchParty", R.mipmap.ic_pocket_patch_party, R.string.app_icon_pocket_patch_party, R.mipmap.ic_pocket_patch_party_foreground),
+    PocketAssetPixelFizz("LauncherPocketAssetPixelFizz", R.mipmap.ic_pocket_pixel_fizz, R.string.app_icon_pocket_pixel_fizz, R.mipmap.ic_pocket_pixel_fizz_foreground),
+    PocketAssetKittyMayhem("LauncherPocketAssetKittyMayhem", R.mipmap.ic_pocket_kitty_mayhem, R.string.app_icon_pocket_kitty_mayhem, R.mipmap.ic_pocket_kitty_mayhem_foreground),
+    PocketAssetMochiMoshpit("LauncherPocketAssetMochiMoshpit", R.mipmap.ic_pocket_mochi_moshpit, R.string.app_icon_pocket_mochi_moshpit, R.mipmap.ic_pocket_mochi_moshpit_foreground),
+    PocketAssetPeachBruiser("LauncherPocketAssetPeachBruiser", R.mipmap.ic_pocket_peach_bruiser, R.string.app_icon_pocket_peach_bruiser, R.mipmap.ic_pocket_peach_bruiser_foreground),
+    PocketAssetBunnyVoltage("LauncherPocketAssetBunnyVoltage", R.mipmap.ic_pocket_bunny_voltage, R.string.app_icon_pocket_bunny_voltage, R.mipmap.ic_pocket_bunny_voltage_foreground),
+    PocketAssetCherryBombshell("LauncherPocketAssetCherryBombshell", R.mipmap.ic_pocket_cherry_bombshell, R.string.app_icon_pocket_cherry_bombshell, R.mipmap.ic_pocket_cherry_bombshell_foreground),
+    PocketAssetTeddyTantrum("LauncherPocketAssetTeddyTantrum", R.mipmap.ic_pocket_teddy_tantrum, R.string.app_icon_pocket_teddy_tantrum, R.mipmap.ic_pocket_teddy_tantrum_foreground),
+    PocketAssetBubbleFang("LauncherPocketAssetBubbleFang", R.mipmap.ic_pocket_bubble_fang, R.string.app_icon_pocket_bubble_fang, R.mipmap.ic_pocket_bubble_fang_foreground),
+    PocketAssetSugarGoblin("LauncherPocketAssetSugarGoblin", R.mipmap.ic_pocket_sugar_goblin, R.string.app_icon_pocket_sugar_goblin, R.mipmap.ic_pocket_sugar_goblin_foreground),
+    PocketAssetCosmicPudding("LauncherPocketAssetCosmicPudding", R.mipmap.ic_pocket_cosmic_pudding, R.string.app_icon_pocket_cosmic_pudding, R.mipmap.ic_pocket_cosmic_pudding_foreground),
+    PocketAssetStickerSyndicate("LauncherPocketAssetStickerSyndicate", R.mipmap.ic_pocket_sticker_syndicate, R.string.app_icon_pocket_sticker_syndicate, R.mipmap.ic_pocket_sticker_syndicate_foreground),
     CollectionCathedralStatic("LauncherCollectionCathedralStatic", R.mipmap.ic_collection_cathedral_static, R.string.app_icon_collection_cathedral_static, R.mipmap.ic_collection_cathedral_static_foreground),
     CollectionVelvetHex("LauncherCollectionVelvetHex", R.mipmap.ic_collection_velvet_hex, R.string.app_icon_collection_velvet_hex, R.mipmap.ic_collection_velvet_hex_foreground),
     CollectionRazorBloom("LauncherCollectionRazorBloom", R.mipmap.ic_collection_razor_bloom, R.string.app_icon_collection_razor_bloom, R.mipmap.ic_collection_razor_bloom_foreground),
@@ -131,6 +158,16 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
 
         /** A data-only theme cannot supply a component name or an arbitrary launcher alias. */
         fun forTheme(id: String?): AppIcon? = when (id) {
+            "soda-sabotage" -> PocketThemeSodaSabotage
+            "velvet-vandal" -> PocketThemeVelvetVandal
+            "acid-daydream" -> PocketThemeAcidDaydream
+            "peach-panic" -> PocketThemePeachPanic
+            "ink-and-ivory" -> PocketThemeInkAndIvory
+            "holo-havoc" -> PocketThemeHoloHavoc
+            "denim-disorder" -> PocketThemeDenimDisorder
+            "cherry-voltage" -> PocketThemeCherryVoltage
+            "mint-mutiny" -> PocketThemeMintMutiny
+            "lunar-lollipop" -> PocketThemeLunarLollipop
             "riot-candy" -> CollectionRiotCandy
             "chrome-venom" -> CollectionChromeVenom
             "bubble-riot" -> CollectionBubbleRiot
@@ -199,6 +236,23 @@ enum class AppIcon(val alias: String, val iconRes: Int, val labelRes: Int, val p
 
         /** Asset packs cannot name arbitrary components. Only these bundled choices are eligible. */
         fun forAssetPack(id:String?):AppIcon? = when(id) {
+            "gummy-signal" -> PocketAssetGummySignal
+            "razor-petal" -> PocketAssetRazorPetal
+            "disco-chrome" -> PocketAssetDiscoChrome
+            "paper-revolt" -> PocketAssetPaperRevolt
+            "velvet-sigil" -> PocketAssetVelvetSigil
+            "patch-party" -> PocketAssetPatchParty
+            "pixel-fizz" -> PocketAssetPixelFizz
+            "kitty-mayhem" -> PocketAssetKittyMayhem
+            "mochi-moshpit" -> PocketAssetMochiMoshpit
+            "peach-bruiser" -> PocketAssetPeachBruiser
+            "bunny-voltage" -> PocketAssetBunnyVoltage
+            "cherry-bombshell" -> PocketAssetCherryBombshell
+            "teddy-tantrum" -> PocketAssetTeddyTantrum
+            "bubble-fang" -> PocketAssetBubbleFang
+            "sugar-goblin" -> PocketAssetSugarGoblin
+            "cosmic-pudding" -> PocketAssetCosmicPudding
+            "sticker-syndicate" -> PocketAssetStickerSyndicate
             "cathedral-static" -> CollectionCathedralStatic
             "velvet-hex" -> CollectionVelvetHex
             "razor-bloom" -> CollectionRazorBloom

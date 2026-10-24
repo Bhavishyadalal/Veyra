@@ -1,8 +1,20 @@
 # Veyra 0.2.0-beta1
 
-**Preview development · Android version code 45**
+**Preview development · Android version code 46**
 
 This development cycle starts from the user-tested **stable 0.1.9 build 40**.
+
+## Pocket Riot + release completion · build 46
+
+- Ten independent cute/bold overlays: Kitty Mayhem, Mochi Moshpit, Peach Bruiser, Bunny Voltage, Cherry Bombshell, Teddy Tantrum, Bubble Fang, Sugar Goblin, Cosmic Pudding and Sticker Syndicate.
+- Each has **119 roles**, licensed fonts, progress/material presets, an offline preview and separate pressed transport controls. Existing packs remain unchanged.
+- **27 new AI glass launcher editions** complete every missing theme/overlay binding: 72 themes, 32 asset packs and **132 launcher choices**. Home and picker use the selected native icon. New aliases require this build.
+- Fourteen previously unmapped deep controls now resolve to existing theme roles, including immersive controls, expand arrows, account switching and edit/delete actions.
+- Clear stale long-press state after cancellation or capability changes, retaining completed-hold click suppression.
+- Guard Theme/Asset Studio's actual hidden-sheet state while applying; asset Studio adds search and All/Downloaded filters.
+- Keep catalog byte/URL limits, and fix optional source-font restoration when the same font exists in theme and asset libraries.
+
+[Actual overlays](asset-packs/previews/pocket-riot/collection.webp) · [Glass icons](design/launcher/pocket-riot/previews/glass-editions.webp) · [Verification](verification/POCKET-RIOT-0.2.0.md)
 
 ## Chaos Studio · build 45
 

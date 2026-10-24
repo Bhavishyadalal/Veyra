@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "icons": [
+    {
+      "id": "soda-sabotage",
+      "name": "Soda Sabotage",
+      "kind": "theme",
+      "style": "cyan soda glass, coral-red lacquer, butter-yellow fizz bubbles"
+    },
+    {
+      "id": "velvet-vandal",
+      "name": "Velvet Vandal",
+      "kind": "theme",
+      "style": "burgundy velvet backing, rose quartz glass, pearl silver thorn filigree"
+    },
+    {
+      "id": "acid-daydream",
+      "name": "Acid Daydream",
+      "kind": "theme",
+      "style": "chartreuse translucent glass, lilac titanium, checkerboard corner inlays"
+    },
+    {
+      "id": "peach-panic",
+      "name": "Peach Panic",
+      "kind": "theme",
+      "style": "peach jelly glass, pale blue enamel, ivory inflatable star corner ornaments"
+    },
+    {
+      "id": "ink-and-ivory",
+      "name": "Ink and Ivory",
+      "kind": "theme",
+      "style": "ivory frosted glass, black ink chrome, tiny crimson torn-print corner details"
+    },
+    {
+      "id": "holo-havoc",
+      "name": "Holo Havoc",
+      "kind": "theme",
+      "style": "prismatic cyan and violet liquid chrome, holographic orbital glints"
+    },
+    {
+      "id": "denim-disorder",
+      "name": "Denim Disorder",
+      "kind": "theme",
+      "style": "indigo glass, denim-textured dark backing, copper rim stitching, tiny cherry-red felt corner details"
+    },
+    {
+      "id": "cherry-voltage",
+      "name": "Cherry Voltage",
+      "kind": "theme",
+      "style": "ruby-red glass, black patent backing, electric-blue chrome rims, tiny glass cherries at the border"
+    },
+    {
+      "id": "mint-mutiny",
+      "name": "Mint Mutiny",
+      "kind": "theme",
+      "style": "jade and mint glass, champagne gold, tiny clover jewels at corners"
+    },
+    {
+      "id": "lunar-lollipop",
+      "name": "Lunar Lollipop",
+      "kind": "theme",
+      "style": "lilac and periwinkle sugar glass, peach pearl metal, tiny crescent and star border accents"
+    },
+    {
+      "id": "gummy-signal",
+      "name": "Gummy Signal",
+      "kind": "asset",
+      "style": "cyan gummy glass, strawberry-pink chrome, butter-yellow inflated tiny star inlays"
+    },
+    {
+      "id": "razor-petal",
+      "name": "Razor Petal",
+      "kind": "asset",
+      "style": "rose-pink glass, lilac titanium, gentle petal-shaped corner ornaments"
+    },
+    {
+      "id": "disco-chrome",
+      "name": "Disco Chrome",
+      "kind": "asset",
+      "style": "icy cyan polished chrome, violet iridescence, tiny pink mirror facets"
+    },
+    {
+      "id": "paper-revolt",
+      "name": "Paper Revolt",
+      "kind": "asset",
+      "style": "ivory frosted enamel glass, coral-red chrome rims, torn-ticket border texture"
+    },
+    {
+      "id": "velvet-sigil",
+      "name": "Velvet Sigil",
+      "kind": "asset",
+      "style": "plum velvet backing, lavender crystal, ornate gold crescent filigree"
+    },
+    {
+      "id": "patch-party",
+      "name": "Patch Party",
+      "kind": "asset",
+      "style": "mint and indigo glass, copper stitch details, small peach enamel corner patches"
+    },
+    {
+      "id": "pixel-fizz",
+      "name": "Pixel Fizz",
+      "kind": "asset",
+      "style": "acid-green candy glass, pale blue chrome, tiny stepped arcade pixel border details"
+    },
+    {
+      "id": "kitty-mayhem",
+      "name": "Kitty Mayhem",
+      "kind": "asset",
+      "style": "Pink enamel cat-ear frames, bold candy lettering and glossy jelly details. Colors #FFD0E9, #BCEAFF, #FFE6A7"
+    },
+    {
+      "id": "mochi-moshpit",
+      "name": "Mochi Moshpit",
+      "kind": "asset",
+      "style": "Puffy ivory mochi scallops, strawberry glass and rounded bubble lettering. Colors #FFE8C5, #FFBCD7, #C4EDDA"
+    },
+    {
+      "id": "peach-bruiser",
+      "name": "Peach Bruiser",
+      "kind": "asset",
+      "style": "Peach armor facets, lavender bolts and oversized comic-poster lettering. Colors #FFD0AA, #CBBEFF, #FFEFAE"
+    },
+    {
+      "id": "bunny-voltage",
+      "name": "Bunny Voltage",
+      "kind": "asset",
+      "style": "Violet rabbit-ear keycaps, icy chrome rims and playful electric typography. Colors #D6C5FF, #BEF6FF, #FFD0E5"
+    },
+    {
+      "id": "cherry-bombshell",
+      "name": "Cherry Bombshell",
+      "kind": "asset",
+      "style": "Cherry-red heart-cut seals, cream rock lettering and ember-ribbon progress. Colors #FFBEC9, #FFF0C2, #C3DFFF"
+    },
+    {
+      "id": "teddy-tantrum",
+      "name": "Teddy Tantrum",
+      "kind": "asset",
+      "style": "Caramel teddy-ear patches, visible stitching and bold toy-box lettering. Colors #FFE0A9, #D0E8FF, #FFD0C4"
+    },
+    {
+      "id": "bubble-fang",
+      "name": "Bubble Fang",
+      "kind": "asset",
+      "style": "Mint glass fangs, pink bubble inlays and strong playful-metal headings. Colors #BAF6DF, #FFD1EB, #E2D0FF"
+    },
+    {
+      "id": "sugar-goblin",
+      "name": "Sugar Goblin",
+      "kind": "asset",
+      "style": "Acid-lime horned arcade tiles, lavender candy rivets and mischievous lettering. Colors #D8FFA5, #DCC8FF, #FFD1AB"
+    },
+    {
+      "id": "cosmic-pudding",
+      "name": "Cosmic Pudding",
+      "kind": "asset",
+      "style": "Orbital pudding medallions, pearl-star highlights and spacious cosmic type. Colors #C5DFFF, #FFE2AB, #FFD2EB"
+    },
+    {
+      "id": "sticker-syndicate",
+      "name": "Sticker Syndicate",
+      "kind": "asset",
+      "style": "Orange-and-blue torn enamel stamps, offset print corners and wet-paint headings. Colors #FFD1A8, #B9DEFF, #F1D0FF"
+    }
+  ]
+}

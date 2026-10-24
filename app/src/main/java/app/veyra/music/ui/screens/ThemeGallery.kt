@@ -65,8 +65,9 @@ internal fun ThemeGallery(onDismiss: () -> Unit) {
         (query.isBlank() || it.name.contains(query.trim(),ignoreCase=true) || it.description.contains(query.trim(),ignoreCase=true)) }
     LaunchedEffect(detailId,available) {if(detailId!=null && detail==null)detailId=null}
     BackHandler(enabled=detailId!=null && !applying) {detailId=null}
-    ModalBottomSheet(onDismissRequest={if(!applying)onDismiss()},
-        sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),containerColor=MaterialTheme.colorScheme.background) {
+    val canDismiss by rememberUpdatedState(!applying)
+    ModalBottomSheet(onDismissRequest={if(canDismiss)onDismiss()},
+        sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true,confirmValueChange={it!=SheetValue.Hidden || canDismiss}),containerColor=MaterialTheme.colorScheme.background) {
         app.veyra.music.ui.themes.ThemeComponentSurface {
         Column(Modifier.fillMaxWidth().heightIn(max=androidx.compose.ui.platform.LocalConfiguration.current.screenHeightDp.dp*.88f)) {
             if(appStyle.custom) Text(stringResource(R.string.style_themes_suspended),Modifier.padding(horizontal=20.dp,vertical=8.dp),style=MaterialTheme.typography.bodyMedium)

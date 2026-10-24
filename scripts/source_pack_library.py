@@ -16,7 +16,7 @@ def encode(packs):
    if not valid_path(path) or not 0<len(data)<=MAX_PACK:raise ValueError('Invalid runtime pack')
    info=tarfile.TarInfo(path);info.size=len(data);info.mode=0o644;info.mtime=0
    tar.addfile(info,io.BytesIO(data))
- return lzma.compress(buffer.getvalue(),format=lzma.FORMAT_XZ,preset=6,filters=None)
+ return lzma.compress(buffer.getvalue(),format=lzma.FORMAT_XZ,preset=9,filters=None)
 
 def decode(data,expected):
  # Bound decompression, archive membership and every original ZIP byte hash.

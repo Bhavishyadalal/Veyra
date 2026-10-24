@@ -1,3 +1,5 @@
+> **Beta build 46:** [Pocket Riot](verification/POCKET-RIOT-0.2.0.md) · ten cute/bold overlays, 27 matching AI glass icons, complete 72-theme/32-overlay icon bindings and control/Studio fixes.
+
 > **Beta build 45:** [Chaos Studio](verification/CHAOS-STUDIO-0.2.0-beta1.md) · ten themes, seven overlays, ten new navigation designs and ten new app/scroll-player motion styles.
 
 > **Beta build 44:** [Reliability review](verification/RELIABILITY-REVIEW-0.2.0-beta1.md): account-safe Library loading, atomic likes and theme/navigation rendering fixes.
@@ -6,7 +8,7 @@
 
 > **Beta build 42:** Liquid Glass now works with theme and asset-pack navigation surfaces and the separate mini-player. [Fix and checks](verification/LIQUID-GLASS-0.2.0-beta1.md).
 
-> **Active development: 0.2.0-beta1 / build 45** on `preview/0.2.0-beta1`. Based on completed stable 0.1.9 build 40. [Preview baseline and checks](verification/UX-0.2.0-beta1.md) · [Preview notes](RELEASE_NOTES_0.2.0-beta1.md). Stable branches remain unchanged.
+> **Active development: 0.2.0-beta1 / build 46** on `preview/0.2.0-beta1`. Based on completed stable 0.1.9 build 40. [Preview baseline and checks](verification/UX-0.2.0-beta1.md) · [Preview notes](RELEASE_NOTES_0.2.0-beta1.md). Stable branches remain unchanged.
 
 > **Build 40:** redesigned [immersive-mode gallery](verification/IMMERSIVE-GALLERY-0.1.9-BUILD-40.md) with visual mode posters, pinned heading/close, clear selection and expandable controls.
 

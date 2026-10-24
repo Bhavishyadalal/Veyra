@@ -32,6 +32,7 @@ def main():
     # Retain font/license build inputs; record reversible image deduplication.
     packed_images = {}
     packed_fonts = {}
+    asset_packed_fonts = {}
     # Only optional authoring copies may be deduplicated. Every Gradle-generated
     # font input stays expanded; new punk authoring fonts can be restored from packs.
     gradle_fonts = {"themes/"+v for v in re.findall(r'"([a-z0-9-]+/fonts/[^"/]+\.ttf)"', (root/"app/build.gradle.kts").read_text())}
@@ -40,7 +41,7 @@ def main():
         with zipfile.ZipFile(root / pack_rel) as source_pack:
             definition = json.loads(source_pack.read("theme.json"))
             for member, digest in definition["files"].items():
-                optional_font = (definition["minAppCode"] >= 31 and Path(member).suffix.lower() == ".ttf"
+                optional_font = (Path(member).suffix.lower() == ".ttf"
                     and f'themes/{entry["id"]}/{member}' not in gradle_fonts)
                 if Path(member).suffix.lower() in {".png", ".webp"} or optional_font:
                     data = source_pack.read(member)
@@ -57,13 +58,13 @@ def main():
                 if Path(member).suffix.lower() in {".png",".ttf",".webp"}:
                     assert hashlib.sha256(source_pack.read(member)).hexdigest()==digest
                     packed_images[f'asset-packs/{item["id"]}/{member}']={"pack":pack_rel,"entry":member,"sha256":digest}
-                    if member.endswith(".ttf"):packed_fonts[digest]={"pack":pack_rel,"entry":member,"sha256":digest}
+                    if member.endswith(".ttf"):asset_packed_fonts[digest]={"pack":pack_rel,"entry":member,"sha256":digest}
             # Studio's public preview is the same byte image as the offline pack specimen.
             preview_member="previews/specimen.webp"
             packed_images[f'asset-packs/{item["id"]}/preview.webp']={"pack":pack_rel,"entry":preview_member,"sha256":definition["files"][preview_member]}
     for source in (root/"design/asset-fonts").glob("*.ttf"):
         digest=hashlib.sha256(source.read_bytes()).hexdigest()
-        if digest in packed_fonts:packed_images[source.relative_to(root).as_posix()]=packed_fonts[digest]
+        if digest in asset_packed_fonts:packed_images[source.relative_to(root).as_posix()]=asset_packed_fonts[digest]
     # The new font library is an authoring source, not a Gradle font-resource input.
     for source in (root/"design/punk-fonts").glob("*.ttf"):
         digest = hashlib.sha256(source.read_bytes()).hexdigest()
@@ -81,7 +82,8 @@ def main():
             # Generated native study images remain in Git; ship their renderer, not
             # 36+ MB of screenshots in every Android Studio source download.
             if (p.parts[:2] in {("themes","previews"),("asset-packs","previews"),
-                    ("design","home-preview"),("design","settings-preview")} and p.suffix.lower() in {".png",".webp"}):
+                    ("design","home-preview"),("design","settings-preview"),
+                    ("design","player-preview"),("design","home016-preview")} and p.suffix.lower() in {".png",".webp"}):
                 continue
             # Generated verification captures are documentation, not test fixtures or build inputs.
             if p.parts[:2] in {("verification","atelier-preview"),("verification","performance-preview"),("verification","reliability-preview")} and p.suffix.lower() in {".png",".webp"}:
@@ -90,7 +92,7 @@ def main():
             # native resources, not duplicate website/media-kit campaign exports.
             if p.parts[0] == "media-kit" and p.suffix.lower() in {".png",".webp",".jpg",".jpeg"}:
                 continue
-            if p.parts[:3] == ("design","launcher","collections") and "previews" in p.parts and p.suffix.lower() in {".png",".webp"}:
+            if p.parts[:2] == ("design","launcher") and "previews" in p.parts and p.suffix.lower() in {".png",".webp"}:
                 continue
             if any(part in excluded for part in p.parts):
                 continue

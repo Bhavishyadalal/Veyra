@@ -8,6 +8,8 @@ enum class GlassFamily { LIQUID, SAMSUNG, PIXEL }
 /** Every existing icon belongs to one small, browsable collection. */
 object IconPickerPolicy {
     fun collection(icon: AppIcon): IconCollection = when {
+        icon.name.startsWith("PocketTheme") -> IconCollection.THEMES
+        icon.name.startsWith("PocketAsset") -> IconCollection.ASSETS
         icon == AppIcon.CollectionCathedralStatic -> IconCollection.ASSETS
         icon == AppIcon.CollectionVelvetHex -> IconCollection.ASSETS
         icon == AppIcon.CollectionRazorBloom -> IconCollection.ASSETS
