@@ -115,6 +115,7 @@ internal fun ImmersivePlayer(
             }) {
                 val wide = maxWidth >= 600.dp && maxWidth > maxHeight
                 val ink = options.immersiveStyle.ink(base.primary)
+                val deckColor = options.immersiveStyle.deckColor()
                 if (options.immersiveStyle != ImmersiveStyle.CLASSIC) {
                     ImmersiveWorld(options.immersiveStyle,song,artwork,position,durationMs,lines,looking,isPlaying && active,
                         controls,locked,onBlocked,onSeek,revealControls,{controls=false},footerHeight)
@@ -192,7 +193,7 @@ internal fun ImmersivePlayer(
                     Surface(Modifier.safeDrawingPadding().padding(horizontal=16.dp,vertical=12.dp).widthIn(max=if(wide)840.dp else 480.dp).fillMaxWidth()
                         .heightIn(max=(maxHeight-100.dp).coerceAtLeast(80.dp))
                         .onSizeChanged {footerHeight=with(density){it.height.toDp()}+28.dp},
-                        shape=androidx.compose.foundation.shape.RoundedCornerShape(28.dp),color=Color(0xFF0B1019).copy(alpha=.92f),contentColor=Color.White,
+                        shape=androidx.compose.foundation.shape.RoundedCornerShape(28.dp),color=deckColor.copy(alpha=if(options.immersiveStyle.isExpandedWorld).94f else .92f),contentColor=Color.White,
                         border=androidx.compose.foundation.BorderStroke(1.dp,ink.copy(.25f))) {
                         Box(Modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
                         if(wide && density.fontScale<=1.35f) Row(Modifier.padding(horizontal=20.dp,vertical=12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(24.dp)) {

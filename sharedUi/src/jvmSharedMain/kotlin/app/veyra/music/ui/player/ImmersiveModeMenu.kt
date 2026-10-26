@@ -58,12 +58,20 @@ import org.jetbrains.compose.resources.stringResource
                     else -> 2
                 }
                 Column(verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                    ImmersiveStyle.entries.chunked(columns).forEach { row ->
-                        Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min),horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-                            row.forEach { style -> Box(Modifier.weight(1f).fillMaxHeight()) {
-                                ImmersiveModeCard(style,options.immersiveStyle==style,artwork,Modifier.fillMaxHeight()) {onSelectStyle(style)}
-                            }}
-                            repeat(columns-row.size) {Spacer(Modifier.weight(1f))}
+                    val groups = listOf(
+                        Res.string.immersive_new_worlds to ImmersiveStyle.entries.filter { it.isExpandedWorld },
+                        Res.string.immersive_original_worlds to ImmersiveStyle.entries.filterNot { it.isExpandedWorld },
+                    )
+                    groups.forEach { (heading, modes) ->
+                        Text(stringResource(heading), style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(top = 4.dp, bottom = 2.dp))
+                        modes.chunked(columns).forEach { row ->
+                            Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min),horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+                                row.forEach { style -> Box(Modifier.weight(1f).fillMaxHeight()) {
+                                    ImmersiveModeCard(style,options.immersiveStyle==style,artwork,Modifier.fillMaxHeight()) {onSelectStyle(style)}
+                                }}
+                                repeat(columns-row.size) {Spacer(Modifier.weight(1f))}
+                            }
                         }
                     }
                 }
@@ -93,7 +101,7 @@ import org.jetbrains.compose.resources.stringResource
                 }
             }
             ImmersiveMenuSection(Icons.Rounded.Settings,stringResource(Res.string.immersive_more_controls),more,{more=!more}) {
-                if(options.immersiveStyle !in listOf(ImmersiveStyle.ARTWORK_CINEMA,ImmersiveStyle.MINIMAL_NIGHT)) {
+                if(options.immersiveStyle.hasLyrics) {
                     ImmersiveMenuAction(Icons.Rounded.Lyrics,stringResource(Res.string.immersive_lyrics_source),onSource)
                     ImmersiveMenuAction(Icons.Rounded.Timer,stringResource(Res.string.immersive_lyrics_timing),onTiming)
                 }

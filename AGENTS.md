@@ -1,6 +1,9 @@
 # Veyra maintenance rules
 
-- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 49**.
+- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 50**.
+  Build 50 adds six immersive scenes (12 total), static shared-geometry previews,
+  an original AI Aurora backdrop and draw/layer-only scene motion that stops on
+  pause, lifecycle inactivity and reduced motion. See verification/IMMERSIVE-EXPANSION-0.2.0-BUILD-50.md.
   Build 49 hardens volume/scrub and panel lifetimes, visit-owned detail loading,
   history/menu ownership, rating rollbacks, Home continuation filtering, startup
   catalog races and missing video-version caching. See verification/PATCH-0.2.0-BUILD-49.md.

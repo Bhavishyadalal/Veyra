@@ -104,4 +104,18 @@ Your current preferences and listening history will be replaced. Account secrets
   <string name="scroll_motion_fade">Soft Fade</string>
   <string name="scroll_motion_elastic">Elastic</string>
   <string name="navigation_studio_hint">Choose a shape and scroll transition. Your theme, icons and Liquid Glass stay with you.</string>
+  <string name="immersive_aurora">Aurora Drift</string>
+  <string name="immersive_vinyl">Vinyl Lounge</string>
+  <string name="immersive_neon">Neon Tunnel</string>
+  <string name="immersive_paper">Paper Reverie</string>
+  <string name="immersive_orbit">Orbital Atlas</string>
+  <string name="immersive_bloom">Prism Bloom</string>
+  <string name="immersive_aurora_hint">Northern lights, a floating sleeve and luminous lyrics</string>
+  <string name="immersive_vinyl_hint">Your artwork on a turning record in a warm listening room</string>
+  <string name="immersive_neon_hint">A violet light portal above an electric midnight grid</string>
+  <string name="immersive_paper_hint">A taped sleeve, warm paper and an editorial serif title</string>
+  <string name="immersive_orbit_hint">Your cover becomes a planet in a drifting star atlas</string>
+  <string name="immersive_bloom_hint">Iridescent glass petals frame your artwork and lyrics</string>
+  <string name="immersive_new_worlds">New worlds</string>
+  <string name="immersive_original_worlds">Original worlds</string>
 </resources>

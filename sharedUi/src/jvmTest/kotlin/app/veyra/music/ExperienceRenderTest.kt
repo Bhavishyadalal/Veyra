@@ -97,7 +97,9 @@ class ExperienceRenderTest {
         val theme=ThemeVisuals("fixture","Matcha",Color(0xFFD6E9A3),Color(0xFF1C3829),Color(0xFF34513C),Color(0xFF718764),16,18,24,
             mapOf("header" to artwork.path),background=Color(0xFF10241A))
         val lines=listOf(LyricLine(0,"A quiet place to begin"),LyricLine(10000,"Let the evening find you"),LyricLine(30000,"Music makes this space your own"))
-        val cases=ImmersiveStyle.entries.map {Triple(it,false,false)} + listOf(
+        val newWorlds = ImmersiveStyle.entries.drop(6)
+        val cases=ImmersiveStyle.entries.map {Triple(it,false,false)} +
+            newWorlds.flatMap { listOf(Triple(it,true,false), Triple(it,false,true)) } + listOf(
             Triple(ImmersiveStyle.LYRICS_FOCUS,true,false),Triple(ImmersiveStyle.LANDSCAPE_STAGE,false,true))
         for((style,large,wide) in cases) {
             val background=ImmersiveBackground.THEME
@@ -244,7 +246,7 @@ class ExperienceRenderTest {
                     val nodes=scene!!.semanticsOwners.flatMap {it.rootSemanticsNode.all()}
                     assertTrue(nodes.any {it.config.getOrNull(SemanticsProperties.Text)?.any {text->text.text.contains("Immersive worlds")}==true})
                     val modes=nodes.filter {it.config.getOrNull(SemanticsProperties.Role)==Role.RadioButton}
-                    assertEquals(6,modes.size)
+                    assertEquals(12,modes.size)
                     assertEquals(1,modes.count {it.config.getOrNull(SemanticsProperties.Selected)==true})
                     val image=scene!!.render(1_000_000_000L)
                     try {File(output,"menu-$name.webp").writeBytes(image.encodeToData(EncodedImageFormat.WEBP,85)!!.bytes)} finally {image.close()}

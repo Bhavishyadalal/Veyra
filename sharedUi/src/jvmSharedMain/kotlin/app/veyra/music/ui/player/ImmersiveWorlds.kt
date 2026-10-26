@@ -46,6 +46,12 @@ import kotlin.math.min
     ImmersiveStyle.LYRICS_FOCUS -> Res.string.immersive_lyrics_focus
     ImmersiveStyle.MINIMAL_NIGHT -> Res.string.immersive_night
     ImmersiveStyle.LANDSCAPE_STAGE -> Res.string.immersive_stage
+    ImmersiveStyle.AURORA_DRIFT -> Res.string.immersive_aurora
+    ImmersiveStyle.VINYL_LOUNGE -> Res.string.immersive_vinyl
+    ImmersiveStyle.NEON_TUNNEL -> Res.string.immersive_neon
+    ImmersiveStyle.PAPER_REVERIE -> Res.string.immersive_paper
+    ImmersiveStyle.ORBITAL_ATLAS -> Res.string.immersive_orbit
+    ImmersiveStyle.PRISM_BLOOM -> Res.string.immersive_bloom
 })
 @Composable internal fun ImmersiveStyle.description(): String = stringResource(when(this) {
     ImmersiveStyle.CLASSIC -> Res.string.immersive_classic_hint
@@ -54,6 +60,12 @@ import kotlin.math.min
     ImmersiveStyle.LYRICS_FOCUS -> Res.string.immersive_lyrics_hint
     ImmersiveStyle.MINIMAL_NIGHT -> Res.string.immersive_night_hint
     ImmersiveStyle.LANDSCAPE_STAGE -> Res.string.immersive_stage_hint
+    ImmersiveStyle.AURORA_DRIFT -> Res.string.immersive_aurora_hint
+    ImmersiveStyle.VINYL_LOUNGE -> Res.string.immersive_vinyl_hint
+    ImmersiveStyle.NEON_TUNNEL -> Res.string.immersive_neon_hint
+    ImmersiveStyle.PAPER_REVERIE -> Res.string.immersive_paper_hint
+    ImmersiveStyle.ORBITAL_ATLAS -> Res.string.immersive_orbit_hint
+    ImmersiveStyle.PRISM_BLOOM -> Res.string.immersive_bloom_hint
 })
 internal fun ImmersiveStyle.symbol(): ImageVector = when(this) {
     ImmersiveStyle.CLASSIC -> Icons.Rounded.AutoAwesome
@@ -62,12 +74,24 @@ internal fun ImmersiveStyle.symbol(): ImageVector = when(this) {
     ImmersiveStyle.LYRICS_FOCUS -> Icons.Rounded.Lyrics
     ImmersiveStyle.MINIMAL_NIGHT -> Icons.Rounded.DarkMode
     ImmersiveStyle.LANDSCAPE_STAGE -> Icons.Rounded.Panorama
+    ImmersiveStyle.AURORA_DRIFT -> Icons.Rounded.Waves
+    ImmersiveStyle.VINYL_LOUNGE -> Icons.Rounded.Album
+    ImmersiveStyle.NEON_TUNNEL -> Icons.Rounded.Bolt
+    ImmersiveStyle.PAPER_REVERIE -> Icons.Rounded.AutoStories
+    ImmersiveStyle.ORBITAL_ATLAS -> Icons.Rounded.Public
+    ImmersiveStyle.PRISM_BLOOM -> Icons.Rounded.LocalFlorist
 }
 internal fun ImmersiveStyle.ink(themeAccent: Color): Color = when(this) {
     ImmersiveStyle.LYRICS_FOCUS -> Color(0xFFD7BBFF)
     ImmersiveStyle.MINIMAL_NIGHT -> Color(0xFFC9DEFF)
     ImmersiveStyle.LANDSCAPE_STAGE -> Color(0xFFFFD18C)
     ImmersiveStyle.ARTWORK_CINEMA -> Color(0xFFE0E8FF)
+    ImmersiveStyle.AURORA_DRIFT -> Color(0xFF9EF8DA)
+    ImmersiveStyle.VINYL_LOUNGE -> Color(0xFFF0C68D)
+    ImmersiveStyle.NEON_TUNNEL -> Color(0xFFCFB2FF)
+    ImmersiveStyle.PAPER_REVERIE -> Color(0xFFF5DDB5)
+    ImmersiveStyle.ORBITAL_ATLAS -> Color(0xFFBBD6FF)
+    ImmersiveStyle.PRISM_BLOOM -> Color(0xFFFFC2E3)
     else -> themeAccent
 }
 
@@ -78,6 +102,11 @@ internal fun ImmersiveStyle.ink(themeAccent: Color): Color = when(this) {
     controls: Boolean, locked: Boolean, onBlocked: () -> Unit, onSeek: (Long) -> Unit,
     onReveal: () -> Unit, onHide: () -> Unit, bottomSpace: androidx.compose.ui.unit.Dp,
 ) {
+    if (style.isExpandedWorld) {
+        ExpandedImmersiveWorld(style, song, artwork, position, durationMs, lines, looking,
+            isPlaying, controls, locked, onBlocked, onSeek, onReveal, onHide, bottomSpace)
+        return
+    }
     val theme = LocalThemeVisuals.current
     val ink = style.ink(MaterialTheme.colorScheme.primary)
     val playhead = rememberLyricPlayhead(position)
@@ -274,6 +303,9 @@ private fun immersiveTime(ms: Long):String {
             drawCircle(ink.copy(.07f),size.width*.32f,Offset(size.width*.15f,size.height*.85f))
         }
         when(style) {
+            ImmersiveStyle.AURORA_DRIFT, ImmersiveStyle.VINYL_LOUNGE, ImmersiveStyle.NEON_TUNNEL,
+            ImmersiveStyle.PAPER_REVERIE, ImmersiveStyle.ORBITAL_ATLAS, ImmersiveStyle.PRISM_BLOOM ->
+                ExpandedImmersiveMiniature(style, request, Modifier.fillMaxSize())
             ImmersiveStyle.ARTWORK_CINEMA,ImmersiveStyle.THEME_WORLD -> {
                 Icon(style.symbol(),null,Modifier.size(36.dp).align(Alignment.Center),tint=ink.copy(.65f))
                 AsyncImage(request,null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop,

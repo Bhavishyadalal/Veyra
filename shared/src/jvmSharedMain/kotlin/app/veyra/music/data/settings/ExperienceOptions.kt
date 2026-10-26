@@ -13,7 +13,10 @@ import kotlinx.serialization.json.Json
 @Serializable enum class ScrollPlayerMotion { FLOW, GLIDE, LIFT, SOFT_FADE, ELASTIC, ZEPHYR, CASCADE, FOCUS, SNAP, BLOOM, SWEEP, FLOAT, COMPRESS, UNFOLD, SETTLE }
 @Serializable enum class AppMotionStyle { DEFAULT, SILK, SOFT_ZOOM, RISE, DRIFT, REVEAL, QUICK_CUT, VELVET, SPRING, DIAGONAL, SHUTTER }
 @Serializable enum class MotionTempo { RELAXED, BALANCED, QUICK }
-@Serializable enum class ImmersiveStyle { CLASSIC, ARTWORK_CINEMA, THEME_WORLD, LYRICS_FOCUS, MINIMAL_NIGHT, LANDSCAPE_STAGE }
+@Serializable enum class ImmersiveStyle {
+    CLASSIC, ARTWORK_CINEMA, THEME_WORLD, LYRICS_FOCUS, MINIMAL_NIGHT, LANDSCAPE_STAGE,
+    AURORA_DRIFT, VINYL_LOUNGE, NEON_TUNNEL, PAPER_REVERIE, ORBITAL_ATLAS, PRISM_BLOOM,
+}
 @Serializable enum class ImmersiveBackground { SONG, THEME, BLEND, MINIMAL }
 @Serializable enum class ImmersiveCover { FILL, FIT, ZOOMED }
 @Serializable enum class ImmersiveLyricsPosition { TOP, CENTER, BOTTOM, FULL }

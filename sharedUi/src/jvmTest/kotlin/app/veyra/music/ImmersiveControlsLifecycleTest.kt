@@ -65,7 +65,7 @@ class ImmersiveControlsLifecycleTest {
     }
 
     @Test fun autoHideDoesNotRevealItsOwnFooterAgain() {
-        for (style in listOf(ImmersiveStyle.CLASSIC, ImmersiveStyle.MINIMAL_NIGHT)) {
+        for (style in listOf(ImmersiveStyle.CLASSIC, ImmersiveStyle.MINIMAL_NIGHT) + ImmersiveStyle.entries.drop(6)) {
             checkAutoHide(style, reduced = false)
         }
     }
