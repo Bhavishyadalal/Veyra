@@ -171,7 +171,7 @@ fun SearchScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     // Tapping the search tab from the nav bar sets focusRequested;
     // respond by focusing the field and opening the keyboard.
-    LaunchedEffect(focusRequested) {
+    LaunchedEffect(focusRequested, showField) {
         if (focusRequested && showField) {
             focusRequester.requestFocus()
             keyboardController?.show()

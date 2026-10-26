@@ -14,11 +14,46 @@ import kotlinx.coroutines.flow.update
  * the same result immediately.
  */
 object LikeState {
+    private val editsLock = Any()
+    private var nextEdit = 0L
+    private var session = 0L
+    private val edits = mutableMapOf<String, Long>()
+    private val confirmed = mutableMapOf<String, Pair<Long, LikeStatus>>()
+    data class Edit internal constructor(val videoId: String, internal val revision: Long, internal val session: Long)
     private val _overrides = MutableStateFlow<Map<String, LikeStatus>>(emptyMap())
     val overrides: StateFlow<Map<String, LikeStatus>> = _overrides.asStateFlow()
 
-    fun set(videoId: String, status: LikeStatus) {
-        _overrides.update {it + (videoId to status)}
+    fun set(videoId: String, status: LikeStatus) = synchronized(editsLock) {
+        val revision = ++nextEdit
+        edits[videoId] = revision
+        confirmed[videoId] = revision to status
+        _overrides.update { it + (videoId to status) }
+    }
+
+    /** Shared by player and notification actions; even LIKE → neutral → LIKE is a new intent. */
+    fun beginEdit(videoId: String, status: LikeStatus, previous: LikeStatus? = null): Edit = synchronized(editsLock) {
+        confirmed.getOrPut(videoId) { 0L to (previous ?: _overrides.value[videoId] ?: LikeStatus.INDIFFERENT) }
+        val edit = Edit(videoId, ++nextEdit, session)
+        edits[videoId] = edit.revision
+        _overrides.update { it + (videoId to status) }
+        edit
+    }
+
+    fun isCurrent(edit: Edit): Boolean = synchronized(editsLock) { edits[edit.videoId] == edit.revision }
+
+    /** Record the last successful server write even if another optimistic edit is already visible. */
+    fun confirm(edit: Edit, status: LikeStatus) = synchronized(editsLock) {
+        if (edit.session == session && edit.revision > (confirmed[edit.videoId]?.first ?: -1L))
+            confirmed[edit.videoId] = edit.revision to status
+    }
+
+    /** A failure from an older edit or a signed-out account cannot roll back the current rating. */
+    fun rollback(edit: Edit, previous: LikeStatus): Boolean = synchronized(editsLock) {
+        if (edits[edit.videoId] != edit.revision) return@synchronized false
+        edits[edit.videoId] = ++nextEdit
+        val restored = confirmed[edit.videoId]?.second ?: previous
+        _overrides.update { it + (edit.videoId to restored) }
+        true
     }
 
     /**
@@ -44,7 +79,10 @@ object LikeState {
         }
     }
 
-    fun clear() {
+    fun clear() = synchronized(editsLock) {
+        edits.clear()
+        confirmed.clear()
+        session++
         _overrides.value = emptyMap()
     }
 }

@@ -1,6 +1,9 @@
 # Veyra maintenance rules
 
-- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 48**.
+- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 49**.
+  Build 49 hardens volume/scrub and panel lifetimes, visit-owned detail loading,
+  history/menu ownership, rating rollbacks, Home continuation filtering, startup
+  catalog races and missing video-version caching. See verification/PATCH-0.2.0-BUILD-49.md.
   Build 48 fixes immersive footer hide/disposal feedback and cancelled seeks,
   and uses the selected launcher image in the foreground signature. See
   verification/PATCH-0.2.0-BUILD-48.md. The original promotion was build 47.

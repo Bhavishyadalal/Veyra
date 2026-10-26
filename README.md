@@ -1,10 +1,10 @@
-> **Stable 0.2.0 / code 48** · 72 themes, 32 independent overlays and 132 launcher choices. Theme-aware Liquid Glass, Motion studio, 16 navigation designs, 15 scroll-player transitions and complete matching glass icons.
+> **Stable 0.2.0 / code 49** · 72 themes, 32 independent overlays and 132 launcher choices. Theme-aware Liquid Glass, Motion studio, 16 navigation designs, 15 scroll-player transitions and complete matching glass icons.
 >
 > [Release notes](RELEASE_NOTES_0.2.0.md) · [Pocket Riot assets](asset-packs/POCKET_RIOT.md) · [Glass icons](design/launcher/pocket-riot/previews/glass-editions.webp) · [Source downloads](downloads/README.md) · [Promotion checks](verification/STABLE-0.2.0-PROMOTION.md).
 >
-> Build 48 fixes recurring immersive-footer glitches, cancelled seeks and selected-icon foreground branding. [Patch details](verification/PATCH-0.2.0-BUILD-48.md).
+> Build 49 fixes volume reconciliation, cancelled player gestures, stale detail/history/menu replies, rating rollbacks, missing-video lookups and startup catalog races. Immersive controls adapt to short screens and larger text. [Review and patch details](verification/PATCH-0.2.0-BUILD-49.md).
 
-> Completed preview **0.2.0-beta1 / code 46** remains on `preview/0.2.0-beta1`. Historical stable **0.1.9 / code 40** remains on `stable/0.1.9`. Install a code-48 build for the immersive controls and selected launch-icon fixes (build 47 already includes the new native icons); this source push does not publish a signed APK.
+> Completed preview **0.2.0-beta1 / code 46** remains on `preview/0.2.0-beta1`. Historical stable **0.1.9 / code 40** remains on `stable/0.1.9`. Rebuild/install code 49 for the latest fixes; this source push does not publish a signed APK.
 
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 

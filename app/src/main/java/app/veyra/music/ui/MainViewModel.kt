@@ -159,6 +159,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val refreshing: StateFlow<Set<Feed>> = _refreshing.asStateFlow()
 
     private val libraryRequests=LatestRequestGate()
+    private val historyRequests = LatestRequestGate()
+    private var historyLoadJob: Job? = null
     private var libraryLoadJob: Job? = null
     private val refreshJobs=mutableMapOf<Feed,Job>()
 
@@ -659,6 +661,15 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      */
     private val _detailStack = MutableStateFlow<List<DetailPage>>(emptyList())
     val detailStack: StateFlow<List<DetailPage>> = _detailStack.asStateFlow()
+    private var nextDetailLoadId = 0L
+    private val detailLoadJobs = mutableMapOf<Long, Job>()
+
+    private fun loadDetail(id: Long, block: suspend kotlinx.coroutines.CoroutineScope.() -> Unit) {
+        val job = viewModelScope.launch(start = CoroutineStart.LAZY, block = block)
+        detailLoadJobs[id] = job
+        job.invokeOnCompletion { if (detailLoadJobs[id] === job) detailLoadJobs.remove(id) }
+        job.start()
+    }
 
     /** UI-side continuation fetches that can be handed to the playback service. */
     private val fillInJobs = mutableMapOf<String, Job>()
@@ -725,7 +736,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
 
     fun likeStatusOf(videoId: String): LikeStatus =
-        likeStatuses.value[videoId] ?: LikeStatus.INDIFFERENT
+        LikeState.overrides.value[videoId] ?: likeStatuses.value[videoId] ?: LikeStatus.INDIFFERENT
 
     /**
      * Sets (or clears) the thumbs rating on [videoId].
@@ -739,10 +750,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         if (!requireSignIn()) return
         val previous = likeStatusOf(videoId)
         if (previous == status) return
-        LikeState.set(videoId, status)
+        val edit = LikeState.beginEdit(videoId, status, previous)
         viewModelScope.launch {
-            YtMusicRepository.rate(videoId, status).fold(
+            YtMusicRepository.rate(videoId, status, edit).fold(
                 onSuccess = {
+                    if (!LikeState.isCurrent(edit)) return@fold
                     // Liked Music is now out of date either way.
                     libraryStale = true
                     if (status != LikeStatus.LIKE) dropFromLikedLists(videoId)
@@ -750,10 +762,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     // demoting it — see [forgetFromLibrary].
                     val unliked = previous == LikeStatus.LIKE &&
                         status == LikeStatus.INDIFFERENT
-                    if (unliked) forgetFromLibrary(videoId)
+                    if (unliked) forgetFromLibrary(videoId) { LikeState.isCurrent(edit) }
                 },
                 onFailure = {
-                    LikeState.set(videoId, previous)
+                    LikeState.rollback(edit, previous)
                 },
             )
         }
@@ -774,13 +786,17 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * cached to take. One extra request, on an action nobody performs in bulk.
      * A song that was never saved has no removal token and this is a no-op.
      */
-    private suspend fun forgetFromLibrary(videoId: String): Boolean {
+    private suspend fun forgetFromLibrary(videoId: String, stillCurrent: () -> Boolean): Boolean {
         val menu = YtMusicRepository.songMenu(videoId).getOrNull() ?: return false
+        currentCoroutineContext().ensureActive()
+        if (!stillCurrent()) return false
         val token = menu.removeFromLibraryToken?.takeIf { menu.inLibrary } ?: return false
         if (YtMusicRepository.setLibraryStatus(token).isFailure) return false
+        currentCoroutineContext().ensureActive()
+        if (!stillCurrent()) return false
         // The menu may be the one on screen; don't leave it offering a
         // removal that has already happened.
-        _songMenu.value = _songMenu.value?.copy(inLibrary = false)
+        if (songMenuVideoId == videoId) _songMenu.value = _songMenu.value?.copy(inLibrary = false)
         return true
     }
 
@@ -921,6 +937,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val songMenu: StateFlow<SongMenu?> = _songMenu.asStateFlow()
 
     private var songMenuJob: Job? = null
+    private var songMenuVideoId: String? = null
 
     /** In-flight liked-library continuation sync — see [syncLikedMusic]. */
     private var likedSyncJob: Job? = null
@@ -942,10 +959,12 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      */
     fun loadSongMenu(videoId: String?) {
         songMenuJob?.cancel()
+        songMenuVideoId = videoId
         _songMenu.value = null
         if (videoId == null || !_signedIn.value) return
         songMenuJob = viewModelScope.launch {
             val menu = YtMusicRepository.songMenu(videoId).getOrNull() ?: return@launch
+            currentCoroutineContext().ensureActive()
             _songMenu.value = menu
             LikeState.rememberStated(videoId, menu.likeStatus)
         }
@@ -1775,7 +1794,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     /** Tapping a tab should leave any pushed page behind. */
     fun clearDetail() {
-        if (_detailStack.value.isNotEmpty()) _detailStack.value = emptyList()
+        _detailStack.value = emptyList()
+        val jobs = detailLoadJobs.values.toList() + fillInJobs.values.toList()
+        detailLoadJobs.clear()
+        fillInJobs.clear()
+        jobs.forEach { it.cancel() }
     }
 
     /** Publish synchronously so a listener change cannot leave old cards in a derived flow. */
@@ -2018,7 +2041,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 YtMusicRepository.moreHome(token).onSuccess { feed ->
                     if (isCurrentHomeLoad(identity, generation)) {
                         val existing = (_home.value as? UiState.Success)?.data.orEmpty()
-                        val added = feed.shelves.withoutRepeatsOf(existing)
+                        val added = app.veyra.music.data.home.usableHomeShelves(feed.shelves).withoutRepeatsOf(existing)
                             .filter { homeSeenTitles.add(it.title.lowercase(Locale.ROOT)) }
                         homeContinuation = feed.continuation.takeIf { added.isNotEmpty() }
                         if (added.isNotEmpty()) {
@@ -2062,7 +2085,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private fun cancelListenerRequests() {
+        songMenuJob?.cancel()
+        songMenuJob = null
+        songMenuVideoId = null
         libraryRequests.invalidate()
+        historyRequests.invalidate()
+        historyLoadJob?.cancel()
+        historyLoadJob = null
         libraryLoadJob?.cancel()
         libraryLoadJob=null
         val old=refreshJobs.values.toList()
@@ -2107,21 +2136,22 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * history on.
      */
     fun loadHistory() {
+        historyLoadJob?.cancel()
+        historyRequests.invalidate()
         if (!_signedIn.value) {
             _history.value = UiState.Error(text(R.string.history_sign_in_required))
             return
         }
         val identity = listenerKey()
         _history.value = UiState.Loading
-        viewModelScope.launch {
-            val next = YtMusicRepository.history().fold(
+        historyLoadJob = viewModelScope.launch {
+            historyRequests.load(fetch = { YtMusicRepository.history().fold(
                 onSuccess = { songs ->
                     if (songs.isEmpty()) UiState.Error(text(R.string.history_empty))
                     else UiState.Success(songs)
                 },
                 onFailure = { UiState.Error(it.friendly()) },
-            )
-            if (identity == listenerKey()) _history.value = next
+            ) }, publish = { next -> if (identity == listenerKey()) _history.value = next })
         }
     }
 
@@ -2856,6 +2886,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             return
         }
         val resolved = browseTypeOf(browseId, type)
+        val loadId = ++nextDetailLoadId
         _detailStack.value += DetailPage(
             browseId = browseId,
             title = title,
@@ -2863,8 +2894,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             thumbnailUrl = thumbnailUrl,
             songs = UiState.Loading,
             type = resolved,
+            loadId = loadId,
         )
-        viewModelScope.launch {
+        loadDetail(loadId) {
             var sections = emptyList<HomeShelf>()
             // Callers that open an artist from a track — the player, the
             // long-press menu — only have that track's cover art and its full
@@ -2907,7 +2939,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             }
             if (onDevice.isNotEmpty()) {
                 _detailStack.value = _detailStack.value.map {
-                    if (it.browseId == browseId && it.songs is UiState.Loading) it.copy(songs = UiState.Success(onDevice)) else it
+                    if (it.loadId == loadId && it.songs is UiState.Loading) it.copy(songs = UiState.Success(onDevice)) else it
                 }
             }
             if (localPlaylist != null) {
@@ -2944,6 +2976,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                             // the one thing that states who made the playlist,
                             // so its own menu never has to go and ask. Recorded
                             // even when the listing came back empty.
+                            currentCoroutineContext().ensureActive()
                             page.owned?.let { setPlaylistOwned(browseId, it) }
                             // Only for the caller that had nothing: a card's own
                             // title is what the user just tapped, and must not
@@ -2975,11 +3008,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     )
                 }
             }
-            // Update by id — the user may have pushed another page meanwhile.
+            currentCoroutineContext().ensureActive()
+            if (_detailStack.value.none { it.loadId == loadId }) return@loadDetail
+            // Only this visit owns this response, including after a quick back/reopen.
             // A page showing its downloaded copy takes only a real listing: a
             // failed or empty fetch leaves the downloaded tracks up.
             _detailStack.value = _detailStack.value.map {
-                if (it.browseId == browseId &&
+                if (it.loadId == loadId &&
                     (it.songs is UiState.Loading || (onDevice.isNotEmpty() && state is UiState.Success))
                 ) {
                     it.copy(
@@ -3015,6 +3050,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * before the last song has been found.
      */
     private fun openSpotifyPage(browseId: String, title: String, subtitle: String, thumbnailUrl: String?) {
+        val loadId = ++nextDetailLoadId
         _detailStack.value += DetailPage(
             browseId = browseId,
             title = title,
@@ -3022,21 +3058,24 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             thumbnailUrl = thumbnailUrl,
             songs = UiState.Loading,
             type = BrowseType.PLAYLIST,
+            loadId = loadId,
         )
-        viewModelScope.launch {
+        loadDetail(loadId) {
             val playlistId = browseId.removePrefix(SPOTIFY_PAGE_PREFIX)
-            fun open() = _detailStack.value.any { it.browseId == browseId }
+            fun open() = _detailStack.value.any { it.loadId == loadId }
             fun setSongs(songs: UiState<List<Song>>) {
+                coroutineContext.ensureActive()
                 _detailStack.value = _detailStack.value.map {
-                    if (it.browseId == browseId) it.copy(songs = songs) else it
+                    if (it.loadId == loadId) it.copy(songs = songs) else it
                 }
             }
             // The list only had a thumbnail; the full-size cover replaces it
             // once this page has asked for it.
             launch {
                 val cover = runCatching { SpotifyLibrary.cover(playlistId) }.getOrNull() ?: return@launch
+                currentCoroutineContext().ensureActive()
                 _detailStack.value = _detailStack.value.map {
-                    if (it.browseId == browseId) it.copy(thumbnailUrl = cover) else it
+                    if (it.loadId == loadId) it.copy(thumbnailUrl = cover) else it
                 }
             }
             val tracks = runCatching {
@@ -3045,11 +3084,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 }
             }.getOrElse {
                 setSongs(UiState.Error(it.message ?: text(R.string.failed)))
-                return@launch
+                return@loadDetail
             }
             if (tracks.isEmpty()) {
                 setSongs(UiState.Error(text(R.string.spotify_empty_tracks)))
-                return@launch
+                return@loadDetail
             }
             val gate = Semaphore(SPOTIFY_MATCH_PARALLELISM)
             coroutineScope {
@@ -3058,13 +3097,14 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                         gate.withPermit {
                             if (!open()) return@withPermit
                             val match = runCatching { SpotifyImporter.matchTrack(track) }.getOrNull()
+                            currentCoroutineContext().ensureActive()
                             val found = match?.copy(thumbnailUrl = match.thumbnailUrl ?: track.imageUrl)
                                 ?: track.asPendingSong().let {
                                     it.copy(videoId = SPOTIFY_MISSING_PREFIX + track.id)
                                 }
                             _detailStack.value = _detailStack.value.map { page ->
                                 val list = (page.songs as? UiState.Success<List<Song>>)?.data
-                                if (page.browseId == browseId && list != null && index < list.size) {
+                                if (page.loadId == loadId && list != null && index < list.size) {
                                     page.copy(songs = UiState.Success(list.toMutableList().also { it[index] = found }))
                                 } else page
                             }
@@ -3212,6 +3252,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * that loops back on itself instead of running dry.
      */
     private fun fillIn(browseId: String, token: String, artworkFallback: String?) {
+        val visits = _detailStack.value.filter { it.browseId == browseId }.mapTo(HashSet()) { it.loadId }
+        if (visits.isEmpty()) return
         fillInJobs[browseId]?.cancel()
         fillInJobs[browseId] = viewModelScope.launch {
             // Publish and draw the first response before spending the shared
@@ -3231,10 +3273,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 // second walk replaces the first, so each copy merges by key
                 // and only takes a token from a page that taught it something.
                 val stack = _detailStack.value
-                if (stack.none { it.browseId == browseId }) return@launch
+                if (stack.none { it.browseId == browseId && it.loadId in visits }) return@launch
                 var progressed = false
                 val updated = stack.map { current ->
-                    if (current.browseId != browseId) return@map current
+                    if (current.browseId != browseId || current.loadId !in visits) return@map current
                     val existing = (current.songs as? UiState.Success)?.data ?: return@map current
                     val known = existing.mapTo(HashSet()) { it.contextEntryKey() }
                     val added = fetched.songs
@@ -3388,6 +3430,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         val stack = _detailStack.value
         if (stack.isEmpty()) return false
         _detailStack.value = stack.dropLast(1)
+        detailLoadJobs.remove(stack.last().loadId)?.cancel()
+        if (_detailStack.value.none { it.browseId == stack.last().browseId })
+            fillInJobs.remove(stack.last().browseId)?.cancel()
         return true
     }
 
@@ -3667,6 +3712,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun clearListenerState(restoreCached: Boolean = false) {
         cancelListenerRequests()
+        clearDetail()
         prepareHomeOwner(listenerKey(), restoreNow = true)
         _account.value = null
         likedSyncJob?.cancel()
@@ -3718,6 +3764,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }
         cancelListenerRequests()
         authStore.signOut()
+        clearDetail()
         Innertube.cookie = null
         // The mirror image: verdicts reached with a session in hand say nothing
         // about what an anonymous walk will be told, and the clients stood down

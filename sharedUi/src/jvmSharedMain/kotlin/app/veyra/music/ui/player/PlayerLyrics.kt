@@ -1851,9 +1851,7 @@ private fun LyricsPanelContent(
     // the blur and the movement are one gesture.
     val focusLine = if (leadLine >= 0) leadLine else scrollLine
     val listState = rememberLazyListState()
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.isScrollInProgress }.collect(onScrollingChange)
-    }
+    ReportPlayerScrolling(listState, onScrollingChange)
     // LayoutInfo changes on every scroll frame. Observe only height here so
     // the entire lyrics list is not recomposed for every scrolling pixel.
     val viewportHeight by remember(listState) {

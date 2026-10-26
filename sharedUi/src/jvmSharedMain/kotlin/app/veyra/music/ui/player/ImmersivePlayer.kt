@@ -190,9 +190,11 @@ internal fun ImmersivePlayer(
                     exit=fadeOut(tween(if(reduceMotion)0 else 160)),
                     modifier=Modifier.align(Alignment.BottomCenter)) {
                     Surface(Modifier.safeDrawingPadding().padding(horizontal=16.dp,vertical=12.dp).widthIn(max=if(wide)840.dp else 480.dp).fillMaxWidth()
+                        .heightIn(max=(maxHeight-100.dp).coerceAtLeast(80.dp))
                         .onSizeChanged {footerHeight=with(density){it.height.toDp()}+28.dp},
                         shape=androidx.compose.foundation.shape.RoundedCornerShape(28.dp),color=Color(0xFF0B1019).copy(alpha=.92f),contentColor=Color.White,
                         border=androidx.compose.foundation.BorderStroke(1.dp,ink.copy(.25f))) {
+                        Box(Modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
                         if(wide && density.fontScale<=1.35f) Row(Modifier.padding(horizontal=20.dp,vertical=12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(24.dp)) {
                             Column(Modifier.weight(1f)) {
                                 Text(song.title,maxLines=1,overflow=TextOverflow.Ellipsis,style=MaterialTheme.typography.titleMedium)
@@ -204,6 +206,7 @@ internal fun ImmersivePlayer(
                             Text(song.artist,maxLines=1,overflow=TextOverflow.Ellipsis,style=MaterialTheme.typography.bodySmall,color=Color.White.copy(.65f))
                             ImmersiveTimeline(song.videoId,position,durationMs,locked,ink,onSeek,onScrubbing)
                             Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {transport()}
+                        }
                         }
                     }
                 }

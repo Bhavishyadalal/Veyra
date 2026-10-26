@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalAccessibilityManager
 import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.unit.Density
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -32,6 +33,37 @@ import javax.swing.SwingUtilities
 /** Exercises the production footer, rather than a duplicate of its visibility logic. */
 @OptIn(ExperimentalComposeUiApi::class)
 class ImmersiveControlsLifecycleTest {
+    @Test fun shortLandscapeWithLargeTextKeepsAReachableScrollableControlDeck() {
+        PlayerPlatform.install(RenderPlayerHost())
+        var scene: ImageComposeScene? = null
+        fun SemanticsNode.all(): List<SemanticsNode> = listOf(this) + children.flatMap { it.all() }
+        try {
+            SwingUtilities.invokeAndWait {
+                scene = ImageComposeScene(600, 320, density = Density(1f, 1.8f)) {
+                    MaterialTheme(colorScheme = darkColorScheme()) {
+                        ImmersivePlayer(
+                            song = Song("short", "A long song title for a small landscape screen", "Veyra", null),
+                            artwork = null, canvas = null, isPlaying = false,
+                            position = PlaybackPosition(), durationMs = 180_000, lines = emptyList(), looking = false,
+                            options = ExperienceOptions(), onOptions = {}, onExit = {}, onPlayPause = {},
+                            onPrevious = {}, onNext = {}, hasPrevious = true, hasNext = true,
+                            locked = false, onBlocked = {}, onSeek = {}, onSource = {}, onTiming = {},
+                            onSongOptions = {}, windowed = false,
+                        )
+                    }
+                }
+                repeat(3) { scene!!.render(it * 40_000_000L).close() }
+                val nodes = scene!!.semanticsOwners.flatMap { it.rootSemanticsNode.all() }
+                val scrollable = nodes.firstOrNull {
+                    it.config.getOrNull(SemanticsProperties.VerticalScrollAxisRange)?.maxValue?.invoke()?.let { max -> max > 0f } == true
+                }
+                assertNotNull("large controls must scroll instead of overflowing the window", scrollable)
+                assertTrue(scrollable!!.boundsInRoot.top >= 0f)
+                assertTrue(scrollable.boundsInRoot.bottom <= 320f)
+            }
+        } finally { SwingUtilities.invokeAndWait { scene?.close() } }
+    }
+
     @Test fun autoHideDoesNotRevealItsOwnFooterAgain() {
         for (style in listOf(ImmersiveStyle.CLASSIC, ImmersiveStyle.MINIMAL_NIGHT)) {
             checkAutoHide(style, reduced = false)

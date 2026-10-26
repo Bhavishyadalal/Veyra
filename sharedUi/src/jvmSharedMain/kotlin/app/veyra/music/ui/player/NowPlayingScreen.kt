@@ -1113,9 +1113,13 @@ fun NowPlayingScreen(
     // draw-phase layers.
     val swipeSettle = remember { Animatable(0f) }
     val swipeTargets = remember { Channel<Float>(Channel.CONFLATED) }
-    LaunchedEffect(swipeTargets) {
+    LaunchedEffect(swipeTargets, reducedBackdropMotion) {
         for (target in swipeTargets) {
             val newest = swipeTargets.tryReceive().getOrNull() ?: target
+            if (reducedBackdropMotion) {
+                swipeSettle.snapTo(newest)
+                continue
+            }
             launch {
                 if (newest != swipeSettle.targetValue) {
                     swipeSettle.animateTo(newest, spring(stiffness = Spring.StiffnessMediumLow))
@@ -1470,7 +1474,10 @@ fun NowPlayingScreen(
             latestSeekBy((if(point.x<size.width/2f)-1 else 1)*experience.doubleTapSeekSeconds*1000L)
         })
     }
-    val skipSwipeGesture = Modifier.pointerInput(showAudioPipeline, showCast, panelScrolling, controlsLocked) {
+    val latestSwipeNext by rememberUpdatedState(onNext)
+    val latestSwipePrevious by rememberUpdatedState(onPrevious)
+    val latestSwipeBlocked by rememberUpdatedState(onBlockedControl)
+    val skipSwipeGesture = Modifier.pointerInput(showAudioPipeline, showCast, panelScrolling, controlsLocked, swipeThreshold) {
         if (showAudioPipeline || showCast || panelScrolling) return@pointerInput
         var total = 0f
         detectHorizontalDragGestures(
@@ -1485,14 +1492,14 @@ fun NowPlayingScreen(
                     // Still tracks the finger and still springs back, so the
                     // sleeve does not feel dead — it just says why it did not
                     // move on.
-                    controlsLocked -> if (crossed) onBlockedControl()
+                    controlsLocked -> if (crossed) latestSwipeBlocked()
                     total <= -swipeThreshold -> {
                         haptics.play(Haptic.SkipNext)
-                        onNext()
+                        latestSwipeNext()
                     }
                     total >= swipeThreshold -> {
                         haptics.play(Haptic.SkipPrevious)
-                        onPrevious()
+                        latestSwipePrevious()
                     }
                 }
                 setSwipeOffset(0f)

@@ -32,6 +32,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.JsonObject
 import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
@@ -46,11 +48,11 @@ object YtMusicRepository {
     // answer makes the eventual player switch use the exact rendition whose
     // bytes were warmed, without repeating a 10–30 second catalogue search.
     private val audioVersionCache = ConcurrentHashMap<String, Song>()
-    // Cache for video version lookups from audio tracks (null means no video found).
-    private val videoVersionCache = ConcurrentHashMap<String, Song?>()
+    private val videoVersionCache = VideoVersionCache()
+    private val ratingMutations = Mutex()
 
     fun cachedAudioVersion(videoId: String): Song? = audioVersionCache[videoId]
-    fun cachedVideoVersion(videoId: String): Song? = videoVersionCache[videoId]
+    fun cachedVideoVersion(videoId: String): Song? = videoVersionCache.get(videoId)?.song
 
     /**
      * The core personalised feed. It stays deliberately independent from the
@@ -425,22 +427,26 @@ object YtMusicRepository {
      */
     suspend fun resolveVideo(song: Song): Song? {
         if (song.isVideo) return null
-        videoVersionCache[song.videoId]?.let { return it }
+        videoVersionCache.get(song.videoId)?.let { return it.song }
         val target = TrackMatcher.targetOf(song)
+        var complete = true
         for (query in TrackMatcher.queries(target)) {
-            val candidates = search(query, SearchFilter.VIDEOS)
+            val response = search(query, SearchFilter.VIDEOS)
+            if (response.isFailure) complete = false
+            val candidates = response
                 .getOrNull()
                 ?.filterIsInstance<SearchResult.Track>()
                 ?.map { it.song }
                 .orEmpty()
             TrackMatcher.best(candidates, target)?.let { match ->
                 Log.d(TAG, "video switch: '${song.title}' -> '${match.title}' ($query)")
-                videoVersionCache[song.videoId] = match
+                videoVersionCache.put(song.videoId, match)
                 return match
             }
         }
         Log.w(TAG, "video switch: no video match for '${song.title}' by '${song.artist}'")
-        videoVersionCache[song.videoId] = null
+        // A failed/offline search is not evidence that a video does not exist.
+        if (complete) videoVersionCache.put(song.videoId, null)
         return null
     }
 
@@ -880,8 +886,15 @@ object YtMusicRepository {
             ?: error("no menu for $videoId")
     }
 
-    suspend fun rate(videoId: String, status: LikeStatus): Result<Unit> =
-        call("rate:$videoId") { Innertube.rate(videoId, status) }
+    suspend fun rate(videoId: String, status: LikeStatus, edit: LikeState.Edit? = null): Result<Unit> =
+        ratingMutations.withLock {
+            currentCoroutineContext().ensureActive()
+            // Serialize sends from the notification and player, discarding obsolete queued taps.
+            if (edit != null && !LikeState.isCurrent(edit)) Result.success(Unit)
+            else call("rate:$videoId") { Innertube.rate(videoId, status) }.also { result ->
+                if (result.isSuccess && edit != null) LikeState.confirm(edit, status)
+            }
+        }
 
     /** Adds or removes a track from the library; [token] says which. */
     suspend fun setLibraryStatus(token: String): Result<Unit> =

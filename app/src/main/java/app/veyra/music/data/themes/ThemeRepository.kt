@@ -72,7 +72,7 @@ object ThemeRepository {
             }
             runCatching {
                 context.assets.open("theme-catalog.json").use { parseCatalog(ThemePack.readBounded(it,65536)) }
-            }.onSuccess { _catalog.value = it }
+            }.onSuccess { _catalog.compareAndSet(emptyList(), it) }
         }}
     }
 

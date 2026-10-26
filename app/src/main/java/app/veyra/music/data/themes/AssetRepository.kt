@@ -83,7 +83,7 @@ object AssetRepository {
             }
             runCatching {
                 context.assets.open("asset-catalog.json").use { parseCatalog(AssetPack.readBounded(it,65536)) }
-            }.onSuccess { _catalog.value = it }
+            }.onSuccess { _catalog.compareAndSet(emptyList(), it) }
         }}
     }
 

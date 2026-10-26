@@ -9,6 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -31,6 +32,8 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
 /**
@@ -81,7 +84,9 @@ internal fun rememberCanvasArtwork(song: Song): CanvasArtwork? {
         if (canvas == null && song.albumName == null) delay(ALBUM_SETTLE_MS)
         // Keep what an earlier pass found if this one comes back empty, rather
         // than pulling a playing clip out from under itself.
-        canvas = PlayerPlatform.host.canvasFor(song) ?: canvas
+        val fetched = PlayerPlatform.host.canvasFor(song)
+        currentCoroutineContext().ensureActive()
+        canvas = fetched ?: canvas
     }
 
     return canvas
@@ -191,7 +196,7 @@ internal fun rememberPlayerArtwork(remoteArt: String?): PlayerArtwork {
  */
 @Composable
 internal fun rememberPlayerScrub(trackId: String, position: PlaybackPosition, durationMs: Long): PlayerScrub {
-    val scrub = remember { PlayerScrub() }
+    val scrub = remember(trackId) { PlayerScrub() }
     var pendingSeek by scrub::pendingSeek
 
     // Released as soon as the player's own position agrees with where the handle
@@ -212,7 +217,7 @@ internal fun rememberPlayerScrub(trackId: String, position: PlaybackPosition, du
     //
     // Watched from inside the effect rather than keyed on the position, so the
     // screen that owns this does not have to read the playhead to drive it.
-    LaunchedEffect(durationMs, pendingSeek) {
+    LaunchedEffect(scrub, position, durationMs, pendingSeek) {
         val target = pendingSeek ?: return@LaunchedEffect
         if (durationMs <= 0) return@LaunchedEffect
         snapshotFlow { position.positionMs }.first { positionMs ->
@@ -220,12 +225,12 @@ internal fun rememberPlayerScrub(trackId: String, position: PlaybackPosition, du
         }
         pendingSeek = null
     }
-    LaunchedEffect(pendingSeek) {
+    LaunchedEffect(scrub, pendingSeek) {
         if (pendingSeek == null) return@LaunchedEffect
         delay(SEEK_SETTLE_TIMEOUT_MS)
         pendingSeek = null
     }
-    LaunchedEffect(trackId) { scrub.cancel() }
+    DisposableEffect(scrub) { onDispose { scrub.cancel() } }
 
     return scrub
 }
@@ -267,14 +272,17 @@ internal fun rememberPlayerVolume(): PlayerVolume {
     // Hardware volume keys and the system panel change the level behind our
     // back; the host follows them, and so does the bar.
     val systemVolume by system.level.collectAsStateWithLifecycle()
+    val reducedMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
 
     // Glide to the level the system reports, but never fight the finger — a
     // drag writes the level, which calls straight back through here.
-    LaunchedEffect(systemVolume) {
+    LaunchedEffect(volume, systemVolume, volume.dragging, reducedMotion) {
         if (!volume.dragging) {
-            volume.level.animateTo(systemVolume, tween(durationMillis = 220, easing = FastOutSlowInEasing))
+            if (reducedMotion) volume.level.snapTo(systemVolume)
+            else volume.level.animateTo(systemVolume, tween(durationMillis = 220, easing = FastOutSlowInEasing))
         }
     }
+    DisposableEffect(volume) { onDispose { volume.release() } }
 
     return volume
 }

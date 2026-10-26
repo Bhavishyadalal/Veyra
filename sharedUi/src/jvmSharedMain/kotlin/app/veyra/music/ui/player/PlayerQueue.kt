@@ -253,9 +253,7 @@ internal fun InlineQueue(
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
     val reducedMotion = app.veyra.music.ui.motion.rememberVeyraReducedMotion()
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.isScrollInProgress }.collect(onScrollingChange)
-    }
+    ReportPlayerScrolling(listState, onScrollingChange)
     val keepScroll = remember(listState) { keepScrollInList(listState) }
     val controlsOnScroll = rememberPlayerControlsOnScroll(
         enabled = collapsePlayerOnScroll,

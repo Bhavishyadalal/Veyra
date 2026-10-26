@@ -559,6 +559,8 @@ data class DetailPage(
      * fetched with a session; see [SubscriptionState].
      */
     val subscription: SubscriptionState? = null,
+    /** Identity of this visit; late network work cannot update a reopened copy. */
+    val loadId: Long = 0L,
 )
 
 /**

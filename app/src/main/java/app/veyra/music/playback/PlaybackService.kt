@@ -3112,12 +3112,12 @@ class PlaybackService : MediaLibraryService() {
 
         // Match the player UI: update both surfaces immediately, then reconcile
         // the optimistic state with YouTube in the background.
-        LikeState.set(videoId, target)
+        val edit = LikeState.beginEdit(videoId, target, previous)
         refreshCustomLayouts()
         favoriteActionJob = scope.launch {
-            YtMusicRepository.rate(videoId, target)
+            YtMusicRepository.rate(videoId, target, edit)
                 .onFailure {
-                    LikeState.set(videoId, previous)
+                    LikeState.rollback(edit, previous)
                     refreshCustomLayouts()
                     TrackLog.w("Veyra", "notification favorite failed: ${it.message}", about = videoId)
                 }

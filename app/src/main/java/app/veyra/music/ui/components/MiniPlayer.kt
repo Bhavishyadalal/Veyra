@@ -285,19 +285,27 @@ internal fun Modifier.miniPlayerGestures(
             // it starts out level with the finger. The bar starts from here,
             // from nothing: lifted by the slop as well, it jumped a few pixels
             // in one frame before it began to follow.
-            target.drag(slopped.position.y - down.position.y)
             var pulled = 0f
-            val finished = drag(pointer) { change ->
-                val delta = change.positionChange().y
-                change.consume()
-                tracker.addPointerInputChange(change)
-                pulled -= delta
-                target.drag(delta)
-                lift.floatValue = pullLift(pulled, liftEase)
+            var velocity = 0f
+            var completed = false
+            try {
+                target.drag(slopped.position.y - down.position.y)
+                val finished = drag(pointer) { change ->
+                    val delta = change.positionChange().y
+                    change.consume()
+                    tracker.addPointerInputChange(change)
+                    pulled -= delta
+                    target.drag(delta)
+                    lift.floatValue = pullLift(pulled, liftEase)
+                }
+                if (finished) velocity = tracker.calculateVelocity().y.coerceIn(-maxVelocity, maxVelocity)
+                completed = true
+            } finally {
+                // A navigation/layout change can cancel pointer input without a drag-end event.
+                // Always release the sheet so it cannot remain held between open and closed.
+                target.release(velocity)
+                if (!completed) lift.floatValue = 0f
             }
-            target.release(
-                if (finished) tracker.calculateVelocity().y.coerceIn(-maxVelocity, maxVelocity) else 0f,
-            )
             // Let go, the bar springs home: under the player on its way up, or
             // in full view if the pull fell short and the player went back.
             val from = lift.floatValue
