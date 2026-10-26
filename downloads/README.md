@@ -1,10 +1,10 @@
 # Veyra source downloads
 
-**Stable 0.2.0 · code 47** promotes the completed 0.2.0-beta1 code 46. Includes 72 themes, 32 independent overlays, 132 launcher choices, Motion studio and the control/Studio fixes. These are complete Android Studio projects with licenses and backend provenance. **Source ZIPs are not APKs.**
+**Stable 0.2.0 · code 48** adds immersive-controls/foreground-icon fixes and retains the completed 0.2.0-beta1 code 46. Includes 72 themes, 32 independent overlays, 132 launcher choices, Motion studio and the control/Studio fixes. These are complete Android Studio projects with licenses and backend provenance. **Source ZIPs are not APKs.**
 
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
-| Current stable · `main`, `stable/0.2.0` | 0.2.0 / code 47 | [Download](Veyra_Android_Source_0.2.0_Stable.zip) | [SHA-256](Veyra_Android_Source_0.2.0_Stable.zip.sha256) |
+| Current stable · `main`, `stable/0.2.0` | 0.2.0 / code 48 | [Download](Veyra_Android_Source_0.2.0_Stable.zip) | [SHA-256](Veyra_Android_Source_0.2.0_Stable.zip.sha256) |
 | Completed preview · `preview/0.2.0-beta1` | 0.2.0-beta1 / code 46 | [Download](Veyra_Android_Source_0.2.0-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.0-beta1.zip.sha256) |
 | Completed preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 35 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 | Historical preview · `preview/0.1.8-beta1` | 0.1.8-beta1 / code 27 | [Download](Veyra_Android_Source_0.1.8-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.8-beta1.zip.sha256) |
@@ -19,7 +19,7 @@ Stage source before packaging:
 
 ```sh
 python3 scripts/route_catalogs.py
-python3 scripts/package_source.py Veyra_Android_Source_0.2.0-beta1.zip
+python3 scripts/package_source.py Veyra_Android_Source_0.2.0_Stable.zip
 python3 scripts/verify_archives.py
 ```
 

@@ -1,6 +1,9 @@
 # Veyra maintenance rules
 
-- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 47**.
+- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 48**.
+  Build 48 fixes immersive footer hide/disposal feedback and cancelled seeks,
+  and uses the selected launcher image in the foreground signature. See
+  verification/PATCH-0.2.0-BUILD-48.md. The original promotion was build 47.
   Explicitly promoted at the owner's request from completed `preview/0.2.0-beta1`
   code 46. Keep the completed preview's suffix/catalog URLs intact on its branch.
   Stable catalogs and bundled fallbacks target `main`; run scripts/route_catalogs.py

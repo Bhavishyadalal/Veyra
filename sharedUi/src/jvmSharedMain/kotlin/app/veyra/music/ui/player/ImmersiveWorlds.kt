@@ -207,14 +207,35 @@ internal fun ImmersiveStyle.ink(themeAccent: Color): Color = when(this) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable internal fun ImmersiveTimeline(songKey: String,position: PlaybackPosition,durationMs: Long,locked: Boolean,
     ink: Color,onSeek: (Long)->Unit,onScrubbing:(Boolean)->Unit) {
-    var drag by remember(songKey,durationMs) {mutableStateOf<Float?>(null)}
+    var drag by remember(songKey,durationMs,locked) {mutableStateOf<Float?>(null)}
+    var pendingSeek by remember(songKey,durationMs,locked) {mutableStateOf<Long?>(null)}
+    val latestSeek by rememberUpdatedState(onSeek)
+    val latestScrubbing by rememberUpdatedState(onScrubbing)
+    // Material may call drag-stop while removing a node. Only a surviving
+    // composition may commit a pending seek; retired timelines cannot seek.
+    LaunchedEffect(pendingSeek,songKey,durationMs,locked) {
+        pendingSeek?.let { target ->
+            if(!locked) latestSeek(target)
+            pendingSeek=null
+        }
+    }
+    val interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { event ->
+            if(event is androidx.compose.foundation.interaction.DragInteraction.Cancel) {
+                pendingSeek=null
+                drag=null
+                latestScrubbing(false)
+            }
+        }
+    }
     val fraction=if(durationMs>0)(position.positionMs.toDouble()/durationMs).coerceIn(0.0,1.0).toFloat() else 0f
     val label=stringResource(Res.string.immersive_seek)
     val shown=drag ?: fraction
     Column {
-        Slider(value=shown,onValueChange={drag=it;onScrubbing(true)},onValueChangeFinished={
-            drag?.let {if(!locked && durationMs>0)onSeek((it.toDouble()*durationMs).toLong().coerceIn(0,durationMs))}
-            drag=null;onScrubbing(false)
+        Slider(value=shown,interactionSource=interactionSource,onValueChange={drag=it;latestScrubbing(true)},onValueChangeFinished={
+            pendingSeek=drag?.let {if(!locked && durationMs>0)(it.toDouble()*durationMs).toLong().coerceIn(0,durationMs) else null}
+            drag=null;latestScrubbing(false)
         },enabled=!locked && durationMs>0,modifier=Modifier.fillMaxWidth().height(32.dp).semantics {contentDescription=label},
             colors=SliderDefaults.colors(thumbColor=ink,activeTrackColor=ink,inactiveTrackColor=Color.White.copy(.18f)),
             thumb={ Box(Modifier.size(12.dp).background(if(locked)ink.copy(.35f) else ink,CircleShape)) },
@@ -231,7 +252,7 @@ internal fun ImmersiveStyle.ink(themeAccent: Color): Color = when(this) {
             Text(if(durationMs>0)immersiveTime(durationMs) else stringResource(Res.string.immersive_live),style=MaterialTheme.typography.labelSmall,color=Color.White.copy(.75f))
         }
     }
-    DisposableEffect(songKey,durationMs) {onDispose {onScrubbing(false)}}
+    DisposableEffect(songKey,durationMs,locked) {onDispose {pendingSeek=null;drag=null;latestScrubbing(false)}}
 }
 private fun immersiveTime(ms: Long):String {
     val seconds=ms.coerceAtLeast(0)/1000

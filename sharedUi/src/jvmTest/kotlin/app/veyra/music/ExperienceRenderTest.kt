@@ -260,7 +260,7 @@ class ExperienceRenderTest {
 
 }
 
-private class RenderPlayerHost:PlayerHost {
+internal class RenderPlayerHost(private val reduceMotion: Boolean = true):PlayerHost {
     private val flows=mutableMapOf<String,StateFlow<*>>()
     override val settings=Proxy.newProxyInstance(PlayerSettingsSource::class.java.classLoader,arrayOf(PlayerSettingsSource::class.java)) {proxy,method,args->
         when(method.name) {
@@ -276,7 +276,8 @@ private class RenderPlayerHost:PlayerHost {
                 "getSmartAnalysis"->SmartAnalysis()
                 "getSmartMixBlend","getSmartTransitionWindow"->null
                 "getTranslationLanguage"->""
-                "getReduceAnimation","getSyncedLyrics"->true
+                "getReduceAnimation"->reduceMotion
+                "getSyncedLyrics"->true
                 else->false
             })}
         }

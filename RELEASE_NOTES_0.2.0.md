@@ -1,6 +1,6 @@
 # Veyra 0.2.0
 
-**Stable · Android code 47**  
+**Stable · Android code 48**  
 Promoted from completed **0.2.0-beta1 / code 46**.
 
 ![Pocket Riot · actual controls](asset-packs/previews/pocket-riot/collection.webp)
@@ -14,6 +14,15 @@ Promoted from completed **0.2.0-beta1 / code 46**.
 | Bundled launcher choices | 105 | **132** |
 | Navigation designs | 3 | **16** |
 | Scroll-player motion choices | Original | **15** |
+
+### Build 48 · steady immersive controls and selected launch branding
+
+- Fix the 5.5-second immersive-footer feedback loop: hiding the seek bar no longer reveals its own controls through cleanup.
+- Fade controls in/out, retain reduced-motion behavior and renew the timer on deliberate interaction.
+- Cancel unfinished seek gestures cleanly; completed gestures still commit once.
+- Foreground branding uses the selected native icon and waits for its image instead of displaying a default placeholder.
+
+[Patch details and verification limits](verification/PATCH-0.2.0-BUILD-48.md).
 
 ### Pocket Riot
 
@@ -48,7 +57,7 @@ Choose among **16 navigation designs** and **15 scroll-player transitions**, wit
 
 ## Install and source
 
-Build/install **code 47** for native changes and new launcher aliases. Signing identity must match an existing installation for an in-place upgrade. This source promotion does not publish a signed APK.
+Build/install **code 48** for native changes and new launcher aliases. Signing identity must match an existing installation for an in-place upgrade. This source promotion does not publish a signed APK.
 
 [Stable source ZIP](downloads/Veyra_Android_Source_0.2.0_Stable.zip) · [SHA-256](downloads/Veyra_Android_Source_0.2.0_Stable.zip.sha256) · [Verification](verification/STABLE-0.2.0-PROMOTION.md) · [Completed beta notes](RELEASE_NOTES_0.2.0-beta1.md)
 
