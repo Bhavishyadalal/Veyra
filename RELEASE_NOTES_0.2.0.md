@@ -1,6 +1,6 @@
 # Veyra 0.2.0
 
-**Stable · Android code 51**
+**Stable · Android code 52**
 Promoted from completed **0.2.0-beta1 / code 46**.
 
 ![Pocket Riot · actual controls](asset-packs/previews/pocket-riot/collection.webp)
@@ -14,6 +14,16 @@ Promoted from completed **0.2.0-beta1 / code 46**.
 | Bundled launcher choices | 105 | **132** |
 | Navigation designs | 3 | **16** |
 | Scroll-player motion choices | Original | **15** |
+
+### Build 52 · safer sources and refreshes
+
+- Source edits and manifest policy updates publish together, preserving concurrent switches and labels.
+- Testing an unsaved server and late replies from replaced clients cannot change saved server policies. Temporary clients obey their own manifest policy.
+- Retired add-on clients cancel their outstanding HTTP work; temporary tests release clients even on failure or cancellation.
+- Repeated IDs in a stale drag order cannot duplicate source rows.
+- A delayed local-folder refresh cannot overwrite a newly reopened page with an older visit's result.
+
+[Review scope, focused checks and limits](verification/PATCH-0.2.0-BUILD-52.md).
 
 ### Build 51 · steadier navigation and a lighter welcome
 
@@ -101,7 +111,7 @@ Choose among **16 navigation designs** and **15 scroll-player transitions**, wit
 
 ## Install and source
 
-Build/install **code 51** for the latest navigation, welcome and performance fixes. Signing identity must match an existing installation for an in-place upgrade. This source update does not publish a signed APK.
+Build/install **code 52** for the latest source-settings and refresh fixes. Signing identity must match an existing installation for an in-place upgrade. This source update does not publish a signed APK.
 
 [Stable source ZIP](downloads/Veyra_Android_Source_0.2.0_Stable.zip) · [SHA-256](downloads/Veyra_Android_Source_0.2.0_Stable.zip.sha256) · [Verification](verification/STABLE-0.2.0-PROMOTION.md) · [Completed beta notes](RELEASE_NOTES_0.2.0-beta1.md)
 

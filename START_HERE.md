@@ -1,6 +1,6 @@
 > **Sketch theme assets:** [Margin Notes](themes/MARGIN_NOTES.md) · [Every asset preview](themes/previews/margin-notes/all-assets.png). In compact source ZIPs, `python3 scripts/restore_theme_sources.py` restores optional duplicate image folders from included packs; regular app builds keep their required inputs expanded.
 
-> **This checkout: stable 0.2.0 / code 51.** Main and stable/0.2.0 share this release; completed preview 0.2.0-beta1 remains code 46. [Release notes](RELEASE_NOTES_0.2.0.md) · [Navigation/welcome fixes](verification/PATCH-0.2.0-BUILD-51.md).
+> **This checkout: stable 0.2.0 / code 52.** Main and stable/0.2.0 share this release; completed preview 0.2.0-beta1 remains code 46. [Release notes](RELEASE_NOTES_0.2.0.md) · [Latest source/refresh fixes](verification/PATCH-0.2.0-BUILD-52.md).
 
 > **Separate stable source: 0.1.8, code 28.** Open this complete project in Android Studio. [Promotion verification and remaining limits](verification/STABLE-0.1.8-PROMOTION.md). The historical beta remains available separately. No APK included.
 

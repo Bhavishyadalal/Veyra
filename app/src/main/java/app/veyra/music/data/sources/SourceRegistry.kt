@@ -109,6 +109,7 @@ object SourceRegistry {
      */
     private var instances: Map<String, MusicSource> = emptyMap()
 
+    @Synchronized
     fun init(context: Context) {
         // Same repair and degradation as AuthStore; see EncryptedPrefs.
         prefs = EncryptedPrefs.open(context, "veyra_sources", "veyra_sources_plain")
@@ -174,6 +175,7 @@ object SourceRegistry {
      * stream is budgeted further by [activeForPlayback]; downloads deliberately
      * apply no connection-quality ceiling — see [SourceResolver.forDownload].
      */
+    @Synchronized
     fun active(): List<MusicSource> =
         enabledConfigs(configs.value)
             // Not in the walk at all while it would be refused anyway: an addon
@@ -198,7 +200,11 @@ object SourceRegistry {
      * because nothing about where it points has changed, and this is called
      * from inside that source's own requests.
      */
-    fun updatePolicy(configId: String, allowDownloads: Boolean, checkValidLossless: Boolean) {
+    @Synchronized
+    internal fun updatePolicy(owner: AddonSource, allowDownloads: Boolean, checkValidLossless: Boolean) {
+        // Candidates and requests from a replaced client do not own saved policy.
+        val configId = owner.configId
+        if (instances[configId] !== owner) return
         val current = config(configId) ?: return
         if (current.allowDownloads == allowDownloads && current.checkValidLossless == checkValidLossless) return
         TrackLog.d(
@@ -234,9 +240,15 @@ object SourceRegistry {
         return active().filter { ceiling.permits(it.kind) }
     }
 
+    @Synchronized
     fun instance(configId: String): MusicSource? = instances[configId]
 
+    @Synchronized
     fun config(configId: String): SourceConfig? = configs.value.firstOrNull { it.id == configId }
+
+    @Synchronized
+    internal fun registeredConfig(owner: AddonSource): SourceConfig? =
+        if (instances[owner.configId] === owner) config(owner.configId) else null
 
     /**
      * Drops completed addon track answers for an explicit quality retry.
@@ -248,16 +260,26 @@ object SourceRegistry {
      * stream URL. In-flight calls stay shared so a quick second press cannot
      * duplicate work already on the wire.
      */
+    @Synchronized
     fun clearCompletedAddonTrackCalls() {
         instances.values
             .filterIsInstance<AddonSource>()
             .forEach(AddonSource::clearCompletedTrackCalls)
     }
 
+    /** Compare and merge a delayed probe while holding the same lock as UI edits. */
+    @Synchronized
+    fun updateDiscoveredLabel(probed: SourceConfig, name: String) {
+        val renamed = config(probed.id)?.withDiscoveredLabel(probed, name) ?: return
+        update(renamed)
+    }
+
     // ── Editing ─────────────────────────────────────────────────────────
 
+    @Synchronized
     fun add(config: SourceConfig) = publish(configs.value + config.tidied())
 
+    @Synchronized
     fun update(config: SourceConfig) =
         config.tidied().let { tidied ->
             publish(configs.value.map { if (it.id == tidied.id) tidied else it })
@@ -277,6 +299,7 @@ object SourceRegistry {
     private fun SourceConfig.tidied(): SourceConfig =
         if (kind == SourceKind.ADDON) copy(baseUrl = AddonClient.normalizeBase(baseUrl)) else this
 
+    @Synchronized
     fun remove(configId: String) {
         val target = config(configId) ?: return
         if (target.kind in BUILT_IN_KINDS) return
@@ -294,6 +317,7 @@ object SourceRegistry {
      * its own off position is worse than no switch, so it isn't offered one:
      * see [SourcesScreen][app.veyra.music.ui.screens.SourcesScreen].
      */
+    @Synchronized
     fun setEnabled(configId: String, enabled: Boolean) {
         if (!enabled && config(configId)?.kind == SourceKind.YOUTUBE) return
         publish(configs.value.map { if (it.id == configId) it.copy(enabled = enabled) else it })
@@ -315,11 +339,12 @@ object SourceRegistry {
      * deleting the rest. Everything that is not an addon keeps its place, since
      * its rank is decided by its kind and is not the user's to set.
      */
+    @Synchronized
     fun reorderAddons(orderedIds: List<String>) {
         val addons = configs.value.filter { it.kind.isUserAdded }
         if (addons.size < 2) return
         val byId = addons.associateBy { it.id }
-        val moved = orderedIds.mapNotNull(byId::get)
+        val moved = orderedIds.distinct().mapNotNull(byId::get)
         val missed = addons.filterNot { config -> moved.any { it.id == config.id } }
         val reordered = moved + missed
         if (reordered.map { it.id } == addons.map { it.id }) return
@@ -327,7 +352,6 @@ object SourceRegistry {
     }
 
     private fun publish(next: List<SourceConfig>, persist: Boolean = true) {
-        configs.value = next
         // Rebuilt against the previous map so that an untouched source keeps
         // the instance it already had, rather than being replaced by an
         // identical-but-cold one every time an unrelated row is toggled.
@@ -346,6 +370,9 @@ object SourceRegistry {
         previous.values.filterNot { it in instances.values }
             .filterIsInstance<AddonSource>()
             .forEach { it.release() }
+        // Publish configs only after the corresponding clients are ready. All writers
+        // hold the registry monitor; readers cannot pair new IDs with an old map.
+        configs.value = next
         if (persist && ::prefs.isInitialized) {
             prefs.edit()
                 .putString(KEY_SOURCES, json.encodeToString(ListSerializer(SourceConfig.serializer()), next))
@@ -440,7 +467,14 @@ object SourceRegistry {
      * old address, which is precisely the state the user is in the middle of
      * correcting.
      */
-    suspend fun probeCandidate(config: SourceConfig): SourceHealth = build(config).health()
+    suspend fun probeCandidate(config: SourceConfig): SourceHealth {
+        val candidate = build(config)
+        return try {
+            candidate.health()
+        } finally {
+            if (candidate is AddonSource) candidate.release()
+        }
+    }
 
     private fun build(config: SourceConfig): MusicSource = when (config.kind) {
         SourceKind.ADDON -> AddonSource(config)

@@ -3141,14 +3141,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             thumbnailUrl = group.thumbnailUrl,
             songs = if (group.songs.isEmpty()) UiState.Error(text(R.string.no_tracks_here)) else UiState.Success(group.songs),
             type = group.type,
+            loadId = ++nextDetailLoadId,
         )
     }
 
     fun reloadLocalDetail(browseId: String) {
+        // A delayed folder/network refresh belongs only to visits already open.
+        val visits = _detailStack.value.filter { it.browseId == browseId }.mapTo(HashSet()) { it.loadId }
+        if (visits.isEmpty()) return
         viewModelScope.launch {
             val state = localPageState(browseId) ?: return@launch
             _detailStack.value = _detailStack.value.map {
-                if (it.browseId == browseId) {
+                if (it.browseId == browseId && it.loadId in visits) {
                     it.copy(songs = state)
                 } else it
             }

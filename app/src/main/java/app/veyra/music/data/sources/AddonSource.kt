@@ -74,7 +74,9 @@ class AddonSource(
     // ── Manifest policy ───────────────────────────────────────────────────
 
     /** The stored config as it is now: the manifest switches change without this source being rebuilt. */
-    private val live: SourceConfig get() = SourceRegistry.config(config.id) ?: config
+    @Volatile private var manifestPolicy: SourceConfig? = null
+    private val live: SourceConfig get() = SourceRegistry.registeredConfig(this)
+        ?: config.withPolicyOf(manifestPolicy ?: config)
 
     /**
      * True while this addon asked for a lossless output (`checkValidLossless`)
@@ -100,8 +102,12 @@ class AddonSource(
         return !shutOut(what)
     }
 
-    private fun recordPolicy(manifest: AddonManifest) =
-        SourceRegistry.updatePolicy(config.id, manifest.downloadsAllowed, manifest.requiresLosslessOutput)
+    private fun recordPolicy(manifest: AddonManifest) {
+        // A temporary candidate obeys its own manifest without modifying the saved server.
+        manifestPolicy = config.copy(allowDownloads = manifest.downloadsAllowed,
+            checkValidLossless = manifest.requiresLosslessOutput)
+        SourceRegistry.updatePolicy(this, manifest.downloadsAllowed, manifest.requiresLosslessOutput)
+    }
 
     // ── Health ────────────────────────────────────────────────────────────
 
@@ -428,7 +434,7 @@ class AddonSource(
     /** Dropped along with the source it belongs to — see [SourceRegistry.publish]. */
     fun release() {
         rows.clear()
-        client.clear()
+        client.close()
     }
 
     /** Forces the next completed track lookup back onto the network. */

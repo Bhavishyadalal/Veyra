@@ -1,6 +1,10 @@
 # Veyra maintenance rules
 
-- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 51**.
+- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 52**.
+  Build 52 serializes source edits/policy publication, rejects candidate/replaced
+  clients writing saved policy, closes retired addon HTTP work, deduplicates drag
+  order IDs and keeps local refreshes owned by their original page visits.
+  See verification/PATCH-0.2.0-BUILD-52.md.
   Build 51 fixes Settings overlay dismissal (including themed/custom motion),
   pauses covered page lifecycles and input, skips fully covered Settings drawing,
   shares one backdrop capture across routes/overlays, cancels inactive source

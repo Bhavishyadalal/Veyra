@@ -101,6 +101,13 @@ class AddonOrderTest {
         assertEquals(listOf("only"), addonLabels())
     }
 
+    @Test fun `repeated ids in a stale drag never duplicate source rows`() {
+        val addons = seed("a", "b", "c")
+        SourceRegistry.reorderAddons(listOf(addons[2].id, addons[2].id, addons[0].id))
+        assertEquals(listOf("c", "a", "b"), addonLabels())
+        assertEquals(SourceRegistry.configs.value.size, SourceRegistry.configs.value.map { it.id }.distinct().size)
+    }
+
     // ── Duplicates ────────────────────────────────────────────────────────
 
     /**

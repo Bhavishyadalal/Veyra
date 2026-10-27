@@ -1,5 +1,6 @@
 package app.veyra.music
 
+import app.veyra.music.data.sources.AddonSource
 import app.veyra.music.data.sources.SourceConfig
 import app.veyra.music.data.sources.SourceKind
 import app.veyra.music.data.sources.SourceRegistry
@@ -36,5 +37,52 @@ class SourceProbeUpdateTest {
             SourceRegistry.update(probed.copy(baseUrl = "https://new.test"))
             assertNotSame(original, SourceRegistry.instance(probed.id))
         } finally { SourceRegistry.remove(probed.id) }
+    }
+
+    @Test fun candidateAndReplacedClientsCannotChangeSavedPolicy() {
+        SourceRegistry.add(probed)
+        val candidate = AddonSource(probed.copy(baseUrl = "https://candidate.test"))
+        try {
+            val old = SourceRegistry.instance(probed.id) as AddonSource
+            SourceRegistry.updatePolicy(candidate, false, true)
+            assertTrue(SourceRegistry.config(probed.id)!!.allowDownloads)
+            SourceRegistry.update(probed.copy(baseUrl = "https://replacement.test"))
+            SourceRegistry.updatePolicy(old, false, true)
+            assertTrue(SourceRegistry.config(probed.id)!!.allowDownloads)
+            val current = SourceRegistry.instance(probed.id) as AddonSource
+            SourceRegistry.updatePolicy(current, false, true)
+            assertFalse(SourceRegistry.config(probed.id)!!.allowDownloads)
+            assertTrue(SourceRegistry.config(probed.id)!!.checkValidLossless)
+            assertSame(current, SourceRegistry.instance(probed.id))
+        } finally { candidate.release(); SourceRegistry.remove(probed.id) }
+    }
+
+    @Test fun parallelEditsKeepEverySourceAndItsClient() {
+        val pool = java.util.concurrent.Executors.newFixedThreadPool(8)
+        val start = java.util.concurrent.CountDownLatch(1)
+        val sources = (1..32).map { probed.copy(id = "parallel-$it") }
+        try {
+            val tasks = sources.map { config -> pool.submit {
+                start.await()
+                SourceRegistry.add(config)
+                SourceRegistry.setEnabled(config.id, false)
+                SourceRegistry.updateDiscoveredLabel(config, "Discovered")
+                val source = SourceRegistry.instance(config.id) as AddonSource
+                SourceRegistry.updatePolicy(source, false, false)
+            } }
+            start.countDown()
+            tasks.forEach { it.get(10, java.util.concurrent.TimeUnit.SECONDS) }
+            sources.forEach { source ->
+                val saved = SourceRegistry.config(source.id)!!
+                assertFalse(saved.enabled)
+                assertFalse(saved.allowDownloads)
+                assertEquals("Discovered", saved.label)
+                assertNotNull(SourceRegistry.instance(source.id))
+            }
+        } finally {
+            pool.shutdownNow()
+            pool.awaitTermination(10, java.util.concurrent.TimeUnit.SECONDS)
+            sources.forEach { SourceRegistry.remove(it.id) }
+        }
     }
 }

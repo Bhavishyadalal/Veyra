@@ -80,7 +80,6 @@ import app.veyra.music.data.sources.SourceConfig
 import app.veyra.music.data.sources.SourceHealth
 import app.veyra.music.data.sources.SourceKind
 import app.veyra.music.data.sources.SourceRegistry
-import app.veyra.music.data.sources.withDiscoveredLabel
 import app.veyra.music.data.webdav.WebDavRepository
 import app.veyra.music.playback.audio.LosslessOutput
 import app.veyra.music.ui.components.AddonEditorAlert
@@ -181,7 +180,7 @@ fun SourcesScreen(
             if (source is AddonSource) {
                 val named = withContext(Dispatchers.IO) { runCatching { source.manifestName() }.getOrNull() }
                 if (named != null && named != config.label) {
-                    SourceRegistry.config(config.id)?.withDiscoveredLabel(config, named)?.let(SourceRegistry::update)
+                    SourceRegistry.updateDiscoveredLabel(config, named)
                 }
             }
         }

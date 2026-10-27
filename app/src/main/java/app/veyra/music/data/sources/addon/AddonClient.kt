@@ -9,6 +9,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -45,6 +46,8 @@ class AddonClient(rawBaseUrl: String) {
         coerceInputValues = true
     }
 
+    @Volatile private var closed = false
+    private val httpCalls = java.util.concurrent.ConcurrentHashMap.newKeySet<okhttp3.Call>()
     private val calls = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val manifests = SharedCalls<AddonManifest>(MANIFEST_TTL_MS, calls, ::logReuse)
@@ -339,25 +342,30 @@ class AddonClient(rawBaseUrl: String) {
                 .header("User-Agent", USER_AGENT)
                 .build()
 
-            val wait = client.newCall(request).execute().use { response ->
-                when {
-                    response.isSuccessful ->
-                        return@withContext response.body.string().takeIf { it.isNotBlank() }
-                            ?: throw AddonException("Empty response")
-                    response.code == 404 -> throw AddonNotFound()
-                    // A 5xx is a server having a bad minute and will be tried
-                    // again on the next track; a 4xx is this app asking for
-                    // something it will never be given — a wrong URL, a token
-                    // that has expired — and no amount of retrying fixes it.
-                    // The sources screen renders the two differently, and
-                    // painting a transient outage as a configuration error
-                    // sends people to re-paste a URL that was always correct.
-                    response.code >= 500 -> throw AddonUnavailable("HTTP ${response.code}")
-                    response.code != 429 -> throw AddonException("HTTP ${response.code}")
-                    attempt >= MAX_RETRIES -> throw AddonUnavailable("This addon is rate limiting Veyra")
-                    else -> retryAfterMs(response.header("Retry-After"), attempt)
+            val call = client.newCall(request)
+            httpCalls.add(call)
+            if (closed) call.cancel()
+            val wait = try {
+                call.execute().use { response ->
+                    when {
+                        response.isSuccessful ->
+                            return@withContext response.body.string().takeIf { it.isNotBlank() }
+                                ?: throw AddonException("Empty response")
+                        response.code == 404 -> throw AddonNotFound()
+                        // A 5xx is a server having a bad minute and will be tried
+                        // again on the next track; a 4xx is this app asking for
+                        // something it will never be given — a wrong URL, a token
+                        // that has expired — and no amount of retrying fixes it.
+                        // The sources screen renders the two differently, and
+                        // painting a transient outage as a configuration error
+                        // sends people to re-paste a URL that was always correct.
+                        response.code >= 500 -> throw AddonUnavailable("HTTP ${response.code}")
+                        response.code != 429 -> throw AddonException("HTTP ${response.code}")
+                        attempt >= MAX_RETRIES -> throw AddonUnavailable("This addon is rate limiting Veyra")
+                        else -> retryAfterMs(response.header("Retry-After"), attempt)
+                    }
                 }
-            }
+            } finally { httpCalls.remove(call) }
             quietUntilMs = System.currentTimeMillis() + wait
             attempt++
         }
@@ -386,6 +394,14 @@ class AddonClient(rawBaseUrl: String) {
         searches.clear()
         streams.clear()
         quietUntilMs = 0L
+    }
+
+    /** Permanent owner disposal; ordinary callers cancelling must still share requests. */
+    fun close() {
+        closed = true
+        httpCalls.forEach { it.cancel() }
+        calls.cancel()
+        clear()
     }
 
     /**
