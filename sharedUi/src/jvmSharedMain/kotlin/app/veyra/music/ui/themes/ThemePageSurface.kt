@@ -31,10 +31,13 @@ fun ThemePageSurface(
 
 /** Retain tab-local UI and Settings across pushes; transient details do not accumulate saved states. */
 @Composable
-fun RetainedRootPage(holder: SaveableStateHolder, pageKey: String, content: @Composable () -> Unit) {
+fun RetainedRootPage(holder: SaveableStateHolder, pageKey: String, active: Boolean = true,
+    visible: Boolean = true, content: @Composable () -> Unit) {
+    app.veyra.music.ui.motion.PageLifetime(active, visible) {
     ThemePageSurface {
         if (pageKey.startsWith("tab:") || pageKey == "settings") holder.SaveableStateProvider(pageKey, content)
         else content()
+    }
     }
 }
 

@@ -1362,7 +1362,7 @@ fun NowPlayingScreen(
     }
     // Portrait clips always use the existing artwork mesh, even if the user
     // selected the legacy backdrop for ordinary artwork.
-    val artMesh = if (legacyMesh && !canvasFirstPortrait) null else
+    val artMesh = if (experience.immersive || (legacyMesh && !canvasFirstPortrait)) null else
         key(song.videoId) { rememberArtworkMesh(remoteArt, canvasFrame, ART_PX) }
     // Whether the banner is the presentation at all: full-bleed is on, and there
     // is something to blow out. The collapse is deliberately *not* part of this:

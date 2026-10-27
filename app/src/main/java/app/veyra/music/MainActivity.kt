@@ -2723,7 +2723,8 @@ private fun VeyraApp(
         // a row, and the player is the right. Off a tablet the row has the
         // one child it always had and changes nothing.
         // Dispose covered pages/effects, retaining their saveable UI and root-owned scroll states.
-        val immersiveCovered = showNowPlaying && playerSong != null && experience.immersive
+        val immersiveCovered = (showNowPlaying && playerSong != null && experience.immersive) ||
+            onboardingShown.targetState || webSession != null
         app.veyra.music.ui.motion.CoveredAppPages(covered=immersiveCovered) {
         Row(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f).fillMaxHeight()
@@ -2766,19 +2767,27 @@ private fun VeyraApp(
                         (if (showSettings && destinationKey != "settings") 1 else 0)
                 }
                 val motionRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+                val overlayTarget = settingsSubScreen.takeUnless { showDiscord || showSpotify } to destinationKey
+                val overlayTransition = androidx.compose.animation.core.updateTransition(overlayTarget, label = "settingsOverlay")
+                val settingsCovered = overlayTarget.first != null &&
+                    overlayTransition.currentState.first == overlayTarget.first && !overlayTransition.isRunning
+                // One capture contains both the base route and Settings overlays. Floating
+                // chrome stays outside it, so glass never samples itself or a hidden parent.
+                Box(Modifier.fillMaxSize().hazeSource(hazeState)
+                    .then(if (glassSamplesBackdrop) Modifier.layerBackdrop(appBackdrop) else Modifier)) {
                 AnimatedContent(
                     targetState = NavigationDestination(destinationKey, destinationDepth),
                     contentKey = { it.key },
                     transitionSpec = {
                         navigationTransition(NavigationMotionPolicy.between(initialState, targetState), reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion, style = appMotion.first, tempo = appMotion.second)
                     },
-                    modifier = Modifier
-                        .hazeSource(hazeState)
-                        .then(if (glassSamplesBackdrop) Modifier.layerBackdrop(appBackdrop) else Modifier),
+                    modifier = Modifier.fillMaxSize(),
                     label = "content",
                 ) { destination ->
                     val key = destination.key
-                    app.veyra.music.ui.themes.RetainedRootPage(rootPageState, key) {
+                    app.veyra.music.ui.themes.RetainedRootPage(rootPageState, key,
+                        active = key == destinationKey && overlayTarget.first == null,
+                        visible = key != "settings" || !settingsCovered) {
                         // Every branch below reads `key` rather than the state that
                         // produced it. The two are the same thing only for the page
                         // being entered: the one on its way out is still composed,
@@ -2913,6 +2922,7 @@ private fun VeyraApp(
                             )
                         } else if (key == "sources") {
                             SourcesScreen(
+                                active = key == destinationKey,
                                 contentPadding = listPadding,
                                 onEditSource = { editingSource = it },
                                 onEditWebDav = { showWebDavEditor = true },
@@ -3522,18 +3532,20 @@ private fun VeyraApp(
                 // these pages had no status-bar scrim, title or back button, and
                 // Discord (pushed over Account) was covered by the page it opened
                 // from — hence skipped while it is up.
-                AnimatedContent(
-                    targetState = settingsSubScreen.takeUnless { showDiscord || showSpotify } to destinationKey,
+                overlayTransition.AnimatedContent(
                     contentKey = { it.first },
                     transitionSpec = {
                         // The main page already owns transitions to/from Discord or Spotify.
                         val motion = if (initialState.second != targetState.second) NavigationMotion.None
                             else if (targetState.first == null) NavigationMotion.Back else NavigationMotion.Forward
-                        navigationTransition(motion, reduceScreenMotion, motionRtl, subtleScreenMotion, sketch = sketchThemeMotion, materialStyle = themeMaterialMotion, style = appMotion.first, tempo = appMotion.second)
+                        app.veyra.music.ui.motion.pageOverlayTransition(targetState.first != null,
+                            reduceScreenMotion || motion == NavigationMotion.None, motionRtl, subtleScreenMotion,
+                            appMotion.first, appMotion.second, themeMaterialMotion)
                     },
                     modifier = Modifier.fillMaxSize(),
-                    label = "settingsSubScreen",
                 ) { (overlay, _) ->
+                    if (overlay != null) app.veyra.music.ui.motion.PageLifetime(
+                        active = overlay == overlayTarget.first) {
                     when (overlay) {
                         "account_scrobbling" -> {
                             app.veyra.music.ui.themes.ThemePageSurface(
@@ -3568,6 +3580,7 @@ private fun VeyraApp(
                                 color = MaterialTheme.colorScheme.background,
                             ) {
                                 SourcesScreen(
+                                    active = overlay == overlayTarget.first,
                                     contentPadding = listPadding,
                                     onEditSource = { editingSource = it },
                                     onEditWebDav = { showWebDavEditor = true },
@@ -3637,8 +3650,10 @@ private fun VeyraApp(
                             }
                         }
                     }
+                    }
                 }
 
+                }
                 // The top-bar footprint is transparent on every page so the
                 // shared app-level gradient is continuous; its controls float
                 // as separate circles in both the glass and blur materials.

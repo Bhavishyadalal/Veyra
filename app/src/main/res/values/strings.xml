@@ -1501,4 +1501,5 @@
     <string name="app_icon_pocket_sugar_goblin">Sugar Goblin Glass</string>
     <string name="app_icon_pocket_cosmic_pudding">Cosmic Pudding Glass</string>
     <string name="app_icon_pocket_sticker_syndicate">Sticker Syndicate Glass</string>
+    <string name="welcome_guest_note">An account is optional. Start with your music.</string>
 </resources>

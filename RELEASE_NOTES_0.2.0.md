@@ -1,6 +1,6 @@
 # Veyra 0.2.0
 
-**Stable · Android code 50**
+**Stable · Android code 51**
 Promoted from completed **0.2.0-beta1 / code 46**.
 
 ![Pocket Riot · actual controls](asset-packs/previews/pocket-riot/collection.webp)
@@ -14,6 +14,17 @@ Promoted from completed **0.2.0-beta1 / code 46**.
 | Bundled launcher choices | 105 | **132** |
 | Navigation designs | 3 | **16** |
 | Scroll-player motion choices | Original | **15** |
+
+### Build 51 · steadier navigation and a lighter welcome
+
+- Sources and other Settings panels animate their outgoing page on Back, including custom motion and downloaded materials; an empty incoming slot no longer delays the visible dismissal.
+- Covered pages keep their UI state while lifecycle collectors and input pause. Fully covered Settings stops drawing after entry, then returns before dismissal begins.
+- Glass and blur capture the foreground route and Settings overlay together, with floating controls outside the capture.
+- Source probes stop when the page is inactive. Delayed add-on names preserve current switches and reject replaced URLs or newer labels.
+- Welcome artwork adapts to viewport height, avoids a large offscreen mask and uses one heading reveal. Outgoing welcome pages cannot receive duplicate input; music pages stay retired while welcome or sign-in covers them.
+- Immersive mode skips the ordinary player's unused artwork-mesh lookup/readback.
+
+[Root causes, checks and device-testing limits](verification/PATCH-0.2.0-BUILD-51.md).
 
 ### Build 50 · six new immersive worlds
 
@@ -90,7 +101,7 @@ Choose among **16 navigation designs** and **15 scroll-player transitions**, wit
 
 ## Install and source
 
-Build/install **code 50** for the new immersive modes and latest fixes. Signing identity must match an existing installation for an in-place upgrade. This source update does not publish a signed APK.
+Build/install **code 51** for the latest navigation, welcome and performance fixes. Signing identity must match an existing installation for an in-place upgrade. This source update does not publish a signed APK.
 
 [Stable source ZIP](downloads/Veyra_Android_Source_0.2.0_Stable.zip) · [SHA-256](downloads/Veyra_Android_Source_0.2.0_Stable.zip.sha256) · [Verification](verification/STABLE-0.2.0-PROMOTION.md) · [Completed beta notes](RELEASE_NOTES_0.2.0-beta1.md)
 

@@ -73,6 +73,11 @@ data class SourceConfig(
         get() = !kind.needsServer || baseUrl.isNotBlank()
 }
 
+/** Apply a discovered name to the current config without restoring switches from an old probe. */
+internal fun SourceConfig.withDiscoveredLabel(probed: SourceConfig, name: String): SourceConfig? =
+    if (id == probed.id && kind == probed.kind && baseUrl == probed.baseUrl && label == probed.label && name.isNotBlank())
+        copy(label = name) else null
+
 /**
  * The user's sources, always tried in the fixed order [SourceKind] declares:
  * their own addons first, then JioSaavn, then YouTube Music.

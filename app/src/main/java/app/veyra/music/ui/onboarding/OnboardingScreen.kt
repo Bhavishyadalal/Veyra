@@ -2,6 +2,7 @@ package app.veyra.music.ui.onboarding
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
@@ -26,7 +27,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -57,6 +57,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -68,8 +70,6 @@ import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -107,12 +107,12 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import app.veyra.music.ui.components.VeyraWaveform
 import app.veyra.music.ui.components.VeyraBrand
 import app.veyra.music.ui.rememberIsForeground
-import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 
 private val WelcomeCream = Color(0xFFF5F3EF)
 private val WelcomeSilver = Color(0xFFDCE0E4)
 private val WelcomeBackground = Color(0xFF08090A)
+private val LocalWelcomeArtworkHeight = staticCompositionLocalOf { 230.dp }
 
 /** First-install name and optional sign-in, with one brief, keyboard-aware brand reveal. */
 @OptIn(ExperimentalLayoutApi::class)
@@ -167,14 +167,15 @@ fun OnboardingScreen(
             transitionSpec = {
                 val direction = if ((targetState > initialState) != rtl) 1 else -1
                 val duration = if (reduceMotion) 0 else 260
-                (slideInHorizontally(tween(duration)) { direction * it / 10 } + fadeIn(tween(duration)))
+                (slideInHorizontally(tween(duration)) { direction * it / 12 } + fadeIn(tween(if (reduceMotion) 0 else 180, delayMillis = if (reduceMotion) 0 else 60)))
                     .togetherWith(
-                        slideOutHorizontally(tween(duration)) { -direction * it / 10 } + fadeOut(tween(duration / 2)),
-                    )
+                        slideOutHorizontally(tween(duration / 2)) { -direction * it / 12 } + fadeOut(tween(if (reduceMotion) 0 else 80)),
+                    ).using(SizeTransform(clip = false) { _, _ -> snap() })
             },
             label = "welcomePage",
             modifier = Modifier.fillMaxSize().systemBarsPadding().imePadding(),
         ) { shown ->
+            app.veyra.music.ui.motion.PageLifetime(active = shown == page) {
             OnboardingPage { compact ->
                 when (shown) {
                     PAGE_WELCOME -> WelcomeLanding(
@@ -208,6 +209,7 @@ fun OnboardingScreen(
                     )
                 }
             }
+            }
         }
     }
 }
@@ -217,6 +219,8 @@ fun OnboardingScreen(
 private fun OnboardingPage(content: @Composable ColumnScope.(Boolean) -> Unit) {
     BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         val compact = maxHeight < 900.dp
+        val artworkHeight = (maxHeight * .27f).coerceIn(100.dp, 310.dp)
+        CompositionLocalProvider(LocalWelcomeArtworkHeight provides artworkHeight) {
         Column(
             Modifier.widthIn(max = 520.dp).fillMaxWidth()
                 .verticalScroll(rememberScrollState())
@@ -224,6 +228,7 @@ private fun OnboardingPage(content: @Composable ColumnScope.(Boolean) -> Unit) {
                 .padding(horizontal = 28.dp, vertical = 20.dp),
             verticalArrangement = Arrangement.SpaceBetween,
         ) { content(compact) }
+        }
     }
 }
 
@@ -256,7 +261,7 @@ private fun ColumnScope.WelcomeLanding(
         }
         Spacer(Modifier.height(if (compact) 12.dp else 24.dp))
         Box(
-            Modifier.fillMaxWidth().height(if (compact) 230.dp else 310.dp)
+            Modifier.fillMaxWidth().height(LocalWelcomeArtworkHeight.current)
                 .pointerInput(preview, rtl, swipeThreshold) {
                     var distance = 0f
                     detectHorizontalDragGestures(
@@ -274,20 +279,20 @@ private fun ColumnScope.WelcomeLanding(
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.fillMaxSize().graphicsLayer {
                         val reveal = phase().coerceIn(0f, 1f)
-                        compositingStrategy = CompositingStrategy.Offscreen
                         alpha = 0.5f + reveal * 0.5f
                         scaleX = 1.03f - reveal * 0.03f
                         scaleY = scaleX
                         translationX = if (reduceMotion) 0f else pose.value * 6.dp.toPx()
                     }.drawWithCache {
-                        val vertical = Brush.verticalGradient(0f to Color.Transparent, 0.16f to Color.Black,
-                            0.8f to Color.Black, 1f to Color.Transparent)
-                        val horizontal = Brush.horizontalGradient(0f to Color.Transparent, 0.08f to Color.Black,
-                            0.92f to Color.Black, 1f to Color.Transparent)
+                        // Paint feathering above the image instead of allocating a full offscreen mask.
+                        val vertical = Brush.verticalGradient(0f to WelcomeBackground, 0.16f to Color.Transparent,
+                            0.8f to Color.Transparent, 1f to WelcomeBackground)
+                        val horizontal = Brush.horizontalGradient(0f to WelcomeBackground, 0.08f to Color.Transparent,
+                            0.92f to Color.Transparent, 1f to WelcomeBackground)
                         onDrawWithContent {
                             drawContent()
-                            drawRect(vertical, blendMode = BlendMode.DstIn)
-                            drawRect(horizontal, blendMode = BlendMode.DstIn)
+                            drawRect(vertical)
+                            drawRect(horizontal)
                         }
                     },
                 )
@@ -309,6 +314,7 @@ private fun ColumnScope.WelcomeLanding(
         Spacer(Modifier.height(if (compact) 22.dp else 30.dp))
         AnimatedContent(
             targetState = preview,
+            modifier = Modifier.fillMaxWidth().heightIn(min = if (compact) 168.dp else 192.dp),
             transitionSpec = {
                 val duration = if (reduceMotion) 0 else 240
                 val direction = if ((nextWelcomePreview(initialState) == targetState) != rtl) 1 else -1
@@ -347,6 +353,10 @@ private fun ColumnScope.WelcomeLanding(
         Spacer(Modifier.height(8.dp))
         PillButton(stringResource(R.string.welcome_get_started), onStart,
             primary = true, reduceMotion = reduceMotion, forwardArrow = true)
+        Spacer(Modifier.height(12.dp))
+        Text(stringResource(R.string.welcome_guest_note), modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center, style = MaterialTheme.typography.bodySmall,
+            color = WelcomeCream.copy(alpha = .65f))
     }
 }
 
@@ -459,35 +469,21 @@ private fun WelcomeProgress(page: Int, onBack: (() -> Unit)? = null) {
     }
 }
 
-/** Whole words flow into place; accessibility reads the original localized heading once. */
+/** One finite heading reveal, with normal localized wrapping and a single accessible heading. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun FlowingTitle(text: String, reduceMotion: Boolean) {
-    val words = remember(text) { text.split(Regex("\\s+")).filter(String::isNotEmpty) }
-    FlowRow(
-        Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = text; heading() },
-        horizontalArrangement = Arrangement.spacedBy(7.dp),
-    ) {
-        words.forEachIndexed { index, word ->
-            val reveal = remember(text, index) { Animatable(if (reduceMotion) 1f else 0f) }
-            LaunchedEffect(text, reduceMotion) {
-                if (reduceMotion) reveal.snapTo(1f) else {
-                    delay(40L + (index * 30L).coerceAtMost(120L))
-                    reveal.animateTo(1f, tween(280))
-                }
-            }
-            Text(
-                word,
-                style = MaterialTheme.typography.displayLarge.copy(fontSize = 34.sp, lineHeight = 40.sp, letterSpacing = (-1).sp),
-                fontWeight = FontWeight.W800,
-                color = WelcomeCream,
-                modifier = Modifier.graphicsLayer {
-                    alpha = reveal.value
-                    translationY = ((1f - reveal.value) * 16f).dp.toPx()
-                },
-            )
-        }
+    val reveal = remember(text) { Animatable(if (reduceMotion) 1f else 0f) }
+    LaunchedEffect(text, reduceMotion) {
+        if (reduceMotion) reveal.snapTo(1f) else reveal.animateTo(1f, tween(240))
     }
+    Text(text,
+        style = MaterialTheme.typography.displayLarge.copy(fontSize = 34.sp, lineHeight = 40.sp, letterSpacing = (-1).sp),
+        fontWeight = FontWeight.W800, color = WelcomeCream,
+        modifier = Modifier.fillMaxWidth().semantics { heading() }.graphicsLayer {
+            alpha = reveal.value
+            translationY = ((1f - reveal.value) * 16f).dp.toPx()
+        })
 }
 
 @Composable

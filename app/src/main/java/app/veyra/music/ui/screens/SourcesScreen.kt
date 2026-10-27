@@ -68,6 +68,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.compose.runtime.collectAsState
 import app.veyra.music.R
 import app.veyra.music.data.settings.AppSettings
 import app.veyra.music.data.settings.AudioQuality
@@ -78,6 +80,7 @@ import app.veyra.music.data.sources.SourceConfig
 import app.veyra.music.data.sources.SourceHealth
 import app.veyra.music.data.sources.SourceKind
 import app.veyra.music.data.sources.SourceRegistry
+import app.veyra.music.data.sources.withDiscoveredLabel
 import app.veyra.music.data.webdav.WebDavRepository
 import app.veyra.music.playback.audio.LosslessOutput
 import app.veyra.music.ui.components.AddonEditorAlert
@@ -103,6 +106,7 @@ import kotlinx.coroutines.withContext
  */
 @Composable
 fun SourcesScreen(
+    active: Boolean = true,
     contentPadding: PaddingValues,
     /**
      * Asks the activity to open the editor for a source — or for a new one,
@@ -145,6 +149,8 @@ fun SourcesScreen(
 
     /** Last known reachability per source, filled in as the probes come back. */
     val health = remember { mutableStateMapOf<String, SourceHealth>() }
+    val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
+    val probesActive = active && lifecycleState.isAtLeast(Lifecycle.State.STARTED)
     val losslessOutput by LosslessOutput.state.collectAsStateWithLifecycle()
 
     // Every source that has a server to reach is probed, so an addon gets a
@@ -154,7 +160,8 @@ fun SourcesScreen(
     // contacted at all until one is connected, and connecting one re-runs this.
     val probeKey = configs.filter { it.kind.needsServer }
         .joinToString { "${it.id}@${it.baseUrl}@${it.checkValidLossless}" } + "@${losslessOutput.capable}"
-    LaunchedEffect(probeKey) {
+    LaunchedEffect(probeKey, probesActive) {
+        if (!probesActive) return@LaunchedEffect
         configs.filter { it.kind.needsServer && it.isComplete && !it.awaitsLosslessOutput }.forEach { config ->
             val source = SourceRegistry.instance(config.id) ?: return@forEach
             health[config.id] = withContext(Dispatchers.IO) {
@@ -174,7 +181,7 @@ fun SourcesScreen(
             if (source is AddonSource) {
                 val named = withContext(Dispatchers.IO) { runCatching { source.manifestName() }.getOrNull() }
                 if (named != null && named != config.label) {
-                    SourceRegistry.update(config.copy(label = named))
+                    SourceRegistry.config(config.id)?.withDiscoveredLabel(config, named)?.let(SourceRegistry::update)
                 }
             }
         }
