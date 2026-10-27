@@ -238,4 +238,6 @@
     <string name="home_show_section">Show %1$s</string>
     <string name="home_section_shown">Shown on Home</string>
     <string name="home_section_hidden">Hidden from Home</string>
+    <string name="search_ready_hint">Ready to search for “%1$s”</string>
+    <string name="search_top_result">Top result</string>
 </resources>

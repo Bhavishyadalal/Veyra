@@ -1,12 +1,14 @@
-> **Stable 0.2.0 / code 52** · 12 immersive modes, 72 themes, 32 independent overlays and 132 launcher choices. Theme-aware Liquid Glass, Motion studio, 16 navigation designs, 15 scroll-player transitions and complete matching glass icons.
+> **Stable 0.2.0 / code 53** · 12 immersive modes, 72 themes, 32 independent overlays and 132 launcher choices. Theme-aware Liquid Glass, Motion studio, 16 navigation designs, 15 scroll-player transitions and complete matching glass icons.
 >
 > [Release notes](RELEASE_NOTES_0.2.0.md) · [Pocket Riot assets](asset-packs/POCKET_RIOT.md) · [Glass icons](design/launcher/pocket-riot/previews/glass-editions.webp) · [Source downloads](downloads/README.md) · [Promotion checks](verification/STABLE-0.2.0-PROMOTION.md).
 >
+> Build 53 adds visible Home refresh recovery, clearer search drafts, independent live media suggestions, consistent keyboard dismissal and responsive themed feedback/actions. [UX changes and checks](verification/UX-0.2.0-BUILD-53.md).
+
 > Build 52 fixes concurrent source edits, temporary/replaced-client policy writes, retired HTTP work, duplicate reorder rows and stale local-page refreshes. [Latest checks](verification/PATCH-0.2.0-BUILD-52.md).
 
 > Build 51 fixes Sources → Playback Settings dismissal, covered-page update/render work, backdrop capture and source-update races, and makes welcome lighter and more adaptive. [Fixes and verification](verification/PATCH-0.2.0-BUILD-51.md). [All twelve immersive modes](verification/IMMERSIVE-EXPANSION-0.2.0-BUILD-50.md) and prior reliability fixes remain.
 
-> Completed preview **0.2.0-beta1 / code 46** remains on `preview/0.2.0-beta1`. Historical stable **0.1.9 / code 40** remains on `stable/0.1.9`. Rebuild/install code 52 for the latest fixes; this source push does not publish a signed APK.
+> Completed preview **0.2.0-beta1 / code 46** remains on `preview/0.2.0-beta1`. Historical stable **0.1.9 / code 40** remains on `stable/0.1.9`. Rebuild/install code 53 for the latest fixes; this source push does not publish a signed APK.
 
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
 

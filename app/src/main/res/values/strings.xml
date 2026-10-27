@@ -1502,4 +1502,6 @@
     <string name="app_icon_pocket_cosmic_pudding">Cosmic Pudding Glass</string>
     <string name="app_icon_pocket_sticker_syndicate">Sticker Syndicate Glass</string>
     <string name="welcome_guest_note">An account is optional. Start with your music.</string>
+    <string name="search_ready_hint">Ready to search for “%1$s”</string>
+    <string name="search_top_result">Top result</string>
 </resources>

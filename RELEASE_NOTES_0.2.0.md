@@ -1,6 +1,6 @@
 # Veyra 0.2.0
 
-**Stable · Android code 52**
+**Stable · Android code 53**
 Promoted from completed **0.2.0-beta1 / code 46**.
 
 ![Pocket Riot · actual controls](asset-packs/previews/pocket-riot/collection.webp)
@@ -14,6 +14,16 @@ Promoted from completed **0.2.0-beta1 / code 46**.
 | Bundled launcher choices | 105 | **132** |
 | Navigation designs | 3 | **16** |
 | Scroll-player motion choices | Original | **15** |
+
+### Build 53 · easier recovery and clearer search
+
+- Home shows a Retry action after a failed refresh while keeping saved recommendations visible. Retry stays disabled during refresh and offline listening keeps its Downloads/Local Music actions.
+- Editing a query clears obsolete results and suggestions immediately. A clear Search action remains available when completions are unavailable.
+- Live media suggestions work independently of text completions; duplicate completions/rows cannot duplicate lazy-list keys. An exact-query action appears above suggestions.
+- Selecting songs, browse results, history or suggestions dismisses the keyboard. Dragging the result list dismisses it too; automatic list resets preserve typing focus. Blank keyboard submissions do nothing.
+- Top-result action buttons wrap at large text sizes. Shared empty/error states use readable, bounded cards drawn from the active palette.
+
+[Checks and device-testing limits](verification/UX-0.2.0-BUILD-53.md).
 
 ### Build 52 · safer sources and refreshes
 
@@ -111,7 +121,7 @@ Choose among **16 navigation designs** and **15 scroll-player transitions**, wit
 
 ## Install and source
 
-Build/install **code 52** for the latest source-settings and refresh fixes. Signing identity must match an existing installation for an in-place upgrade. This source update does not publish a signed APK.
+Build/install **code 53** for the latest Home/search usability improvements. Signing identity must match an existing installation for an in-place upgrade. This source update does not publish a signed APK.
 
 [Stable source ZIP](downloads/Veyra_Android_Source_0.2.0_Stable.zip) · [SHA-256](downloads/Veyra_Android_Source_0.2.0_Stable.zip.sha256) · [Verification](verification/STABLE-0.2.0-PROMOTION.md) · [Completed beta notes](RELEASE_NOTES_0.2.0-beta1.md)
 

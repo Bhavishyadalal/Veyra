@@ -259,7 +259,8 @@ fun HomeScreen(
                     item(key = "home:experience", contentType = "home:experience") {
                         HomeExperienceHeader(offline, showingSaved, updating, homeNotice, homeSections,
                             if (customizable) ({ editingHome = true }) else null,
-                            onOpenDownloads, onOpenLocalMusic, reducedMotion = homeReducedMotion, savedContentLabel = savedContentLabel)
+                            onOpenDownloads, onOpenLocalMusic, reducedMotion = homeReducedMotion, savedContentLabel = savedContentLabel,
+                            onRetry = retryArtwork)
                     }
                 }
                 if (!signedIn && onSignIn != null && experience.homeSignInPrompt) {

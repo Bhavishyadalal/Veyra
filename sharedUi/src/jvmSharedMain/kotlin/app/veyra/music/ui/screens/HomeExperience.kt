@@ -40,6 +40,7 @@ internal fun HomeExperienceHeader(
     onLocalMusic: (() -> Unit)?,
     reducedMotion: Boolean = false,
     savedContentLabel: String? = null,
+    onRetry: (() -> Unit)? = null,
 ) {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
     Column(Modifier.fillMaxWidth().padding(horizontal = PAGE_GUTTER), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -71,6 +72,13 @@ internal fun HomeExperienceHeader(
                     if (showingSaved && savedContentLabel != null) Text(savedContentLabel,
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
+            }
+        }
+        if (!offline && notice != null && onRetry != null) {
+            TextButton(onClick = onRetry, enabled = !updating) {
+                Icon(Icons.Rounded.Refresh, null, Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(Res.string.retry))
             }
         }
         if (offline) {

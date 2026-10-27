@@ -2273,6 +2273,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         addonSearchJob?.cancel()
         _addonResults.value = null
         _query.value = newValue
+        // Never label a previous query's results/completions with the new draft.
+        _results.value = null
+        _suggestions.value = emptyList()
+        _typeaheadResults.value = emptyList()
         if (newValue.isBlank()) {
             searchSubmitted = false
             _suggestions.value = emptyList()
@@ -2464,8 +2468,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      * suggestion or history row, a filter tab — so the request that arrives is
      * already the one the user meant, and making them wait out a timer for it
      * would be a delay with nothing behind it. Typing asks
-     * [startSuggestPipeline] for completions instead and leaves the results
-     * alone.
+     * [startSuggestPipeline] for completions instead; editing clears the old
+     * result set so it cannot be mistaken for the new draft.
      */
     private fun startSearchPipeline() = viewModelScope.launch {
         searchRequests
@@ -2594,6 +2598,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 if (!stillWanted(input)) return@collectLatest
                 _suggestions.value = listOf(input) +
                     fetched.filterNot { it.equals(input, ignoreCase = true) }
+                        .distinctBy { it.lowercase(Locale.ROOT) }
             }
     }
 

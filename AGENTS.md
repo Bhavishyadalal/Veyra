@@ -1,6 +1,10 @@
 # Veyra maintenance rules
 
-- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 52**.
+- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 53**.
+  Build 53 improves Home recovery with visible Retry, current-query search drafts,
+  independent media suggestions, duplicate-safe completions, keyboard dismissal,
+  large-text result actions and theme-aware empty/error cards. See
+  verification/UX-0.2.0-BUILD-53.md.
   Build 52 serializes source edits/policy publication, rejects candidate/replaced
   clients writing saved policy, closes retired addon HTTP work, deduplicates drag
   order IDs and keeps local refreshes owned by their original page visits.

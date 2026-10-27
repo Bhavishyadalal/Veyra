@@ -61,8 +61,11 @@ fun SearchField(
     // Both ways of saying "search this" do the same two things, so they're
     // written once here rather than twice.
     val submit = {
-        onSubmit()
-        focusManager.clearFocus()
+        if (query.isNotBlank()) {
+            onSubmit()
+            focusManager.clearFocus()
+            keyboardController?.hide()
+        }
     }
     Row(
         modifier = modifier
@@ -87,7 +90,7 @@ fun SearchField(
             modifier = Modifier
                 .size(48.dp)
                 .clip(CircleShape)
-                .clickable(enabled = query.isNotBlank(), onClick = submit)
+                .clickable(enabled = query.isNotBlank(), role = androidx.compose.ui.semantics.Role.Button, onClick = submit)
                 .padding(12.dp),
         )
         Spacer(Modifier.width(4.dp))
@@ -126,7 +129,7 @@ fun SearchField(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .clickable {
+                    .clickable(role = androidx.compose.ui.semantics.Role.Button) {
                         onQueryChange("")
                         // Clearing is an edit, not a dismissal: leave the user
                         // ready to immediately type their next search.

@@ -15,7 +15,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import app.veyra.music.ui.components.longPressMenuClickable
+import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,6 +56,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -169,6 +173,13 @@ fun SearchScreen(
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val dragging by listState.interactionSource.collectIsDraggedAsState()
+    fun dismissKeyboard() {
+        focusManager.clearFocus()
+        keyboardController?.hide()
+    }
+    // Only a user's drag dismisses typing; automatic list resets keep focus.
+    LaunchedEffect(dragging) { if (dragging) dismissKeyboard() }
     // Tapping the search tab from the nav bar sets focusRequested;
     // respond by focusing the field and opening the keyboard.
     LaunchedEffect(focusRequested, showField) {
@@ -188,7 +199,7 @@ fun SearchScreen(
     // MainViewModel.suggestions. Nothing below it is worth showing while it is
     // up: the results are for whatever was searched before this edit began,
     // and so are the filter tabs above them.
-    val suggesting = suggestions.isNotEmpty() && !searchingLibrary && !searchingAddons
+    val suggesting = (suggestions.isNotEmpty() || typeaheadResults.isNotEmpty()) && !searchingLibrary && !searchingAddons
     // Live media results arrive from the parallel typeahead pipeline; show
     // them only while the user is still typing (suggestions visible), so they
     // appear as a dropdown beneath the text completions rather than floating
@@ -253,38 +264,44 @@ fun SearchScreen(
                     results = if (searchingAddons) addonResults else libraryResults,
                     addons = searchingAddons,
                     addonHistory = addonHistory,
-                    onAddonHistoryClick = onAddonHistoryClick,
+                    onAddonHistoryClick = { term -> dismissKeyboard(); onAddonHistoryClick(term) },
                     onAddonHistoryRemove = onAddonHistoryRemove,
                     onAddonHistoryClear = onAddonHistoryClear,
                     currentSong = currentSong,
                     isPlaying = isPlaying,
-                    onSongClick = onLibrarySongClick,
+                    onSongClick = { songs, index -> dismissKeyboard(); onLibrarySongClick(songs, index) },
                     onSongLongPress = onSongLongPress,
                     onSongSwipe = onSongSwipe,
                 )
                 suggesting -> {
                     searchSuggestions(
-                        suggestions = suggestions,
+                        suggestions = suggestions.ifEmpty { listOf(query.trim()) },
                         // Picking one is done typing, so the keyboard comes down
                         // with it and the results get the whole screen.
                         onClick = { term ->
+                            dismissKeyboard()
                             onSuggestionClick(term)
-                            focusManager.clearFocus()
                         },
                         onFill = onQueryChange,
                     )
                     if (showTypeahead) {
                         searchTypeaheadDropdown(
                             typeaheadResults = typeaheadResults,
-                            onSongClick = { song -> onTopResultPlay(song) },
+                            onSongClick = { song -> dismissKeyboard(); onTopResultPlay(song) },
                             onSongLongPress = onTypeaheadLongPress,
                             onBrowseClick = { item ->
+                                dismissKeyboard()
                                 onBrowseClick(item)
                             },
                             currentSong = currentSong,
                             isPlaying = isPlaying,
                         )
                     }
+                }
+                results == null && query.isNotBlank() -> item(key = "search:draft") {
+                    MessageState(stringResource(Res.string.search_ready_hint, query.trim()),
+                        actionLabel = stringResource(Res.string.search),
+                        onAction = { dismissKeyboard(); onSubmit() })
                 }
                 results == null -> if (history.isEmpty()) {
                     item { MessageState(stringResource(Res.string.search_empty)) }
@@ -293,7 +310,7 @@ fun SearchScreen(
                         history = history,
                         currentSong = currentSong,
                         isPlaying = isPlaying,
-                        onClick = onHistoryClick,
+                        onClick = { entry -> dismissKeyboard(); onHistoryClick(entry) },
                         onRemove = onHistoryRemove,
                         onClear = onHistoryClear,
                     )
@@ -321,7 +338,7 @@ fun SearchScreen(
                         item(key = "search:top-result:${topResult.song.videoId}") {
                             TopResultCard(
                                 song = topResult.song,
-                                onPlay = { onTopResultPlay(topResult.song) },
+                                onPlay = { dismissKeyboard(); onTopResultPlay(topResult.song) },
                                 onPlaylist = { onTopResultPlaylist(topResult.song) },
                                 onLongPress = { onSongLongPress(topResult.song) },
                             )
@@ -358,6 +375,7 @@ fun SearchScreen(
                                 is SearchResult.Track -> SongRow(
                                     song = row.song,
                                     onClick = {
+                                        dismissKeyboard()
                                         onSongClick(tracks, tracks.indexOf(row.song).coerceAtLeast(0))
                                     },
                                     onLongPress = { onSongLongPress(row.song) },
@@ -369,7 +387,7 @@ fun SearchScreen(
                                 )
                                 is SearchResult.Browse -> BrowseRow(
                                     item = row.item,
-                                    onClick = { onBrowseClick(row.item) },
+                                    onClick = { dismissKeyboard(); onBrowseClick(row.item) },
                                     onLongPress = onBrowseLongPress?.let { { it(row.item) } },
                                 )
                             }
@@ -480,7 +498,7 @@ private fun LazyListScope.librarySearchResults(
 }
 
 /** The All response carries its highest-confidence music hit as a promoted card. */
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 private fun TopResultCard(
     song: Song,
@@ -496,7 +514,7 @@ private fun TopResultCard(
             .contextClick(onLongPress),
     ) {
         Text(
-            text = "Top result",
+            text = stringResource(Res.string.search_top_result),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurface,
         )
@@ -532,7 +550,7 @@ private fun TopResultCard(
             )
         }
         Spacer(Modifier.height(12.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             OutlinedButton(
                 onClick = onPlay,
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
@@ -571,10 +589,12 @@ private fun LazyListScope.searchSuggestions(
     // row. It keeps the gap under the field stable even when that row changes
     // its text or icon treatment.
     item(key = "suggestions:top-inset") { Spacer(Modifier.height(8.dp)) }
-    // Skip the echo of the typed text (element 0) — it's already visible in
-    // the search field itself — and cap at N so the list stays compact above
-    // the playable-media cards.
-    itemsIndexed(suggestions.drop(1).take(3), key = { _, term -> "suggest:$term" }) { _, term ->
+    suggestions.firstOrNull()?.takeIf { it.isNotBlank() }?.let { term ->
+        item(key = "suggestions:search-exact") {
+            SuggestionRow(term = term, isQueryAction = true, onFill = null, onClick = { onClick(term) })
+        }
+    }
+    itemsIndexed(suggestions.drop(1).distinct().take(3), key = { _, term -> "suggest:$term" }) { _, term ->
         SuggestionRow(
             term = term,
             isQueryAction = false,
@@ -675,13 +695,7 @@ private fun LazyListScope.searchTypeaheadDropdown(
             color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
         )
     }
-    items(typeaheadResults, key = { result ->
-        when (result) {
-            is SearchResult.Track -> "ta:track:${result.song.videoId}"
-            is SearchResult.Browse -> "ta:browse:${result.item.browseId}"
-            is SearchResult.TopTrack -> "ta:top:${result.song.videoId}"
-        }
-    }) { result ->
+    items(typeaheadResults.distinctBy(::typeaheadKey), key = ::typeaheadKey) { result ->
         when (result) {
             is SearchResult.Track -> TypeaheadSongRow(
                 song = result.song,
@@ -704,6 +718,12 @@ private fun LazyListScope.searchTypeaheadDropdown(
             )
         }
     }
+}
+
+private fun typeaheadKey(result: SearchResult): String = when (result) {
+    is SearchResult.Track -> "ta:track:${result.song.videoId}"
+    is SearchResult.Browse -> "ta:browse:${result.item.browseId}"
+    is SearchResult.TopTrack -> "ta:top:${result.song.videoId}"
 }
 
 /**
