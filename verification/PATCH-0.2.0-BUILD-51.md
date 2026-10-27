@@ -34,7 +34,9 @@ page, without registering competing capture layers.
 - Source health/manifest probes stop when their page is inactive or its lifecycle
   is below `STARTED`, including during dismissal. A late discovered add-on name
   merges into the **current** config, preserving changed enable/download/lossless
-  switches. Replaced URLs and newer labels reject the old name result.
+  switches. Replaced URLs and newer labels reject the old name result. Cosmetic
+  add-on renames update the existing instance's label rather than releasing its
+  warm client and in-flight/cached calls; endpoint or enablement edits still replace it.
 - Welcome artwork height adapts to available viewport height. The existing
   silver artwork is feathered with foreground gradients instead of a large
   offscreen alpha-mask layer. One heading reveal replaces separate staggered
@@ -61,7 +63,7 @@ debug/release version metadata are checked. Test dependency cache misses were
 resolved through the configured proxy and verified trust store; no dependency
 versions or TLS verification settings were changed in the project.
 
-**29 focused tests passed** with zero failures/errors/skips: 23 Android unit tests
+**30 focused tests passed** with zero failures/errors/skips: 24 Android unit tests
 and six shared-UI/offscreen checks. Production Kotlin compilation passed;
 production debug and release metadata both identify **0.2.0 / code 51**.
 

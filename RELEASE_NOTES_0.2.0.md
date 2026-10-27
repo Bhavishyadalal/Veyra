@@ -20,7 +20,7 @@ Promoted from completed **0.2.0-beta1 / code 46**.
 - Sources and other Settings panels animate their outgoing page on Back, including custom motion and downloaded materials; an empty incoming slot no longer delays the visible dismissal.
 - Covered pages keep their UI state while lifecycle collectors and input pause. Fully covered Settings stops drawing after entry, then returns before dismissal begins.
 - Glass and blur capture the foreground route and Settings overlay together, with floating controls outside the capture.
-- Source probes stop when the page is inactive. Delayed add-on names preserve current switches and reject replaced URLs or newer labels.
+- Source probes stop when the page is inactive. Delayed add-on names preserve current switches and reject replaced URLs or newer labels; cosmetic renames keep the warm client and cached requests.
 - Welcome artwork adapts to viewport height, avoids a large offscreen mask and uses one heading reveal. Outgoing welcome pages cannot receive duplicate input; music pages stay retired while welcome or sign-in covers them.
 - Immersive mode skips the ordinary player's unused artwork-mesh lookup/readback.
 

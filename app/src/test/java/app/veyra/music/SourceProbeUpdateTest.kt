@@ -2,6 +2,7 @@ package app.veyra.music
 
 import app.veyra.music.data.sources.SourceConfig
 import app.veyra.music.data.sources.SourceKind
+import app.veyra.music.data.sources.SourceRegistry
 import app.veyra.music.data.sources.withDiscoveredLabel
 import org.junit.Assert.*
 import org.junit.Test
@@ -23,5 +24,17 @@ class SourceProbeUpdateTest {
         assertNull(probed.copy(baseUrl = "https://new.test").withDiscoveredLabel(probed, "Stale name"))
         assertNull(probed.copy(label = "My label").withDiscoveredLabel(probed, "Stale name"))
         assertNull(probed.withDiscoveredLabel(probed, " "))
+    }
+
+    @Test fun cosmeticRenameRetainsTheWarmClientButAnEndpointChangeReplacesIt() {
+        SourceRegistry.add(probed)
+        try {
+            val original = SourceRegistry.instance(probed.id)!!
+            SourceRegistry.update(probed.copy(label = "Discovered name"))
+            assertSame(original, SourceRegistry.instance(probed.id))
+            assertEquals("Discovered name", original.displayName)
+            SourceRegistry.update(probed.copy(baseUrl = "https://new.test"))
+            assertNotSame(original, SourceRegistry.instance(probed.id))
+        } finally { SourceRegistry.remove(probed.id) }
     }
 }

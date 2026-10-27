@@ -458,7 +458,8 @@ object SourceRegistry {
      * out: they change no address, and a source reads them live from here.
      */
     private fun MusicSource.configuredBy(config: SourceConfig): Boolean =
-        this is ConfigBacked && this.config.withPolicyOf(config) == config
+        if (this is AddonSource) updateLabelIfCompatible(config)
+        else this is ConfigBacked && this.config.withPolicyOf(config) == config
 
     /** Implemented by sources that carry their [SourceConfig], so [publish] can tell a real edit from a no-op. */
     internal interface ConfigBacked {

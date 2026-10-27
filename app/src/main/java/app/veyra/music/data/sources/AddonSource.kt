@@ -31,8 +31,18 @@ import java.util.Locale
  * catalogues adds two addons, and [SourceRegistry] walks them in order.
  */
 class AddonSource(
-    override val config: SourceConfig,
+    config: SourceConfig,
 ) : MusicSource, SourceRegistry.ConfigBacked {
+    @Volatile
+    override var config: SourceConfig = config
+        private set
+
+    /** A friendly-name refresh must not discard a warm client's manifests or in-flight calls. */
+    internal fun updateLabelIfCompatible(next: SourceConfig): Boolean {
+        if (config.copy(label = next.label).withPolicyOf(next) != next) return false
+        config = config.copy(label = next.label)
+        return true
+    }
 
     override val configId: String get() = config.id
     override val kind: SourceKind get() = config.kind
