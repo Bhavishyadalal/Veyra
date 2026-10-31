@@ -23,8 +23,12 @@ Missing UI resources (270 keys per offered non-English locale) are completed wit
 - Stable catalogs and bundled fallbacks are routed to `main`. Published theme/overlay ZIPs are unchanged. Generated offscreen study captures are restored after testing; renderers/tests remain in source.
 - Source archive retention, checksums, native build inputs and backend provenance are checked with `scripts/verify_archives.py` before push. Only current stable and the newest three preview ZIPs remain at this branch tip. Prior stable source remains on its frozen branch/history.
 
-No Android emulator/physical device was attached. Full APK assembly/signing, installer permission behavior, actual MediaStore output on a phone, FPS, thermal behavior and battery use remain device checks. APK publication and live website deployment are separate from Git push.
+No Android emulator/physical device was attached. Installer permission behavior, actual MediaStore output on a phone, FPS, thermal behavior and battery use remain device checks. Signed APK assembly is verified by the CI run below. APK publication and live website deployment are separate from Git push.
 
 ## Device checklist
 
 Open/close the immersive picker repeatedly during timed lyrics/Canvas playback; select and reach all twelve styles, including large text/RTL/landscape; interrupt dismissal with a drag and retry. Confirm playback continues while visual motion pauses behind the sheet. Upgrade with old private preferences, import an old backup, download fresh audio and open it in another player from Internal storage → Music → Veyra. Export existing private audio, retry and cancel, test full storage, and check legacy permission denial/grant. Install stable build 56 over beta 55 using the same signing identity.
+
+## CI recovery
+
+The signed workflow run 41214044225 failed before compilation while resolving standard Maven Central artifacts; Check run 41211872335 requested the retired SDK package `tools`. Build repositories now also use Sonatype's alternate Central endpoint (`repo1.maven.org`), with unchanged dependency versions. CI retries dependency transport/resolution failures once with refreshed metadata; compiler/build errors retain their exit status. Both SDK setup paths request platform-tools, and a release upload fails if no APK exists. Runtime version/code are unchanged. Four isolated retry tests and refreshed Gradle configuration pass. Signed runner verification passed, including APK upload: https://github.com/Bhavishyadalal/Veyra/actions/runs/41227117260.

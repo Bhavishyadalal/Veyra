@@ -2,6 +2,8 @@
 buildscript {
     repositories {
         google()
+        mavenCentral()
+        maven("https://repo1.maven.org/maven2")
     }
     dependencies {
         // Keep D8/R8 newer than AGP's bundled dexer: the app uses Kotlin
