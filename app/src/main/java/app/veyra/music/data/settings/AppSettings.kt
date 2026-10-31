@@ -218,6 +218,8 @@ object AppSettings {
      * can also retain codecs that need an offline playlist package.
      */
     val exportDownloads = MutableStateFlow(true)
+    /** Opt-in: download signed release APKs on an unmetered connection while opening Veyra. */
+    val autoDownloadUpdates = MutableStateFlow(false)
 
     /** Whether the active network charges for data. `null` while offline. */
     val meteredConnection = MutableStateFlow<Boolean?>(null)
@@ -827,6 +829,7 @@ object AppSettings {
     }
 
     private fun readAll() {
+        autoDownloadUpdates.value = prefs.getBoolean("auto_download_updates", false)
         experience.value = ExperienceOptions.decode(prefs.getString("experience_options", null))
         migrateSingleQuality()
         audioQualityWifi.value = readQuality(KEY_QUALITY_WIFI)
@@ -1663,6 +1666,11 @@ object AppSettings {
     fun setExportDownloads(value: Boolean) {
         exportDownloads.value = value
         prefs.edit().putBoolean(KEY_EXPORT_DOWNLOADS, value).apply()
+    }
+
+    fun setAutoDownloadUpdates(value: Boolean) {
+        autoDownloadUpdates.value = value
+        prefs.edit().putBoolean("auto_download_updates", value).apply()
     }
 
     fun setLastfmPrimaryArtistOnly(value: Boolean) {

@@ -1,7 +1,10 @@
 # Veyra maintenance rules
 
-- Active preview: `preview/0.2.1-beta1`, **0.2.1-beta1 / code 54**.
-  Shared Music/Veyra downloads, bulk export, safer identities and bounded progress.
+- Active preview: `preview/0.2.1-beta1`, **0.2.1-beta1 / code 55**.
+  Build 55 adds cached immersive backdrop layers, indexed lyric focus, safe
+  automatic APK transfers, waveform notifications and Settings/welcome fixes.
+  See verification/PERFORMANCE-UPDATES-0.2.1-BUILD-55.md. Retains shared
+  Music/Veyra downloads, bulk export, safer identities and bounded progress.
   See verification/DOWNLOADS-0.2.1-beta1.md. Keep stable 0.2.0 / code 53 unchanged.
   Preview catalogs/fallbacks target this preview branch. Retain stable 0.2.0 plus
   previews 0.2.1-beta1, 0.2.0-beta1 and 0.1.9-beta1 at this branch tip.

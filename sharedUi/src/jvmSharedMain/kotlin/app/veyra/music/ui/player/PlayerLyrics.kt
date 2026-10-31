@@ -449,8 +449,8 @@ private class ScrollRun(val id: Int, val delta: Float, val durationMs: Int) {
  * held breath in one song and half a verse in another, and neither the snap
  * nor the drift is what you want to be reading against.
  */
-private fun scrollLead(lines: List<LyricLine>, positionMs: Long): Long {
-    val current = lines.indexOfLast { it.timeMs <= positionMs }
+private fun scrollLead(lines: List<LyricLine>, positionMs: Long, index: LyricFocusIndex): Long {
+    val current = index.latest(positionMs)
     // Before the first line's own timestamp there is no current line to
     // measure a run-up from. [indexOfLast] answers -1 there, and the guard
     // below does not catch it: `current + 1` is 0, which is a perfectly real
@@ -1811,8 +1811,10 @@ private fun LyricsPanelContent(
     onTogglePick: (Int) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
-    val panelPlaying = isPlaying && active
+    val timedDocument = remember(lines) { lines.any { it.timeMs > 0L } }
+    val panelPlaying = isPlaying && active && timedDocument
     val clock = rememberLyricClock(trackKey, playhead, panelPlaying)
+    val focusIndex = remember(lines) { LyricFocusIndex(lines) }
     val subReveal = rememberSubLyricsReveal(subLines, trackKey)
 
     val isSynced = remember(lines) { lines.any { it.timeMs > 0L } }
@@ -1823,7 +1825,7 @@ private fun LyricsPanelContent(
 
     val activeRows by remember(lines, isSynced) {
         derivedStateOf {
-            if (!isSynced) emptyList() else activeLyricRows(lines, clock.longValue)
+            if (!isSynced) emptyList() else focusIndex.activeRows(clock.longValue)
         }
     }
     // The uppermost unfinished vocal owns the scroll anchor until its end,
@@ -1842,7 +1844,7 @@ private fun LyricsPanelContent(
                 -1
             } else {
                 val now = clock.longValue
-                activeLyricRows(lines, now + scrollLead(lines, now)).firstOrNull() ?: -1
+                focusIndex.activeRows(now + scrollLead(lines, now, focusIndex)).firstOrNull() ?: -1
             }
         }
     }
@@ -1871,7 +1873,8 @@ private fun LyricsPanelContent(
         }
     }
 
-    val reduceDynamicBlur by PlayerSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
+    val savedReduceDynamicBlur by PlayerSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
+    val reduceDynamicBlur = savedReduceDynamicBlur || LocalImmersiveRendering.current
     val lyricsBlur by PlayerSettings.lyricsBlur.collectAsStateWithLifecycle()
     val reduceAnimation by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
 
@@ -1973,7 +1976,7 @@ private fun LyricsPanelContent(
                 // given the run-up's own duration and curve instead of the
                 // list's default spring.
                 visible != null -> {
-                    val span = scrollLead(lines, clock.longValue).toInt()
+                    val span = scrollLead(lines, clock.longValue, focusIndex).toInt()
                     run = ScrollRun(run.id + 1, visible.offset.toFloat(), span)
                     // The same curve the rows catch up on. Two different
                     // curves and a row with no delay at all still trails the

@@ -126,6 +126,9 @@ fun OnboardingScreen(
     modifier: Modifier = Modifier,
 ) {
     var page by rememberSaveable { mutableIntStateOf(PAGE_WELCOME) }
+    var finishing by rememberSaveable { mutableStateOf(false) }
+    val latestFinish by androidx.compose.runtime.rememberUpdatedState(onFinish)
+    val finishOnce: () -> Unit = { if (!finishing) { finishing = true; latestFinish() } }
     var name by rememberSaveable { mutableStateOf(initialName) }
     val focusManager = LocalFocusManager.current
     val reduceAnimation by AppSettings.reduceAnimation.collectAsStateWithLifecycle()
@@ -154,7 +157,7 @@ fun OnboardingScreen(
         page = if (page == PAGE_CONNECT) PAGE_NAME else PAGE_WELCOME
     }
     LaunchedEffect(signedIn, page) {
-        if (signedIn && page == PAGE_CONNECT) onFinish()
+        if (signedIn && page == PAGE_CONNECT) finishOnce()
     }
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Box(
@@ -182,22 +185,23 @@ fun OnboardingScreen(
                         compact = compact,
                         reduceMotion = reduceMotion,
                         phase = { phase.value },
-                        onStart = { page = PAGE_NAME },
+                        onStart = { if (page == PAGE_WELCOME && !finishing) page = PAGE_NAME },
                     )
                     PAGE_NAME -> NamePage(
                         compact = compact,
                         onBack = { focusManager.clearFocus(); page = PAGE_WELCOME },
                         name = name,
-                        onNameChange = { name = it.take(NAME_LIMIT) },
+                        onNameChange = { name = welcomeNameInput(it, NAME_LIMIT) },
                         reduceMotion = reduceMotion,
                         keyboardUp = keyboardUp,
                         phase = { phase.value },
                         onNext = next@{
+                            if (page != PAGE_NAME || finishing) return@next
                             val chosen = name.trim()
                             if (chosen.isEmpty()) return@next
                             focusManager.clearFocus()
                             onNameChosen(chosen)
-                            if (signedIn) onFinish() else page = PAGE_CONNECT
+                            if (signedIn) finishOnce() else page = PAGE_CONNECT
                         },
                     )
                     else -> ConnectPage(
@@ -205,7 +209,7 @@ fun OnboardingScreen(
                         reduceMotion = reduceMotion,
                         onBack = { page = PAGE_NAME },
                         onSignIn = onSignIn,
-                        onSkip = onFinish,
+                        onSkip = finishOnce,
                     )
                 }
             }

@@ -28,8 +28,18 @@ val localProps = Properties().apply {
 val discordApplicationId = (localProps.getProperty("DISCORD_APPLICATION_ID")
     ?: System.getenv("DISCORD_APPLICATION_ID") ?: "1543679166967193620").trim()
 
+// Only the canonical checkout opts into upstream releases by default. Forks
+// and extracted source projects must explicitly configure their own feed.
+val canonicalCheckout = runCatching {
+    providers.exec {
+        commandLine("git", "config", "--get", "remote.origin.url")
+        isIgnoreExitValue = true
+    }.standardOutput.asText.get().trim().removeSuffix(".git").removeSuffix("/")
+        .let { it == "https://github.com/Bhavishyadalal/Veyra" || it == "git@github.com:Bhavishyadalal/Veyra" }
+}.getOrDefault(false)
 val veyraUpdateFeed = (localProps.getProperty("VEYRA_UPDATE_FEED_URL")
-    ?: System.getenv("VEYRA_UPDATE_FEED_URL") ?: "").trim()
+    ?: System.getenv("VEYRA_UPDATE_FEED_URL")
+    ?: if (canonicalCheckout) "https://api.github.com/repos/Bhavishyadalal/Veyra/releases/latest" else "").trim()
 
 val lastfmApiKey: String = (
     localProps.getProperty("LASTFM_API_KEY")

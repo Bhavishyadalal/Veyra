@@ -1001,6 +1001,13 @@
 
     <string name="export_compatible_downloads">Save new downloads to Music/Veyra</string>
     <string name="export_all_downloads">Export all downloads</string>
+    <string name="app_updates">App updates</string>
+    <string name="auto_download_updates">Download updates automatically</string>
+    <string name="auto_download_updates_hint">Check when Veyra opens and download new releases on an unmetered connection. Android always asks before installing.</string>
+    <string name="check_app_updates">Check for updates</string>
+    <string name="update_ready_to_install">Veyra update ready to install</string>
+    <string name="update_downloading_apk">Downloading Veyra update</string>
+    <string name="update_install_permission_hint">Tap to review the update and approve installation.</string>
     <string name="export_downloads_description">Copy saved audio to Music/Veyra in internal storage for use in other apps. Originals stay safe. Retrying skips completed copies.</string>
     <string name="export_downloads_result">%1$d exported · %2$d already shared · %3$d failed</string>
 

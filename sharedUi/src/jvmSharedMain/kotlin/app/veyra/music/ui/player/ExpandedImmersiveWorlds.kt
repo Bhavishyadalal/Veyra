@@ -96,6 +96,18 @@ internal fun rememberImmersiveScenePhase(active: Boolean): State<Float> {
     return phase
 }
 
+/** State is read in the layer block, so motion leaves the vector display list cached. */
+internal fun Modifier.immersiveBackdropMotion(style: ImmersiveStyle, phase: State<Float>): Modifier = graphicsLayer {
+    if (style == ImmersiveStyle.VINYL_LOUNGE || style == ImmersiveStyle.PAPER_REVERIE) return@graphicsLayer
+    val wave = sin(phase.value * 2f * PI.toFloat())
+    when (style) {
+        ImmersiveStyle.PRISM_BLOOM -> rotationZ = wave * 5f
+        ImmersiveStyle.NEON_TUNNEL -> { scaleX = 1.04f + wave * .025f; scaleY = scaleX }
+        ImmersiveStyle.ORBITAL_ATLAS, ImmersiveStyle.AURORA_DRIFT -> translationX = wave * 6.dp.toPx()
+        else -> Unit
+    }
+}
+
 /** These scenes share the existing transport, seek, lifecycle and lyric engine. */
 @Composable
 internal fun ExpandedImmersiveWorld(
@@ -272,7 +284,10 @@ private fun ExpandedSceneBackdrop(style: ImmersiveStyle, phase: State<Float>, mo
                 Color(0xFF04121E).copy(alpha = .4f), Color(0xFF04121E).copy(alpha = .8f)))))
         }
         // Brushes and petal paths are built on size/style changes, not on every animation frame.
-        Box(Modifier.fillMaxSize().drawWithCache {
+        // Keep the vector display list static. Transform its cached layer on
+        // the render thread instead of repainting overlapping screen-sized
+        // translucent gradients and paths on every scene-clock frame.
+        Box(Modifier.fillMaxSize().immersiveBackdropMotion(style, phase).drawWithCache {
             val petalColors = listOf(Color(0xFF62F6C9), Color(0xFFFF84CB), Color(0xFF9A78FF), Color(0xFFFFCC7E))
             val petals = if (style != ImmersiveStyle.PRISM_BLOOM) emptyList() else List(8) { i ->
                 Path().apply {
@@ -290,7 +305,7 @@ private fun ExpandedSceneBackdrop(style: ImmersiveStyle, phase: State<Float>, mo
             val spotlight = Brush.radialGradient(listOf(Color(0xFFB88347).copy(alpha = .25f), Color.Transparent),
                 center = Offset(size.width * .35f, size.height * .25f), radius = size.maxDimension * .7f)
             onDrawBehind {
-                val motion = phase.value
+                val motion = .08f
                 when (style) {
                     ImmersiveStyle.VINYL_LOUNGE -> {
                         drawRect(spotlight)

@@ -320,8 +320,11 @@ fun SettingsScreen(
                 folder,
                 Intent.FLAG_GRANT_READ_URI_PERMISSION,
             )
+        }.onSuccess {
+            AppSettings.setLocalMusicFolderUri(folder.toString())
+        }.onFailure {
+            Toast.makeText(context, "Could not keep access to this folder. Choose another folder.", Toast.LENGTH_LONG).show()
         }
-        AppSettings.setLocalMusicFolderUri(folder.toString())
     }
 
     /**
@@ -406,14 +409,14 @@ fun SettingsScreen(
     val reducedMotion = rememberVeyraReducedMotion()
     val appMotion=app.veyra.music.ui.motion.rememberAppMotionPreferences()
     var categoryIntroduced by remember { mutableStateOf(false) }
-    val categoryAlpha = remember { Animatable(1f) }
-    var categoryDirection by remember { mutableStateOf(1f) }
+    val categoryAlpha = remember(category) { Animatable(if (categoryIntroduced && !reducedMotion) 0f else 1f) }
+
     val categoryRtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
+    val categoryDirection = (if (category == null) -1f else 1f) * (if (categoryRtl) -1f else 1f)
     LaunchedEffect(category, reducedMotion) {
         if (reducedMotion || !categoryIntroduced) {
             categoryAlpha.snapTo(1f)
         } else {
-            categoryDirection = (if (category == null) -1f else 1f) * (if (categoryRtl) -1f else 1f)
             categoryAlpha.snapTo(0f)
             categoryAlpha.animateTo(1f, tween(app.veyra.music.ui.motion.appMotionDuration(appMotion.first,appMotion.second,VeyraMotion.Section), easing = VeyraMotion.Easing))
         }
@@ -1330,6 +1333,9 @@ fun SettingsScreen(
             }
 
             SearchableSettingsGroup(search, category = SettingsCategory.ADVANCED, header = stringResource(R.string.advanced_options)) {
+                row(stringResource(R.string.app_updates), "apk", "version", "update", "install") {
+                    app.veyra.music.ui.components.AppUpdatesCard()
+                }
                 val smartAlignmentTitle = stringResource(R.string.smart_version_alignment)
                 row(smartAlignmentTitle, "alignment", "sync", "waveform", "video", "audio", "skit", "intro") {
                     SettingsRow(
@@ -1429,10 +1435,7 @@ fun SettingsScreen(
     }
 
     picking?.let { target ->
-        ModalBottomSheet(
-            onDismissRequest = { picking = null },
-            containerColor = MaterialTheme.colorScheme.background,
-        ) {
+        SettingsOptionSheet(onDismiss = { picking = null }) { commit ->
             QualitySheet(
                 target = target,
                 selected = when (target) {
@@ -1448,11 +1451,12 @@ fun SettingsScreen(
                 // is now read per stream off the connection in force; see
                 // [AudioQuality.permits].
                 onSelect = { quality ->
-                    when (target) {
-                        QualityTarget.WIFI -> AppSettings.setAudioQualityWifi(quality)
-                        QualityTarget.CELLULAR -> AppSettings.setAudioQualityCellular(quality)
+                    commit {
+                        when (target) {
+                            QualityTarget.WIFI -> AppSettings.setAudioQualityWifi(quality)
+                            QualityTarget.CELLULAR -> AppSettings.setAudioQualityCellular(quality)
+                        }
                     }
-                    picking = null
                 },
             )
         }
@@ -1470,30 +1474,22 @@ fun SettingsScreen(
             dismissButton = { TextButton(onClick = { resetCustomization = null }) { Text(stringResource(R.string.cancel)) } })
     }
     if (pickingDownloadQuality) {
-        ModalBottomSheet(
-            onDismissRequest = { pickingDownloadQuality = false },
-            containerColor = MaterialTheme.colorScheme.background,
-        ) {
+        SettingsOptionSheet(onDismiss = { pickingDownloadQuality = false }) { commit ->
             DownloadQualitySheet(
                 selected = downloadQuality,
                 onSelect = { quality ->
-                    AppSettings.setDownloadQuality(quality)
-                    pickingDownloadQuality = false
+                    commit { AppSettings.setDownloadQuality(quality) }
                 },
             )
         }
     }
 
     if (pickingAutomixPerformance) {
-        ModalBottomSheet(
-            onDismissRequest = { pickingAutomixPerformance = false },
-            containerColor = MaterialTheme.colorScheme.background,
-        ) {
+        SettingsOptionSheet(onDismiss = { pickingAutomixPerformance = false }) { commit ->
             AutomixPerformanceSheet(
                 selected = automixPerformance,
                 onSelect = { mode ->
-                    AppSettings.setAutomixPerformanceMode(mode)
-                    pickingAutomixPerformance = false
+                    commit { AppSettings.setAutomixPerformanceMode(mode) }
                 },
             )
         }
@@ -1911,7 +1907,7 @@ internal enum class SettingsCategory(val title: Int, val summary: List<Int>, val
     APPEARANCE(R.string.appearance, listOf(R.string.theme, R.string.app_icon), SettingsIcons.Appearance),
     LIBRARY(R.string.library, listOf(R.string.downloads, R.string.storage, R.string.your_data), SettingsIcons.Library),
     PERFORMANCE(R.string.performance, listOf(R.string.high_performance_mode, R.string.reduce_animation), SettingsIcons.Performance),
-    ADVANCED(R.string.advanced_options, listOf(R.string.miscellaneous, R.string.show_nerd_stats), SettingsIcons.Advanced),
+    ADVANCED(R.string.advanced_options, listOf(R.string.app_updates, R.string.show_nerd_stats), SettingsIcons.Advanced),
 }
 
 /** Plain, full-width destinations remain readable at large system font sizes. */

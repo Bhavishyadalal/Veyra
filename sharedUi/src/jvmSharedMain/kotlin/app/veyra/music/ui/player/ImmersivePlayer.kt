@@ -45,9 +45,14 @@ import app.veyra.music.playback.PlaybackPosition
 import app.veyra.music.sharedui.resources.*
 import app.veyra.music.ui.themes.ThemeScene
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
+
+/** Immersive lyrics keep contrast/depth without per-row blur render targets. */
+internal val LocalImmersiveRendering = staticCompositionLocalOf { false }
 
 /** A separate window so the system-bar and screen-on lifetime ends exactly with this mode. */
 @Composable
@@ -80,6 +85,10 @@ internal fun ImmersivePlayer(
     val active = lifecycle.isAtLeast(Lifecycle.State.RESUMED)
     val reduceMotion by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     val playhead = rememberLyricPlayhead(position)
+    val imageContext = LocalPlatformContext.current
+    val artworkRequest = remember(artwork, imageContext) {
+        ImageRequest.Builder(imageContext).data(artwork).size(960).build()
+    }
     val density=LocalDensity.current
     var footerHeight by remember {mutableStateOf(210.dp)}
     val threshold = with(density) { 72.dp.toPx() }
@@ -97,6 +106,7 @@ internal fun ImmersivePlayer(
     val content: @Composable () -> Unit = {
         // White lyric ink always has a dark local backdrop, even with a light downloaded theme.
         val base = MaterialTheme.colorScheme
+        CompositionLocalProvider(LocalImmersiveRendering provides true) {
         MaterialTheme(colorScheme = base.copy(onSurface = Color.White, onBackground = Color.White,
             onSurfaceVariant = Color.White.copy(alpha = .76f))) {
             BoxWithConstraints(Modifier.fillMaxSize().background(Color(0xFF080C12)).pointerInput(Unit) {
@@ -130,11 +140,11 @@ internal fun ImmersivePlayer(
                         else -> Modifier.fillMaxSize()
                     }
                     val fadeArtwork=options.immersiveBackground==ImmersiveBackground.BLEND || options.immersiveCover==ImmersiveCover.ZOOMED
-                    Box(artModifier.then(if(fadeArtwork)Modifier.graphicsLayer {compositingStrategy=CompositingStrategy.Offscreen}.drawWithCache {
-                        val mask=Brush.verticalGradient(0f to Color.Black,.65f to Color.Black,1f to Color.Transparent,endY=size.height)
-                        onDrawWithContent {drawContent();drawRect(mask,blendMode=BlendMode.DstIn)}
+                    Box(artModifier.then(if(fadeArtwork)Modifier.drawWithCache {
+                        val mask=Brush.verticalGradient(0f to Color.Transparent,.65f to Color.Transparent,1f to Color(0xFF080C12),endY=size.height)
+                        onDrawWithContent {drawContent();drawRect(mask)}
                     } else Modifier)) {
-                        AsyncImage(artwork, null, Modifier.fillMaxSize(), contentScale = if (options.immersiveCover == ImmersiveCover.FIT) ContentScale.Fit else ContentScale.Crop)
+                        AsyncImage(artworkRequest, null, Modifier.fillMaxSize(), contentScale = if (options.immersiveCover == ImmersiveCover.FIT) ContentScale.Fit else ContentScale.Crop)
                         if (canvas != null && !reduceMotion && !options.dataSaver) CanvasArtworkPlayer(canvas, isPlaying && active,
                             Modifier.fillMaxSize(), contentMode = if (options.immersiveCover == ImmersiveCover.FIT) CanvasContentMode.FIT_PORTRAIT else CanvasContentMode.CROP)
                     }
@@ -218,6 +228,7 @@ internal fun ImmersivePlayer(
                         onSource={settings=false;onSource()},onTiming={settings=false;onTiming()},onSongOptions={settings=false;onSongOptions()},onDismiss={settings=false})
                 } }
             }
+        }
         }
     }
     if(windowed)ImmersiveWindow(onExit,content) else content()

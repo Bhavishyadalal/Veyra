@@ -1,13 +1,13 @@
 # Veyra source downloads
 
-**Testing preview 0.2.1-beta1 · code 54** adds automatic shared Music/Veyra storage and bulk export. [Preview notes](../RELEASE_NOTES_0.2.1-beta1.md) · [Checks/device checklist](../verification/DOWNLOADS-0.2.1-beta1.md). Stable is unchanged.
+**Testing preview 0.2.1-beta1 · code 55** adds immersive rendering reductions, optional automatic APK updates, the current waveform notification icon and Settings/welcome fixes, retaining portable downloads. [Preview notes](../RELEASE_NOTES_0.2.1-beta1.md) · [Checks/device checklist](../verification/DOWNLOADS-0.2.1-beta1.md). Stable is unchanged.
 
 **Stable 0.2.0 · code 53** improves Home refresh recovery, search drafts and suggestions, keyboard behavior, large-text actions and themed feedback cards. Retains source-policy, Settings, welcome and refresh fixes. Includes all 12 immersive modes, 72 themes, 32 independent overlays, 132 launcher choices and prior reliability fixes. The completed 0.2.0-beta1 remains code 46. These are complete Android Studio projects with licenses and backend provenance. **Source ZIPs are not APKs.**
 
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
 | Current stable · `main`, `stable/0.2.0` | 0.2.0 / code 53 | [Download](Veyra_Android_Source_0.2.0_Stable.zip) | [SHA-256](Veyra_Android_Source_0.2.0_Stable.zip.sha256) |
-| Current testing preview · `preview/0.2.1-beta1` | 0.2.1-beta1 / code 54 | [Download](Veyra_Android_Source_0.2.1-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.1-beta1.zip.sha256) |
+| Current testing preview · `preview/0.2.1-beta1` | 0.2.1-beta1 / code 55 | [Download](Veyra_Android_Source_0.2.1-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.1-beta1.zip.sha256) |
 | Completed preview · `preview/0.2.0-beta1` | 0.2.0-beta1 / code 46 | [Download](Veyra_Android_Source_0.2.0-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.0-beta1.zip.sha256) |
 | Completed preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 35 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 

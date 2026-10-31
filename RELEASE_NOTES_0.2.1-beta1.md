@@ -1,6 +1,10 @@
-# Veyra 0.2.1-beta1 · build 54
+# Veyra 0.2.1-beta1 · build 55
 
 Testing preview on `preview/0.2.1-beta1`. Stable stays 0.2.0 / code 53.
+
+Build 55 adds cached immersive backdrop motion, indexed lyric focus and a lighter immersive lyric/artwork path; a current waveform notification icon; Settings → Advanced → App updates with optional automatic unmetered APK transfer, signer/package/build/checksum validation and Android-approved installation; and consistent Settings selector dismissal, category entry, folder access and welcome completion/Unicode input. [Details, checks and device-testing limits](verification/PERFORMANCE-UPDATES-0.2.1-BUILD-55.md).
+
+Retained from build 54:
 
 - New downloads automatically use **internal shared storage → Music → Veyra**. Android creates the folder on the first successful download. No broad file-access permission is needed on Android 10+. The existing private-storage switch remains available.
 - **Export all downloads** in Settings → Downloads and the Downloads sheet copies existing private audio into Music/Veyra. Progress, cancellation, completed/previously shared/failed counts and safe retry work across screen dismissal. Original downloads are preserved; export requires additional free space.

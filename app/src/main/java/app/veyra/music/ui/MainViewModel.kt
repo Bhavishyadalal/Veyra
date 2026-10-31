@@ -1574,10 +1574,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             configurationChanges.collect { reloadRemoteDetail(SmbConfig.BROWSE_ID) }
         }
         viewModelScope.launch {
-            // A leftover APK only means "Install Now" for the session that
-            // downloaded it — see AppUpdateChecker.clearCache.
+            // Clear abandoned partials, then restore a verified ready APK and
+            // honor the opt-in unmetered-download preference.
             AppUpdateChecker.clearCache(getApplication())
-            AppUpdateChecker.check()
+            AppUpdateChecker.checkAndPrepare(getApplication(), automatic = true)
         }
     }
 

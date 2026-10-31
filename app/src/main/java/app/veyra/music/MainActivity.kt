@@ -374,6 +374,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (intent?.getBooleanExtra("open_app_update", false) == true) AppUpdateChecker.requestOpen()
         enableEdgeToEdge()
         // Before the composition, so a cold launch from a widget's artwork has
         // the request already standing by the time VeyraApp first reads it.
@@ -476,6 +477,7 @@ class MainActivity : AppCompatActivity() {
         // Replaces what getIntent() returns, so the extra this consumes is the
         // one that just arrived and not the one the task was started with.
         setIntent(intent)
+        if (intent.getBooleanExtra("open_app_update", false)) AppUpdateChecker.requestOpen()
         if (intent.action == Intent.ACTION_MAIN && intent.hasCategory(Intent.CATEGORY_LAUNCHER) && hasWindowFocus()) {
             launchGeneration++
         }
@@ -766,6 +768,22 @@ private fun VeyraApp(
     var updateDialogShown by rememberSaveable { mutableStateOf(false) }
     var showUpdateDialog by remember { mutableStateOf(false) }
     val updateAvailable by viewModel.updateAvailable.collectAsStateWithLifecycle()
+    val automaticUpdates by AppSettings.autoDownloadUpdates.collectAsStateWithLifecycle()
+    val updateMetered by AppSettings.meteredConnection.collectAsStateWithLifecycle()
+    val updateForeground = app.veyra.music.ui.rememberIsForeground()
+    LaunchedEffect(updateAvailable, automaticUpdates, updateMetered, updateForeground) {
+        if (updateForeground && automaticUpdates && updateMetered == false && updateAvailable != null) {
+            AppUpdateChecker.startDownload(context, automatic = true)
+        }
+    }
+    val installUpdate = app.veyra.music.ui.components.rememberUpdateInstaller()
+    val updateOpenRequest by AppUpdateChecker.openRequests.collectAsStateWithLifecycle()
+    val updateDownload by AppUpdateChecker.download.collectAsStateWithLifecycle()
+    LaunchedEffect(updateOpenRequest, updateDownload is AppUpdateChecker.DownloadState.Ready, updateAvailable) {
+        if (updateAvailable != null && (updateOpenRequest > 0 || updateDownload is AppUpdateChecker.DownloadState.Ready)) {
+            showUpdateDialog = true
+        }
+    }
 
     /**
      * The single gate both surfaces read, so the icon can't announce the update
@@ -5167,7 +5185,7 @@ private fun VeyraApp(
                     onDismiss = { showUpdateDialog = false },
                     onDownload = {
                         if (update.apkUrl != null) {
-                            scope.launch { AppUpdateChecker.downloadApk(context) }
+                            AppUpdateChecker.startDownload(context)
                         } else {
                             context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(update.releaseUrl)))
                             showUpdateDialog = false
@@ -5177,8 +5195,7 @@ private fun VeyraApp(
                         AppUpdateChecker.cancelDownload()
                     },
                     onInstall = {
-                        val ready = AppUpdateChecker.download.value as? AppUpdateChecker.DownloadState.Ready
-                        ready?.let { AppUpdateChecker.installApk(context, it.file) }
+                        installUpdate()
                     },
                     onOpenReleasePage = {
                         AppUpdateChecker.resetDownload()

@@ -11,7 +11,7 @@ buildscript {
     }
 }
 /* Preview only. Stable 0.2.0 remains code 53 on main/stable. */
-extra["veyraVersionCode"] = 54
+extra["veyraVersionCode"] = 55
 extra["veyraVersionName"] = "0.2.1"
 
 /*
