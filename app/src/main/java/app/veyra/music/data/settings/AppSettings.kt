@@ -213,11 +213,11 @@ object AppSettings {
 
     /**
      * Keep ordinary downloads in Music/Veyra where other music apps can see
-     * them. Off (the default) keeps downloads in this app's private storage.
-     * HLS downloads always stay private because they are a playlist package,
-     * not one portable audio file.
+     * them. On by default; users may opt into app-private storage instead.
+     * Supported manifests are assembled into portable audio; the private mode
+     * can also retain codecs that need an offline playlist package.
      */
-    val exportDownloads = MutableStateFlow(false)
+    val exportDownloads = MutableStateFlow(true)
 
     /** Whether the active network charges for data. `null` while offline. */
     val meteredConnection = MutableStateFlow<Boolean?>(null)
@@ -838,7 +838,13 @@ object AppSettings {
         migrateDownloadQuality()
         downloadQuality.value = readDownloadQuality()
         wifiOnlyDownloads.value = prefs.getBoolean(KEY_WIFI_ONLY_DOWNLOADS, true)
-        exportDownloads.value = prefs.getBoolean(KEY_EXPORT_DOWNLOADS, false)
+        // One-time migration to the portable-download default. Later explicit
+        // choices (including private storage) survive restarts and updates.
+        if (!prefs.getBoolean("portable_downloads_v1", false)) {
+            prefs.edit().putBoolean(KEY_EXPORT_DOWNLOADS, true)
+                .putBoolean("portable_downloads_v1", true).apply()
+        }
+        exportDownloads.value = prefs.getBoolean(KEY_EXPORT_DOWNLOADS, true)
         crossfadeSeconds.value = prefs.getInt(KEY_CROSSFADE, 0)
         smartFadeEnabled.value = prefs.getBoolean(KEY_SMART_FADE, false)
         automixPerformanceMode.value = runCatching {
@@ -2045,6 +2051,7 @@ object AppSettings {
      * Downloads page would read as empty while the space stayed used.
      */
     private val DEVICE_LOCAL = setOf(
+        "portable_downloads_v1",
         "downloaded_tracks",
         "downloaded_tracks_metadata",
         "downloaded_collections",

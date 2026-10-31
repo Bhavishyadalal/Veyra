@@ -580,6 +580,9 @@ fun SettingsScreen(
                         subtitle = "Music/Veyra".takeIf { exportDownloads },
                     )
                 }
+                row(stringResource(R.string.export_all_downloads), "export", "music folder", divided = false) {
+                    app.veyra.music.ui.components.DownloadExportCard()
+                }
             }
 
             SearchableSettingsGroup(search, category = SettingsCategory.SOUND, header = stringResource(R.string.playback)) {

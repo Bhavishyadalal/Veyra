@@ -1,3 +1,5 @@
+> **Testing preview 0.2.1-beta1 / code 54** · Automatic Music/Veyra downloads, Export all downloads, safe recording filenames and bounded, animated progress. [Beta notes](RELEASE_NOTES_0.2.1-beta1.md) · [Verification/device checklist](verification/DOWNLOADS-0.2.1-beta1.md). Stable remains 0.2.0 / code 53.
+
 > **Stable 0.2.0 / code 53** · 12 immersive modes, 72 themes, 32 independent overlays and 132 launcher choices. Theme-aware Liquid Glass, Motion studio, 16 navigation designs, 15 scroll-player transitions and complete matching glass icons.
 >
 > [Release notes](RELEASE_NOTES_0.2.0.md) · [Pocket Riot assets](asset-packs/POCKET_RIOT.md) · [Glass icons](design/launcher/pocket-riot/previews/glass-editions.webp) · [Source downloads](downloads/README.md) · [Promotion checks](verification/STABLE-0.2.0-PROMOTION.md).

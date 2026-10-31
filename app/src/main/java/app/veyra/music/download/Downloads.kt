@@ -886,6 +886,7 @@ object Downloads {
         // would let a change made mid-download splice two renditions into
         // one file.
         val quality = AppSettings.downloadQuality.value
+        val public = AppSettings.exportDownloads.value
 
         // Asked before the lookup rather than after it, unlike the check on the
         // route's own filename below. A file already sitting in Music under a
@@ -898,15 +899,15 @@ object Downloads {
         // for lossless with a transcode.
         if (quality.keepsLossless) {
             LOSSLESS_EXTENSIONS.firstNotNullOfOrNull { extension ->
-                DownloadStore.existing(context, DownloadStore.fileNameFor(track, extension))
+                DownloadStore.existing(context, DownloadStore.fileNameFor(track, extension), public)
             }?.let { uri ->
-                return@withContext Prepared(song.videoId, track, route = null, alreadyAt = uri)
+                return@withContext Prepared(song.videoId, track, route = null, alreadyAt = uri, public = public)
             }
         }
 
-        val route = routeFor(context, track, quality)
+        val route = routeFor(context, track, quality, public)
         Log.d(TAG, "downloading ${song.videoId} as .${route.extension} (${route.describe}, ${quality.label})")
-        Prepared(song.videoId, track, route = route, alreadyAt = null)
+        Prepared(song.videoId, track, route = route, alreadyAt = null, public = public)
     }
 
     /**
@@ -925,6 +926,7 @@ object Downloads {
         val route: Route?,
         /** A file already in Music that is this download, if there is one. */
         val alreadyAt: Uri?,
+        val public: Boolean,
     )
 
     /**
@@ -949,6 +951,7 @@ object Downloads {
             return
         }
         val route = plan.route ?: error("Nothing to download")
+        val progressGate = DownloadProgressGate()
 
         var pending: DownloadStore.Pending? = null
         var lyrics: Deferred<LyricsTag.Embeddable?>? = null
@@ -976,7 +979,7 @@ object Downloads {
                 }
 
                 val name = DownloadStore.fileNameFor(track, route.extension)
-                val alreadyThere = DownloadStore.existing(context, name)
+                val alreadyThere = DownloadStore.existing(context, name, plan.public)
                 if (alreadyThere != null) {
                     Log.d(TAG, "$name is already in Music; adopting it")
                     remember(song, track, alreadyThere)
@@ -987,11 +990,12 @@ object Downloads {
                 val manifest = route.offlineHls
                 if (manifest != null) {
                     val onSegment: (Long, Long) -> Unit = { written, total ->
-                        val fraction = written.toFloat() / total
                         workContext.ensureActive()
-                        publish(claim) {
-                            _active.update { it + (id to DownloadState.Running(fraction)) }
-                            DownloadSession.running(id, fraction)
+                        progressGate.update(written, total)?.let { fraction ->
+                            publish(claim) {
+                                _active.update { it + (id to DownloadState.Running(fraction)) }
+                                DownloadSession.running(id, fraction)
+                            }
                         }
                     }
                     val savedUri = if (manifest.dash) {
@@ -1021,15 +1025,16 @@ object Downloads {
                     return@coroutineScope
                 }
 
-                val destination = DownloadStore.begin(context, name, route.mimeType)
+                val destination = DownloadStore.begin(context, name, route.mimeType, plan.public)
                 pending = destination
                 destination.openStream().use { sink ->
                     route.write(sink) { written, total ->
-                        val fraction = written.toFloat() / total
                         workContext.ensureActive()
-                        publish(claim) {
-                            _active.update { it + (id to DownloadState.Running(fraction)) }
-                            DownloadSession.running(id, fraction)
+                        progressGate.update(written, total)?.let { fraction ->
+                            publish(claim) {
+                                _active.update { it + (id to DownloadState.Running(fraction)) }
+                                DownloadSession.running(id, fraction)
+                            }
                         }
                     }
                 }
@@ -1105,7 +1110,7 @@ object Downloads {
      *   than to the middle of this one. [Downloader.fetch] resolves again after
      *   a mid-download refusal and has to ask for the same rung it started on.
      */
-    private suspend fun routeFor(context: Context, track: Song, quality: DownloadQuality): Route {
+    private suspend fun routeFor(context: Context, track: Song, quality: DownloadQuality, public: Boolean): Route {
         fromSources(track, quality)?.let { (stream, storable) ->
             // A manifest is an index, not audio. Whichever kind it is, fetching
             // it as a file writes the index into something named `.flac` —
@@ -1137,7 +1142,7 @@ object Downloads {
                     },
                 )
             }
-            if (packaged && AppSettings.exportDownloads.value) {
+            if (packaged && public) {
                 Log.d(TAG, "can't export a .${storable.extension} manifest; taking YouTube for ${track.videoId}")
                 return@let
             }
@@ -1159,7 +1164,7 @@ object Downloads {
         // MediaStore.Audio refuses audio/webm on affected Android versions.
         // Keep Opus for app-private downloads, but pin exported downloads to
         // AAC-in-MP4 for both the initial resolve and any mid-transfer retry.
-        val requireM4a = AppSettings.exportDownloads.value
+        val requireM4a = public
         val stream = StreamResolver.resolveForDownload(track.videoId, quality.maxKbps, requireM4a)
         return Route(
             extension = stream.downloadExtension,

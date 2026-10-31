@@ -174,6 +174,10 @@ class DownloadService : Service() {
         super.onDestroy()
     }
 
+    override fun onTimeout(startId: Int, fgsType: Int) {
+        shutdown(stopWork = true)
+    }
+
     // ---- Notification -------------------------------------------------------
 
     private fun promote() {

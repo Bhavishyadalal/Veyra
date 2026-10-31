@@ -42,6 +42,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -199,6 +201,21 @@ fun DownloadManagerSheet(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
     val session by DownloadSession.state.collectAsStateWithLifecycle()
     // Newest ask last, the order the queue will actually reach them in.
     val items = remember(session.items) { session.items.sortedBy { it.sequence } }
+    var pendingRetry by remember { mutableStateOf<List<DownloadSession.Item>>(emptyList()) }
+    val storagePermission = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+    ) { granted ->
+        if (granted) pendingRetry.forEach { Downloads.enqueue(context, it.song, it.from) }
+        pendingRetry = emptyList()
+    }
+    val retry: (List<DownloadSession.Item>) -> Unit = { requested ->
+        if (export && app.veyra.music.download.DownloadStore.needsLegacyPermission() &&
+            androidx.core.content.ContextCompat.checkSelfPermission(context,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            pendingRetry = requested
+            storagePermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        } else requested.forEach { Downloads.enqueue(context, it.song, it.from) }
+    }
 
     Column(modifier.fillMaxWidth()) {
         Row(
@@ -270,7 +287,8 @@ fun DownloadManagerSheet(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
         val available by androidx.compose.runtime.produceState<String?>(null, session.busy, export) {
             value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
                 runCatching {
-                    val location = if (export) android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_MUSIC) else context.filesDir
+                    // Music/Veyra may not exist until the first successful save.
+                    val location = if (export) android.os.Environment.getExternalStorageDirectory() else context.filesDir
                     android.text.format.Formatter.formatShortFileSize(context, android.os.StatFs(location.absolutePath).availableBytes)
                 }.getOrNull()
             }
@@ -281,8 +299,9 @@ fun DownloadManagerSheet(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
                 color=MaterialTheme.colorScheme.onSurfaceVariant)
         }
         if (session.failed > 0) TextButton(onClick = {
-            items.filter { it.progress is DownloadProgress.Failed }.forEach { Downloads.enqueue(context, it.song, it.from) }
+            retry(items.filter { it.progress is DownloadProgress.Failed })
         }, modifier = Modifier.padding(horizontal=12.dp)) { Text(stringResource(R.string.download_retry_all)) }
+        DownloadExportCard()
         HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline)
 
         // Capped rather than left to grow: a hundred-track playlist would
@@ -293,7 +312,7 @@ fun DownloadManagerSheet(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
                 DownloadManagerRow(
                     item = item,
                     onCancel = { Downloads.cancel(item.videoId) },
-                    onRetry = { Downloads.enqueue(context, item.song, item.from) },
+                    onRetry = { retry(listOf(item)) },
                 )
             }
         }
@@ -314,6 +333,10 @@ private fun DownloadManagerRow(
     val reduced = app.veyra.music.ui.motion.rememberVeyraReducedMotion()
     val progress = item.progress
     val failed = progress as? DownloadProgress.Failed
+    val animatedFraction by animateFloatAsState(
+        targetValue = (progress as? DownloadProgress.Running)?.fraction ?: 0f,
+        animationSpec = tween(if (reduced) 0 else 150), label = "trackDownloadProgress",
+    )
 
     Row(
         modifier = Modifier
@@ -388,7 +411,7 @@ private fun DownloadManagerRow(
                     ) else LinearProgressIndicator(
                         // Indeterminate until the first response names a
                         // length — a bar frozen at nothing reads as broken.
-                        progress = { progress.fraction },
+                        progress = { animatedFraction },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(3.dp),

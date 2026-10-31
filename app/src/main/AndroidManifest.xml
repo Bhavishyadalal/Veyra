@@ -500,6 +500,10 @@
             android:name=".download.DownloadService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+        <service
+            android:name=".download.DownloadExportService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
 
         <!--
           Home-screen widgets. Two providers so the picker lists a 2×2 and a 4×2,
