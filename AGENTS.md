@@ -1,5 +1,12 @@
 # Veyra maintenance rules
 
+- Active beta: `preview/0.2.2-beta1`, **0.2.2-beta1 / code 57**, created at
+  the owner's choice from stable 0.2.1 build 56. Includes all stable picker,
+  shared-storage and locale fixes. Keep main/stable 0.2.1 at code 56.
+  Catalogs and fallbacks on this branch target preview/0.2.2-beta1.
+  See verification/BETA-0.2.2-beta1.md. Retain stable 0.2.1 and previews
+  0.2.2-beta1, 0.2.1-beta1 and 0.2.0-beta1 at this branch tip.
+
 - Current stable: `main` and `stable/0.2.1`, **0.2.1 / code 56**, explicitly
   promoted at the owner's request. Fixes the immersive mode picker with lazy
   rows, deferred previews, paused background motion and dismissal-before-selection.

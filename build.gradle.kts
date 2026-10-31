@@ -10,9 +10,9 @@ buildscript {
         classpath("com.android.tools:r8:9.1.56")
     }
 }
-/* Stable 0.2.1, explicitly promoted after the preview. */
-extra["veyraVersionCode"] = 56
-extra["veyraVersionName"] = "0.2.1"
+/* Next testing track, based on stable 0.2.1. */
+extra["veyraVersionCode"] = 57
+extra["veyraVersionName"] = "0.2.2"
 
 /*
  * Bump this by hand before cutting each sideloaded test build ("beta2",
@@ -30,7 +30,7 @@ extra["veyraVersionName"] = "0.2.1"
  * so it is the one place to get right.
  *
  */
-extra["veyraBetaSuffix"] = ""
+extra["veyraBetaSuffix"] = "beta1"
 
 plugins {
     id("com.android.application") version "8.10.1" apply false

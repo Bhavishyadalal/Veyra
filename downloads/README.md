@@ -5,9 +5,9 @@
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
 | Current stable · `main`, `stable/0.2.1` | 0.2.1 / code 56 | [Download](Veyra_Android_Source_0.2.1_Stable.zip) | [SHA-256](Veyra_Android_Source_0.2.1_Stable.zip.sha256) |
+| Current preview · `preview/0.2.2-beta1` | 0.2.2-beta1 / code 57 | [Download](Veyra_Android_Source_0.2.2-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.2-beta1.zip.sha256) |
 | Completed preview · `preview/0.2.1-beta1` | 0.2.1-beta1 / code 55 | [Download](Veyra_Android_Source_0.2.1-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.1-beta1.zip.sha256) |
 | Completed preview · `preview/0.2.0-beta1` | 0.2.0-beta1 / code 46 | [Download](Veyra_Android_Source_0.2.0-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.0-beta1.zip.sha256) |
-| Completed preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 35 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 
 These are complete Android Studio projects, not installable APKs. Verify the SHA-256 sidecar, extract the entire Veyra folder and open it in Android Studio. Native build resources, launcher masters, fonts/licenses and runtime packs remain included. Restore the lossless runtime library offline with `python3 scripts/restore_source_packs.py`; optional authoring sources restore with `scripts/restore_theme_sources.py` without overwriting edits.
 
@@ -15,7 +15,7 @@ Stage source before packaging:
 
 ```sh
 python3 scripts/route_catalogs.py
-python3 scripts/package_source.py Veyra_Android_Source_0.2.1_Stable.zip
+python3 scripts/package_source.py Veyra_Android_Source_0.2.2-beta1.zip
 python3 scripts/verify_archives.py
 ```
 

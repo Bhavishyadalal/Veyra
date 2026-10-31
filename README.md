@@ -1,3 +1,5 @@
+> **Testing preview 0.2.2-beta1 / code 57** · Based on stable 0.2.1, including the lazy immersive picker, shared Music/Veyra downloads and locale fixes. [Preview notes](RELEASE_NOTES_0.2.2-beta1.md) · [Verification](verification/BETA-0.2.2-beta1.md). Stable remains 0.2.1 / code 56.
+
 > **Stable 0.2.1 / code 56** · Faster immersive mode picker, enforced shared Music/Veyra downloads, current waveform notifications, optional app updates and Settings/welcome fixes. Includes 12 immersive modes, 72 themes, 32 overlays and 132 launcher choices.
 >
 > [Release notes](RELEASE_NOTES_0.2.1.md) · [Promotion and testing](verification/STABLE-0.2.1-PROMOTION.md) · [Source downloads](downloads/README.md).
