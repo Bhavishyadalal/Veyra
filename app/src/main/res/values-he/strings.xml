@@ -871,7 +871,7 @@
 
     <string name="dolby_atmos_unavailable">מכשיר זה אינו תומך ב-Atmos, שירים ינוגנו בגרסה רגילה</string>
 
-    <string name="export_compatible_downloads">ייצא הורדות תואמות</string>
+    <string name="export_compatible_downloads">הורד תיקייה</string>
 
     <string name="legacy_mesh_gradient">גרדיאנט רשת קלאסי</string>
 
@@ -1349,4 +1349,299 @@
     <string name="onboarding_back">חזרה</string>
     <string name="signed_by">נחתם על ידי %1$s</string>
     <string name="settings_intro">צליל, סגנון וכל מה שביניהם.</string>
+
+    <!-- Completed UI strings; machine-assisted translations, branded style names preserved. -->
+    <string name="download_destination_hint">אחסון פנימי ← מוזיקה ← Veyra. כל הורדות האודיו החדשות נשמרות כאן.</string>
+    <string name="export_all_downloads">ייצא את כל ההורדות</string>
+    <string name="app_updates">עדכוני אפליקציה</string>
+    <string name="auto_download_updates">הורד עדכונים באופן אוטומטי</string>
+    <string name="auto_download_updates_hint">בדוק מתי Veyra נפתח והורד מהדורות חדשות בחיבור ללא מדדים. אנדרואיד תמיד שואל לפני ההתקנה.</string>
+    <string name="check_app_updates">בדוק אם יש עדכונים</string>
+    <string name="update_ready_to_install">עדכון Veyra מוכן להתקנה</string>
+    <string name="update_downloading_apk">מוריד עדכון Veyra</string>
+    <string name="update_install_permission_hint">הקש כדי לסקור את העדכון ולאשר התקנה.</string>
+    <string name="export_downloads_description">העתק אודיו שמור ל-Music/Veyra באחסון פנימי לשימוש באפליקציות אחרות. מקוריים נשארים בטוחים. ניסיון חוזר מדלג על עותקים שהושלמו.</string>
+    <string name="export_downloads_result">%1$d מיוצא · %2$d כבר שותף · %3$d נכשל</string>
+    <string name="veyra_github_profile">מפתח ב-GitHub</string>
+    <string name="veyra_github_source">קוד מקור Veyra</string>
+    <string name="veyra_website_source">קוד מקור האתר</string>
+    <string name="welcome_space_title">המוזיקה שלך.\nהמרחב שלך.</string>
+    <string name="welcome_space_body">מצא מועדף.\nהישאר לתחושה.</string>
+    <string name="welcome_lyrics_title">כל מילה.\nכל תחושה.</string>
+    <string name="welcome_lyrics_body">עקוב אחר המילים.\nהתקרב לשיר.</string>
+    <string name="welcome_together_title">האנשים שלך.\n פסקול אחד.</string>
+    <string name="welcome_together_body">האזינו יחד.\nאין צורך בחשבון כדי להצטרף.</string>
+    <string name="welcome_music_chip">נוצר עבור המוזיקה שלך</string>
+    <string name="welcome_lyrics_chip">תישאר עם המילים</string>
+    <string name="welcome_together_chip">עדיף ביחד</string>
+    <string name="welcome_get_started">התחל</string>
+    <string name="welcome_next_preview">חקור את התצוגה המקדימה הבאה</string>
+    <string name="welcome_preview_position">תצוגה מקדימה של %1$d של %2$d</string>
+    <string name="onboarding_personalize_title">הפוך אותו לשלך.</string>
+    <string name="settings_backup_working">עובד על הגיבוי שלך...</string>
+    <string name="home_layout_save_failed">לא ניתן לשמור את פריסת הבית שלך. אנא נסה שוב.</string>
+    <string name="home_offline_track_unavailable">פריט זה צריך חיבור. פתח הורדות או מוזיקה מקומית כדי להאזין במצב לא מקוון.</string>
+    <string name="stronger_text">טקסט חזק יותר</string>
+    <string name="stronger_text_subtitle">טקסט כבד יותר לקריאה קלה יותר. שומר על גודל הטקסט של המערכת שלך.</string>
+    <string name="contrast_player_controls">פקדי נגן בעלי ניגודיות גבוהה יותר</string>
+    <string name="contrast_player_controls_subtitle">תן ללחצני הנגן רקע גלוי וקווי מתאר מעל יצירות אמנות.</string>
+    <string name="custom_accent">פלטת דגש</string>
+    <string name="custom_accent_hint">צבעי מבטא של אפליקציה; צבעי הגרפיקה של הנגן נשארים קשורים לשיר.</string>
+    <string-array name="custom_accent_options">
+        <item>Veyra</item>
+        <item>צהבהב</item>
+        <item>ענבר</item>
+        <item>ורד</item>
+    </string-array>
+    <string name="custom_artwork_corners">פינות יצירה</string>
+    <string name="custom_artwork_corners_hint">בחר את סגנון הכיסוי עבור אריחים, תמונות ממוזערות של רצועות ויצירות אמנות של נגן.</string>
+    <string-array name="custom_corner_options">
+        <item>מקורי</item>
+        <item>רך</item>
+        <item>מעוגל</item>
+        <item>ריבוע</item>
+    </string-array>
+    <string name="custom_list_spacing">מרווח רשימת שירים</string>
+    <string name="custom_list_spacing_hint">קומפקטי מפחית את ריפוד השורות. טקסט מערכת גדול שומר על מרווח נוח.</string>
+    <string-array name="custom_spacing_options">
+        <item>נוח</item>
+        <item>קומפקטי</item>
+    </string-array>
+    <string name="custom_motion_level">רמת תנועה</string>
+    <string name="custom_motion_level_hint">עדין שומר על דהיית דף ומשתיק תנועה דקורטיבית. אנימציות מושבתות מערכת תמיד מקבלות עדיפות.</string>
+    <string-array name="custom_motion_options">
+        <item>מלא</item>
+        <item>עדין</item>
+        <item>כבוי</item>
+    </string-array>
+    <string name="custom_player_shortcut">פעולת שחקן עדיפות</string>
+    <string name="custom_player_shortcut_hint">העבר פעולה אחת לראש תפריט שלוש הנקודות של השחקן. פעולות בחשבון עדיין דורשות כניסה.</string>
+    <string-array name="custom_shortcut_options">
+        <item>הזמנה מקורית</item>
+        <item>הורד</item>
+        <item>מועדף</item>
+        <item>טיימר שינה</item>
+        <item>הוסף לפלייליסט</item>
+    </string-array>
+    <string name="custom_reset_appearance">אפס התאמה אישית של מראה</string>
+    <string name="custom_reset_appearance_hint">אפס גופנים, מבטא, פינות כריכה, מרווחים בין רשימות, טקסט ותנועה חזקים יותר. שמור חשבונות, רשימות השמעה והורדות.</string>
+    <string name="custom_reset_player">אפס את ההתאמה האישית של הנגן</string>
+    <string name="custom_reset_player_hint">שחזר את סדר התפריט המקורי וכבה פקדים בעלי ניגודיות גבוהה יותר. המשך השמעה, חשבונות והורדות.</string>
+    <string name="custom_reset_confirm">אפס</string>
+    <string name="theme_packs">סטודיו נושא</string>
+    <string name="theme_packs_subtitle">הורד יצירות אמנות, גופנים, סמלים וסגנונות נגן</string>
+    <string name="theme_packs_description">אווירה חדשה לכל מסך. הורד פעם אחת, שמור אותו במצב לא מקוון וחזור למראה המקורי שלך בכל עת.</string>
+    <string name="theme_original">Veyra מקורי</string>
+    <string name="theme_active">פעיל כרגע</string>
+    <string name="theme_restore_hint">שחזר את העדפות המראה השמורה שלך</string>
+    <string name="theme_apply">החל נושא</string>
+    <string name="theme_download">הורד ערכת נושא</string>
+    <string name="theme_update_required">עדכן תחילה את Veyra</string>
+    <string name="theme_catalog_empty">עדיין לא נטענו ערכות נושא. רענן את הקטלוג כשאתה מקוון.</string>
+    <string name="theme_refresh_catalog">רענן את קטלוג הנושא</string>
+    <string name="theme_safety_hint">ערכת נושא עוקפת צבעים נתמכים, גופני כותרות וסגנונות בקרה עד שתחזור ל-Veyra המקורי. החשבונות, ההורדות, הפלייליסטים ופקדי ההשמעה שלך נשארים שלך. המראה המקורי נשאר זמין במצב לא מקוון.</string>
+    <string name="theme_restart_title">ליישם את הנושא הזה?</string>
+    <string name="theme_restart_description">Veyra ירענן את המסכים שלו כדי לטעון את ערכת הנושא. מוזיקה ממשיכה להתנגן. הספרייה, החשבונות והעדפות המראה המקוריות שלך נשמרות.</string>
+    <string name="theme_apply_restart">החל והפעל מחדש את ממשק המשתמש</string>
+    <string name="theme_later">מאוחר יותר</string>
+    <string name="theme_remove">הסר את העיצוב שהורד</string>
+    <string name="theme_remove_description">פעולה זו מסירה את קובצי העיצוב שאינם בשימוש מהמכשיר הזה. תוכל להוריד את ערכת הנושא שוב מאוחר יותר.</string>
+    <string name="theme_done">בוצע</string>
+    <string name="theme_download_update">הורד עדכון ערכת נושא</string>
+    <string name="theme_collection_title">תן לזה להרגיש כמוך.</string>
+    <string name="theme_collection_description">עולמות חדשים למוזיקה שלך. חקור יצירות אמנות, סוג, סמלים ופרטי נגן, ולאחר מכן שמור את המועדפים שלך במצב לא מקוון.</string>
+    <string name="theme_all">כל הנושאים</string>
+    <string name="theme_downloaded">הורד</string>
+    <string name="theme_discover">גלה</string>
+    <string name="theme_no_downloads">ערכות הנושא שהורדת יופיעו כאן.</string>
+    <string name="theme_includes">גרפיקה · גופנים · בקרות · מיתוג</string>
+    <string name="theme_launcher_title">מגע הגמר</string>
+    <string name="theme_launcher_hint">בחר בנפרד סמל מסך בית תואם. ייתכן שיידרש רגע לרענון המשגר ​​שלך.</string>
+    <string name="theme_use_launcher">השתמש בסמל אפליקציה תואם</string>
+    <string name="theme_restore_launcher">שחזור סמל האפליקציה המקורית</string>
+    <string name="theme_launcher_confirm">לשנות את סמל האפליקציה?</string>
+    <string name="theme_current_launcher">סמל האפליקציה הנוכחי: %1$s</string>
+    <string name="icon_collection_glass">זכוכית</string>
+    <string name="icon_collection_themes">ערכות נושא</string>
+    <string name="icon_family_liquid">נוזל</string>
+    <string name="icon_chooser_hint">בחר סמל למעלה. ייתכן שיידרש רגע לרענון המשגר ​​שלך.</string>
+    <string name="theme_back_collection">חזרה לנושאים</string>
+    <string name="theme_details">פרטי נושא</string>
+    <string name="theme_downloading">מוריד...</string>
+    <string name="theme_verifying">מאמת קבצים...</string>
+    <string name="theme_applying">מגיש בקשה...</string>
+    <string name="theme_live_apply_hint">עדכן את המראה תוך שמירה על המקום והמוזיקה שלך מתנגנת.</string>
+    <string name="theme_optional_restart">גם רענן את הממשק</string>
+    <string name="icon_choose">בחר סמל</string>
+    <string name="theme_saved_appearance">הסגנון השמור שלך</string>
+    <string name="home_saved_at">נשמר %1$s · מרענן במצב מקוון</string>
+    <string name="theme_matching_icon">השתמש גם בסמל המשגר התואם</string>
+    <string name="theme_icon_failed">הנושא הוחל. לא ניתן היה לשנות את סמל המפעיל; נסה את בוחר אייקוני האפליקציה.</string>
+    <string name="download_saved_private">נשמר באחסון האפליקציה</string>
+    <string name="download_interrupted">הופסק כאשר Veyra נסגר. הקש על נסה שוב כדי להוריד שוב.</string>
+    <string name="download_storage">%1$s זמין · %2$s</string>
+    <string name="download_storage_private">אחסון אפליקציות</string>
+    <string name="download_retry_all">ניסיון חוזר נכשל</string>
+    <string name="listen_together_host_reconnecting">המארח מנותק · ממתין לחיבור מחדש</string>
+    <string name="queue_removed">הוסר את %1$d מהתור</string>
+    <string name="queue_undo_expired">התור השתנה. ביטול אינו זמין יותר.</string>
+    <string name="undo">בטל</string>
+    <string name="download_action_track">%1$s %2$s</string>
+    <string name="icon_collection_atelier">אטלייה זכוכית</string>
+    <string name="theme_search">חיפוש ערכות נושא</string>
+    <string name="theme_clear_search">נקה חיפוש</string>
+    <string name="theme_no_search_results">אין ערכות נושא תואמות. נסה שם או מצב רוח אחר.</string>
+    <string name="icon_search">אייקונים של חיפוש</string>
+    <string name="icon_no_search_results">אין סמלים תואמים באוסף זה.</string>
+    <string name="icon_current_selection">סמל נוכחי: %1$s</string>
+    <string name="icon_collection_all">הכל</string>
+    <string name="appearance_fonts">גופנים</string>
+    <string name="font_follow_theme">עקוב אחר נושא</string>
+    <string name="font_veyra_default">ברירת המחדל של Veyra</string>
+    <string name="font_preview_heading">המוזיקה שלך, הסגנון שלך.</string>
+    <string name="font_preview_body">כותרות שיר ברורות. קריאה נוחה.</string>
+    <string name="font_selection_hint">בחירת הגופן שלך נשארת כאשר אתה משנה ערכות נושא. ערכת נושא עקוב משחזרת את הטיפוגרפיה של כל נושא משלו. רישיונות גופנים כלולים באפליקציה.</string>
+    <string name="font_apply">החל גופן</string>
+    <string name="app_style">סגנון אפליקציה</string>
+    <string name="app_style_hint">בחר מראה שלם עבור הבית ושאר ה-Veyra. אפשרויות העיצוב והגופן המקוריות שלך נשארות שמורות.</string>
+    <string name="style_original_hint">הבית המוכר שלך. כל ערכות הנושא ואפשרויות הגופנים להורדה.</string>
+    <string name="style_editorial_hint">נייר שמנת, הדגשים בצבע בורדו וכריכות עריכה נועזים.</string>
+    <string name="style_room_hint">ירקות בוטניים, טיפוגרפיה חמה וקולאז\'ים עם שרוול שיא.</string>
+    <string name="style_night_hint">כחול חצות, סוג גדול מדי ויצירות האמנות של השיר הנוכחי שלך.</string>
+    <string name="style_apply">החל סגנון</string>
+    <string name="style_original_only">זמין במקור. הבחירה שלך נשארת שמורה.</string>
+    <string name="style_themes_suspended">לסגנון האפליקציה הזה יש לוח וגופנים משלו. עבור למקור כדי להחיל ערכות נושא להורדה.</string>
+    <string name="experience_section_player">שחקן</string>
+    <string name="experience_section_mini">מיני נגן</string>
+    <string name="experience_section_gestures">מחוות</string>
+    <string name="experience_section_network">רשת</string>
+    <string name="experience_home_layout">פריסת הבית שלך</string>
+    <string name="experience_nav_destinations">יעדים גלויים</string>
+    <string name="experience_nav_behavior">התנהגות ניווט</string>
+    <string name="scroll_player_animations">אנימציות של נגן גלילה</string>
+    <string name="scroll_player_animations_hint">קפלו את המיני נגן לניווט תוך כדי גלילה, עם או בלי Liquid Glass. מכבד תנועה מופחתת.</string>
+    <string name="pin_home_header">הצמד את כותרת הבית</string>
+    <string name="pin_home_header_hint">השאר את מיתוג הבית המקורי ואת הברכה מעל פיד הגלילה. חלונות קצרים מאפשרים לגלול את הכותרת.</string>
+    <string name="asset_packs">חבילות נכסים</string>
+    <string name="asset_packs_subtitle">שכבת גופנים, סמלים ופקדים על כל נושא</string>
+    <string name="asset_packs_explanation">שמור על הנושא שלך. שנה את הפרטים שלו. חבילות נכסים עובדות גם עם סגנונות אפליקציה מקוריים ומותאמים אישית.</string>
+    <string name="asset_theme_defaults">שימוש בנכסי נושא</string>
+    <string name="asset_layers">בחר אילו חלקים החבילה עוקפת.</string>
+    <string name="asset_restore">שחזור נכסי נושא</string>
+    <string name="asset_icons">אייקונים ועורות לחוץ</string>
+    <string name="asset_controls">צורות לחצנים ופסי התקדמות</string>
+    <string name="asset_motion">ארוז מעברי דפים</string>
+    <string name="asset_colors">דיו כותרות אדפטיבי</string>
+    <string name="asset_font_priority">הגופן שבחרת או מיובא מקבל עדיפות. בחר עקוב אחר נושא בגופנים כדי להשתמש באותיות חבילה. נכסים לא זמינים שומרים על הפקדים המקוריים שלהם.</string>
+    <string name="asset_cancel">בטל הורדה</string>
+    <string name="asset_download">הורד נכסים</string>
+    <string name="asset_update_required">עדכן תחילה את Veyra</string>
+    <string name="asset_remove">הסר הורדה</string>
+    <string name="asset_empty">לא נטענו חבילות. רענן כדי לנסות שוב.</string>
+    <string name="asset_apply">החל נכסים</string>
+    <string name="app_icon_collection_riot_candy">Riot Candy</string>
+    <string name="app_icon_collection_chrome_venom">Chrome Venom</string>
+    <string name="app_icon_collection_bubble_riot">Bubble Riot</string>
+    <string name="app_icon_collection_xerox_afterparty">Xerox Afterparty</string>
+    <string name="app_icon_collection_cosmic_vandal">Cosmic Vandal</string>
+    <string name="app_icon_collection_switchback_radio">Switchback Radio</string>
+    <string name="app_icon_collection_komorebi_hour">Komorebi Hour</string>
+    <string name="app_icon_collection_rooftop_reverie">Rooftop Reverie</string>
+    <string name="app_icon_collection_apex_telemetry">Apex Telemetry</string>
+    <string name="app_icon_collection_cinder_kata">Cinder Kata</string>
+    <string name="app_icon_collection_lantern_letters">Lantern Letters</string>
+    <string name="app_icon_collection_velvet_orbit">Velvet Orbit</string>
+    <string name="app_icon_collection_moss_mechanism">Moss &amp; Mechanism</string>
+    <string name="app_icon_collection_sugar_static">Sugar Static</string>
+    <string name="app_icon_collection_tidal_origami">Tidal Origami</string>
+    <string name="app_icon_collection_margin_notes">Margin Notes</string>
+    <string name="app_icon_collection_spray_parade">Spray Parade</string>
+    <string name="app_icon_collection_paper_pop">Paper Pop</string>
+    <string name="app_icon_collection_ink_rebel">Ink Rebel</string>
+    <string name="app_icon_collection_laser_club">Laser Club</string>
+    <string name="app_icon_collection_thread_riot">Thread Riot</string>
+    <string name="icon_collection_assets">חבילות נכסים</string>
+    <string name="asset_matching_app_icon">סמל אפליקציה תואם</string>
+    <string name="app_icon_collection_cathedral_static">Cathedral Static</string>
+    <string name="app_icon_collection_velvet_hex">Velvet Hex</string>
+    <string name="app_icon_collection_razor_bloom">Razor Bloom</string>
+    <string name="app_icon_collection_neon_seance">Neon Séance</string>
+    <string name="app_icon_collection_blackout_zine">Blackout Zine</string>
+    <string name="app_icon_collection_chrome_fang">Chrome Fang</string>
+    <string name="app_icon_collection_candy_crypt">Candy Crypt</string>
+    <string name="app_icon_collection_royal_ruin">Royal Ruin</string>
+    <string name="app_icon_collection_acid_gargoyle">Acid Gargoyle</string>
+    <string name="app_icon_collection_midnight_stitch">Midnight Stitch</string>
+    <string name="navigation_monorail">מונורייל</string>
+    <string name="navigation_harbor">נמל</string>
+    <string name="navigation_ticket">כרטיס</string>
+    <string name="navigation_pebble">אבן נחל</string>
+    <string name="navigation_prism">פריזמה</string>
+    <string name="navigation_bracket">סוגר</string>
+    <string name="navigation_halo">הילה</string>
+    <string name="navigation_stitch">תפר</string>
+    <string name="navigation_pixel">פיקסל</string>
+    <string name="navigation_lozenge">לכסנית</string>
+    <string name="scroll_motion_zephyr">זפיר</string>
+    <string name="scroll_motion_cascade">אשד</string>
+    <string name="scroll_motion_focus">פוקוס</string>
+    <string name="scroll_motion_snap">הצמד</string>
+    <string name="scroll_motion_bloom">בלום</string>
+    <string name="scroll_motion_sweep">לטאטא</string>
+    <string name="scroll_motion_float">לצוף</string>
+    <string name="scroll_motion_compress">דחוס</string>
+    <string name="scroll_motion_unfold">נפרש</string>
+    <string name="scroll_motion_settle">התיישבו</string>
+    <string name="app_motion_default">ברירת המחדל של ערכת הנושא</string>
+    <string name="app_motion_silk">משי</string>
+    <string name="app_motion_soft_zoom">זום רך</string>
+    <string name="app_motion_rise">לעלות</string>
+    <string name="app_motion_drift">להיסחף</string>
+    <string name="app_motion_reveal">לחשוף</string>
+    <string name="app_motion_quick_cut">חיתוך מהיר</string>
+    <string name="app_motion_velvet">קטיפה</string>
+    <string name="app_motion_spring">אביב</string>
+    <string name="app_motion_diagonal">אלכסוני</string>
+    <string name="app_motion_shutter">תריס</string>
+    <string name="app_motion_title">סטודיו לתנועה</string>
+    <string name="app_motion_style">מעבר עמוד</string>
+    <string name="app_motion_hint">בחר את התנועה עבור דפים והגדרות. ברירת המחדל של ערכת הנושא שומרת על הסגנון של כל חבילה. פתיחת השחקן עוקבת אחר התזמון שנבחר; תנועה מופחתת תמיד מקבלת עדיפות.</string>
+    <string name="motion_tempo_title">קצב תנועה</string>
+    <string name="motion_tempo_relaxed">רגוע</string>
+    <string name="motion_tempo_balanced">מאוזן</string>
+    <string name="motion_tempo_quick">מהר</string>
+    <string name="motion_preview">הקש לתצוגה מקדימה</string>
+    <string name="asset_search">חפש חבילות וסגנונות</string>
+    <string name="asset_all">כל החבילות</string>
+    <string name="asset_no_matches">אין חבילות תואמות. נסה סגנון אחר או עבור לכל החבילות.</string>
+    <string name="app_icon_pocket_soda_sabotage">Soda Sabotage Glass</string>
+    <string name="app_icon_pocket_velvet_vandal">Velvet Vandal Glass</string>
+    <string name="app_icon_pocket_acid_daydream">Acid Daydream Glass</string>
+    <string name="app_icon_pocket_peach_panic">Peach Panic Glass</string>
+    <string name="app_icon_pocket_ink_and_ivory">Ink and Ivory Glass</string>
+    <string name="app_icon_pocket_holo_havoc">Holo Havoc Glass</string>
+    <string name="app_icon_pocket_denim_disorder">Denim Disorder Glass</string>
+    <string name="app_icon_pocket_cherry_voltage">Cherry Voltage Glass</string>
+    <string name="app_icon_pocket_mint_mutiny">Mint Mutiny Glass</string>
+    <string name="app_icon_pocket_lunar_lollipop">Lunar Lollipop Glass</string>
+    <string name="app_icon_pocket_gummy_signal">Gummy Signal Glass</string>
+    <string name="app_icon_pocket_razor_petal">Razor Petal Glass</string>
+    <string name="app_icon_pocket_disco_chrome">Disco Chrome Glass</string>
+    <string name="app_icon_pocket_paper_revolt">Paper Revolt Glass</string>
+    <string name="app_icon_pocket_velvet_sigil">Velvet Sigil Glass</string>
+    <string name="app_icon_pocket_patch_party">Patch Party Glass</string>
+    <string name="app_icon_pocket_pixel_fizz">Pixel Fizz Glass</string>
+    <string name="app_icon_pocket_kitty_mayhem">Kitty Mayhem Glass</string>
+    <string name="app_icon_pocket_mochi_moshpit">Mochi Moshpit Glass</string>
+    <string name="app_icon_pocket_peach_bruiser">Peach Bruiser Glass</string>
+    <string name="app_icon_pocket_bunny_voltage">Bunny Voltage Glass</string>
+    <string name="app_icon_pocket_cherry_bombshell">Cherry Bombshell Glass</string>
+    <string name="app_icon_pocket_teddy_tantrum">Teddy Tantrum Glass</string>
+    <string name="app_icon_pocket_bubble_fang">Bubble Fang Glass</string>
+    <string name="app_icon_pocket_sugar_goblin">Sugar Goblin Glass</string>
+    <string name="app_icon_pocket_cosmic_pudding">Cosmic Pudding Glass</string>
+    <string name="app_icon_pocket_sticker_syndicate">Sticker Syndicate Glass</string>
+    <string name="welcome_guest_note">חשבון הוא אופציונלי. התחל עם המוזיקה שלך.</string>
+    <string name="search_ready_hint">מוכן לחיפוש \"%1$s\"</string>
+    <string name="search_top_result">תוצאה עליונה</string>
 </resources>

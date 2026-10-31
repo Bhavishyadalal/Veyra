@@ -851,7 +851,7 @@
 
     <string name="dolby_atmos_unavailable">Este dispositivo não suporta Atmos, as músicas tocarão na versão padrão</string>
 
-    <string name="export_compatible_downloads">Exportar downloads compatíveis</string>
+    <string name="export_compatible_downloads">Baixar pasta</string>
 
     <string name="legacy_mesh_gradient">Gradiente de malha clássico</string>
 
@@ -1327,4 +1327,299 @@
     <string name="onboarding_back">Voltar</string>
     <string name="signed_by">Assinado por %1$s</string>
     <string name="settings_intro">Som, estilo e tudo mais.</string>
+
+    <!-- Completed UI strings; machine-assisted translations, branded style names preserved. -->
+    <string name="download_destination_hint">Armazenamento interno → Música → Veyra. Todos os novos downloads de áudio são salvos aqui.</string>
+    <string name="export_all_downloads">Exportar todos os downloads</string>
+    <string name="app_updates">Atualizações de aplicativos</string>
+    <string name="auto_download_updates">Baixe atualizações automaticamente</string>
+    <string name="auto_download_updates_hint">Verifique quando Veyra abre e baixe novos lançamentos em uma conexão ilimitada. O Android sempre pergunta antes de instalar.</string>
+    <string name="check_app_updates">Verifique se há atualizações</string>
+    <string name="update_ready_to_install">Atualização Veyra pronta para instalação</string>
+    <string name="update_downloading_apk">Baixando a atualização Veyra</string>
+    <string name="update_install_permission_hint">Toque para revisar a atualização e aprovar a instalação.</string>
+    <string name="export_downloads_description">Copie o áudio salvo para Music/Veyra no armazenamento interno para uso em outros aplicativos. Os originais permanecem seguros. A nova tentativa ignora as cópias concluídas.</string>
+    <string name="export_downloads_result">%1$d exportado · %2$d já compartilhado · %3$d falhou</string>
+    <string name="veyra_github_profile">Desenvolvedor em GitHub</string>
+    <string name="veyra_github_source">Código fonte Veyra</string>
+    <string name="veyra_website_source">Código fonte do site</string>
+    <string name="welcome_space_title">Sua música.\nSeu espaço.</string>
+    <string name="welcome_space_body">Encontre um favorito.\nFique pela sensação.</string>
+    <string name="welcome_lyrics_title">Cada palavra.\nCada sentimento.</string>
+    <string name="welcome_lyrics_body">Siga a letra.\nAproxime-se da música.</string>
+    <string name="welcome_together_title">Seu povo.\nUma trilha sonora.</string>
+    <string name="welcome_together_body">Ouçam juntos.\nNão é necessária nenhuma conta para participar.</string>
+    <string name="welcome_music_chip">Feito para sua música</string>
+    <string name="welcome_lyrics_chip">Fique com as letras</string>
+    <string name="welcome_together_chip">Melhor juntos</string>
+    <string name="welcome_get_started">Comece</string>
+    <string name="welcome_next_preview">Explore a próxima prévia</string>
+    <string name="welcome_preview_position">Visualização %1$d de %2$d</string>
+    <string name="onboarding_personalize_title">Faça com que seja seu.</string>
+    <string name="settings_backup_working">Trabalhando no seu backup…</string>
+    <string name="home_layout_save_failed">Não foi possível salvar o layout da sua página inicial. Por favor, tente novamente.</string>
+    <string name="home_offline_track_unavailable">Este item precisa de uma conexão. Abra Downloads ou Música Local para ouvir offline.</string>
+    <string name="stronger_text">Texto mais forte</string>
+    <string name="stronger_text_subtitle">Texto mais pesado para facilitar a leitura. Mantém o tamanho do texto do seu sistema.</string>
+    <string name="contrast_player_controls">Controles do player com maior contraste</string>
+    <string name="contrast_player_controls_subtitle">Dê aos botões do player um fundo visível e contorno sobre a arte.</string>
+    <string name="custom_accent">Paleta de destaque</string>
+    <string name="custom_accent_hint">Cores de destaque do aplicativo; as cores da arte do jogador permanecem vinculadas à música.</string>
+    <string-array name="custom_accent_options">
+        <item>Veyra</item>
+        <item>Azul-petróleo</item>
+        <item>Âmbar</item>
+        <item>Rosa</item>
+    </string-array>
+    <string name="custom_artwork_corners">Cantos de arte</string>
+    <string name="custom_artwork_corners_hint">Escolha o estilo da capa dos blocos, miniaturas das faixas e arte do jogador.</string>
+    <string-array name="custom_corner_options">
+        <item>Originais</item>
+        <item>Suave</item>
+        <item>Arredondado</item>
+        <item>Quadrado</item>
+    </string-array>
+    <string name="custom_list_spacing">Espaçamento da lista de músicas</string>
+    <string name="custom_list_spacing_hint">Compacto reduz o preenchimento das linhas. O texto grande do sistema mantém um espaçamento confortável.</string>
+    <string-array name="custom_spacing_options">
+        <item>Confortável</item>
+        <item>Compacto</item>
+    </string-array>
+    <string name="custom_motion_level">Nível de movimento</string>
+    <string name="custom_motion_level_hint">Sutil mantém o desbotamento da página e silencia o movimento decorativo. As animações desabilitadas pelo sistema sempre têm prioridade.</string>
+    <string-array name="custom_motion_options">
+        <item>Completo</item>
+        <item>Sutil</item>
+        <item>Desligado</item>
+    </string-array>
+    <string name="custom_player_shortcut">Ação prioritária do jogador</string>
+    <string name="custom_player_shortcut_hint">Mova uma ação para o topo do menu de três pontos do jogador. As ações da conta ainda exigem login.</string>
+    <string-array name="custom_shortcut_options">
+        <item>Pedido original</item>
+        <item>Baixar</item>
+        <item>Favorito</item>
+        <item>Temporizador</item>
+        <item>Adicionar à lista de reprodução</item>
+    </string-array>
+    <string name="custom_reset_appearance">Redefinir personalização de aparência</string>
+    <string name="custom_reset_appearance_hint">Redefina fontes, acentos, cantos de capa, espaçamento de lista, texto e movimento mais fortes. Mantenha contas, playlists e downloads.</string>
+    <string name="custom_reset_player">Redefinir personalização do player</string>
+    <string name="custom_reset_player_hint">Restaure a ordem original do menu e desative os controles de maior contraste. Mantenha reprodução, contas e downloads.</string>
+    <string name="custom_reset_confirm">Redefinir</string>
+    <string name="theme_packs">Estúdio temático</string>
+    <string name="theme_packs_subtitle">Baixe arte, fontes, ícones e estilos de player</string>
+    <string name="theme_packs_description">Uma nova atmosfera para cada tela. Baixe uma vez, mantenha-o off-line e retorne à aparência original a qualquer momento.</string>
+    <string name="theme_original">Original Veyra</string>
+    <string name="theme_active">Atualmente ativo</string>
+    <string name="theme_restore_hint">Restaure suas preferências de aparência salvas</string>
+    <string name="theme_apply">Aplicar tema</string>
+    <string name="theme_download">Baixar tema</string>
+    <string name="theme_update_required">Atualize Veyra primeiro</string>
+    <string name="theme_catalog_empty">Nenhum tema carregado ainda. Atualize o catálogo quando estiver online.</string>
+    <string name="theme_refresh_catalog">Atualizar catálogo de temas</string>
+    <string name="theme_safety_hint">Um tema substitui cores, fontes de cabeçalho e estilos de controle suportados até que você retorne ao Veyra original. Suas contas, downloads, playlists e controles de reprodução permanecem seus. A aparência original permanece disponível offline.</string>
+    <string name="theme_restart_title">Aplicar este tema?</string>
+    <string name="theme_restart_description">Veyra atualizará suas telas para carregar o tema. A música continua tocando. Sua biblioteca, contas e preferências de aparência originais são preservadas.</string>
+    <string name="theme_apply_restart">Aplicar e reiniciar a IU</string>
+    <string name="theme_later">Mais tarde</string>
+    <string name="theme_remove">Remover tema baixado</string>
+    <string name="theme_remove_description">Isso remove os arquivos de tema não utilizados deste dispositivo. Você pode baixar o tema novamente mais tarde.</string>
+    <string name="theme_done">Concluído</string>
+    <string name="theme_download_update">Baixar atualização do tema</string>
+    <string name="theme_collection_title">Faça com que se sinta como você.</string>
+    <string name="theme_collection_description">Novos mundos para sua música. Explore a arte, o tipo, os ícones e os detalhes do jogador e mantenha seus favoritos off-line.</string>
+    <string name="theme_all">Todos os temas</string>
+    <string name="theme_downloaded">Baixado</string>
+    <string name="theme_discover">Descubra</string>
+    <string name="theme_no_downloads">Seus temas baixados aparecerão aqui.</string>
+    <string name="theme_includes">Arte · Fontes · Controles · Branding</string>
+    <string name="theme_launcher_title">O toque final</string>
+    <string name="theme_launcher_hint">Escolha um ícone correspondente na tela inicial separadamente. Seu inicializador pode demorar um pouco para atualizar.</string>
+    <string name="theme_use_launcher">Use o ícone do aplicativo correspondente</string>
+    <string name="theme_restore_launcher">Restaurar ícone original do aplicativo</string>
+    <string name="theme_launcher_confirm">Alterar o ícone do aplicativo?</string>
+    <string name="theme_current_launcher">Ícone do aplicativo atual: %1$s</string>
+    <string name="icon_collection_glass">Vidro</string>
+    <string name="icon_collection_themes">Temas</string>
+    <string name="icon_family_liquid">Líquido</string>
+    <string name="icon_chooser_hint">Escolha um ícone acima. Seu inicializador pode demorar um pouco para atualizar.</string>
+    <string name="theme_back_collection">Voltar aos temas</string>
+    <string name="theme_details">Detalhes do tema</string>
+    <string name="theme_downloading">Baixando…</string>
+    <string name="theme_verifying">Verificando arquivos…</string>
+    <string name="theme_applying">Aplicando…</string>
+    <string name="theme_live_apply_hint">Atualize o visual enquanto mantém seu lugar e sua música tocando.</string>
+    <string name="theme_optional_restart">Atualize também a interface</string>
+    <string name="icon_choose">Escolha um ícone</string>
+    <string name="theme_saved_appearance">Seu estilo salvo</string>
+    <string name="home_saved_at">%1$s salvo · atualizando quando on-line</string>
+    <string name="theme_matching_icon">Use também o ícone do iniciador correspondente</string>
+    <string name="theme_icon_failed">Tema aplicado. O ícone do iniciador não pôde ser alterado; experimente o seletor de ícones do aplicativo.</string>
+    <string name="download_saved_private">Salvo no armazenamento do aplicativo</string>
+    <string name="download_interrupted">Interrompido quando Veyra foi fechado. Toque em Tentar novamente para baixar novamente.</string>
+    <string name="download_storage">%1$s disponível · %2$s</string>
+    <string name="download_storage_private">Armazenamento de aplicativos</string>
+    <string name="download_retry_all">Falha na nova tentativa</string>
+    <string name="listen_together_host_reconnecting">Host desconectado · esperando que eles se reconectem</string>
+    <string name="queue_removed">%1$d removido da fila</string>
+    <string name="queue_undo_expired">Fila alterada. Desfazer não está mais disponível.</string>
+    <string name="undo">Desfazer</string>
+    <string name="download_action_track">%1$s %2$s</string>
+    <string name="icon_collection_atelier">Ateliê de Vidro</string>
+    <string name="theme_search">Temas de pesquisa</string>
+    <string name="theme_clear_search">Limpar pesquisa</string>
+    <string name="theme_no_search_results">Não há temas correspondentes. Experimente outro nome ou humor.</string>
+    <string name="icon_search">Ícones de pesquisa</string>
+    <string name="icon_no_search_results">Não há ícones correspondentes nesta coleção.</string>
+    <string name="icon_current_selection">Ícone atual: %1$s</string>
+    <string name="icon_collection_all">Todos</string>
+    <string name="appearance_fonts">Fontes</string>
+    <string name="font_follow_theme">Seguir tema</string>
+    <string name="font_veyra_default">Veyra padrão</string>
+    <string name="font_preview_heading">Sua música, seu estilo.</string>
+    <string name="font_preview_body">Limpar títulos de músicas. Leitura confortável.</string>
+    <string name="font_selection_hint">A escolha da fonte permanece quando você altera os temas. Seguir tema restaura a tipografia própria de cada tema. As licenças de fontes estão incluídas no aplicativo.</string>
+    <string name="font_apply">Aplicar fonte</string>
+    <string name="app_style">Estilo do aplicativo</string>
+    <string name="app_style_hint">Escolha um visual completo para Home e o restante do Veyra. Suas opções originais de tema e fonte permanecem salvas.</string>
+    <string name="style_original_hint">Sua casa familiar. Todos os temas para download e opções de fontes.</string>
+    <string name="style_editorial_hint">Papel creme, detalhes em bordô e capas editoriais ousadas.</string>
+    <string name="style_room_hint">Verdes botânicos, tipografia quente e colagens em capas de discos.</string>
+    <string name="style_night_hint">Azul meia-noite, tipo grande e a capa da sua música atual.</string>
+    <string name="style_apply">Aplicar estilo</string>
+    <string name="style_original_only">Disponível em Original. Sua seleção permanece salva.</string>
+    <string name="style_themes_suspended">Este estilo de aplicativo possui sua própria paleta e fontes. Mude para Original para aplicar temas para download.</string>
+    <string name="experience_section_player">Jogador</string>
+    <string name="experience_section_mini">Miniplayer</string>
+    <string name="experience_section_gestures">Gestos</string>
+    <string name="experience_section_network">Rede</string>
+    <string name="experience_home_layout">Layout da sua casa</string>
+    <string name="experience_nav_destinations">Destinos visíveis</string>
+    <string name="experience_nav_behavior">Comportamento de navegação</string>
+    <string name="scroll_player_animations">Rolar animações do jogador</string>
+    <string name="scroll_player_animations_hint">Dobre o miniplayer para navegação enquanto rola, com ou sem Liquid Glass. Respeita o movimento reduzido.</string>
+    <string name="pin_home_header">Fixar cabeçalho inicial</string>
+    <string name="pin_home_header_hint">Mantenha a marca e a saudação da Original Home acima do feed de rolagem. Janelas curtas mantêm o cabeçalho rolável.</string>
+    <string name="asset_packs">Pacotes de ativos</string>
+    <string name="asset_packs_subtitle">Camada de fontes, ícones e controles sobre qualquer tema</string>
+    <string name="asset_packs_explanation">Mantenha seu tema. Altere seus detalhes. Os pacotes de recursos também funcionam com estilos de aplicativos originais e personalizados.</string>
+    <string name="asset_theme_defaults">Usando recursos de tema</string>
+    <string name="asset_layers">Escolha quais partes o pacote substitui.</string>
+    <string name="asset_restore">Restaurar ativos do tema</string>
+    <string name="asset_icons">Ícones e skins prensados</string>
+    <string name="asset_controls">Formatos de botões e barras de progresso</string>
+    <string name="asset_motion">Pacote de transições de página</string>
+    <string name="asset_colors">Tinta de título adaptável</string>
+    <string name="asset_font_priority">A fonte escolhida ou importada tem prioridade. Escolha Seguir tema em Fontes para usar letras de pacote. Os ativos indisponíveis mantêm seus controles nativos.</string>
+    <string name="asset_cancel">Cancelar download</string>
+    <string name="asset_download">Baixar ativos</string>
+    <string name="asset_update_required">Atualize Veyra primeiro</string>
+    <string name="asset_remove">Remover download</string>
+    <string name="asset_empty">Nenhum pacote carregado. Atualize para tentar novamente.</string>
+    <string name="asset_apply">Aplicar ativos</string>
+    <string name="app_icon_collection_riot_candy">Riot Candy</string>
+    <string name="app_icon_collection_chrome_venom">Chrome Venom</string>
+    <string name="app_icon_collection_bubble_riot">Bubble Riot</string>
+    <string name="app_icon_collection_xerox_afterparty">Xerox Afterparty</string>
+    <string name="app_icon_collection_cosmic_vandal">Cosmic Vandal</string>
+    <string name="app_icon_collection_switchback_radio">Switchback Radio</string>
+    <string name="app_icon_collection_komorebi_hour">Komorebi Hour</string>
+    <string name="app_icon_collection_rooftop_reverie">Rooftop Reverie</string>
+    <string name="app_icon_collection_apex_telemetry">Apex Telemetry</string>
+    <string name="app_icon_collection_cinder_kata">Cinder Kata</string>
+    <string name="app_icon_collection_lantern_letters">Lantern Letters</string>
+    <string name="app_icon_collection_velvet_orbit">Velvet Orbit</string>
+    <string name="app_icon_collection_moss_mechanism">Moss &amp; Mechanism</string>
+    <string name="app_icon_collection_sugar_static">Sugar Static</string>
+    <string name="app_icon_collection_tidal_origami">Tidal Origami</string>
+    <string name="app_icon_collection_margin_notes">Margin Notes</string>
+    <string name="app_icon_collection_spray_parade">Spray Parade</string>
+    <string name="app_icon_collection_paper_pop">Paper Pop</string>
+    <string name="app_icon_collection_ink_rebel">Ink Rebel</string>
+    <string name="app_icon_collection_laser_club">Laser Club</string>
+    <string name="app_icon_collection_thread_riot">Thread Riot</string>
+    <string name="icon_collection_assets">Pacotes de ativos</string>
+    <string name="asset_matching_app_icon">Ícone do aplicativo correspondente</string>
+    <string name="app_icon_collection_cathedral_static">Cathedral Static</string>
+    <string name="app_icon_collection_velvet_hex">Velvet Hex</string>
+    <string name="app_icon_collection_razor_bloom">Razor Bloom</string>
+    <string name="app_icon_collection_neon_seance">Neon Séance</string>
+    <string name="app_icon_collection_blackout_zine">Blackout Zine</string>
+    <string name="app_icon_collection_chrome_fang">Chrome Fang</string>
+    <string name="app_icon_collection_candy_crypt">Candy Crypt</string>
+    <string name="app_icon_collection_royal_ruin">Royal Ruin</string>
+    <string name="app_icon_collection_acid_gargoyle">Acid Gargoyle</string>
+    <string name="app_icon_collection_midnight_stitch">Midnight Stitch</string>
+    <string name="navigation_monorail">Monotrilho</string>
+    <string name="navigation_harbor">Porto</string>
+    <string name="navigation_ticket">Bilhete</string>
+    <string name="navigation_pebble">Seixo</string>
+    <string name="navigation_prism">Prisma</string>
+    <string name="navigation_bracket">Suporte</string>
+    <string name="navigation_halo">auréola</string>
+    <string name="navigation_stitch">Costurar</string>
+    <string name="navigation_pixel">Pixel</string>
+    <string name="navigation_lozenge">Pastilha</string>
+    <string name="scroll_motion_zephyr">Zéfiro</string>
+    <string name="scroll_motion_cascade">Cascata</string>
+    <string name="scroll_motion_focus">Foco</string>
+    <string name="scroll_motion_snap">Snap</string>
+    <string name="scroll_motion_bloom">Florescer</string>
+    <string name="scroll_motion_sweep">Varrer</string>
+    <string name="scroll_motion_float">Flutuar</string>
+    <string name="scroll_motion_compress">Comprimir</string>
+    <string name="scroll_motion_unfold">Desdobrar</string>
+    <string name="scroll_motion_settle">Resolver</string>
+    <string name="app_motion_default">Padrão do tema</string>
+    <string name="app_motion_silk">Seda</string>
+    <string name="app_motion_soft_zoom">Zoom Suave</string>
+    <string name="app_motion_rise">Subir</string>
+    <string name="app_motion_drift">Deriva</string>
+    <string name="app_motion_reveal">Revelar</string>
+    <string name="app_motion_quick_cut">Corte rápido</string>
+    <string name="app_motion_velvet">Veludo</string>
+    <string name="app_motion_spring">Primavera</string>
+    <string name="app_motion_diagonal">Diagonal</string>
+    <string name="app_motion_shutter">Obturador</string>
+    <string name="app_motion_title">Estúdio de movimento</string>
+    <string name="app_motion_style">Transição de página</string>
+    <string name="app_motion_hint">Escolha o movimento para páginas e configurações. O padrão do tema mantém o estilo próprio de cada pacote. A abertura do jogador segue o tempo selecionado; o movimento reduzido sempre tem prioridade.</string>
+    <string name="motion_tempo_title">Ritmo de movimento</string>
+    <string name="motion_tempo_relaxed">Descontraído</string>
+    <string name="motion_tempo_balanced">Equilibrado</string>
+    <string name="motion_tempo_quick">Rápido</string>
+    <string name="motion_preview">Toque para visualizar</string>
+    <string name="asset_search">Pesquise pacotes e estilos</string>
+    <string name="asset_all">Todos os pacotes</string>
+    <string name="asset_no_matches">Nenhum pacote correspondente. Experimente outro estilo ou mude para Todos os pacotes.</string>
+    <string name="app_icon_pocket_soda_sabotage">Soda Sabotage Glass</string>
+    <string name="app_icon_pocket_velvet_vandal">Velvet Vandal Glass</string>
+    <string name="app_icon_pocket_acid_daydream">Acid Daydream Glass</string>
+    <string name="app_icon_pocket_peach_panic">Peach Panic Glass</string>
+    <string name="app_icon_pocket_ink_and_ivory">Ink and Ivory Glass</string>
+    <string name="app_icon_pocket_holo_havoc">Holo Havoc Glass</string>
+    <string name="app_icon_pocket_denim_disorder">Denim Disorder Glass</string>
+    <string name="app_icon_pocket_cherry_voltage">Cherry Voltage Glass</string>
+    <string name="app_icon_pocket_mint_mutiny">Mint Mutiny Glass</string>
+    <string name="app_icon_pocket_lunar_lollipop">Lunar Lollipop Glass</string>
+    <string name="app_icon_pocket_gummy_signal">Gummy Signal Glass</string>
+    <string name="app_icon_pocket_razor_petal">Razor Petal Glass</string>
+    <string name="app_icon_pocket_disco_chrome">Disco Chrome Glass</string>
+    <string name="app_icon_pocket_paper_revolt">Paper Revolt Glass</string>
+    <string name="app_icon_pocket_velvet_sigil">Velvet Sigil Glass</string>
+    <string name="app_icon_pocket_patch_party">Patch Party Glass</string>
+    <string name="app_icon_pocket_pixel_fizz">Pixel Fizz Glass</string>
+    <string name="app_icon_pocket_kitty_mayhem">Kitty Mayhem Glass</string>
+    <string name="app_icon_pocket_mochi_moshpit">Mochi Moshpit Glass</string>
+    <string name="app_icon_pocket_peach_bruiser">Peach Bruiser Glass</string>
+    <string name="app_icon_pocket_bunny_voltage">Bunny Voltage Glass</string>
+    <string name="app_icon_pocket_cherry_bombshell">Cherry Bombshell Glass</string>
+    <string name="app_icon_pocket_teddy_tantrum">Teddy Tantrum Glass</string>
+    <string name="app_icon_pocket_bubble_fang">Bubble Fang Glass</string>
+    <string name="app_icon_pocket_sugar_goblin">Sugar Goblin Glass</string>
+    <string name="app_icon_pocket_cosmic_pudding">Cosmic Pudding Glass</string>
+    <string name="app_icon_pocket_sticker_syndicate">Sticker Syndicate Glass</string>
+    <string name="welcome_guest_note">Uma conta é opcional. Comece com sua música.</string>
+    <string name="search_ready_hint">Pronto para pesquisar “%1$s”</string>
+    <string name="search_top_result">Resultado principal</string>
 </resources>

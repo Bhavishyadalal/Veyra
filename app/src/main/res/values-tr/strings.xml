@@ -842,7 +842,7 @@
 
     <string name="dolby_atmos_unavailable">Bu cihaz Atmos\'u desteklemiyor, parçalar normal versiyonda çalınacak</string>
 
-    <string name="export_compatible_downloads">Uyumlu indirmeleri dışa aktar</string>
+    <string name="export_compatible_downloads">Klasörü indir</string>
 
     <string name="legacy_mesh_gradient">Klasik ağ gradyanı</string>
 
@@ -1279,4 +1279,299 @@
     <string name="onboarding_back">Geri</string>
     <string name="signed_by">%1$s tarafından imzalandı</string>
     <string name="settings_intro">Ses, tarz ve aradaki her şey.</string>
+
+    <!-- Completed UI strings; machine-assisted translations, branded style names preserved. -->
+    <string name="download_destination_hint">Dahili depolama → Müzik → Veyra. Tüm yeni ses indirmeleri buraya kaydedilir.</string>
+    <string name="export_all_downloads">Tüm indirilenleri dışa aktar</string>
+    <string name="app_updates">Uygulama güncellemeleri</string>
+    <string name="auto_download_updates">Güncellemeleri otomatik olarak indir</string>
+    <string name="auto_download_updates_hint">Veyra\'nun ne zaman açıldığını kontrol edin ve yeni sürümleri sınırsız bir bağlantı üzerinden indirin. Android her zaman yüklemeden önce sorar.</string>
+    <string name="check_app_updates">Güncellemeleri kontrol edin</string>
+    <string name="update_ready_to_install">Veyra güncellemesi yüklenmeye hazır</string>
+    <string name="update_downloading_apk">Veyra güncellemesi indiriliyor</string>
+    <string name="update_install_permission_hint">Güncellemeyi incelemek ve kurulumu onaylamak için dokunun.</string>
+    <string name="export_downloads_description">Kaydedilen sesi diğer uygulamalarda kullanmak üzere dahili depolamadaki Music/Veyra\'ya kopyalayın. Orijinaller güvende kalır. Yeniden denendiğinde tamamlanan kopyalar atlanır.</string>
+    <string name="export_downloads_result">%1$d dışa aktarıldı · %2$d zaten paylaşıldı · %3$d başarısız oldu</string>
+    <string name="veyra_github_profile">GitHub geliştiricisi</string>
+    <string name="veyra_github_source">Veyra kaynak kodu</string>
+    <string name="veyra_website_source">Web sitesi kaynak kodu</string>
+    <string name="welcome_space_title">Müziğiniz.\nAlanınız.</string>
+    <string name="welcome_space_body">Bir favori bulun.\nHisleriniz için kalın.</string>
+    <string name="welcome_lyrics_title">Her kelime.\nHer duygu.</string>
+    <string name="welcome_lyrics_body">Şarkı sözlerini takip edin.\nŞarkıya yaklaşın.</string>
+    <string name="welcome_together_title">Halkınız.\nBir film müziği.</string>
+    <string name="welcome_together_body">Birlikte dinleyin.\nKatılmak için hesaba gerek yok.</string>
+    <string name="welcome_music_chip">Müziğiniz için tasarlandı</string>
+    <string name="welcome_lyrics_chip">Şarkı sözleriyle kalın</string>
+    <string name="welcome_together_chip">Birlikte daha iyi</string>
+    <string name="welcome_get_started">Başlayın</string>
+    <string name="welcome_next_preview">Sonraki önizlemeyi keşfedin</string>
+    <string name="welcome_preview_position">%2$d\'nun %1$d ön izlemesi</string>
+    <string name="onboarding_personalize_title">Senin olsun.</string>
+    <string name="settings_backup_working">Yedeklemeniz üzerinde çalışılıyor…</string>
+    <string name="home_layout_save_failed">Ana sayfa düzeniniz kaydedilemedi. Lütfen tekrar deneyin.</string>
+    <string name="home_offline_track_unavailable">Bu öğenin bir bağlantıya ihtiyacı var. Çevrimdışı dinlemek için İndirilenler\'i veya Yerel Müzik\'i açın.</string>
+    <string name="stronger_text">Daha güçlü metin</string>
+    <string name="stronger_text_subtitle">Daha kolay okuma için daha ağır metin. Sisteminizin metin boyutunu korur.</string>
+    <string name="contrast_player_controls">Daha yüksek kontrastlı oynatıcı kontrolleri</string>
+    <string name="contrast_player_controls_subtitle">Oynatıcı düğmelerine görünür bir arka plan verin ve resmin ana hatlarını çizin.</string>
+    <string name="custom_accent">Vurgu paleti</string>
+    <string name="custom_accent_hint">Uygulama vurgu renkleri; Oyuncu resminin renkleri şarkıya bağlı kalır.</string>
+    <string-array name="custom_accent_options">
+        <item>Veyra</item>
+        <item>turkuaz</item>
+        <item>kehribar</item>
+        <item>Gül</item>
+    </string-array>
+    <string name="custom_artwork_corners">Sanat eseri köşeleri</string>
+    <string name="custom_artwork_corners_hint">Parçalar, parça küçük resimleri ve oynatıcı çizimleri için kapak stilini seçin.</string>
+    <string-array name="custom_corner_options">
+        <item>Orijinal</item>
+        <item>Yumuşak</item>
+        <item>Yuvarlak</item>
+        <item>Kare</item>
+    </string-array>
+    <string name="custom_list_spacing">Şarkı listesi aralığı</string>
+    <string name="custom_list_spacing_hint">Kompakt, sıra dolgusunu azaltır. Büyük sistem metni rahat aralık sağlar.</string>
+    <string-array name="custom_spacing_options">
+        <item>Rahat</item>
+        <item>Kompakt</item>
+    </string-array>
+    <string name="custom_motion_level">Hareket seviyesi</string>
+    <string name="custom_motion_level_hint">İnce sayfanın solmasını önler ve dekoratif hareketi susturur. Sistem tarafından devre dışı bırakılan animasyonlar her zaman önceliklidir.</string>
+    <string-array name="custom_motion_options">
+        <item>Tam</item>
+        <item>İnce</item>
+        <item>Kapalı</item>
+    </string-array>
+    <string name="custom_player_shortcut">Öncelikli oyuncu eylemi</string>
+    <string name="custom_player_shortcut_hint">Bir eylemi oynatıcının üç noktalı menüsünün en üstüne taşıyın. Hesap işlemleri hâlâ oturum açmayı gerektiriyor.</string>
+    <string-array name="custom_shortcut_options">
+        <item>Orijinal sipariş</item>
+        <item>İndir</item>
+        <item>Favori</item>
+        <item>Uyku zamanlayıcısı</item>
+        <item>Çalma listesine ekle</item>
+    </string-array>
+    <string name="custom_reset_appearance">Görünüm özelleştirmesini sıfırla</string>
+    <string name="custom_reset_appearance_hint">Yazı tiplerini, vurguyu, kapak köşelerini, liste aralığını, daha güçlü metni ve hareketi sıfırlayın. Hesapları, çalma listelerini ve indirilenleri saklayın.</string>
+    <string name="custom_reset_player">Oynatıcı özelleştirmesini sıfırla</string>
+    <string name="custom_reset_player_hint">Orijinal menü sırasını geri yükleyin ve daha yüksek kontrastlı kontrolleri kapatın. Oynatmayı, hesapları ve indirmeleri koruyun.</string>
+    <string name="custom_reset_confirm">Sıfırla</string>
+    <string name="theme_packs">Tema stüdyosu</string>
+    <string name="theme_packs_subtitle">Çizimleri, yazı tiplerini, simgeleri ve oynatıcı stillerini indirin</string>
+    <string name="theme_packs_description">Her ekranda yeni bir atmosfer. Bir kez indirin, çevrimdışı tutun ve istediğiniz zaman orijinal görünümünüze dönün.</string>
+    <string name="theme_original">Orijinal Veyra</string>
+    <string name="theme_active">Şu anda aktif</string>
+    <string name="theme_restore_hint">Kaydedilen görünüm tercihlerinizi geri yükleyin</string>
+    <string name="theme_apply">Temayı uygula</string>
+    <string name="theme_download">Temayı indir</string>
+    <string name="theme_update_required">Önce Veyra\'yu güncelleyin</string>
+    <string name="theme_catalog_empty">Henüz tema yüklenmedi. Çevrimiçi olduğunuzda kataloğu yenileyin.</string>
+    <string name="theme_refresh_catalog">Tema kataloğunu yenile</string>
+    <string name="theme_safety_hint">Orijinal Veyra\'ya dönene kadar bir tema, desteklenen renkleri, başlık yazı tiplerini ve kontrol stillerini geçersiz kılar. Hesaplarınız, indirdikleriniz, oynatma listeleriniz ve oynatma kontrolleriniz size ait kalır. Orijinal görünüm çevrimdışı olarak kullanılabilir durumda kalır.</string>
+    <string name="theme_restart_title">Bu tema uygulansın mı?</string>
+    <string name="theme_restart_description">Veyra temayı yüklemek için ekranlarını yenileyecek. Müzik çalmaya devam ediyor. Kitaplığınız, hesaplarınız ve orijinal görünüm tercihleriniz korunur.</string>
+    <string name="theme_apply_restart">Kullanıcı arayüzünü uygula ve yeniden başlat</string>
+    <string name="theme_later">Daha sonra</string>
+    <string name="theme_remove">İndirilen temayı kaldır</string>
+    <string name="theme_remove_description">Bu, kullanılmayan tema dosyalarını bu cihazdan kaldırır. Temayı daha sonra tekrar indirebilirsiniz.</string>
+    <string name="theme_done">Bitti</string>
+    <string name="theme_download_update">Tema güncellemesini indir</string>
+    <string name="theme_collection_title">Kendin gibi hissetmesini sağla.</string>
+    <string name="theme_collection_description">Müziğiniz için yeni dünyalar. Çizimleri, yazıları, simgeleri ve oynatıcı ayrıntılarını keşfedin, ardından favorilerinizi çevrimdışı tutun.</string>
+    <string name="theme_all">Tüm temalar</string>
+    <string name="theme_downloaded">İndirildi</string>
+    <string name="theme_discover">Keşfet</string>
+    <string name="theme_no_downloads">İndirdiğiniz temalar burada görünecektir.</string>
+    <string name="theme_includes">Çizimler · Yazı Tipleri · Kontroller · Markalama</string>
+    <string name="theme_launcher_title">Son dokunuş</string>
+    <string name="theme_launcher_hint">Eşleşen bir ana ekran simgesini ayrı olarak seçin. Başlatıcınızın yenilenmesi biraz zaman alabilir.</string>
+    <string name="theme_use_launcher">Eşleşen uygulama simgesini kullan</string>
+    <string name="theme_restore_launcher">Orijinal uygulama simgesini geri yükle</string>
+    <string name="theme_launcher_confirm">Uygulama simgesi değiştirilsin mi?</string>
+    <string name="theme_current_launcher">Mevcut uygulama simgesi: %1$s</string>
+    <string name="icon_collection_glass">Cam</string>
+    <string name="icon_collection_themes">Temalar</string>
+    <string name="icon_family_liquid">Sıvı</string>
+    <string name="icon_chooser_hint">Yukarıdan bir simge seçin. Başlatıcınızın yenilenmesi biraz zaman alabilir.</string>
+    <string name="theme_back_collection">Temalara geri dön</string>
+    <string name="theme_details">Tema ayrıntıları</string>
+    <string name="theme_downloading">İndiriliyor…</string>
+    <string name="theme_verifying">Dosyalar doğrulanıyor…</string>
+    <string name="theme_applying">Başvuruluyor…</string>
+    <string name="theme_live_apply_hint">Yerinizi ve müziğinizi çalmaya devam ederken görünümü güncelleyin.</string>
+    <string name="theme_optional_restart">Ayrıca arayüzü yenileyin</string>
+    <string name="icon_choose">Bir simge seçin</string>
+    <string name="theme_saved_appearance">Kaydedilen stiliniz</string>
+    <string name="home_saved_at">%1$s kaydedildi · çevrimiçi olduğunda yenileniyor</string>
+    <string name="theme_matching_icon">Ayrıca eşleşen başlatıcı simgesini de kullanın</string>
+    <string name="theme_icon_failed">Tema uygulandı. Başlatıcı simgesi değişemedi; uygulama simgesi seçiciyi deneyin.</string>
+    <string name="download_saved_private">Uygulama depolama alanına kaydedildi</string>
+    <string name="download_interrupted">Veyra kapatıldığında kesintiye uğradı. Tekrar indirmek için Yeniden Dene\'ye dokunun.</string>
+    <string name="download_storage">%1$s mevcut · %2$s</string>
+    <string name="download_storage_private">Uygulama depolama</string>
+    <string name="download_retry_all">Yeniden deneme başarısız oldu</string>
+    <string name="listen_together_host_reconnecting">Ana bilgisayarın bağlantısı kesildi · yeniden bağlanmaları bekleniyor</string>
+    <string name="queue_removed">%1$d kuyruktan kaldırıldı</string>
+    <string name="queue_undo_expired">Sıra değişti. Geri alma artık kullanılamıyor.</string>
+    <string name="undo">Geri al</string>
+    <string name="download_action_track">%1$s %2$s</string>
+    <string name="icon_collection_atelier">Cam Atölyesi</string>
+    <string name="theme_search">Temaları arayın</string>
+    <string name="theme_clear_search">Aramayı temizle</string>
+    <string name="theme_no_search_results">Eşleşen tema yok. Başka bir isim veya ruh hali deneyin.</string>
+    <string name="icon_search">Arama simgeleri</string>
+    <string name="icon_no_search_results">Bu koleksiyonda eşleşen simge yok.</string>
+    <string name="icon_current_selection">Geçerli simge: %1$s</string>
+    <string name="icon_collection_all">Hepsi</string>
+    <string name="appearance_fonts">Yazı tipleri</string>
+    <string name="font_follow_theme">Temayı takip et</string>
+    <string name="font_veyra_default">Veyra varsayılan</string>
+    <string name="font_preview_heading">Sizin müziğiniz, sizin tarzınız.</string>
+    <string name="font_preview_body">Şarkı adlarını temizleyin. Rahat okuma.</string>
+    <string name="font_selection_hint">Temaları değiştirdiğinizde yazı tipi seçiminiz aynı kalır. Temayı takip et her temanın kendi tipografisini geri yükler. Yazı tipi lisansları uygulamaya dahildir.</string>
+    <string name="font_apply">Yazı tipini uygula</string>
+    <string name="app_style">Uygulama stili</string>
+    <string name="app_style_hint">Ana Sayfa ve Veyra\'nun geri kalanı için eksiksiz bir görünüm seçin. Orijinal temanız ve yazı tipi seçimleriniz kayıtlı kalır.</string>
+    <string name="style_original_hint">Tanıdık Eviniz. Tüm indirilebilir temalar ve yazı tipi seçenekleri.</string>
+    <string name="style_editorial_hint">Krem kağıt, bordo vurgular ve cesur editoryal kapaklar.</string>
+    <string name="style_room_hint">Botanik yeşillikler, sıcak tipografi ve plak kılıflı kolajlar.</string>
+    <string name="style_night_hint">Gece mavisi, büyük boy yazı ve mevcut şarkı çiziminiz.</string>
+    <string name="style_apply">Stili uygula</string>
+    <string name="style_original_only">Orijinal olarak mevcuttur. Seçiminiz kayıtlı kalır.</string>
+    <string name="style_themes_suspended">Bu uygulama stilinin kendi paleti ve yazı tipleri vardır. İndirilebilir temaları uygulamak için Orijinal\'e geçin.</string>
+    <string name="experience_section_player">Oyuncu</string>
+    <string name="experience_section_mini">Mini oynatıcı</string>
+    <string name="experience_section_gestures">Hareketler</string>
+    <string name="experience_section_network">Ağ</string>
+    <string name="experience_home_layout">Ev düzeniniz</string>
+    <string name="experience_nav_destinations">Görünür hedefler</string>
+    <string name="experience_nav_behavior">Gezinme davranışı</string>
+    <string name="scroll_player_animations">Oyuncu animasyonlarını kaydır</string>
+    <string name="scroll_player_animations_hint">Liquid Glass ile veya Liquid Glass olmadan kaydırma yaparken mini oynatıcıyı navigasyona katlayın. Azaltılmış harekete saygı gösterir.</string>
+    <string name="pin_home_header">Ana Sayfa başlığını sabitle</string>
+    <string name="pin_home_header_hint">Orijinal Ev markasını ve selamlamayı kayan akışın üzerinde tutun. Kısa pencereler başlığın kaydırılabilir olmasını sağlar.</string>
+    <string name="asset_packs">Varlık paketleri</string>
+    <string name="asset_packs_subtitle">Yazı tiplerini, simgeleri ve kontrolleri herhangi bir temanın üzerine katmanlayın</string>
+    <string name="asset_packs_explanation">Temanızı koruyun. Ayrıntılarını değiştirin. Varlık paketleri aynı zamanda Orijinal ve özel uygulama stilleriyle de çalışır.</string>
+    <string name="asset_theme_defaults">Tema varlıklarını kullanma</string>
+    <string name="asset_layers">Paketin hangi parçaları geçersiz kılacağını seçin.</string>
+    <string name="asset_restore">Tema varlıklarını geri yükle</string>
+    <string name="asset_icons">Simgeler ve preslenmiş görünümler</string>
+    <string name="asset_controls">Düğme şekilleri ve ilerleme çubukları</string>
+    <string name="asset_motion">Sayfa geçişlerini paketle</string>
+    <string name="asset_colors">Uyarlanabilir başlık mürekkebi</string>
+    <string name="asset_font_priority">Seçtiğiniz veya içe aktardığınız yazı tipi önceliklidir. Paket harflerini kullanmak için Yazı Tipleri\'nde Temayı takip et\'i seçin. Kullanılamayan varlıklar yerel kontrollerini korur.</string>
+    <string name="asset_cancel">İndirmeyi iptal et</string>
+    <string name="asset_download">Varlıkları indirin</string>
+    <string name="asset_update_required">Önce Veyra\'yu güncelleyin</string>
+    <string name="asset_remove">İndirmeyi kaldır</string>
+    <string name="asset_empty">Hiçbir paket yüklenmedi. Tekrar denemek için yenileyin.</string>
+    <string name="asset_apply">Varlıkları uygula</string>
+    <string name="app_icon_collection_riot_candy">Riot Candy</string>
+    <string name="app_icon_collection_chrome_venom">Chrome Venom</string>
+    <string name="app_icon_collection_bubble_riot">Bubble Riot</string>
+    <string name="app_icon_collection_xerox_afterparty">Xerox Afterparty</string>
+    <string name="app_icon_collection_cosmic_vandal">Cosmic Vandal</string>
+    <string name="app_icon_collection_switchback_radio">Switchback Radio</string>
+    <string name="app_icon_collection_komorebi_hour">Komorebi Hour</string>
+    <string name="app_icon_collection_rooftop_reverie">Rooftop Reverie</string>
+    <string name="app_icon_collection_apex_telemetry">Apex Telemetry</string>
+    <string name="app_icon_collection_cinder_kata">Cinder Kata</string>
+    <string name="app_icon_collection_lantern_letters">Lantern Letters</string>
+    <string name="app_icon_collection_velvet_orbit">Velvet Orbit</string>
+    <string name="app_icon_collection_moss_mechanism">Moss &amp; Mechanism</string>
+    <string name="app_icon_collection_sugar_static">Sugar Static</string>
+    <string name="app_icon_collection_tidal_origami">Tidal Origami</string>
+    <string name="app_icon_collection_margin_notes">Margin Notes</string>
+    <string name="app_icon_collection_spray_parade">Spray Parade</string>
+    <string name="app_icon_collection_paper_pop">Paper Pop</string>
+    <string name="app_icon_collection_ink_rebel">Ink Rebel</string>
+    <string name="app_icon_collection_laser_club">Laser Club</string>
+    <string name="app_icon_collection_thread_riot">Thread Riot</string>
+    <string name="icon_collection_assets">Varlık paketleri</string>
+    <string name="asset_matching_app_icon">Eşleşen uygulama simgesi</string>
+    <string name="app_icon_collection_cathedral_static">Cathedral Static</string>
+    <string name="app_icon_collection_velvet_hex">Velvet Hex</string>
+    <string name="app_icon_collection_razor_bloom">Razor Bloom</string>
+    <string name="app_icon_collection_neon_seance">Neon Séance</string>
+    <string name="app_icon_collection_blackout_zine">Blackout Zine</string>
+    <string name="app_icon_collection_chrome_fang">Chrome Fang</string>
+    <string name="app_icon_collection_candy_crypt">Candy Crypt</string>
+    <string name="app_icon_collection_royal_ruin">Royal Ruin</string>
+    <string name="app_icon_collection_acid_gargoyle">Acid Gargoyle</string>
+    <string name="app_icon_collection_midnight_stitch">Midnight Stitch</string>
+    <string name="navigation_monorail">Monoray</string>
+    <string name="navigation_harbor">Liman</string>
+    <string name="navigation_ticket">Bilet</string>
+    <string name="navigation_pebble">Çakıl taşı</string>
+    <string name="navigation_prism">prizma</string>
+    <string name="navigation_bracket">Braket</string>
+    <string name="navigation_halo">Hale</string>
+    <string name="navigation_stitch">Dikiş</string>
+    <string name="navigation_pixel">Piksel</string>
+    <string name="navigation_lozenge">Pastil</string>
+    <string name="scroll_motion_zephyr">Zefir</string>
+    <string name="scroll_motion_cascade">Çağlayan</string>
+    <string name="scroll_motion_focus">Odaklanma</string>
+    <string name="scroll_motion_snap">Yapış</string>
+    <string name="scroll_motion_bloom">Çiçeklenme</string>
+    <string name="scroll_motion_sweep">Süpürme</string>
+    <string name="scroll_motion_float">Şamandıra</string>
+    <string name="scroll_motion_compress">Sıkıştır</string>
+    <string name="scroll_motion_unfold">Aç</string>
+    <string name="scroll_motion_settle">Yerleş</string>
+    <string name="app_motion_default">Tema varsayılanı</string>
+    <string name="app_motion_silk">İpek</string>
+    <string name="app_motion_soft_zoom">Yumuşak Yakınlaştırma</string>
+    <string name="app_motion_rise">Yüksel</string>
+    <string name="app_motion_drift">Sürüklenme</string>
+    <string name="app_motion_reveal">Açıkla</string>
+    <string name="app_motion_quick_cut">Hızlı Kesim</string>
+    <string name="app_motion_velvet">Kadife</string>
+    <string name="app_motion_spring">Bahar</string>
+    <string name="app_motion_diagonal">diyagonal</string>
+    <string name="app_motion_shutter">Deklanşör</string>
+    <string name="app_motion_title">Hareket stüdyosu</string>
+    <string name="app_motion_style">Sayfa geçişi</string>
+    <string name="app_motion_hint">Sayfalar ve Ayarlar için hareketi seçin. Tema varsayılanı her paketin kendi stilini korur. Oyuncu açılışı seçilen zamanlamayı takip eder; azaltılmış hareket her zaman önceliklidir.</string>
+    <string name="motion_tempo_title">Hareket hızı</string>
+    <string name="motion_tempo_relaxed">Rahat</string>
+    <string name="motion_tempo_balanced">Dengeli</string>
+    <string name="motion_tempo_quick">Hızlı</string>
+    <string name="motion_preview">Önizlemek için dokunun</string>
+    <string name="asset_search">Paketleri ve stilleri arayın</string>
+    <string name="asset_all">Tüm paketler</string>
+    <string name="asset_no_matches">Eşleşen paket yok. Başka bir stil deneyin veya Tüm paketlere geçin.</string>
+    <string name="app_icon_pocket_soda_sabotage">Soda Sabotage Glass</string>
+    <string name="app_icon_pocket_velvet_vandal">Velvet Vandal Glass</string>
+    <string name="app_icon_pocket_acid_daydream">Acid Daydream Glass</string>
+    <string name="app_icon_pocket_peach_panic">Peach Panic Glass</string>
+    <string name="app_icon_pocket_ink_and_ivory">Ink and Ivory Glass</string>
+    <string name="app_icon_pocket_holo_havoc">Holo Havoc Glass</string>
+    <string name="app_icon_pocket_denim_disorder">Denim Disorder Glass</string>
+    <string name="app_icon_pocket_cherry_voltage">Cherry Voltage Glass</string>
+    <string name="app_icon_pocket_mint_mutiny">Mint Mutiny Glass</string>
+    <string name="app_icon_pocket_lunar_lollipop">Lunar Lollipop Glass</string>
+    <string name="app_icon_pocket_gummy_signal">Gummy Signal Glass</string>
+    <string name="app_icon_pocket_razor_petal">Razor Petal Glass</string>
+    <string name="app_icon_pocket_disco_chrome">Disco Chrome Glass</string>
+    <string name="app_icon_pocket_paper_revolt">Paper Revolt Glass</string>
+    <string name="app_icon_pocket_velvet_sigil">Velvet Sigil Glass</string>
+    <string name="app_icon_pocket_patch_party">Patch Party Glass</string>
+    <string name="app_icon_pocket_pixel_fizz">Pixel Fizz Glass</string>
+    <string name="app_icon_pocket_kitty_mayhem">Kitty Mayhem Glass</string>
+    <string name="app_icon_pocket_mochi_moshpit">Mochi Moshpit Glass</string>
+    <string name="app_icon_pocket_peach_bruiser">Peach Bruiser Glass</string>
+    <string name="app_icon_pocket_bunny_voltage">Bunny Voltage Glass</string>
+    <string name="app_icon_pocket_cherry_bombshell">Cherry Bombshell Glass</string>
+    <string name="app_icon_pocket_teddy_tantrum">Teddy Tantrum Glass</string>
+    <string name="app_icon_pocket_bubble_fang">Bubble Fang Glass</string>
+    <string name="app_icon_pocket_sugar_goblin">Sugar Goblin Glass</string>
+    <string name="app_icon_pocket_cosmic_pudding">Cosmic Pudding Glass</string>
+    <string name="app_icon_pocket_sticker_syndicate">Sticker Syndicate Glass</string>
+    <string name="welcome_guest_note">Hesap isteğe bağlıdır. Müziğinizle başlayın.</string>
+    <string name="search_ready_hint">“%1$s”yu aramaya hazır</string>
+    <string name="search_top_result">En iyi sonuç</string>
 </resources>

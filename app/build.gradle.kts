@@ -28,6 +28,14 @@ val localProps = Properties().apply {
 val discordApplicationId = (localProps.getProperty("DISCORD_APPLICATION_ID")
     ?: System.getenv("DISCORD_APPLICATION_ID") ?: "1543679166967193620").trim()
 
+// Locale tests read XML directly. Resource text edits do not necessarily change
+// R classes, so declare those inputs rather than reusing stale test results.
+tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+    inputs.files(fileTree("src/main/res") { include("**/strings.xml") })
+        .withPropertyName("localizedStrings")
+        .withPathSensitivity(org.gradle.api.tasks.PathSensitivity.RELATIVE)
+}
+
 // Only the canonical checkout opts into upstream releases by default. Forks
 // and extracted source projects must explicitly configure their own feed.
 val canonicalCheckout = runCatching {

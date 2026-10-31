@@ -235,7 +235,6 @@ fun SettingsScreen(
     val showCacheFolder by AppSettings.showCacheFolder.collectAsStateWithLifecycle()
     val downloadQuality by AppSettings.downloadQuality.collectAsStateWithLifecycle()
     val wifiOnlyDownloads by AppSettings.wifiOnlyDownloads.collectAsStateWithLifecycle()
-    val exportDownloads by AppSettings.exportDownloads.collectAsStateWithLifecycle()
     val stopOnTaskRemoved by AppSettings.stopOnTaskRemoved.collectAsStateWithLifecycle()
     val hideVolumeBar by AppSettings.hideVolumeBar.collectAsStateWithLifecycle()
     val hideStatusBarInPlayer by AppSettings.hideStatusBarInPlayer.collectAsStateWithLifecycle()
@@ -576,12 +575,11 @@ fun SettingsScreen(
                 }
                 val exportDownloadsTitle = stringResource(R.string.export_compatible_downloads)
                 row(exportDownloadsTitle, "music folder", divided = false) {
-                    SettingsSubRow(
-                        title = exportDownloadsTitle,
-                        checked = exportDownloads,
-                        onCheckedChange = AppSettings::setExportDownloads,
-                        subtitle = "Music/Veyra".takeIf { exportDownloads },
-                    )
+                    Column(Modifier.padding(horizontal=20.dp, vertical=12.dp)) {
+                        Text(exportDownloadsTitle, style=MaterialTheme.typography.titleSmall)
+                        Text(stringResource(R.string.download_destination_hint), style=MaterialTheme.typography.bodySmall,
+                            color=MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                 }
                 row(stringResource(R.string.export_all_downloads), "export", "music folder", divided = false) {
                     app.veyra.music.ui.components.DownloadExportCard()

@@ -48,6 +48,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 
@@ -127,7 +128,7 @@ internal fun ImmersivePlayer(
                 val ink = options.immersiveStyle.ink(base.primary)
                 val deckColor = options.immersiveStyle.deckColor()
                 if (options.immersiveStyle != ImmersiveStyle.CLASSIC) {
-                    ImmersiveWorld(options.immersiveStyle,song,artwork,position,durationMs,lines,looking,isPlaying && active,
+                    ImmersiveWorld(options.immersiveStyle,song,artwork,position,durationMs,lines,looking,isPlaying && active && !settings,
                         controls,locked,onBlocked,onSeek,revealControls,{controls=false},footerHeight)
                 } else {
                 val themeArt = options.immersiveBackground == ImmersiveBackground.THEME || options.immersiveBackground == ImmersiveBackground.BLEND
@@ -145,7 +146,7 @@ internal fun ImmersivePlayer(
                         onDrawWithContent {drawContent();drawRect(mask)}
                     } else Modifier)) {
                         AsyncImage(artworkRequest, null, Modifier.fillMaxSize(), contentScale = if (options.immersiveCover == ImmersiveCover.FIT) ContentScale.Fit else ContentScale.Crop)
-                        if (canvas != null && !reduceMotion && !options.dataSaver) CanvasArtworkPlayer(canvas, isPlaying && active,
+                        if (canvas != null && !reduceMotion && !options.dataSaver) CanvasArtworkPlayer(canvas, isPlaying && active && !settings,
                             Modifier.fillMaxSize(), contentMode = if (options.immersiveCover == ImmersiveCover.FIT) CanvasContentMode.FIT_PORTRAIT else CanvasContentMode.CROP)
                     }
                 }
@@ -169,7 +170,7 @@ internal fun ImmersivePlayer(
                             Text(stringResource(Res.string.immersive_no_lyrics), style=MaterialTheme.typography.bodyMedium, color=Color.White.copy(alpha=.7f))
                         }
                     } else LyricsPanel(lines=lines, trackKey=song.videoId, playhead=playhead, looking=looking,
-                        isPlaying=isPlaying && active, onSeekToLine={ if(locked)onBlocked() else onSeek(it) },
+                        isPlaying=isPlaying && active && !settings, onSeekToLine={ if(locked)onBlocked() else onSeek(it) },
                         controlsOpen=controls, onRevealControls=revealControls, onHideControls={controls=false},
                         modifier=Modifier.align(placement).fillMaxWidth().fillMaxHeight(if(options.immersiveLyrics==ImmersiveLyricsPosition.FULL)1f else .58f))
                 }
@@ -221,12 +222,30 @@ internal fun ImmersivePlayer(
                         }
                     }
                 }
-                if(settings) MaterialTheme(colorScheme=base) { ModalBottomSheet(onDismissRequest={settings=false},sheetMaxWidth=900.dp,sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true),
-                    containerColor=base.surface,shape=androidx.compose.foundation.shape.RoundedCornerShape(topStart=32.dp,topEnd=32.dp)) {
-                    ImmersiveMenuContent(options,artwork,onOptions,
-                        onSelectStyle={onOptions(options.copy(immersiveStyle=it));settings=false;revealControls()},
-                        onSource={settings=false;onSource()},onTiming={settings=false;onTiming()},onSongOptions={settings=false;onSongOptions()},onDismiss={settings=false})
-                } }
+                if(settings) MaterialTheme(colorScheme=base) {
+                    val menuState = rememberModalBottomSheetState(skipPartiallyExpanded=true)
+                    val menuScope = rememberCoroutineScope()
+                    val latestOptions by rememberUpdatedState(options)
+                    var closing by remember { mutableStateOf(false) }
+                    val closeMenu: (() -> Unit) -> Unit = { action ->
+                        if (!closing) {
+                            closing = true
+                            menuScope.launch {
+                                try {
+                                    menuState.hide()
+                                    if (!menuState.isVisible) { settings=false; action() }
+                                } finally { closing=false }
+                            }
+                        }
+                    }
+                    ModalBottomSheet(onDismissRequest={settings=false},sheetMaxWidth=900.dp,sheetState=menuState,
+                        containerColor=base.surface,shape=androidx.compose.foundation.shape.RoundedCornerShape(topStart=32.dp,topEnd=32.dp)) {
+                        ImmersiveMenuContent(options,artwork,onOptions,
+                            onSelectStyle={ style -> closeMenu {onOptions(latestOptions.copy(immersiveStyle=style));revealControls()} },
+                            onSource={closeMenu(onSource)},onTiming={closeMenu(onTiming)},onSongOptions={closeMenu(onSongOptions)},
+                            onDismiss={closeMenu {}},previewsReady=menuState.currentValue==SheetValue.Expanded && !closing)
+                    }
+                }
             }
         }
         }

@@ -202,7 +202,7 @@ internal fun ImmersiveStyle.ink(themeAccent: Color): Color = when(this) {
 }
 
 /** One selectable poster, with a bounded static miniature instead of a live player. */
-@Composable internal fun ImmersiveModeCard(style: ImmersiveStyle,selected: Boolean,artwork:String?=null,modifier:Modifier=Modifier,onClick: () -> Unit) {
+@Composable internal fun ImmersiveModeCard(style: ImmersiveStyle,selected: Boolean,artwork:String?=null,modifier:Modifier=Modifier,showPreview:Boolean=true,onClick: () -> Unit) {
     val ink=style.ink(MaterialTheme.colorScheme.primary)
     val shape=RoundedCornerShape(24.dp)
     Surface(onClick=onClick,shape=shape,
@@ -215,7 +215,10 @@ internal fun ImmersiveStyle.ink(themeAccent: Color): Color = when(this) {
         }) {
         Column {
             Box(Modifier.fillMaxWidth().height(128.dp).padding(6.dp).clip(RoundedCornerShape(19.dp))) {
-                ImmersiveMiniature(style,artwork,ink,Modifier.fillMaxSize())
+                if (showPreview) ImmersiveMiniature(style,artwork,ink,Modifier.fillMaxSize())
+                else Box(Modifier.fillMaxSize().background(ink.copy(alpha=.08f)),contentAlignment=Alignment.Center) {
+                    Icon(style.symbol(),null,Modifier.size(36.dp),tint=ink)
+                }
                 Surface(Modifier.align(Alignment.TopStart).padding(8.dp),shape=CircleShape,color=Color.Black.copy(.55f),contentColor=Color.White) {
                     Text((style.ordinal+1).toString().padStart(2,'0'),Modifier.padding(horizontal=8.dp,vertical=4.dp),style=MaterialTheme.typography.labelSmall)
                 }

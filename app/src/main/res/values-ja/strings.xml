@@ -785,7 +785,7 @@
 
     <string name="profile_unavailable">このページではログインしているプロフィールはまだありません。</string>
 
-    <string name="export_compatible_downloads">互換性のあるダウンロードをエクスポート</string>
+    <string name="export_compatible_downloads">ダウンロードフォルダ</string>
 
     <string name="output_precision">出力精度</string>
 
@@ -1300,4 +1300,299 @@
     <string name="onboarding_back">戻る</string>
     <string name="signed_by">%1$s のサイン</string>
     <string name="settings_intro">音もスタイルも、あなたらしく。</string>
+
+    <!-- Completed UI strings; machine-assisted translations, branded style names preserved. -->
+    <string name="download_destination_hint">内部ストレージ→ミュージック→Veyra。新しいオーディオのダウンロードはすべてここに保存されます。</string>
+    <string name="export_all_downloads">すべてのダウンロードをエクスポートする</string>
+    <string name="app_updates">アプリのアップデート</string>
+    <string name="auto_download_updates">アップデートを自動的にダウンロードする</string>
+    <string name="auto_download_updates_hint">Veyra がいつ開くかを確認し、従量制課金接続で新しいリリースをダウンロードします。 Android では、インストールする前に必ず尋ねられます。</string>
+    <string name="check_app_updates">アップデートをチェックする</string>
+    <string name="update_ready_to_install">Veyra アップデートをインストールする準備ができました</string>
+    <string name="update_downloading_apk">Veyra アップデートをダウンロードしています</string>
+    <string name="update_install_permission_hint">タップしてアップデートを確認し、インストールを承認します。</string>
+    <string name="export_downloads_description">保存されたオーディオを内部ストレージの Music/Veyra にコピーして、他のアプリで使用します。オリジナルは安全に保管されます。再試行すると、完了したコピーはスキップされます。</string>
+    <string name="export_downloads_result">%1$d はエクスポートされました · %2$d はすでに共有されました · %3$d は失敗しました</string>
+    <string name="veyra_github_profile">GitHub の開発者</string>
+    <string name="veyra_github_source">Veyra ソースコード</string>
+    <string name="veyra_website_source">ウェブサイトのソースコード</string>
+    <string name="welcome_space_title">あなたの音楽。\nあなたの空間。</string>
+    <string name="welcome_space_body">お気に入りを見つけてください。\n気分を忘れずに。</string>
+    <string name="welcome_lyrics_title">すべての言葉。\nすべての感情。</string>
+    <string name="welcome_lyrics_body">歌詞をたどって\n曲に近づいてみましょう。</string>
+    <string name="welcome_together_title">あなたの人々。\nサウンドトラック 1 つ。</string>
+    <string name="welcome_together_body">一緒に聞いてください。\n参加するのにアカウントは必要ありません。</string>
+    <string name="welcome_music_chip">あなたの音楽のために作られました</string>
+    <string name="welcome_lyrics_chip">歌詞に従ってください</string>
+    <string name="welcome_together_chip">一緒にもっと良い</string>
+    <string name="welcome_get_started">始めましょう</string>
+    <string name="welcome_next_preview">次のプレビューを確認する</string>
+    <string name="welcome_preview_position">%1$d の %2$d をプレビューする</string>
+    <string name="onboarding_personalize_title">それをあなたのものにしてください。</string>
+    <string name="settings_backup_working">バックアップを作成中です…</string>
+    <string name="home_layout_save_failed">ホームレイアウトを保存できませんでした。もう一度試してください。</string>
+    <string name="home_offline_track_unavailable">この商品は接続が必要です。ダウンロードまたはローカル ミュージックを開いてオフラインで聴きます。</string>
+    <string name="stronger_text">より強力なテキスト</string>
+    <string name="stronger_text_subtitle">読みやすいように重いテキスト。システムのテキスト サイズを維持します。</string>
+    <string name="contrast_player_controls">よりコントラストの高いプレーヤー コントロール</string>
+    <string name="contrast_player_controls_subtitle">プレーヤーのボタンに背景とアートワーク上のアウトラインを表示します。</string>
+    <string name="custom_accent">アクセントパレット</string>
+    <string name="custom_accent_hint">アプリのアクセントカラー。プレーヤーのアートワークの色は曲に関連付けられたままになります。</string>
+    <string-array name="custom_accent_options">
+        <item>Veyra</item>
+        <item>ティール</item>
+        <item>アンバー</item>
+        <item>ローズ</item>
+    </string-array>
+    <string name="custom_artwork_corners">アートワークコーナー</string>
+    <string name="custom_artwork_corners_hint">タイル、トラックのサムネイル、プレーヤーのアートワークのカバー スタイルを選択します。</string>
+    <string-array name="custom_corner_options">
+        <item>オリジナル</item>
+        <item>ソフト</item>
+        <item>丸い</item>
+        <item>正方形</item>
+    </string-array>
+    <string name="custom_list_spacing">曲リストの間隔</string>
+    <string name="custom_list_spacing_hint">コンパクトは行パディングを減らします。大きなシステムテキストにより、快適なスペースが保たれます。</string>
+    <string-array name="custom_spacing_options">
+        <item>快適</item>
+        <item>コンパクト</item>
+    </string-array>
+    <string name="custom_motion_level">モーションレベル</string>
+    <string name="custom_motion_level_hint">ページの色あせを微妙に抑え、装飾的な動きを静かにします。システムで無効になっているアニメーションが常に優先されます。</string>
+    <string-array name="custom_motion_options">
+        <item>フル</item>
+        <item>微妙な</item>
+        <item>オフ</item>
+    </string-array>
+    <string name="custom_player_shortcut">優先プレイヤーのアクション</string>
+    <string name="custom_player_shortcut_hint">1 つのアクションをプレーヤーの 3 点メニューの一番上に移動します。アカウントのアクションには引き続きサインインが必要です。</string>
+    <string-array name="custom_shortcut_options">
+        <item>オリジナルの注文</item>
+        <item>ダウンロード</item>
+        <item>お気に入り</item>
+        <item>スリープタイマー</item>
+        <item>プレイリストに追加</item>
+    </string-array>
+    <string name="custom_reset_appearance">外観のカスタマイズをリセット</string>
+    <string name="custom_reset_appearance_hint">フォント、アクセント、表紙の角、リストの間隔、テキストとモーションを強化します。アカウント、プレイリスト、ダウンロードを保存します。</string>
+    <string name="custom_reset_player">プレーヤーのカスタマイズをリセットする</string>
+    <string name="custom_reset_player_hint">元のメニュー順序を復元し、高コントラストのコントロールをオフにします。再生、アカウント、ダウンロードを維持します。</string>
+    <string name="custom_reset_confirm">リセット</string>
+    <string name="theme_packs">テーマスタジオ</string>
+    <string name="theme_packs_subtitle">アートワーク、フォント、アイコン、プレーヤー スタイルをダウンロードする</string>
+    <string name="theme_packs_description">あらゆる画面に新しい雰囲気を。一度ダウンロードすれば、オフラインにしておけば、いつでも元の外観に戻ります。</string>
+    <string name="theme_original">オリジナル Veyra</string>
+    <string name="theme_active">現在活動中</string>
+    <string name="theme_restore_hint">保存した外観設定を復元する</string>
+    <string name="theme_apply">テーマを適用する</string>
+    <string name="theme_download">テーマをダウンロード</string>
+    <string name="theme_update_required">最初に Veyra を更新します</string>
+    <string name="theme_catalog_empty">まだテーマが読み込まれていません。オンライン時にカタログを更新します。</string>
+    <string name="theme_refresh_catalog">テーマカタログを更新する</string>
+    <string name="theme_safety_hint">テーマは、元の Veyra に戻るまで、サポートされている色、見出しフォント、およびコントロール スタイルをオーバーライドします。あなたのアカウント、ダウンロード、プレイリスト、再生コントロールはあなたのもののままです。元の外観はオフラインでも利用できます。</string>
+    <string name="theme_restart_title">このテーマを適用しますか?</string>
+    <string name="theme_restart_description">Veyra は画面を更新してテーマを読み込みます。音楽は鳴り続けます。ライブラリ、アカウント、元の外観設定は保持されます。</string>
+    <string name="theme_apply_restart">UI を適用して再起動する</string>
+    <string name="theme_later">後で</string>
+    <string name="theme_remove">ダウンロードしたテーマを削除する</string>
+    <string name="theme_remove_description">これにより、未使用のテーマ ファイルがこのデバイスから削除されます。テーマは後で再度ダウンロードできます。</string>
+    <string name="theme_done">完了</string>
+    <string name="theme_download_update">テーマのアップデートをダウンロード</string>
+    <string name="theme_collection_title">あなたらしく感じさせてください。</string>
+    <string name="theme_collection_description">あなたの音楽に新しい世界を。アートワーク、タイプ、アイコン、プレーヤーの詳細を調べて、お気に入りをオフラインに保ちます。</string>
+    <string name="theme_all">すべてのテーマ</string>
+    <string name="theme_downloaded">ダウンロード済み</string>
+    <string name="theme_discover">発見する</string>
+    <string name="theme_no_downloads">ダウンロードしたテーマがここに表示されます。</string>
+    <string name="theme_includes">アートワーク · フォント · コントロール · ブランディング</string>
+    <string name="theme_launcher_title">最後の仕上げ</string>
+    <string name="theme_launcher_hint">一致するホーム画面アイコンを個別に選択します。ランチャーが更新されるまでに少し時間がかかる場合があります。</string>
+    <string name="theme_use_launcher">マッチングアプリのアイコンを使う</string>
+    <string name="theme_restore_launcher">元のアプリアイコンを復元する</string>
+    <string name="theme_launcher_confirm">アプリのアイコンを変更しますか?</string>
+    <string name="theme_current_launcher">現在のアプリアイコン: %1$s</string>
+    <string name="icon_collection_glass">ガラス</string>
+    <string name="icon_collection_themes">テーマ</string>
+    <string name="icon_family_liquid">液体</string>
+    <string name="icon_chooser_hint">上のアイコンを選択してください。ランチャーが更新されるまでに少し時間がかかる場合があります。</string>
+    <string name="theme_back_collection">テーマに戻る</string>
+    <string name="theme_details">テーマの詳細</string>
+    <string name="theme_downloading">ダウンロード中…</string>
+    <string name="theme_verifying">ファイルを検証中…</string>
+    <string name="theme_applying">申請中…</string>
+    <string name="theme_live_apply_hint">あなたの場所と音楽の再生を維持しながら、外観を更新します。</string>
+    <string name="theme_optional_restart">インターフェイスも更新します</string>
+    <string name="icon_choose">アイコンを選択してください</string>
+    <string name="theme_saved_appearance">保存したスタイル</string>
+    <string name="home_saved_at">保存済み %1$s · オンライン時に更新</string>
+    <string name="theme_matching_icon">対応するランチャー アイコンも使用します</string>
+    <string name="theme_icon_failed">テーマが適用されました。ランチャーアイコンを変更できませんでした。アプリアイコンの選択を試してください。</string>
+    <string name="download_saved_private">アプリのストレージに保存される</string>
+    <string name="download_interrupted">Veyra が閉じると中断されました。再度ダウンロードするには、「再試行」をタップします。</string>
+    <string name="download_storage">%1$s が利用可能 · %2$s</string>
+    <string name="download_storage_private">アプリのストレージ</string>
+    <string name="download_retry_all">再試行に失敗しました</string>
+    <string name="listen_together_host_reconnecting">ホストが切断されました - 再接続を待っています</string>
+    <string name="queue_removed">%1$d をキューから削除しました</string>
+    <string name="queue_undo_expired">キューが変更されました。元に戻すは使用できなくなりました。</string>
+    <string name="undo">元に戻す</string>
+    <string name="download_action_track">%1$s %2$s</string>
+    <string name="icon_collection_atelier">ガラスのアトリエ</string>
+    <string name="theme_search">テーマを検索する</string>
+    <string name="theme_clear_search">検索をクリア</string>
+    <string name="theme_no_search_results">一致するテーマがありません。別の名前または雰囲気を試してください。</string>
+    <string name="icon_search">検索アイコン</string>
+    <string name="icon_no_search_results">このコレクションには一致するアイコンがありません。</string>
+    <string name="icon_current_selection">現在のアイコン: %1$s</string>
+    <string name="icon_collection_all">すべて</string>
+    <string name="appearance_fonts">フォント</string>
+    <string name="font_follow_theme">テーマに従う</string>
+    <string name="font_veyra_default">Veyra デフォルト</string>
+    <string name="font_preview_heading">あなたの音楽、あなたのスタイル。</string>
+    <string name="font_preview_body">曲名を明確にする。快適な読書。</string>
+    <string name="font_selection_hint">テーマを変更しても、選択したフォントは維持されます。テーマに従うと、各テーマ独自のタイポグラフィが復元されます。フォントのライセンスはアプリに含まれています。</string>
+    <string name="font_apply">フォントを適用する</string>
+    <string name="app_style">アプリのスタイル</string>
+    <string name="app_style_hint">ホームと Veyra の残りの部分の完全な外観を選択します。オリジナルのテーマとフォントの選択は保存されたままになります。</string>
+    <string name="style_original_hint">あなたのおなじみのホーム。すべてダウンロード可能なテーマとフォントの選択。</string>
+    <string name="style_editorial_hint">クリーム色の紙、バーガンディのアクセント、そして大胆なエディトリアルカバー。</string>
+    <string name="style_room_hint">植物の緑、温かみのあるタイポグラフィー、レコードジャケットのコラージュ。</string>
+    <string name="style_night_hint">ミッドナイトブルー、特大タイプと現在の曲のアートワーク。</string>
+    <string name="style_apply">スタイルを適用する</string>
+    <string name="style_original_only">オリジナルでご利用いただけます。選択内容は保存されたままになります。</string>
+    <string name="style_themes_suspended">このアプリ スタイルには独自のパレットとフォントがあります。ダウンロード可能なテーマを適用するには、オリジナルに切り替えます。</string>
+    <string name="experience_section_player">プレーヤー</string>
+    <string name="experience_section_mini">ミニプレーヤー</string>
+    <string name="experience_section_gestures">ジェスチャー</string>
+    <string name="experience_section_network">ネットワーク</string>
+    <string name="experience_home_layout">あなたのお家のレイアウト</string>
+    <string name="experience_nav_destinations">目に見える目的地</string>
+    <string name="experience_nav_behavior">ナビゲーション動作</string>
+    <string name="scroll_player_animations">プレーヤーのアニメーションをスクロールする</string>
+    <string name="scroll_player_animations_hint">液体ガラスの有無にかかわらず、スクロール中にミニ プレーヤーをナビゲーション内に折りたたみます。モーションの軽減を尊重します。</string>
+    <string name="pin_home_header">ホームヘッダーをピン留めする</string>
+    <string name="pin_home_header_hint">オリジナルのホームのブランド名と挨拶文をスクロール フィードの上に表示します。短いウィンドウではヘッダーをスクロール可能に保ちます。</string>
+    <string name="asset_packs">アセットパック</string>
+    <string name="asset_packs_subtitle">フォント、アイコン、コントロールをテーマ上にレイヤー化</string>
+    <string name="asset_packs_explanation">テーマを維持してください。詳細を変更します。アセット パックは、オリジナル アプリ スタイルやカスタム アプリ スタイルでも機能します。</string>
+    <string name="asset_theme_defaults">テーマアセットの使用</string>
+    <string name="asset_layers">パックがオーバーライドする部分を選択します。</string>
+    <string name="asset_restore">テーマアセットを復元する</string>
+    <string name="asset_icons">アイコンと押されたスキン</string>
+    <string name="asset_controls">ボタンの形状とプログレスバー</string>
+    <string name="asset_motion">パックページ遷移</string>
+    <string name="asset_colors">アダプティブ見出しインク</string>
+    <string name="asset_font_priority">選択またはインポートしたフォントが優先されます。パック レタリングを使用するには、[フォント] で [テーマに従う] を選択します。利用できないアセットはネイティブ コントロールを保持します。</string>
+    <string name="asset_cancel">ダウンロードをキャンセルする</string>
+    <string name="asset_download">アセットをダウンロードする</string>
+    <string name="asset_update_required">最初に Veyra を更新します</string>
+    <string name="asset_remove">ダウンロードを削除する</string>
+    <string name="asset_empty">パックがロードされていません。更新して再試行してください。</string>
+    <string name="asset_apply">アセットを適用する</string>
+    <string name="app_icon_collection_riot_candy">Riot Candy</string>
+    <string name="app_icon_collection_chrome_venom">Chrome Venom</string>
+    <string name="app_icon_collection_bubble_riot">Bubble Riot</string>
+    <string name="app_icon_collection_xerox_afterparty">Xerox Afterparty</string>
+    <string name="app_icon_collection_cosmic_vandal">Cosmic Vandal</string>
+    <string name="app_icon_collection_switchback_radio">Switchback Radio</string>
+    <string name="app_icon_collection_komorebi_hour">Komorebi Hour</string>
+    <string name="app_icon_collection_rooftop_reverie">Rooftop Reverie</string>
+    <string name="app_icon_collection_apex_telemetry">Apex Telemetry</string>
+    <string name="app_icon_collection_cinder_kata">Cinder Kata</string>
+    <string name="app_icon_collection_lantern_letters">Lantern Letters</string>
+    <string name="app_icon_collection_velvet_orbit">Velvet Orbit</string>
+    <string name="app_icon_collection_moss_mechanism">Moss &amp; Mechanism</string>
+    <string name="app_icon_collection_sugar_static">Sugar Static</string>
+    <string name="app_icon_collection_tidal_origami">Tidal Origami</string>
+    <string name="app_icon_collection_margin_notes">Margin Notes</string>
+    <string name="app_icon_collection_spray_parade">Spray Parade</string>
+    <string name="app_icon_collection_paper_pop">Paper Pop</string>
+    <string name="app_icon_collection_ink_rebel">Ink Rebel</string>
+    <string name="app_icon_collection_laser_club">Laser Club</string>
+    <string name="app_icon_collection_thread_riot">Thread Riot</string>
+    <string name="icon_collection_assets">アセットパック</string>
+    <string name="asset_matching_app_icon">マッチングアプリのアイコン</string>
+    <string name="app_icon_collection_cathedral_static">Cathedral Static</string>
+    <string name="app_icon_collection_velvet_hex">Velvet Hex</string>
+    <string name="app_icon_collection_razor_bloom">Razor Bloom</string>
+    <string name="app_icon_collection_neon_seance">Neon Séance</string>
+    <string name="app_icon_collection_blackout_zine">Blackout Zine</string>
+    <string name="app_icon_collection_chrome_fang">Chrome Fang</string>
+    <string name="app_icon_collection_candy_crypt">Candy Crypt</string>
+    <string name="app_icon_collection_royal_ruin">Royal Ruin</string>
+    <string name="app_icon_collection_acid_gargoyle">Acid Gargoyle</string>
+    <string name="app_icon_collection_midnight_stitch">Midnight Stitch</string>
+    <string name="navigation_monorail">モノレール</string>
+    <string name="navigation_harbor">港</string>
+    <string name="navigation_ticket">チケット</string>
+    <string name="navigation_pebble">小石</string>
+    <string name="navigation_prism">プリズム</string>
+    <string name="navigation_bracket">ブラケット</string>
+    <string name="navigation_halo">ハロー</string>
+    <string name="navigation_stitch">ステッチ</string>
+    <string name="navigation_pixel">ピクセル</string>
+    <string name="navigation_lozenge">トローチ</string>
+    <string name="scroll_motion_zephyr">ゼファー</string>
+    <string name="scroll_motion_cascade">カスケード</string>
+    <string name="scroll_motion_focus">フォーカス</string>
+    <string name="scroll_motion_snap">スナップ</string>
+    <string name="scroll_motion_bloom">ブルーム</string>
+    <string name="scroll_motion_sweep">スイープ</string>
+    <string name="scroll_motion_float">フロート</string>
+    <string name="scroll_motion_compress">圧縮する</string>
+    <string name="scroll_motion_unfold">展開する</string>
+    <string name="scroll_motion_settle">決済する</string>
+    <string name="app_motion_default">テーマのデフォルト</string>
+    <string name="app_motion_silk">シルク</string>
+    <string name="app_motion_soft_zoom">ソフトズーム</string>
+    <string name="app_motion_rise">上昇</string>
+    <string name="app_motion_drift">ドリフト</string>
+    <string name="app_motion_reveal">明らかにする</string>
+    <string name="app_motion_quick_cut">クイックカット</string>
+    <string name="app_motion_velvet">ベルベット</string>
+    <string name="app_motion_spring">春</string>
+    <string name="app_motion_diagonal">斜め</string>
+    <string name="app_motion_shutter">シャッター</string>
+    <string name="app_motion_title">モーションスタジオ</string>
+    <string name="app_motion_style">ページ遷移</string>
+    <string name="app_motion_hint">ページのモーションと設定を選択します。テーマのデフォルトでは、各パックの独自のスタイルが維持されます。プレーヤーのオープニングは選択したタイミングに従います。モーションの軽減が常に優先されます。</string>
+    <string name="motion_tempo_title">動作のペース</string>
+    <string name="motion_tempo_relaxed">リラックスした</string>
+    <string name="motion_tempo_balanced">バランスの取れた</string>
+    <string name="motion_tempo_quick">クイック</string>
+    <string name="motion_preview">タップしてプレビューします</string>
+    <string name="asset_search">パックとスタイルを検索する</string>
+    <string name="asset_all">すべてのパック</string>
+    <string name="asset_no_matches">一致するパックはありません。別のスタイルを試すか、すべてのパックに切り替えてください。</string>
+    <string name="app_icon_pocket_soda_sabotage">Soda Sabotage Glass</string>
+    <string name="app_icon_pocket_velvet_vandal">Velvet Vandal Glass</string>
+    <string name="app_icon_pocket_acid_daydream">Acid Daydream Glass</string>
+    <string name="app_icon_pocket_peach_panic">Peach Panic Glass</string>
+    <string name="app_icon_pocket_ink_and_ivory">Ink and Ivory Glass</string>
+    <string name="app_icon_pocket_holo_havoc">Holo Havoc Glass</string>
+    <string name="app_icon_pocket_denim_disorder">Denim Disorder Glass</string>
+    <string name="app_icon_pocket_cherry_voltage">Cherry Voltage Glass</string>
+    <string name="app_icon_pocket_mint_mutiny">Mint Mutiny Glass</string>
+    <string name="app_icon_pocket_lunar_lollipop">Lunar Lollipop Glass</string>
+    <string name="app_icon_pocket_gummy_signal">Gummy Signal Glass</string>
+    <string name="app_icon_pocket_razor_petal">Razor Petal Glass</string>
+    <string name="app_icon_pocket_disco_chrome">Disco Chrome Glass</string>
+    <string name="app_icon_pocket_paper_revolt">Paper Revolt Glass</string>
+    <string name="app_icon_pocket_velvet_sigil">Velvet Sigil Glass</string>
+    <string name="app_icon_pocket_patch_party">Patch Party Glass</string>
+    <string name="app_icon_pocket_pixel_fizz">Pixel Fizz Glass</string>
+    <string name="app_icon_pocket_kitty_mayhem">Kitty Mayhem Glass</string>
+    <string name="app_icon_pocket_mochi_moshpit">Mochi Moshpit Glass</string>
+    <string name="app_icon_pocket_peach_bruiser">Peach Bruiser Glass</string>
+    <string name="app_icon_pocket_bunny_voltage">Bunny Voltage Glass</string>
+    <string name="app_icon_pocket_cherry_bombshell">Cherry Bombshell Glass</string>
+    <string name="app_icon_pocket_teddy_tantrum">Teddy Tantrum Glass</string>
+    <string name="app_icon_pocket_bubble_fang">Bubble Fang Glass</string>
+    <string name="app_icon_pocket_sugar_goblin">Sugar Goblin Glass</string>
+    <string name="app_icon_pocket_cosmic_pudding">Cosmic Pudding Glass</string>
+    <string name="app_icon_pocket_sticker_syndicate">Sticker Syndicate Glass</string>
+    <string name="welcome_guest_note">アカウントはオプションです。まずは音楽から始めましょう。</string>
+    <string name="search_ready_hint">「%1$s」を検索する準備ができました</string>
+    <string name="search_top_result">上位の結果</string>
 </resources>

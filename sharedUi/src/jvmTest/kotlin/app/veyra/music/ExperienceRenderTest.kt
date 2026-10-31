@@ -246,11 +246,23 @@ class ExperienceRenderTest {
                     val nodes=scene!!.semanticsOwners.flatMap {it.rootSemanticsNode.all()}
                     assertTrue(nodes.any {it.config.getOrNull(SemanticsProperties.Text)?.any {text->text.text.contains("Immersive worlds")}==true})
                     val modes=nodes.filter {it.config.getOrNull(SemanticsProperties.Role)==Role.RadioButton}
-                    assertEquals(12,modes.size)
-                    assertEquals(1,modes.count {it.config.getOrNull(SemanticsProperties.Selected)==true})
+                    assertTrue(modes.isNotEmpty())
+                    assertTrue("posters must be lazy", modes.size < ImmersiveStyle.entries.size)
                     val image=scene!!.render(1_000_000_000L)
                     try {File(output,"menu-$name.webp").writeBytes(image.encodeToData(EncodedImageFormat.WEBP,85)!!.bytes)} finally {image.close()}
-                    modes.forEach {assertTrue(it.config[SemanticsActions.OnClick].action!!.invoke())}
+                    // A lazy gallery exposes visible cards, then mounts later
+                    // rows as the user scrolls. Exercise that real route.
+                    var frameTime = 1_100_000_000L
+                    val columns = if (fontScale >= 1.4f || width < 320) 1 else if (width >= 760) 3 else 2
+                    val rowCount = 3 + 2 * ((6 + columns - 1) / columns)
+                    for (row in 0 until rowCount) {
+                        val current=scene!!.semanticsOwners.flatMap {it.rootSemanticsNode.all()}
+                        current.filter {it.config.getOrNull(SemanticsProperties.Role)==Role.RadioButton}
+                            .forEach {assertTrue(it.config[SemanticsActions.OnClick].action!!.invoke())}
+                        current.first {it.config.getOrNull(SemanticsActions.ScrollToIndex)!=null}
+                            .config[SemanticsActions.ScrollToIndex].action!!.invoke(row)
+                        repeat(4) {scene!!.render(frameTime).close();frameTime+=50_000_000L}
+                    }
                     assertEquals(ImmersiveStyle.entries.toSet(),selections.toSet())
                     val close=nodes.first {it.config.getOrNull(SemanticsProperties.ContentDescription)?.contains("Close immersive menu")==true && it.config.getOrNull(SemanticsActions.OnClick)!=null}
                     close.config[SemanticsActions.OnClick].action!!.invoke()

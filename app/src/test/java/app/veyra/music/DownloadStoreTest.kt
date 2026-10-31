@@ -120,7 +120,7 @@ class DownloadStoreTest {
     @Test
     fun `the name is artist then title, and carries the extension asked for`() {
         assertEquals(
-            "Arijit Singh - Kesariya.flac",
+            "Arijit Singh - Kesariya [6ca13d52ca70].flac",
             DownloadStore.fileNameFor(song("Kesariya", "Arijit Singh"), "flac"),
         )
     }
@@ -128,12 +128,12 @@ class DownloadStoreTest {
     @Test
     fun `characters a volume or a shell would object to are replaced`() {
         val name = DownloadStore.fileNameFor(song("A/B: C?", "D|E"), "m4a")
-        assertEquals("D E - A B C.m4a", name)
+        assertEquals("D E - A B C [6ca13d52ca70].m4a", name)
     }
 
     @Test
     fun `a row with nothing to name it falls back to the video id`() {
-        assertEquals("xyz789.m4a", DownloadStore.fileNameFor(song("", "", "xyz789"), "m4a"))
+        assertEquals("xyz789 [5a4640c17e8e].m4a", DownloadStore.fileNameFor(song("", "", "xyz789"), "m4a"))
     }
 
     // ---- What quality is kept ----------------------------------------------

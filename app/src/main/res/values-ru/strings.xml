@@ -874,7 +874,7 @@
 
     <string name="dolby_atmos_unavailable">Это устройство не поддерживает Atmos, треки будут играть в обычном формате</string>
 
-    <string name="export_compatible_downloads">Экспорт совместимых загрузок</string>
+    <string name="export_compatible_downloads">Папка загрузки</string>
 
     <string name="legacy_mesh_gradient">Классический сетчатый градиент</string>
 
@@ -1354,4 +1354,299 @@
     <string name="onboarding_back">Назад</string>
     <string name="signed_by">Подпись: %1$s</string>
     <string name="settings_intro">Звук, стиль и всё остальное.</string>
+
+    <!-- Completed UI strings; machine-assisted translations, branded style names preserved. -->
+    <string name="download_destination_hint">Внутренняя память → Музыка → Veyra. Здесь сохраняются все новые загрузки аудио.</string>
+    <string name="export_all_downloads">Экспортировать все загрузки</string>
+    <string name="app_updates">Обновления приложений</string>
+    <string name="auto_download_updates">Загружать обновления автоматически</string>
+    <string name="auto_download_updates_hint">Проверьте, когда откроется Veyra, и загрузите новые выпуски по безлимитному соединению. Android всегда спрашивает перед установкой.</string>
+    <string name="check_app_updates">Проверьте наличие обновлений</string>
+    <string name="update_ready_to_install">Обновление Veyra готово к установке.</string>
+    <string name="update_downloading_apk">Загрузка обновления Veyra</string>
+    <string name="update_install_permission_hint">Нажмите, чтобы просмотреть обновление и одобрить установку.</string>
+    <string name="export_downloads_description">Скопируйте сохраненный звук в Music/Veyra во внутренней памяти для использования в других приложениях. Оригиналы остаются в безопасности. При повторной попытке завершенные копии пропускаются.</string>
+    <string name="export_downloads_result">%1$d экспортирован · %2$d уже доступен · %3$d не выполнен</string>
+    <string name="veyra_github_profile">Разработчик на GitHub</string>
+    <string name="veyra_github_source">Исходный код Veyra</string>
+    <string name="veyra_website_source">Исходный код сайта</string>
+    <string name="welcome_space_title">Ваша музыка.\nВаше пространство.</string>
+    <string name="welcome_space_body">Найдите любимого.\nОставайтесь ради ощущений.</string>
+    <string name="welcome_lyrics_title">Каждое слово.\nКаждое чувство.</string>
+    <string name="welcome_lyrics_body">Следите за текстом.\nПриблизьтесь к песне.</string>
+    <string name="welcome_together_title">Ваши люди.\nОдин саундтрек.</string>
+    <string name="welcome_together_body">Слушайте вместе.\nДля регистрации не требуется учетная запись.</string>
+    <string name="welcome_music_chip">Создано для вашей музыки</string>
+    <string name="welcome_lyrics_chip">Оставайся с текстами</string>
+    <string name="welcome_together_chip">Лучше вместе</string>
+    <string name="welcome_get_started">Начать</string>
+    <string name="welcome_next_preview">Изучите следующий предварительный просмотр</string>
+    <string name="welcome_preview_position">Предварительный просмотр %1$d из %2$d</string>
+    <string name="onboarding_personalize_title">Сделайте это своим.</string>
+    <string name="settings_backup_working">Работаем над резервной копией…</string>
+    <string name="home_layout_save_failed">Не удалось сохранить макет главной страницы. Пожалуйста, попробуйте еще раз.</string>
+    <string name="home_offline_track_unavailable">Этот предмет требует подключения. Откройте «Загрузки» или «Локальную музыку», чтобы слушать в автономном режиме.</string>
+    <string name="stronger_text">Более сильный текст</string>
+    <string name="stronger_text_subtitle">Более тяжелый текст для облегчения чтения. Сохраняет системный размер текста.</string>
+    <string name="contrast_player_controls">Более контрастное управление игроком</string>
+    <string name="contrast_player_controls_subtitle">Дайте кнопкам проигрывателя видимый фон и контур поверх изображения.</string>
+    <string name="custom_accent">Акцентная палитра</string>
+    <string name="custom_accent_hint">Акцентные цвета приложения; цвета обложки проигрывателя остаются привязанными к песне.</string>
+    <string-array name="custom_accent_options">
+        <item>Veyra</item>
+        <item>Бирюзовый</item>
+        <item>Янтарь</item>
+        <item>Роза</item>
+    </string-array>
+    <string name="custom_artwork_corners">Уголки произведений искусства</string>
+    <string name="custom_artwork_corners_hint">Выберите стиль обложки для плиток, миниатюр треков и иллюстраций игроков.</string>
+    <string-array name="custom_corner_options">
+        <item>Оригинал</item>
+        <item>Мягкий</item>
+        <item>Закругленный</item>
+        <item>Площадь</item>
+    </string-array>
+    <string name="custom_list_spacing">Расстояние в списке песен</string>
+    <string name="custom_list_spacing_hint">Компактный уменьшает заполнение строк. Большой системный текст сохраняет удобные интервалы.</string>
+    <string-array name="custom_spacing_options">
+        <item>Удобный</item>
+        <item>Компактный</item>
+    </string-array>
+    <string name="custom_motion_level">Уровень движения</string>
+    <string name="custom_motion_level_hint">Благодаря технологии Subtle страница не выцветает и успокаивает декоративные движения. Анимации, отключенные системой, всегда имеют приоритет.</string>
+    <string-array name="custom_motion_options">
+        <item>Полный</item>
+        <item>Тонкий</item>
+        <item>Выкл.</item>
+    </string-array>
+    <string name="custom_player_shortcut">Приоритетное действие игрока</string>
+    <string name="custom_player_shortcut_hint">Переместить одно действие в верхнюю часть трехточечного меню игрока. Действия с учетной записью по-прежнему требуют входа в систему.</string>
+    <string-array name="custom_shortcut_options">
+        <item>Исходный заказ</item>
+        <item>Скачать</item>
+        <item>Любимый</item>
+        <item>Таймер сна</item>
+        <item>Добавить в плейлист</item>
+    </string-array>
+    <string name="custom_reset_appearance">Сбросить настройки внешнего вида</string>
+    <string name="custom_reset_appearance_hint">Сбросьте шрифты, акценты, углы обложки, интервал между списками, более сильный текст и движение. Сохраняйте аккаунты, плейлисты и загрузки.</string>
+    <string name="custom_reset_player">Сбросить настройки плеера</string>
+    <string name="custom_reset_player_hint">Восстановите исходный порядок меню и отключите элементы управления с более высокой контрастностью. Сохраняйте воспроизведение, учетные записи и загрузки.</string>
+    <string name="custom_reset_confirm">Сброс</string>
+    <string name="theme_packs">Тематическая студия</string>
+    <string name="theme_packs_subtitle">Загрузите иллюстрации, шрифты, значки и стили проигрывателя.</string>
+    <string name="theme_packs_description">Новая атмосфера на каждом экране. Загрузите один раз, сохраните его в автономном режиме и вернитесь к исходному виду в любое время.</string>
+    <string name="theme_original">Оригинальный Veyra</string>
+    <string name="theme_active">В настоящее время активен</string>
+    <string name="theme_restore_hint">Восстановите сохраненные настройки внешнего вида</string>
+    <string name="theme_apply">Применить тему</string>
+    <string name="theme_download">Скачать тему</string>
+    <string name="theme_update_required">Сначала обновите Veyra.</string>
+    <string name="theme_catalog_empty">Темы пока не загружены. Обновляйте каталог, когда находитесь онлайн.</string>
+    <string name="theme_refresh_catalog">Обновить каталог тем</string>
+    <string name="theme_safety_hint">Тема переопределяет поддерживаемые цвета, шрифты заголовков и стили элементов управления, пока вы не вернетесь к исходному варианту Veyra. Ваши учетные записи, загрузки, плейлисты и элементы управления воспроизведением останутся вашими. Исходный внешний вид остается доступным в автономном режиме.</string>
+    <string name="theme_restart_title">Применить эту тему?</string>
+    <string name="theme_restart_description">Veyra обновит экраны, чтобы загрузить тему. Музыка продолжает играть. Ваша библиотека, учетные записи и исходные настройки внешнего вида сохраняются.</string>
+    <string name="theme_apply_restart">Применить и перезапустить пользовательский интерфейс</string>
+    <string name="theme_later">Позже</string>
+    <string name="theme_remove">Удалить скачанную тему</string>
+    <string name="theme_remove_description">Это удалит неиспользуемые файлы темы с этого устройства. Вы можете загрузить тему снова позже.</string>
+    <string name="theme_done">Готово</string>
+    <string name="theme_download_update">Скачать обновление темы</string>
+    <string name="theme_collection_title">Заставьте его чувствовать себя как вы.</string>
+    <string name="theme_collection_description">Новые миры для вашей музыки. Изучите изображения, шрифты, значки и сведения об игроках, а затем сохраняйте избранное в автономном режиме.</string>
+    <string name="theme_all">Все темы</string>
+    <string name="theme_downloaded">Скачано</string>
+    <string name="theme_discover">Откройте для себя</string>
+    <string name="theme_no_downloads">Здесь появятся загруженные вами темы.</string>
+    <string name="theme_includes">Оформление · Шрифты · Элементы управления · Брендинг</string>
+    <string name="theme_launcher_title">Последний штрих</string>
+    <string name="theme_launcher_hint">Выберите соответствующий значок на главном экране отдельно. Обновление программы запуска может занять некоторое время.</string>
+    <string name="theme_use_launcher">Использовать соответствующий значок приложения</string>
+    <string name="theme_restore_launcher">Восстановить исходный значок приложения</string>
+    <string name="theme_launcher_confirm">Изменить значок приложения?</string>
+    <string name="theme_current_launcher">Текущий значок приложения: %1$s.</string>
+    <string name="icon_collection_glass">Стекло</string>
+    <string name="icon_collection_themes">Темы</string>
+    <string name="icon_family_liquid">Жидкость</string>
+    <string name="icon_chooser_hint">Выберите значок выше. Обновление программы запуска может занять некоторое время.</string>
+    <string name="theme_back_collection">Вернуться к темам</string>
+    <string name="theme_details">Подробности темы</string>
+    <string name="theme_downloading">Загрузка…</string>
+    <string name="theme_verifying">Проверка файлов…</string>
+    <string name="theme_applying">Применение…</string>
+    <string name="theme_live_apply_hint">Обновите внешний вид, сохраняя при этом свое место и музыку.</string>
+    <string name="theme_optional_restart">Также обновите интерфейс</string>
+    <string name="icon_choose">Выберите значок</string>
+    <string name="theme_saved_appearance">Ваш сохраненный стиль</string>
+    <string name="home_saved_at">Сохранено %1$s · обновляется при подключении к сети.</string>
+    <string name="theme_matching_icon">Также используйте соответствующий значок запуска</string>
+    <string name="theme_icon_failed">Тема применена. Значок лаунчера не мог измениться; попробуйте выбрать значок приложения.</string>
+    <string name="download_saved_private">Сохранено в хранилище приложений.</string>
+    <string name="download_interrupted">Прерывается при закрытии Veyra. Нажмите «Повторить», чтобы загрузить еще раз.</string>
+    <string name="download_storage">%1$s доступен · %2$s</string>
+    <string name="download_storage_private">Хранилище приложений</string>
+    <string name="download_retry_all">Повторная попытка не удалась</string>
+    <string name="listen_together_host_reconnecting">Хост отключен · ждём повторного подключения</string>
+    <string name="queue_removed">%1$d удален из очереди.</string>
+    <string name="queue_undo_expired">Очередь изменилась. Отмена больше недоступна.</string>
+    <string name="undo">Отменить</string>
+    <string name="download_action_track">%1$s %2$s</string>
+    <string name="icon_collection_atelier">Стеклянное Ателье</string>
+    <string name="theme_search">Поиск тем</string>
+    <string name="theme_clear_search">Очистить поиск</string>
+    <string name="theme_no_search_results">Нет подходящих тем. Попробуйте другое имя или настроение.</string>
+    <string name="icon_search">Значки поиска</string>
+    <string name="icon_no_search_results">В этой коллекции нет подходящих значков.</string>
+    <string name="icon_current_selection">Текущий значок: %1$s.</string>
+    <string name="icon_collection_all">Все</string>
+    <string name="appearance_fonts">Шрифты</string>
+    <string name="font_follow_theme">Следовать теме</string>
+    <string name="font_veyra_default">Veyra по умолчанию</string>
+    <string name="font_preview_heading">Твоя музыка, твой стиль.</string>
+    <string name="font_preview_body">Четкие названия песен. Комфортное чтение.</string>
+    <string name="font_selection_hint">Ваш выбор шрифта сохраняется при смене темы. Следовать за темой восстанавливает собственную типографику каждой темы. Лицензии на шрифты включены в приложение.</string>
+    <string name="font_apply">Применить шрифт</string>
+    <string name="app_style">Стиль приложения</string>
+    <string name="app_style_hint">Выберите полный облик Дома и остальной части Veyra. Исходная тема и выбор шрифта сохраняются.</string>
+    <string name="style_original_hint">Ваш знакомый Дом. Все загружаемые темы и варианты шрифтов.</string>
+    <string name="style_editorial_hint">Кремовая бумага, бордовые акценты и эффектная редакционная обложка.</string>
+    <string name="style_room_hint">Ботаническая зелень, теплая типографика и коллажи в конвертах для пластинок.</string>
+    <string name="style_night_hint">Полуночно-синий, крупный шрифт и обложка вашей текущей песни.</string>
+    <string name="style_apply">Применить стиль</string>
+    <string name="style_original_only">Доступен в оригинале. Ваш выбор останется сохраненным.</string>
+    <string name="style_themes_suspended">Этот стиль приложения имеет собственную палитру и шрифты. Переключитесь на исходный вариант, чтобы применить загружаемые темы.</string>
+    <string name="experience_section_player">Игрок</string>
+    <string name="experience_section_mini">Мини-плеер</string>
+    <string name="experience_section_gestures">Жесты</string>
+    <string name="experience_section_network">Сеть</string>
+    <string name="experience_home_layout">Планировка вашего дома</string>
+    <string name="experience_nav_destinations">Видимые направления</string>
+    <string name="experience_nav_behavior">Поведение навигации</string>
+    <string name="scroll_player_animations">Прокрутка анимации игрока</string>
+    <string name="scroll_player_animations_hint">Сложите мини-плеер в навигацию во время прокрутки, с Liquid Glass или без него. Уважает ограниченное движение.</string>
+    <string name="pin_home_header">Закрепить главный заголовок</string>
+    <string name="pin_home_header_hint">Держите фирменный стиль и приветствие Original Home над прокручиваемой лентой. Короткие окна позволяют прокручивать заголовок.</string>
+    <string name="asset_packs">Пакеты активов</string>
+    <string name="asset_packs_subtitle">Наслаивайте шрифты, значки и элементы управления на любую тему.</string>
+    <string name="asset_packs_explanation">Держите свою тему. Измените его детали. Пакеты ресурсов также работают с оригинальными и пользовательскими стилями приложений.</string>
+    <string name="asset_theme_defaults">Использование ресурсов темы</string>
+    <string name="asset_layers">Выберите, какие части пакета переопределяются.</string>
+    <string name="asset_restore">Восстановить ресурсы темы</string>
+    <string name="asset_icons">Иконки и прессованные скины</string>
+    <string name="asset_controls">Формы кнопок и индикаторы выполнения</string>
+    <string name="asset_motion">Пакет переходов страниц</string>
+    <string name="asset_colors">Адаптивный заголовок заголовка</string>
+    <string name="asset_font_priority">Выбранный вами или импортированный шрифт имеет приоритет. Выберите «Следовать теме» в разделе «Шрифты», чтобы использовать пакетные надписи. Недоступные ресурсы сохраняют свои собственные элементы управления.</string>
+    <string name="asset_cancel">Отменить загрузку</string>
+    <string name="asset_download">Скачать ресурсы</string>
+    <string name="asset_update_required">Сначала обновите Veyra.</string>
+    <string name="asset_remove">Удалить загрузку</string>
+    <string name="asset_empty">Пакеты не загружены. Обновите, чтобы повторить попытку.</string>
+    <string name="asset_apply">Применить ресурсы</string>
+    <string name="app_icon_collection_riot_candy">Riot Candy</string>
+    <string name="app_icon_collection_chrome_venom">Chrome Venom</string>
+    <string name="app_icon_collection_bubble_riot">Bubble Riot</string>
+    <string name="app_icon_collection_xerox_afterparty">Xerox Afterparty</string>
+    <string name="app_icon_collection_cosmic_vandal">Cosmic Vandal</string>
+    <string name="app_icon_collection_switchback_radio">Switchback Radio</string>
+    <string name="app_icon_collection_komorebi_hour">Komorebi Hour</string>
+    <string name="app_icon_collection_rooftop_reverie">Rooftop Reverie</string>
+    <string name="app_icon_collection_apex_telemetry">Apex Telemetry</string>
+    <string name="app_icon_collection_cinder_kata">Cinder Kata</string>
+    <string name="app_icon_collection_lantern_letters">Lantern Letters</string>
+    <string name="app_icon_collection_velvet_orbit">Velvet Orbit</string>
+    <string name="app_icon_collection_moss_mechanism">Moss &amp; Mechanism</string>
+    <string name="app_icon_collection_sugar_static">Sugar Static</string>
+    <string name="app_icon_collection_tidal_origami">Tidal Origami</string>
+    <string name="app_icon_collection_margin_notes">Margin Notes</string>
+    <string name="app_icon_collection_spray_parade">Spray Parade</string>
+    <string name="app_icon_collection_paper_pop">Paper Pop</string>
+    <string name="app_icon_collection_ink_rebel">Ink Rebel</string>
+    <string name="app_icon_collection_laser_club">Laser Club</string>
+    <string name="app_icon_collection_thread_riot">Thread Riot</string>
+    <string name="icon_collection_assets">Пакеты активов</string>
+    <string name="asset_matching_app_icon">Соответствующий значок приложения</string>
+    <string name="app_icon_collection_cathedral_static">Cathedral Static</string>
+    <string name="app_icon_collection_velvet_hex">Velvet Hex</string>
+    <string name="app_icon_collection_razor_bloom">Razor Bloom</string>
+    <string name="app_icon_collection_neon_seance">Neon Séance</string>
+    <string name="app_icon_collection_blackout_zine">Blackout Zine</string>
+    <string name="app_icon_collection_chrome_fang">Chrome Fang</string>
+    <string name="app_icon_collection_candy_crypt">Candy Crypt</string>
+    <string name="app_icon_collection_royal_ruin">Royal Ruin</string>
+    <string name="app_icon_collection_acid_gargoyle">Acid Gargoyle</string>
+    <string name="app_icon_collection_midnight_stitch">Midnight Stitch</string>
+    <string name="navigation_monorail">Монорельс</string>
+    <string name="navigation_harbor">Гавань</string>
+    <string name="navigation_ticket">Билет</string>
+    <string name="navigation_pebble">Галька</string>
+    <string name="navigation_prism">Призма</string>
+    <string name="navigation_bracket">Кронштейн</string>
+    <string name="navigation_halo">Гало</string>
+    <string name="navigation_stitch">Стежок</string>
+    <string name="navigation_pixel">Пиксель</string>
+    <string name="navigation_lozenge">Леденцы</string>
+    <string name="scroll_motion_zephyr">Зефир</string>
+    <string name="scroll_motion_cascade">Каскад</string>
+    <string name="scroll_motion_focus">Фокус</string>
+    <string name="scroll_motion_snap">Привязка</string>
+    <string name="scroll_motion_bloom">Блум</string>
+    <string name="scroll_motion_sweep">Развертка</string>
+    <string name="scroll_motion_float">Плавать</string>
+    <string name="scroll_motion_compress">Сжать</string>
+    <string name="scroll_motion_unfold">Развернуть</string>
+    <string name="scroll_motion_settle">Поселиться</string>
+    <string name="app_motion_default">Тема по умолчанию</string>
+    <string name="app_motion_silk">Шелк</string>
+    <string name="app_motion_soft_zoom">Мягкий зум</string>
+    <string name="app_motion_rise">подъем</string>
+    <string name="app_motion_drift">Дрифт</string>
+    <string name="app_motion_reveal">Раскрыть</string>
+    <string name="app_motion_quick_cut">Быстрая резка</string>
+    <string name="app_motion_velvet">бархат</string>
+    <string name="app_motion_spring">Весна</string>
+    <string name="app_motion_diagonal">Диагональ</string>
+    <string name="app_motion_shutter">Затвор</string>
+    <string name="app_motion_title">Моушн-студия</string>
+    <string name="app_motion_style">Переход страницы</string>
+    <string name="app_motion_hint">Выберите движение для страниц и настройки. По умолчанию тема сохраняет собственный стиль каждого пакета. Открытие игрока происходит в выбранное время; ограниченное движение всегда имеет приоритет.</string>
+    <string name="motion_tempo_title">Темп движения</string>
+    <string name="motion_tempo_relaxed">Расслабленный</string>
+    <string name="motion_tempo_balanced">Сбалансированный</string>
+    <string name="motion_tempo_quick">Быстрый</string>
+    <string name="motion_preview">Нажмите, чтобы просмотреть</string>
+    <string name="asset_search">Поиск пакетов и стилей</string>
+    <string name="asset_all">Все пакеты</string>
+    <string name="asset_no_matches">Нет подходящих пакетов. Попробуйте другой стиль или переключитесь на «Все пакеты».</string>
+    <string name="app_icon_pocket_soda_sabotage">Soda Sabotage Glass</string>
+    <string name="app_icon_pocket_velvet_vandal">Velvet Vandal Glass</string>
+    <string name="app_icon_pocket_acid_daydream">Acid Daydream Glass</string>
+    <string name="app_icon_pocket_peach_panic">Peach Panic Glass</string>
+    <string name="app_icon_pocket_ink_and_ivory">Ink and Ivory Glass</string>
+    <string name="app_icon_pocket_holo_havoc">Holo Havoc Glass</string>
+    <string name="app_icon_pocket_denim_disorder">Denim Disorder Glass</string>
+    <string name="app_icon_pocket_cherry_voltage">Cherry Voltage Glass</string>
+    <string name="app_icon_pocket_mint_mutiny">Mint Mutiny Glass</string>
+    <string name="app_icon_pocket_lunar_lollipop">Lunar Lollipop Glass</string>
+    <string name="app_icon_pocket_gummy_signal">Gummy Signal Glass</string>
+    <string name="app_icon_pocket_razor_petal">Razor Petal Glass</string>
+    <string name="app_icon_pocket_disco_chrome">Disco Chrome Glass</string>
+    <string name="app_icon_pocket_paper_revolt">Paper Revolt Glass</string>
+    <string name="app_icon_pocket_velvet_sigil">Velvet Sigil Glass</string>
+    <string name="app_icon_pocket_patch_party">Patch Party Glass</string>
+    <string name="app_icon_pocket_pixel_fizz">Pixel Fizz Glass</string>
+    <string name="app_icon_pocket_kitty_mayhem">Kitty Mayhem Glass</string>
+    <string name="app_icon_pocket_mochi_moshpit">Mochi Moshpit Glass</string>
+    <string name="app_icon_pocket_peach_bruiser">Peach Bruiser Glass</string>
+    <string name="app_icon_pocket_bunny_voltage">Bunny Voltage Glass</string>
+    <string name="app_icon_pocket_cherry_bombshell">Cherry Bombshell Glass</string>
+    <string name="app_icon_pocket_teddy_tantrum">Teddy Tantrum Glass</string>
+    <string name="app_icon_pocket_bubble_fang">Bubble Fang Glass</string>
+    <string name="app_icon_pocket_sugar_goblin">Sugar Goblin Glass</string>
+    <string name="app_icon_pocket_cosmic_pudding">Cosmic Pudding Glass</string>
+    <string name="app_icon_pocket_sticker_syndicate">Sticker Syndicate Glass</string>
+    <string name="welcome_guest_note">Учетная запись не является обязательной. Начните со своей музыки.</string>
+    <string name="search_ready_hint">Готов к поиску «%1$s»</string>
+    <string name="search_top_result">Лучший результат</string>
 </resources>

@@ -6,6 +6,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
@@ -24,7 +26,7 @@ import org.jetbrains.compose.resources.stringResource
 /** A visual mode gallery with a fixed heading and independently scrollable controls. */
 @Composable internal fun ImmersiveMenuContent(options:ExperienceOptions,artwork:String?,onOptions:(ExperienceOptions)->Unit,
     onSelectStyle:(ImmersiveStyle)->Unit,onSource:()->Unit,onTiming:()->Unit,onSongOptions:()->Unit,
-    onDismiss:()->Unit={}) {
+    onDismiss:()->Unit={}, previewsReady:Boolean=true) {
     val largeText=LocalDensity.current.fontScale>=1.4f
     var more by rememberSaveable {mutableStateOf(false)}
     var customize by rememberSaveable {mutableStateOf(false)}
@@ -48,34 +50,37 @@ import org.jetbrains.compose.resources.stringResource
             }
         }
         HorizontalDivider(color=MaterialTheme.colorScheme.outlineVariant.copy(.35f))
-        Column(Modifier.weight(1f,fill=false).fillMaxWidth().verticalScroll(rememberScrollState())
-            .padding(horizontal=20.dp).padding(top=18.dp,bottom=28.dp),verticalArrangement=Arrangement.spacedBy(18.dp)) {
-            BoxWithConstraints(Modifier.fillMaxWidth().selectableGroup()) {
-                val fontScale=LocalDensity.current.fontScale
-                val columns=when {
-                    fontScale>=1.4f || maxWidth<320.dp -> 1
-                    maxWidth>=760.dp -> 3
-                    else -> 2
-                }
-                Column(verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                    val groups = listOf(
-                        Res.string.immersive_new_worlds to ImmersiveStyle.entries.filter { it.isExpandedWorld },
-                        Res.string.immersive_original_worlds to ImmersiveStyle.entries.filterNot { it.isExpandedWorld },
-                    )
-                    groups.forEach { (heading, modes) ->
-                        Text(stringResource(heading), style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(top = 4.dp, bottom = 2.dp))
-                        modes.chunked(columns).forEach { row ->
-                            Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min),horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-                                row.forEach { style -> Box(Modifier.weight(1f).fillMaxHeight()) {
-                                    ImmersiveModeCard(style,options.immersiveStyle==style,artwork,Modifier.fillMaxHeight()) {onSelectStyle(style)}
-                                }}
-                                repeat(columns-row.size) {Spacer(Modifier.weight(1f))}
+        BoxWithConstraints(Modifier.weight(1f,fill=false).fillMaxWidth()) {
+            val fontScale=LocalDensity.current.fontScale
+            val columns=when {
+                fontScale>=1.4f || maxWidth<320.dp -> 1
+                maxWidth>=760.dp -> 3
+                else -> 2
+            }
+            LazyColumn(Modifier.fillMaxWidth(),
+                contentPadding=PaddingValues(start=20.dp,end=20.dp,top=18.dp,bottom=28.dp),
+                verticalArrangement=Arrangement.spacedBy(12.dp)) {
+                val groups = listOf(
+                    Res.string.immersive_new_worlds to ImmersiveStyle.entries.filter { it.isExpandedWorld },
+                    Res.string.immersive_original_worlds to ImmersiveStyle.entries.filterNot { it.isExpandedWorld },
+                )
+                groups.forEachIndexed { group, (heading, modes) ->
+                    item(key="heading-$group", contentType="heading") {
+                        Text(stringResource(heading), style=MaterialTheme.typography.titleMedium,
+                            color=MaterialTheme.colorScheme.onSurface,modifier=Modifier.padding(top=4.dp,bottom=2.dp))
+                    }
+                    items(modes.chunked(columns), key={ "modes-${it.first().name}" }, contentType={ "modes" }) { row ->
+                        Row(Modifier.fillMaxWidth().selectableGroup(),horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+                            row.forEach { style ->
+                                ImmersiveModeCard(style,options.immersiveStyle==style,artwork,Modifier.weight(1f),
+                                    showPreview=previewsReady) {onSelectStyle(style)}
                             }
+                            repeat(columns-row.size) {Spacer(Modifier.weight(1f))}
                         }
                     }
                 }
-            }
+                item(key="controls", contentType="controls") {
+                Column(verticalArrangement=Arrangement.spacedBy(18.dp)) {
             if(options.immersiveStyle==ImmersiveStyle.CLASSIC) {
                 ImmersiveMenuSection(Icons.Rounded.Tune,stringResource(Res.string.immersive_customize_classic),customize,{customize=!customize}) {
                     ImmersiveChoices(stringResource(Res.string.immersive_background),ImmersiveBackground.entries,options.immersiveBackground,
@@ -106,6 +111,9 @@ import org.jetbrains.compose.resources.stringResource
                     ImmersiveMenuAction(Icons.Rounded.Timer,stringResource(Res.string.immersive_lyrics_timing),onTiming)
                 }
                 ImmersiveMenuAction(Icons.Rounded.MusicNote,stringResource(Res.string.immersive_song_options),onSongOptions)
+            }
+                }
+                }
             }
         }
     }

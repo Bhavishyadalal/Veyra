@@ -1,36 +1,24 @@
 # Veyra source downloads
 
-**Testing preview 0.2.1-beta1 · code 55** adds immersive rendering reductions, optional automatic APK updates, the current waveform notification icon and Settings/welcome fixes, retaining portable downloads. [Preview notes](../RELEASE_NOTES_0.2.1-beta1.md) · [Checks/device checklist](../verification/DOWNLOADS-0.2.1-beta1.md). Stable is unchanged.
-
-**Stable 0.2.0 · code 53** improves Home refresh recovery, search drafts and suggestions, keyboard behavior, large-text actions and themed feedback cards. Retains source-policy, Settings, welcome and refresh fixes. Includes all 12 immersive modes, 72 themes, 32 independent overlays, 132 launcher choices and prior reliability fixes. The completed 0.2.0-beta1 remains code 46. These are complete Android Studio projects with licenses and backend provenance. **Source ZIPs are not APKs.**
+**Stable 0.2.1 · code 56** fixes the immersive style picker and makes every new audio download use **Internal storage → Music → Veyra**. Retains automatic updates, waveform notifications, 12 immersive modes, 72 themes, 32 overlays and 132 launcher choices. [Release notes](../RELEASE_NOTES_0.2.1.md) · [Verification and limits](../verification/STABLE-0.2.1-PROMOTION.md).
 
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
-| Current stable · `main`, `stable/0.2.0` | 0.2.0 / code 53 | [Download](Veyra_Android_Source_0.2.0_Stable.zip) | [SHA-256](Veyra_Android_Source_0.2.0_Stable.zip.sha256) |
-| Current testing preview · `preview/0.2.1-beta1` | 0.2.1-beta1 / code 55 | [Download](Veyra_Android_Source_0.2.1-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.1-beta1.zip.sha256) |
+| Current stable · `main`, `stable/0.2.1` | 0.2.1 / code 56 | [Download](Veyra_Android_Source_0.2.1_Stable.zip) | [SHA-256](Veyra_Android_Source_0.2.1_Stable.zip.sha256) |
+| Completed preview · `preview/0.2.1-beta1` | 0.2.1-beta1 / code 55 | [Download](Veyra_Android_Source_0.2.1-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.1-beta1.zip.sha256) |
 | Completed preview · `preview/0.2.0-beta1` | 0.2.0-beta1 / code 46 | [Download](Veyra_Android_Source_0.2.0-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.0-beta1.zip.sha256) |
 | Completed preview · `preview/0.1.9-beta1` | 0.1.9-beta1 / code 35 | [Download](Veyra_Android_Source_0.1.9-beta1.zip) | [SHA-256](Veyra_Android_Source_0.1.9-beta1.zip.sha256) |
 
-[Release notes](../RELEASE_NOTES_0.2.0.md) · [Promotion checks](../verification/STABLE-0.2.0-PROMOTION.md) · [Completed beta notes](../RELEASE_NOTES_0.2.0-beta1.md). Historical stable 0.1.9 source remains on [its frozen branch](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/stable/0.1.9/downloads/Veyra_Android_Source_0.1.9_Stable.zip).
-
-## Open and verify
-
-Verify the matching SHA-256 sidecar, extract the entire `Veyra` folder and open it in Android Studio. Source packages omit secrets, local configuration, signing keys, APKs and duplicate promotional/gallery images. Native build resources, launcher masters, fonts/licenses and all current runtime packs remain included. Optional authoring files restore from checked pack mappings with `python3 scripts/restore_theme_sources.py`; existing edits are never overwritten.
+These are complete Android Studio projects, not installable APKs. Verify the SHA-256 sidecar, extract the entire Veyra folder and open it in Android Studio. Native build resources, launcher masters, fonts/licenses and runtime packs remain included. Restore the lossless runtime library offline with `python3 scripts/restore_source_packs.py`; optional authoring sources restore with `scripts/restore_theme_sources.py` without overwriting edits.
 
 Stage source before packaging:
 
 ```sh
 python3 scripts/route_catalogs.py
-python3 scripts/package_source.py Veyra_Android_Source_0.2.1-beta1.zip
+python3 scripts/package_source.py Veyra_Android_Source_0.2.1_Stable.zip
 python3 scripts/verify_archives.py
 ```
 
-## Preserved history
+Prior stable [0.2.0 / code 53](https://github.com/Bhavishyadalal/Veyra/tree/stable/0.2.0) and its original source ZIP remain on its branch/history. Older stable and preview branches are preserved. Only the current stable and newest three preview ZIPs remain at this branch tip; no history, tags or release assets are deleted.
 
-[0.1.7-beta1 source archive](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/preview/0.1.7-beta1/downloads/Veyra_Android_Source_0.1.7-beta1.zip) remains on its completed preview branch.
-
-Stable 0.1.8 / code 28 remains on [stable/0.1.8](https://github.com/Bhavishyadalal/Veyra/tree/stable/0.1.8), including [its original ZIP](https://github.com/Bhavishyadalal/Veyra/raw/refs/heads/stable/0.1.8/downloads/Veyra_Android_Source_0.1.8_Stable.zip). Stable 0.1.7 / code 26 and 0.1.6 / code 22 remain on their respective stable branches. Only current stable and the three newest preview ZIPs are retained at this branch tip; all preview ZIP bytes are unchanged. No history, tags or release assets are removed.
-
-Rooms, invites and presence use **https://veyra-listen-together.onrender.com**; intentional custom servers remain supported. [Backend provenance](../docs/BACKEND_SYNC.md). Website source is maintained separately in [Veyra-website](https://github.com/Bhavishyadalal/Veyra-website). APK publication is separate.
-
-The latest preview stores runtime theme/overlay ZIPs in an included lossless `SOURCE_DATA_PACKS.tar.xz` library. Restore them offline with `python3 scripts/restore_source_packs.py`. Android build inputs and native icon masters remain expanded. This avoids duplicated pack bytes pushing the source download above GitHub’s 100 MiB limit; original pack bytes and checksums are preserved.
+Backend provenance is included: [sync policy](../docs/BACKEND_SYNC.md). Official rooms/invites use https://veyra-listen-together.onrender.com; intentional custom servers remain supported. Website source is maintained separately in [Veyra-website](https://github.com/Bhavishyadalal/Veyra-website).

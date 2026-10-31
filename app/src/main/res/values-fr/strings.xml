@@ -847,7 +847,7 @@
 
     <string name="dolby_atmos_unavailable">Cet appareil ne prend pas en charge Atmos, lecture en version normale</string>
 
-    <string name="export_compatible_downloads">Exporter les téléchargements compatibles</string>
+    <string name="export_compatible_downloads">Dossier de téléchargement</string>
 
     <string name="legacy_mesh_gradient">Dégradé fluide classique</string>
 
@@ -1323,4 +1323,299 @@
     <string name="onboarding_back">Retour</string>
     <string name="signed_by">Signé par %1$s</string>
     <string name="settings_intro">Le son, le style et tout le reste.</string>
+
+    <!-- Completed UI strings; machine-assisted translations, branded style names preserved. -->
+    <string name="download_destination_hint">Stockage interne → Musique → Veyra. Tous les nouveaux téléchargements audio sont enregistrés ici.</string>
+    <string name="export_all_downloads">Exporter tous les téléchargements</string>
+    <string name="app_updates">Mises à jour de l\'application</string>
+    <string name="auto_download_updates">Télécharger automatiquement les mises à jour</string>
+    <string name="auto_download_updates_hint">Vérifiez quand Veyra s’ouvre et téléchargez les nouvelles versions sur une connexion illimitée. Android demande toujours avant l\'installation.</string>
+    <string name="check_app_updates">Vérifier les mises à jour</string>
+    <string name="update_ready_to_install">Mise à jour Veyra prête à installer</string>
+    <string name="update_downloading_apk">Téléchargement de la mise à jour Veyra</string>
+    <string name="update_install_permission_hint">Appuyez pour examiner la mise à jour et approuver l\'installation.</string>
+    <string name="export_downloads_description">Copiez l\'audio enregistré sur Music/Veyra dans la mémoire interne pour une utilisation dans d\'autres applications. Les originaux restent en sécurité. Une nouvelle tentative ignore les copies terminées.</string>
+    <string name="export_downloads_result">%1$d exporté · %2$d déjà partagé · %3$d a échoué</string>
+    <string name="veyra_github_profile">Développeur sur GitHub</string>
+    <string name="veyra_github_source">Code source Veyra</string>
+    <string name="veyra_website_source">Code source du site Web</string>
+    <string name="welcome_space_title">Votre musique.\nVotre espace.</string>
+    <string name="welcome_space_body">Trouvez un favori.\nRestez pour le sentiment.</string>
+    <string name="welcome_lyrics_title">Chaque mot.\nChaque sentiment.</string>
+    <string name="welcome_lyrics_body">Suivez les paroles.\nRapprochez-vous de la chanson.</string>
+    <string name="welcome_together_title">Votre peuple.\nUne bande-son.</string>
+    <string name="welcome_together_body">Écoutez ensemble.\nAucun compte n\'est nécessaire pour rejoindre.</string>
+    <string name="welcome_music_chip">Conçu pour votre musique</string>
+    <string name="welcome_lyrics_chip">Restez avec les paroles</string>
+    <string name="welcome_together_chip">Mieux ensemble</string>
+    <string name="welcome_get_started">Commencez</string>
+    <string name="welcome_next_preview">Découvrez le prochain aperçu</string>
+    <string name="welcome_preview_position">Aperçu %1$d de %2$d</string>
+    <string name="onboarding_personalize_title">Faites-le vôtre.</string>
+    <string name="settings_backup_working">Je travaille sur votre sauvegarde…</string>
+    <string name="home_layout_save_failed">Impossible d\'enregistrer la présentation de votre page d\'accueil. Veuillez réessayer.</string>
+    <string name="home_offline_track_unavailable">Cet élément nécessite une connexion. Ouvrez Téléchargements ou Musique locale pour écouter hors ligne.</string>
+    <string name="stronger_text">Texte plus fort</string>
+    <string name="stronger_text_subtitle">Texte plus lourd pour une lecture plus facile. Conserve la taille du texte de votre système.</string>
+    <string name="contrast_player_controls">Commandes de joueur à contraste plus élevé</string>
+    <string name="contrast_player_controls_subtitle">Donnez aux boutons du lecteur un arrière-plan visible et un contour sur les illustrations.</string>
+    <string name="custom_accent">Palette d\'accents</string>
+    <string name="custom_accent_hint">Couleurs d’accentuation de l’application ; les couleurs des illustrations du joueur restent liées à la chanson.</string>
+    <string-array name="custom_accent_options">
+        <item>Veyra</item>
+        <item>Sarcelle</item>
+        <item>Ambre</item>
+        <item>Rose</item>
+    </string-array>
+    <string name="custom_artwork_corners">Coins d\'œuvres d\'art</string>
+    <string name="custom_artwork_corners_hint">Choisissez le style de couverture des vignettes, les vignettes des pistes et les illustrations des joueurs.</string>
+    <string-array name="custom_corner_options">
+        <item>Originale</item>
+        <item>Doux</item>
+        <item>Arrondi</item>
+        <item>Carré</item>
+    </string-array>
+    <string name="custom_list_spacing">Espacement de la liste des chansons</string>
+    <string name="custom_list_spacing_hint">Compact réduit le rembourrage des rangées. Le texte système volumineux conserve un espacement confortable.</string>
+    <string-array name="custom_spacing_options">
+        <item>Confortable</item>
+        <item>Compacte</item>
+    </string-array>
+    <string name="custom_motion_level">Niveau de mouvement</string>
+    <string name="custom_motion_level_hint">Subtile, la page s\'estompe et atténue les mouvements décoratifs. Les animations désactivées par le système sont toujours prioritaires.</string>
+    <string-array name="custom_motion_options">
+        <item>Plein</item>
+        <item>Subtil</item>
+        <item>Désactivé</item>
+    </string-array>
+    <string name="custom_player_shortcut">Action du joueur prioritaire</string>
+    <string name="custom_player_shortcut_hint">Déplacez une action en haut du menu à trois points du joueur. Les actions sur le compte nécessitent toujours une connexion.</string>
+    <string-array name="custom_shortcut_options">
+        <item>Commande originale</item>
+        <item>Télécharger</item>
+        <item>Favoris</item>
+        <item>Minuterie de mise en veille</item>
+        <item>Ajouter à la playlist</item>
+    </string-array>
+    <string name="custom_reset_appearance">Réinitialiser la personnalisation de l\'apparence</string>
+    <string name="custom_reset_appearance_hint">Réinitialisez les polices, l\'accent, les coins de couverture, l\'espacement des listes, le texte et le mouvement plus forts. Conservez les comptes, les listes de lecture et les téléchargements.</string>
+    <string name="custom_reset_player">Réinitialiser la personnalisation du joueur</string>
+    <string name="custom_reset_player_hint">Restaurez l’ordre d’origine du menu et désactivez les commandes à contraste plus élevé. Gardez la lecture, les comptes et les téléchargements.</string>
+    <string name="custom_reset_confirm">Réinitialiser</string>
+    <string name="theme_packs">Atelier à thème</string>
+    <string name="theme_packs_subtitle">Téléchargez des illustrations, des polices, des icônes et des styles de lecteur</string>
+    <string name="theme_packs_description">Une nouvelle ambiance pour chaque écran. Téléchargez-le une fois, conservez-le hors ligne et revenez à votre apparence d\'origine à tout moment.</string>
+    <string name="theme_original">Original Veyra</string>
+    <string name="theme_active">Actuellement actif</string>
+    <string name="theme_restore_hint">Restaurer vos préférences d\'apparence enregistrées</string>
+    <string name="theme_apply">Appliquer le thème</string>
+    <string name="theme_download">Télécharger le thème</string>
+    <string name="theme_update_required">Mettez d\'abord à jour Veyra</string>
+    <string name="theme_catalog_empty">Aucun thème chargé pour l\'instant. Actualisez le catalogue lorsque vous êtes en ligne.</string>
+    <string name="theme_refresh_catalog">Actualiser le catalogue de thèmes</string>
+    <string name="theme_safety_hint">Un thème remplace les couleurs, les polices de titre et les styles de contrôle pris en charge jusqu\'à ce que vous reveniez à l\'original Veyra. Vos comptes, téléchargements, listes de lecture et commandes de lecture restent les vôtres. L\'apparence originale reste disponible hors ligne.</string>
+    <string name="theme_restart_title">Appliquer ce thème ?</string>
+    <string name="theme_restart_description">Veyra actualisera ses écrans pour charger le thème. La musique continue de jouer. Votre bibliothèque, vos comptes et vos préférences d\'apparence d\'origine sont préservés.</string>
+    <string name="theme_apply_restart">Appliquer et redémarrer l\'interface utilisateur</string>
+    <string name="theme_later">Plus tard</string>
+    <string name="theme_remove">Supprimer le thème téléchargé</string>
+    <string name="theme_remove_description">Cela supprime les fichiers de thème inutilisés de cet appareil. Vous pourrez télécharger à nouveau le thème plus tard.</string>
+    <string name="theme_done">Terminé</string>
+    <string name="theme_download_update">Télécharger la mise à jour du thème</string>
+    <string name="theme_collection_title">Donnez-lui l\'impression d\'être à votre image.</string>
+    <string name="theme_collection_description">De nouveaux mondes pour votre musique. Explorez les illustrations, les caractères, les icônes et les détails du joueur, puis conservez vos favoris hors ligne.</string>
+    <string name="theme_all">Tous les thèmes</string>
+    <string name="theme_downloaded">Téléchargé</string>
+    <string name="theme_discover">Découvrez</string>
+    <string name="theme_no_downloads">Vos thèmes téléchargés apparaîtront ici.</string>
+    <string name="theme_includes">Oeuvre · Polices · Contrôles · Image de marque</string>
+    <string name="theme_launcher_title">La touche finale</string>
+    <string name="theme_launcher_hint">Choisissez séparément une icône correspondante sur l\'écran d\'accueil. Votre lanceur peut prendre un moment pour s\'actualiser.</string>
+    <string name="theme_use_launcher">Utiliser l\'icône de l\'application correspondante</string>
+    <string name="theme_restore_launcher">Restaurer l\'icône de l\'application d\'origine</string>
+    <string name="theme_launcher_confirm">Changer l\'icône de l\'application ?</string>
+    <string name="theme_current_launcher">Icône de l\'application actuelle : %1$s</string>
+    <string name="icon_collection_glass">Verre</string>
+    <string name="icon_collection_themes">Thèmes</string>
+    <string name="icon_family_liquid">Liquide</string>
+    <string name="icon_chooser_hint">Choisissez une icône ci-dessus. Votre lanceur peut prendre un moment pour s\'actualiser.</string>
+    <string name="theme_back_collection">Retour aux thèmes</string>
+    <string name="theme_details">Détails du thème</string>
+    <string name="theme_downloading">Téléchargement…</string>
+    <string name="theme_verifying">Vérification des fichiers…</string>
+    <string name="theme_applying">Candidature…</string>
+    <string name="theme_live_apply_hint">Mettez à jour le look tout en gardant votre place et votre musique.</string>
+    <string name="theme_optional_restart">Actualisez également l\'interface</string>
+    <string name="icon_choose">Choisissez une icône</string>
+    <string name="theme_saved_appearance">Votre style enregistré</string>
+    <string name="home_saved_at">Enregistré %1$s · Actualisation en ligne</string>
+    <string name="theme_matching_icon">Utilisez également l\'icône de lanceur correspondante</string>
+    <string name="theme_icon_failed">Thème appliqué. L\'icône du lanceur n\'a pas pu changer ; essayez le sélecteur d\'icône d\'application.</string>
+    <string name="download_saved_private">Enregistré dans le stockage de l\'application</string>
+    <string name="download_interrupted">Interrompu à la fermeture de Veyra. Appuyez sur Réessayer pour télécharger à nouveau.</string>
+    <string name="download_storage">%1$s disponible · %2$s</string>
+    <string name="download_storage_private">Stockage d\'applications</string>
+    <string name="download_retry_all">La nouvelle tentative a échoué</string>
+    <string name="listen_together_host_reconnecting">Hôte déconnecté  · attendant qu\'il se reconnecte</string>
+    <string name="queue_removed">%1$d supprimé de la file d\'attente</string>
+    <string name="queue_undo_expired">La file d\'attente a changé. L\'annulation n\'est plus disponible.</string>
+    <string name="undo">Annuler</string>
+    <string name="download_action_track">%1$s %2$s</string>
+    <string name="icon_collection_atelier">Atelier de verre</string>
+    <string name="theme_search">Thèmes de recherche</string>
+    <string name="theme_clear_search">Effacer la recherche</string>
+    <string name="theme_no_search_results">Aucun thème correspondant. Essayez un autre nom ou une autre ambiance.</string>
+    <string name="icon_search">Icônes de recherche</string>
+    <string name="icon_no_search_results">Aucune icône correspondante dans cette collection.</string>
+    <string name="icon_current_selection">Icône actuelle : %1$s</string>
+    <string name="icon_collection_all">Tout</string>
+    <string name="appearance_fonts">Polices</string>
+    <string name="font_follow_theme">Suivre le thème</string>
+    <string name="font_veyra_default">Veyra par défaut</string>
+    <string name="font_preview_heading">Votre musique, votre style.</string>
+    <string name="font_preview_body">Titres de chansons clairs. Lecture confortable.</string>
+    <string name="font_selection_hint">Votre choix de police reste lorsque vous changez de thème. Suivre le thème restaure la typographie de chaque thème. Les licences de polices sont incluses avec l\'application.</string>
+    <string name="font_apply">Appliquer la police</string>
+    <string name="app_style">Style d\'application</string>
+    <string name="app_style_hint">Choisissez un look complet pour Home et le reste de Veyra. Vos choix de thème et de police d\'origine restent enregistrés.</string>
+    <string name="style_original_hint">Votre maison familière. Tous les thèmes et choix de polices téléchargeables.</string>
+    <string name="style_editorial_hint">Papier crème, accents bordeaux et couvertures éditoriales audacieuses.</string>
+    <string name="style_room_hint">Verts botaniques, typographie chaleureuse et collages sur pochettes de disques.</string>
+    <string name="style_night_hint">Bleu nuit, caractères surdimensionnés et illustration de votre chanson actuelle.</string>
+    <string name="style_apply">Appliquer le style</string>
+    <string name="style_original_only">Disponible en version originale. Votre sélection reste enregistrée.</string>
+    <string name="style_themes_suspended">Ce style d\'application possède sa propre palette et ses propres polices. Basculez vers Original pour appliquer des thèmes téléchargeables.</string>
+    <string name="experience_section_player">Joueur</string>
+    <string name="experience_section_mini">Mini-lecteur</string>
+    <string name="experience_section_gestures">Gestes</string>
+    <string name="experience_section_network">Réseau</string>
+    <string name="experience_home_layout">L\'aménagement de votre maison</string>
+    <string name="experience_nav_destinations">Destinations visibles</string>
+    <string name="experience_nav_behavior">Comportement de navigation</string>
+    <string name="scroll_player_animations">Faire défiler les animations du joueur</string>
+    <string name="scroll_player_animations_hint">Pliez le mini lecteur en navigation tout en faisant défiler, avec ou sans Liquid Glass. Respecte les mouvements réduits.</string>
+    <string name="pin_home_header">Épingler l\'en-tête d\'accueil</string>
+    <string name="pin_home_header_hint">Conservez la marque et le message d\'accueil d\'origine au-dessus du flux défilant. Des fenêtres courtes permettent de faire défiler l\'en-tête.</string>
+    <string name="asset_packs">Packs d\'actifs</string>
+    <string name="asset_packs_subtitle">Superposez des polices, des icônes et des contrôles sur n\'importe quel thème</string>
+    <string name="asset_packs_explanation">Gardez votre thème. Modifiez ses détails. Les packs de ressources fonctionnent également avec les styles d\'application originaux et personnalisés.</string>
+    <string name="asset_theme_defaults">Utiliser les ressources du thème</string>
+    <string name="asset_layers">Choisissez les pièces que le pack remplace.</string>
+    <string name="asset_restore">Restaurer les actifs du thème</string>
+    <string name="asset_icons">Icônes et skins pressés</string>
+    <string name="asset_controls">Formes de boutons et barres de progression</string>
+    <string name="asset_motion">Transitions de pages de pack</string>
+    <string name="asset_colors">Encre de titre adaptative</string>
+    <string name="asset_font_priority">La police choisie ou importée est prioritaire. Choisissez Suivre le thème dans Polices pour utiliser le lettrage du pack. Les ressources indisponibles conservent leurs contrôles natifs.</string>
+    <string name="asset_cancel">Annuler le téléchargement</string>
+    <string name="asset_download">Télécharger les ressources</string>
+    <string name="asset_update_required">Mettez d\'abord à jour Veyra</string>
+    <string name="asset_remove">Supprimer le téléchargement</string>
+    <string name="asset_empty">Aucun pack chargé. Actualisez pour réessayer.</string>
+    <string name="asset_apply">Appliquer des éléments</string>
+    <string name="app_icon_collection_riot_candy">Riot Candy</string>
+    <string name="app_icon_collection_chrome_venom">Chrome Venom</string>
+    <string name="app_icon_collection_bubble_riot">Bubble Riot</string>
+    <string name="app_icon_collection_xerox_afterparty">Xerox Afterparty</string>
+    <string name="app_icon_collection_cosmic_vandal">Cosmic Vandal</string>
+    <string name="app_icon_collection_switchback_radio">Switchback Radio</string>
+    <string name="app_icon_collection_komorebi_hour">Komorebi Hour</string>
+    <string name="app_icon_collection_rooftop_reverie">Rooftop Reverie</string>
+    <string name="app_icon_collection_apex_telemetry">Apex Telemetry</string>
+    <string name="app_icon_collection_cinder_kata">Cinder Kata</string>
+    <string name="app_icon_collection_lantern_letters">Lantern Letters</string>
+    <string name="app_icon_collection_velvet_orbit">Velvet Orbit</string>
+    <string name="app_icon_collection_moss_mechanism">Moss &amp; Mechanism</string>
+    <string name="app_icon_collection_sugar_static">Sugar Static</string>
+    <string name="app_icon_collection_tidal_origami">Tidal Origami</string>
+    <string name="app_icon_collection_margin_notes">Margin Notes</string>
+    <string name="app_icon_collection_spray_parade">Spray Parade</string>
+    <string name="app_icon_collection_paper_pop">Paper Pop</string>
+    <string name="app_icon_collection_ink_rebel">Ink Rebel</string>
+    <string name="app_icon_collection_laser_club">Laser Club</string>
+    <string name="app_icon_collection_thread_riot">Thread Riot</string>
+    <string name="icon_collection_assets">Packs d\'actifs</string>
+    <string name="asset_matching_app_icon">Icône d\'application correspondante</string>
+    <string name="app_icon_collection_cathedral_static">Cathedral Static</string>
+    <string name="app_icon_collection_velvet_hex">Velvet Hex</string>
+    <string name="app_icon_collection_razor_bloom">Razor Bloom</string>
+    <string name="app_icon_collection_neon_seance">Neon Séance</string>
+    <string name="app_icon_collection_blackout_zine">Blackout Zine</string>
+    <string name="app_icon_collection_chrome_fang">Chrome Fang</string>
+    <string name="app_icon_collection_candy_crypt">Candy Crypt</string>
+    <string name="app_icon_collection_royal_ruin">Royal Ruin</string>
+    <string name="app_icon_collection_acid_gargoyle">Acid Gargoyle</string>
+    <string name="app_icon_collection_midnight_stitch">Midnight Stitch</string>
+    <string name="navigation_monorail">Monorail</string>
+    <string name="navigation_harbor">Port</string>
+    <string name="navigation_ticket">Billet</string>
+    <string name="navigation_pebble">Caillou</string>
+    <string name="navigation_prism">Prisme</string>
+    <string name="navigation_bracket">Support</string>
+    <string name="navigation_halo">Halo</string>
+    <string name="navigation_stitch">Point</string>
+    <string name="navigation_pixel">Pixels</string>
+    <string name="navigation_lozenge">Pastille</string>
+    <string name="scroll_motion_zephyr">Zéphyr</string>
+    <string name="scroll_motion_cascade">Cascade</string>
+    <string name="scroll_motion_focus">Concentrez-vous</string>
+    <string name="scroll_motion_snap">Snap</string>
+    <string name="scroll_motion_bloom">Floraison</string>
+    <string name="scroll_motion_sweep">Balayage</string>
+    <string name="scroll_motion_float">Flotteur</string>
+    <string name="scroll_motion_compress">Compresser</string>
+    <string name="scroll_motion_unfold">Déplier</string>
+    <string name="scroll_motion_settle">Régler</string>
+    <string name="app_motion_default">Thème par défaut</string>
+    <string name="app_motion_silk">Soie</string>
+    <string name="app_motion_soft_zoom">Zoom doux</string>
+    <string name="app_motion_rise">Monter</string>
+    <string name="app_motion_drift">Dérive</string>
+    <string name="app_motion_reveal">Révéler</string>
+    <string name="app_motion_quick_cut">Coupe rapide</string>
+    <string name="app_motion_velvet">Velours</string>
+    <string name="app_motion_spring">Printemps</string>
+    <string name="app_motion_diagonal">Diagonale</string>
+    <string name="app_motion_shutter">Obturateur</string>
+    <string name="app_motion_title">Studio de mouvement</string>
+    <string name="app_motion_style">Transition de page</string>
+    <string name="app_motion_hint">Choisissez le mouvement pour les pages et les paramètres. Le thème par défaut conserve le style propre de chaque pack. L\'ouverture des joueurs suit le timing sélectionné ; la réduction des mouvements est toujours prioritaire.</string>
+    <string name="motion_tempo_title">Rythme de mouvement</string>
+    <string name="motion_tempo_relaxed">Détendu</string>
+    <string name="motion_tempo_balanced">Équilibré</string>
+    <string name="motion_tempo_quick">Rapide</string>
+    <string name="motion_preview">Appuyez pour prévisualiser</string>
+    <string name="asset_search">Rechercher des packs et des styles</string>
+    <string name="asset_all">Tous les packs</string>
+    <string name="asset_no_matches">Aucun pack correspondant. Essayez un autre style ou passez à Tous les packs.</string>
+    <string name="app_icon_pocket_soda_sabotage">Soda Sabotage Glass</string>
+    <string name="app_icon_pocket_velvet_vandal">Velvet Vandal Glass</string>
+    <string name="app_icon_pocket_acid_daydream">Acid Daydream Glass</string>
+    <string name="app_icon_pocket_peach_panic">Peach Panic Glass</string>
+    <string name="app_icon_pocket_ink_and_ivory">Ink and Ivory Glass</string>
+    <string name="app_icon_pocket_holo_havoc">Holo Havoc Glass</string>
+    <string name="app_icon_pocket_denim_disorder">Denim Disorder Glass</string>
+    <string name="app_icon_pocket_cherry_voltage">Cherry Voltage Glass</string>
+    <string name="app_icon_pocket_mint_mutiny">Mint Mutiny Glass</string>
+    <string name="app_icon_pocket_lunar_lollipop">Lunar Lollipop Glass</string>
+    <string name="app_icon_pocket_gummy_signal">Gummy Signal Glass</string>
+    <string name="app_icon_pocket_razor_petal">Razor Petal Glass</string>
+    <string name="app_icon_pocket_disco_chrome">Disco Chrome Glass</string>
+    <string name="app_icon_pocket_paper_revolt">Paper Revolt Glass</string>
+    <string name="app_icon_pocket_velvet_sigil">Velvet Sigil Glass</string>
+    <string name="app_icon_pocket_patch_party">Patch Party Glass</string>
+    <string name="app_icon_pocket_pixel_fizz">Pixel Fizz Glass</string>
+    <string name="app_icon_pocket_kitty_mayhem">Kitty Mayhem Glass</string>
+    <string name="app_icon_pocket_mochi_moshpit">Mochi Moshpit Glass</string>
+    <string name="app_icon_pocket_peach_bruiser">Peach Bruiser Glass</string>
+    <string name="app_icon_pocket_bunny_voltage">Bunny Voltage Glass</string>
+    <string name="app_icon_pocket_cherry_bombshell">Cherry Bombshell Glass</string>
+    <string name="app_icon_pocket_teddy_tantrum">Teddy Tantrum Glass</string>
+    <string name="app_icon_pocket_bubble_fang">Bubble Fang Glass</string>
+    <string name="app_icon_pocket_sugar_goblin">Sugar Goblin Glass</string>
+    <string name="app_icon_pocket_cosmic_pudding">Cosmic Pudding Glass</string>
+    <string name="app_icon_pocket_sticker_syndicate">Sticker Syndicate Glass</string>
+    <string name="welcome_guest_note">Un compte est facultatif. Commencez par votre musique.</string>
+    <string name="search_ready_hint">Prêt à rechercher « %1$s »</string>
+    <string name="search_top_result">Meilleur résultat</string>
 </resources>

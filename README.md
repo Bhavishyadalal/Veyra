@@ -1,24 +1,10 @@
-> Build 55 reduces immersive redraw/lyric work, adds optional automatic APK downloads with Android-approved installation, updates the waveform notification icon and fixes Settings/welcome interactions. [Changes and validation](verification/PERFORMANCE-UPDATES-0.2.1-BUILD-55.md).
-
-> **Testing preview 0.2.1-beta1 / code 55** · Automatic Music/Veyra downloads, Export all downloads, safe recording filenames and bounded, animated progress. [Beta notes](RELEASE_NOTES_0.2.1-beta1.md) · [Verification/device checklist](verification/DOWNLOADS-0.2.1-beta1.md). Stable remains 0.2.0 / code 53.
-
-> **Stable 0.2.0 / code 53** · 12 immersive modes, 72 themes, 32 independent overlays and 132 launcher choices. Theme-aware Liquid Glass, Motion studio, 16 navigation designs, 15 scroll-player transitions and complete matching glass icons.
+> **Stable 0.2.1 / code 56** · Faster immersive mode picker, enforced shared Music/Veyra downloads, current waveform notifications, optional app updates and Settings/welcome fixes. Includes 12 immersive modes, 72 themes, 32 overlays and 132 launcher choices.
 >
-> [Release notes](RELEASE_NOTES_0.2.0.md) · [Pocket Riot assets](asset-packs/POCKET_RIOT.md) · [Glass icons](design/launcher/pocket-riot/previews/glass-editions.webp) · [Source downloads](downloads/README.md) · [Promotion checks](verification/STABLE-0.2.0-PROMOTION.md).
+> [Release notes](RELEASE_NOTES_0.2.1.md) · [Promotion and testing](verification/STABLE-0.2.1-PROMOTION.md) · [Source downloads](downloads/README.md).
 >
-> Build 53 adds visible Home refresh recovery, clearer search drafts, independent live media suggestions, consistent keyboard dismissal and responsive themed feedback/actions. [UX changes and checks](verification/UX-0.2.0-BUILD-53.md).
-
-> Build 52 fixes concurrent source edits, temporary/replaced-client policy writes, retired HTTP work, duplicate reorder rows and stale local-page refreshes. [Latest checks](verification/PATCH-0.2.0-BUILD-52.md).
-
-> Build 51 fixes Sources → Playback Settings dismissal, covered-page update/render work, backdrop capture and source-update races, and makes welcome lighter and more adaptive. [Fixes and verification](verification/PATCH-0.2.0-BUILD-51.md). [All twelve immersive modes](verification/IMMERSIVE-EXPANSION-0.2.0-BUILD-50.md) and prior reliability fixes remain.
-
-> Completed preview **0.2.0-beta1 / code 46** remains on `preview/0.2.0-beta1`. Historical stable **0.1.9 / code 40** remains on `stable/0.1.9`. Rebuild/install code 53 for the latest fixes; this source push does not publish a signed APK.
+> Main and `stable/0.2.1` are the current stable source. Completed `preview/0.2.1-beta1` remains code 55; older stable versions remain on their frozen branches. Source ZIPs are Android Studio projects, not APKs. APK publication is separate.
 
 ![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
-
-> **Source tracks:** current stable is on `main` and `stable/0.2.0`. Historical stable 0.1.7 remains on `stable/0.1.7`; the completed `preview/0.1.8-beta1` remains code 27. Stable 0.2.0 includes 72 themes, 32 asset packs and 132 launcher choices. [Downloads](downloads/README.md) · [Backend policy](docs/BACKEND_SYNC.md).
-
-> Open the complete project using [START_HERE.md](START_HERE.md). Source ZIPs are Android Studio projects, not APKs; promotion does not publish an installable APK.
 
 # Veyra
 

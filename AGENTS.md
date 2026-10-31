@@ -1,15 +1,18 @@
 # Veyra maintenance rules
 
-- Active preview: `preview/0.2.1-beta1`, **0.2.1-beta1 / code 55**.
-  Build 55 adds cached immersive backdrop layers, indexed lyric focus, safe
-  automatic APK transfers, waveform notifications and Settings/welcome fixes.
-  See verification/PERFORMANCE-UPDATES-0.2.1-BUILD-55.md. Retains shared
-  Music/Veyra downloads, bulk export, safer identities and bounded progress.
-  See verification/DOWNLOADS-0.2.1-beta1.md. Keep stable 0.2.0 / code 53 unchanged.
-  Preview catalogs/fallbacks target this preview branch. Retain stable 0.2.0 plus
-  previews 0.2.1-beta1, 0.2.0-beta1 and 0.1.9-beta1 at this branch tip.
+- Current stable: `main` and `stable/0.2.1`, **0.2.1 / code 56**, explicitly
+  promoted at the owner's request. Fixes the immersive mode picker with lazy
+  rows, deferred previews, paused background motion and dismissal-before-selection.
+  All new downloads must use shared Music/Veyra: no private-mode preference or
+  private DownloadStore write path remains. Existing private originals stay safe
+  and remain exportable. See verification/STABLE-0.2.1-PROMOTION.md.
+  Stable catalogs/fallbacks target main. Completed `preview/0.2.1-beta1` stays
+  frozen at 0.2.1-beta1 / code 55 with its preview URLs. Retain stable 0.2.1 plus
+  the newest previews 0.2.1-beta1, 0.2.0-beta1 and 0.1.9-beta1 at branch tips.
+  Sixteen offered non-English locales now include missing UI keys, with
+  machine-assisted translations; preserve indexed arguments and branded names.
 
-- Current stable: `main` and `stable/0.2.0`, version **0.2.0 / code 53**.
+- Previous stable: `stable/0.2.0`, version **0.2.0 / code 53**.
   Build 53 improves Home recovery with visible Retry, current-query search drafts,
   independent media suggestions, duplicate-safe completions, keyboard dismissal,
   large-text result actions and theme-aware empty/error cards. See
@@ -45,7 +48,7 @@
   Build 45 adds Chaos Studio and Motion studio; builds 42–44 fix Liquid Glass,
   navigation design, request ownership and ratings. Preserve reduced motion,
   safe JSON defaults and decoration-only glass overlays.
-  Current source archives: stable 0.2.0 plus previews 0.2.1-beta1,
+  Current source archives: stable 0.2.1 plus previews 0.2.1-beta1,
   0.2.0-beta1 and 0.1.9-beta1. Older stable 0.1.9 stays on its frozen branch/history.
   Source ZIPs retain native inputs and masters; runtime ZIPs are losslessly stored
   in SOURCE_DATA_PACKS.tar.xz. Restore offline with scripts/restore_source_packs.py

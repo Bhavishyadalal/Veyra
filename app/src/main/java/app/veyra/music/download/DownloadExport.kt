@@ -106,7 +106,7 @@ object DownloadExport {
             else -> error("Unsupported audio format: $extension")
         }
         val name = DownloadStore.fileNameFor(song, extension)
-        if (DownloadStore.existing(context, name, public = true) != null) return false
+        if (DownloadStore.existing(context, name) != null) return false
         var remuxed: File? = null
         var pending: DownloadStore.Pending? = null
         try {
@@ -114,7 +114,7 @@ object DownloadExport {
                 remuxed = File.createTempFile("veyra-export-", ".ogg", context.cacheDir)
                 remuxOpus(file, remuxed) { scope.ensureActive() }
             }
-            val destination = DownloadStore.begin(context, name, mime, public = true)
+            val destination = DownloadStore.begin(context, name, mime)
             pending = destination
             destination.openStream().use { sink ->
                 if (packagePlan != null) PortableAudio.write(context.cacheDir, packagePlan, sink) { scope.ensureActive() }

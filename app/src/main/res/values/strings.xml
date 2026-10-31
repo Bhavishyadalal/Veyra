@@ -999,7 +999,8 @@
 
     <string name="miscellaneous_footer">When enabled, closing the app from the recent apps screen will also stop music playback.</string>
 
-    <string name="export_compatible_downloads">Save new downloads to Music/Veyra</string>
+    <string name="export_compatible_downloads">Download folder</string>
+    <string name="download_destination_hint">Internal storage → Music → Veyra. All new audio downloads are saved here.</string>
     <string name="export_all_downloads">Export all downloads</string>
     <string name="app_updates">App updates</string>
     <string name="auto_download_updates">Download updates automatically</string>

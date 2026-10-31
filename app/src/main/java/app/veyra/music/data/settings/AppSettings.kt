@@ -17,6 +17,7 @@ import app.veyra.music.data.sources.SourceKind
 import app.veyra.music.playback.EqLayout
 import app.veyra.music.playback.EqualizerPreset
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 
 /**
@@ -213,11 +214,10 @@ object AppSettings {
 
     /**
      * Keep ordinary downloads in Music/Veyra where other music apps can see
-     * them. On by default; users may opt into app-private storage instead.
-     * Supported manifests are assembled into portable audio; the private mode
-     * can also retain codecs that need an offline playlist package.
+     * them. All new downloads use shared storage, including after restoring
+     * an old backup containing the retired private-storage preference.
      */
-    val exportDownloads = MutableStateFlow(true)
+    val exportDownloads = MutableStateFlow(true).asStateFlow()
     /** Opt-in: download signed release APKs on an unmetered connection while opening Veyra. */
     val autoDownloadUpdates = MutableStateFlow(false)
 
@@ -841,13 +841,9 @@ object AppSettings {
         migrateDownloadQuality()
         downloadQuality.value = readDownloadQuality()
         wifiOnlyDownloads.value = prefs.getBoolean(KEY_WIFI_ONLY_DOWNLOADS, true)
-        // One-time migration to the portable-download default. Later explicit
-        // choices (including private storage) survive restarts and updates.
-        if (!prefs.getBoolean("portable_downloads_v1", false)) {
-            prefs.edit().putBoolean(KEY_EXPORT_DOWNLOADS, true)
-                .putBoolean("portable_downloads_v1", true).apply()
-        }
-        exportDownloads.value = prefs.getBoolean(KEY_EXPORT_DOWNLOADS, true)
+        // Shared storage is the download contract. Ignore old private-mode
+        // choices restored from preferences/backups; old audio remains exportable.
+        prefs.edit().remove(KEY_EXPORT_DOWNLOADS).remove("portable_downloads_v1").apply()
         crossfadeSeconds.value = prefs.getInt(KEY_CROSSFADE, 0)
         smartFadeEnabled.value = prefs.getBoolean(KEY_SMART_FADE, false)
         automixPerformanceMode.value = runCatching {
@@ -1661,11 +1657,6 @@ object AppSettings {
     fun setLoudnessNormalization(value: Boolean) {
         loudnessNormalization.value = value
         prefs.edit().putBoolean(KEY_LOUDNESS_NORMALIZATION, value).apply()
-    }
-
-    fun setExportDownloads(value: Boolean) {
-        exportDownloads.value = value
-        prefs.edit().putBoolean(KEY_EXPORT_DOWNLOADS, value).apply()
     }
 
     fun setAutoDownloadUpdates(value: Boolean) {

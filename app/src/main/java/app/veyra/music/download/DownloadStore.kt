@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import app.veyra.music.data.DebugLog as Log
-import app.veyra.music.data.settings.AppSettings
 import androidx.annotation.RequiresApi
 import app.veyra.music.data.model.Song
 import java.io.File
@@ -155,14 +154,9 @@ object DownloadStore {
      * taps download twice gets two copies rather than being told they already
      * have one.
      */
-    fun existing(context: Context, name: String, public: Boolean = AppSettings.exportDownloads.value): Uri? =
-        if (!public) {
-            privateFile(context, name).takeIf { it.isFile && it.length() > 0 }?.let(Uri::fromFile)
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            mediaStoreEntry(context, name)
-        } else {
-            legacyFile(name).takeIf { it.isFile && it.length() > 0 }?.let(Uri::fromFile)
-        }
+    fun existing(context: Context, name: String): Uri? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) mediaStoreEntry(context, name)
+        else legacyFile(name).takeIf { it.isFile && it.length() > 0 }?.let(Uri::fromFile)
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun mediaStoreEntry(context: Context, name: String): Uri? = runCatching {
@@ -271,14 +265,7 @@ object DownloadStore {
      *   made — a failure worth surfacing, since every one of them means the
      *   download cannot start rather than that it might not finish.
      */
-    fun begin(context: Context, name: String, mimeType: String, public: Boolean = AppSettings.exportDownloads.value): Pending {
-        if (!public) {
-            val target = privateFile(context, name)
-            val folder = target.parentFile ?: error("No download folder")
-            if (!folder.exists() && !folder.mkdirs()) error("Could not create ${folder.path}")
-            val part = File.createTempFile(".veyra-", ".part", folder)
-            return Pending(context, Uri.fromFile(target), name, part = part, target = target)
-        }
+    fun begin(context: Context, name: String, mimeType: String): Pending {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val values = ContentValues().apply {
                 put(MediaStore.MediaColumns.DISPLAY_NAME, name)
@@ -315,6 +302,4 @@ object DownloadStore {
         name,
     )
 
-    private fun privateFile(context: Context, name: String) =
-        File(File(context.filesDir, "downloads"), name)
 }

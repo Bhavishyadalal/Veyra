@@ -846,7 +846,7 @@
 
     <string name="dolby_atmos_unavailable">यह डिवाइस Atmos का समर्थन नहीं करता, गाने सामान्य संस्करण में बजेंगे</string>
 
-    <string name="export_compatible_downloads">संगत डाउनलोड निर्यात करें</string>
+    <string name="export_compatible_downloads">फ़ोल्डर डाउनलोड करें</string>
 
     <string name="legacy_mesh_gradient">क्लासिक मेश ग्रेडिएंट</string>
 
@@ -1322,4 +1322,299 @@
     <string name="onboarding_back">वापस</string>
     <string name="signed_by">%1$s द्वारा हस्ताक्षरित</string>
     <string name="settings_intro">आवाज़, अंदाज़ और बाकी सब कुछ।</string>
+
+    <!-- Completed UI strings; machine-assisted translations, branded style names preserved. -->
+    <string name="download_destination_hint">आंतरिक भंडारण → संगीत → Veyra। सभी नए ऑडियो डाउनलोड यहां सहेजे गए हैं।</string>
+    <string name="export_all_downloads">सभी डाउनलोड निर्यात करें</string>
+    <string name="app_updates">ऐप अपडेट</string>
+    <string name="auto_download_updates">अपडेट स्वचालित रूप से डाउनलोड करें</string>
+    <string name="auto_download_updates_hint">जांचें कि Veyra कब खुलता है और बिना मीटर वाले कनेक्शन पर नई रिलीज़ डाउनलोड करें। एंड्रॉइड हमेशा इंस्टॉल करने से पहले पूछता है।</string>
+    <string name="check_app_updates">अपडेट के लिए जांचें</string>
+    <string name="update_ready_to_install">Veyra अपडेट इंस्टाल करने के लिए तैयार है</string>
+    <string name="update_downloading_apk">Veyra अपडेट डाउनलोड हो रहा है</string>
+    <string name="update_install_permission_hint">अपडेट की समीक्षा करने और इंस्टॉलेशन को मंजूरी देने के लिए टैप करें।</string>
+    <string name="export_downloads_description">अन्य ऐप्स में उपयोग के लिए आंतरिक भंडारण में सहेजे गए ऑडियो को Music/Veyra पर कॉपी करें। मूल सुरक्षित रहें. पुनः प्रयास करने से पूर्ण प्रतियाँ छूट जाती हैं।</string>
+    <string name="export_downloads_result">%1$d निर्यात किया गया · %2$d पहले ही साझा किया गया · %3$d विफल</string>
+    <string name="veyra_github_profile">GitHub पर डेवलपर</string>
+    <string name="veyra_github_source">Veyra स्रोत कोड</string>
+    <string name="veyra_website_source">वेबसाइट स्रोत कोड</string>
+    <string name="welcome_space_title">आपका संगीत.\nआपका स्थान.</string>
+    <string name="welcome_space_body">पसंदीदा ढूंढें.\nभावना के लिए बने रहें।</string>
+    <string name="welcome_lyrics_title">हर शब्द.\nहर भावना.</string>
+    <string name="welcome_lyrics_body">गीत के बोल का अनुसरण करें.\nगीत के करीब पहुंचें।</string>
+    <string name="welcome_together_title">आपके लोग.\nOne साउंडट्रैक।</string>
+    <string name="welcome_together_body">एक साथ सुनें.\n शामिल होने के लिए किसी खाते की आवश्यकता नहीं है।</string>
+    <string name="welcome_music_chip">आपके संगीत के लिए बनाया गया</string>
+    <string name="welcome_lyrics_chip">गीत के साथ बने रहें</string>
+    <string name="welcome_together_chip">एक साथ बेहतर</string>
+    <string name="welcome_get_started">आरंभ करें</string>
+    <string name="welcome_next_preview">अगले पूर्वावलोकन का अन्वेषण करें</string>
+    <string name="welcome_preview_position">%2$d का पूर्वावलोकन %1$d</string>
+    <string name="onboarding_personalize_title">इसे अपना बनाओ.</string>
+    <string name="settings_backup_working">आपके बैकअप पर काम हो रहा है...</string>
+    <string name="home_layout_save_failed">आपका होम लेआउट सहेजा नहीं जा सका. कृपया पुन: प्रयास करें।</string>
+    <string name="home_offline_track_unavailable">इस आइटम को कनेक्शन की आवश्यकता है. ऑफ़लाइन सुनने के लिए डाउनलोड या स्थानीय संगीत खोलें।</string>
+    <string name="stronger_text">अधिक सशक्त पाठ</string>
+    <string name="stronger_text_subtitle">आसानी से पढ़ने के लिए भारी पाठ। आपके सिस्टम टेक्स्ट का आकार बनाए रखता है.</string>
+    <string name="contrast_player_controls">उच्च-कंट्रास्ट प्लेयर नियंत्रण</string>
+    <string name="contrast_player_controls_subtitle">प्लेयर बटन को कलाकृति के ऊपर एक दृश्यमान पृष्ठभूमि और रूपरेखा दें।</string>
+    <string name="custom_accent">एक्सेंट पैलेट</string>
+    <string name="custom_accent_hint">ऐप उच्चारण रंग; प्लेयर कलाकृति के रंग गीत से बंधे रहते हैं।</string>
+    <string-array name="custom_accent_options">
+        <item>Veyra</item>
+        <item>चैती</item>
+        <item>अंबर</item>
+        <item>गुलाब</item>
+    </string-array>
+    <string name="custom_artwork_corners">कलाकृति के कोने</string>
+    <string name="custom_artwork_corners_hint">टाइल्स, ट्रैक थंबनेल और प्लेयर कलाकृति के लिए कवर शैली चुनें।</string>
+    <string-array name="custom_corner_options">
+        <item>मौलिक</item>
+        <item>मुलायम</item>
+        <item>गोलाकार</item>
+        <item>चौकोर</item>
+    </string-array>
+    <string name="custom_list_spacing">गीत सूची रिक्ति</string>
+    <string name="custom_list_spacing_hint">कॉम्पैक्ट पंक्ति गद्दी को कम करता है। बड़ा सिस्टम टेक्स्ट आरामदायक अंतर रखता है।</string>
+    <string-array name="custom_spacing_options">
+        <item>आरामदायक</item>
+        <item>सघन</item>
+    </string-array>
+    <string name="custom_motion_level">गति स्तर</string>
+    <string name="custom_motion_level_hint">सूक्ष्म पृष्ठ को फीका रखता है और सजावटी गति को शांत करता है। सिस्टम-अक्षम एनिमेशन हमेशा प्राथमिकता लेते हैं।</string>
+    <string-array name="custom_motion_options">
+        <item>पूर्ण</item>
+        <item>सूक्ष्म</item>
+        <item>बंद</item>
+    </string-array>
+    <string name="custom_player_shortcut">प्राथमिकता खिलाड़ी कार्रवाई</string>
+    <string name="custom_player_shortcut_hint">एक क्रिया को प्लेयर के तीन-बिंदु मेनू के शीर्ष पर ले जाएँ। खाता क्रियाओं के लिए अभी भी साइन-इन की आवश्यकता है।</string>
+    <string-array name="custom_shortcut_options">
+        <item>मूल आदेश</item>
+        <item>डाउनलोड करें</item>
+        <item>पसंदीदा</item>
+        <item>नींद का टाइमर</item>
+        <item>प्लेलिस्ट में जोड़ें</item>
+    </string-array>
+    <string name="custom_reset_appearance">उपस्थिति अनुकूलन रीसेट करें</string>
+    <string name="custom_reset_appearance_hint">फ़ॉन्ट, उच्चारण, कवर कोनों, सूची रिक्ति, मजबूत पाठ और गति को रीसेट करें। खाते, प्लेलिस्ट और डाउनलोड रखें।</string>
+    <string name="custom_reset_player">प्लेयर अनुकूलन रीसेट करें</string>
+    <string name="custom_reset_player_hint">मूल मेनू क्रम पुनर्स्थापित करें और उच्च-कंट्रास्ट नियंत्रण बंद करें। प्लेबैक, अकाउंट और डाउनलोड रखें।</string>
+    <string name="custom_reset_confirm">रीसेट करें</string>
+    <string name="theme_packs">थीम स्टूडियो</string>
+    <string name="theme_packs_subtitle">कलाकृति, फ़ॉन्ट, आइकन और प्लेयर शैलियाँ डाउनलोड करें</string>
+    <string name="theme_packs_description">हर स्क्रीन के लिए एक नया माहौल। एक बार डाउनलोड करें, इसे ऑफ़लाइन रखें, और किसी भी समय अपने मूल स्वरूप में वापस आएँ।</string>
+    <string name="theme_original">मूल Veyra</string>
+    <string name="theme_active">वर्तमान में सक्रिय</string>
+    <string name="theme_restore_hint">अपनी सहेजी गई उपस्थिति प्राथमिकताओं को पुनर्स्थापित करें</string>
+    <string name="theme_apply">थीम लागू करें</string>
+    <string name="theme_download">थीम डाउनलोड करें</string>
+    <string name="theme_update_required">पहले Veyra को अपडेट करें</string>
+    <string name="theme_catalog_empty">अभी तक कोई थीम लोड नहीं हुई है. जब आप ऑनलाइन हों तो कैटलॉग को ताज़ा करें।</string>
+    <string name="theme_refresh_catalog">थीम कैटलॉग ताज़ा करें</string>
+    <string name="theme_safety_hint">जब तक आप मूल Veyra पर वापस नहीं आते, थीम समर्थित रंगों, शीर्षक फ़ॉन्ट और नियंत्रण शैलियों को ओवरराइड करती है। आपके खाते, डाउनलोड, प्लेलिस्ट और प्लेबैक नियंत्रण आपके ही रहेंगे। मूल स्वरूप ऑफ़लाइन उपलब्ध रहता है.</string>
+    <string name="theme_restart_title">इस थीम को लागू करें?</string>
+    <string name="theme_restart_description">Veyra थीम लोड करने के लिए अपनी स्क्रीन को रीफ्रेश करेगा। संगीत बजता रहता है. आपकी लाइब्रेरी, खाते और मूल स्वरूप प्राथमिकताएँ संरक्षित हैं।</string>
+    <string name="theme_apply_restart">यूआई लागू करें और पुनः आरंभ करें</string>
+    <string name="theme_later">बाद में</string>
+    <string name="theme_remove">डाउनलोड की गई थीम हटाएं</string>
+    <string name="theme_remove_description">यह इस डिवाइस से अप्रयुक्त थीम फ़ाइलों को हटा देता है। आप बाद में थीम को फिर से डाउनलोड कर सकते हैं।</string>
+    <string name="theme_done">हो गया</string>
+    <string name="theme_download_update">थीम अपडेट डाउनलोड करें</string>
+    <string name="theme_collection_title">इसे अपने जैसा महसूस कराएं.</string>
+    <string name="theme_collection_description">आपके संगीत के लिए नई दुनिया। कलाकृति, प्रकार, आइकन और प्लेयर विवरण का अन्वेषण करें, फिर अपने पसंदीदा को ऑफ़लाइन रखें।</string>
+    <string name="theme_all">सभी विषय</string>
+    <string name="theme_downloaded">डाउनलोड किया गया</string>
+    <string name="theme_discover">खोजें</string>
+    <string name="theme_no_downloads">आपकी डाउनलोड की गई थीम यहां दिखाई देंगी.</string>
+    <string name="theme_includes">कलाकृति · फ़ॉन्ट्स · नियंत्रण · ब्रांडिंग</string>
+    <string name="theme_launcher_title">अंतिम स्पर्श</string>
+    <string name="theme_launcher_hint">अलग से मेल खाने वाला होम-स्क्रीन आइकन चुनें। आपके लॉन्चर को ताज़ा होने में कुछ समय लग सकता है।</string>
+    <string name="theme_use_launcher">मेल खाने वाले ऐप आइकन का उपयोग करें</string>
+    <string name="theme_restore_launcher">मूल ऐप आइकन पुनर्स्थापित करें</string>
+    <string name="theme_launcher_confirm">ऐप आइकन बदलें?</string>
+    <string name="theme_current_launcher">वर्तमान ऐप आइकन: %1$s</string>
+    <string name="icon_collection_glass">कांच</string>
+    <string name="icon_collection_themes">थीम्स</string>
+    <string name="icon_family_liquid">तरल</string>
+    <string name="icon_chooser_hint">ऊपर एक आइकन चुनें. आपके लॉन्चर को ताज़ा होने में कुछ समय लग सकता है।</string>
+    <string name="theme_back_collection">थीम पर वापस जाएँ</string>
+    <string name="theme_details">थीम विवरण</string>
+    <string name="theme_downloading">डाउनलोड हो रहा है...</string>
+    <string name="theme_verifying">फ़ाइलें सत्यापित हो रही हैं...</string>
+    <string name="theme_applying">लागू किया जा रहा है...</string>
+    <string name="theme_live_apply_hint">अपना स्थान और संगीत चालू रखते हुए लुक को अपडेट करें।</string>
+    <string name="theme_optional_restart">इंटरफ़ेस को भी ताज़ा करें</string>
+    <string name="icon_choose">एक आइकन चुनें</string>
+    <string name="theme_saved_appearance">आपकी सहेजी गई शैली</string>
+    <string name="home_saved_at">सहेजा गया %1$s · ऑनलाइन होने पर ताज़ा हो रहा है</string>
+    <string name="theme_matching_icon">मेल खाने वाले लॉन्चर आइकन का भी उपयोग करें</string>
+    <string name="theme_icon_failed">थीम लागू की गई. लॉन्चर आइकन नहीं बदल सका; ऐप आइकन चयनकर्ता आज़माएं.</string>
+    <string name="download_saved_private">ऐप स्टोरेज में सहेजा गया</string>
+    <string name="download_interrupted">Veyra बंद होने पर बाधित हुआ। दोबारा डाउनलोड करने के लिए पुनः प्रयास करें पर टैप करें.</string>
+    <string name="download_storage">%1$s उपलब्ध · %2$s</string>
+    <string name="download_storage_private">ऐप स्टोरेज</string>
+    <string name="download_retry_all">पुनः प्रयास विफल रहा</string>
+    <string name="listen_together_host_reconnecting">होस्ट डिस्कनेक्ट हो गया · उनके पुनः कनेक्ट होने की प्रतीक्षा की जा रही है</string>
+    <string name="queue_removed">%1$d को कतार से हटा दिया गया</string>
+    <string name="queue_undo_expired">कतार बदल गई. पूर्ववत करना अब उपलब्ध नहीं है.</string>
+    <string name="undo">पूर्ववत करें</string>
+    <string name="download_action_track">%1$s %2$s</string>
+    <string name="icon_collection_atelier">ग्लास अटेलियर</string>
+    <string name="theme_search">थीम खोजें</string>
+    <string name="theme_clear_search">स्पष्ट खोज</string>
+    <string name="theme_no_search_results">कोई मेल खाती थीम नहीं. कोई दूसरा नाम या मूड आज़माएं.</string>
+    <string name="icon_search">चिह्न खोजें</string>
+    <string name="icon_no_search_results">इस संग्रह में कोई मेल खाता चिह्न नहीं है.</string>
+    <string name="icon_current_selection">वर्तमान आइकन: %1$s</string>
+    <string name="icon_collection_all">सब</string>
+    <string name="appearance_fonts">फ़ॉन्ट्स</string>
+    <string name="font_follow_theme">थीम का पालन करें</string>
+    <string name="font_veyra_default">Veyra डिफ़ॉल्ट</string>
+    <string name="font_preview_heading">आपका संगीत, आपकी शैली।</string>
+    <string name="font_preview_body">स्पष्ट गीत शीर्षक. आरामदायक पढ़ना.</string>
+    <string name="font_selection_hint">जब आप थीम बदलते हैं तो आपकी फ़ॉन्ट पसंद बनी रहती है। फ़ॉलो थीम प्रत्येक थीम की अपनी टाइपोग्राफी को पुनर्स्थापित करती है। फ़ॉन्ट लाइसेंस ऐप के साथ शामिल हैं।</string>
+    <string name="font_apply">फ़ॉन्ट लागू करें</string>
+    <string name="app_style">ऐप शैली</string>
+    <string name="app_style_hint">होम और बाकी Veyra के लिए एक संपूर्ण लुक चुनें। आपकी मूल थीम और फ़ॉन्ट विकल्प सहेजे रहते हैं।</string>
+    <string name="style_original_hint">आपका परिचित घर. सभी डाउनलोड करने योग्य थीम और फ़ॉन्ट विकल्प।</string>
+    <string name="style_editorial_hint">क्रीम पेपर, बरगंडी लहजे और बोल्ड संपादकीय कवर।</string>
+    <string name="style_room_hint">वानस्पतिक हरियाली, गर्म टाइपोग्राफी और रिकॉर्ड-आस्तीन कोलाज।</string>
+    <string name="style_night_hint">आधी रात का नीला, बड़े आकार का प्रकार और आपका वर्तमान गीत कलाकृति।</string>
+    <string name="style_apply">शैली लागू करें</string>
+    <string name="style_original_only">मूल रूप में उपलब्ध है. आपका चयन सहेजा जाता है.</string>
+    <string name="style_themes_suspended">इस ऐप शैली का अपना पैलेट और फ़ॉन्ट है। डाउनलोड करने योग्य थीम लागू करने के लिए मूल पर स्विच करें।</string>
+    <string name="experience_section_player">खिलाड़ी</string>
+    <string name="experience_section_mini">मिनी प्लेयर</string>
+    <string name="experience_section_gestures">इशारे</string>
+    <string name="experience_section_network">नेटवर्क</string>
+    <string name="experience_home_layout">आपके घर का लेआउट</string>
+    <string name="experience_nav_destinations">दृश्यमान गंतव्य</string>
+    <string name="experience_nav_behavior">नेविगेशन व्यवहार</string>
+    <string name="scroll_player_animations">स्क्रॉल प्लेयर एनिमेशन</string>
+    <string name="scroll_player_animations_hint">स्क्रॉल करते समय, लिक्विड ग्लास के साथ या उसके बिना, मिनी प्लेयर को नेविगेशन में मोड़ें। कम गति का सम्मान करता है.</string>
+    <string name="pin_home_header">होम हेडर पिन करें</string>
+    <string name="pin_home_header_hint">ओरिजिनल होम ब्रांडिंग और ग्रीटिंग को स्क्रॉलिंग फ़ीड के ऊपर रखें। छोटी विंडो हेडर को स्क्रॉल करने योग्य रखती हैं।</string>
+    <string name="asset_packs">संपत्ति पैक</string>
+    <string name="asset_packs_subtitle">किसी भी थीम पर फ़ॉन्ट, आइकन और नियंत्रण परत करें</string>
+    <string name="asset_packs_explanation">अपनी थीम रखें. इसका विवरण बदलें. एसेट पैक मूल और कस्टम ऐप शैलियों के साथ भी काम करते हैं।</string>
+    <string name="asset_theme_defaults">थीम परिसंपत्तियों का उपयोग करना</string>
+    <string name="asset_layers">चुनें कि पैक किन हिस्सों को ओवरराइड करता है।</string>
+    <string name="asset_restore">थीम संपत्तियों को पुनर्स्थापित करें</string>
+    <string name="asset_icons">चिह्न और दबी हुई खालें</string>
+    <string name="asset_controls">बटन आकार और प्रगति पट्टियाँ</string>
+    <string name="asset_motion">पृष्ठ परिवर्तन पैक करें</string>
+    <string name="asset_colors">अनुकूली शीर्षक स्याही</string>
+    <string name="asset_font_priority">आपका चुना हुआ या आयातित फ़ॉन्ट प्राथमिकता लेता है। पैक लेटरिंग का उपयोग करने के लिए फ़ॉन्ट्स में फ़ॉलो थीम चुनें। अनुपलब्ध परिसंपत्तियाँ अपना मूल नियंत्रण रखती हैं।</string>
+    <string name="asset_cancel">डाउनलोड रद्द करें</string>
+    <string name="asset_download">संपत्ति डाउनलोड करें</string>
+    <string name="asset_update_required">पहले Veyra को अपडेट करें</string>
+    <string name="asset_remove">डाउनलोड हटाएँ</string>
+    <string name="asset_empty">कोई पैक लोड नहीं किया गया. पुनः प्रयास करने के लिए ताज़ा करें.</string>
+    <string name="asset_apply">संपत्ति लागू करें</string>
+    <string name="app_icon_collection_riot_candy">Riot Candy</string>
+    <string name="app_icon_collection_chrome_venom">Chrome Venom</string>
+    <string name="app_icon_collection_bubble_riot">Bubble Riot</string>
+    <string name="app_icon_collection_xerox_afterparty">Xerox Afterparty</string>
+    <string name="app_icon_collection_cosmic_vandal">Cosmic Vandal</string>
+    <string name="app_icon_collection_switchback_radio">Switchback Radio</string>
+    <string name="app_icon_collection_komorebi_hour">Komorebi Hour</string>
+    <string name="app_icon_collection_rooftop_reverie">Rooftop Reverie</string>
+    <string name="app_icon_collection_apex_telemetry">Apex Telemetry</string>
+    <string name="app_icon_collection_cinder_kata">Cinder Kata</string>
+    <string name="app_icon_collection_lantern_letters">Lantern Letters</string>
+    <string name="app_icon_collection_velvet_orbit">Velvet Orbit</string>
+    <string name="app_icon_collection_moss_mechanism">Moss &amp; Mechanism</string>
+    <string name="app_icon_collection_sugar_static">Sugar Static</string>
+    <string name="app_icon_collection_tidal_origami">Tidal Origami</string>
+    <string name="app_icon_collection_margin_notes">Margin Notes</string>
+    <string name="app_icon_collection_spray_parade">Spray Parade</string>
+    <string name="app_icon_collection_paper_pop">Paper Pop</string>
+    <string name="app_icon_collection_ink_rebel">Ink Rebel</string>
+    <string name="app_icon_collection_laser_club">Laser Club</string>
+    <string name="app_icon_collection_thread_riot">Thread Riot</string>
+    <string name="icon_collection_assets">संपत्ति पैक</string>
+    <string name="asset_matching_app_icon">मिलान ऐप आइकन</string>
+    <string name="app_icon_collection_cathedral_static">Cathedral Static</string>
+    <string name="app_icon_collection_velvet_hex">Velvet Hex</string>
+    <string name="app_icon_collection_razor_bloom">Razor Bloom</string>
+    <string name="app_icon_collection_neon_seance">Neon Séance</string>
+    <string name="app_icon_collection_blackout_zine">Blackout Zine</string>
+    <string name="app_icon_collection_chrome_fang">Chrome Fang</string>
+    <string name="app_icon_collection_candy_crypt">Candy Crypt</string>
+    <string name="app_icon_collection_royal_ruin">Royal Ruin</string>
+    <string name="app_icon_collection_acid_gargoyle">Acid Gargoyle</string>
+    <string name="app_icon_collection_midnight_stitch">Midnight Stitch</string>
+    <string name="navigation_monorail">मोनोरेल</string>
+    <string name="navigation_harbor">बंदरगाह</string>
+    <string name="navigation_ticket">टिकट</string>
+    <string name="navigation_pebble">कंकड़</string>
+    <string name="navigation_prism">प्रिज्म</string>
+    <string name="navigation_bracket">ब्रैकेट</string>
+    <string name="navigation_halo">हेलो</string>
+    <string name="navigation_stitch">सिलाई</string>
+    <string name="navigation_pixel">पिक्सेल</string>
+    <string name="navigation_lozenge">लोजेंज</string>
+    <string name="scroll_motion_zephyr">जेफायर</string>
+    <string name="scroll_motion_cascade">झरना</string>
+    <string name="scroll_motion_focus">फोकस</string>
+    <string name="scroll_motion_snap">स्नैप</string>
+    <string name="scroll_motion_bloom">खिलना</string>
+    <string name="scroll_motion_sweep">झाडू</string>
+    <string name="scroll_motion_float">तैरना</string>
+    <string name="scroll_motion_compress">संपीड़ित करें</string>
+    <string name="scroll_motion_unfold">खोलना</string>
+    <string name="scroll_motion_settle">निपटान</string>
+    <string name="app_motion_default">थीम डिफ़ॉल्ट</string>
+    <string name="app_motion_silk">रेशम</string>
+    <string name="app_motion_soft_zoom">नरम ज़ूम</string>
+    <string name="app_motion_rise">उदय</string>
+    <string name="app_motion_drift">बहाव</string>
+    <string name="app_motion_reveal">खुलासा</string>
+    <string name="app_motion_quick_cut">त्वरित कटौती</string>
+    <string name="app_motion_velvet">मखमली</string>
+    <string name="app_motion_spring">वसंत</string>
+    <string name="app_motion_diagonal">विकर्ण</string>
+    <string name="app_motion_shutter">शटर</string>
+    <string name="app_motion_title">मोशन स्टूडियो</string>
+    <string name="app_motion_style">पृष्ठ संक्रमण</string>
+    <string name="app_motion_hint">पेजों और सेटिंग्स के लिए प्रस्ताव चुनें. थीम डिफ़ॉल्ट प्रत्येक पैक की अपनी शैली रखती है। खिलाड़ी का उद्घाटन चयनित समय के अनुसार होता है; धीमी गति को हमेशा प्राथमिकता दी जाती है।</string>
+    <string name="motion_tempo_title">गति गति</string>
+    <string name="motion_tempo_relaxed">आराम से</string>
+    <string name="motion_tempo_balanced">संतुलित</string>
+    <string name="motion_tempo_quick">जल्दी</string>
+    <string name="motion_preview">पूर्वावलोकन करने के लिए टैप करें</string>
+    <string name="asset_search">पैक और शैलियाँ खोजें</string>
+    <string name="asset_all">सभी पैक</string>
+    <string name="asset_no_matches">कोई मेल खाता पैक नहीं. कोई अन्य शैली आज़माएँ या सभी पैक पर स्विच करें।</string>
+    <string name="app_icon_pocket_soda_sabotage">Soda Sabotage Glass</string>
+    <string name="app_icon_pocket_velvet_vandal">Velvet Vandal Glass</string>
+    <string name="app_icon_pocket_acid_daydream">Acid Daydream Glass</string>
+    <string name="app_icon_pocket_peach_panic">Peach Panic Glass</string>
+    <string name="app_icon_pocket_ink_and_ivory">Ink and Ivory Glass</string>
+    <string name="app_icon_pocket_holo_havoc">Holo Havoc Glass</string>
+    <string name="app_icon_pocket_denim_disorder">Denim Disorder Glass</string>
+    <string name="app_icon_pocket_cherry_voltage">Cherry Voltage Glass</string>
+    <string name="app_icon_pocket_mint_mutiny">Mint Mutiny Glass</string>
+    <string name="app_icon_pocket_lunar_lollipop">Lunar Lollipop Glass</string>
+    <string name="app_icon_pocket_gummy_signal">Gummy Signal Glass</string>
+    <string name="app_icon_pocket_razor_petal">Razor Petal Glass</string>
+    <string name="app_icon_pocket_disco_chrome">Disco Chrome Glass</string>
+    <string name="app_icon_pocket_paper_revolt">Paper Revolt Glass</string>
+    <string name="app_icon_pocket_velvet_sigil">Velvet Sigil Glass</string>
+    <string name="app_icon_pocket_patch_party">Patch Party Glass</string>
+    <string name="app_icon_pocket_pixel_fizz">Pixel Fizz Glass</string>
+    <string name="app_icon_pocket_kitty_mayhem">Kitty Mayhem Glass</string>
+    <string name="app_icon_pocket_mochi_moshpit">Mochi Moshpit Glass</string>
+    <string name="app_icon_pocket_peach_bruiser">Peach Bruiser Glass</string>
+    <string name="app_icon_pocket_bunny_voltage">Bunny Voltage Glass</string>
+    <string name="app_icon_pocket_cherry_bombshell">Cherry Bombshell Glass</string>
+    <string name="app_icon_pocket_teddy_tantrum">Teddy Tantrum Glass</string>
+    <string name="app_icon_pocket_bubble_fang">Bubble Fang Glass</string>
+    <string name="app_icon_pocket_sugar_goblin">Sugar Goblin Glass</string>
+    <string name="app_icon_pocket_cosmic_pudding">Cosmic Pudding Glass</string>
+    <string name="app_icon_pocket_sticker_syndicate">Sticker Syndicate Glass</string>
+    <string name="welcome_guest_note">एक खाता वैकल्पिक है. अपने संगीत से शुरुआत करें.</string>
+    <string name="search_ready_hint">\"%1$s\" खोजने के लिए तैयार</string>
+    <string name="search_top_result">शीर्ष परिणाम</string>
 </resources>

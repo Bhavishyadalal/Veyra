@@ -825,7 +825,7 @@
 
     <string name="dolby_atmos_unavailable">此设备不支持杜比全景声，歌曲将以普通版本播放</string>
 
-    <string name="export_compatible_downloads">导出兼容的下载</string>
+    <string name="export_compatible_downloads">下载文件夹</string>
 
     <string name="legacy_mesh_gradient">经典网格渐变</string>
 
@@ -1299,4 +1299,299 @@
     <string name="artist_signatures_test_failed">无法访问该地址的 API</string>
     <string name="signed_by">签名：%1$s</string>
     <string name="settings_intro">声音、风格，一切随心。</string>
+
+    <!-- Completed UI strings; machine-assisted translations, branded style names preserved. -->
+    <string name="download_destination_hint">内部存储→音乐→Veyra。所有新下载的音频都保存在这里。</string>
+    <string name="export_all_downloads">导出所有下载</string>
+    <string name="app_updates">应用程序更新</string>
+    <string name="auto_download_updates">自动下载更新</string>
+    <string name="auto_download_updates_hint">检查 Veyra 何时打开并在不限流量的连接上下载新版本。 Android 在安装之前总是会询问。</string>
+    <string name="check_app_updates">检查更新</string>
+    <string name="update_ready_to_install">Veyra 更新准备安装</string>
+    <string name="update_downloading_apk">下载 Veyra 更新</string>
+    <string name="update_install_permission_hint">点击以查看更新并批准安装。</string>
+    <string name="export_downloads_description">将保存的音频复制到内部存储器中的 Music/Veyra 以便在其他应用程序中使用。原件保持安全。重试会跳过已完成的副本。</string>
+    <string name="export_downloads_result">%1$d 已导出 · %2$d 已共享 · %3$d 失败</string>
+    <string name="veyra_github_profile">GitHub 上的开发者</string>
+    <string name="veyra_github_source">Veyra源代码</string>
+    <string name="veyra_website_source">网站源代码</string>
+    <string name="welcome_space_title">你的音乐。\n你的空间。</string>
+    <string name="welcome_space_body">找到一个最喜欢的。\n留下来的感觉。</string>
+    <string name="welcome_lyrics_title">每一个字。\n每一个感受。</string>
+    <string name="welcome_lyrics_body">跟着歌词\n走近歌曲。</string>
+    <string name="welcome_together_title">你的人民。\n原声带。</string>
+    <string name="welcome_together_body">一起听。\n无需帐号加入。</string>
+    <string name="welcome_music_chip">为您的音乐而生</string>
+    <string name="welcome_lyrics_chip">坚持歌词</string>
+    <string name="welcome_together_chip">在一起更好</string>
+    <string name="welcome_get_started">开始使用</string>
+    <string name="welcome_next_preview">探索下一个预览</string>
+    <string name="welcome_preview_position">%2$d 的预览 %1$d</string>
+    <string name="onboarding_personalize_title">让它成为你的。</string>
+    <string name="settings_backup_working">正在处理您的备份...</string>
+    <string name="home_layout_save_failed">无法保存您的主页布局。请再试一次。</string>
+    <string name="home_offline_track_unavailable">该项目需要连接。打开下载或本地音乐以离线收听。</string>
+    <string name="stronger_text">更强的文字</string>
+    <string name="stronger_text_subtitle">较重的文字更容易阅读。保持系统文本大小。</string>
+    <string name="contrast_player_controls">更高对比度的播放器控制</string>
+    <string name="contrast_player_controls_subtitle">为播放器按钮提供可见的背景和图稿上的轮廓。</string>
+    <string name="custom_accent">口音调色板</string>
+    <string name="custom_accent_hint">应用强调色；玩家艺术作品的颜色仍然与歌曲相关。</string>
+    <string-array name="custom_accent_options">
+        <item>Veyra</item>
+        <item>青色</item>
+        <item>琥珀色</item>
+        <item>玫瑰</item>
+    </string-array>
+    <string name="custom_artwork_corners">艺术品角</string>
+    <string name="custom_artwork_corners_hint">选择图块、曲目缩略图和播放器插图的封面样式。</string>
+    <string-array name="custom_corner_options">
+        <item>原创</item>
+        <item>软</item>
+        <item>圆形</item>
+        <item>广场</item>
+    </string-array>
+    <string name="custom_list_spacing">歌曲列表间距</string>
+    <string name="custom_list_spacing_hint">紧凑减少行填充。大系统文本保持舒适的间距。</string>
+    <string-array name="custom_spacing_options">
+        <item>舒适</item>
+        <item>紧凑型</item>
+    </string-array>
+    <string name="custom_motion_level">运动水平</string>
+    <string name="custom_motion_level_hint">微妙地保持页面褪色并安静装饰运动。系统禁用的动画始终优先。</string>
+    <string-array name="custom_motion_options">
+        <item>满</item>
+        <item>微妙</item>
+        <item>关闭</item>
+    </string-array>
+    <string name="custom_player_shortcut">优先玩家行动</string>
+    <string name="custom_player_shortcut_hint">将一项操作移至玩家三点菜单的顶部。帐户操作仍然需要登录。</string>
+    <string-array name="custom_shortcut_options">
+        <item>原始订单</item>
+        <item>下载</item>
+        <item>最爱</item>
+        <item>睡眠定时器</item>
+        <item>添加到播放列表</item>
+    </string-array>
+    <string name="custom_reset_appearance">重置外观自定义</string>
+    <string name="custom_reset_appearance_hint">重置字体、重音、覆盖角、列表间距、更强的文本和动作。保留帐户、播放列表和下载。</string>
+    <string name="custom_reset_player">重置播放器自定义</string>
+    <string name="custom_reset_player_hint">恢复原始菜单顺序并关闭较高对比度的控件。保留播放、帐户和下载。</string>
+    <string name="custom_reset_confirm">重置</string>
+    <string name="theme_packs">主题工作室</string>
+    <string name="theme_packs_subtitle">下载艺术作品、字体、图标和播放器样式</string>
+    <string name="theme_packs_description">每个屏幕都有新的氛围。下载一次，离线保存，随时恢复原貌。</string>
+    <string name="theme_original">原装Veyra</string>
+    <string name="theme_active">目前活跃</string>
+    <string name="theme_restore_hint">恢复您保存的外观首选项</string>
+    <string name="theme_apply">应用主题</string>
+    <string name="theme_download">下载主题</string>
+    <string name="theme_update_required">先更新Veyra</string>
+    <string name="theme_catalog_empty">尚未加载主题。在线时刷新目录。</string>
+    <string name="theme_refresh_catalog">刷新主题目录</string>
+    <string name="theme_safety_hint">主题会覆盖支持的颜色、标题字体和控件样式，直到您返回到原始 Veyra。您的帐户、下载、播放列表和播放控件归您所有。原始外观仍可离线使用。</string>
+    <string name="theme_restart_title">应用这个主题？</string>
+    <string name="theme_restart_description">Veyra 将刷新屏幕以加载主题。音乐继续播放。您的图书馆、帐户和原始外观偏好都会被保留。</string>
+    <string name="theme_apply_restart">应用并重新启动 UI</string>
+    <string name="theme_later">后来</string>
+    <string name="theme_remove">删除下载的主题</string>
+    <string name="theme_remove_description">这将从该设备中删除未使用的主题文件。您可以稍后再次下载主题。</string>
+    <string name="theme_done">完成</string>
+    <string name="theme_download_update">下载主题更新</string>
+    <string name="theme_collection_title">让它感觉像你。</string>
+    <string name="theme_collection_description">您的音乐新世界。探索艺术作品、类型、图标和播放器详细信息，然后将您最喜欢的离线保存。</string>
+    <string name="theme_all">所有主题</string>
+    <string name="theme_downloaded">已下载</string>
+    <string name="theme_discover">发现</string>
+    <string name="theme_no_downloads">您下载的主题将出现在此处。</string>
+    <string name="theme_includes">图稿·字体·控件·品牌</string>
+    <string name="theme_launcher_title">画龙点睛</string>
+    <string name="theme_launcher_hint">单独选择一个匹配的主屏幕图标。您的启动器可能需要一些时间来刷新。</string>
+    <string name="theme_use_launcher">使用匹配的应用程序图标</string>
+    <string name="theme_restore_launcher">恢复原来的应用程序图标</string>
+    <string name="theme_launcher_confirm">更改应用程序图标？</string>
+    <string name="theme_current_launcher">当前应用程序图标：%1$s</string>
+    <string name="icon_collection_glass">玻璃</string>
+    <string name="icon_collection_themes">主题</string>
+    <string name="icon_family_liquid">液体</string>
+    <string name="icon_chooser_hint">选择上面的图标。您的启动器可能需要一些时间来刷新。</string>
+    <string name="theme_back_collection">返回主题</string>
+    <string name="theme_details">主题详情</string>
+    <string name="theme_downloading">正在下载...</string>
+    <string name="theme_verifying">正在验证文件...</string>
+    <string name="theme_applying">正在申请…</string>
+    <string name="theme_live_apply_hint">更新外观，同时保持您的位置和音乐播放。</string>
+    <string name="theme_optional_restart">界面也刷新一下</string>
+    <string name="icon_choose">选择一个图标</string>
+    <string name="theme_saved_appearance">您保存的样式</string>
+    <string name="home_saved_at">已保存 %1$s · 在线刷新</string>
+    <string name="theme_matching_icon">还可以使用匹配的启动器图标</string>
+    <string name="theme_icon_failed">主题已应用。启动器图标无法更改；尝试应用程序图标选择器。</string>
+    <string name="download_saved_private">保存在应用程序存储中</string>
+    <string name="download_interrupted">Veyra关闭时中断。点击重试再次下载。</string>
+    <string name="download_storage">%1$s 可用 · %2$s</string>
+    <string name="download_storage_private">应用程序存储</string>
+    <string name="download_retry_all">重试失败</string>
+    <string name="listen_together_host_reconnecting">主机已断开连接·等待它们重新连接</string>
+    <string name="queue_removed">从队列中删除了 %1$d</string>
+    <string name="queue_undo_expired">队列改变了。撤消不再可用。</string>
+    <string name="undo">撤消</string>
+    <string name="download_action_track">%1$s %2$s</string>
+    <string name="icon_collection_atelier">玻璃工作室</string>
+    <string name="theme_search">搜索主题</string>
+    <string name="theme_clear_search">清除搜索</string>
+    <string name="theme_no_search_results">没有匹配的主题。尝试另一个名字或心情。</string>
+    <string name="icon_search">搜索图标</string>
+    <string name="icon_no_search_results">此集合中没有匹配的图标。</string>
+    <string name="icon_current_selection">当前图标：%1$s</string>
+    <string name="icon_collection_all">全部</string>
+    <string name="appearance_fonts">字体</string>
+    <string name="font_follow_theme">跟随主题</string>
+    <string name="font_veyra_default">Veyra 默认</string>
+    <string name="font_preview_heading">你的音乐，你的风格。</string>
+    <string name="font_preview_body">清晰的歌名。阅读舒适。</string>
+    <string name="font_selection_hint">当您更改主题时，您的字体选择将保留。跟随主题恢复每个主题自己的排版。该应用程序包含字体许可证。</string>
+    <string name="font_apply">应用字体</string>
+    <string name="app_style">应用风格</string>
+    <string name="app_style_hint">为主页和 Veyra 的其余部分选择完整的外观。您的原始主题和字体选择将保留。</string>
+    <string name="style_original_hint">你熟悉的家。所有可下载的主题和字体选择。</string>
+    <string name="style_editorial_hint">奶油色纸张、酒红色调和大胆的社论封面。</string>
+    <string name="style_room_hint">植物绿色、温暖的版式和唱片套拼贴画。</string>
+    <string name="style_night_hint">午夜蓝色，超大字体和您当前的歌曲艺术作品。</string>
+    <string name="style_apply">应用风格</string>
+    <string name="style_original_only">提供原版。您的选择将被保存。</string>
+    <string name="style_themes_suspended">这个应用程序风格有自己的调色板和字体。切换到原始以应用可下载的主题。</string>
+    <string name="experience_section_player">玩家</string>
+    <string name="experience_section_mini">迷你播放器</string>
+    <string name="experience_section_gestures">手势</string>
+    <string name="experience_section_network">网络</string>
+    <string name="experience_home_layout">你的家居布局</string>
+    <string name="experience_nav_destinations">可见的目的地</string>
+    <string name="experience_nav_behavior">导航行为</string>
+    <string name="scroll_player_animations">滚动播放器动画</string>
+    <string name="scroll_player_animations_hint">滚动时将迷你播放器折叠到导航中，无论有或没有液体玻璃。尊重减少运动。</string>
+    <string name="pin_home_header">固定主页标题</string>
+    <string name="pin_home_header_hint">将原始主页品牌和问候语保留在滚动提要上方。短窗口保持标题可滚动。</string>
+    <string name="asset_packs">资源包</string>
+    <string name="asset_packs_subtitle">在任何主题上分层字体、图标和控件</string>
+    <string name="asset_packs_explanation">保持你的主题。更改其详细信息。资源包还适用于原始和自定义应用程序样式。</string>
+    <string name="asset_theme_defaults">使用主题资源</string>
+    <string name="asset_layers">选择包覆盖哪些部分。</string>
+    <string name="asset_restore">恢复主题资产</string>
+    <string name="asset_icons">图标和压制皮肤</string>
+    <string name="asset_controls">按钮形状和进度条</string>
+    <string name="asset_motion">打包页面转换</string>
+    <string name="asset_colors">自适应标题墨水</string>
+    <string name="asset_font_priority">您选择或导入的字体优先。在“字体”中选择“遵循主题”以使用包字体。不可用的资产保留其本机控制。</string>
+    <string name="asset_cancel">取消下载</string>
+    <string name="asset_download">下载资源</string>
+    <string name="asset_update_required">先更新Veyra</string>
+    <string name="asset_remove">删除下载</string>
+    <string name="asset_empty">没有加载包。刷新再试一次。</string>
+    <string name="asset_apply">应用资产</string>
+    <string name="app_icon_collection_riot_candy">Riot Candy</string>
+    <string name="app_icon_collection_chrome_venom">Chrome Venom</string>
+    <string name="app_icon_collection_bubble_riot">Bubble Riot</string>
+    <string name="app_icon_collection_xerox_afterparty">Xerox Afterparty</string>
+    <string name="app_icon_collection_cosmic_vandal">Cosmic Vandal</string>
+    <string name="app_icon_collection_switchback_radio">Switchback Radio</string>
+    <string name="app_icon_collection_komorebi_hour">Komorebi Hour</string>
+    <string name="app_icon_collection_rooftop_reverie">Rooftop Reverie</string>
+    <string name="app_icon_collection_apex_telemetry">Apex Telemetry</string>
+    <string name="app_icon_collection_cinder_kata">Cinder Kata</string>
+    <string name="app_icon_collection_lantern_letters">Lantern Letters</string>
+    <string name="app_icon_collection_velvet_orbit">Velvet Orbit</string>
+    <string name="app_icon_collection_moss_mechanism">Moss &amp; Mechanism</string>
+    <string name="app_icon_collection_sugar_static">Sugar Static</string>
+    <string name="app_icon_collection_tidal_origami">Tidal Origami</string>
+    <string name="app_icon_collection_margin_notes">Margin Notes</string>
+    <string name="app_icon_collection_spray_parade">Spray Parade</string>
+    <string name="app_icon_collection_paper_pop">Paper Pop</string>
+    <string name="app_icon_collection_ink_rebel">Ink Rebel</string>
+    <string name="app_icon_collection_laser_club">Laser Club</string>
+    <string name="app_icon_collection_thread_riot">Thread Riot</string>
+    <string name="icon_collection_assets">资源包</string>
+    <string name="asset_matching_app_icon">匹配的应用程序图标</string>
+    <string name="app_icon_collection_cathedral_static">Cathedral Static</string>
+    <string name="app_icon_collection_velvet_hex">Velvet Hex</string>
+    <string name="app_icon_collection_razor_bloom">Razor Bloom</string>
+    <string name="app_icon_collection_neon_seance">Neon Séance</string>
+    <string name="app_icon_collection_blackout_zine">Blackout Zine</string>
+    <string name="app_icon_collection_chrome_fang">Chrome Fang</string>
+    <string name="app_icon_collection_candy_crypt">Candy Crypt</string>
+    <string name="app_icon_collection_royal_ruin">Royal Ruin</string>
+    <string name="app_icon_collection_acid_gargoyle">Acid Gargoyle</string>
+    <string name="app_icon_collection_midnight_stitch">Midnight Stitch</string>
+    <string name="navigation_monorail">单轨电车</string>
+    <string name="navigation_harbor">港口</string>
+    <string name="navigation_ticket">门票</string>
+    <string name="navigation_pebble">卵石</string>
+    <string name="navigation_prism">棱镜</string>
+    <string name="navigation_bracket">支架</string>
+    <string name="navigation_halo">晕</string>
+    <string name="navigation_stitch">针迹</string>
+    <string name="navigation_pixel">像素</string>
+    <string name="navigation_lozenge">菱形</string>
+    <string name="scroll_motion_zephyr">和风</string>
+    <string name="scroll_motion_cascade">级联</string>
+    <string name="scroll_motion_focus">焦点</string>
+    <string name="scroll_motion_snap">快照</string>
+    <string name="scroll_motion_bloom">布鲁姆</string>
+    <string name="scroll_motion_sweep">扫一扫</string>
+    <string name="scroll_motion_float">浮动</string>
+    <string name="scroll_motion_compress">压缩</string>
+    <string name="scroll_motion_unfold">展开</string>
+    <string name="scroll_motion_settle">定居</string>
+    <string name="app_motion_default">主题默认</string>
+    <string name="app_motion_silk">丝绸</string>
+    <string name="app_motion_soft_zoom">软变焦</string>
+    <string name="app_motion_rise">崛起</string>
+    <string name="app_motion_drift">漂移</string>
+    <string name="app_motion_reveal">揭示</string>
+    <string name="app_motion_quick_cut">快速剪辑</string>
+    <string name="app_motion_velvet">天鹅绒</string>
+    <string name="app_motion_spring">春天</string>
+    <string name="app_motion_diagonal">对角线</string>
+    <string name="app_motion_shutter">快门</string>
+    <string name="app_motion_title">动感工作室</string>
+    <string name="app_motion_style">页面过渡</string>
+    <string name="app_motion_hint">选择页面和设置的动作。主题默认保留每个包自己的风格。玩家按照选定的时间开局；减少运动始终优先。</string>
+    <string name="motion_tempo_title">运动速度</string>
+    <string name="motion_tempo_relaxed">轻松</string>
+    <string name="motion_tempo_balanced">平衡</string>
+    <string name="motion_tempo_quick">快</string>
+    <string name="motion_preview">点击预览</string>
+    <string name="asset_search">搜索包和样式</string>
+    <string name="asset_all">所有包</string>
+    <string name="asset_no_matches">没有匹配的包。尝试其他样式或切换到所有包。</string>
+    <string name="app_icon_pocket_soda_sabotage">Soda Sabotage Glass</string>
+    <string name="app_icon_pocket_velvet_vandal">Velvet Vandal Glass</string>
+    <string name="app_icon_pocket_acid_daydream">Acid Daydream Glass</string>
+    <string name="app_icon_pocket_peach_panic">Peach Panic Glass</string>
+    <string name="app_icon_pocket_ink_and_ivory">Ink and Ivory Glass</string>
+    <string name="app_icon_pocket_holo_havoc">Holo Havoc Glass</string>
+    <string name="app_icon_pocket_denim_disorder">Denim Disorder Glass</string>
+    <string name="app_icon_pocket_cherry_voltage">Cherry Voltage Glass</string>
+    <string name="app_icon_pocket_mint_mutiny">Mint Mutiny Glass</string>
+    <string name="app_icon_pocket_lunar_lollipop">Lunar Lollipop Glass</string>
+    <string name="app_icon_pocket_gummy_signal">Gummy Signal Glass</string>
+    <string name="app_icon_pocket_razor_petal">Razor Petal Glass</string>
+    <string name="app_icon_pocket_disco_chrome">Disco Chrome Glass</string>
+    <string name="app_icon_pocket_paper_revolt">Paper Revolt Glass</string>
+    <string name="app_icon_pocket_velvet_sigil">Velvet Sigil Glass</string>
+    <string name="app_icon_pocket_patch_party">Patch Party Glass</string>
+    <string name="app_icon_pocket_pixel_fizz">Pixel Fizz Glass</string>
+    <string name="app_icon_pocket_kitty_mayhem">Kitty Mayhem Glass</string>
+    <string name="app_icon_pocket_mochi_moshpit">Mochi Moshpit Glass</string>
+    <string name="app_icon_pocket_peach_bruiser">Peach Bruiser Glass</string>
+    <string name="app_icon_pocket_bunny_voltage">Bunny Voltage Glass</string>
+    <string name="app_icon_pocket_cherry_bombshell">Cherry Bombshell Glass</string>
+    <string name="app_icon_pocket_teddy_tantrum">Teddy Tantrum Glass</string>
+    <string name="app_icon_pocket_bubble_fang">Bubble Fang Glass</string>
+    <string name="app_icon_pocket_sugar_goblin">Sugar Goblin Glass</string>
+    <string name="app_icon_pocket_cosmic_pudding">Cosmic Pudding Glass</string>
+    <string name="app_icon_pocket_sticker_syndicate">Sticker Syndicate Glass</string>
+    <string name="welcome_guest_note">帐户是可选的。从你的音乐开始。</string>
+    <string name="search_ready_hint">准备搜索“%1$s”</string>
+    <string name="search_top_result">最高结果</string>
 </resources>
