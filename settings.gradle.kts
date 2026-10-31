@@ -2,6 +2,10 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        // Same Maven Central artifacts through Sonatype's alternate endpoint.
+        // Fresh hosted runners have intermittently received missing-artifact
+        // responses from repo.maven.apache.org during plugin resolution.
+        maven("https://repo1.maven.org/maven2")
         gradlePluginPortal()
     }
 }
@@ -10,6 +14,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://repo1.maven.org/maven2")
         // NewPipeExtractor is published via JitPack.
         maven("https://jitpack.io")
     }
