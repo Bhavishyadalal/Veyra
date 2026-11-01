@@ -1534,4 +1534,8 @@
     <string name="welcome_guest_note">Một tài khoản là tùy chọn. Bắt đầu với âm nhạc của bạn.</string>
     <string name="search_ready_hint">Sẵn sàng tìm kiếm “%1$s”</string>
     <string name="search_top_result">Kết quả hàng đầu</string>
+    <string name="startup_prepare_title">Đang chuẩn bị Veyra</string>
+    <string name="startup_prepare_hint">Đang chuẩn bị phông chữ và giao diện. Thường mất vài giây. Bạn có thể tiếp tục trong khi quá trình hoàn tất ở nền.</string>
+    <string name="startup_prepare_slow">Mất nhiều thời gian hơn bình thường. Bạn có thể tiếp tục trong khi quá trình chuẩn bị hoàn tất ở nền.</string>
+    <string name="startup_prepare_failed">Không thể hoàn tất chuẩn bị. Hãy thử lại hoặc tiếp tục với giao diện có sẵn.</string>
 </resources>

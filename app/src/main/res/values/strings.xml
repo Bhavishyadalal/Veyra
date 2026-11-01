@@ -1515,4 +1515,8 @@
     <string name="welcome_guest_note">An account is optional. Start with your music.</string>
     <string name="search_ready_hint">Ready to search for “%1$s”</string>
     <string name="search_top_result">Top result</string>
+    <string name="startup_prepare_title">Preparing Veyra</string>
+    <string name="startup_prepare_hint">Preparing fonts and appearance. Usually a few seconds. You can continue while this finishes in the background.</string>
+    <string name="startup_prepare_slow">Taking longer than usual. You can continue while preparation finishes in the background.</string>
+    <string name="startup_prepare_failed">Preparation could not finish. Retry, or continue with the available appearance.</string>
 </resources>

@@ -1574,4 +1574,8 @@
     <string name="welcome_guest_note">Hesap isteğe bağlıdır. Müziğinizle başlayın.</string>
     <string name="search_ready_hint">“%1$s”yu aramaya hazır</string>
     <string name="search_top_result">En iyi sonuç</string>
+    <string name="startup_prepare_title">Veyra hazırlanıyor</string>
+    <string name="startup_prepare_hint">Yazı tipleri ve görünüm hazırlanıyor. Genellikle birkaç saniye sürer. Hazırlık arka planda tamamlanırken devam edebilirsiniz.</string>
+    <string name="startup_prepare_slow">Normalden uzun sürüyor. Hazırlık arka planda tamamlanırken devam edebilirsiniz.</string>
+    <string name="startup_prepare_failed">Hazırlık tamamlanamadı. Yeniden deneyin veya kullanılabilir görünümle devam edin.</string>
 </resources>

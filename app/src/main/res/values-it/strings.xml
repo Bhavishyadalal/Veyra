@@ -1556,4 +1556,8 @@
     <string name="welcome_guest_note">Un account è facoltativo. Inizia con la tua musica.</string>
     <string name="search_ready_hint">Pronti per la ricerca di \"%1$s\"</string>
     <string name="search_top_result">Risultato eccellente</string>
+    <string name="startup_prepare_title">Preparazione di Veyra</string>
+    <string name="startup_prepare_hint">Preparazione di caratteri e aspetto. Di solito bastano pochi secondi. Puoi continuare mentre la preparazione termina in background.</string>
+    <string name="startup_prepare_slow">Sta richiedendo più tempo del solito. Puoi continuare mentre la preparazione termina in background.</string>
+    <string name="startup_prepare_failed">Impossibile completare la preparazione. Riprova o continua con l’aspetto disponibile.</string>
 </resources>

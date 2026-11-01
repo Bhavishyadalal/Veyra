@@ -1594,4 +1594,8 @@
     <string name="welcome_guest_note">帳戶是可選的。從你的音樂開始。</string>
     <string name="search_ready_hint">準備搜尋“%1$s”</string>
     <string name="search_top_result">最高結果</string>
+    <string name="startup_prepare_title">正在準備 Veyra</string>
+    <string name="startup_prepare_hint">正在準備字型和外觀，通常需要幾秒鐘。你可以繼續使用，準備工作將在背景完成。</string>
+    <string name="startup_prepare_slow">耗時比平時更長。你可以繼續使用，準備工作將在背景完成。</string>
+    <string name="startup_prepare_failed">無法完成準備。請重試，或使用可用的外觀繼續。</string>
 </resources>

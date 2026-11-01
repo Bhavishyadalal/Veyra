@@ -5,7 +5,7 @@
 | Track | Version | Source ZIP | Checksum |
 | --- | --- | --- | --- |
 | Current stable · `main`, `stable/0.2.1` | 0.2.1 / code 56 | [Download](Veyra_Android_Source_0.2.1_Stable.zip) | [SHA-256](Veyra_Android_Source_0.2.1_Stable.zip.sha256) |
-| Current preview · `preview/0.2.2-beta1` | 0.2.2-beta1 / code 57 | [Download](Veyra_Android_Source_0.2.2-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.2-beta1.zip.sha256) |
+| Current preview · `preview/0.2.2-beta1` | 0.2.2-beta1 / code 58 | [Download](Veyra_Android_Source_0.2.2-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.2-beta1.zip.sha256) |
 | Completed preview · `preview/0.2.1-beta1` | 0.2.1-beta1 / code 55 | [Download](Veyra_Android_Source_0.2.1-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.1-beta1.zip.sha256) |
 | Completed preview · `preview/0.2.0-beta1` | 0.2.0-beta1 / code 46 | [Download](Veyra_Android_Source_0.2.0-beta1.zip) | [SHA-256](Veyra_Android_Source_0.2.0-beta1.zip.sha256) |
 

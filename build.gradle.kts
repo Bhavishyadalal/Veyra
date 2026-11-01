@@ -13,7 +13,7 @@ buildscript {
     }
 }
 /* Next testing track, based on stable 0.2.1. */
-extra["veyraVersionCode"] = 57
+extra["veyraVersionCode"] = 58
 extra["veyraVersionName"] = "0.2.2"
 
 /*

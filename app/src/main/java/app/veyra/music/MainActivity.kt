@@ -110,7 +110,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalClipboard
@@ -118,6 +117,7 @@ import androidx.compose.ui.platform.ClipEntry
 import android.content.ClipData
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
@@ -434,6 +434,7 @@ class MainActivity : AppCompatActivity() {
                 // A measured constraint cannot be stale — it is the very width
                 // the split is about to be laid out in.
                 BoxWithConstraints(Modifier.fillMaxSize()) {
+                    if (!app.veyra.music.ui.performance.StartupPreparationGate()) {
                     VeyraApp(
                         darkTheme = darkTheme,
                         windowWidth = maxWidth,
@@ -441,6 +442,7 @@ class MainActivity : AppCompatActivity() {
                         appBackdrop = appBackdrop,
                     )
                     app.veyra.music.ui.components.LaunchSignature(generation = launchGeneration)
+                    }
                 }
                 }
             }
@@ -726,10 +728,8 @@ private fun VeyraApp(
     val autoplayEnabled = autoplayEnabledFor(partyState, autoplay)
     val partyServerStatus by ListenTogether.serverConnectionState.collectAsStateWithLifecycle()
     val listenBrainzToken by AppSettings.listenBrainzToken.collectAsStateWithLifecycle()
-    // Set each time the search tab is tapped, which SearchScreen uses as a
-    // signal to focus the input field.
-    var searchFocusRequested by remember { mutableStateOf(false) }
-    val searchFieldFocus = remember { FocusRequester() }
+    val navigationFocus = LocalFocusManager.current
+    val navigationKeyboard = LocalSoftwareKeyboardController.current
     // Invalidates an in-flight radio lookup when a later play request wins.
     var playRequestGeneration by remember { mutableIntStateOf(0) }
     // Starting radio from the item already playing must not replace that media
@@ -2145,7 +2145,6 @@ private fun VeyraApp(
         if(!startupHandled) {
             startupHandled=true
             when(experience.startupTab) {
-                1->searchFocusRequested=experience.searchKeyboard
                 4->onLibraryItemClick(ShelfItem(textResources.getString(R.string.local_music),"",null,null,"local:all"))
                 5->showReplay=true
                 6->showSettings=true
@@ -3263,7 +3262,7 @@ private fun VeyraApp(
                                     1->onLibraryItemClick(ShelfItem(textResources.getString(R.string.local_music),"",null,null,"local:all"))
                                     2->selectedTab=TAB_LIBRARY
                                     3->showReplay=true
-                                    4->{selectedTab=TAB_SEARCH;searchFocusRequested=experience.searchKeyboard}
+                                    4->{selectedTab=TAB_SEARCH}
                                     5->showEqualizer=true
                                     6->showListenTogether=true
                                     7->if(signedIn)onLibraryItemClick(ShelfItem(textResources.getString(R.string.auto_liked),"",null,null,"LM")) else {webSession=WebSessionMode.SIGN_IN}
@@ -3337,8 +3336,8 @@ private fun VeyraApp(
                                 onLoadMore = viewModel::loadMoreSearchResults,
                                 listState = searchListState,
                                 scrollResetTrigger = searchScrollReset,
-                                focusRequested = searchFocusRequested,
-                                onFocusHandled = { searchFocusRequested = false },
+                                focusRequested = false,
+                                onFocusHandled = {},
                                 // Search hits are alternatives to each other, not a running
                                 // order — play the one tapped and build a station from it.
                                 onSongClick = { songs, index ->
@@ -3799,22 +3798,11 @@ private fun VeyraApp(
                         !showHistory && !showReplay
                     ) {
                         {
-                            // The search field lives up here in the bar, beside the
-                            // account photo, so it answers the nav bar's Search tap
-                            // itself: focus and keyboard, the way the page used to.
-                            val keyboard = LocalSoftwareKeyboardController.current
-                            LaunchedEffect(searchFocusRequested) {
-                                if (searchFocusRequested) {
-                                    searchFieldFocus.requestFocus()
-                                    keyboard?.show()
-                                    searchFocusRequested = false
-                                }
-                            }
+                            // Navigation never requests text focus. Tap the field to type.
                             SearchField(
                                 query = query,
                                 onQueryChange = viewModel::onQueryChange,
                                 onSubmit = viewModel::submitSearch,
-                                focusRequester = searchFieldFocus,
                                 placeholder = org.jetbrains.compose.resources.stringResource(
                                     if (searchSource == SearchSource.LIBRARY) {
                                         SharedRes.string.search_library_hint
@@ -4120,12 +4108,10 @@ private fun VeyraApp(
                         6->showSettings=true
                     }
 
-                    // Every search tab tap resets the field, focuses it, and opens
-                    // the keyboard through SearchScreen's focus request.
-                    if (index == TAB_SEARCH) {
-                        viewModel.onQueryChange("")
-                        searchFocusRequested = experience.searchKeyboard
-                    }
+                    // Preserve the draft/results and dismiss focus on every tab tap.
+                    // A saved legacy keyboard preference must not reopen the IME.
+                    navigationFocus.clearFocus(force = true)
+                    navigationKeyboard?.hide()
                 }
 
                 if (foldingNavigation) Column(

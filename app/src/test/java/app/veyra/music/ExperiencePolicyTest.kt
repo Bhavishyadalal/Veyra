@@ -5,6 +5,13 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class ExperiencePolicyTest {
+    @Test fun legacyKeyboardPreferenceCannotChangeRootNavigationBehavior() {
+        val legacy = ExperienceOptions.decode("""{"searchKeyboard":true,"startupTab":1}""")
+        val manual = legacy.copy(searchKeyboard = false)
+        assertEquals(manual.forAppRoot(), legacy.forAppRoot())
+        assertFalse(ExperienceOptions.decode(null).searchKeyboard)
+    }
+
     @Test fun immersiveWorldPreferencesPreserveClassicAndRoundTripAllModes() {
         assertEquals(ImmersiveStyle.CLASSIC,ExperienceOptions.decode("""{"immersive":true}""").immersiveStyle)
         assertEquals(ImmersiveStyle.CLASSIC,ExperienceOptions.decode("""{"immersiveStyle":"FUTURE_WORLD"}""").immersiveStyle)

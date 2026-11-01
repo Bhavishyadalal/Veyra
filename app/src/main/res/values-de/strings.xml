@@ -1617,4 +1617,8 @@
     <string name="welcome_guest_note">Ein Konto ist optional. Beginnen Sie mit Ihrer Musik.</string>
     <string name="search_ready_hint">Bereit für die Suche nach „%1$s“</string>
     <string name="search_top_result">Top Ergebnis</string>
+    <string name="startup_prepare_title">Veyra wird vorbereitet</string>
+    <string name="startup_prepare_hint">Schriften und Darstellung werden vorbereitet. Das dauert meist wenige Sekunden. Du kannst fortfahren, während dies im Hintergrund abgeschlossen wird.</string>
+    <string name="startup_prepare_slow">Es dauert länger als üblich. Du kannst fortfahren, während die Vorbereitung im Hintergrund abgeschlossen wird.</string>
+    <string name="startup_prepare_failed">Die Vorbereitung konnte nicht abgeschlossen werden. Versuche es erneut oder fahre mit der verfügbaren Darstellung fort.</string>
 </resources>

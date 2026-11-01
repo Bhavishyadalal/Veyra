@@ -1594,4 +1594,8 @@
     <string name="welcome_guest_note">Akun adalah opsional. Mulailah dengan musik Anda.</string>
     <string name="search_ready_hint">Siap mencari “%1$s”</string>
     <string name="search_top_result">Hasil teratas</string>
+    <string name="startup_prepare_title">Menyiapkan Veyra</string>
+    <string name="startup_prepare_hint">Menyiapkan font dan tampilan. Biasanya beberapa detik. Anda dapat melanjutkan sementara persiapan selesai di latar belakang.</string>
+    <string name="startup_prepare_slow">Lebih lama dari biasanya. Anda dapat melanjutkan sementara persiapan selesai di latar belakang.</string>
+    <string name="startup_prepare_failed">Persiapan tidak dapat diselesaikan. Coba lagi atau lanjutkan dengan tampilan yang tersedia.</string>
 </resources>

@@ -1644,4 +1644,8 @@
     <string name="welcome_guest_note">חשבון הוא אופציונלי. התחל עם המוזיקה שלך.</string>
     <string name="search_ready_hint">מוכן לחיפוש \"%1$s\"</string>
     <string name="search_top_result">תוצאה עליונה</string>
+    <string name="startup_prepare_title">מכינים את Veyra</string>
+    <string name="startup_prepare_hint">מכינים גופנים ועיצוב. לרוב נדרשות כמה שניות. ניתן להמשיך בזמן שההכנה מסתיימת ברקע.</string>
+    <string name="startup_prepare_slow">זה נמשך יותר מהרגיל. ניתן להמשיך בזמן שההכנה מסתיימת ברקע.</string>
+    <string name="startup_prepare_failed">לא ניתן היה להשלים את ההכנה. נסו שוב או המשיכו עם העיצוב הזמין.</string>
 </resources>

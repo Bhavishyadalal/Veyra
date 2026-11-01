@@ -54,18 +54,20 @@ object AssetRepository {
             .putBoolean("controls",value.controls).putBoolean("motion",value.motion).putBoolean("colors",value.colors).apply()
     }
 
-    fun init(app: Context) {
+    fun init(app: Context): Job {
         context = app.applicationContext
         _options.value=AssetOptions(prefs.getBoolean("icons",true),prefs.getBoolean("fonts",true),
             prefs.getBoolean("controls",true),prefs.getBoolean("motion",true),prefs.getBoolean("colors",true))
-        scope.launch { mutations.withLock {
+        return scope.launch { mutations.withLock {
             // Validate local data before it can influence theme construction.
             val selected = prefs.getString("active", null)
             root.listFiles()?.filter { it.name.startsWith(".staging-") || it.name.startsWith(".old-") }
                 ?.forEach { it.deleteRecursively() }
-            root.listFiles()?.filter { it.isDirectory && !it.name.startsWith('.') }?.forEach { folder ->
+            root.listFiles()?.filter { it.isDirectory && !it.name.startsWith('.') }
+                ?.sortedBy { if (it.name == selected) 0 else 1 }?.forEach { folder ->
+                yield()
                 runCatching {
-                    val m = loadInstalled(folder)
+                    val m = loadInstalled(folder, warmFonts = folder.name == selected)
                     if (m.version > (_installed.value[m.id]?.version ?: 0)) {
                         synchronized(lock) { installedDirectories[m.id] = folder }
                         _installed.value = _installed.value + (m.id to m)
@@ -186,25 +188,28 @@ object AssetRepository {
         }.onFailure { if (it is CancellationException) throw it; _message.value = "Could not apply asset pack. Your theme is unchanged." }.isSuccess
     }}
 
-    private fun loadInstalled(folder: File): AssetManifest {
+    private fun loadInstalled(folder: File, warmFonts: Boolean = true): AssetManifest {
         val m = AssetPack.json.decodeFromString<AssetManifest>(File(folder,"assets.json").inputStream().use {AssetPack.readBounded(it,65536).decodeToString()})
         AssetPack.validate(m,BuildConfig.VERSION_CODE)
         require(folder.name == "${m.id}-v${m.version}")
         for ((path, hash) in m.files) {
             val file = File(folder,path)
-            require(file.length() in 1..AssetPack.MAX_FILE && AssetPack.sha256(file.readBytes()) == hash)
+            require(verifiedPackFileHash(file, AssetPack.MAX_FILE) == hash)
         }
-        validateDecodedAssets(m,folder)
+        validateDecodedAssets(m,folder,warmFonts)
         return m
     }
 
-    private fun validateDecodedAssets(m: AssetManifest, folder: File) {
+    private fun validateDecodedAssets(m: AssetManifest, folder: File) = validateDecodedAssets(m, folder, true)
+
+    private fun validateDecodedAssets(m: AssetManifest, folder: File, warmFonts: Boolean) {
         for ((key,path) in m.assets + ("preview" to "previews/specimen.webp")) {
             val file = File(folder,path)
             if (key.endsWith("Font")) {
                 val header = file.inputStream().use { input -> ByteArray(4).also { check(input.read(it) == 4) } }
                 require(header.contentEquals(byteArrayOf(0,1,0,0)) || header.decodeToString() in setOf("OTTO","true")) { "Invalid asset-pack font." }
-                PackFontCache.load(file.absolutePath)
+                // Inactive fonts are parsed on Apply, before they can affect the UI.
+                if (warmFonts) PackFontCache.load(file.absolutePath)
             }
             else {
                 val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }

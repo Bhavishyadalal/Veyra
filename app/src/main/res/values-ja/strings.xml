@@ -1595,4 +1595,8 @@
     <string name="welcome_guest_note">アカウントはオプションです。まずは音楽から始めましょう。</string>
     <string name="search_ready_hint">「%1$s」を検索する準備ができました</string>
     <string name="search_top_result">上位の結果</string>
+    <string name="startup_prepare_title">Veyra を準備中</string>
+    <string name="startup_prepare_hint">フォントと外観を準備しています。通常は数秒です。準備をバックグラウンドで続けながら先に進めます。</string>
+    <string name="startup_prepare_slow">通常より時間がかかっています。準備をバックグラウンドで続けながら先に進めます。</string>
+    <string name="startup_prepare_failed">準備を完了できませんでした。再試行するか、利用可能な外観で続行してください。</string>
 </resources>

@@ -120,8 +120,8 @@ class VeyraApplication : Application(), SingletonImageLoader.Factory {
         AppSettings.init(this, authStore)
         Innertube.contentCountry = {AppSettings.experience.value.contentCountry.ifBlank {null}}
         CoroutineScope(SupervisorJob()+Dispatchers.IO).launch {runCatching {AppIcon.current(this@VeyraApplication)}}
-        app.veyra.music.data.themes.ThemeRepository.init(this)
-        app.veyra.music.data.themes.AssetRepository.init(this)
+        val themeRestore = app.veyra.music.data.themes.ThemeRepository.init(this)
+        val assetRestore = app.veyra.music.data.themes.AssetRepository.init(this)
         CoroutineScope(SupervisorJob()+Dispatchers.Default).launch {
             combine(AppSettings.appStyle, app.veyra.music.data.themes.ThemeRepository.active) {style,theme->style to theme}
                 .collect {app.veyra.music.widget.MediaWidget.refresh(this@VeyraApplication)}
@@ -167,6 +167,7 @@ class VeyraApplication : Application(), SingletonImageLoader.Factory {
         // The public "apps open right now" count; see Presence.
         app.veyra.music.data.presence.AndroidPresence.install(this)
         backgroundInit.join()
+        app.veyra.music.ui.performance.StartupPreparation.configure(this, themeRestore, assetRestore)
     }
 
     /**

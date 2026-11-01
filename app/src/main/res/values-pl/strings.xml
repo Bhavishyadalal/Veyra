@@ -1669,4 +1669,8 @@
     <string name="welcome_guest_note">Konto jest opcjonalne. Zacznij od swojej muzyki.</string>
     <string name="search_ready_hint">Gotowy do wyszukiwania „%1$s”</string>
     <string name="search_top_result">Najlepszy wynik</string>
+    <string name="startup_prepare_title">Przygotowywanie Veyra</string>
+    <string name="startup_prepare_hint">Przygotowywanie czcionek i wyglądu zwykle trwa kilka sekund. Możesz kontynuować, gdy przygotowanie trwa w tle.</string>
+    <string name="startup_prepare_slow">To trwa dłużej niż zwykle. Możesz kontynuować, gdy przygotowanie trwa w tle.</string>
+    <string name="startup_prepare_failed">Nie udało się ukończyć przygotowania. Spróbuj ponownie lub kontynuuj z dostępnym wyglądem.</string>
 </resources>

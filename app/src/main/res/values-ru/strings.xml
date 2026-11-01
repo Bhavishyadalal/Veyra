@@ -1649,4 +1649,8 @@
     <string name="welcome_guest_note">Учетная запись не является обязательной. Начните со своей музыки.</string>
     <string name="search_ready_hint">Готов к поиску «%1$s»</string>
     <string name="search_top_result">Лучший результат</string>
+    <string name="startup_prepare_title">Подготовка Veyra</string>
+    <string name="startup_prepare_hint">Подготовка шрифтов и оформления обычно занимает несколько секунд. Можно продолжить, пока подготовка завершается в фоне.</string>
+    <string name="startup_prepare_slow">Это занимает больше времени, чем обычно. Можно продолжить, пока подготовка завершается в фоне.</string>
+    <string name="startup_prepare_failed">Не удалось завершить подготовку. Повторите попытку или продолжите с доступным оформлением.</string>
 </resources>

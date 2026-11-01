@@ -1617,4 +1617,8 @@
     <string name="welcome_guest_note">एक खाता वैकल्पिक है. अपने संगीत से शुरुआत करें.</string>
     <string name="search_ready_hint">\"%1$s\" खोजने के लिए तैयार</string>
     <string name="search_top_result">शीर्ष परिणाम</string>
+    <string name="startup_prepare_title">Veyra तैयार हो रहा है</string>
+    <string name="startup_prepare_hint">फ़ॉन्ट और रूप तैयार हो रहे हैं। आम तौर पर कुछ सेकंड लगते हैं। तैयारी पृष्ठभूमि में पूरी होने तक आप आगे बढ़ सकते हैं।</string>
+    <string name="startup_prepare_slow">सामान्य से अधिक समय लग रहा है। तैयारी पृष्ठभूमि में पूरी होने तक आप आगे बढ़ सकते हैं।</string>
+    <string name="startup_prepare_failed">तैयारी पूरी नहीं हो सकी। फिर कोशिश करें या उपलब्ध रूप के साथ आगे बढ़ें।</string>
 </resources>

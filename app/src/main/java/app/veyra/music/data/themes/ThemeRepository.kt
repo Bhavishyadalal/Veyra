@@ -45,16 +45,18 @@ object ThemeRepository {
     private val lock = Any()
     private val mutations = kotlinx.coroutines.sync.Mutex()
 
-    fun init(app: Context) {
+    fun init(app: Context): Job {
         context = app.applicationContext
-        scope.launch { mutations.withLock {
+        return scope.launch { mutations.withLock {
             // Validate local data before it can influence theme construction.
             val selected = prefs.getString("active", null)
             root.listFiles()?.filter { it.name.startsWith(".staging-") || it.name.startsWith(".old-") }
                 ?.forEach { it.deleteRecursively() }
-            root.listFiles()?.filter { it.isDirectory && !it.name.startsWith('.') }?.forEach { folder ->
+            root.listFiles()?.filter { it.isDirectory && !it.name.startsWith('.') }
+                ?.sortedBy { if (it.name == selected) 0 else 1 }?.forEach { folder ->
+                yield()
                 runCatching {
-                    val m = loadInstalled(folder)
+                    val m = loadInstalled(folder, warmFonts = folder.name == selected)
                     if (m.version > (_installed.value[m.id]?.version ?: 0)) {
                         synchronized(lock) { installedDirectories[m.id] = folder }
                         _installed.value = _installed.value + (m.id to m)
@@ -176,25 +178,28 @@ object ThemeRepository {
         }.onFailure { if (it is CancellationException) throw it; _message.value = "Could not apply theme. Original appearance is still available." }.isSuccess
     }}
 
-    private fun loadInstalled(folder: File): ThemeManifest {
+    private fun loadInstalled(folder: File, warmFonts: Boolean = true): ThemeManifest {
         val m = ThemePack.json.decodeFromString<ThemeManifest>(File(folder,"theme.json").inputStream().use { ThemePack.readBounded(it,65536).decodeToString() })
         ThemePack.validate(m,BuildConfig.VERSION_CODE)
         require(folder.name == "${m.id}-v${m.version}")
         for ((path, hash) in m.files) {
             val file = File(folder,path)
-            require(file.length() in 1..ThemePack.MAX_FILE && ThemePack.sha256(file.readBytes()) == hash)
+            require(verifiedPackFileHash(file, ThemePack.MAX_FILE) == hash)
         }
-        validateDecodedAssets(m,folder)
+        validateDecodedAssets(m,folder,warmFonts)
         return m
     }
 
-    private fun validateDecodedAssets(m: ThemeManifest, folder: File) {
+    private fun validateDecodedAssets(m: ThemeManifest, folder: File) = validateDecodedAssets(m, folder, true)
+
+    private fun validateDecodedAssets(m: ThemeManifest, folder: File, warmFonts: Boolean) {
         for ((key,path) in m.assets) {
             val file = File(folder,path)
             if (key.endsWith("Font")) {
                 val header = file.inputStream().use { input -> ByteArray(4).also { check(input.read(it) == 4) } }
                 require(header.contentEquals(byteArrayOf(0,1,0,0)) || header.decodeToString() in setOf("OTTO","true")) { "Invalid theme font." }
-                PackFontCache.load(file.absolutePath)
+                // Inactive fonts are parsed on Apply, before they can affect the UI.
+                if (warmFonts) PackFontCache.load(file.absolutePath)
             }
             else {
                 val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }

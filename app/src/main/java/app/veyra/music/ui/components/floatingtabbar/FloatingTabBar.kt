@@ -1074,10 +1074,10 @@ private fun Modifier.animateEnterExitAccessory(
 
         this@animateEnterExitAccessory
             .renderInSharedTransitionScopeOverlay()
-            .graphicsLayer(
-                compositingStrategy = CompositingStrategy.ModulateAlpha,
+            .graphicsLayer {
+                compositingStrategy = CompositingStrategy.ModulateAlpha
                 alpha = animatedAlpha
-            )
+            }
     }
 }
 

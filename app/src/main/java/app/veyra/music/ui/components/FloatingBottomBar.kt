@@ -52,6 +52,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import app.veyra.music.ui.themes.navigationPillMotion
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -203,17 +204,6 @@ fun FloatingBottomBar(
         label = "pillOffset",
     )
 
-    // How much of a tab's stride is still ahead of the indicator: 0 at rest,
-    // toward 1 in the middle of a move or under a drag that has run away from
-    // it. The stretch below is a function of this and nothing else, which is
-    // what keeps it honest — the shape can only be deformed while it is
-    // actually behind where it is going.
-    val lag = if (tabStepPx > 0f) {
-        (abs(pillTargetPx - animatedPillOffset) / tabStepPx).coerceIn(0f, 1f)
-    } else {
-        0f
-    }
-
     var lastHapticTab by remember { mutableIntStateOf(selectedIndex) }
 
     LaunchedEffect(selectedIndex) { dragOffset = 0f }
@@ -248,16 +238,10 @@ fun FloatingBottomBar(
                     .align(AbsoluteAlignment.TopLeft)
                     .width(with(density) { tabWidthPx.toDp() })
                     .height(with(density) { rowSize.height.toDp() })
-                    .graphicsLayer {
-                        translationX = animatedPillOffset
-                        // Around its own centre, so the indicator draws out
-                        // both ways rather than growing a tail off one edge —
-                        // a leading edge that ran ahead of the glyph it is
-                        // meant to be behind would read as two things moving,
-                        // not one thing stretching.
-                        scaleX = 1f + lag * STRETCH
-                        scaleY = 1f - lag * STRETCH * SQUASH
-                    }
+                    .navigationPillMotion(
+                        offset = { animatedPillOffset }, targetOffset = pillTargetPx,
+                        tabStep = tabStepPx, stretch = STRETCH, squash = SQUASH,
+                    )
                     .clip(RoundedCornerShape(22.dp))
                     .background(MaterialTheme.colorScheme.primaryContainer)
                     .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.20f), RoundedCornerShape(22.dp)),

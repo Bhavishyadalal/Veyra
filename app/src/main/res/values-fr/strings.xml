@@ -1618,4 +1618,8 @@
     <string name="welcome_guest_note">Un compte est facultatif. Commencez par votre musique.</string>
     <string name="search_ready_hint">Prêt à rechercher « %1$s »</string>
     <string name="search_top_result">Meilleur résultat</string>
+    <string name="startup_prepare_title">Préparation de Veyra</string>
+    <string name="startup_prepare_hint">Préparation des polices et de l’apparence. Cela prend généralement quelques secondes. Vous pouvez continuer pendant la préparation en arrière-plan.</string>
+    <string name="startup_prepare_slow">Cela prend plus de temps que prévu. Vous pouvez continuer pendant la préparation en arrière-plan.</string>
+    <string name="startup_prepare_failed">La préparation a échoué. Réessayez ou continuez avec l’apparence disponible.</string>
 </resources>

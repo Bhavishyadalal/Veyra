@@ -1622,4 +1622,8 @@
     <string name="welcome_guest_note">Uma conta é opcional. Comece com sua música.</string>
     <string name="search_ready_hint">Pronto para pesquisar “%1$s”</string>
     <string name="search_top_result">Resultado principal</string>
+    <string name="startup_prepare_title">Preparando o Veyra</string>
+    <string name="startup_prepare_hint">Preparando fontes e aparência. Geralmente leva alguns segundos. Você pode continuar enquanto isso termina em segundo plano.</string>
+    <string name="startup_prepare_slow">Está demorando mais que o normal. Você pode continuar enquanto a preparação termina em segundo plano.</string>
+    <string name="startup_prepare_failed">Não foi possível concluir a preparação. Tente novamente ou continue com a aparência disponível.</string>
 </resources>

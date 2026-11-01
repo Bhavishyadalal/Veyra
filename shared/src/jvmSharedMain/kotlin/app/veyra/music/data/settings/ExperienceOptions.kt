@@ -44,7 +44,8 @@ data class ExperienceOptions(
     val scrollPlayerMotion: ScrollPlayerMotion = ScrollPlayerMotion.FLOW,
     val appMotionStyle: AppMotionStyle = AppMotionStyle.DEFAULT,
     val motionTempo: MotionTempo = MotionTempo.BALANCED,
-    val searchKeyboard: Boolean = true,
+    // Retained for backup compatibility; navigation no longer requests keyboard focus.
+    val searchKeyboard: Boolean = false,
     val miniPlayerDesign: MiniPlayerDesign = MiniPlayerDesign.PILL,
     val miniPlayerProgress: MiniPlayerProgress = MiniPlayerProgress.NONE,
     val miniSkipButtons: Boolean = true,
@@ -96,5 +97,5 @@ fun normalizedNavigation(ids:List<Int>):List<Int> {
 }
 
 /** Only the preferences the app root consumes; typing a greeting must not invalidate navigation. */
-data class RootExperience(val navigation:List<Int>,val startupTab:Int,val searchKeyboard:Boolean,val quickPicksRadio:Boolean,val immersive:Boolean)
-fun ExperienceOptions.forAppRoot()=RootExperience(navigation,startupTab,searchKeyboard,quickPicksRadio,immersive)
+data class RootExperience(val navigation:List<Int>,val startupTab:Int,val quickPicksRadio:Boolean,val immersive:Boolean)
+fun ExperienceOptions.forAppRoot()=RootExperience(navigation,startupTab,quickPicksRadio,immersive)

@@ -1600,4 +1600,8 @@
     <string name="welcome_guest_note">บัญชีเป็นทางเลือก เริ่มต้นด้วยเพลงของคุณ</string>
     <string name="search_ready_hint">พร้อมค้นหา “%1$s”</string>
     <string name="search_top_result">ผลลัพธ์อันดับต้นๆ</string>
+    <string name="startup_prepare_title">กำลังเตรียม Veyra</string>
+    <string name="startup_prepare_hint">กำลังเตรียมแบบอักษรและรูปลักษณ์ โดยปกติใช้เวลาไม่กี่วินาที คุณสามารถใช้งานต่อขณะเตรียมให้เสร็จในเบื้องหลังได้</string>
+    <string name="startup_prepare_slow">ใช้เวลานานกว่าปกติ คุณสามารถใช้งานต่อขณะเตรียมให้เสร็จในเบื้องหลังได้</string>
+    <string name="startup_prepare_failed">ไม่สามารถเตรียมให้เสร็จได้ ลองอีกครั้งหรือใช้รูปลักษณ์ที่พร้อมใช้งานต่อ</string>
 </resources>

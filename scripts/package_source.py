@@ -120,7 +120,7 @@ def main():
         library = encode(pack_data)
         z.writestr("Veyra/" + LIBRARY, library, compress_type=zipfile.ZIP_STORED)
         manifest.append({"path": LIBRARY, "bytes": len(library), "sha256": hashlib.sha256(library).hexdigest()})
-        z.writestr("Veyra/SOURCE_MANIFEST.json", json.dumps({"package": args.name, "files": manifest, "themeAssetsInPacks": omitted, "packedArchives": packed_archives}, indent=2) + "\n")
+        z.writestr("Veyra/SOURCE_MANIFEST.json", json.dumps({"package": args.name, "files": manifest, "themeAssetsInPacks": omitted, "packedArchives": packed_archives}, separators=(",", ":")) + "\n")
     with zipfile.ZipFile(archive) as z:
         assert z.testzip() is None
         for entry in manifest:

@@ -1,6 +1,8 @@
 package app.veyra.music.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -23,29 +25,31 @@ import app.veyra.music.ui.icons.SettingsIcons
     val options by AppSettings.experience.collectAsStateWithLifecycle()
     val scrollAnimations by AppSettings.scrollPlayerAnimations.collectAsStateWithLifecycle()
     val labels=listOf(R.string.home,R.string.search,R.string.explore,R.string.library,R.string.local_music,R.string.replay,R.string.settings).map {stringResource(it)}
+    val designChoices=listOf(R.string.navigation_floating,R.string.navigation_docked,R.string.navigation_minimal,R.string.navigation_capsule,R.string.navigation_ribbon,R.string.navigation_orbit,R.string.navigation_monorail,R.string.navigation_harbor,R.string.navigation_ticket,R.string.navigation_pebble,R.string.navigation_prism,R.string.navigation_bracket,R.string.navigation_halo,R.string.navigation_stitch,R.string.navigation_pixel,R.string.navigation_lozenge).map {stringResource(it)}
     ModalBottomSheet(onDismissRequest={open=false},sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true)) {
         app.veyra.music.ui.themes.ThemeComponentSurface {
-        Column(Modifier.fillMaxWidth().heightIn(max=680.dp).verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+        BoxWithConstraints {
+        val columns = if (maxWidth >= 340.dp && androidx.compose.ui.platform.LocalDensity.current.fontScale < 1.4f) 2 else 1
+        val designRows = remember(columns) { NavigationDesign.entries.chunked(columns) }
+        LazyColumn(Modifier.fillMaxWidth().heightIn(max=680.dp),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+            item { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.navigation_custom_title),style=MaterialTheme.typography.headlineSmall)
             Text(stringResource(R.string.navigation_studio_hint),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
-            val designChoices=listOf(R.string.navigation_floating,R.string.navigation_docked,R.string.navigation_minimal,R.string.navigation_capsule,R.string.navigation_ribbon,R.string.navigation_orbit,R.string.navigation_monorail,R.string.navigation_harbor,R.string.navigation_ticket,R.string.navigation_pebble,R.string.navigation_prism,R.string.navigation_bracket,R.string.navigation_halo,R.string.navigation_stitch,R.string.navigation_pixel,R.string.navigation_lozenge).map {stringResource(it)}
-            BoxWithConstraints {
-                val columns=if(maxWidth>=340.dp && androidx.compose.ui.platform.LocalDensity.current.fontScale<1.4f)2 else 1
-                Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
-                    NavigationDesign.entries.chunked(columns).forEach {row->
+
+            } }
+            // Only visible design specimens mount while the sheet opens.
+            items(designRows, key={it.first().name}) {row->
                         Row(horizontalArrangement=Arrangement.spacedBy(10.dp)) {
                             row.forEach {design->app.veyra.music.ui.themes.NavigationStylePreview(design,designChoices[design.ordinal],options.navigationDesign==design,
                                 {AppSettings.setExperience(options.copy(navigationDesign=design))},Modifier.weight(1f))}
                         }
-                    }
-                }
             }
-            AppMotionSetting()
-            ExperienceSection(stringResource(R.string.scroll_player_animations)) {
+            item { AppMotionSetting() }
+            item { ExperienceSection(stringResource(R.string.scroll_player_animations)) {
                 SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.scroll_player_animations),subtitle=stringResource(R.string.scroll_player_animations_hint),checked=scrollAnimations,onClick={AppSettings.setScrollPlayerAnimations(!scrollAnimations)})
                 ScrollPlayerMotionSetting()
-            }
-            ExperienceSection(stringResource(R.string.experience_nav_destinations)) {
+            } }
+            item { ExperienceSection(stringResource(R.string.experience_nav_destinations)) {
             options.navigation.forEachIndexed {index,target->
                 Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically) {
                     Text(labels[target],Modifier.weight(1f))
@@ -56,14 +60,14 @@ import app.veyra.music.ui.icons.SettingsIcons
             labels.indices.filter {it !in options.navigation}.forEach {target->
                 OutlinedButton(enabled=options.navigation.size<5,onClick={AppSettings.setExperience(options.copy(navigation=options.navigation+target))}) {Text(stringResource(R.string.navigation_add,labels[target]))}
             }
-            }
-            ExperienceSection(stringResource(R.string.experience_nav_behavior)) {
+            } }
+            item { ExperienceSection(stringResource(R.string.experience_nav_behavior)) {
             SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.navigation_start),subtitle=labels[options.startupTab],options=labels,selectedIndex=options.startupTab,onSelect={AppSettings.setExperience(options.copy(startupTab=it))})
             val labelChoices=listOf(R.string.navigation_labels_always,R.string.navigation_labels_selected,R.string.navigation_labels_hidden).map {stringResource(it)}
             SettingsPresetRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.navigation_labels),subtitle=labelChoices[options.navigationLabels.ordinal],options=labelChoices,selectedIndex=options.navigationLabels.ordinal,onSelect={AppSettings.setExperience(options.copy(navigationLabels=NavigationLabels.entries[it]))})
-            SettingsRow(icon=SettingsIcons.Appearance,title=stringResource(R.string.navigation_search_keyboard),checked=options.searchKeyboard,onClick={AppSettings.setExperience(options.copy(searchKeyboard=!options.searchKeyboard))})
-            }
-            TextButton(onClick={AppSettings.setExperience(options.copy(navigation=listOf(0,1,2,3),startupTab=0,navigationLabels=NavigationLabels.ALWAYS,navigationDesign=NavigationDesign.FLOATING,scrollPlayerMotion=ScrollPlayerMotion.FLOW))}) {Text(stringResource(R.string.navigation_reset))}
+            } }
+            item { TextButton(onClick={AppSettings.setExperience(options.copy(navigation=listOf(0,1,2,3),startupTab=0,navigationLabels=NavigationLabels.ALWAYS,navigationDesign=NavigationDesign.FLOATING,scrollPlayerMotion=ScrollPlayerMotion.FLOW))}) {Text(stringResource(R.string.navigation_reset))} }
+        }
         }
         }
     }
