@@ -29,7 +29,7 @@ import app.veyra.music.ui.icons.SettingsIcons
     ModalBottomSheet(onDismissRequest={open=false},sheetState=rememberModalBottomSheetState(skipPartiallyExpanded=true)) {
         app.veyra.music.ui.themes.ThemeComponentSurface {
         BoxWithConstraints {
-        val columns = if (maxWidth >= 340.dp && androidx.compose.ui.platform.LocalDensity.current.fontScale < 1.4f) 2 else 1
+        val columns = if (maxWidth - 40.dp >= 340.dp && androidx.compose.ui.platform.LocalDensity.current.fontScale < 1.4f) 2 else 1
         val designRows = remember(columns) { NavigationDesign.entries.chunked(columns) }
         LazyColumn(Modifier.fillMaxWidth().heightIn(max=680.dp),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             item { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {

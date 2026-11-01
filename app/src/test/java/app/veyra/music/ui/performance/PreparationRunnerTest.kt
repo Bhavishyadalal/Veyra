@@ -7,6 +7,21 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PreparationRunnerTest {
+    @Test fun unreadableSavedStateExposesRecoveryInsteadOfRemainingOnBlankScreen() = runTest {
+        var fail = true
+        var saved = false
+        val runner = PreparationRunner(backgroundScope, listOf({}),
+            { if (fail) error("Preferences unavailable") else false }, { saved = true })
+        runner.start(); runCurrent()
+        assertTrue(runner.state.value.failed)
+        assertFalse(runner.state.value.checking)
+        assertFalse(saved)
+        fail = false
+        runner.start(); runCurrent()
+        assertTrue(runner.state.value.done)
+        assertTrue(saved)
+    }
+
     @Test fun progressTracksCompletedWorkAndRepeatedStartsDoNotDuplicateIt() = runTest {
         val finish = CompletableDeferred<Unit>()
         var runs = 0

@@ -34,7 +34,7 @@ internal class PreparationRunner(
             } catch (cancel: CancellationException) {
                 throw cancel
             } catch (_: Exception) {
-                _state.value = _state.value.copy(failed = true)
+                _state.value = _state.value.copy(failed = true, checking = false)
             }
         }
     }

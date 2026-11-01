@@ -1,3 +1,10 @@
+# Veyra 0.2.2 · a calmer start, a lighter touch
+
+- Promote tested beta 58 to stable build 59 with manual Search focus, preserved queries, optional first-build preparation and lighter navigation/appearance work.
+- Recover from unreadable preparation preferences and account for sheet padding in the navigation gallery.
+- Keep existing downloads, effects, packs and older branches intact.
+- [Full user-facing changelog](RELEASE_NOTES_0.2.2.md) · [Verification](verification/STABLE-0.2.2-PROMOTION.md).
+
 # Veyra 0.1.6-beta1 · saved, personal and offline Home
 
 - Restore a bounded per-listener Home snapshot before network refresh; preserve useful content during refresh/failure. No auth cookies, stream URLs or paging tokens are persisted in snapshots.

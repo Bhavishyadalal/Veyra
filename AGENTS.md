@@ -1,23 +1,26 @@
 # Veyra maintenance rules
 
-- Active beta: `preview/0.2.2-beta1`, **0.2.2-beta1 / code 58**, created at
-  the owner's choice from stable 0.2.1 build 56. Includes all stable picker,
-  shared-storage and locale fixes. Keep main/stable 0.2.1 at code 56.
-  Build 58 removes navigation-triggered keyboard focus, adds optional first-build
-  appearance preparation and reduces navigation/pack startup work.
-  Catalogs and fallbacks on this branch target preview/0.2.2-beta1.
-  See verification/BETA-0.2.2-beta1.md. Retain stable 0.2.1 and previews
-  0.2.2-beta1, 0.2.1-beta1 and 0.2.0-beta1 at this branch tip.
+- Current stable: `main` and `stable/0.2.2`, **0.2.2 / code 59**, promoted
+  at the owner's request from tested beta build 58. Includes tap-to-type Search,
+  optional first-build appearance preparation, lazy Navigation Studio and reduced
+  navigation/pack startup work. Preparation saved-state failures expose recovery;
+  gallery columns account for padding. See verification/STABLE-0.2.2-PROMOTION.md.
+  Stable catalogs/fallbacks target main. Retain stable 0.2.2 plus previews
+  0.2.2-beta1, 0.2.1-beta1 and 0.2.0-beta1. Source archives use standard ZIP
+  with adaptive lossless image compression; native inputs and pack bytes remain unchanged.
+- Completed beta: `preview/0.2.2-beta1`, **0.2.2-beta1 / code 58**, remains
+  frozen with its original source ZIP and preview catalog routes. No newer beta
+  has been opened. Preserve older completed previews and stable branches.
 
-- Current stable: `main` and `stable/0.2.1`, **0.2.1 / code 56**, explicitly
+- Historical stable: `stable/0.2.1`, **0.2.1 / code 56**, explicitly
   promoted at the owner's request. Fixes the immersive mode picker with lazy
   rows, deferred previews, paused background motion and dismissal-before-selection.
   All new downloads must use shared Music/Veyra: no private-mode preference or
   private DownloadStore write path remains. Existing private originals stay safe
   and remain exportable. See verification/STABLE-0.2.1-PROMOTION.md.
   Stable catalogs/fallbacks target main. Completed `preview/0.2.1-beta1` stays
-  frozen at 0.2.1-beta1 / code 55 with its preview URLs. Retain stable 0.2.1 plus
-  the newest previews 0.2.1-beta1, 0.2.0-beta1 and 0.1.9-beta1 at branch tips.
+  frozen at 0.2.1-beta1 / code 55 with its preview URLs. That promotion retained
+  stable 0.2.1 plus previews 0.2.1-beta1, 0.2.0-beta1 and 0.1.9-beta1.
   Sixteen offered non-English locales now include missing UI keys, with
   machine-assisted translations; preserve indexed arguments and branded names.
 
@@ -57,8 +60,8 @@
   Build 45 adds Chaos Studio and Motion studio; builds 42–44 fix Liquid Glass,
   navigation design, request ownership and ratings. Preserve reduced motion,
   safe JSON defaults and decoration-only glass overlays.
-  Current source archives: stable 0.2.1 plus previews 0.2.1-beta1,
-  0.2.0-beta1 and 0.1.9-beta1. Older stable 0.1.9 stays on its frozen branch/history.
+  Current source archives: stable 0.2.2 plus previews 0.2.2-beta1,
+  0.2.1-beta1 and 0.2.0-beta1. Older stable 0.1.9 stays on its frozen branch/history.
   Source ZIPs retain native inputs and masters; runtime ZIPs are losslessly stored
   in SOURCE_DATA_PACKS.tar.xz. Restore offline with scripts/restore_source_packs.py
   or scripts/restore_theme_sources.py. Preserve strict paths/checksums, font pool

@@ -1,12 +1,8 @@
-> **Testing preview 0.2.2-beta1 / code 58** · Tap-to-type Search, optional appearance preparation and lighter navigation rendering, retaining stable 0.2.1 fixes. [Preview notes](RELEASE_NOTES_0.2.2-beta1.md) · [Verification](verification/BETA-0.2.2-beta1.md). Stable remains 0.2.1 / code 56.
-
-> **Stable 0.2.1 / code 56** · Faster immersive mode picker, enforced shared Music/Veyra downloads, current waveform notifications, optional app updates and Settings/welcome fixes. Includes 12 immersive modes, 72 themes, 32 overlays and 132 launcher choices.
+> **Stable 0.2.2 / code 59** · Tap-to-type Search, optional appearance preparation and lighter navigation rendering. Includes startup recovery and responsive navigation-gallery fixes.
 >
-> [Release notes](RELEASE_NOTES_0.2.1.md) · [Promotion and testing](verification/STABLE-0.2.1-PROMOTION.md) · [Source downloads](downloads/README.md).
+> [Release notes and changelog](RELEASE_NOTES_0.2.2.md) · [Promotion checks](verification/STABLE-0.2.2-PROMOTION.md) · [Source downloads](downloads/README.md).
 >
-> Main and `stable/0.2.1` are the current stable source. Completed `preview/0.2.1-beta1` remains code 55; older stable versions remain on their frozen branches. Source ZIPs are Android Studio projects, not APKs. APK publication is separate.
-
-![Veyra — Your music. Another dimension.](media-kit/banners/veyra-app-banner.png)
+> Main and `stable/0.2.2` are the current stable source. Completed `preview/0.2.2-beta1` stays at code 58; historical stable and preview branches remain unchanged. Source ZIPs are Android Studio projects; APK publication is separate.
 
 # Veyra
 

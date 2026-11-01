@@ -7,7 +7,17 @@ import re
 from pathlib import Path
 import subprocess
 import zipfile
+import zlib
 from source_pack_library import LIBRARY,encode
+
+
+def image_zip_level(data):
+    # Already-compressed artwork can be smaller at level 1 than at level 9.
+    # Compare actual standard-DEFLATE bytes; never change the source image.
+    def size(level):
+        compressor = zlib.compressobj(level, zlib.DEFLATED, -15)
+        return len(compressor.compress(data) + compressor.flush())
+    return min((1, 9), key=size)
 
 
 def main():
@@ -115,7 +125,12 @@ def main():
             if duplicate and hashlib.sha256(data).hexdigest() == duplicate["sha256"]:
                 omitted.append({"path": rel, **duplicate})
                 continue
-            z.write(path, "Veyra/" + rel)
+            if p.suffix.lower() in {".png", ".webp", ".jpg", ".jpeg"} and len(data) >= 65536:
+                info = zipfile.ZipInfo.from_file(path, "Veyra/" + rel)
+                z.writestr(info, data, compress_type=zipfile.ZIP_DEFLATED,
+                           compresslevel=image_zip_level(data))
+            else:
+                z.write(path, "Veyra/" + rel)
             manifest.append({"path": rel, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
         library = encode(pack_data)
         z.writestr("Veyra/" + LIBRARY, library, compress_type=zipfile.ZIP_STORED)
