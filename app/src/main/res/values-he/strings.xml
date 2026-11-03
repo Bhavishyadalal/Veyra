@@ -253,7 +253,7 @@
     <string name="filter_non_music_audio_subtitle">מסתיר קטעים קצרים מ-30 שניות, קבצי WAV, הודעות קוליות, הקלטות וצלילי מערכת</string>
     <string name="performance">ביצועים</string>
     <string name="high_performance_mode">מצב ביצועים גבוהים</string>
-    <string name="high_performance_subtitle">משתמש באנימציות מלאות וטשטוש, ומבקש קצב רענון מסך גבוה יותר</string>
+    <string name="high_performance_subtitle">בקש קצב רענון גבוה יותר של התצוגה. אפקטים חזותיים נשלטים בנפרד.</string>
     <string name="high_performance_active">%1$d הרץ התבקש. מערכת אנדרואיד עשויה להפחית זאת במידת הצורך.</string>
     <string name="beta">בטא</string>
     <string name="refresh_rate">קצב רענון</string>
@@ -1648,4 +1648,13 @@
     <string name="startup_prepare_hint">מכינים גופנים ועיצוב. לרוב נדרשות כמה שניות. ניתן להמשיך בזמן שההכנה מסתיימת ברקע.</string>
     <string name="startup_prepare_slow">זה נמשך יותר מהרגיל. ניתן להמשיך בזמן שההכנה מסתיימת ברקע.</string>
     <string name="startup_prepare_failed">לא ניתן היה להשלים את ההכנה. נסו שוב או המשיכו עם העיצוב הזמין.</string>
+    <string name="reduce_visual_effects">צמצם אפקטים חזותיים</string>
+    <string name="reduce_visual_effects_hint">משטחים אטומים, ללא טשטוש או זכוכית, רקעים סטטיים ותנועה פשוטה יותר. Your appearance choices are preserved.</string>
+    <string name="visual_effects_choice_title">בחר את החוויה החזותית שלך</string>
+    <string name="visual_effects_choice_hint">השפעות מופחתות מומלצות לחוויה קלילה יותר. אתה יכול לבחור את המראה המתאים לטלפון שלך.</string>
+    <string name="visual_effects_reduced_hint">אפקטים מופחתים: משטחים מוצקים, ללא טשטוש דקורטיבי או זכוכית, וללא רקע מונפש של קנבס.</string>
+    <string name="visual_effects_full_hint">אפקטים מלאים: אפשר את הגדרות הטשטוש, הזכוכית והתנועה שבחרת. הביצועים תלויים בטלפון שלך.</string>
+    <string name="visual_effects_change_later">שנה זאת בכל עת בהגדרות ← ביצועים.</string>
+    <string name="visual_effects_use_reduced">השפעות מופחתות · מומלץ</string>
+    <string name="visual_effects_use_full">אפקטים מלאים</string>
 </resources>

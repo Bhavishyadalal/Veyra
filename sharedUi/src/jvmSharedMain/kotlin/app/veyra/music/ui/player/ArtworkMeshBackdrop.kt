@@ -16,7 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
+import app.veyra.music.ui.customization.visualEffectBlur as blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
@@ -97,6 +97,7 @@ fun rememberFullArtworkBlurImage(
     artPx: Int = CARD_ART_PX,
     prepare: Boolean = true,
 ): ImageBitmap? {
+    if (app.veyra.music.ui.customization.LocalReducedVisualEffects.current) return null
     val context = LocalPlatformContext.current
     var image by remember(imageUrl) { mutableStateOf(imageUrl?.let(fullBlurCache::get)) }
 
@@ -141,6 +142,10 @@ fun FullArtworkBlurBackdrop(
     image: ImageBitmap?,
     modifier: Modifier = Modifier,
 ) {
+    if (app.veyra.music.ui.customization.LocalReducedVisualEffects.current) {
+        Box(modifier.fillMaxSize().background(FallbackBackdrop))
+        return
+    }
     val imageAlpha by androidx.compose.animation.core.animateFloatAsState(
         targetValue = if (image != null) 1f else 0f,
         animationSpec = tween(320, easing = FastOutSlowInEasing),
@@ -193,6 +198,7 @@ fun rememberArtworkMesh(
      */
     artPx: Int = CARD_ART_PX,
 ): ArtworkMesh? {
+    if (app.veyra.music.ui.customization.LocalReducedVisualEffects.current) return null
     val context = LocalPlatformContext.current
     // The last mesh that was on screen, whatever it was read from. A cover
     // the cache has never seen decodes *over* this instead of blanking the
@@ -317,6 +323,10 @@ fun ArtworkMeshBackdrop(
      */
     blurRadius: Dp = 32.dp,
 ) {
+    if (app.veyra.music.ui.customization.LocalReducedVisualEffects.current) {
+        Box(modifier.fillMaxSize().background(fallback.copy(alpha = 1f)))
+        return
+    }
     val reduceAnimation by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     val reduceDynamicBlur by PlayerSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     // RenderEffect only; below API 31 `blur` is a no-op. It is not missed here —

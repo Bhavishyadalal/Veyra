@@ -17,7 +17,7 @@ import app.veyra.music.sharedui.resources.*
 import app.veyra.music.ui.LyricsProviderState
 import app.veyra.music.ui.haptics.rememberHaptics
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.hazeSource
+import app.veyra.music.ui.components.visualEffectHazeSource as hazeSource
 import org.jetbrains.compose.resources.stringArrayResource
 import org.jetbrains.compose.resources.stringResource
 

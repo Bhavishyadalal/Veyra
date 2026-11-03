@@ -258,7 +258,7 @@
     <string name="filter_non_music_audio_subtitle">Скрывает клипы короче 30 секунд, файлы WAV, голосовые заметки, записи и системные звуки</string>
     <string name="performance">Производительность</string>
     <string name="high_performance_mode">Режим высокой производительности</string>
-    <string name="high_performance_subtitle">Использует полную анимацию и размытие, а также запрашивает более высокую частоту обновления экрана</string>
+    <string name="high_performance_subtitle">Запросите более высокую частоту обновления дисплея. Визуальные эффекты контролируются отдельно.</string>
     <string name="high_performance_active">Запрошена частота %1$d Гц. Android может снизить её при необходимости.</string>
     <string name="beta">Бета</string>
     <string name="refresh_rate">Частота обновления</string>
@@ -1653,4 +1653,13 @@
     <string name="startup_prepare_hint">Подготовка шрифтов и оформления обычно занимает несколько секунд. Можно продолжить, пока подготовка завершается в фоне.</string>
     <string name="startup_prepare_slow">Это занимает больше времени, чем обычно. Можно продолжить, пока подготовка завершается в фоне.</string>
     <string name="startup_prepare_failed">Не удалось завершить подготовку. Повторите попытку или продолжите с доступным оформлением.</string>
+    <string name="reduce_visual_effects">Уменьшите визуальные эффекты</string>
+    <string name="reduce_visual_effects_hint">Непрозрачные поверхности, отсутствие размытия и стекла, статический фон и более простое движение. Ваш выбор внешнего вида сохраняется.</string>
+    <string name="visual_effects_choice_title">Выберите свой визуальный опыт</string>
+    <string name="visual_effects_choice_hint">Для более легкого опыта рекомендуется уменьшить эффекты. Вы можете выбрать внешний вид, который подходит вашему телефону.</string>
+    <string name="visual_effects_reduced_hint">Уменьшенные эффекты: сплошные поверхности, отсутствие декоративного размытия или стекла, а также отсутствие анимированного фона Canvas.</string>
+    <string name="visual_effects_full_hint">Полные эффекты: разрешите выбранные вами настройки размытия, стекла и движения. Производительность зависит от вашего телефона.</string>
+    <string name="visual_effects_change_later">Измените это в любое время в «Настройки» → «Производительность».</string>
+    <string name="visual_effects_use_reduced">Снижение эффектов · Рекомендуется</string>
+    <string name="visual_effects_use_full">Полные эффекты</string>
 </resources>

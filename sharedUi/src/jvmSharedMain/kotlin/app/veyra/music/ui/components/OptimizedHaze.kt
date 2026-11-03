@@ -1,6 +1,11 @@
 package app.veyra.music.ui.components
 
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.Composable
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
+import app.veyra.music.ui.customization.LocalReducedVisualEffects
+import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.ExperimentalHazeApi
 import dev.chrisbanes.haze.HazeEffectScope
 import dev.chrisbanes.haze.HazeInputScale
@@ -21,12 +26,19 @@ import dev.chrisbanes.haze.hazeEffect
  * reason: the blur is what hides the upscale, so the pixels that were being paid
  * for could not be seen either way. [block] can still override it per call site.
  */
+@Composable
 @OptIn(ExperimentalHazeApi::class)
 fun Modifier.optimizedHazeEffect(
     state: HazeState,
     style: HazeStyle = HazeStyle.Unspecified,
     block: (HazeEffectScope.() -> Unit)? = null,
-): Modifier = hazeEffect(state, style) {
+): Modifier = if (LocalReducedVisualEffects.current) {
+    background(MaterialTheme.colorScheme.surface.copy(alpha = 1f))
+} else hazeEffect(state, style) {
     inputScale = HazeInputScale.Fixed(0.33f)
     block?.invoke(this)
 }
+
+@Composable
+fun Modifier.visualEffectHazeSource(state: HazeState): Modifier =
+    if (LocalReducedVisualEffects.current) this else hazeSource(state)

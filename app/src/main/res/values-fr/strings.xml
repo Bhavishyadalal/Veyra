@@ -249,7 +249,7 @@
     <string name="filter_non_music_audio_subtitle">Masque les extraits de moins de 30 secondes, les fichiers WAV, les notes vocales, les enregistrements et les sons système</string>
     <string name="performance">Performance</string>
     <string name="high_performance_mode">Mode haute performance</string>
-    <string name="high_performance_subtitle">Utilise toutes les animations et le flou, et demande un taux de rafraîchissement plus élevé</string>
+    <string name="high_performance_subtitle">Demandez un taux de rafraîchissement d’affichage plus élevé. Les effets visuels sont contrôlés séparément.</string>
     <string name="high_performance_active">%1$d Hz demandés. Android peut le réduire si nécessaire.</string>
     <string name="beta">Bêta</string>
     <string name="refresh_rate">Taux de rafraîchissement</string>
@@ -1622,4 +1622,13 @@
     <string name="startup_prepare_hint">Préparation des polices et de l’apparence. Cela prend généralement quelques secondes. Vous pouvez continuer pendant la préparation en arrière-plan.</string>
     <string name="startup_prepare_slow">Cela prend plus de temps que prévu. Vous pouvez continuer pendant la préparation en arrière-plan.</string>
     <string name="startup_prepare_failed">La préparation a échoué. Réessayez ou continuez avec l’apparence disponible.</string>
+    <string name="reduce_visual_effects">Réduire les effets visuels</string>
+    <string name="reduce_visual_effects_hint">Surfaces opaques, sans flou ni verre, arrière-plans statiques et mouvements plus simples. Vos choix d’apparence sont conservés.</string>
+    <string name="visual_effects_choice_title">Choisissez votre expérience visuelle</string>
+    <string name="visual_effects_choice_hint">Des effets réduits sont recommandés pour une expérience plus légère. Vous pouvez choisir le look qui convient à votre téléphone.</string>
+    <string name="visual_effects_reduced_hint">Effets réduits : surfaces solides, pas de flou décoratif ni de verre, et pas d\'arrière-plans Canvas animés.</string>
+    <string name="visual_effects_full_hint">Effets complets : autorisez les paramètres de flou, de verre et de mouvement sélectionnés. Les performances dépendent de votre téléphone.</string>
+    <string name="visual_effects_change_later">Modifiez cela à tout moment dans Paramètres → Performances.</string>
+    <string name="visual_effects_use_reduced">Effets réduits · Recommandé</string>
+    <string name="visual_effects_use_full">Effets complets</string>
 </resources>

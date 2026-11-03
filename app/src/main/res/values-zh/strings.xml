@@ -243,7 +243,7 @@
     <string name="filter_non_music_audio_subtitle">隐藏时长低于 30 秒的片段、WAV 文件、语音备忘录、录音和系统提示音</string>
     <string name="performance">性能</string>
     <string name="high_performance_mode">高性能模式</string>
-    <string name="high_performance_subtitle">使用完整动画和模糊效果，并请求更高的屏幕刷新率</string>
+    <string name="high_performance_subtitle">要求更高的显示刷新率。视觉效果单独控制。</string>
     <string name="high_performance_active">已请求 %1$d Hz。Android 可能会在需要时降低此数值。</string>
     <string name="beta">测试版</string>
     <string name="refresh_rate">刷新率</string>
@@ -1598,4 +1598,13 @@
     <string name="startup_prepare_hint">正在准备字体和外观，通常需要几秒钟。你可以继续使用，准备工作将在后台完成。</string>
     <string name="startup_prepare_slow">耗时比平时更长。你可以继续使用，准备工作将在后台完成。</string>
     <string name="startup_prepare_failed">无法完成准备。请重试，或使用可用的外观继续。</string>
+    <string name="reduce_visual_effects">减少视觉效果</string>
+    <string name="reduce_visual_effects_hint">不透明表面、无模糊或玻璃、静态背景和更简单的运动。您的外观选择将被保留。</string>
+    <string name="visual_effects_choice_title">选择您的视觉体验</string>
+    <string name="visual_effects_choice_hint">建议减少效果以获得更轻松的体验。您可以选择适合您手机的外观。</string>
+    <string name="visual_effects_reduced_hint">减少的效果：固体表面，没有装饰性模糊或玻璃，并且没有动画画布背景。</string>
+    <string name="visual_effects_full_hint">完整效果：允许您选择的模糊、玻璃和运动设置。性能取决于您的手机。</string>
+    <string name="visual_effects_change_later">可以随时在“设置”→“性能”中更改此设置。</string>
+    <string name="visual_effects_use_reduced">减少影响 · 推荐</string>
+    <string name="visual_effects_use_full">效果齐全</string>
 </resources>

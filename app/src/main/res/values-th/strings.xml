@@ -267,7 +267,7 @@
     <string name="filter_non_music_audio_subtitle">ซ่อนคลิปสั้นกว่า 30 วินาที ไฟล์ WAV บันทึกเสียง การอัดเสียง และเสียงระบบ</string>
     <string name="performance">ประสิทธิภาพ</string>
     <string name="high_performance_mode">โหมดประสิทธิภาพสูง</string>
-    <string name="high_performance_subtitle">ใช้แอนิเมชันและเบลอเต็มรูปแบบ และขออัตรารีเฟรชหน้าจอที่สูงขึ้น</string>
+    <string name="high_performance_subtitle">ขออัตราการรีเฟรชการแสดงผลที่สูงขึ้น เอฟเฟ็กต์ภาพได้รับการควบคุมแยกกัน</string>
     <string name="high_performance_active">ขออัตรารีเฟรช %1$d Hz ระบบ Android อาจลดลงเมื่อจำเป็น</string>
     <string name="beta">เบต้า</string>
     <string name="refresh_rate">อัตรารีเฟรช</string>
@@ -1604,4 +1604,13 @@
     <string name="startup_prepare_hint">กำลังเตรียมแบบอักษรและรูปลักษณ์ โดยปกติใช้เวลาไม่กี่วินาที คุณสามารถใช้งานต่อขณะเตรียมให้เสร็จในเบื้องหลังได้</string>
     <string name="startup_prepare_slow">ใช้เวลานานกว่าปกติ คุณสามารถใช้งานต่อขณะเตรียมให้เสร็จในเบื้องหลังได้</string>
     <string name="startup_prepare_failed">ไม่สามารถเตรียมให้เสร็จได้ ลองอีกครั้งหรือใช้รูปลักษณ์ที่พร้อมใช้งานต่อ</string>
+    <string name="reduce_visual_effects">ลดเอฟเฟ็กต์ภาพ</string>
+    <string name="reduce_visual_effects_hint">พื้นผิวทึบแสง ไม่เบลอหรือเป็นกระจก พื้นหลังคงที่ และการเคลื่อนไหวง่ายขึ้น ตัวเลือกลักษณะที่ปรากฏของคุณจะถูกเก็บรักษาไว้</string>
+    <string name="visual_effects_choice_title">เลือกประสบการณ์การมองเห็นของคุณ</string>
+    <string name="visual_effects_choice_hint">แนะนำให้ใช้เอฟเฟ็กต์ที่ลดลงเพื่อประสบการณ์ที่เบากว่า คุณสามารถเลือกรูปลักษณ์ที่เหมาะกับโทรศัพท์ของคุณได้</string>
+    <string name="visual_effects_reduced_hint">เอฟเฟกต์ลดลง: พื้นผิวทึบ ไม่มีภาพเบลอหรือกระจกตกแต่ง และไม่มีพื้นหลังแคนวาสแบบเคลื่อนไหว</string>
+    <string name="visual_effects_full_hint">เอฟเฟ็กต์แบบเต็ม: อนุญาตการตั้งค่าการเบลอ กระจก และการเคลื่อนไหวที่คุณเลือก ประสิทธิภาพขึ้นอยู่กับโทรศัพท์ของคุณ</string>
+    <string name="visual_effects_change_later">เปลี่ยนได้ตลอดเวลาในการตั้งค่า → ประสิทธิภาพ</string>
+    <string name="visual_effects_use_reduced">ผลกระทบที่ลดลง · แนะนำ</string>
+    <string name="visual_effects_use_full">เอฟเฟกต์เต็มรูปแบบ</string>
 </resources>

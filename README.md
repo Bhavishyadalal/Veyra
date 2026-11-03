@@ -1,3 +1,7 @@
+> **Testing preview 0.2.3-beta1 / code 60** · Based on stable 0.2.2. Adds a saved reduced-effects profile, opaque surfaces, a post-welcome choice and independent refresh-rate controls. [Preview notes](RELEASE_NOTES_0.2.3-beta1.md) · [Verification](verification/BETA-0.2.3-beta1.md).
+>
+> Stable remains 0.2.2 / code 59 on main and `stable/0.2.2`. The owner runs GitHub APK workflows manually.
+
 > **Stable 0.2.2 / code 59** · Tap-to-type Search, optional appearance preparation and lighter navigation rendering. Includes startup recovery and responsive navigation-gallery fixes.
 >
 > [Release notes and changelog](RELEASE_NOTES_0.2.2.md) · [Promotion checks](verification/STABLE-0.2.2-PROMOTION.md) · [Source downloads](downloads/README.md).

@@ -271,6 +271,10 @@ private fun SceneHero(style: ImmersiveStyle, request: ImageRequest, position: Pl
 
 @Composable
 private fun ExpandedSceneBackdrop(style: ImmersiveStyle, phase: State<Float>, modifier: Modifier) {
+    if (app.veyra.music.ui.customization.LocalReducedVisualEffects.current) {
+        Box(modifier.background(if (style == ImmersiveStyle.PAPER_REVERIE) Color(0xFFEBE2D1) else style.deckColor()))
+        return
+    }
     Box(modifier.background(when (style) {
         ImmersiveStyle.PAPER_REVERIE -> Color(0xFFEBE2D1)
         ImmersiveStyle.VINYL_LOUNGE -> Color(0xFF1E1714)

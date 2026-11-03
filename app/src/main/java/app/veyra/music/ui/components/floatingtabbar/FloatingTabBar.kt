@@ -93,7 +93,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import app.veyra.music.ui.customization.visualEffectShadow as shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlurEffect
@@ -1144,7 +1144,7 @@ private fun Modifier.animateEnterExitTab(
             // pay for a blur of nothing — on a bar that is on screen the whole
             // time the app is.
             renderEffect =
-                if (animatedBlur > 0f) BlurEffect(animatedBlur, animatedBlur) else null
+                if (animatedBlur > 0f && !AppSettings.reduceVisualEffects.value) BlurEffect(animatedBlur, animatedBlur) else null
         }
     }
 }

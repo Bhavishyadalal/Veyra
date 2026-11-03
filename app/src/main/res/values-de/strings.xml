@@ -248,7 +248,7 @@
     <string name="filter_non_music_audio_subtitle">Blendet Clips unter 30 Sekunden, WAV-Dateien, Sprachnotizen, Aufnahmen und Systemtöne aus</string>
     <string name="performance">Leistung</string>
     <string name="high_performance_mode">Hochleistungsmodus</string>
-    <string name="high_performance_subtitle">Verwendet vollständige Animationen und Unschärfe und fordert eine höhere Bildwiederholrate an</string>
+    <string name="high_performance_subtitle">Fordern Sie eine höhere Bildwiederholfrequenz an. Visuelle Effekte werden separat gesteuert.</string>
     <string name="high_performance_active">%1$d Hz angefordert. Android kann die Rate bei Bedarf verringern.</string>
     <string name="beta">Beta</string>
     <string name="refresh_rate">Bildwiederholrate</string>
@@ -1621,4 +1621,13 @@
     <string name="startup_prepare_hint">Schriften und Darstellung werden vorbereitet. Das dauert meist wenige Sekunden. Du kannst fortfahren, während dies im Hintergrund abgeschlossen wird.</string>
     <string name="startup_prepare_slow">Es dauert länger als üblich. Du kannst fortfahren, während die Vorbereitung im Hintergrund abgeschlossen wird.</string>
     <string name="startup_prepare_failed">Die Vorbereitung konnte nicht abgeschlossen werden. Versuche es erneut oder fahre mit der verfügbaren Darstellung fort.</string>
+    <string name="reduce_visual_effects">Reduzieren Sie visuelle Effekte</string>
+    <string name="reduce_visual_effects_hint">Undurchsichtige Oberflächen, keine Unschärfe oder Glas, statische Hintergründe und einfachere Bewegung. Ihre Auswahl an Erscheinungsbildern bleibt erhalten.</string>
+    <string name="visual_effects_choice_title">Wählen Sie Ihr visuelles Erlebnis</string>
+    <string name="visual_effects_choice_hint">Für ein leichteres Erlebnis werden reduzierte Effekte empfohlen. Sie können den Look wählen, der zu Ihrem Telefon passt.</string>
+    <string name="visual_effects_reduced_hint">Reduzierte Effekte: feste Oberflächen, keine dekorative Unschärfe oder Glas und keine animierten Canvas-Hintergründe.</string>
+    <string name="visual_effects_full_hint">Volle Effekte: Ermöglichen Sie Ihre ausgewählten Unschärfe-, Glas- und Bewegungseinstellungen. Die Leistung hängt von Ihrem Telefon ab.</string>
+    <string name="visual_effects_change_later">Sie können dies jederzeit unter Einstellungen → Leistung ändern.</string>
+    <string name="visual_effects_use_reduced">Reduzierte Auswirkungen · Empfohlen</string>
+    <string name="visual_effects_use_full">Volle Wirkung</string>
 </resources>

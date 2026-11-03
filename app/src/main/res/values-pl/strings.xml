@@ -254,7 +254,7 @@
     <string name="filter_non_music_audio_subtitle">Ukrywa klipy krótsze niż 30 sekund, pliki WAV, notatki głosowe, nagrania i dźwięki systemowe</string>
     <string name="performance">Wydajność</string>
     <string name="high_performance_mode">Tryb wysokiej wydajności</string>
-    <string name="high_performance_subtitle">Używa pełnych animacji i rozmycia oraz żąda wyższej częstotliwości odświeżania ekranu</string>
+    <string name="high_performance_subtitle">Poproś o wyższą częstotliwość odświeżania wyświetlacza. Efekty wizualne są kontrolowane osobno.</string>
     <string name="high_performance_active">Zażądano %1$d Hz. Android może ją obniżyć, jeśli to konieczne.</string>
     <string name="beta">Beta</string>
     <string name="refresh_rate">Częstotliwość odświeżania</string>
@@ -1673,4 +1673,13 @@
     <string name="startup_prepare_hint">Przygotowywanie czcionek i wyglądu zwykle trwa kilka sekund. Możesz kontynuować, gdy przygotowanie trwa w tle.</string>
     <string name="startup_prepare_slow">To trwa dłużej niż zwykle. Możesz kontynuować, gdy przygotowanie trwa w tle.</string>
     <string name="startup_prepare_failed">Nie udało się ukończyć przygotowania. Spróbuj ponownie lub kontynuuj z dostępnym wyglądem.</string>
+    <string name="reduce_visual_effects">Zmniejsz efekty wizualne</string>
+    <string name="reduce_visual_effects_hint">Nieprzezroczyste powierzchnie, brak rozmyć i szkła, statyczne tła i prostszy ruch. Twoje wybory dotyczące wyglądu zostaną zachowane.</string>
+    <string name="visual_effects_choice_title">Wybierz swoje wrażenia wizualne</string>
+    <string name="visual_effects_choice_hint">Aby uzyskać lżejsze wrażenia, zaleca się ograniczenie efektów. Możesz wybrać wygląd pasujący do Twojego telefonu.</string>
+    <string name="visual_effects_reduced_hint">Zredukowane efekty: stałe powierzchnie, brak dekoracyjnych rozmyć i szkła oraz brak animowanych teł na płótnie.</string>
+    <string name="visual_effects_full_hint">Pełne efekty: zezwól na wybrane ustawienia rozmycia, szkła i ruchu. Wydajność zależy od telefonu.</string>
+    <string name="visual_effects_change_later">Zmień to w dowolnym momencie w Ustawieniach → Wydajność.</string>
+    <string name="visual_effects_use_reduced">Zredukowane efekty · Zalecane</string>
+    <string name="visual_effects_use_full">Pełne efekty</string>
 </resources>

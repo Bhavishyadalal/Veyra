@@ -9,6 +9,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -20,7 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
+import app.veyra.music.ui.customization.visualEffectBlur as blur
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -118,6 +119,10 @@ fun MeshGradientBackground(
      */
     colorFadeMillis: Int = 1400,
 ) {
+    if (app.veyra.music.ui.customization.LocalReducedVisualEffects.current) {
+        androidx.compose.foundation.layout.Box(modifier.fillMaxSize().background(Color(0xFF101216)))
+        return
+    }
     val reduceAnimation by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
 
     val reduceBlur by PlayerSettings.reduceDynamicBlur.collectAsStateWithLifecycle()

@@ -36,7 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
+import app.veyra.music.ui.customization.visualEffectBlur as blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
@@ -102,8 +102,9 @@ internal fun GlowingAvatar(
     size: Dp = 104.dp,
     glow: Color = MaterialTheme.colorScheme.primary,
 ) {
-    val breathe = rememberInfiniteTransition(label = "partyGlow")
-    val spread by breathe.animateFloat(
+    val reduced = app.veyra.music.ui.customization.LocalReducedVisualEffects.current
+    val breathe = if (!reduced) rememberInfiniteTransition(label = "partyGlow") else null
+    val spread = breathe?.animateFloat(
         initialValue = 0.92f,
         targetValue = 1.14f,
         animationSpec = infiniteRepeatable(
@@ -111,8 +112,8 @@ internal fun GlowingAvatar(
             repeatMode = RepeatMode.Reverse,
         ),
         label = "partyGlowSpread",
-    )
-    val intensity by breathe.animateFloat(
+    )?.value ?: 1f
+    val intensity = breathe?.animateFloat(
         initialValue = 0.35f,
         targetValue = 0.6f,
         animationSpec = infiniteRepeatable(
@@ -123,13 +124,13 @@ internal fun GlowingAvatar(
             repeatMode = RepeatMode.Reverse,
         ),
         label = "partyGlowIntensity",
-    )
+    )?.value ?: 0f
 
     Box(
         modifier = modifier.size(size * 2.1f),
         contentAlignment = Alignment.Center,
     ) {
-        Box(
+        if (!reduced) Box(
             modifier = Modifier
                 .size(size * 1.75f)
                 .scale(spread)

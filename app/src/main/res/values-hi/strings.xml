@@ -248,7 +248,7 @@
     <string name="filter_non_music_audio_subtitle">30 सेकंड से छोटे क्लिप, WAV फ़ाइलें, वॉइस नोट्स, रिकॉर्डिंग और सिस्टम साउंड छिपाता है</string>
     <string name="performance">परफ़ॉर्मेंस</string>
     <string name="high_performance_mode">हाई परफ़ॉर्मेंस मोड</string>
-    <string name="high_performance_subtitle">पूरे एनिमेशन और ब्लर का उपयोग करता है, और डिस्प्ले का ज़्यादा रिफ़्रेश रेट मांगता है</string>
+    <string name="high_performance_subtitle">उच्च प्रदर्शन ताज़ा दर का अनुरोध करें। दृश्य प्रभावों को अलग से नियंत्रित किया जाता है।</string>
     <string name="high_performance_active">%1$d Hz का अनुरोध किया गया। ज़रूरत पड़ने पर Android इसे कम कर सकता है।</string>
     <string name="beta">बीटा</string>
     <string name="refresh_rate">रिफ़्रेश रेट</string>
@@ -1621,4 +1621,13 @@
     <string name="startup_prepare_hint">फ़ॉन्ट और रूप तैयार हो रहे हैं। आम तौर पर कुछ सेकंड लगते हैं। तैयारी पृष्ठभूमि में पूरी होने तक आप आगे बढ़ सकते हैं।</string>
     <string name="startup_prepare_slow">सामान्य से अधिक समय लग रहा है। तैयारी पृष्ठभूमि में पूरी होने तक आप आगे बढ़ सकते हैं।</string>
     <string name="startup_prepare_failed">तैयारी पूरी नहीं हो सकी। फिर कोशिश करें या उपलब्ध रूप के साथ आगे बढ़ें।</string>
+    <string name="reduce_visual_effects">दृश्य प्रभाव कम करें</string>
+    <string name="reduce_visual_effects_hint">अपारदर्शी सतहें, कोई धुंधलापन या कांच नहीं, स्थिर पृष्ठभूमि और सरल गति। आपके दिखावे के विकल्प सुरक्षित हैं।</string>
+    <string name="visual_effects_choice_title">अपना दृश्य अनुभव चुनें</string>
+    <string name="visual_effects_choice_hint">हल्के अनुभव के लिए कम प्रभावों की अनुशंसा की जाती है। आप वह लुक चुन सकते हैं जो आपके फोन पर सूट करे।</string>
+    <string name="visual_effects_reduced_hint">कम प्रभाव: ठोस सतहें, कोई सजावटी धुंधलापन या कांच नहीं, और कोई एनिमेटेड कैनवास पृष्ठभूमि नहीं।</string>
+    <string name="visual_effects_full_hint">पूर्ण प्रभाव: अपने चयनित धुंधलापन, ग्लास और गति सेटिंग्स की अनुमति दें। प्रदर्शन आपके फ़ोन पर निर्भर करता है.</string>
+    <string name="visual_effects_change_later">इसे सेटिंग → प्रदर्शन में किसी भी समय बदलें।</string>
+    <string name="visual_effects_use_reduced">कम प्रभाव · अनुशंसित</string>
+    <string name="visual_effects_use_full">पूर्ण प्रभाव</string>
 </resources>

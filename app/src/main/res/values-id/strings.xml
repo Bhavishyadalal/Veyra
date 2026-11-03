@@ -243,7 +243,7 @@
     <string name="filter_non_music_audio_subtitle">Menyembunyikan klip di bawah 30 detik, file WAV, catatan suara, rekaman, dan suara sistem</string>
     <string name="performance">Performa</string>
     <string name="high_performance_mode">Mode performa tinggi</string>
-    <string name="high_performance_subtitle">Menggunakan animasi dan blur penuh, serta meminta refresh rate layar yang lebih tinggi</string>
+    <string name="high_performance_subtitle">Minta kecepatan refresh tampilan yang lebih tinggi. Efek visual dikontrol secara terpisah.</string>
     <string name="high_performance_active">%1$d Hz diminta. Android dapat menurunkannya saat diperlukan.</string>
     <string name="beta">Beta</string>
     <string name="refresh_rate">Refresh rate</string>
@@ -1598,4 +1598,13 @@
     <string name="startup_prepare_hint">Menyiapkan font dan tampilan. Biasanya beberapa detik. Anda dapat melanjutkan sementara persiapan selesai di latar belakang.</string>
     <string name="startup_prepare_slow">Lebih lama dari biasanya. Anda dapat melanjutkan sementara persiapan selesai di latar belakang.</string>
     <string name="startup_prepare_failed">Persiapan tidak dapat diselesaikan. Coba lagi atau lanjutkan dengan tampilan yang tersedia.</string>
+    <string name="reduce_visual_effects">Kurangi efek visual</string>
+    <string name="reduce_visual_effects_hint">Permukaan buram, tidak buram atau kaca, latar belakang statis, dan gerakan lebih sederhana. Pilihan penampilan Anda dipertahankan.</string>
+    <string name="visual_effects_choice_title">Pilih pengalaman visual Anda</string>
+    <string name="visual_effects_choice_hint">Efek yang dikurangi direkomendasikan untuk pengalaman yang lebih ringan. Anda dapat memilih tampilan yang sesuai dengan ponsel Anda.</string>
+    <string name="visual_effects_reduced_hint">Efek yang dikurangi: permukaan padat, tanpa hiasan buram atau kaca, dan tanpa latar belakang Kanvas animasi.</string>
+    <string name="visual_effects_full_hint">Efek penuh: memungkinkan pengaturan blur, kaca, dan gerakan yang Anda pilih. Kinerja tergantung pada ponsel Anda.</string>
+    <string name="visual_effects_change_later">Ubah ini kapan saja di Pengaturan → Kinerja.</string>
+    <string name="visual_effects_use_reduced">Mengurangi efek · Direkomendasikan</string>
+    <string name="visual_effects_use_full">Efek penuh</string>
 </resources>

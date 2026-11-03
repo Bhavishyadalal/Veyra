@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
+import app.veyra.music.ui.customization.visualEffectBlur as blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -60,6 +60,10 @@ fun ArtworkBackdrop(
      */
     artPx: Int = CARD_ART_PX,
 ) {
+    if (app.veyra.music.ui.customization.LocalReducedVisualEffects.current) {
+        Box(modifier.background(palette.background.copy(alpha = 1f)))
+        return
+    }
     if (app.veyra.music.ui.themes.LocalThemeVisuals.current != null) {
         Box(modifier.background(palette.background)) {
             app.veyra.music.ui.themes.ThemeScene(Modifier.matchParentSize(), prominent = true)

@@ -80,9 +80,9 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
+import app.veyra.music.ui.customization.visualEffectBlur as blur
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.shadow
+import app.veyra.music.ui.customization.visualEffectShadow as shadow
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.geometry.Offset

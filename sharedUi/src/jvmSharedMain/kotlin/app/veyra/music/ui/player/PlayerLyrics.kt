@@ -80,7 +80,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
+import app.veyra.music.ui.customization.visualEffectBlur as blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
@@ -1878,7 +1878,8 @@ private fun LyricsPanelContent(
     val lyricsBlur by PlayerSettings.lyricsBlur.collectAsStateWithLifecycle()
     val reduceAnimation by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
 
-    val glowing = !reduceAnimation && !reduceDynamicBlur && lyricsBlur &&
+    val glowing = !app.veyra.music.ui.customization.LocalReducedVisualEffects.current &&
+        !reduceAnimation && !reduceDynamicBlur && lyricsBlur &&
         renderEffectBlurSupported
 
     LaunchedEffect(listState) {

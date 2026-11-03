@@ -9,6 +9,7 @@
  */
 package app.veyra.music.ui.components
 
+import app.veyra.music.ui.customization.LocalReducedVisualEffects
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -128,6 +129,7 @@ fun Modifier.lightweightLiquidGlass(
     shape: CornerBasedShape,
     fallbackColor: Color,
 ): Modifier {
+    if (LocalReducedVisualEffects.current) return clip(shape).background(fallbackColor.copy(alpha = 1f), shape)
     val useGlass = LocalLiquidGlassEnabled.current && isGlassSupported()
     val glassTint = LocalThemeVisuals.current?.surface ?: if (MaterialTheme.colorScheme.surface.luminance() > 0.5f) {
         Color(0xFFFAFAFA)
@@ -165,7 +167,7 @@ fun Modifier.lightweightLiquidGlass(
  */
 @Composable
 fun Modifier.liquidGlassRim(shape: CornerBasedShape): Modifier {
-    if (!LocalLiquidGlassEnabled.current || !isGlassSupported()) return this
+    if (LocalReducedVisualEffects.current || !LocalLiquidGlassEnabled.current || !isGlassSupported()) return this
     val shapeProvider = remember(shape) { ShapeProvider { shape } }
     return then(
         HighlightElement(
@@ -193,6 +195,7 @@ fun Modifier.liquidGlassRim(shape: CornerBasedShape): Modifier {
  */
 @Composable
 fun Modifier.liquidGlass(shape: CornerBasedShape): Modifier {
+    if (LocalReducedVisualEffects.current) return background(MaterialTheme.colorScheme.surface.copy(alpha = 1f), shape)
     if (!isGlassSupported()) return this
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     if (reduceDynamicBlur) {

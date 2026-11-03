@@ -18,7 +18,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.ui.draw.blur
+import app.veyra.music.ui.customization.visualEffectBlur as blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -142,6 +142,10 @@ fun themeSceneScrimAlpha(theme: ThemeVisuals): Float {
 @Composable
 fun ThemeScene(modifier: Modifier = Modifier, prominent: Boolean = false) {
     val theme = LocalThemeVisuals.current ?: return
+    if (app.veyra.music.ui.customization.LocalReducedVisualEffects.current) {
+        Box(modifier.background(theme.background.copy(alpha = 1f)).clearAndSetSemantics {})
+        return
+    }
     if (theme.sceneStyle.startsWith("app_")) {
         app.veyra.music.ui.styles.StyleBackdrop(app.veyra.music.ui.styles.LocalAppStyle.current,theme.asset("header"),modifier)
         return

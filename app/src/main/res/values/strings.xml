@@ -382,7 +382,7 @@
     <string name="filter_non_music_audio_subtitle">Hides clips under 30 seconds, WAV files, voice notes, recordings and system sounds</string>
     <string name="performance">Performance</string>
     <string name="high_performance_mode">High performance mode</string>
-    <string name="high_performance_subtitle">Uses full animations and blur, and requests a higher display refresh rate</string>
+    <string name="high_performance_subtitle">Request a higher display refresh rate. Visual effects are controlled separately.</string>
     <string name="high_performance_active">%1$d Hz requested. Android may lower it when needed.</string>
     <string name="beta">Beta</string>
     <string name="refresh_rate">Refresh rate</string>
@@ -1519,4 +1519,13 @@
     <string name="startup_prepare_hint">Preparing fonts and appearance. Usually a few seconds. You can continue while this finishes in the background.</string>
     <string name="startup_prepare_slow">Taking longer than usual. You can continue while preparation finishes in the background.</string>
     <string name="startup_prepare_failed">Preparation could not finish. Retry, or continue with the available appearance.</string>
+    <string name="reduce_visual_effects">Reduce visual effects</string>
+    <string name="reduce_visual_effects_hint">Opaque surfaces, no blur or glass, static backgrounds and simpler motion. Your appearance choices are preserved.</string>
+    <string name="visual_effects_choice_title">Choose your visual experience</string>
+    <string name="visual_effects_choice_hint">Reduced effects are recommended for a lighter experience. You can choose the look that suits your phone.</string>
+    <string name="visual_effects_reduced_hint">Reduced effects: solid surfaces, no decorative blur or glass, and no animated Canvas backgrounds.</string>
+    <string name="visual_effects_full_hint">Full effects: allow your selected blur, glass and motion settings. Performance depends on your phone.</string>
+    <string name="visual_effects_change_later">Change this anytime in Settings → Performance.</string>
+    <string name="visual_effects_use_reduced">Reduced effects · Recommended</string>
+    <string name="visual_effects_use_full">Full effects</string>
 </resources>

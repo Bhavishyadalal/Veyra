@@ -366,6 +366,10 @@ object AppSettings {
     val showNerdStats = MutableStateFlow(false)
 
     /** Freezes the main player's mesh gradient instead of letting it drift/crossfade. */
+    private val _reduceVisualEffects = MutableStateFlow(false)
+    val reduceVisualEffects = _reduceVisualEffects.asStateFlow()
+    private val _visualEffectsChoiceMade = MutableStateFlow(false)
+    val visualEffectsChoiceMade = _visualEffectsChoiceMade.asStateFlow()
     val reduceAnimation = MutableStateFlow(false)
     val accentPalette = MutableStateFlow(AccentPalette.DEFAULT)
     val appStyle = MutableStateFlow(app.veyra.music.ui.styles.AppStyle.ORIGINAL)
@@ -916,11 +920,8 @@ object AppSettings {
         lyricsOffsetMs.value = prefs.getInt(KEY_LYRICS_OFFSET_MS, 0)
             .coerceIn(MIN_LYRICS_OFFSET_MS, MAX_LYRICS_OFFSET_MS)
         translationLanguage.value = prefs.getString(KEY_TRANSLATION_LANGUAGE, "").orEmpty()
-        if (highPerformanceMode.value) {
-            reduceAnimation.value = false
-            reduceDynamicBlur.value = false
-        }
         animatedCanvas.value = prefs.getBoolean(KEY_ANIMATED_CANVAS, true)
+        reloadVisualEffectsPreferences()
         canvasOverCellular.value = prefs.getBoolean(KEY_CANVAS_OVER_CELLULAR, false)
         spotifyCanvasAutoHide.value = prefs.getBoolean(KEY_SPOTIFY_CANVAS_AUTO_HIDE, true)
         prioritizeSpotifyCanvas.value = prefs.getBoolean(KEY_PRIORITIZE_SPOTIFY_CANVAS, false)
@@ -1279,7 +1280,8 @@ object AppSettings {
     fun setMotionLevel(value: MotionLevel) {
         setReduceAnimation(value == MotionLevel.OFF)
         subtleMotion.value = value == MotionLevel.SUBTLE
-        prefs.edit().putBoolean("subtle_motion", subtleMotion.value).apply()
+        prefs.edit().putBoolean("subtle_motion", value == MotionLevel.SUBTLE).apply()
+        applyVisualEffectsPolicy()
     }
     fun resetAppearanceCustomization() {
         setThemeArtwork(app.veyra.music.ui.themes.ThemeArtworkOptions())
@@ -1302,14 +1304,45 @@ object AppSettings {
         prefs.edit().putBoolean(KEY_CONTRAST_PLAYER_CONTROLS, value).apply()
     }
 
+    internal fun reloadVisualEffectsPreferences() {
+        _reduceVisualEffects.value = prefs.getBoolean("reduce_visual_effects", false)
+        _visualEffectsChoiceMade.value = prefs.getBoolean("visual_effects_choice_made", false)
+        applyVisualEffectsPolicy()
+    }
+
+    /** Master overrides never overwrite the listener's individual appearance choices. */
+    private fun applyVisualEffectsPolicy() {
+        val effective = resolveVisualEffects(reduceVisualEffects.value, VisualEffectsPreferences(
+            reduceAnimation = prefs.getBoolean(KEY_REDUCE_ANIMATION, false),
+            reduceBlur = prefs.getBoolean(KEY_REDUCE_BLUR, true),
+            liquidGlass = prefs.getBoolean(KEY_LIQUID_GLASS, false),
+            animatedCanvas = prefs.getBoolean(KEY_ANIMATED_CANVAS, true),
+            lyricsBlur = prefs.getBoolean(KEY_LYRICS_BLUR, true),
+        ))
+        reduceAnimation.value = effective.reduceAnimation
+        reduceDynamicBlur.value = effective.reduceBlur
+        liquidGlass.value = effective.liquidGlass
+        animatedCanvas.value = effective.animatedCanvas
+        lyricsBlur.value = effective.lyricsBlur
+        subtleMotion.value = !effective.reduceAnimation && prefs.getBoolean("subtle_motion", false)
+    }
+
+    fun setReduceVisualEffects(value: Boolean) {
+        prefs.edit().putBoolean("reduce_visual_effects", value)
+            .putBoolean("visual_effects_choice_made", true).apply()
+        _reduceVisualEffects.value = value
+        _visualEffectsChoiceMade.value = true
+        applyVisualEffectsPolicy()
+    }
+
+    fun dismissVisualEffectsSuggestion() {
+        prefs.edit().putBoolean("visual_effects_choice_made", true).apply()
+        _visualEffectsChoiceMade.value = true
+    }
+
     fun setReduceAnimation(value: Boolean) {
-        subtleMotion.value = false
-        prefs.edit().putBoolean("subtle_motion", false).apply()
-        reduceAnimation.value = value
-        if (value) highPerformanceMode.value = false
-        val editor = prefs.edit().putBoolean(KEY_REDUCE_ANIMATION, value)
-        if (value) editor.putBoolean(KEY_HIGH_PERFORMANCE_MODE, false)
-        editor.apply()
+        prefs.edit().putBoolean("subtle_motion", false).putBoolean(KEY_REDUCE_ANIMATION, value).apply()
+        applyVisualEffectsPolicy()
     }
 
     fun setOnboardingComplete() {
@@ -1363,11 +1396,8 @@ object AppSettings {
     }
 
     fun setReduceDynamicBlur(value: Boolean) {
-        reduceDynamicBlur.value = value
-        if (value) highPerformanceMode.value = false
-        val editor = prefs.edit().putBoolean(KEY_REDUCE_BLUR, value)
-        if (value) editor.putBoolean(KEY_HIGH_PERFORMANCE_MODE, false)
-        editor.apply()
+        prefs.edit().putBoolean(KEY_REDUCE_BLUR, value).apply()
+        applyVisualEffectsPolicy()
     }
 
     fun setScrollPlayerAnimations(value: Boolean) {
@@ -1376,22 +1406,13 @@ object AppSettings {
     }
 
     fun setLiquidGlass(value: Boolean) {
-        liquidGlass.value = value
         prefs.edit().putBoolean(KEY_LIQUID_GLASS, value).apply()
+        applyVisualEffectsPolicy()
     }
 
     fun setHighPerformanceMode(value: Boolean) {
         highPerformanceMode.value = value
-        if (value) {
-            reduceAnimation.value = false
-            reduceDynamicBlur.value = false
-        }
-        val editor = prefs.edit().putBoolean(KEY_HIGH_PERFORMANCE_MODE, value)
-        if (value) {
-            editor.putBoolean(KEY_REDUCE_ANIMATION, false)
-            editor.putBoolean(KEY_REDUCE_BLUR, false)
-        }
-        editor.apply()
+        prefs.edit().putBoolean(KEY_HIGH_PERFORMANCE_MODE, value).apply()
     }
 
     fun setPerformanceRefreshRate(value: Int) {
@@ -1401,8 +1422,8 @@ object AppSettings {
     }
 
     fun setLyricsBlur(value: Boolean) {
-        lyricsBlur.value = value
         prefs.edit().putBoolean(KEY_LYRICS_BLUR, value).apply()
+        applyVisualEffectsPolicy()
     }
 
     fun setLyricsOffsetMs(value: Int) {
@@ -1522,8 +1543,8 @@ object AppSettings {
     }
 
     fun setAnimatedCanvas(value: Boolean) {
-        animatedCanvas.value = value
         prefs.edit().putBoolean(KEY_ANIMATED_CANVAS, value).apply()
+        applyVisualEffectsPolicy()
     }
 
     fun setCanvasOverCellular(value: Boolean) {

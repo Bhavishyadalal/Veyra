@@ -341,7 +341,7 @@ import app.veyra.music.ui.utils.guardSheetFromContentTouches
 import app.veyra.music.ui.utils.rememberIosOverscrollFactory
 import app.veyra.music.ui.performance.resolvePerformanceRefreshRate
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.hazeSource
+import app.veyra.music.ui.components.visualEffectHazeSource as hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
 import kotlinx.coroutines.launch
@@ -740,6 +740,7 @@ private fun VeyraApp(
     // The modal player owns light status glyphs and its own contrast scrim.
     // Every other surface follows the theme; Replay's page and stories remain
     // dark artwork either way. So is the welcome, drawn over all of it.
+    val effectsChoiceMade by AppSettings.visualEffectsChoiceMade.collectAsStateWithLifecycle()
     val onboardingComplete by AppSettings.onboardingComplete.collectAsStateWithLifecycle()
     // Held through the slide away as well, so the glyphs don't turn dark over
     // the mesh while it is still on its way off the screen.
@@ -5069,6 +5070,14 @@ private fun VeyraApp(
             )
         }
 
+        // Wait for welcome dismissal and sign-in, so the choice never stacks on setup.
+        if (onboardingComplete && !onboardingVisible && webSession == null && !effectsChoiceMade) {
+            app.veyra.music.ui.components.VisualEffectsChoiceDialog(
+                onChoose = AppSettings::setReduceVisualEffects,
+                onDismiss = AppSettings::dismissVisualEffectsSuggestion,
+            )
+        }
+
         // ---- Google sign-in (full screen WebView) ----
         webSession?.let { mode ->
             BackHandler { webSession = null }
@@ -5159,7 +5168,7 @@ private fun VeyraApp(
         }
 
         // ---- Update available (once per launch; held until the welcome is done) ----
-        if (showUpdateDialog && onboardingComplete) {
+        if (showUpdateDialog && onboardingComplete && effectsChoiceMade) {
             updateNotice?.let { update ->
                 UpdateAvailableDialog(
                     version = update.version,

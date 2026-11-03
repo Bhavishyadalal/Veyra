@@ -291,7 +291,7 @@
     <string name="filter_non_music_audio_subtitle">Nasconde clip sotto i 30 secondi, file WAV, note vocali, registrazioni e suoni di sistema</string>
     <string name="performance">Prestazioni</string>
     <string name="high_performance_mode">Modalità alte prestazioni</string>
-    <string name="high_performance_subtitle">Usa animazioni e sfocatura complete e richiede una frequenza di aggiornamento più alta</string>
+    <string name="high_performance_subtitle">Richiedi una frequenza di aggiornamento del display più elevata. Gli effetti visivi sono controllati separatamente.</string>
     <string name="high_performance_active">%1$d Hz richiesti. Android potrebbe ridurli quando necessario.</string>
     <string name="beta">Beta</string>
     <string name="refresh_rate">Frequenza di aggiornamento</string>
@@ -1560,4 +1560,13 @@
     <string name="startup_prepare_hint">Preparazione di caratteri e aspetto. Di solito bastano pochi secondi. Puoi continuare mentre la preparazione termina in background.</string>
     <string name="startup_prepare_slow">Sta richiedendo più tempo del solito. Puoi continuare mentre la preparazione termina in background.</string>
     <string name="startup_prepare_failed">Impossibile completare la preparazione. Riprova o continua con l’aspetto disponibile.</string>
+    <string name="reduce_visual_effects">Ridurre gli effetti visivi</string>
+    <string name="reduce_visual_effects_hint">Superfici opache, nessuna sfocatura o vetro, sfondi statici e movimento più semplice. Le tue scelte di aspetto vengono preservate.</string>
+    <string name="visual_effects_choice_title">Scegli la tua esperienza visiva</string>
+    <string name="visual_effects_choice_hint">Si consigliano effetti ridotti per un\'esperienza più leggera. Puoi scegliere il look adatto al tuo telefono.</string>
+    <string name="visual_effects_reduced_hint">Effetti ridotti: superfici solide, nessuna sfocatura decorativa o vetro e nessuno sfondo animato su tela.</string>
+    <string name="visual_effects_full_hint">Effetti completi: consenti le impostazioni di sfocatura, vetro e movimento selezionate. Le prestazioni dipendono dal telefono.</string>
+    <string name="visual_effects_change_later">Puoi modificarlo in qualsiasi momento in Impostazioni → Prestazioni.</string>
+    <string name="visual_effects_use_reduced">Effetti ridotti · Consigliato</string>
+    <string name="visual_effects_use_full">Effetti completi</string>
 </resources>

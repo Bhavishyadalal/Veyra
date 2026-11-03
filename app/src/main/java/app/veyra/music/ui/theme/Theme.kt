@@ -136,6 +136,7 @@ fun VeyraTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
+    val reducedEffects by AppSettings.reduceVisualEffects.collectAsStateWithLifecycle()
     val selectedIcon by app.veyra.music.AppIcon.selected.collectAsStateWithLifecycle()
     val selectedIconPainter=rememberLauncherIconPainter(selectedIcon ?: app.veyra.music.AppIcon.Default)
     val iconContext=androidx.compose.ui.platform.LocalContext.current.applicationContext
@@ -208,9 +209,11 @@ fun VeyraTheme(
             extraLarge = androidx.compose.foundation.shape.RoundedCornerShape(androidx.compose.ui.unit.Dp(pack.navCorner.toFloat())))
     }
     CompositionLocalProvider(
+        app.veyra.music.ui.customization.LocalReducedVisualEffects provides reducedEffects,
         app.veyra.music.ui.components.LocalVeyraSelectedIcon provides selectedIconPainter,
         app.veyra.music.ui.themes.LocalThemeArtworkOptions provides
-            (if (appStyle.custom) app.veyra.music.ui.themes.ThemeArtworkOptions() else themeArtwork),
+            (if (reducedEffects) app.veyra.music.ui.themes.ThemeArtworkOptions(visibility=0f, dim=1f, blur=0f, controlOpacity=1f)
+             else if (appStyle.custom) app.veyra.music.ui.themes.ThemeArtworkOptions() else themeArtwork),
         LocalAppStyle provides appStyle,
         app.veyra.music.ui.themes.LocalThemeVisuals provides pack,
         LocalArtworkCorners provides (if(appStyle.custom) ArtworkCorners.DEFAULT else corners),

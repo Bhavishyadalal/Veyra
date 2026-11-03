@@ -29,7 +29,7 @@ object VeyraMotion {
 fun rememberVeyraReducedMotion(includeSubtle: Boolean = true): Boolean {
     val preference by PlayerSettings.reduceAnimation.collectAsStateWithLifecycle()
     val system = rememberCoroutineScope().coroutineContext[MotionDurationScale]?.scaleFactor ?: 1f
-    return preference || system == 0f || (includeSubtle && LocalSubtleMotion.current)
+    return app.veyra.music.ui.customization.LocalReducedVisualEffects.current || preference || system == 0f || (includeSubtle && LocalSubtleMotion.current)
 }
 
 /** Tonal feedback inside the caller's clip; layout and touch targets never move. */

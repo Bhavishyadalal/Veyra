@@ -243,7 +243,7 @@
     <string name="filter_non_music_audio_subtitle">30秒未満のクリップ、WAVファイル、ボイスメモ、録音、システム音を非表示にします</string>
     <string name="performance">パフォーマンス</string>
     <string name="high_performance_mode">高パフォーマンスモード</string>
-    <string name="high_performance_subtitle">フルアニメーションとぼかしを使用し、より高いディスプレイリフレッシュレートをリクエストします</string>
+    <string name="high_performance_subtitle">より高い表示リフレッシュ レートを要求します。視覚効果は個別に制御されます。</string>
     <string name="high_performance_active">%1$d Hzをリクエスト中です。必要に応じてAndroidが下げることがあります。</string>
     <string name="beta">ベータ</string>
     <string name="refresh_rate">リフレッシュレート</string>
@@ -1599,4 +1599,13 @@
     <string name="startup_prepare_hint">フォントと外観を準備しています。通常は数秒です。準備をバックグラウンドで続けながら先に進めます。</string>
     <string name="startup_prepare_slow">通常より時間がかかっています。準備をバックグラウンドで続けながら先に進めます。</string>
     <string name="startup_prepare_failed">準備を完了できませんでした。再試行するか、利用可能な外観で続行してください。</string>
+    <string name="reduce_visual_effects">視覚効果を減らす</string>
+    <string name="reduce_visual_effects_hint">不透明な表面、ぼかしやガラスがなく、静的な背景とシンプルなモーション。外観の選択は保持されます。</string>
+    <string name="visual_effects_choice_title">視覚体験を選択してください</string>
+    <string name="visual_effects_choice_hint">より軽いエクスペリエンスを得るには、エフェクトを低減することをお勧めします。お使いの携帯電話に合った外観を選択できます。</string>
+    <string name="visual_effects_reduced_hint">効果の減少: ソリッド サーフェス、装飾的なぼかしやガラスなし、アニメーション化されたキャンバスの背景なし。</string>
+    <string name="visual_effects_full_hint">フルエフェクト: 選択したブラー、ガラス、モーション設定を許可します。パフォーマンスは携帯電話によって異なります。</string>
+    <string name="visual_effects_change_later">これはいつでも「設定」→「パフォーマンス」で変更できます。</string>
+    <string name="visual_effects_use_reduced">影響の軽減・推奨</string>
+    <string name="visual_effects_use_full">フルエフェクト</string>
 </resources>

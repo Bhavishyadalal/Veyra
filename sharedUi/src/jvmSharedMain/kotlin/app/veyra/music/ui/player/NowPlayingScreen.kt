@@ -100,7 +100,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.stringArrayResource
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
+import app.veyra.music.ui.customization.visualEffectShadow as shadow
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.layer.drawLayer
@@ -172,7 +172,7 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.ExperimentalHazeApi
-import dev.chrisbanes.haze.hazeSource
+import app.veyra.music.ui.components.visualEffectHazeSource as hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -2132,7 +2132,8 @@ fun NowPlayingScreen(
                 // The tablet has no mirrored main-player treatment to crossfade from.
                 // Legacy mesh is the whole backdrop on every page, so the lyrics and
                 // queue panels must not crossfade the blurred artwork over it.
-                val legacyMeshBackdrop = !tabletArtworkBackdrop && !spotifyCanvasPresentation &&
+                val legacyMeshBackdrop = !app.veyra.music.ui.customization.LocalReducedVisualEffects.current &&
+                    !tabletArtworkBackdrop && !spotifyCanvasPresentation &&
                     legacyMesh && !canvasFirstPortrait
                 val fullArtworkBackdropAlpha by animateFloatAsState(
                     targetValue = if (

@@ -273,7 +273,7 @@
     <string name="filter_non_music_audio_subtitle">30 saniyeden kısa klipleri, WAV dosyalarını, sesli notları, kayıtları ve sistem seslerini gizler</string>
     <string name="performance">Performans</string>
     <string name="high_performance_mode">Yüksek performans modu</string>
-    <string name="high_performance_subtitle">Tam animasyonlar ve bulanıklık kullanır ve daha yüksek bir ekran yenileme hızı ister</string>
+    <string name="high_performance_subtitle">Daha yüksek bir ekran yenileme hızı isteyin. Görsel efektler ayrı ayrı kontrol edilir.</string>
     <string name="high_performance_active">%1$d Hz istendi. Android gerektiğinde bunu düşürebilir.</string>
     <string name="beta">Beta</string>
     <string name="refresh_rate">Yenileme hızı</string>
@@ -1578,4 +1578,13 @@
     <string name="startup_prepare_hint">Yazı tipleri ve görünüm hazırlanıyor. Genellikle birkaç saniye sürer. Hazırlık arka planda tamamlanırken devam edebilirsiniz.</string>
     <string name="startup_prepare_slow">Normalden uzun sürüyor. Hazırlık arka planda tamamlanırken devam edebilirsiniz.</string>
     <string name="startup_prepare_failed">Hazırlık tamamlanamadı. Yeniden deneyin veya kullanılabilir görünümle devam edin.</string>
+    <string name="reduce_visual_effects">Görsel efektleri azaltın</string>
+    <string name="reduce_visual_effects_hint">Opak yüzeyler, bulanıklık veya cam yok, statik arka planlar ve daha basit hareket. Görünüm tercihleriniz korunur.</string>
+    <string name="visual_effects_choice_title">Görsel deneyiminizi seçin</string>
+    <string name="visual_effects_choice_hint">Daha hafif bir deneyim için azaltılmış efektler önerilir. Telefonunuza uygun görünümü seçebilirsiniz.</string>
+    <string name="visual_effects_reduced_hint">Azaltılmış efektler: katı yüzeyler, dekoratif bulanıklık veya cam yok ve hareketli Kanvas arka planları yok.</string>
+    <string name="visual_effects_full_hint">Tam efektler: seçtiğiniz bulanıklık, cam ve hareket ayarlarına izin verin. Performans telefonunuza bağlıdır.</string>
+    <string name="visual_effects_change_later">Bunu istediğiniz zaman Ayarlar → Performans bölümünden değiştirebilirsiniz.</string>
+    <string name="visual_effects_use_reduced">Azaltılmış efektler · Önerilen</string>
+    <string name="visual_effects_use_full">Tam efektler</string>
 </resources>

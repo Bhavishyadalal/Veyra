@@ -206,6 +206,7 @@ fun SettingsScreen(
     var resetCustomization by rememberSaveable { mutableStateOf<String?>(null) }
     val strongerText by AppSettings.strongerText.collectAsStateWithLifecycle()
     val contrastPlayerControls by AppSettings.contrastPlayerControls.collectAsStateWithLifecycle()
+    val reducedVisualEffects by AppSettings.reduceVisualEffects.collectAsStateWithLifecycle()
     val reduceAnimation by AppSettings.reduceAnimation.collectAsStateWithLifecycle()
     val reduceDynamicBlur by AppSettings.reduceDynamicBlur.collectAsStateWithLifecycle()
     val liquidGlass by AppSettings.liquidGlass.collectAsStateWithLifecycle()
@@ -836,7 +837,7 @@ fun SettingsScreen(
                                 R.string.liquid_glass_unavailable
                             },
                         ),
-                        enabled = liquidGlassSupported,
+                        enabled = liquidGlassSupported && !reducedVisualEffects,
                         checked = liquidGlass,
                         onClick = { AppSettings.setLiquidGlass(!liquidGlass) },
                     )
@@ -888,6 +889,7 @@ fun SettingsScreen(
                         icon = Icons.Rounded.Animation,
                         title = animatedCoverArtTitle,
                         subtitle = stringResource(R.string.animated_cover_art_subtitle),
+                        enabled = !reducedVisualEffects,
                         checked = animatedCanvas,
                         onClick = { AppSettings.setAnimatedCanvas(!animatedCanvas) },
                     )
@@ -983,6 +985,7 @@ fun SettingsScreen(
                             icon = Icons.Rounded.BlurOn,
                             title = lyricsBlurTitle,
                             subtitle = stringResource(R.string.blur_unfocused_lyrics_subtitle),
+                            enabled = !reducedVisualEffects,
                             checked = lyricsBlur,
                             onClick = { AppSettings.setLyricsBlur(!lyricsBlur) },
                         )
@@ -1021,11 +1024,22 @@ fun SettingsScreen(
             }
 
             SearchableSettingsGroup(search, category = SettingsCategory.PERFORMANCE, header = stringResource(R.string.performance)) {
+                val reducedEffectsTitle = stringResource(R.string.reduce_visual_effects)
+                row(reducedEffectsTitle, "blur", "effects", "opaque", "glass", "smooth", "performance") {
+                    SettingsRow(
+                        icon = Icons.Rounded.BlurOff,
+                        title = reducedEffectsTitle,
+                        subtitle = stringResource(R.string.reduce_visual_effects_hint),
+                        checked = reducedVisualEffects,
+                        onClick = { AppSettings.setReduceVisualEffects(!reducedVisualEffects) },
+                    )
+                }
                 val reduceAnimationTitle = stringResource(R.string.reduce_animation)
                 row(reduceAnimationTitle, "motion") {
                     SettingsRow(
                         icon = Icons.Rounded.MotionPhotosOff,
                         title = reduceAnimationTitle,
+                        enabled = !reducedVisualEffects,
                         subtitle = stringResource(R.string.reduce_animation_subtitle),
                         checked = reduceAnimation,
                         onClick = { AppSettings.setReduceAnimation(!reduceAnimation) },
@@ -1036,6 +1050,7 @@ fun SettingsScreen(
                     SettingsRow(
                         icon = Icons.Rounded.BlurOff,
                         title = reduceDynamicBlurTitle,
+                        enabled = !reducedVisualEffects,
                         subtitle = stringResource(R.string.reduce_dynamic_blur_subtitle),
                         checked = reduceDynamicBlur,
                         onClick = { AppSettings.setReduceDynamicBlur(!reduceDynamicBlur) },
@@ -1904,7 +1919,7 @@ internal enum class SettingsCategory(val title: Int, val summary: List<Int>, val
     SOUND(R.string.playback, listOf(R.string.audio_quality, R.string.equalizer), SettingsIcons.Sound),
     APPEARANCE(R.string.appearance, listOf(R.string.theme, R.string.app_icon), SettingsIcons.Appearance),
     LIBRARY(R.string.library, listOf(R.string.downloads, R.string.storage, R.string.your_data), SettingsIcons.Library),
-    PERFORMANCE(R.string.performance, listOf(R.string.high_performance_mode, R.string.reduce_animation), SettingsIcons.Performance),
+    PERFORMANCE(R.string.performance, listOf(R.string.reduce_visual_effects, R.string.high_performance_mode, R.string.reduce_animation), SettingsIcons.Performance),
     ADVANCED(R.string.advanced_options, listOf(R.string.app_updates, R.string.show_nerd_stats), SettingsIcons.Advanced),
 }
 

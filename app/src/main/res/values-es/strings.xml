@@ -261,7 +261,7 @@
     <string name="filter_non_music_audio_subtitle">Oculta clips de menos de 30 segundos, archivos WAV, notas de voz, grabaciones y sonidos del sistema</string>
     <string name="performance">Rendimiento</string>
     <string name="high_performance_mode">Modo de alto rendimiento</string>
-    <string name="high_performance_subtitle">Usa las animaciones y el desenfoque completos, y solicita una frecuencia de pantalla más alta</string>
+    <string name="high_performance_subtitle">Solicite una frecuencia de actualización de pantalla más alta. Los efectos visuales se controlan por separado.</string>
     <string name="high_performance_active">Se solicitaron %1$d Hz. Android puede reducirlos cuando sea necesario.</string>
     <string name="beta">Beta</string>
     <string name="refresh_rate">Frecuencia de actualización</string>
@@ -1593,4 +1593,13 @@
     <string name="startup_prepare_hint">Preparando fuentes y apariencia. Suele tardar unos segundos. Puedes continuar mientras termina en segundo plano.</string>
     <string name="startup_prepare_slow">Está tardando más de lo habitual. Puedes continuar mientras termina en segundo plano.</string>
     <string name="startup_prepare_failed">No se pudo completar la preparación. Reintenta o continúa con la apariencia disponible.</string>
+    <string name="reduce_visual_effects">Reducir los efectos visuales</string>
+    <string name="reduce_visual_effects_hint">Superficies opacas, sin desenfoques ni cristales, fondos estáticos y movimiento más sencillo. Se conservan sus opciones de apariencia.</string>
+    <string name="visual_effects_choice_title">Elige tu experiencia visual</string>
+    <string name="visual_effects_choice_hint">Se recomiendan efectos reducidos para una experiencia más ligera. Puedes elegir el aspecto que se adapte a tu teléfono.</string>
+    <string name="visual_effects_reduced_hint">Efectos reducidos: superficies sólidas, sin desenfoque decorativo ni vidrio, y sin fondos de lienzo animados.</string>
+    <string name="visual_effects_full_hint">Efectos completos: permita las configuraciones de desenfoque, vidrio y movimiento seleccionadas. El rendimiento depende de su teléfono.</string>
+    <string name="visual_effects_change_later">Cambie esto en cualquier momento en Configuración → Rendimiento.</string>
+    <string name="visual_effects_use_reduced">Efectos reducidos · Recomendado</string>
+    <string name="visual_effects_use_full">efectos completos</string>
 </resources>

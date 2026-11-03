@@ -1,3 +1,10 @@
+# Veyra 0.2.3-beta1 · choose your visual profile
+
+- Add a saved reduced-effects master, post-welcome suggestion and Settings → Performance switch.
+- Use opaque surfaces and static backgrounds; suppress decorative blur, glass, shadows and Canvas effects while preserving individual choices.
+- Decouple refresh-rate preference from visual effects. Based on stable 0.2.2 build 59; new beta code 60.
+- [Preview notes](RELEASE_NOTES_0.2.3-beta1.md) · [Verification](verification/BETA-0.2.3-beta1.md). The owner runs GitHub workflows manually.
+
 # Veyra 0.2.2 · a calmer start, a lighter touch
 
 - Promote tested beta 58 to stable build 59 with manual Search focus, preserved queries, optional first-build preparation and lighter navigation/appearance work.

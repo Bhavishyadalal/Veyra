@@ -280,7 +280,7 @@
     <string name="filter_non_music_audio_subtitle">Ẩn các đoạn âm thanh dưới 30 giây, tệp WAV, ghi âm giọng nói, bản thu âm và âm thanh hệ thống</string>
     <string name="performance">Hiệu năng</string>
     <string name="high_performance_mode">Chế độ hiệu năng cao</string>
-    <string name="high_performance_subtitle">Sử dụng đầy đủ hiệu ứng chuyển động và làm mờ, đồng thời yêu cầu tần số quét màn hình cao hơn</string>
+    <string name="high_performance_subtitle">Yêu cầu tốc độ làm mới màn hình cao hơn. Hiệu ứng hình ảnh được kiểm soát riêng biệt.</string>
     <string name="high_performance_active">Đã yêu cầu %1$d Hz. Android có thể giảm tần số khi cần.</string>
     <string name="beta">Beta</string>
     <string name="refresh_rate">Tần số quét</string>
@@ -1538,4 +1538,13 @@
     <string name="startup_prepare_hint">Đang chuẩn bị phông chữ và giao diện. Thường mất vài giây. Bạn có thể tiếp tục trong khi quá trình hoàn tất ở nền.</string>
     <string name="startup_prepare_slow">Mất nhiều thời gian hơn bình thường. Bạn có thể tiếp tục trong khi quá trình chuẩn bị hoàn tất ở nền.</string>
     <string name="startup_prepare_failed">Không thể hoàn tất chuẩn bị. Hãy thử lại hoặc tiếp tục với giao diện có sẵn.</string>
+    <string name="reduce_visual_effects">Giảm hiệu ứng hình ảnh</string>
+    <string name="reduce_visual_effects_hint">Bề mặt mờ đục, không bị mờ hoặc có kính, nền tĩnh và chuyển động đơn giản hơn. Lựa chọn ngoại hình của bạn được bảo tồn.</string>
+    <string name="visual_effects_choice_title">Chọn trải nghiệm hình ảnh của bạn</string>
+    <string name="visual_effects_choice_hint">Nên giảm hiệu ứng để có trải nghiệm nhẹ nhàng hơn. Bạn có thể chọn giao diện phù hợp với điện thoại của mình.</string>
+    <string name="visual_effects_reduced_hint">Giảm hiệu ứng: bề mặt đồng nhất, không có mờ trang trí hoặc kính và không có nền Canvas hoạt hình.</string>
+    <string name="visual_effects_full_hint">Hiệu ứng đầy đủ: cho phép cài đặt độ mờ, kính và chuyển động đã chọn của bạn. Hiệu suất phụ thuộc vào điện thoại của bạn.</string>
+    <string name="visual_effects_change_later">Thay đổi điều này bất cứ lúc nào trong Cài đặt → Hiệu suất.</string>
+    <string name="visual_effects_use_reduced">Giảm hiệu ứng · Được đề xuất</string>
+    <string name="visual_effects_use_full">Hiệu ứng đầy đủ</string>
 </resources>

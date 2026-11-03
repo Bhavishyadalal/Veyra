@@ -15,6 +15,10 @@ import java.io.File
 /** Static, offline decorative art. No animation clock or network request. */
 @Composable
 fun StyleBackdrop(style:AppStyle, artwork:String?, modifier:Modifier=Modifier) {
+    if (app.veyra.music.ui.customization.LocalReducedVisualEffects.current) {
+        Box(modifier.background(style.colorScheme().background.copy(alpha=1f)))
+        return
+    }
     val p=app.veyra.music.ui.themes.LocalThemeVisuals.current ?: style.visuals() ?: return
     Box(modifier.background(p.background).clearAndSetSemantics {}) {
         if(style==AppStyle.LISTENING_ROOM && artwork!=null) {
